@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\Game">
+      <UniqueIdentifier>{98baa510-897a-4ddc-8406-fee4100c38d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\SupportCard">
+      <UniqueIdentifier>{4f29c778-e362-4f73-9ec2-442e7dc71187}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Game">
+      <UniqueIdentifier>{6572637c-5bb0-45c2-88fd-fc79f5129b2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\SupportCard">
+      <UniqueIdentifier>{a88f6e74-d0bc-4658-a6c8-71bb69b09e6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\GameDatabase">
+      <UniqueIdentifier>{9ab44119-9c5a-4e0c-b4d8-28ae45cb5fbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\GameDatabase">
+      <UniqueIdentifier>{ecee3a31-09dd-491e-a347-4eab98b75342}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="UmaSimulator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SupportCard\CardEffect.cpp">
+      <Filter>源文件\SupportCard</Filter>
+    </ClCompile>
+    <ClCompile Include="SupportCard\SupportCard.cpp">
+      <Filter>源文件\SupportCard</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDatabase\KnownSupportCards.cpp">
+      <Filter>源文件\GameDatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>源文件\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDatabase\UmaData.cpp">
+      <Filter>源文件\GameDatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDatabase\KnownUmas.cpp">
+      <Filter>源文件\GameDatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDatabase\GameConstants.cpp">
+      <Filter>源文件\GameDatabase</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tests.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Game.h">
+      <Filter>头文件\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SupportCard\CardEffect.h">
+      <Filter>头文件\SupportCard</Filter>
+    </ClInclude>
+    <ClInclude Include="SupportCard\SupportCard.h">
+      <Filter>头文件\SupportCard</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDatabase\GameDatabase.h">
+      <Filter>头文件\GameDatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDatabase\UmaData.h">
+      <Filter>头文件\GameDatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDatabase\GameConstants.h">
+      <Filter>头文件\GameDatabase</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
