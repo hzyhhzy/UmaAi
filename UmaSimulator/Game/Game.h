@@ -32,7 +32,7 @@ struct Game
   int venusSpiritsCount;//底层有几个碎片
   int venusSpiritsBottom[8];//底层碎片。8*颜色+属性。颜色012对应红蓝黄，属性123456对应速耐力根智pt
   int venusSpiritsUpper[4 + 2];//按顺序分别是第二层和第三层的碎片，编号与底层碎片一致。*2还是*3现场算
-  int venusAvailableWisdom;//顶层的女神睿智
+  int venusAvailableWisdom;//顶层的女神睿智，123分别是黄红蓝，0是没有
   bool venusIsWisdomActive;//是否正在使用睿智
 
   //神团卡专属
@@ -63,6 +63,7 @@ struct Game
 
   //辅助函数
   void addSpirit(int s);//添加碎片
+  int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，红女神是5级
   std::array<int, 6> venusSpiritsBonus() const;//计算碎片加成
   bool isOutgoingLegal(int chosenOutgoing) const;//这个外出是否是可以进行的
 };

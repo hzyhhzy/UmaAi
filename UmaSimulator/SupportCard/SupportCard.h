@@ -22,5 +22,5 @@ struct SupportCard
   double deYiLv;//得意率
 
 
-  CardTrainingEffect getCardEffect(const Game& game, int atTrain);//根据游戏状态计算支援卡的“固有”
+  CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan) const;//根据游戏状态计算支援卡的“固有”
 };
