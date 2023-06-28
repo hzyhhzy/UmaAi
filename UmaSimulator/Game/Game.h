@@ -53,7 +53,8 @@ struct Game
 
   //游戏主线
   void newGame(std::mt19937_64& rand, int newUmaId,int newCards[6],int newZhongMaBlueCount[5]);//重置游戏，开局。umaId是马娘编号
-  void randomDistributeCardsAndCalculate(std::mt19937_64& rand);//随机分配卡组，并计算每个训练加多少
+  void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组
+  void calculateTrainingValue();//计算每个训练加多少
 
   //计算训练后的变化。其中，chosenTrain代表选择的训练，01234分别是速耐力根智，5是休息，6是外出，7是比赛。useVenusIfFull是假如女神已满，是否开启女神。chosenSpiritColor是假如出现女神三选一事件，选择的碎片颜色。chosenOutgoing是如果外出，选择的外出项目，五个神团外出分别是01234，普通外出是5。
   //注：普通回合有14种可能（5种训练，其中一种训练可能会出现女神三选一。除此以外有休息，比赛，5种出行），比赛回合只有开不开女神两种选择

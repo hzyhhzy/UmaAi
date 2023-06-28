@@ -7,7 +7,7 @@
 class GameDatabase
 {
 public:
-  static const int ALL_SUPPORTCARD_NUM = 11;
+  static const int ALL_SUPPORTCARD_NUM = 13;
   static const std::string AllSupportCardNames[ALL_SUPPORTCARD_NUM];
   static const SupportCard AllSupportCards[ALL_SUPPORTCARD_NUM];
 

@@ -135,7 +135,8 @@
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="SupportCard\CardEffect.cpp" />
     <ClCompile Include="SupportCard\SupportCard.cpp" />
-    <ClCompile Include="test1.cpp" />
+    <ClCompile Include="Tests\test1.cpp" />
+    <ClCompile Include="Tests\test2.cpp" />
     <ClCompile Include="UmaSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,7 +146,7 @@
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="SupportCard\CardEffect.h" />
     <ClInclude Include="SupportCard\SupportCard.h" />
-    <ClInclude Include="tests.h" />
+    <ClInclude Include="Tests\tests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

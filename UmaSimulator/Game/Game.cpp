@@ -9,8 +9,6 @@ void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhong
   for (int i = 0; i < 5; i++)
     zhongMaBlueCount[i] = newZhongMaBlueCount[i];
 
-  random_device rd;
-  rand = mt19937_64(rd);
   turn = 0;
   vital = 100;
   maxVital = 100;
@@ -152,6 +150,43 @@ void Game::randomDistributeCardsAndCalculate(std::mt19937_64& rand)
       else
         basicValue[j] = 0;
     }
+
+    //6.成长率
+    double growthRates[6] = { 1,1,1,1,1,1 };
+    for (int j = 0; j < 5; j++)
+      growthRates[j] = 1.0 + 0.01 * GameDatabase::AllUmas[umaId].fiveValueBonus[j];
+
+    //下层总数值
+    int totalValueLower[6];
+    for (int j = 0; j < 6; j++)
+    {
+      int v = totalMultiplying * basicValue[j] * growthRates[j];//向下取整了
+      if (v > 100)v = 100;
+      totalValueLower[j] = v;
+    }
+
+
+    
+    //7.碎片
+    
+
+    
+    //8.女神训练加成
+    
+
+    //体力
+    int vitalChange=GameConstants::TrainingBasicValue[trainType][trainLv][6];
+    for (int i = 0; i < cardNum; i++)
+      vitalChange += effects[i].vitalBonus;
+
+
+    for (int j = 0; j < 6; j++)
+    {
+      trainValue[trainType][j] = totalValueLower[j];
+    }
+    trainValue[trainType][6] = vitalChange;
+
+
 
   }
 }

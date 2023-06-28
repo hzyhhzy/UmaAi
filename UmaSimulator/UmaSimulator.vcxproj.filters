@@ -31,12 +31,15 @@
     <Filter Include="头文件\GameDatabase">
       <UniqueIdentifier>{ecee3a31-09dd-491e-a347-4eab98b75342}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Tests">
+      <UniqueIdentifier>{796c275c-24fa-41f7-a8a7-6cd839cbec06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tests">
+      <UniqueIdentifier>{88af81e1-cb29-4987-a630-e40b6f3ad99b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UmaSimulator.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="test1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SupportCard\CardEffect.cpp">
@@ -60,11 +63,14 @@
     <ClCompile Include="GameDatabase\GameConstants.cpp">
       <Filter>源文件\GameDatabase</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\test2.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\test1.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tests.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Game.h">
       <Filter>头文件\Game</Filter>
     </ClInclude>
@@ -82,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="GameDatabase\GameConstants.h">
       <Filter>头文件\GameDatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\tests.h">
+      <Filter>头文件\Tests</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

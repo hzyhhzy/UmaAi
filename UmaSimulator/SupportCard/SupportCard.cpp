@@ -109,6 +109,19 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       effect.bonus[0] = 0;
     }
   }
+  //11.耐海湾
+  else if (cardID == 11)
+  {
+    //啥都没有
+  }
+  //12.智好歌剧
+  else if (cardID == 12)
+  {
+    if (jiBan < 80)
+    {
+      effect.bonus[0] = 0;
+    }
+  }
   //
   else 
   {
