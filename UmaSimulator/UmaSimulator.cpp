@@ -2,11 +2,11 @@
 //
 
 #include <iostream>
-#include "tests.h"
+#include "Tests/tests.h"
 
 int main()
 {
-  main_test1();
+  main_test2();
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

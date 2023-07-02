@@ -36,7 +36,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
   {
     effect.youQing = 0;
   }
-  if (!isShining || cardType != 4)
+  if (!isShining || atTrain != 4)
     effect.vitalBonus = 0;
 
   //接下来是各种固有
@@ -120,6 +120,14 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     if (jiBan < 80)
     {
       effect.bonus[0] = 0;
+    }
+  }
+  //13.根黄金城
+  else if (cardID == 13)
+  {
+    if (jiBan < 100)
+    {
+      effect.bonus[3] = 0;
     }
   }
   //

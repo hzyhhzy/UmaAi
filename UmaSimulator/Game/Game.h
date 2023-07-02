@@ -12,6 +12,7 @@ struct Game
   int maxVital;//体力上限
   bool isQieZhe;//切者
   bool isAiJiao;//爱娇
+  int failureRateBias;//失败率改变量。练习上手=2，练习下手=-2
   int fiveValue[5];//五维属性，1200以上不减半
   //int fiveValueUmaBonus[5];//马娘自身加成
   int fiveValueLimit[5];//五维属性上限，1200以上不减半
@@ -29,10 +30,9 @@ struct Game
   int venusLevelRed;
   int venusLevelBlue;
 
-  int venusSpiritsCount;//底层有几个碎片
-  int venusSpiritsBottom[8];//底层碎片。8*颜色+属性。颜色012对应红蓝黄，属性123456对应速耐力根智pt
+  int venusSpiritsBottom[8];//底层碎片。8*颜色+属性。颜色012对应红蓝黄，属性123456对应速耐力根智pt。叫做“spirit”是因为游戏里就这样叫的
   int venusSpiritsUpper[4 + 2];//按顺序分别是第二层和第三层的碎片，编号与底层碎片一致。*2还是*3现场算
-  int venusAvailableWisdom;//顶层的女神睿智，123分别是黄红蓝，0是没有
+  int venusAvailableWisdom;//顶层的女神睿智，123分别是红蓝黄，0是没有
   bool venusIsWisdomActive;//是否正在使用睿智
 
   //神团卡专属
@@ -47,14 +47,43 @@ struct Game
   int stageInTurn;
   bool cardDistribution[5][8];//支援卡分布，六张卡分别012345，理事长6，记者7
   bool cardHint[6];//六张卡分别有没有亮红点
-  int spiritDistribution[5 + 3];//碎片分布，依次是五训练，休息，外出，比赛。
+  int spiritDistribution[5 + 3];//碎片分布，依次是五训练01234，休息5，外出6，比赛7。若为2碎片，则加32
+
+  //通过计算获得的信息
+  int spiritBonus[6];//碎片加成
   int trainValue[5][7];//第一个数是第几个训练，第二个数依次是速耐力根智pt体力
   int failRate[5];//训练失败率
 
-  //游戏主线
+  //游戏流程:
+  //newGame();
+  //for (int t = 0; t < TOTAL_TURN; t++)
+  //{
+  //  if (!isRacing)//正常训练回合
+  //  {
+  //    randomDistributeCards();
+  //    calculateTrainingValue();
+  //    PLAYER_CHOICE;
+  //    applyTraining();
+  //    checkEventAfterTrain();
+  //  }
+  //  else//比赛回合
+  //  {
+  //    if(venusAvailableWisdom!=0)//是否使用女神睿智，不可使用的时候直接跳过决策步
+  //    {
+  //      PLAYER_CHOICE;
+  //    }
+  //    applyTraining();//比赛
+  //    checkEventAfterTrain();
+  //  }
+  //}
+  //finalScore();
+  //
+
+
+
   void newGame(std::mt19937_64& rand, int newUmaId,int newCards[6],int newZhongMaBlueCount[5]);//重置游戏，开局。umaId是马娘编号
-  void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组
-  void calculateTrainingValue();//计算每个训练加多少
+  void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组和碎片
+  void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率
 
   //计算训练后的变化。其中，chosenTrain代表选择的训练，01234分别是速耐力根智，5是休息，6是外出，7是比赛。useVenusIfFull是假如女神已满，是否开启女神。chosenSpiritColor是假如出现女神三选一事件，选择的碎片颜色。chosenOutgoing是如果外出，选择的外出项目，五个神团外出分别是01234，普通外出是5。
   //注：普通回合有14种可能（5种训练，其中一种训练可能会出现女神三选一。除此以外有休息，比赛，5种出行），比赛回合只有开不开女神两种选择
@@ -63,9 +92,19 @@ struct Game
   int finalScore(int chosenOutgoing) const;//最终总分
 
   //辅助函数
-  void addSpirit(int s);//添加碎片
   int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，红女神是5级
-  std::array<int, 6> venusSpiritsBonus() const;//计算碎片加成
   bool isOutgoingLegal(int chosenOutgoing) const;//这个外出是否是可以进行的
+  //void runTestGame();
+
+  void getNNInput(float* buf) const;//神经网络输入
+
+private:
+  void addSpirit(std::mt19937_64& rand, int s);//添加碎片
+  void activateVenusWisdom();//使用女神睿智
+  void clearSpirit();//清空碎片
+  void calculateFailureRate(int trainType);//计算训练失败率
+  void calculateVenusSpiritsBonus();//计算碎片加成  
+public:
+  void calculateTrainingValueSingle(int trainType);//计算每个训练加多少
 };
 

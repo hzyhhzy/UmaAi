@@ -14,6 +14,8 @@
 // 10 速宝穴
 // 11 耐海湾
 // 12 智好歌剧
+// 13 根黄金城
+// 
 //
 
 
@@ -31,11 +33,12 @@ const std::string GameDatabase::AllSupportCardNames[ALL_SUPPORTCARD_NUM] = {
   "速宝穴",
   "耐海湾",
   "智好歌剧",
+  "根黄金城",
 };
 
 
 //这里的都包括固有，不满足固有条件的会在getCardEffect里校正
-const SupportCard GameDatabase::AllSupportCards[ALL_SUPPORTCARD_NUM] =
+SupportCard GameDatabase::AllSupportCards[ALL_SUPPORTCARD_NUM] =
 {
   //0，模板
   {
@@ -60,7 +63,7 @@ const SupportCard GameDatabase::AllSupportCards[ALL_SUPPORTCARD_NUM] =
     32, // 友情加成
     15, // 干劲加成
     10, // 训练加成
-    {1, 1, 1, 0, 0, 0}, // 速耐力根智pt的加成
+    {1, 1, 1, 0, 0, 1}, // 速耐力根智pt的加成
     2, // 智力彩圈体力回复量
     {0, 0, 35, 0, 0, 0}, // 初期速耐力根智pt的提升
     20, // 初始羁绊
@@ -241,6 +244,22 @@ const SupportCard GameDatabase::AllSupportCards[ALL_SUPPORTCARD_NUM] =
     5, // 智力彩圈体力回复量
     {0, 0, 0, 0, 20, 0}, // 初期速耐力根智pt的提升
     25, // 初始羁绊
+    5, // 赛后
+    {0, 0, 0, 0, 0, 25}, // 为了简化，把红点的技能等效成多少属性
+    40, // 启发发生率提升
+    50  // 得意率
+  },
+  //13,根黄金城
+  {
+    13, // 支援卡id，部分卡具有比较复杂的固有，根据id来辨别
+    3, // 支援卡类型，0速1耐2力3根4智5友人或团队
+    30, // 友情加成
+    30, // 干劲加成
+    5, // 训练加成
+    {0, 0, 1, 3, 0, 0}, // 速耐力根智pt的加成
+    0, // 智力彩圈体力回复量
+    {20, 0, 0, 0, 0, 0}, // 初期速耐力根智pt的提升
+    35, // 初始羁绊
     5, // 赛后
     {0, 0, 0, 0, 0, 25}, // 为了简化，把红点的技能等效成多少属性
     40, // 启发发生率提升
