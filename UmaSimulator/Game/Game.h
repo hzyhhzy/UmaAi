@@ -13,9 +13,9 @@ struct Game
   bool isQieZhe;//切者
   bool isAiJiao;//爱娇
   int failureRateBias;//失败率改变量。练习上手=2，练习下手=-2
-  int fiveValue[5];//五维属性，1200以上不减半
-  //int fiveValueUmaBonus[5];//马娘自身加成
-  int fiveValueLimit[5];//五维属性上限，1200以上不减半
+  int fiveStatus[5];//五维属性，1200以上不减半
+  //int fiveStatusUmaBonus[5];//马娘自身加成
+  int fiveStatusLimit[5];//五维属性上限，1200以上不减半
   int skillPt;//技能点
   int motivation;//干劲，从1到5分别是绝不调到绝好调
   int cardId[6];//6张卡的id
@@ -105,7 +105,7 @@ private:
   int calculateFailureRate(int trainType) const;//计算训练失败率
   void calculateVenusSpiritsBonus();//计算碎片加成  
   std::array<int,6> calculateBlueVenusBonus(int trainType) const;//计算开蓝女神的加成
-  void runRace(int basicFiveValueBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
+  void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
 public:
   void calculateTrainingValueSingle(int trainType);//计算每个训练加多少
 };

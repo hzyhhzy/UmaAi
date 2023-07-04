@@ -20,22 +20,22 @@ void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhong
   skillPt = 120;
 
   for (int i = 0; i < 5; i++)
-    fiveValue[i] = GameDatabase::AllUmas[umaId].fiveValueInitial[i]; //赛马娘初始值
+    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
   for (int i = 0; i < 5; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
-      fiveValue[j] = GameDatabase::AllSupportCards[cardId[i]].bonusBasic[j]; 
+      fiveStatus[j] = GameDatabase::AllSupportCards[cardId[i]].bonusBasic[j]; 
     skillPt += GameDatabase::AllSupportCards[cardId[i]].bonusBasic[5];
   }
   for (int i = 0; i < 5; i++)
-    fiveValue[i] += zhongMaBlueCount[i] * 7; //种马
+    fiveStatus[i] += zhongMaBlueCount[i] * 7; //种马
 
   for (int i = 0; i < 5; i++)
-    fiveValueLimit[i] = GameConstants::BasicFiveValueLimit[i]; //原始属性上限
+    fiveStatusLimit[i] = GameConstants::BasicFiveStatusLimit[i]; //原始属性上限
   for (int i = 0; i < 5; i++)
-    fiveValueLimit[i] += zhongMaBlueCount[i] * 7; //属性上限--种马
+    fiveStatusLimit[i] += zhongMaBlueCount[i] * 7; //属性上限--种马
   for (int i = 0; i < 5; i++)
-    fiveValueLimit[i] += rand()%10; //属性上限--白因子随机增加
+    fiveStatusLimit[i] += rand()%10; //属性上限--白因子随机增加
 
   motivation = 3;
   for (int i = 0; i < 6; i++)
@@ -343,7 +343,7 @@ void Game::calculateVenusSpiritsBonus()
       spiritBonus[type] += 3;
   }
 }
-void Game::runRace(int basicFiveValueBonus, int basicPtBonus)
+void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 {
   int cardRaceBonus = 0;
   for (int card = 0; card < 6; card++)
@@ -353,9 +353,9 @@ void Game::runRace(int basicFiveValueBonus, int basicPtBonus)
   double raceMultiply = 1 + 0.01 * cardRaceBonus;
   if (venusAvailableWisdom == 1 && venusIsWisdomActive)//开红
     raceMultiply *= 1.35;
-  int fiveValueBonus = floor(raceMultiply * basicFiveValueBonus);
+  int fiveStatusBonus = floor(raceMultiply * basicFiveStatusBonus);
   int ptBonus = floor(raceMultiply * basicPtBonus);
-  for (int i = 0; i < 5; i++)fiveValue[i] += fiveValueBonus;
+  for (int i = 0; i < 5; i++)fiveStatus[i] += fiveStatusBonus;
   skillPt += basicPtBonus;
 }
 void Game::calculateTrainingValueSingle(int trainType)
@@ -414,7 +414,7 @@ void Game::calculateTrainingValueSingle(int trainType)
   //6.成长率
   double growthRates[6] = { 1,1,1,1,1,1 };
   for (int j = 0; j < 5; j++)
-    growthRates[j] = 1.0 + 0.01 * GameDatabase::AllUmas[umaId].fiveValueBonus[j];
+    growthRates[j] = 1.0 + 0.01 * GameDatabase::AllUmas[umaId].fiveStatusBonus[j];
 
   //下层总数值
   int totalValue[6];
@@ -473,7 +473,7 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
   if (isRacing)
   {
     if (turn != TOTAL_TURN - 1)//除了GrandMaster
-      runRace(GameConstants::NormalRaceFiveValueBonus, GameConstants::NormalRacePtBonus);
+      runRace(GameConstants::NormalRaceFiveStatusBonus, GameConstants::NormalRacePtBonus);
     int newSpirit = (rand() % 6 + 1) + (rand() % 3) * 8;//随机加两个碎片
     addSpirit(rand, newSpirit);
     addSpirit(rand, newSpirit);
@@ -505,7 +505,7 @@ int Game::finalScore(int chosenOutgoing) const
 {
   int total = 0;
   for (int i = 0; i < 5; i++)
-    total += GameConstants::FiveValueFinalScore[min(fiveValue[i],fiveValueLimit[i])];
+    total += GameConstants::FiveStatusFinalScore[min(fiveStatus[i],fiveStatusLimit[i])];
   
   double scorePtRate = isQieZhe ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate;
   total += scorePtRate * skillPt;

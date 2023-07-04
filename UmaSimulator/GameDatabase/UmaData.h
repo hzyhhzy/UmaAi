@@ -4,6 +4,6 @@
 struct UmaData
 {
   bool races[TOTAL_TURN];//哪些回合有比赛
-  int fiveValueBonus[5];//属性加成
-  int fiveValueInitial[5];//初始属性
+  int fiveStatusBonus[5];//属性加成
+  int fiveStatusInitial[5];//初始属性
 };
