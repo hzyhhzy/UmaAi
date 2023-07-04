@@ -282,7 +282,7 @@ void Game::clearSpirit()
 {
 
 }
-void Game::calculateFailureRate(int trainType)
+int Game::calculateFailureRate(int trainType) const
 {
   //粗略拟合的训练失败率，二次函数 A*x^2 + B*x + C + 0.5 * trainLevel
   //误差应该在2%以内
@@ -297,7 +297,7 @@ void Game::calculateFailureRate(int trainType)
   fr += failureRateBias;
   if (fr < 0)fr = 0;
   if (fr > 100)fr = 100;
-  failRate[trainType] = fr;
+  return fr;
 }
 void Game::calculateVenusSpiritsBonus()
 {
@@ -343,10 +343,25 @@ void Game::calculateVenusSpiritsBonus()
       spiritBonus[type] += 3;
   }
 }
+void Game::runRace(int basicFiveValueBonus, int basicPtBonus)
+{
+  int cardRaceBonus = 0;
+  for (int card = 0; card < 6; card++)
+  {
+    cardRaceBonus += GameDatabase::AllSupportCards[cardId[card]].saiHou;
+  }
+  double raceMultiply = 1 + 0.01 * cardRaceBonus;
+  if (venusAvailableWisdom == 1 && venusIsWisdomActive)//开红
+    raceMultiply *= 1.35;
+  int fiveValueBonus = floor(raceMultiply * basicFiveValueBonus);
+  int ptBonus = floor(raceMultiply * basicPtBonus);
+  for (int i = 0; i < 5; i++)fiveValue[i] += fiveValueBonus;
+  skillPt += basicPtBonus;
+}
 void Game::calculateTrainingValueSingle(int trainType)
 {
   //分配完了，接下来计算属性加值
-  calculateFailureRate(trainType);//计算失败率
+  failRate[trainType] = calculateFailureRate(trainType);//计算失败率
 
   vector<CardTrainingEffect> effects;
   for (int card = 0; card < 6; card++)
@@ -449,6 +464,52 @@ void Game::calculateTrainingValueSingle(int trainType)
     trainValue[trainType][j] = totalValue[j];
   }
   trainValue[trainType][6] = vitalChange;
+}
+
+void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIfFull, int chosenSpiritColor, int chosenOutgoing)
+{
+  if (useVenusIfFull && venusAvailableWisdom != 0)
+    activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
+  if (isRacing)
+  {
+    if (turn != TOTAL_TURN - 1)//除了GrandMaster
+      runRace(GameConstants::NormalRaceFiveValueBonus, GameConstants::NormalRacePtBonus);
+    int newSpirit = (rand() % 6 + 1) + (rand() % 3) * 8;//随机加两个碎片
+    addSpirit(rand, newSpirit);
+    addSpirit(rand, newSpirit);
+    return;//GUR,WBC,SWBC,GrandMaster四场比赛在checkEventAfterTrain()里处理，不在这个函数
+  }
+  if (chosenTrain == 5)//休息
+  {
+    int r = rand() % 100;
+    if (r < 25)
+      vital += 70;
+    else if (r < 82)
+      vital += 50;
+    else
+      vital += 30;
+    if (vital > maxVital)
+      vital = maxVital;
+
+    int spirit = spiritDistribution[chosenTrain];
+    addSpirit(rand, spirit % 32);
+    if(spirit>32)addSpirit(rand, spirit % 32);//两个碎片
+  }
+  else if (chosenTrain == 7)//比赛
+  {
+    TODO
+  }
+}
+
+int Game::finalScore(int chosenOutgoing) const
+{
+  int total = 0;
+  for (int i = 0; i < 5; i++)
+    total += GameConstants::FiveValueFinalScore[min(fiveValue[i],fiveValueLimit[i])];
+  
+  double scorePtRate = isQieZhe ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate;
+  total += scorePtRate * skillPt;
+  return total;
 }
 
 int Game::getTrainingLevel(int item) const

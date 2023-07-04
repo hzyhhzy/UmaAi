@@ -72,8 +72,8 @@ struct Game
   //    {
   //      PLAYER_CHOICE;
   //    }
-  //    applyTraining();//比赛
-  //    checkEventAfterTrain();
+  //    applyTraining();//这个函数只开女神，不干别的
+  //    checkEventAfterTrain();//比赛加多少在这个函数里处理
   //  }
   //}
   //finalScore();
@@ -102,8 +102,10 @@ private:
   void addSpirit(std::mt19937_64& rand, int s);//添加碎片
   void activateVenusWisdom();//使用女神睿智
   void clearSpirit();//清空碎片
-  void calculateFailureRate(int trainType);//计算训练失败率
+  int calculateFailureRate(int trainType) const;//计算训练失败率
   void calculateVenusSpiritsBonus();//计算碎片加成  
+  std::array<int,6> calculateBlueVenusBonus(int trainType) const;//计算开蓝女神的加成
+  void runRace(int basicFiveValueBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
 public:
   void calculateTrainingValueSingle(int trainType);//计算每个训练加多少
 };

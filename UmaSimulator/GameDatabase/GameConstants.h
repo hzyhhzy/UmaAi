@@ -12,6 +12,11 @@ public:
   static const int TrainingBasicValue[5][6][7]; //TrainingBasicValue[第几种训练][LV几][速耐力根智pt体力]，红女神是LV6
   static const int BasicFiveValueLimit[5];//初始上限，1200以上翻倍
 
+  //各种游戏参数
+  static const int NormalRaceFiveValueBonus;//常规比赛属性加成=3
+  static const int NormalRacePtBonus;//常规比赛pt加成
+
+
   //女神杯
   static const int VenusLevelTrainBonus[6];//女神等级训练加成
   static const int RedVenusLevelVitalCostDown[6];//红女神体力消耗下降比例

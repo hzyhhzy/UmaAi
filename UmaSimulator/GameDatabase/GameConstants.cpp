@@ -6,6 +6,11 @@ const double GameConstants::ScorePtRate = 1.8;
 const double GameConstants::ScorePtRateQieZhe = 2.0;
 const int GameConstants::BasicFiveValueLimit[5] = { 1800,1600,1800,1400,1400 }; //游戏里原来是1500 1400 1500 1300 1300，模拟器中1200以上翻倍
 
+const int GameConstants::NormalRaceFiveValueBonus = 3;//常规比赛属性加成=3
+const int GameConstants::NormalRacePtBonus = 40;//常规比赛pt加成
+
+
+
 const int GameConstants::VenusLevelTrainBonus[6] = { 0,5,8,11,13,15 };
 const int GameConstants::RedVenusLevelVitalCostDown[6] = { 0,10,15,18,20,23 };//红女神体力消耗下降比例
 const int GameConstants::BlueVenusLevelHintProbBonus[6] = { 0,20,25,30,33,35 };//蓝女神事件发生概率提升
