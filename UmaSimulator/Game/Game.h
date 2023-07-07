@@ -89,16 +89,22 @@ struct Game
   //注：普通回合有14种可能（5种训练，其中一种训练可能会出现女神三选一。除此以外有休息，比赛，5种出行），比赛回合只有开不开女神两种选择
   void applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIfFull, int chosenSpiritColor, int chosenOutgoing);
   void checkEventAfterTrain(std::mt19937_64& rand);//检查固定事件和随机事件，并进入下一个回合
-  int finalScore(int chosenOutgoing) const;//最终总分
+  int finalScore() const;//最终总分
 
   //辅助函数
   int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，红女神是5级
   bool isOutgoingLegal(int chosenOutgoing) const;//这个外出是否是可以进行的
+  bool isXiaHeSu();//是否为夏合宿
   //void runTestGame();
 
   void getNNInput(float* buf) const;//神经网络输入
 
 private:
+  void addStatus(int idx, int value);//增加属性值，并处理溢出
+  void addAllStatus(int value);//增加五个属性值
+  void addVital(int value);//增加体力，并处理溢出
+  void addMotivation(int value);//增加心情
+  void addJiBan(int idx,int value);//增加羁绊，并考虑爱娇
   void addSpirit(std::mt19937_64& rand, int s);//添加碎片
   void activateVenusWisdom();//使用女神睿智
   void clearSpirit();//清空碎片
@@ -106,6 +112,11 @@ private:
   void calculateVenusSpiritsBonus();//计算碎片加成  
   std::array<int,6> calculateBlueVenusBonus(int trainType) const;//计算开蓝女神的加成
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
+
+
+  //一些过于复杂的事件放在这里
+  void handleVenusOutgoing(int chosenOutgoing);//女神外出
+  void handleVenusThreeChoicesEvent(std::mt19937_64& rand, int chosenColor);//女神三选一事件
 public:
   void calculateTrainingValueSingle(int trainType);//计算每个训练加多少
 };

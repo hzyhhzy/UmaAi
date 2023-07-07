@@ -16,6 +16,10 @@ public:
   static const int NormalRaceFiveStatusBonus;//常规比赛属性加成=3
   static const int NormalRacePtBonus;//常规比赛pt加成
 
+  //女神卡
+  static const double VenusUnlockOutgoingProbEveryTurn;//每回合解锁外出的概率
+  static const double VenusThreeChoicesEventProb;//三选一事件概率，暂时猜测为40%*(1+蓝女神等级加成)
+  static const double VenusQingReDeactivateProb[10];//不同回合数女神情热离去的概率
 
   //女神杯
   static const int VenusLevelTrainBonus[6];//女神等级训练加成

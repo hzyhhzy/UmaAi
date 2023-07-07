@@ -7,7 +7,7 @@ void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhong
   umaId = newUmaId;
   for (int i = 0; i < 6; i++)
     cardId[i] = newCards[i];
-  assert(cardId[0] = SHENTUAN_ID);
+  assert(cardId[0] = SHENTUAN_ID && "神团卡不在第一个位置");
   for (int i = 0; i < 5; i++)
     zhongMaBlueCount[i] = newZhongMaBlueCount[i];
 
@@ -21,21 +21,21 @@ void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhong
 
   for (int i = 0; i < 5; i++)
     fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
-  for (int i = 0; i < 5; i++)//支援卡初始加成
+  for (int i = 0; i < 6; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
-      fiveStatus[j] = GameDatabase::AllSupportCards[cardId[i]].bonusBasic[j]; 
+      addStatus(j, GameDatabase::AllSupportCards[cardId[i]].bonusBasic[j]);
     skillPt += GameDatabase::AllSupportCards[cardId[i]].bonusBasic[5];
   }
   for (int i = 0; i < 5; i++)
-    fiveStatus[i] += zhongMaBlueCount[i] * 7; //种马
+    addStatus(i, zhongMaBlueCount[i] * 7); //种马
 
   for (int i = 0; i < 5; i++)
     fiveStatusLimit[i] = GameConstants::BasicFiveStatusLimit[i]; //原始属性上限
   for (int i = 0; i < 5; i++)
-    fiveStatusLimit[i] += zhongMaBlueCount[i] * 7; //属性上限--种马
+    fiveStatusLimit[i] += zhongMaBlueCount[i] * 7; //属性上限--种马基础值
   for (int i = 0; i < 5; i++)
-    fiveStatusLimit[i] += rand()%10; //属性上限--白因子随机增加
+    fiveStatusLimit[i] += rand()%10; //属性上限--后两次继承随机增加
 
   motivation = 3;
   for (int i = 0; i < 6; i++)
@@ -115,7 +115,8 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
       cardDistribution[whichTrain][7] = true;
   }
   //分配碎片
-  if (turn < 2 || venusSpiritsBottom[7] != 0)//无碎片
+  if(false)
+  //if (turn < 2 || venusSpiritsBottom[7] != 0)//无碎片
   {
     for (int i = 0; i < 8; i++)
       spiritDistribution[i] = 0;
@@ -123,6 +124,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   else
   {
     bool allowTwoSpirits = venusSpiritsBottom[6] != 0;//有两个空位
+    allowTwoSpirits = true;
     for (int i = 0; i < 8; i++)
     {
       std::discrete_distribution<> d(GameConstants::VenusSpiritTypeProb[i], GameConstants::VenusSpiritTypeProb[i+1]);
@@ -169,8 +171,49 @@ void Game::calculateTrainingValue()
     calculateTrainingValueSingle(trainType);
   }
 }
+void Game::addStatus(int idx, int value)
+{
+  fiveStatus[idx] += value;
+  if (fiveStatus[idx] > fiveStatusLimit[idx])
+    fiveStatus[idx] = fiveStatusLimit[idx];
+  if (fiveStatus[idx] < 1)
+    fiveStatus[idx] = 1;
+}
+void Game::addVital(int value)
+{
+  vital += value;
+  if (vital > maxVital)
+    vital = maxVital;
+  if (vital < 0)
+    vital = 0;
+}
+void Game::addMotivation(int value)
+{
+  motivation += value;
+  if (motivation > 5)
+    motivation = 5;
+  if (vital < 1)
+    motivation = 1;
+}
+void Game::addJiBan(int idx, int value)
+{
+  if (idx < 6 && isAiJiao)value += 2;
+  cardJiBan[idx] += value;
+  if (cardJiBan[idx] > 100)cardJiBan[idx] = 100;
+}
+void Game::addAllStatus(int value)
+{
+  for (int i = 0; i < 5; i++)addStatus(i, value);
+}
 void Game::addSpirit(std::mt19937_64& rand, int s)
 {
+  if (s > 32)//两个碎片
+  {
+    addSpirit(rand, s % 32);
+    addSpirit(rand, s % 32);
+    return;
+  }
+
   int place = -1;//在第几个碎片槽
   for (int i = 0; i < 8; i++)
   {
@@ -253,8 +296,7 @@ void Game::activateVenusWisdom()
   {
     if (venusLevelRed < 5)
       venusLevelRed += 1;
-    vital += 50;
-    if (vital > maxVital)vital = maxVital;
+    addVital(50);
     motivation = 5;
     //其他项目不在这里处理
   }
@@ -355,8 +397,62 @@ void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
     raceMultiply *= 1.35;
   int fiveStatusBonus = floor(raceMultiply * basicFiveStatusBonus);
   int ptBonus = floor(raceMultiply * basicPtBonus);
-  for (int i = 0; i < 5; i++)fiveStatus[i] += fiveStatusBonus;
+  addAllStatus(fiveStatusBonus);
   skillPt += basicPtBonus;
+}
+void Game::handleVenusOutgoing(int chosenOutgoing)
+{
+  assert(cardId[0] = SHENTUAN_ID && "神团卡不在第一个位置");
+  if (chosenOutgoing == 0)//红
+  {
+    addVital(45);
+    addMotivation(1);
+    skillPt += 24;
+    skillPt += 10;//技能等价
+    addJiBan(0, 5);
+  }
+  else if (chosenOutgoing == 1)//蓝
+  {
+    addVital(32);
+    addMotivation(1);
+    addStatus(0, 12);
+    addStatus(4, 12);
+    skillPt += 10;//技能等价
+    addJiBan(0, 5);
+  }
+  else if (chosenOutgoing == 2)//黄
+  {
+    maxVital += 4;
+    addVital(32);
+    addMotivation(1);
+    addStatus(1, 8);
+    addStatus(2, 8);
+    addStatus(3, 8);
+    skillPt += 15;//技能等价
+    addJiBan(0, 5);
+
+  }
+  else if (chosenOutgoing == 3)//团1
+  {
+    addVital(45);
+    addMotivation(1);
+    addStatus(1, 15);
+    addStatus(2, 15);
+    addStatus(3, 15);
+    addJiBan(0, 5);
+
+  }
+  else if (chosenOutgoing == 4)//团2
+  {
+    addVital(52);
+    addMotivation(1);
+    addAllStatus(9);
+    skillPt += 36;
+    skillPt += 50;//技能等价
+    addJiBan(0, 5);
+    venusCardIsQingRe = true;
+  }
+  else assert(false && "未知的神团出行");
 }
 void Game::calculateTrainingValueSingle(int trainType)
 {
@@ -481,27 +577,49 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
   }
   if (chosenTrain == 5)//休息
   {
-    int r = rand() % 100;
-    if (r < 25)
-      vital += 70;
-    else if (r < 82)
-      vital += 50;
+    if (isXiaHeSu())
+    {
+      addVital(40);
+      addMotivation(1);
+    }
     else
-      vital += 30;
-    if (vital > maxVital)
-      vital = maxVital;
+    {
+      int r = rand() % 100;
+      if (r < 25)
+        addVital(70);
+      else if (r < 82)
+        addVital(50);
+      else
+        addVital(30);
+    }
 
-    int spirit = spiritDistribution[chosenTrain];
-    addSpirit(rand, spirit % 32);
-    if(spirit>32)addSpirit(rand, spirit % 32);//两个碎片
+    addSpirit(rand, spiritDistribution[chosenTrain]);
   }
   else if (chosenTrain == 7)//比赛
   {
-    TODO
+    runRace(GameConstants::NormalRaceFiveStatusBonus, GameConstants::NormalRacePtBonus);
+
+    addSpirit(rand, spiritDistribution[chosenTrain]);
+  }
+  else if (chosenTrain == 6)//外出
+  {
+    assert(!isXiaHeSu() && "夏合宿不允许外出");
+    if (chosenOutgoing < 5)//神团外出
+      handleVenusOutgoing(chosenOutgoing);
+    else if (chosenOutgoing == 6)//普通外出
+    {
+      //懒得查概率了，就50%加2心情，50%加1心情10体力
+      if (rand() % 2)
+        addMotivation(2);
+      else
+        addVital(10);
+    }
+
+    addSpirit(rand, spiritDistribution[chosenTrain]);
   }
 }
 
-int Game::finalScore(int chosenOutgoing) const
+int Game::finalScore() const
 {
   int total = 0;
   for (int i = 0; i < 5; i++)
@@ -514,16 +632,23 @@ int Game::finalScore(int chosenOutgoing) const
 
 int Game::getTrainingLevel(int item) const
 {
-  int level = trainLevelCount[item] / 12;
-  if (level > 4)level = 4;
+  int level ;
   if (venusIsWisdomActive && venusAvailableWisdom == 1)//红女神
     level = 5;
+  else if(isXiaHeSu())
+    level = 4;
+  else
+  {
+    level = trainLevelCount[item] / 12;
+    if (level > 4)level = 4;
+  }
   return level;
 }
 
 bool Game::isOutgoingLegal(int chosenOutgoing) const
 {
-  assert(chosenOutgoing >= 0 && chosenOutgoing <= 5);
+  assert(chosenOutgoing >= 0 && chosenOutgoing <= 5 && "未知的外出");
+  if (isXiaHeSu())return false;//夏合宿不允许外出
   if (chosenOutgoing == 5)return true;//普通外出
   //剩下的是神团外出
   if (!venusCardUnlockOutgoing)return false;
@@ -537,4 +662,9 @@ bool Game::isOutgoingLegal(int chosenOutgoing) const
 
 
 
+}
+
+bool Game::isXiaHeSu() const
+{
+  return (turn >= 36 && turn <= 39) || (turn >= 60 && turn <= 63);
 }

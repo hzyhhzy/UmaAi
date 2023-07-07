@@ -7,7 +7,7 @@ const double GameConstants::ScorePtRateQieZhe = 2.0;
 const int GameConstants::BasicFiveStatusLimit[5] = { 1800,1600,1800,1400,1400 }; //游戏里原来是1500 1400 1500 1300 1300，模拟器中1200以上翻倍
 
 const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3
-const int GameConstants::NormalRacePtBonus = 40;//常规比赛pt加成
+const int GameConstants::NormalRacePtBonus = 45;//常规比赛pt加成,G1=45
 
 
 

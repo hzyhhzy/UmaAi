@@ -1,12 +1,14 @@
 //≤‚ ‘—µ¡∑ Ù–‘÷µÀ„∑®
 #include <iostream>
 #include <random>
+#include <cassert>
 #include "../Game/Game.h"
 using namespace std;
 
 
 void main_test2()
 {
+  assert(1 == 2 && "test error");
   random_device rd;
   auto rand = mt19937_64(rd());
 
