@@ -85,7 +85,11 @@ struct Game
   void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组和碎片
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率
 
-  //计算训练后的变化。其中，chosenTrain代表选择的训练，01234分别是速耐力根智，5是休息，6是外出，7是比赛。useVenusIfFull是假如女神已满，是否开启女神。chosenSpiritColor是假如出现女神三选一事件，选择的碎片颜色。chosenOutgoing是如果外出，选择的外出项目，五个神团外出分别是01234，普通外出是5。
+  //计算训练后的变化。
+  // 其中，chosenTrain代表选择的训练，01234分别是速耐力根智，5是休息，6是外出，7是比赛。
+  // useVenusIfFull是假如女神已满，是否开启女神。
+  // chosenSpiritColor是假如出现女神三选一事件，选择的碎片颜色。红蓝黄分别012
+  // chosenOutgoing是如果外出，选择的外出项目，五个神团外出分别是01234，普通外出是5。
   //注：普通回合有14种可能（5种训练，其中一种训练可能会出现女神三选一。除此以外有休息，比赛，5种出行），比赛回合只有开不开女神两种选择
   void applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIfFull, int chosenSpiritColor, int chosenOutgoing);
   void checkEventAfterTrain(std::mt19937_64& rand);//检查固定事件和随机事件，并进入下一个回合
@@ -94,7 +98,7 @@ struct Game
   //辅助函数
   int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，红女神是5级
   bool isOutgoingLegal(int chosenOutgoing) const;//这个外出是否是可以进行的
-  bool isXiaHeSu();//是否为夏合宿
+  bool isXiaHeSu() const;//是否为夏合宿
   //void runTestGame();
 
   void getNNInput(float* buf) const;//神经网络输入
@@ -105,6 +109,7 @@ private:
   void addVital(int value);//增加体力，并处理溢出
   void addMotivation(int value);//增加心情
   void addJiBan(int idx,int value);//增加羁绊，并考虑爱娇
+  void addTrainingLevelCount(int item, int value);//增加训练等级计数（每12为1级，训练+2，碎片+1，特殊比赛
   void addSpirit(std::mt19937_64& rand, int s);//添加碎片
   void activateVenusWisdom();//使用女神睿智
   void clearSpirit();//清空碎片

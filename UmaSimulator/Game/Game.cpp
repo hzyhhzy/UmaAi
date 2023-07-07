@@ -7,7 +7,7 @@ void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhong
   umaId = newUmaId;
   for (int i = 0; i < 6; i++)
     cardId[i] = newCards[i];
-  assert(cardId[0] = SHENTUAN_ID && "神团卡不在第一个位置");
+  assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
   for (int i = 0; i < 5; i++)
     zhongMaBlueCount[i] = newZhongMaBlueCount[i];
 
@@ -74,12 +74,17 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   //先将6张卡分配到训练中
   for (int i = 0; i < 5; i++)
     for (int j = 0; j < 8; j++)
-      cardDistribution[i][j] = 0;
+      cardDistribution[i][j] = false;
 
   double blueVenusHintBonus = 1 + 0.01 * GameConstants::BlueVenusLevelHintProbBonus[venusLevelBlue];
 
   for (int i = 0; i < 6; i++)
   {
+    if (turn < 2 && i == 0)//前两回合神团不来
+    {
+      assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
+      continue;
+    }
     std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
     int cardType = GameDatabase::AllSupportCards[cardId[i]].cardType;
     int deYiLv = GameDatabase::AllSupportCards[cardId[i]].deYiLv;
@@ -201,6 +206,11 @@ void Game::addJiBan(int idx, int value)
   cardJiBan[idx] += value;
   if (cardJiBan[idx] > 100)cardJiBan[idx] = 100;
 }
+void Game::addTrainingLevelCount(int item, int value)
+{
+  trainLevelCount[item] += value;
+  if (trainLevelCount[item] > 48)trainLevelCount[item] = 48;
+}
 void Game::addAllStatus(int value)
 {
   for (int i = 0; i < 5; i++)addStatus(i, value);
@@ -225,6 +235,14 @@ void Game::addSpirit(std::mt19937_64& rand, int s)
   }
   if (place == -1)return;//碎片槽满了
   venusSpiritsBottom[place] = s;
+
+  //训练等级计数+1
+  {
+    int type = s % 8 - 1;
+    if (s < 5 && s >= 0)
+      addTrainingLevelCount(type, 1);
+  }
+
   if (place % 2 == 1)//第二层有新碎片
   {
     int sL = venusSpiritsBottom[place - 1];
@@ -291,6 +309,7 @@ void Game::addSpirit(std::mt19937_64& rand, int s)
 void Game::activateVenusWisdom()
 {
   if (venusAvailableWisdom == 0)return;
+  assert(venusIsWisdomActive == false);
   venusIsWisdomActive = true;
   if (venusAvailableWisdom == 1)//开红
   {
@@ -402,7 +421,7 @@ void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 }
 void Game::handleVenusOutgoing(int chosenOutgoing)
 {
-  assert(cardId[0] = SHENTUAN_ID && "神团卡不在第一个位置");
+  assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
   if (chosenOutgoing == 0)//红
   {
     addVital(45);
@@ -453,6 +472,34 @@ void Game::handleVenusOutgoing(int chosenOutgoing)
     venusCardIsQingRe = true;
   }
   else assert(false && "未知的神团出行");
+}
+void Game::handleVenusThreeChoicesEvent(std::mt19937_64& rand, int chosenColor)
+{
+  int spiritType = chosenColor * 8 + rand() % 6 + 1;//碎片类型
+  addSpirit(rand, spiritType);
+  assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
+  addJiBan(0, 5);
+  if (chosenColor == 0)
+  {
+    skillPt += 4;
+    if(venusCardIsQingRe)
+      skillPt += 5;
+  }
+  else if (chosenColor == 1)
+  {
+    addStatus(0, 4);
+    if (venusCardIsQingRe)
+      skillPt += 4;
+  }
+  else if (chosenColor == 2)
+  {
+    addStatus(1, 4);
+    if (venusCardIsQingRe)
+      skillPt += 4;
+  }
+
+  if (venusCardUnlockOutgoing)
+    venusCardIsQingRe = true;//情热是否消失在checkEventAfterTrain里处理
 }
 void Game::calculateTrainingValueSingle(int trainType)
 {
@@ -604,6 +651,7 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
   else if (chosenTrain == 6)//外出
   {
     assert(!isXiaHeSu() && "夏合宿不允许外出");
+    assert(isOutgoingLegal(chosenOutgoing) && "不合法的外出");
     if (chosenOutgoing < 5)//神团外出
       handleVenusOutgoing(chosenOutgoing);
     else if (chosenOutgoing == 6)//普通外出
@@ -612,10 +660,110 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
       if (rand() % 2)
         addMotivation(2);
       else
+      {
+        addMotivation(1);
         addVital(10);
+      }
     }
 
     addSpirit(rand, spiritDistribution[chosenTrain]);
+  }
+  else if (chosenTrain <= 4 && chosenTrain >= 0)//常规训练
+  {
+    if (rand() % 100 < failRate[chosenTrain])//训练失败
+    {
+      if (failRate[chosenTrain] >= 20 && (rand() % 100 < failRate[chosenTrain]))//训练大失败，概率是瞎猜的
+      {
+        addStatus(chosenTrain, -10);
+        if (fiveStatus[chosenTrain] > 1200)
+          addStatus(chosenTrain, -10);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
+        //随机扣2个10，不妨改成全属性-4降低随机性
+        for (int i = 0; i < 5; i++)
+        {
+          addStatus(i, -4);
+          if (fiveStatus[i] > 1200)
+            addStatus(i, -4);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
+        }
+        addMotivation(-3);
+        addVital(10);
+      }
+      else//小失败
+      {
+        addStatus(chosenTrain, -5);
+        if (fiveStatus[chosenTrain] > 1200)
+          addStatus(chosenTrain, -5);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
+        addMotivation(-1);
+      }
+    }
+    else
+    {
+      //先加上训练值
+      for (int i = 0; i < 5; i++)
+        addStatus(i, trainValue[chosenTrain][i]);
+      skillPt += trainValue[chosenTrain][5];
+      addVital(trainValue[chosenTrain][6]);
+      
+      //羁绊，红点
+      for (int i = 0; i < 8; i++)
+      {
+        if (cardDistribution[chosenTrain][i])
+        {
+          addJiBan(i, 7);
+          if (i == 6)skillPt += 2;//理事长
+          if (i >= 6)continue;//理事长和记者
+          if (cardHint[i])//红点
+          {
+            addJiBan(i, 5);
+            auto& hintBonus = GameDatabase::AllSupportCards[cardId[i]].hintBonus;
+            for (int i = 0; i < 5; i++)
+              addStatus(i, hintBonus[i]);
+            skillPt += hintBonus[5];
+          }
+        }
+      }
+      
+      //开蓝
+      if (venusIsWisdomActive && venusAvailableWisdom == 2)
+      {
+        auto blueVenusBonus = calculateBlueVenusBonus(chosenTrain);
+        for (int i = 0; i < 5; i++)
+          addStatus(i, blueVenusBonus[i]);
+        skillPt += blueVenusBonus[5];
+      }
+
+      //加碎片
+      addSpirit(rand, spiritDistribution[chosenTrain]);
+
+      //点击了女神所在的训练
+      assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
+      if (cardDistribution[chosenTrain][0])
+      {
+        if (!venusCardFirstClick)//第一次点
+        {
+          venusCardFirstClick = true;
+          addAllStatus(3);
+          addVital(10);
+          addJiBan(0, 10);
+        }
+        else
+        {
+          //三选一事件概率，暂时猜测为40%*(1+蓝女神等级加成)
+          double activeVenusProb = GameConstants::VenusThreeChoicesEventProb * (1 + 0.01 * GameConstants::BlueVenusLevelHintProbBonus[venusLevelBlue]);
+          bool activateThreeChoicesEvent = rand() % 1000 < activeVenusProb * 1000;
+          if (venusCardIsQingRe || (venusIsWisdomActive && venusAvailableWisdom == 2))//情热或开蓝
+          {
+            activateThreeChoicesEvent = true;
+          }
+          if (activateThreeChoicesEvent)
+            handleVenusThreeChoicesEvent(rand, chosenSpiritColor);
+        }
+
+      }
+
+      //训练等级计数+2
+      if(!isXiaHeSu())
+        addTrainingLevelCount(chosenTrain, 2);
+    }
   }
 }
 
@@ -639,6 +787,7 @@ int Game::getTrainingLevel(int item) const
     level = 4;
   else
   {
+    assert(trainLevelCount[item] <= 48, "训练等级计数超过48");
     level = trainLevelCount[item] / 12;
     if (level > 4)level = 4;
   }
