@@ -404,6 +404,31 @@ void Game::calculateVenusSpiritsBonus()
       spiritBonus[type] += 3;
   }
 }
+std::array<int, 6> Game::calculateBlueVenusBonus(int trainType) const
+{
+  std::array<int, 6> value = { 0,0,0,0,0,0 };
+  int cardCount = 0;
+  for (int i = 0; i < 6; i++)
+  {
+    if (cardDistribution[trainType][i])
+    {
+      int cardType = GameDatabase::AllSupportCards[cardId[i]].cardType;
+      if (cardType < 5)//速耐力根智
+      {
+        cardCount++;
+        for (int j = 0; j < 6; j++)
+          value[j] += GameConstants::BlueVenusRelatedStatus[cardType][j];
+      }
+    }
+  }
+  for (int j = 0; j < 6; j++)
+  {
+    if (value[j] > 0)//关联属性
+      value[j] += spiritBonus[j];
+  }
+  value[5] += 20 * cardCount;
+  return value;
+}
 void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 {
   int cardRaceBonus = 0;
@@ -708,7 +733,11 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
       {
         if (cardDistribution[chosenTrain][i])
         {
-          addJiBan(i, 7);
+          assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
+          if (i == 0) //神团点一次+4羁绊
+            addJiBan(i, 4);
+          else
+            addJiBan(i, 7);
           if (i == 6)skillPt += 2;//理事长
           if (i >= 6)continue;//理事长和记者
           if (cardHint[i])//红点
