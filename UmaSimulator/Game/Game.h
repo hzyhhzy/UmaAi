@@ -22,6 +22,7 @@ struct Game
   int cardJiBan[8];//羁绊，六张卡分别012345，理事长6，记者7
   int trainLevelCount[5];//五个训练的等级的计数，实际训练等级=min(5,t/12+1)
   int zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
+  int zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
   int isRacing;//这个回合是否在比赛
   //bool raceTurns[TOTAL_TURN];//哪些回合是比赛 //用umaId替代，在GameDatabase::AllUmas里找
 
@@ -39,6 +40,7 @@ struct Game
   bool venusCardFirstClick;// 是否已经点击过神团卡
   bool venusCardUnlockOutgoing;// 是否解锁外出
   bool venusCardIsQingRe;// 情热zone
+  int venusCardQingReContinuousTurns;//女神连着情热了几个回合
   bool venusCardOutgoingUsed[5];// 用过哪些出行，依次是红黄蓝和最后两个
 
   //当前回合的训练信息
@@ -81,7 +83,11 @@ struct Game
 
 
 
-  void newGame(std::mt19937_64& rand, int newUmaId,int newCards[6],int newZhongMaBlueCount[5]);//重置游戏，开局。umaId是马娘编号
+  void newGame(std::mt19937_64& rand,
+    int newUmaId,
+    int newCards[6],
+    int newZhongMaBlueCount[5],
+    int newZhongMaExtraBonus[6]);//重置游戏，开局。umaId是马娘编号
   void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组和碎片
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率
 

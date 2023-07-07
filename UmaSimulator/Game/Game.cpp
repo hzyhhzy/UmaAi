@@ -2,7 +2,12 @@
 #include <cassert>
 #include "Game.h"
 using namespace std;
-void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhongMaBlueCount[5])
+static bool randBool(mt19937_64& rand, double p)
+{
+  return rand() % 65536 < p * 65536;
+}
+
+void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhongMaBlueCount[5], int newZhongMaExtraBonus[6])
 {
   umaId = newUmaId;
   for (int i = 0; i < 6; i++)
@@ -10,6 +15,8 @@ void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhong
   assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
   for (int i = 0; i < 5; i++)
     zhongMaBlueCount[i] = newZhongMaBlueCount[i];
+  for (int i = 0; i < 6; i++)
+    zhongMaExtraBonus[i] = newZhongMaExtraBonus[i];
 
   turn = 0;
   vital = 100;
@@ -61,6 +68,7 @@ void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhong
   venusCardFirstClick = false;
   venusCardUnlockOutgoing = false;
   venusCardIsQingRe = false;
+  venusCardQingReContinuousTurns = 0;
   for (int i = 0; i < 5; i++)
     venusCardOutgoingUsed[i] = false;
 
@@ -642,6 +650,8 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
   {
     if (turn != TOTAL_TURN - 1)//除了GrandMaster
       runRace(GameConstants::NormalRaceFiveStatusBonus, GameConstants::NormalRacePtBonus);
+    addJiBan(6, 4);//理事长羁绊+4
+
     int newSpirit = (rand() % 6 + 1) + (rand() % 3) * 8;//随机加两个碎片
     addSpirit(rand, newSpirit);
     addSpirit(rand, newSpirit);
@@ -778,7 +788,7 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
         {
           //三选一事件概率，暂时猜测为40%*(1+蓝女神等级加成)
           double activeVenusProb = GameConstants::VenusThreeChoicesEventProb * (1 + 0.01 * GameConstants::BlueVenusLevelHintProbBonus[venusLevelBlue]);
-          bool activateThreeChoicesEvent = rand() % 1000 < activeVenusProb * 1000;
+          bool activateThreeChoicesEvent = randBool(rand,activeVenusProb);
           if (venusCardIsQingRe || (venusIsWisdomActive && venusAvailableWisdom == 2))//情热或开蓝
           {
             activateThreeChoicesEvent = true;
@@ -795,6 +805,7 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
     }
   }
 }
+
 
 int Game::finalScore() const
 {
@@ -845,4 +856,262 @@ bool Game::isOutgoingLegal(int chosenOutgoing) const
 bool Game::isXiaHeSu() const
 {
   return (turn >= 36 && turn <= 39) || (turn >= 60 && turn <= 63);
+}
+
+
+
+void Game::checkEventAfterTrain(std::mt19937_64& rand)
+{
+  //女神会不会启动
+  if (venusCardFirstClick && (!venusCardUnlockOutgoing))
+  {
+    if (randBool(rand, GameConstants::VenusUnlockOutgoingProbEveryTurn))//启动
+    {
+      //真似び学ぶ三女神
+      venusCardUnlockOutgoing = true;
+      venusCardIsQingRe = true;
+      addAllStatus(6);
+      skillPt += 12;
+      assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
+      addJiBan(0, 5);
+    }
+  }
+
+  //女神情热是否结束
+  if(venusCardIsQingRe)
+  {
+    if (randBool(rand, GameConstants::VenusQingReDeactivateProb[venusCardQingReContinuousTurns]))
+    {
+      venusCardIsQingRe = false;
+      venusCardQingReContinuousTurns = 0;
+    }
+    else venusCardQingReContinuousTurns++;
+  }
+
+  //处理各种固定事件
+  if (turn == 24)//第一年年底
+  {
+    //GUR
+    int raceFiveStatusBonus = 10;
+    int racePtBonus = 50;
+    if (venusLevelYellow >= 1)
+      raceFiveStatusBonus += 2;//随机1个属性+10，改成平均
+    if (venusLevelRed >= 1)
+      racePtBonus += 20;
+    runRace(raceFiveStatusBonus, racePtBonus);
+    if (venusLevelBlue >= 1)
+      skillPt += 10;//获得1个跑法技能
+
+    //升训练等级
+    for (int i = 0; i < 5; i++)
+      addTrainingLevelCount(i, 8);
+
+    //年底三选一事件，选属性还是体力
+    //为了简化，直接视为全属性+5
+    if (maxVital - vital >= 50)
+      addVital(20);
+    else 
+      addAllStatus(5);
+
+    //女神さま、ひとやすみ
+    if (venusCardUnlockOutgoing)
+    {
+      addVital(19);
+      skillPt += 36;
+      skillPt += 50;//技能等效
+      assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
+      addJiBan(0, 5);
+    }
+
+  }
+  else if (turn == 32)//第二年继承
+  {
+    for (int i = 0; i < 5; i++)
+      addStatus(i, zhongMaBlueCount[i] * 6); //蓝因子典型值
+    for (int i = 0; i < 5; i++)
+      addStatus(i, zhongMaExtraBonus[i]); //剧本因子典型值
+    skillPt += zhongMaExtraBonus[5];
+  }
+  else if (turn == 48)//第二年年底
+  {
+    //WBC
+    int raceFiveStatusBonus = 15;
+    int racePtBonus = 60;
+    if (venusLevelYellow >= 2)
+      raceFiveStatusBonus += 4;//随机2个属性+10，改成平均
+    if (venusLevelRed >= 2)
+      racePtBonus += 30;
+    runRace(raceFiveStatusBonus, racePtBonus);
+    if (venusLevelBlue >= 2)
+      skillPt += 20;//获得2个跑法技能
+
+    //升训练等级
+    for (int i = 0; i < 5; i++)
+      addTrainingLevelCount(i, 8);
+
+    //年底三选一事件，选属性还是体力
+    if (maxVital - vital >= 50)
+      addVital(30);
+    else
+      addAllStatus(8);
+  }
+  else if (turn == 49)//抽奖
+  {
+    int rd = rand() % 100;
+    if (rd < 16)//温泉或一等奖
+    {
+      addVital(30);
+      addAllStatus(10);
+      addMotivation(2);
+    }
+    else if (rd < 16 + 27)//二等奖
+    {
+      addVital(20);
+      addAllStatus(5);
+      addMotivation(1);
+    }
+    else if (rd < 16 + 27 + 46)//三等奖
+    {
+      addVital(20);
+    }
+    else//厕纸
+    {
+      addMotivation(-1);
+    }
+  }
+  else if (turn == 56)//第三年继承&理事长升固有
+  {
+    for (int i = 0; i < 5; i++)
+      addStatus(i, zhongMaBlueCount[i] * 6); //蓝因子典型值
+    for (int i = 0; i < 5; i++)
+      addStatus(i, zhongMaExtraBonus[i]); //剧本因子典型值
+    skillPt += zhongMaExtraBonus[5];
+    if (cardJiBan[6] >= 60)//可以升固有
+    {
+      addMotivation(1);
+      skillPt += 170 / GameConstants::ScorePtRate;//固有直接等价成pt
+    }
+    else
+    {
+      addVital(-5);
+      skillPt += 25;
+    }
+  }
+  else if (turn == 72)//第三年年底
+  {
+    //SWBC
+    int raceFiveStatusBonus = 20;
+    int racePtBonus = 70;
+    if (venusLevelYellow >= 3)
+      raceFiveStatusBonus += 6;//随机3个属性+10，改成平均
+    if (venusLevelRed >= 3)
+      racePtBonus += 45;
+    runRace(raceFiveStatusBonus, racePtBonus);
+    if (venusLevelBlue >= 3)
+      skillPt += 30;//获得3个跑法技能
+
+    //升训练等级
+    for (int i = 0; i < 5; i++)
+      addTrainingLevelCount(i, 8);
+  }
+  else if (turn == 77)//最后一战前的三选一
+  {
+    int totalLevel = venusLevelRed + venusLevelBlue + venusLevelYellow;
+    int maxLevel = max(venusLevelRed, max(venusLevelBlue, venusLevelYellow));
+    if (maxLevel >= 4)
+    {
+      addAllStatus(10);
+      skillPt += 50;//技能等效
+      if (maxLevel >= 5)
+        skillPt += 20;//技能折扣
+      if (totalLevel >= 12)
+        skillPt += 40;//技能折扣
+    }
+  }
+  else if (turn == 78)//最后一战
+  {
+    //GrandMasters
+    int raceFiveStatusBonus = 20;
+    int racePtBonus = 80;
+    runRace(raceFiveStatusBonus, racePtBonus);
+
+    //女神卡事件
+    if (venusCardOutgoingUsed[4])//出行走完了
+    {
+      addAllStatus(12);
+      skillPt += 12;
+    }
+    else
+    {
+      addAllStatus(8);
+    }
+
+    //记者
+    if (cardJiBan[7] >= 100)
+    {
+      addAllStatus(5);
+      skillPt += 20;
+    }
+    else if (cardJiBan[7] >= 80)
+    {
+      addAllStatus(3);
+      skillPt += 10;
+    }
+    else
+    {
+      skillPt += 5;
+    }
+
+    //各种乱七八糟
+    addAllStatus(25);
+    skillPt += 80;
+  }
+
+  //模拟各种随机事件
+
+  //支援卡连续事件，随机给一个卡加5羁绊
+  if (randBool(rand, 0.3))
+  {
+    int card = rand() % 6;
+    addJiBan(card, 5);
+  }
+
+  //模拟乱七八糟加属性事件
+  addAllStatus(1);
+
+  //加体力
+  if (randBool(rand, 0.1))
+  {
+    addVital(10);
+  }
+
+  //加心情
+  if (randBool(rand, 0.03))
+  {
+    addMotivation(1);
+  }
+
+  //掉心情
+  if (randBool(rand, 0.03))
+  {
+    addMotivation(-1);
+  }
+  
+  //如果开女神，清空碎片
+  if (venusIsWisdomActive)
+  {
+    venusIsWisdomActive = false;
+    venusAvailableWisdom = 0;
+    for (int i = 0; i < 8; i++)
+      venusSpiritsBottom[i] = 0;
+    for (int i = 0; i < 6; i++)
+      venusSpiritsUpper[i] = 0;
+    for (int i = 0; i < 6; i++)
+      spiritBonus[i] = 0;
+  }
+
+  //回合数+1
+  turn++;
+
+
 }
