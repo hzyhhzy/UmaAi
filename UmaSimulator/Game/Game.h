@@ -56,6 +56,9 @@ struct Game
   int trainValue[5][7];//第一个数是第几个训练，第二个数依次是速耐力根智pt体力
   int failRate[5];//训练失败率
 
+  //显示相关
+  bool playerPrint;//给人玩的时候，显示更多信息
+
   //游戏流程:
   //newGame();
   //for (int t = 0; t < TOTAL_TURN; t++)
@@ -84,6 +87,7 @@ struct Game
 
 
   void newGame(std::mt19937_64& rand,
+    bool enablePlayerPrint,
     int newUmaId,
     int newCards[6],
     int newZhongMaBlueCount[5],
@@ -91,13 +95,13 @@ struct Game
   void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组和碎片
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率
 
-  //计算训练后的变化。
+  // 计算训练后的变化。如果不合法，则返回false，且保证不做任何修改
   // 其中，chosenTrain代表选择的训练，01234分别是速耐力根智，5是休息，6是外出，7是比赛。
-  // useVenusIfFull是假如女神已满，是否开启女神。
+  // useVenus是假如女神已满，是否开启女神。
   // chosenSpiritColor是假如出现女神三选一事件，选择的碎片颜色。红蓝黄分别012
   // chosenOutgoing是如果外出，选择的外出项目，五个神团外出分别是01234，普通外出是5。
   //注：普通回合有14种可能（5种训练，其中一种训练可能会出现女神三选一。除此以外有休息，比赛，5种出行），比赛回合只有开不开女神两种选择
-  void applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIfFull, int chosenSpiritColor, int chosenOutgoing);
+  bool applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing);
   void checkEventAfterTrain(std::mt19937_64& rand);//检查固定事件和随机事件，并进入下一个回合
   int finalScore() const;//最终总分
 
@@ -108,6 +112,8 @@ struct Game
   //void runTestGame();
 
   void getNNInput(float* buf) const;//神经网络输入
+  void print() const;//用彩色字体显示游戏内容
+  void printFinalStats() const;//显示最终结果
 
 private:
   void addStatus(int idx, int value);//增加属性值，并处理溢出
@@ -128,6 +134,9 @@ private:
   //一些过于复杂的事件放在这里
   void handleVenusOutgoing(int chosenOutgoing);//女神外出
   void handleVenusThreeChoicesEvent(std::mt19937_64& rand, int chosenColor);//女神三选一事件
+
+  //显示事件
+  void printEvents(std::string s) const;//用绿色字体显示事件
 public:
   void calculateTrainingValueSingle(int trainType);//计算每个训练加多少
 };

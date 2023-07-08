@@ -14,7 +14,8 @@ void main_test2()
   //int cards[6] = { 1,2,3,6,11,10 };
   int cards[6] = { 1,2,3,4,5,6 };
   int zhongmaBlue[5] = { 18,0,0,0,0 };
-  game.newGame(rand, 1, cards, zhongmaBlue);
+  int zhongmaBonus[6] = { 30,0,30,0,200 };
+  game.newGame(rand,true, 1, cards, zhongmaBlue, zhongmaBonus);
   game.motivation = 5;
   for (int i = 0; i < 6; i++)
     game.cardJiBan[i] = 100;

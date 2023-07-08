@@ -7,8 +7,9 @@ static bool randBool(mt19937_64& rand, double p)
   return rand() % 65536 < p * 65536;
 }
 
-void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhongMaBlueCount[5], int newZhongMaExtraBonus[6])
+void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int newCards[6], int newZhongMaBlueCount[5], int newZhongMaExtraBonus[6])
 {
+  playerPrint = enablePlayerPrint;
   umaId = newUmaId;
   for (int i = 0; i < 6; i++)
     cardId[i] = newCards[i];
@@ -25,24 +26,28 @@ void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhong
   isAiJiao = false; 
   failureRateBias = 0;
   skillPt = 120;
+  skillPt += 170 * 5 / GameConstants::ScorePtRate;//固有技能换算成pt
 
-  for (int i = 0; i < 5; i++)
-    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
-  for (int i = 0; i < 6; i++)//支援卡初始加成
-  {
-    for (int j = 0; j < 5; j++)
-      addStatus(j, GameDatabase::AllSupportCards[cardId[i]].bonusBasic[j]);
-    skillPt += GameDatabase::AllSupportCards[cardId[i]].bonusBasic[5];
-  }
-  for (int i = 0; i < 5; i++)
-    addStatus(i, zhongMaBlueCount[i] * 7); //种马
 
   for (int i = 0; i < 5; i++)
     fiveStatusLimit[i] = GameConstants::BasicFiveStatusLimit[i]; //原始属性上限
   for (int i = 0; i < 5; i++)
     fiveStatusLimit[i] += zhongMaBlueCount[i] * 7; //属性上限--种马基础值
   for (int i = 0; i < 5; i++)
-    fiveStatusLimit[i] += rand()%10; //属性上限--后两次继承随机增加
+    fiveStatusLimit[i] += rand() % 20; //属性上限--后两次继承随机增加
+
+
+  for (int i = 0; i < 5; i++)
+    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
+  for (int i = 0; i < 6; i++)//支援卡初始加成
+  {
+    for (int j = 0; j < 5; j++)
+      addStatus(j, GameDatabase::AllSupportCards[cardId[i]].initialBonus[j]);
+    skillPt += GameDatabase::AllSupportCards[cardId[i]].initialBonus[5];
+  }
+  for (int i = 0; i < 5; i++)
+    addStatus(i, zhongMaBlueCount[i] * 7); //种马
+
 
   motivation = 3;
   for (int i = 0; i < 6; i++)
@@ -73,6 +78,7 @@ void Game::newGame(mt19937_64& rand, int newUmaId, int newCards[6], int newZhong
     venusCardOutgoingUsed[i] = false;
 
   stageInTurn = 0;
+  calculateVenusSpiritsBonus();
   randomDistributeCards(rand); 
   calculateTrainingValue();
 }
@@ -128,16 +134,14 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
       cardDistribution[whichTrain][7] = true;
   }
   //分配碎片
-  if(false)
-  //if (turn < 2 || venusSpiritsBottom[7] != 0)//无碎片
+  if (turn < 2 || venusSpiritsBottom[7] != 0)//无碎片
   {
     for (int i = 0; i < 8; i++)
       spiritDistribution[i] = 0;
   }
   else
   {
-    bool allowTwoSpirits = venusSpiritsBottom[6] != 0;//有两个空位
-    allowTwoSpirits = true;
+    bool allowTwoSpirits = venusSpiritsBottom[6] == 0;//有两个空位
     for (int i = 0; i < 8; i++)
     {
       std::discrete_distribution<> d(GameConstants::VenusSpiritTypeProb[i], GameConstants::VenusSpiritTypeProb[i+1]);
@@ -216,6 +220,7 @@ void Game::addJiBan(int idx, int value)
 }
 void Game::addTrainingLevelCount(int item, int value)
 {
+  assert(item >= 0 && item < 5 && "addTrainingLevelCount不合法训练");
   trainLevelCount[item] += value;
   if (trainLevelCount[item] > 48)trainLevelCount[item] = 48;
 }
@@ -247,7 +252,7 @@ void Game::addSpirit(std::mt19937_64& rand, int s)
   //训练等级计数+1
   {
     int type = s % 8 - 1;
-    if (s < 5 && s >= 0)
+    if (type < 5 && type >= 0)
       addTrainingLevelCount(type, 1);
   }
 
@@ -356,8 +361,8 @@ int Game::calculateFailureRate(int trainType) const
   //粗略拟合的训练失败率，二次函数 A*x^2 + B*x + C + 0.5 * trainLevel
   //误差应该在2%以内
   static const double A = 0.0245;
-  static const double B[5] = { -3.77,-3.74,-3.76,-3.81333,-2.42857 };
-  static const double C[5] = { 130,127,129,133.5,74.5 };
+  static const double B[5] = { -3.77,-3.74,-3.76,-3.81333,-3.286 };
+  static const double C[5] = { 130,127,129,133.5,80.2 };
 
   double f = A * vital * vital + B[trainType] * vital + C[trainType] + 0.5 * getTrainingLevel(trainType);
   int fr = round(f);
@@ -454,6 +459,7 @@ void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 }
 void Game::handleVenusOutgoing(int chosenOutgoing)
 {
+  venusCardOutgoingUsed[chosenOutgoing] = true;
   assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
   if (chosenOutgoing == 0)//红
   {
@@ -508,6 +514,7 @@ void Game::handleVenusOutgoing(int chosenOutgoing)
 }
 void Game::handleVenusThreeChoicesEvent(std::mt19937_64& rand, int chosenColor)
 {
+  printEvents("出现女神三选一事件");
   int spiritType = chosenColor * 8 + rand() % 6 + 1;//碎片类型
   addSpirit(rand, spiritType);
   assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
@@ -642,12 +649,17 @@ void Game::calculateTrainingValueSingle(int trainType)
   trainValue[trainType][6] = vitalChange;
 }
 
-void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIfFull, int chosenSpiritColor, int chosenOutgoing)
+bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing)
 {
-  if (useVenusIfFull && venusAvailableWisdom != 0)
-    activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
   if (isRacing)
   {
+    if (useVenus)
+    {
+      if (venusAvailableWisdom != 0)
+        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
+      else
+        return false;
+    }
     if (turn != TOTAL_TURN - 1)//除了GrandMaster
       runRace(GameConstants::NormalRaceFiveStatusBonus, GameConstants::NormalRacePtBonus);
     addJiBan(6, 4);//理事长羁绊+4
@@ -655,10 +667,17 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
     int newSpirit = (rand() % 6 + 1) + (rand() % 3) * 8;//随机加两个碎片
     addSpirit(rand, newSpirit);
     addSpirit(rand, newSpirit);
-    return;//GUR,WBC,SWBC,GrandMaster四场比赛在checkEventAfterTrain()里处理，不在这个函数
+    return true;//GUR,WBC,SWBC,GrandMaster四场比赛在checkEventAfterTrain()里处理，不在这个函数
   }
   if (chosenTrain == 5)//休息
   {
+    if (useVenus)
+    {
+      if (venusAvailableWisdom != 0)
+        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
+      else
+        return false;
+    }
     if (isXiaHeSu())
     {
       addVital(40);
@@ -679,14 +698,42 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
   }
   else if (chosenTrain == 7)//比赛
   {
+    if (turn <= 12)
+    {
+      printEvents("前13回合无法比赛");
+      return false;
+    }
+    if (useVenus)
+    {
+      if (venusAvailableWisdom != 0)
+        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
+      else
+        return false;
+    }
     runRace(GameConstants::NormalRaceFiveStatusBonus, GameConstants::NormalRacePtBonus);
-
     addSpirit(rand, spiritDistribution[chosenTrain]);
   }
   else if (chosenTrain == 6)//外出
   {
+    if (isXiaHeSu())
+    {
+      printEvents("夏合宿只能休息，不能外出");
+      return false;
+    }
+    if(!isOutgoingLegal(chosenOutgoing))
+    {
+      printEvents("不合法的外出");
+      return false;
+    }
     assert(!isXiaHeSu() && "夏合宿不允许外出");
     assert(isOutgoingLegal(chosenOutgoing) && "不合法的外出");
+    if (useVenus)
+    {
+      if (venusAvailableWisdom != 0)
+        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
+      else
+        return false;
+    }
     if (chosenOutgoing < 5)//神团外出
       handleVenusOutgoing(chosenOutgoing);
     else if (chosenOutgoing == 6)//普通外出
@@ -705,10 +752,18 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
   }
   else if (chosenTrain <= 4 && chosenTrain >= 0)//常规训练
   {
+    if (useVenus)
+    {
+      if (venusAvailableWisdom != 0)
+        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
+      else
+        return false;
+    }
     if (rand() % 100 < failRate[chosenTrain])//训练失败
     {
       if (failRate[chosenTrain] >= 20 && (rand() % 100 < failRate[chosenTrain]))//训练大失败，概率是瞎猜的
       {
+        printEvents("训练大失败！");
         addStatus(chosenTrain, -10);
         if (fiveStatus[chosenTrain] > 1200)
           addStatus(chosenTrain, -10);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
@@ -724,6 +779,7 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
       }
       else//小失败
       {
+        printEvents("训练小失败！");
         addStatus(chosenTrain, -5);
         if (fiveStatus[chosenTrain] > 1200)
           addStatus(chosenTrain, -5);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
@@ -779,6 +835,7 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
       {
         if (!venusCardFirstClick)//第一次点
         {
+          printEvents("第一次点女神");
           venusCardFirstClick = true;
           addAllStatus(3);
           addVital(10);
@@ -804,6 +861,12 @@ void Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenusIf
         addTrainingLevelCount(chosenTrain, 2);
     }
   }
+  else
+  {
+    printEvents("未知的训练项目");
+    return false;
+  }
+  return true;
 }
 
 
@@ -867,6 +930,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   {
     if (randBool(rand, GameConstants::VenusUnlockOutgoingProbEveryTurn))//启动
     {
+      printEvents("女神外出解锁！");
       //真似び学ぶ三女神
       venusCardUnlockOutgoing = true;
       venusCardIsQingRe = true;
@@ -882,6 +946,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   {
     if (randBool(rand, GameConstants::VenusQingReDeactivateProb[venusCardQingReContinuousTurns]))
     {
+      printEvents("女神情热结束");
       venusCardIsQingRe = false;
       venusCardQingReContinuousTurns = 0;
     }
@@ -889,7 +954,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   }
 
   //处理各种固定事件
-  if (turn == 24)//第一年年底
+  if (turn == 23)//第一年年底
   {
     //GUR
     int raceFiveStatusBonus = 10;
@@ -923,16 +988,20 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
       addJiBan(0, 5);
     }
 
+    printEvents("GUR结束");
+
   }
-  else if (turn == 32)//第二年继承
+  else if (turn == 31)//第二年继承
   {
     for (int i = 0; i < 5; i++)
       addStatus(i, zhongMaBlueCount[i] * 6); //蓝因子典型值
     for (int i = 0; i < 5; i++)
       addStatus(i, zhongMaExtraBonus[i]); //剧本因子典型值
     skillPt += zhongMaExtraBonus[5];
+
+    printEvents("第二年继承");
   }
-  else if (turn == 48)//第二年年底
+  else if (turn == 47)//第二年年底
   {
     //WBC
     int raceFiveStatusBonus = 15;
@@ -954,8 +1023,9 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
       addVital(30);
     else
       addAllStatus(8);
+    printEvents("WBC结束");
   }
-  else if (turn == 49)//抽奖
+  else if (turn == 48)//抽奖
   {
     int rd = rand() % 100;
     if (rd < 16)//温泉或一等奖
@@ -963,33 +1033,40 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
       addVital(30);
       addAllStatus(10);
       addMotivation(2);
+
+      printEvents("抽奖：你抽中了温泉/一等奖");
     }
     else if (rd < 16 + 27)//二等奖
     {
       addVital(20);
       addAllStatus(5);
       addMotivation(1);
+      printEvents("抽奖：你抽中了二等奖");
     }
     else if (rd < 16 + 27 + 46)//三等奖
     {
       addVital(20);
+      printEvents("抽奖：你抽中了三等奖");
     }
     else//厕纸
     {
       addMotivation(-1);
+      printEvents("抽奖：你抽中了厕纸");
     }
   }
-  else if (turn == 56)//第三年继承&理事长升固有
+  else if (turn == 55)//第三年继承&理事长升固有
   {
     for (int i = 0; i < 5; i++)
       addStatus(i, zhongMaBlueCount[i] * 6); //蓝因子典型值
     for (int i = 0; i < 5; i++)
       addStatus(i, zhongMaExtraBonus[i]); //剧本因子典型值
     skillPt += zhongMaExtraBonus[5];
+    printEvents("第三年继承");
     if (cardJiBan[6] >= 60)//可以升固有
     {
       addMotivation(1);
       skillPt += 170 / GameConstants::ScorePtRate;//固有直接等价成pt
+      printEvents("固有等级+1");
     }
     else
     {
@@ -997,7 +1074,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
       skillPt += 25;
     }
   }
-  else if (turn == 72)//第三年年底
+  else if (turn == 71)//第三年年底
   {
     //SWBC
     int raceFiveStatusBonus = 20;
@@ -1013,8 +1090,10 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
     //升训练等级
     for (int i = 0; i < 5; i++)
       addTrainingLevelCount(i, 8);
+
+    printEvents("SWBC结束");
   }
-  else if (turn == 77)//最后一战前的三选一
+  else if (turn == 76)//最后一战前的三选一
   {
     int totalLevel = venusLevelRed + venusLevelBlue + venusLevelYellow;
     int maxLevel = max(venusLevelRed, max(venusLevelBlue, venusLevelYellow));
@@ -1028,7 +1107,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
         skillPt += 40;//技能折扣
     }
   }
-  else if (turn == 78)//最后一战
+  else if (turn == 77)//最后一战
   {
     //GrandMasters
     int raceFiveStatusBonus = 20;
@@ -1065,6 +1144,10 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
     //各种乱七八糟
     addAllStatus(25);
     skillPt += 80;
+
+
+    printEvents("育成结束!");
+    printEvents("你的得分是："+to_string(finalScore()));
   }
 
   //模拟各种随机事件
@@ -1074,27 +1157,33 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   {
     int card = rand() % 6;
     addJiBan(card, 5);
+
+    printEvents("模拟随机事件：" + GameDatabase::AllSupportCardNames[cardId[card]] + " 的羁绊+5");
   }
 
   //模拟乱七八糟加属性事件
   addAllStatus(1);
+  printEvents("模拟随机事件：全属性+1");
 
   //加体力
   if (randBool(rand, 0.1))
   {
     addVital(10);
+    printEvents("模拟随机事件：体力+10");
   }
 
   //加心情
   if (randBool(rand, 0.03))
   {
     addMotivation(1);
+    printEvents("模拟随机事件：心情+1");
   }
 
   //掉心情
   if (randBool(rand, 0.03))
   {
     addMotivation(-1);
+    printEvents("模拟随机事件：心情-1");
   }
   
   //如果开女神，清空碎片
@@ -1112,6 +1201,10 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
 
   //回合数+1
   turn++;
+  if (turn < TOTAL_TURN)
+  {
+    isRacing = GameDatabase::AllUmas[umaId].races[turn];
+  }
 
 
 }

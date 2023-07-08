@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include "Tests/tests.h"
+#include "MainCommands/MainCommands.h"
 
 int main()
 {
-  main_test2();
+  main_playerPlay();
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

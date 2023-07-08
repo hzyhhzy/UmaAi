@@ -37,6 +37,15 @@
     <Filter Include="头文件\Tests">
       <UniqueIdentifier>{88af81e1-cb29-4987-a630-e40b6f3ad99b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\External">
+      <UniqueIdentifier>{4eb82961-d639-4371-b6f5-f38def5c4255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\MainCommands">
+      <UniqueIdentifier>{03937f1c-ac17-4773-8048-d4ba993859ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MainCommands">
+      <UniqueIdentifier>{56a3f240-e3f2-486d-a2e7-f0fd05e37009}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UmaSimulator.cpp">
@@ -69,6 +78,15 @@
     <ClCompile Include="Tests\test1.cpp">
       <Filter>源文件\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\test3.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GamePrint.cpp">
+      <Filter>源文件\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCommands\PlayerPlay.cpp">
+      <Filter>源文件\MainCommands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
@@ -91,6 +109,15 @@
     </ClInclude>
     <ClInclude Include="Tests\tests.h">
       <Filter>头文件\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="External\termcolor.hpp">
+      <Filter>头文件\External</Filter>
+    </ClInclude>
+    <ClInclude Include="External\rang.hpp">
+      <Filter>头文件\External</Filter>
+    </ClInclude>
+    <ClInclude Include="MainCommands\MainCommands.h">
+      <Filter>头文件\MainCommands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
