@@ -366,6 +366,7 @@ int Game::calculateFailureRate(int trainType) const
 
   double f = A * vital * vital + B[trainType] * vital + C[trainType] + 0.5 * getTrainingLevel(trainType);
   int fr = round(f);
+  if (vital > 60)fr = 0;//由于是二次函数，体力超过103时算出来的fr大于0，所以需要手动修正
   if (fr < 0)fr = 0;
   if (fr > 99)fr = 99;//无练习下手，失败率最高99%
   fr += failureRateBias;
@@ -991,7 +992,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
     printEvents("GUR结束");
 
   }
-  else if (turn == 31)//第二年继承
+  else if (turn == 29)//第二年继承
   {
     for (int i = 0; i < 5; i++)
       addStatus(i, zhongMaBlueCount[i] * 6); //蓝因子典型值
@@ -1054,7 +1055,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
       printEvents("抽奖：你抽中了厕纸");
     }
   }
-  else if (turn == 55)//第三年继承&理事长升固有
+  else if (turn == 53)//第三年继承&理事长升固有
   {
     for (int i = 0; i < 5; i++)
       addStatus(i, zhongMaBlueCount[i] * 6); //蓝因子典型值
@@ -1183,7 +1184,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   if (randBool(rand, 0.03))
   {
     addMotivation(-1);
-    printEvents("模拟随机事件：心情-1");
+    printEvents("模拟随机事件：\033[0m\033[33m心情-1\033[0m\033[32m");
   }
   
   //如果开女神，清空碎片

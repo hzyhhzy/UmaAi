@@ -2,6 +2,8 @@
 #include <random>
 #include <sstream>
 #include <cassert>
+#include <thread>  // for std::this_thread::sleep_for
+#include <chrono>  // for std::chrono::seconds
 #include "../Game/Game.h"
 #include "../External/termcolor.hpp"
 using namespace std;
@@ -20,7 +22,7 @@ void main_playerPlay()
   int umaId = 1;
   int cards[6] = { 1,2,3,4,5,6 };
   int zhongmaBlue[5] = { 18,0,0,0,0 };
-  int zhongmaBonus[6] = { 30,0,30,0,200 };
+  int zhongmaBonus[6] = { 30,0,30,0,0,200 };
   for(int gamenum=0;gamenum<100000;gamenum++)
   {
 
@@ -246,8 +248,9 @@ void main_playerPlay()
         if (isRemake)
           break;
       }
-
+      cout << endl;
       game.checkEventAfterTrain(rand);
+      std::this_thread::sleep_for(std::chrono::seconds(2));//等几秒让人看清楚
     }
     cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
     game.printFinalStats();
