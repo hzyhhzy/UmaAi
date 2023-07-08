@@ -1146,9 +1146,6 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
     addAllStatus(25);
     skillPt += 80;
 
-
-    printEvents("育成结束!");
-    printEvents("你的得分是："+to_string(finalScore()));
   }
 
   //模拟各种随机事件
@@ -1205,6 +1202,11 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   if (turn < TOTAL_TURN)
   {
     isRacing = GameDatabase::AllUmas[umaId].races[turn];
+  }
+  else
+  {
+    printEvents("育成结束!");
+    printEvents("你的得分是：" + to_string(finalScore()));
   }
 
 

@@ -115,6 +115,24 @@ void main_playerPlay()
           cin >> s;
 
           int chosenTrain = -1;
+          int chosenSpiritColor = -1;
+          if (s.size() == 2 && (s[1] == 'q' || s[1] == 'a' || s[1] == 'z'))//例如“5q”，则选择5（智）训练，选择q（红）碎片
+          {
+            if (s[1] == 'q')
+            {
+              chosenSpiritColor = 0;
+            }
+            else if (s[1] == 'a')
+            {
+              chosenSpiritColor = 1;
+            }
+            else if (s[1] == 'z')
+            {
+              chosenSpiritColor = 2;
+            }
+
+            s = s.substr(0, 1);
+          }
           if (s == "1")
             chosenTrain = 0;
           else if (s == "2")
@@ -213,29 +231,33 @@ void main_playerPlay()
           }
 
 
-          int chosenSpiritColor = -1;
           assert(game.cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
           if (chosenTrain >= 0 && chosenTrain < 5 && game.cardDistribution[chosenTrain][0])//神团卡在选择的训练
           {
-            cout << termcolor::cyan << "如果出现女神三选一事件，选择什么颜色的碎片？q红，a蓝，z黄" << termcolor::reset << endl;
-            cin >> s;
-            if (s == "q")
+            if (chosenSpiritColor == -1)
             {
-              chosenSpiritColor = 0;
+              cout << termcolor::cyan << "如果出现女神三选一事件，选择什么颜色的碎片？q红，a蓝，z黄" << termcolor::reset << endl;
+              cin >> s;
+              if (s == "q")
+              {
+                chosenSpiritColor = 0;
+              }
+              else if (s == "a")
+              {
+                chosenSpiritColor = 1;
+              }
+              else if (s == "z")
+              {
+                chosenSpiritColor = 2;
+              }
+              else
+              {
+                cout << termcolor::red << "输入有误，请重新输入" << termcolor::reset << endl;
+                continue;
+              }
             }
-            else if (s == "a")
-            {
-              chosenSpiritColor = 1;
-            }
-            else if (s == "z")
-            {
-              chosenSpiritColor = 2;
-            }
-            else
-            {
-              cout << termcolor::red << "输入有误，请重新输入" << termcolor::reset << endl;
-              continue;
-            }
+            else//提前选了碎片了
+              cout << termcolor::cyan << "已提前选择碎片颜色" << termcolor::reset << endl;
 
           }
 

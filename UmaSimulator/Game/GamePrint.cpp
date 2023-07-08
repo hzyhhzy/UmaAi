@@ -205,7 +205,7 @@ void Game::print() const
     string oneRow[5];//表格中一行要显示的内容
     for (int i = 0; i < 5; i++)
     {
-      oneRow[i] = to_string(fiveStatus[i]) + "/" + to_string(fiveStatusLimit[i]) + "(" + to_string(fiveStatusLimit[i] - fiveStatus[i]) + ")";
+      oneRow[i] = "\033[33m" + to_string(fiveStatus[i]) + "\033[0m" + "/" + to_string(fiveStatusLimit[i]) + "(" + to_string(fiveStatusLimit[i] - fiveStatus[i]) + ")";
     }
     printTableRow(oneRow);
   }
