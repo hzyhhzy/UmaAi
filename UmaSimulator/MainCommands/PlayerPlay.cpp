@@ -27,7 +27,7 @@ void main_playerPlay()
   {
 
     Game game;
-    game.newGame(rand, true, 1, cards, zhongmaBlue, zhongmaBonus);
+    game.newGame(rand, true, umaId, cards, zhongmaBlue, zhongmaBonus);
 
 
     cout << termcolor::bright_blue << "------------------------------------------------------------------------------------------------" << termcolor::reset << endl;

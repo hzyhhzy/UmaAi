@@ -32,7 +32,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
   for (int i = 0; i < 5; i++)
     fiveStatusLimit[i] = GameConstants::BasicFiveStatusLimit[i]; //原始属性上限
   for (int i = 0; i < 5; i++)
-    fiveStatusLimit[i] += zhongMaBlueCount[i] * 7; //属性上限--种马基础值
+    fiveStatusLimit[i] += zhongMaBlueCount[i] * 7 * 2; //属性上限--种马基础值
   for (int i = 0; i < 5; i++)
     fiveStatusLimit[i] += rand() % 20; //属性上限--后两次继承随机增加
 
