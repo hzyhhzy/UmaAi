@@ -87,6 +87,9 @@
     <ClCompile Include="MainCommands\PlayerPlay.cpp">
       <Filter>源文件\MainCommands</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\test4.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">

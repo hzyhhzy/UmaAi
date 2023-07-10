@@ -140,6 +140,7 @@
     <ClCompile Include="Tests\test1.cpp" />
     <ClCompile Include="Tests\test2.cpp" />
     <ClCompile Include="Tests\test3.cpp" />
+    <ClCompile Include="Tests\test4.cpp" />
     <ClCompile Include="UmaSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>
