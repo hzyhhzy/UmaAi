@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -119,6 +119,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +136,8 @@
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GamePrint.cpp" />
     <ClCompile Include="MainCommands\PlayerPlay.cpp" />
+    <ClCompile Include="NeuralNet\Evaluator.cpp" />
+    <ClCompile Include="NeuralNet\NNInput.cpp" />
     <ClCompile Include="SupportCard\CardEffect.cpp" />
     <ClCompile Include="SupportCard\SupportCard.cpp" />
     <ClCompile Include="Tests\test1.cpp" />
@@ -151,6 +154,8 @@
     <ClInclude Include="GameDatabase\UmaData.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="MainCommands\MainCommands.h" />
+    <ClInclude Include="NeuralNet\Evaluator.h" />
+    <ClInclude Include="NeuralNet\NNInput.h" />
     <ClInclude Include="SupportCard\CardEffect.h" />
     <ClInclude Include="SupportCard\SupportCard.h" />
     <ClInclude Include="Tests\tests.h" />

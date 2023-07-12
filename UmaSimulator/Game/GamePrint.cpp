@@ -388,8 +388,7 @@ void Game::printFinalStats() const
   int fiveStatusScore = 0;
   for (int i = 0; i < 5; i++)
     fiveStatusScore += GameConstants::FiveStatusFinalScore[min(fiveStatus[i], fiveStatusLimit[i])];
-  double scorePtRate = isQieZhe ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate;
-  int skillScore = scorePtRate * skillPt;
+  int skillScore = getSkillScore();
 
   cout << termcolor::bright_red << "你的得分是：" << termcolor::bright_green << finalScore() << termcolor::reset << endl;
   cout << termcolor::bright_red << "属性分=" << termcolor::bright_green << fiveStatusScore << termcolor::reset << "，" << termcolor::bright_red << "技能分=" << termcolor::bright_green << skillScore << termcolor::reset << endl;

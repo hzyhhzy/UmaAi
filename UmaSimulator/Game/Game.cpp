@@ -650,7 +650,7 @@ void Game::calculateTrainingValueSingle(int trainType)
   trainValue[trainType][6] = vitalChange;
 }
 
-bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing)
+bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
 {
   if (isRacing)
   {
@@ -845,12 +845,11 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
         else
         {
           //三选一事件概率，暂时猜测为40%*(1+蓝女神等级加成)
-          double activeVenusProb = GameConstants::VenusThreeChoicesEventProb * (1 + 0.01 * GameConstants::BlueVenusLevelHintProbBonus[venusLevelBlue]);
-          bool activateThreeChoicesEvent = randBool(rand,activeVenusProb);
-          if (venusCardIsQingRe || (venusIsWisdomActive && venusAvailableWisdom == 2))//情热或开蓝
-          {
+          bool activateThreeChoicesEvent = randBool(rand,getThreeChoicesEventProb(useVenus));
+          if (forceThreeChoicesEvent == 1)
             activateThreeChoicesEvent = true;
-          }
+          else if (forceThreeChoicesEvent == -1)
+              activateThreeChoicesEvent = false;
           if (activateThreeChoicesEvent)
             handleVenusThreeChoicesEvent(rand, chosenSpiritColor);
         }
@@ -870,6 +869,11 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
   return true;
 }
 
+float Game::getSkillScore() const
+{
+  float scorePtRate = isQieZhe ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate;
+  return scorePtRate * skillPt;
+}
 
 int Game::finalScore() const
 {
@@ -877,8 +881,7 @@ int Game::finalScore() const
   for (int i = 0; i < 5; i++)
     total += GameConstants::FiveStatusFinalScore[min(fiveStatus[i],fiveStatusLimit[i])];
   
-  double scorePtRate = isQieZhe ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate;
-  total += scorePtRate * skillPt;
+  total += getSkillScore();
   return total;
 }
 
@@ -920,6 +923,16 @@ bool Game::isOutgoingLegal(int chosenOutgoing) const
 bool Game::isXiaHeSu() const
 {
   return (turn >= 36 && turn <= 39) || (turn >= 60 && turn <= 63);
+}
+
+double Game::getThreeChoicesEventProb(bool useVenusIfFull)
+{
+  if (!venusCardFirstClick)return 0.0;
+  if (venusCardIsQingRe)return 1.0;
+  if (venusAvailableWisdom == 2 && useVenusIfFull)return 1.0;
+  //三选一事件概率，暂时猜测为40%*(1+蓝女神等级加成)
+  return GameConstants::VenusThreeChoicesEventProb * (1 + 0.01 * GameConstants::BlueVenusLevelHintProbBonus[venusLevelBlue]);
+
 }
 
 
@@ -1210,4 +1223,32 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   }
 
 
+}
+
+void Game::applyTrainingAndNextTurn(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
+{
+  assert(turn < TOTAL_TURN && "Game::applyTrainingAndNextTurn游戏已结束");
+  bool suc = applyTraining(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
+  assert(suc && "Game::applyTrainingAndNextTurn选择了不合法的训练");
+
+  checkEventAfterTrain(rand);
+  if (turn >= TOTAL_TURN) return;
+
+  if (isRacing)
+  {
+    if (venusAvailableWisdom == 0)//比赛回合且无法开女神，再进行一个回合
+    {
+      bool useVenus = false;
+      applyTrainingAndNextTurn(rand, -1, useVenus, -1, -1, -1);
+    }
+    else
+    {
+      //玩家决策是否开女神
+    }
+  }
+  else//常规训练回合
+  {
+    randomDistributeCards(rand);
+    calculateTrainingValue();
+  }
 }

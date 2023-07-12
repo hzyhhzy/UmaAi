@@ -101,18 +101,36 @@ struct Game
   // chosenSpiritColor是假如出现女神三选一事件，选择的碎片颜色。红蓝黄分别012
   // chosenOutgoing是如果外出，选择的外出项目，五个神团外出分别是01234，普通外出是5。
   //注：普通回合有14种可能（5种训练，其中一种训练可能会出现女神三选一。除此以外有休息，比赛，5种出行），比赛回合只有开不开女神两种选择
-  bool applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing);
+  // forceThreeChoicesEvent是强制召唤三选一事件，1为强制召唤，-1为强制不召唤，0为正常（按概率召唤）。此设置仅用于ai搜索
+  bool applyTraining(
+    std::mt19937_64& rand, 
+    int chosenTrain, 
+    bool useVenus, 
+    int chosenSpiritColor, 
+    int chosenOutgoing,
+    int forceThreeChoicesEvent = 0);
   void checkEventAfterTrain(std::mt19937_64& rand);//检查固定事件和随机事件，并进入下一个回合
+
+  void applyTrainingAndNextTurn(
+    std::mt19937_64& rand,
+    int chosenTrain,
+    bool useVenus,
+    int chosenSpiritColor,
+    int chosenOutgoing,
+    int forceThreeChoicesEvent = 0);//一直往后进行，直到下一次需要玩家决策
+
   int finalScore() const;//最终总分
 
   //辅助函数
   int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，红女神是5级
   bool isOutgoingLegal(int chosenOutgoing) const;//这个外出是否是可以进行的
   bool isXiaHeSu() const;//是否为夏合宿
+  double getThreeChoicesEventProb(bool useVenusIfFull);//点击三女神出事件的概率
   //void runTestGame();
 
-  void getNNInput(float* buf) const;//神经网络输入
+  void getNNInputV1(float* buf, float targetScore) const;//神经网络输入
   void print() const;//用彩色字体显示游戏内容
+  float getSkillScore() const;//技能分，输入神经网络之前也可能提前减去
   void printFinalStats() const;//显示最终结果
 
 private:
