@@ -4,9 +4,12 @@
 #include "../Game/Game.h"
 using namespace std;
 
-void Game::getNNInputV1(float* buf, float targetScore) const
+void Game::getNNInputV1(float* buf, float targetScore, int mode) const
 {
   for (int i = 0; i < NNINPUT_CHANNELS_V1; i++)buf[i] = 0.0;
+  if (isEnd())return;
+  //stageInTurn=0是还没分配卡组，让神经网络估计一下达标概率（value）。stageInTurn=1是分配了卡组等待玩家选择，让神经网络估计每个选项是最优解的概率（policy）
+  assert((stageInTurn == 0 && mode == 0) || (stageInTurn == 1 && mode == 1));
   
   //0~77 回合数
   assert(turn >= 0 && turn < TOTAL_TURN);
@@ -142,14 +145,17 @@ void Game::getNNInputV1(float* buf, float targetScore) const
   assert(stageInTurn >= 0 && stageInTurn < 5);
   buf[326 + stageInTurn] = 1.0;
 
-  //331~370 支援卡分布
-  for (int i = 0; i < 5; i++)
-    for (int j = 0; j < 8; j++)
-      buf[331 + 8 * i + j] = cardDistribution[i][j];
+  if (mode == 1)
+  {
+    //331~370 支援卡分布
+    for (int i = 0; i < 5; i++)
+      for (int j = 0; j < 8; j++)
+        buf[331 + 8 * i + j] = cardDistribution[i][j];
 
-  //371~376 支援卡红点
-  for (int i = 0; i < 6; i++)
-    buf[371 + i] = cardHint[i];
+    //371~376 支援卡红点
+    for (int i = 0; i < 6; i++)
+      buf[371 + i] = cardHint[i];
+  }
 
   //377~456 训练碎片
   //每个碎片用6通道表示属性，3通道表示颜色，1通道表示是否双倍
@@ -175,26 +181,29 @@ void Game::getNNInputV1(float* buf, float targetScore) const
   for (int i = 0; i < 6; i++)
     buf[457 + i] = spiritBonus[i] / 10.0;
 
-  //463~492 训练属性
-  for (int i = 0; i < 5; i++)
-    for (int j = 0; j < 6; j++)
-      buf[463 + 6 * i + j] = trainValue[i][j] / 50.0;
+  if (mode == 1)
+  {
+    //463~492 训练属性
+    for (int i = 0; i < 5; i++)
+      for (int j = 0; j < 6; j++)
+        buf[463 + 6 * i + j] = trainValue[i][j] / 50.0;
 
-  //493~497 训练体力
-  for (int i = 0; i < 5; i++)
-    buf[493 + i] = trainValue[i][6] / 20.0;
+    //493~497 训练体力
+    for (int i = 0; i < 5; i++)
+      buf[493 + i] = trainValue[i][6] / 20.0;
 
-  //498~502 训练失败率
-  for (int i = 0; i < 5; i++)
-    buf[498 + i] = failRate[i] / 30.0;
+    //498~502 训练失败率
+    for (int i = 0; i < 5; i++)
+      buf[498 + i] = failRate[i] / 30.0;
 
-  //503~507 训练失败率>0
-  for (int i = 0; i < 5; i++)
-    buf[503 + i] = failRate[i] > 0;
+    //503~507 训练失败率>0
+    for (int i = 0; i < 5; i++)
+      buf[503 + i] = failRate[i] > 0;
 
-  //508~512 训练失败率>=20
-  for (int i = 0; i < 5; i++)
-    buf[508 + i] = failRate[i] >= 20;
+    //508~512 训练失败率>=20
+    for (int i = 0; i < 5; i++)
+      buf[508 + i] = failRate[i] >= 20;
+  }
 
   //513~599 马娘id
   static_assert(GameDatabase::ALL_UMA_NUM <= 599 - 513, "超过v1版神经网络支持马娘数上限");
@@ -210,6 +219,9 @@ void Game::getNNInputV1(float* buf, float targetScore) const
   float remainScoreExceptPt = targetScore - getSkillScore();
   buf[900] = (remainScoreExceptPt - 25000) / 2000.0;
 
+  //901~902 模式
+  assert(901 + mode < NNINPUT_CHANNELS_V1);
+  buf[901 + mode] = 1.0;
 
 
 

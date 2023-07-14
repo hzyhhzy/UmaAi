@@ -17,7 +17,7 @@ void main_test3()
   int umaId = 1;
   int cards[6] = { 1,2,3,4,5,6 };
   int zhongmaBlue[5] = { 18,0,0,0,0 };
-  int zhongmaBonus[6] = { 30,0,30,0,0,200 };
+  int zhongmaBonus[6] = { 30,0,30,0,30,200 };
 
   double totalScore = 0;
   double totalScoreSqr = 0;
@@ -32,7 +32,6 @@ void main_test3()
     {
       assert(turn == game.turn && "回合数不正确");
       game.randomDistributeCards(rand);
-      game.calculateTrainingValue();
       //game.print();
       if (game.isRacing)//比赛回合
       {
@@ -125,6 +124,7 @@ void main_test3()
             
             for (int i = 0; i < 5; i++)
               value += game.trainValue[item][i];
+
             value += ptValue * game.trainValue[item][5];
             value += vitalValue * game.trainValue[item][6];
 

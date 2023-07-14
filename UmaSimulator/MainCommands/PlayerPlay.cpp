@@ -47,10 +47,10 @@ void main_playerPlay()
     {
       assert(turn == game.turn && "回合数不正确");
       game.randomDistributeCards(rand);
-      game.calculateTrainingValue();
       game.print();
       if (game.isRacing)//比赛回合
       {
+        game.randomDistributeCards(rand);//只把stageInTurn改成1
         if (game.venusAvailableWisdom == 0)//没女神睿智，完全不需要玩家操作
         {
           cout << termcolor::cyan << "此回合为比赛回合，无需操作" << termcolor::reset << endl << endl;
@@ -181,7 +181,6 @@ void main_playerPlay()
           {
             cout << termcolor::bright_cyan << "卡组重新分配！" << termcolor::reset << endl;
             game.randomDistributeCards(rand);
-            game.calculateTrainingValue();
             game.print();
             continue;
           }

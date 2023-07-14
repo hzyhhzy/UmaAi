@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -137,13 +137,16 @@
     <ClCompile Include="Game\GamePrint.cpp" />
     <ClCompile Include="MainCommands\PlayerPlay.cpp" />
     <ClCompile Include="NeuralNet\Evaluator.cpp" />
+    <ClCompile Include="NeuralNet\Model.cpp" />
     <ClCompile Include="NeuralNet\NNInput.cpp" />
+    <ClCompile Include="Search\Search.cpp" />
     <ClCompile Include="SupportCard\CardEffect.cpp" />
     <ClCompile Include="SupportCard\SupportCard.cpp" />
     <ClCompile Include="Tests\test1.cpp" />
     <ClCompile Include="Tests\test2.cpp" />
     <ClCompile Include="Tests\test3.cpp" />
     <ClCompile Include="Tests\test4.cpp" />
+    <ClCompile Include="Tests\test5.cpp" />
     <ClCompile Include="UmaSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +158,9 @@
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="MainCommands\MainCommands.h" />
     <ClInclude Include="NeuralNet\Evaluator.h" />
+    <ClInclude Include="NeuralNet\Model.h" />
     <ClInclude Include="NeuralNet\NNInput.h" />
+    <ClInclude Include="Search\Search.h" />
     <ClInclude Include="SupportCard\CardEffect.h" />
     <ClInclude Include="SupportCard\SupportCard.h" />
     <ClInclude Include="Tests\tests.h" />

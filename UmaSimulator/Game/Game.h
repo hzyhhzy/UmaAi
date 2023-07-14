@@ -66,13 +66,13 @@ struct Game
   //  if (!isRacing)//正常训练回合
   //  {
   //    randomDistributeCards();
-  //    calculateTrainingValue();
   //    PLAYER_CHOICE;
   //    applyTraining();
   //    checkEventAfterTrain();
   //  }
   //  else//比赛回合
   //  {
+  //    randomDistributeCards();//只把stageInTurn改成1
   //    if(venusAvailableWisdom!=0)//是否使用女神睿智，不可使用的时候直接跳过决策步
   //    {
   //      PLAYER_CHOICE;
@@ -120,20 +120,21 @@ struct Game
     int forceThreeChoicesEvent = 0);//一直往后进行，直到下一次需要玩家决策
 
   int finalScore() const;//最终总分
+  bool isEnd() const;//
 
   //辅助函数
+  void activateVenusWisdom();//使用女神睿智
   int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，红女神是5级
   bool isOutgoingLegal(int chosenOutgoing) const;//这个外出是否是可以进行的
   bool isXiaHeSu() const;//是否为夏合宿
   double getThreeChoicesEventProb(bool useVenusIfFull);//点击三女神出事件的概率
   //void runTestGame();
 
-  void getNNInputV1(float* buf, float targetScore) const;//神经网络输入
+  void getNNInputV1(float* buf, float targetScore, int mode) const;//神经网络输入，mode=0是value，1是policy
   void print() const;//用彩色字体显示游戏内容
   float getSkillScore() const;//技能分，输入神经网络之前也可能提前减去
   void printFinalStats() const;//显示最终结果
 
-private:
   void addStatus(int idx, int value);//增加属性值，并处理溢出
   void addAllStatus(int value);//增加五个属性值
   void addVital(int value);//增加体力，并处理溢出
@@ -141,7 +142,6 @@ private:
   void addJiBan(int idx,int value);//增加羁绊，并考虑爱娇
   void addTrainingLevelCount(int item, int value);//增加训练等级计数（每12为1级，训练+2，碎片+1，特殊比赛
   void addSpirit(std::mt19937_64& rand, int s);//添加碎片
-  void activateVenusWisdom();//使用女神睿智
   void clearSpirit();//清空碎片
   int calculateFailureRate(int trainType) const;//计算训练失败率
   void calculateVenusSpiritsBonus();//计算碎片加成  
@@ -155,7 +155,7 @@ private:
 
   //显示事件
   void printEvents(std::string s) const;//用绿色字体显示事件
-public:
+
   void calculateTrainingValueSingle(int trainType);//计算每个训练加多少
 };
 

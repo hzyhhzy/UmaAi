@@ -52,6 +52,12 @@
     <Filter Include="源文件\NeuralNet">
       <UniqueIdentifier>{fa82e747-5a06-4c48-bf22-1da22cc8b15a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Search">
+      <UniqueIdentifier>{5386e4f3-cdc7-475a-b98e-74ea94276aa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Search">
+      <UniqueIdentifier>{490cc3d4-0d2b-4435-87c1-ab2aa0a1c4e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UmaSimulator.cpp">
@@ -102,6 +108,15 @@
     <ClCompile Include="NeuralNet\NNInput.cpp">
       <Filter>源文件\NeuralNet</Filter>
     </ClCompile>
+    <ClCompile Include="Search\Search.cpp">
+      <Filter>源文件\Search</Filter>
+    </ClCompile>
+    <ClCompile Include="NeuralNet\Model.cpp">
+      <Filter>源文件\NeuralNet</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\test5.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
@@ -138,6 +153,12 @@
       <Filter>头文件\NeuralNet</Filter>
     </ClInclude>
     <ClInclude Include="NeuralNet\NNInput.h">
+      <Filter>头文件\NeuralNet</Filter>
+    </ClInclude>
+    <ClInclude Include="Search\Search.h">
+      <Filter>头文件\Search</Filter>
+    </ClInclude>
+    <ClInclude Include="NeuralNet\Model.h">
       <Filter>头文件\NeuralNet</Filter>
     </ClInclude>
   </ItemGroup>

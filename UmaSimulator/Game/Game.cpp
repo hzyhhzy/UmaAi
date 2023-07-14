@@ -80,11 +80,14 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
   stageInTurn = 0;
   calculateVenusSpiritsBonus();
   randomDistributeCards(rand); 
-  calculateTrainingValue();
 }
 
 void Game::randomDistributeCards(std::mt19937_64& rand)
 {
+  //assert(stageInTurn == 0 || turn == 0);
+  stageInTurn = 1;
+  if (isRacing)
+    return;//比赛不用分配卡组，但要改stageInTurn
   //先将6张卡分配到训练中
   for (int i = 0; i < 5; i++)
     for (int j = 0; j < 8; j++)
@@ -179,6 +182,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
     }
 
   }
+  calculateTrainingValue();
 }
 
 void Game::calculateTrainingValue()
@@ -321,7 +325,7 @@ void Game::addSpirit(std::mt19937_64& rand, int s)
 }
 void Game::activateVenusWisdom()
 {
-  if (venusAvailableWisdom == 0)return;
+  assert(venusAvailableWisdom != 0);
   assert(venusIsWisdomActive == false);
   venusIsWisdomActive = true;
   if (venusAvailableWisdom == 1)//开红
@@ -652,6 +656,8 @@ void Game::calculateTrainingValueSingle(int trainType)
 
 bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
 {
+  assert(stageInTurn == 1);
+  stageInTurn = 2;
   if (isRacing)
   {
     if (useVenus)
@@ -885,6 +891,11 @@ int Game::finalScore() const
   return total;
 }
 
+bool Game::isEnd() const
+{
+  return turn >= TOTAL_TURN;
+}
+
 int Game::getTrainingLevel(int item) const
 {
   int level ;
@@ -939,6 +950,8 @@ double Game::getThreeChoicesEventProb(bool useVenusIfFull)
 
 void Game::checkEventAfterTrain(std::mt19937_64& rand)
 {
+  assert(stageInTurn == 2);
+  stageInTurn = 0;
   //女神会不会启动
   if (venusCardFirstClick && (!venusCardUnlockOutgoing))
   {
@@ -1227,28 +1240,24 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
 
 void Game::applyTrainingAndNextTurn(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
 {
+  assert(stageInTurn == 1);
   assert(turn < TOTAL_TURN && "Game::applyTrainingAndNextTurn游戏已结束");
   bool suc = applyTraining(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
   assert(suc && "Game::applyTrainingAndNextTurn选择了不合法的训练");
 
   checkEventAfterTrain(rand);
-  if (turn >= TOTAL_TURN) return;
+  if (isEnd()) return;
 
   if (isRacing)
   {
     if (venusAvailableWisdom == 0)//比赛回合且无法开女神，再进行一个回合
     {
+      randomDistributeCards(rand);//把stageInTurn改成1
       bool useVenus = false;
       applyTrainingAndNextTurn(rand, -1, useVenus, -1, -1, -1);
     }
-    else
-    {
-      //玩家决策是否开女神
-    }
   }
-  else//常规训练回合
-  {
-    randomDistributeCards(rand);
-    calculateTrainingValue();
-  }
+
+  randomDistributeCards(rand);
+
 }

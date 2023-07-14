@@ -34,7 +34,6 @@ void main_test2()
     for (int i = 0; i < N; i++)
     {
       game.randomDistributeCards(rand);
-      game.calculateTrainingValue();
       double bestv = -100;
       for (int t = 0; t < 5; t++)
       {
@@ -60,7 +59,6 @@ void main_test2()
     for (int i = 0; i < N; i++)
     {
       game.randomDistributeCards(rand);
-      game.calculateTrainingValue();
       double bestv = -100;
       for (int t = 0; t < 5; t++)
       {
@@ -86,7 +84,6 @@ void main_test2()
     for (int i = 0; i < N; i++)
     {
       game.randomDistributeCards(rand);
-      game.calculateTrainingValue();
       double bestv = -100;
       for (int t = 0; t < 5; t++)
       {
@@ -113,7 +110,6 @@ void main_test2()
     for (int i = 0; i < N; i++)
     {
       game.randomDistributeCards(rand);
-      game.calculateTrainingValue();
       double bestv = -100;
       for (int t = 0; t < 5; t++)
       {
@@ -140,7 +136,6 @@ void main_test2()
     for (int i = 0; i < N; i++)
     {
       game.randomDistributeCards(rand);
-      game.calculateTrainingValue();
       double bestv = -100;
       for (int t = 0; t < 5; t++)
       {
