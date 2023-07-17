@@ -5,6 +5,7 @@
 #include <cassert>
 #include "../Game/Game.h"
 #include "../NeuralNet/Evaluator.h"
+#include "../Search/Search.h"
 #include "../External/termcolor.hpp"
 using namespace std;
 
@@ -22,62 +23,22 @@ void main_test5()
   double totalScoreSqr = 0;
   int bestScore = 0;
   int n = 0;
-  for (int gamenum = 0; gamenum < 10000; gamenum++)
+
+  Search search;
+  Evaluator evaluator(NULL, 16);
+  int searchN = 16;
+
+  for (int gamenum = 0; gamenum < 100000; gamenum++)
   {
 
     Game game;
     game.newGame(rand, false, umaId, cards, zhongmaBlue, zhongmaBonus);
     while(!game.isEnd())
     {
-
-      bool useVenus = false;
-      int chosenSpiritColor = -1;
-      int chosenTrain = -1;
-      int chosenOutgoing = -1;
-
-      auto policy = Evaluator::handWrittenPolicy(game);
-
-      {
-        float bestPolicy = 0.001;
-        for (int i = 0; i < 8;i++)
-        {
-          float p = policy.trainingPolicy[i];
-          if (p > bestPolicy)
-          {
-            chosenTrain = i;
-            bestPolicy = p;
-          }
-        }
-      }
-      useVenus = policy.useVenusPolicy >= 0.5;
-      {
-        float bestPolicy = 0.001;
-        for (int i = 0; i < 3; i++)
-        {
-          float p = policy.threeChoicesEventPolicy[i];
-          if (p > bestPolicy)
-          {
-            chosenSpiritColor = i;
-            bestPolicy = p;
-          }
-        }
-      }
-      {
-        float bestPolicy = 0.001;
-        for (int i = 0; i < 6; i++)
-        {
-          float p = policy.outgoingPolicy[i];
-          if (p > bestPolicy)
-          {
-            chosenOutgoing = i;
-            bestPolicy = p;
-          }
-        }
-      }
-
-
-      game.applyTrainingAndNextTurn(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing);
-
+      //auto policy = Evaluator::handWrittenPolicy(game);
+      search.runSearch(game, evaluator, searchN, TOTAL_TURN, 27000);
+      auto policy = search.extractPolicyFromSearchResults(1);
+      Search::runOneTurnUsingPolicy(rand, game, policy, true);
     }
     //cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
     int score = game.finalScore();
@@ -86,8 +47,9 @@ void main_test5()
     totalScoreSqr += score * score;
     if (score > bestScore)bestScore = score;
     //game.print();
-    //game.printFinalStats();
-  }
-  cout << n << "局，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
+    game.printFinalStats();
 
+    cout << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
+
+  }
 }

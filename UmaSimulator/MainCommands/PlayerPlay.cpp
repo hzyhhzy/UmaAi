@@ -1,11 +1,13 @@
 #include <iostream>
+#include <iomanip> 
 #include <random>
 #include <sstream>
 #include <cassert>
 #include <thread>  // for std::this_thread::sleep_for
 #include <chrono>  // for std::chrono::seconds
-#include "../Game/Game.h"
 #include "../External/termcolor.hpp"
+#include "../Game/Game.h"
+#include "../Search/Search.h"
 using namespace std;
 
 
@@ -25,7 +27,8 @@ void main_playerPlay()
   int zhongmaBonus[6] = { 30,0,30,0,0,200 };
   for(int gamenum=0;gamenum<100000;gamenum++)
   {
-
+    Search search;
+    Evaluator evaluator(NULL, 128);
     Game game;
     game.newGame(rand, true, umaId, cards, zhongmaBlue, zhongmaBonus);
 
@@ -48,6 +51,36 @@ void main_playerPlay()
       assert(turn == game.turn && "回合数不正确");
       game.randomDistributeCards(rand);
       game.print();
+      search.runSearch(game, evaluator, 2048, TOTAL_TURN, 27000);
+      for (int i = 0; i < 2; i++)
+      {
+        for (int j = 0; j < 8 + 4 + 6; j++)
+        {
+          cout 
+            //<< fixed << setprecision(1) << search.allChoicesValue[i][j].winrate * 100 << "%:" 
+            << fixed << setprecision(0) << search.allChoicesValue[i][j].avgScoreMinusTarget << " ";
+          if (j == 4 || j == 7 || j == 11)cout << endl;
+        }
+        cout << endl;
+        cout << endl;
+      }
+
+
+      {
+        auto policy = search.extractPolicyFromSearchResults(1);
+        cout << fixed << setprecision(1) << policy.useVenusPolicy * 100 << "% ";
+        cout << endl;
+        for (int i = 0; i < 8; i++)
+          cout << fixed << setprecision(1) << policy.trainingPolicy[i] * 100 << "% ";
+        cout << endl;
+        for (int i = 0; i < 3; i++)
+          cout << fixed << setprecision(1) << policy.threeChoicesEventPolicy[i] * 100 << "% ";
+        cout << endl;
+        for (int i = 0; i < 6; i++)
+          cout << fixed << setprecision(1) << policy.outgoingPolicy[i] * 100 << "% ";
+        cout << endl;
+      }
+
       if (game.isRacing)//比赛回合
       {
         game.randomDistributeCards(rand);//只把stageInTurn改成1

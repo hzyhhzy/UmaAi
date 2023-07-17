@@ -18,6 +18,7 @@ struct ModelOutputValueV1
 {
   float winrate;
   float avgScoreMinusTarget;
+  float extract(int i);
 };
 static_assert(sizeof(ModelOutputValueV1) == sizeof(float) * NNOUTPUT_CHANNELS_VALUE_V1, "NNOUTPUT_CHANNELS_VALUE_V1´íÎó");
 

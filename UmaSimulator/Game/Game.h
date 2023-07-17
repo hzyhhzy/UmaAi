@@ -56,6 +56,12 @@ struct Game
   int trainValue[5][7];//第一个数是第几个训练，第二个数依次是速耐力根智pt体力
   int failRate[5];//训练失败率
 
+  //随机数发生器，用于分配卡组和碎片
+  //前提是得意率为常数
+  std::discrete_distribution<> cardDistributionRandom[8];
+  std::discrete_distribution<> venusSpiritTypeRandom[8];
+
+
   //显示相关
   bool playerPrint;//给人玩的时候，显示更多信息
 
@@ -127,7 +133,7 @@ struct Game
   int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，红女神是5级
   bool isOutgoingLegal(int chosenOutgoing) const;//这个外出是否是可以进行的
   bool isXiaHeSu() const;//是否为夏合宿
-  double getThreeChoicesEventProb(bool useVenusIfFull);//点击三女神出事件的概率
+  double getThreeChoicesEventProb(bool useVenusIfFull) const;//点击三女神出事件的概率
   //void runTestGame();
 
   void getNNInputV1(float* buf, float targetScore, int mode) const;//神经网络输入，mode=0是value，1是policy

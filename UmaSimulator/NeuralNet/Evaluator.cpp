@@ -51,6 +51,8 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
     {0,0,0,0,0,0},
     {0,0,0}
   };
+  if(game0.isEnd())
+    return policy;
 
   int chosenTrain = 0;
   bool useVenus = false;
@@ -99,12 +101,12 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
       {
         const double jibanValue = 2;
         const double venusValue_first = 40;
-        const double venusValue_beforeOutgoing = 6;
-        const double venusValue_afterOutgoing = 30;
+        const double venusValue_beforeOutgoing = 10;
+        const double venusValue_afterOutgoing = 20;
         const double venusValue_activated = 6;
-        const double spiritValue = 20;
+        const double spiritValue = 25;
         const double vitalValue = 0.9;
-        const double statusWeights[6] = { 1.0,1.0,1.0,1.0,1.0,0.4 };
+        const double statusWeights[6] = { 1.0,1.0,1.0,1.0,1.0,0.4/1.8*(game.isQieZhe?GameConstants::ScorePtRateQieZhe:GameConstants::ScorePtRate)};
 
 
         double expectSpiritNum = int(game.spiritDistribution[item] / 32) + 1;

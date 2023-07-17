@@ -77,6 +77,28 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
   for (int i = 0; i < 5; i++)
     venusCardOutgoingUsed[i] = false;
 
+  for (int i = 0; i < 8; i++)
+  {
+    std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
+    if (i < 6)
+    {
+      int cardType = GameDatabase::AllSupportCards[cardId[i]].cardType;
+      int deYiLv = GameDatabase::AllSupportCards[cardId[i]].deYiLv;
+      if (cardType >= 0 && cardType < 5)//速耐力根智卡
+        probs[cardType] += deYiLv;
+      else //友人卡，鸽的概率较高
+        probs[5] += 50;
+    }
+    else //理事长，记者
+      probs[5] += 50;
+
+    cardDistributionRandom[i] = std::discrete_distribution<>(probs.begin(), probs.end());
+  }
+
+  for (int i = 0; i < 8; i++)
+    venusSpiritTypeRandom[i] = std::discrete_distribution<>(GameConstants::VenusSpiritTypeProb[i], GameConstants::VenusSpiritTypeProb[i + 1]);
+
+
   stageInTurn = 0;
   calculateVenusSpiritsBonus();
   randomDistributeCards(rand); 
@@ -95,46 +117,29 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
 
   double blueVenusHintBonus = 1 + 0.01 * GameConstants::BlueVenusLevelHintProbBonus[venusLevelBlue];
 
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < 8; i++)
   {
     if (turn < 2 && i == 0)//前两回合神团不来
     {
       assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
       continue;
     }
-    std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-    int cardType = GameDatabase::AllSupportCards[cardId[i]].cardType;
-    int deYiLv = GameDatabase::AllSupportCards[cardId[i]].deYiLv;
-    if (cardType >= 0 && cardType < 5)//速耐力根智卡
-      probs[cardType] += deYiLv;
-    else //友人卡，鸽的概率较高
-      probs[5] += 50;
 
+    int cardType = i < 6 ? GameDatabase::AllSupportCards[cardId[i]].cardType : 6;
 
-    std::discrete_distribution<> d(probs.begin(), probs.end());
-    int whichTrain = d(rand);//在哪个训练
+    int whichTrain = cardDistributionRandom[i](rand);//在哪个训练
     if (whichTrain < 5)//没鸽
       cardDistribution[whichTrain][i] = true;
 
     //是否有hint
-    if (cardType >= 0 && cardType < 5)//速耐力根智卡
+    if (i < 6 && cardType >= 0 && cardType < 5)//速耐力根智卡
     {
       double hintProb = 0.06 * blueVenusHintBonus * (1 + 0.01 * GameDatabase::AllSupportCards[cardId[i]].hintProbIncrease);
       bernoulli_distribution d(hintProb);
       cardHint[i] = d(rand);
     }
-    else cardHint[i] = false;
-  }
-  //理事长和记者
-  {
-    std::vector<int> probs = { 100,100,100,100,100,100 }; //速耐力根智鸽
-    std::discrete_distribution<> d(probs.begin(), probs.end());
-    int whichTrain = d(rand);//在哪个训练
-    if (whichTrain < 5)//没鸽
-      cardDistribution[whichTrain][6] = true;
-    whichTrain = d(rand);//在哪个训练
-    if (whichTrain < 5)//没鸽
-      cardDistribution[whichTrain][7] = true;
+    else if (i < 6)
+      cardHint[i] = false;
   }
   //分配碎片
   if (turn < 2 || venusSpiritsBottom[7] != 0)//无碎片
@@ -147,8 +152,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
     bool allowTwoSpirits = venusSpiritsBottom[6] == 0;//有两个空位
     for (int i = 0; i < 8; i++)
     {
-      std::discrete_distribution<> d(GameConstants::VenusSpiritTypeProb[i], GameConstants::VenusSpiritTypeProb[i+1]);
-      int spiritType = d(rand) + 1;
+      int spiritType = venusSpiritTypeRandom[i](rand) + 1;
       int spiritColor = rand() % 3;
       int spirit = spiritType + spiritColor * 8;
 
@@ -936,7 +940,7 @@ bool Game::isXiaHeSu() const
   return (turn >= 36 && turn <= 39) || (turn >= 60 && turn <= 63);
 }
 
-double Game::getThreeChoicesEventProb(bool useVenusIfFull)
+double Game::getThreeChoicesEventProb(bool useVenusIfFull) const
 {
   if (!venusCardFirstClick)return 0.0;
   if (venusCardIsQingRe)return 1.0;
