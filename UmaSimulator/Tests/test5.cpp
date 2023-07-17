@@ -26,7 +26,7 @@ void main_test5()
 
   Search search;
   Evaluator evaluator(NULL, 16);
-  int searchN = 16;
+  int searchN = 2048;
 
   for (int gamenum = 0; gamenum < 100000; gamenum++)
   {
