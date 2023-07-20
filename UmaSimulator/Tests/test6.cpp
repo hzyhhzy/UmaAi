@@ -46,36 +46,65 @@ void main_test6()
     cout << endl;
     cout << "计算中..." << endl;
     cout << endl;
+
+    auto printPolicy = [](float p)
+    {
+      cout << fixed << setprecision(1);
+      if (p >= 0.2)cout << "\033[32m";
+      else cout << "\033[36m";
+      cout << p * 100 << "% ";
+      cout << "\033[0m";
+    };
+
     search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNum);
+    cout << "计算完毕" << endl;
     {
       auto policy = search.extractPolicyFromSearchResults(1);
-
-      cout << "使用女神率：";
-      cout << fixed << setprecision(1) << policy.useVenusPolicy * 100 << "% ";
-      cout << endl;
+      if (game.venusAvailableWisdom != 0)
+      {
+        cout << "使用女神率：";
+        printPolicy(policy.useVenusPolicy * 100);
+        cout << endl;
+      }
 
       cout << "速耐力根智：";
       for (int i = 0; i < 5; i++)
-        cout << fixed << setprecision(1) << policy.trainingPolicy[i] * 100 << "% ";
+        printPolicy(policy.trainingPolicy[i]);
       cout << endl;
 
       cout << "休息，外出，比赛：";
       for (int i = 0; i < 3; i++)
-        cout << fixed << setprecision(1) << policy.trainingPolicy[5 + i] * 100 << "% ";
+        printPolicy(policy.trainingPolicy[5 + i]);
       cout << endl;
 
       cout << "红，蓝，黄：";
       for (int i = 0; i < 3; i++)
-        cout << fixed << setprecision(1) << policy.threeChoicesEventPolicy[i] * 100 << "% ";
+        printPolicy(policy.threeChoicesEventPolicy[i]);
       cout << endl;
 
       cout << "五个女神外出以及普通外出：";
       for (int i = 0; i < 6; i++)
-        cout << fixed << setprecision(1) << policy.outgoingPolicy[i] * 100 << "% ";
+        printPolicy(policy.outgoingPolicy[i]);
       cout << endl;
     }
 
+    float maxScore = -10000;
+    for (int i = 0; i < 2; i++)
+    {
+      for (int j = 0; j < 8 + 4 + 6; j++)
+      {
+        float s = search.allChoicesValue[i][j].avgScoreMinusTarget;
+        if (s > maxScore)maxScore = s;
+      }
+    }
+
+    cout << "期望分数（未考虑技能打折和已买技能）：\033[31m" << maxScore << "\033[0m" << endl;
+    cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：\033[31m" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << "\033[0m" << endl;
+
+
+
     cout << endl;
+    cout << "各选项的期望分数：" << endl;
     for (int i = 0; i < 2; i++)
     {
       for (int j = 0; j < 8 + 4 + 6; j++)
