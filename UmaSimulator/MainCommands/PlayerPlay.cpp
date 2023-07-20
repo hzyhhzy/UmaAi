@@ -13,6 +13,8 @@ using namespace std;
 
 void main_playerPlay()
 {
+  const int threadNum = 4;
+
   cout << termcolor::cyan << "赛马娘（大师杯）育成模拟器 v0.1" << termcolor::reset << endl;
   cout << termcolor::cyan << "作者 Sigmoid，QQ: 2658628026" << termcolor::reset << endl;
   cout << termcolor::cyan << "代码开源：" << termcolor::yellow << "https://github.com/hzyhhzy/UmaSimulator" << termcolor::reset << endl;
@@ -28,7 +30,9 @@ void main_playerPlay()
   for(int gamenum=0;gamenum<100000;gamenum++)
   {
     Search search;
-    Evaluator evaluator(NULL, 128);
+    vector<Evaluator> evaluators;
+    for (int i = 0; i < threadNum; i++)
+      evaluators.push_back(Evaluator(NULL, 128));
     Game game;
     game.newGame(rand, true, umaId, cards, zhongmaBlue, zhongmaBonus);
 
@@ -51,7 +55,7 @@ void main_playerPlay()
       assert(turn == game.turn && "回合数不正确");
       game.randomDistributeCards(rand);
       game.print();
-      search.runSearch(game, evaluator, 2048, TOTAL_TURN, 27000);
+      search.runSearch(game, evaluators.data(), 4096, TOTAL_TURN, 27000, threadNum);
       for (int i = 0; i < 2; i++)
       {
         for (int j = 0; j < 8 + 4 + 6; j++)

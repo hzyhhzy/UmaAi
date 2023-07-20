@@ -104,6 +104,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +137,7 @@
     <ClCompile Include="GameDatabase\UmaData.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GamePrint.cpp" />
+    <ClCompile Include="Game\Protocol.cpp" />
     <ClCompile Include="MainCommands\PlayerPlay.cpp" />
     <ClCompile Include="NeuralNet\Evaluator.cpp" />
     <ClCompile Include="NeuralNet\Model.cpp" />
@@ -147,6 +150,7 @@
     <ClCompile Include="Tests\test3.cpp" />
     <ClCompile Include="Tests\test4.cpp" />
     <ClCompile Include="Tests\test5.cpp" />
+    <ClCompile Include="Tests\test6.cpp" />
     <ClCompile Include="UmaSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>

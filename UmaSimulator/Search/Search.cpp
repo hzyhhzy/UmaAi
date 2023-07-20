@@ -1,5 +1,10 @@
 #include <random>
 #include <cassert>
+#include <iostream>
+#include <sstream>
+#include <thread>
+#include <atomic>
+#include <future>
 #include "Search.h"
 
 static void softmax(float* f, int n)
@@ -20,7 +25,7 @@ static void softmax(float* f, int n)
     f[i] *= totalInv;
 }
 
-void Search::runSearch(const Game& game, Evaluator& evaluator, int eachSamplingNum, int maxDepth, int targetScore)
+void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore, int threadNum)
 {
   for (int i = 0; i < 2; i++)
     for (int j = 0; j < 8 + 4 + 6; j++)
@@ -39,8 +44,8 @@ void Search::runSearch(const Game& game, Evaluator& evaluator, int eachSamplingN
     //先考虑是不是只有比赛
     if (game.isRacing)
     {
-      allChoicesValue[useVenus][0] = evaluateSingleAction(game, evaluator, eachSamplingNum, maxDepth, targetScore,
-        rand, -1, useVenus, -1, -1, -1);
+      allChoicesValue[useVenus][0] = evaluateSingleAction(game, evaluators, eachSamplingNum, maxDepth, targetScore,
+        rand, -1, useVenus, -1, -1, threadNum, -1);
     }
     else
     {
@@ -60,8 +65,8 @@ void Search::runSearch(const Game& game, Evaluator& evaluator, int eachSamplingN
             for (int chosenSpiritColor = 0; chosenSpiritColor < 3; chosenSpiritColor++)
             {
               auto value = evaluateSingleAction(
-                game, evaluator, eachSamplingNum, maxDepth, targetScore,
-                rand, item, useVenus, chosenSpiritColor, -1, 1);
+                game, evaluators, eachSamplingNum, maxDepth, targetScore,
+                rand, item, useVenus, chosenSpiritColor, -1, threadNum, 1);
               allChoicesValue[useVenus][8 + 1 + chosenSpiritColor] = value;
               if (value.avgScoreMinusTarget > bestScoreIfThreeChoices)
                 bestScoreIfThreeChoices = value.avgScoreMinusTarget;
@@ -82,8 +87,8 @@ void Search::runSearch(const Game& game, Evaluator& evaluator, int eachSamplingN
           if (threeChoicesProb < 1.0)
           {
             allChoicesValue[useVenus][8] = evaluateSingleAction(
-              game, evaluator, eachSamplingNum, maxDepth, targetScore,
-              rand, item, useVenus, -1, -1, -1);
+              game, evaluators, eachSamplingNum, maxDepth, targetScore,
+              rand, item, useVenus, -1, -1, threadNum, -1);
           }
           else
           {
@@ -99,22 +104,22 @@ void Search::runSearch(const Game& game, Evaluator& evaluator, int eachSamplingN
         else//女神不在这个训练
         {
           allChoicesValue[useVenus][item] = evaluateSingleAction(
-            game, evaluator, eachSamplingNum, maxDepth, targetScore,
-            rand, item, useVenus, -1, -1, -1);
+            game, evaluators, eachSamplingNum, maxDepth, targetScore,
+            rand, item, useVenus, -1, -1, threadNum, -1);
         }
       }
 
       //休息
       allChoicesValue[useVenus][5] = evaluateSingleAction(
-        game, evaluator, eachSamplingNum, maxDepth, targetScore,
-        rand, 5, useVenus, -1, -1, -1);
+        game, evaluators, eachSamplingNum, maxDepth, targetScore,
+        rand, 5, useVenus, -1, -1, threadNum, -1);
 
       //比赛
       if (game.turn > 12)
       {
         allChoicesValue[useVenus][7] = evaluateSingleAction(
-          game, evaluator, eachSamplingNum, maxDepth, targetScore,
-          rand, 7, useVenus, -1, -1, -1);
+          game, evaluators, eachSamplingNum, maxDepth, targetScore,
+          rand, 7, useVenus, -1, -1, threadNum, -1);
       }
 
       //外出
@@ -127,8 +132,8 @@ void Search::runSearch(const Game& game, Evaluator& evaluator, int eachSamplingN
           if (!game.isOutgoingLegal(chosenOutgoing))
             continue;
           auto value = evaluateSingleAction(
-            game, evaluator, eachSamplingNum, maxDepth, targetScore,
-            rand, 6, useVenus, -1, chosenOutgoing, -1);
+            game, evaluators, eachSamplingNum, maxDepth, targetScore,
+            rand, 6, useVenus, -1, chosenOutgoing, threadNum, -1);
           allChoicesValue[useVenus][8 + 4 + chosenOutgoing] = value;
           if (value.avgScoreMinusTarget > bestScore)
             bestScore = value.avgScoreMinusTarget;
@@ -143,64 +148,109 @@ void Search::runSearch(const Game& game, Evaluator& evaluator, int eachSamplingN
   }
 }
 
-ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator& evaluator, int eachSamplingNum, int maxDepth, int targetScore,
-  std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
+
+
+ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore,
+  std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int threadNum, int forceThreeChoicesEvent)
 {
-  int batchsize = evaluator.maxBatchsize;
-  int batchNum = (eachSamplingNum - 1) / evaluator.maxBatchsize + 1;
-  eachSamplingNum = batchNum * evaluator.maxBatchsize;//凑够整数个batchsize
 
-  std::vector<float> targetScores;
-  targetScores.assign(batchsize, targetScore);
-
-  double totalScore = 0;
-  double totalWinrate = 0;
-  double totalNum = 0;
-  Game gameCopy = game;
-  gameCopy.playerPrint = false;
-  for (int batch = 0; batch < batchNum; batch++)
+  if (threadNum == 1)
   {
-    gamesBuf.assign(batchsize, gameCopy);
 
-    //先走第一步
-    for (int i = 0; i < batchsize; i++)
+    int batchsize = evaluators->maxBatchsize;
+    int batchNum = (eachSamplingNum - 1) / evaluators->maxBatchsize + 1;
+    eachSamplingNum = batchNum * evaluators->maxBatchsize;//凑够整数个batchsize
+
+    std::vector<float> targetScores;
+    targetScores.assign(batchsize, targetScore);
+
+    double totalScore = 0;
+    double totalWinrate = 0;
+    double totalNum = 0;
+    Game gameCopy = game;
+    gameCopy.playerPrint = false;
+    std::vector<Game> gamesBuf;
+    for (int batch = 0; batch < batchNum; batch++)
     {
-      gamesBuf[i].applyTrainingAndNextTurn(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
-    }
-    
+      gamesBuf.assign(batchsize, gameCopy);
 
-
-    for (int depth = 0; depth < maxDepth; depth++)
-    {
-      evaluator.evaluate(gamesBuf.data(), targetScores.data(), 1, batchsize);//计算policy
-      bool distributeCards = (depth != maxDepth - 1);//最后一层就不分配卡组了，直接调用神经网络估值
-
-
-      bool allFinished = true;
+      //先走第一步
       for (int i = 0; i < batchsize; i++)
       {
-        Search::runOneTurnUsingPolicy(rand, gamesBuf[i], evaluator.policyResults[i], distributeCards);
-        if (!gamesBuf[i].isEnd())allFinished = false;
+        gamesBuf[i].applyTrainingAndNextTurn(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
       }
 
-      if (allFinished)break;
+
+
+      for (int depth = 0; depth < maxDepth; depth++)
+      {
+        evaluators->evaluate(gamesBuf.data(), targetScores.data(), 1, batchsize);//计算policy
+        bool distributeCards = (depth != maxDepth - 1);//最后一层就不分配卡组了，直接调用神经网络估值
+
+
+        bool allFinished = true;
+        for (int i = 0; i < batchsize; i++)
+        {
+          Search::runOneTurnUsingPolicy(rand, gamesBuf[i], evaluators->policyResults[i], distributeCards);
+          if (!gamesBuf[i].isEnd())allFinished = false;
+        }
+
+        if (allFinished)break;
+      }
+
+      evaluators->evaluate(gamesBuf.data(), targetScores.data(), 0, batchsize);//计算value
+
+      for (int i = 0; i < batchsize; i++)
+      {
+        totalScore += evaluators->valueResults[i].avgScoreMinusTarget;
+        totalWinrate += evaluators->valueResults[i].winrate;
+      }
+      totalNum += batchsize;
+
     }
-
-    evaluator.evaluate(gamesBuf.data(), targetScores.data(), 0, batchsize);//计算value
-
-    for (int i = 0; i < batchsize; i++)
-    {
-      totalScore += evaluator.valueResults[i].avgScoreMinusTarget;
-      totalWinrate += evaluator.valueResults[i].winrate;
-    }
-    totalNum += batchsize;
-
+    ModelOutputValueV1 out;
+    out.avgScoreMinusTarget = totalScore / totalNum;
+    out.winrate = totalWinrate / totalNum;
+    return out;
   }
-  ModelOutputValueV1 out;
-  out.avgScoreMinusTarget = totalScore / totalNum;
-  out.winrate = totalWinrate / totalNum;
-  return out;
-  
+
+  else
+  {
+
+    int eachSamplingNumEveryThread = eachSamplingNum / threadNum;
+    if (eachSamplingNumEveryThread <= 0)eachSamplingNumEveryThread = 1;
+
+    std::vector<std::mt19937_64> rands;
+    for (int i = 0; i < threadNum; i++)
+      rands.push_back(std::mt19937_64(rand()));
+
+
+
+    std::vector<std::future<ModelOutputValueV1>> futures(threadNum); // 用于存储每个线程的结果
+
+    // 创建线程并执行函数f
+    for (int i = 0; i < threadNum; ++i) {
+      futures[i] = std::async(std::launch::async,
+        [this, i, &game, &evaluators, eachSamplingNumEveryThread, maxDepth, targetScore, &rands, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent]() {
+          
+          return this->evaluateSingleAction(game, evaluators + i, eachSamplingNumEveryThread, maxDepth, targetScore,
+          rands[i],
+          chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, 1, forceThreeChoicesEvent);
+        });
+     
+    }
+
+    ModelOutputValueV1 totalResult = { 0,0 };
+    // 获取每个线程的结果
+    for (int i = 0; i < threadNum; ++i) {
+      auto result = futures[i].get(); 
+      totalResult.avgScoreMinusTarget += result.avgScoreMinusTarget;
+      totalResult.winrate += result.winrate;
+    }
+    totalResult.avgScoreMinusTarget /= threadNum;
+    totalResult.winrate /= threadNum;
+    return totalResult;
+  }
 }
 
 ModelOutputPolicyV1 Search::extractPolicyFromSearchResults(int mode, float delta)

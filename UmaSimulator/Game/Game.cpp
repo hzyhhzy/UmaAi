@@ -77,6 +77,15 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
   for (int i = 0; i < 5; i++)
     venusCardOutgoingUsed[i] = false;
 
+  initRandomGenerators();
+
+  stageInTurn = 0;
+  calculateVenusSpiritsBonus();
+  randomDistributeCards(rand); 
+}
+
+void Game::initRandomGenerators()
+{
   for (int i = 0; i < 8; i++)
   {
     std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
@@ -98,10 +107,6 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
   for (int i = 0; i < 8; i++)
     venusSpiritTypeRandom[i] = std::discrete_distribution<>(GameConstants::VenusSpiritTypeProb[i], GameConstants::VenusSpiritTypeProb[i + 1]);
 
-
-  stageInTurn = 0;
-  calculateVenusSpiritsBonus();
-  randomDistributeCards(rand); 
 }
 
 void Game::randomDistributeCards(std::mt19937_64& rand)

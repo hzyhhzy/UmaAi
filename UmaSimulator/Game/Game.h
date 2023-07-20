@@ -98,6 +98,11 @@ struct Game
     int newCards[6],
     int newZhongMaBlueCount[5],
     int newZhongMaExtraBonus[6]);//重置游戏，开局。umaId是马娘编号
+
+  bool loadGameFromJson(std::string jsonStr);
+
+  void initRandomGenerators();
+
   void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组和碎片
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率
 

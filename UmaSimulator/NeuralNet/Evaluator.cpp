@@ -1,4 +1,5 @@
 #include <cassert>
+#include <iostream>
 #include "Evaluator.h"
 
 void Evaluator::evaluate(const Game* games, const float* targetScores, int mode, int gameNum)
@@ -42,6 +43,19 @@ Evaluator::Evaluator(Model* model, int maxBatchsize):model(model), maxBatchsize(
   
 }
 
+
+static double vitalEvaluation(int vital,int maxVital)
+{
+  if (vital <= 50)
+    return 2.0 * vital;
+  else if (vital <= 70)
+    return 1.5 * (vital - 50) + vitalEvaluation(50, maxVital);
+  else if (vital <= maxVital - 10)
+    return 1.0 * (vital - 70) + vitalEvaluation(70, maxVital);
+  else
+    return 0.5 * (vital - (maxVital - 10)) + vitalEvaluation(maxVital - 10, maxVital);
+}
+
 ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
 {
   ModelOutputPolicyV1 policy=
@@ -67,47 +81,35 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
   }
   else//常规训练回合
   {
-    if (game.venusAvailableWisdom == 1)
+    if (game.venusAvailableWisdom != 0)
     {
       useVenus = true;
       game.activateVenusWisdom();
     }
 
-    if (game.vital < 50)//有女神外出就外出，没有就休息
-    {
-      if (game.venusCardUnlockOutgoing && !game.venusCardOutgoingUsed[4] && !game.isXiaHeSu())
-      {
-        chosenTrain = 6;
-        chosenOutgoing =
-          (!game.venusCardOutgoingUsed[2]) ? 2 :
-          (!game.venusCardOutgoingUsed[0]) ? 0 :
-          (!game.venusCardOutgoingUsed[1]) ? 1 :
-          (!game.venusCardOutgoingUsed[3]) ? 3 :
-          4;
-      }
-      else
-        chosenTrain = 5;
-    }
-    else
-    {
-      if (game.venusAvailableWisdom != 0 && !game.venusIsWisdomActive)
-      {
-        useVenus = true;
-        game.activateVenusWisdom();
-      }
+
+      const double jibanValue = 2;
+      const double venusValue_first = 40;
+      const double venusValue_beforeOutgoing = 10;
+      const double venusValue_afterOutgoing = 20;
+      const double venusValue_activated = 6;
+      const double spiritValue = 25;
+      const double vitalFactor = 0.7;
+      const double smallFailValue = -30;
+      const double bigFailValue = -90;
+      const double wizFailValue = 5;
+      const double statusWeights[6] = { 1.0,1.0,1.0,1.0,1.0,0.4 / 1.8 * (game.isQieZhe ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate) };
+      const double restValueFactor = 1.2;//休息估值权重
+
+      int vitalAfterRest = std::min(game.maxVital, 50 + game.vital);
+      double restValue = restValueFactor * (vitalEvaluation(vitalAfterRest, game.maxVital) - vitalEvaluation(game.vital, game.maxVital));
+      //std::cout << restValue << " "<<game.vital<<std::endl;
+      if (game.venusSpiritsBottom[7] == 0)restValue += spiritValue;
+
       double bestValue = -10000;
       int bestTrain = -1;
       for (int item = 0; item < 5; item++)
       {
-        const double jibanValue = 2;
-        const double venusValue_first = 40;
-        const double venusValue_beforeOutgoing = 10;
-        const double venusValue_afterOutgoing = 20;
-        const double venusValue_activated = 6;
-        const double spiritValue = 25;
-        const double vitalValue = 0.9;
-        const double statusWeights[6] = { 1.0,1.0,1.0,1.0,1.0,0.4/1.8*(game.isQieZhe?GameConstants::ScorePtRateQieZhe:GameConstants::ScorePtRate)};
-
 
         double expectSpiritNum = int(game.spiritDistribution[item] / 32) + 1;
         double value = 0;
@@ -135,14 +137,29 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
               expectSpiritNum += 1;
               value += venusValue_activated;
             }
+
+
+            //选等级最低的那种颜色的碎片
+            if (game.venusLevelRed <= game.venusLevelBlue && game.venusLevelRed <= game.venusLevelYellow)
+              chosenSpiritColor = 0;
+            else if (game.venusLevelBlue <= game.venusLevelYellow && game.venusLevelBlue < game.venusLevelRed)
+              chosenSpiritColor = 1;
+            else
+              chosenSpiritColor = 2;
           }
           else
           {
             if (game.cardJiBan[head] < 80)
             {
               int jibanAdd = 7;
+              if (game.isAiJiao)jibanAdd += 2;
               if (game.cardHint[head])
+              {
                 jibanAdd += 5;
+                if (game.isAiJiao)jibanAdd += 2;
+              }
+              jibanAdd = std::min(80 - game.cardJiBan[head], jibanAdd);
+
               value += jibanAdd * jibanValue;
             }
           }
@@ -173,7 +190,25 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
         for (int i = 0; i < 6; i++)
           value += game.trainValue[item][i] * statusWeights[i];
 
-        value += vitalValue * game.trainValue[item][6];
+        //value += vitalValue * game.trainValue[item][6];
+
+        int vitalAfterTrain = std::min(game.maxVital, game.trainValue[item][6] + game.vital);
+        value += vitalFactor * (vitalEvaluation(vitalAfterTrain, game.maxVital) - vitalEvaluation(game.vital, game.maxVital));
+        
+
+        double failRate = game.failRate[item];
+        if (failRate > 0)
+        {
+          double failValueAvg = wizFailValue;
+          if (item != 5)
+          {
+            double bigFailProb = failRate;
+            if (failRate < 20)bigFailProb = 0;
+            failValueAvg = 0.01 * bigFailProb * bigFailValue + (1 - 0.01 * bigFailProb) * smallFailValue;
+          }
+          value = 0.01 * failRate * failValueAvg + (1 - 0.01 * failRate) * value;
+        }
+
 
         if (value > bestValue)
         {
@@ -182,7 +217,23 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
         }
       }
       chosenTrain = bestTrain;
-    }
+
+      if (restValue>bestValue)//有女神外出就外出，没有就休息
+      {
+        if (game.venusCardUnlockOutgoing && !game.venusCardOutgoingUsed[4] && !game.isXiaHeSu())
+        {
+          chosenTrain = 6;
+          chosenOutgoing =
+            (!game.venusCardOutgoingUsed[2]) ? 2 :
+            (!game.venusCardOutgoingUsed[0]) ? 0 :
+            (!game.venusCardOutgoingUsed[1]) ? 1 :
+            (!game.venusCardOutgoingUsed[3]) ? 3 :
+            4;
+        }
+        else
+          chosenTrain = 5;
+      }
+    
   }
   policy.trainingPolicy[chosenTrain] = 1.0;
   if (useVenus)policy.useVenusPolicy = 1.0;

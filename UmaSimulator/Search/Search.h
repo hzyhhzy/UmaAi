@@ -15,11 +15,11 @@ public:
   ModelOutputValueV1 allChoicesValue[2][8 + 4 + 6];
 
   //对于每个可能的情况（最多2*(8+4+6)种），每个往后模拟eachSamplingNum局，模拟maxDepth回合后返回神经网络输出（神经网络输出是达到targetScore的概率）
-  void runSearch(const Game& game, Evaluator& evaluator, int eachSamplingNum, int maxDepth, int targetScore);
+  void runSearch(const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore, int threadNum);
 
   //计算单个选择的数值
   ModelOutputValueV1 evaluateSingleAction(
-    const Game& game, Evaluator& evaluator, int eachSamplingNum, int maxDepth, int targetScore,
+    const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore,
     
 
     std::mt19937_64& rand,
@@ -27,7 +27,8 @@ public:
     bool useVenus,
     int chosenSpiritColor,
     int chosenOutgoing,
-    int forceThreeChoicesEvent = 0);
+    int threadNum,
+    int forceThreeChoicesEvent);
 
   //根据搜索结果选出最佳选择，policy也做一定的软化
   //mode=0是根据胜率，=1是根据平均分

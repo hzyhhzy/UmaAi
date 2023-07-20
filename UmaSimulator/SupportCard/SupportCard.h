@@ -17,7 +17,7 @@ struct SupportCard
   int initialBonus[6];//初期速耐力根智pt的提升
   int initialJiBan;//初始羁绊
   double saiHou;//赛后
-  int hintBonus[6];//为了简化，把红点的技能等效成多少属性
+  int hintBonus[6];//为了简化，把红点的技能等效成多少属性。综合考虑技能有效率（例如高峰90%有效，除了集中力），平均性价比与折扣，种马重复给技能（假设30%）
   double hintProbIncrease;//启发发生率提升
   double deYiLv;//得意率
 
