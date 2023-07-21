@@ -53,9 +53,9 @@ const std::string GameDatabase::AllSupportCardNames[ALL_SUPPORTCARD_NUM] = {
   "[速]速子",
 
   "[耐]光钻",
-  "[耐]桂冠",
+  "[力]八重",
 
-  "[力]白仁",
+  "[智]波旁",
   "[力]重炮",
   //25----
   "[力]内恰",
@@ -83,6 +83,8 @@ const std::string GameDatabase::AllSupportCardNames[ALL_SUPPORTCARD_NUM] = {
   "[智]速子sr",
   "[智]大和sr",
   "[智]福来sr",
+  //45----
+   
 
 
 
@@ -120,9 +122,9 @@ const std::map<int, int> GameDatabase::AllSupportCardGameIdToSimulatorId =
   {430028,18},
   {430078,19},
   {430101,20},
-  {430,21},
-  {430,22},
-  {430,23},
+  {130137,21},
+  {430032,22},
+  {330141,23},
   {430,24},
   {430,25},
   {430,26},
@@ -493,53 +495,54 @@ SupportCard GameDatabase::AllSupportCards[ALL_SUPPORTCARD_NUM] =
     0, // 启发发生率提升
     0  // 得意率
   },
-  //
-  {
+  //21,神团一破
+{
     21, // 支援卡id，部分卡具有比较复杂的固有，根据id来辨别
-    0, // 支援卡类型，0速1耐2力3根4智5友人或团队
-    0, // 友情加成
-    0, // 干劲加成
+    5, // 支援卡类型，0速1耐2力3根4智5友人或团队
+    17, // 友情加成
+    15, // 干劲加成
     0, // 训练加成
-    {0, 0, 0, 0, 0, 0}, // 速耐力根智pt的加成
-    0, // 智力彩圈体力回复量
-    {0, 0, 0, 0, 0, 0}, // 初期速耐力根智pt的提升
-    0, // 初始羁绊
+    {1, 1, 1, 0, 0, 1}, // 速耐力根智pt的加成
+    1, // 智力彩圈体力回复量
+    {0, 0, 27, 0, 0, 0}, // 初期速耐力根智pt的提升
+    16, // 初始羁绊
     0, // 赛后
+    //友人卡的各种事件会另外处理
     {0, 0, 0, 0, 0, 0}, // 为了简化，把红点的技能等效成多少属性
     0, // 启发发生率提升
     0  // 得意率
-  },
-  //
+},
+  //22，[力]八重无敌
   {
     22, // 支援卡id，部分卡具有比较复杂的固有，根据id来辨别
-    0, // 支援卡类型，0速1耐2力3根4智5友人或团队
-    0, // 友情加成
-    0, // 干劲加成
-    0, // 训练加成
-    {0, 0, 0, 0, 0, 0}, // 速耐力根智pt的加成
+    2, // 支援卡类型，0速1耐2力3根4智5友人或团队
+    20, // 友情加成
+    40, // 干劲加成
+    10, // 训练加成
+    {0, 0, 1, 0, 0, 0}, // 速耐力根智pt的加成
     0, // 智力彩圈体力回复量
     {0, 0, 0, 0, 0, 0}, // 初期速耐力根智pt的提升
-    0, // 初始羁绊
-    0, // 赛后
-    {0, 0, 0, 0, 0, 0}, // 为了简化，把红点的技能等效成多少属性
-    0, // 启发发生率提升
-    0  // 得意率
+    20, // 初始羁绊
+    10, // 赛后
+    {0, 0, 0, 0, 0, 40}, // 为了简化，把红点的技能等效成多少属性
+    60, // 启发发生率提升
+    20  // 得意率
   },
-  //
+  //23，三破智波旁
   {
     23, // 支援卡id，部分卡具有比较复杂的固有，根据id来辨别
-    0, // 支援卡类型，0速1耐2力3根4智5友人或团队
-    0, // 友情加成
+    4, // 支援卡类型，0速1耐2力3根4智5友人或团队
+    28, // 友情加成
     0, // 干劲加成
-    0, // 训练加成
-    {0, 0, 0, 0, 0, 0}, // 速耐力根智pt的加成
-    0, // 智力彩圈体力回复量
-    {0, 0, 0, 0, 0, 0}, // 初期速耐力根智pt的提升
-    0, // 初始羁绊
+    13, // 训练加成
+    {1, 0, 0, 0, 1, 0}, // 速耐力根智pt的加成
+    4, // 智力彩圈体力回复量
+    {12,12,12,12,12, 0}, // 初期速耐力根智pt的提升。
+    28, // 初始羁绊
     0, // 赛后
-    {0, 0, 0, 0, 0, 0}, // 为了简化，把红点的技能等效成多少属性
-    0, // 启发发生率提升
-    0  // 得意率
+    {0, 0, 0, 0, 0, 30}, // 为了简化，把红点的技能等效成多少属性
+    40, // 启发发生率提升
+    61 // 得意率
   },
   //
   {
@@ -557,6 +560,7 @@ SupportCard GameDatabase::AllSupportCards[ALL_SUPPORTCARD_NUM] =
     0, // 启发发生率提升
     0  // 得意率
   },
+
 };
 
 CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int jiBan) const
@@ -576,7 +580,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     if (jiBan < 80)isShining = false;
     if (cardType != atTrain)isShining = false;
   }
-  else if (cardID == SHENTUAN_ID)//神团
+  else if (GameDatabase::AllSupportCards[cardID].cardType == 5 )//神团
   {
     if (!game.venusCardIsQingRe)
       isShining = false;
@@ -703,6 +707,15 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     //啥都没有
     }
   //
+  else if (cardID == 21) {
+      //啥都没有
+      }
+  else if (cardID == 22){
+          //啥都没有
+          }
+  else if (cardID == 23) {
+      //啥都没有
+  }
   else
   {
     std::cout << "未知卡";

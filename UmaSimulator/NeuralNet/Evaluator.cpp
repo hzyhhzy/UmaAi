@@ -113,7 +113,7 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
 
         double expectSpiritNum = int(game.spiritDistribution[item] / 32) + 1;
         double value = 0;
-        assert(game.cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
+        assert(GameDatabase::AllSupportCards[game.cardId[0]].cardType == 5 && "神团卡不在第一个位置");
         for (int head = 0; head < 6; head++)
         {
           if (!game.cardDistribution[item][head])
