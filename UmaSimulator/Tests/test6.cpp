@@ -12,8 +12,8 @@ using namespace std;
 
 void main_test6()
 {
-  const int threadNum = 16;
-  const int searchN = 8192;
+  const int threadNum = 12;
+  const int searchN = 6144;
   Search search;
   vector<Evaluator> evaluators;
   for (int i = 0; i < threadNum; i++)
@@ -50,7 +50,7 @@ void main_test6()
     auto printPolicy = [](float p)
     {
       cout << fixed << setprecision(1);
-      if (p >= 0.2)cout << "\033[32m";
+      if (p >= 0.2)cout << "\033[33m";
       else cout << "\033[36m";
       cout << p * 100 << "% ";
       cout << "\033[0m";
@@ -63,7 +63,7 @@ void main_test6()
       if (game.venusAvailableWisdom != 0)
       {
         cout << "使用女神率：";
-        printPolicy(policy.useVenusPolicy * 100);
+        printPolicy(policy.useVenusPolicy);
         cout << endl;
       }
 
@@ -98,8 +98,8 @@ void main_test6()
       }
     }
 
-    cout << "期望分数（未考虑技能打折和已买技能）：\033[31m" << maxScore << "\033[0m" << endl;
-    cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：\033[31m" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << "\033[0m" << endl;
+    cout << "期望分数（未考虑技能打折和已买技能）：\033[33m" << maxScore << "\033[0m" << endl;
+    cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：\033[33m" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << "\033[0m" << endl;
 
 
 

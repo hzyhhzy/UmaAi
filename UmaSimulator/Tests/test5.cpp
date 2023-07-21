@@ -11,9 +11,9 @@
 #include "../External/termcolor.hpp"
 using namespace std;
 
-const bool handWrittenEvaluationTest = false;
-const int threadNum = 1;
-const int threadNumInner = 8;
+const bool handWrittenEvaluationTest = true;
+const int threadNum = 12;
+const int threadNumInner = 1;
 const int searchN = handWrittenEvaluationTest ? 1 : 512;
 
 
@@ -33,16 +33,20 @@ void worker()
 {
   random_device rd;
   auto rand = mt19937_64(rd());
-  int umaId = 1;
-  int cards[6] = { 1,2,3,4,5,6 };
+
+  //int umaId = 1;//我自己的号
+  //int cards[6] = { 1,2,3,4,5,6 };
+
+  int umaId = 3;//二之宫
+  int cards[6] = { 1,2,14,10,11,15 };
+
   int zhongmaBlue[5] = { 18,0,0,0,0 };
-  int zhongmaBonus[6] = { 30,0,30,0,30,200 };
+  int zhongmaBonus[6] = { 20,0,40,0,20,200 };
 
   Search search;
   vector<Evaluator> evaluators;
   for (int i = 0; i < threadNumInner; i++)
     evaluators.push_back(Evaluator(NULL, 128));
-  for (int i = 0; i < threadNumInner; i++)std::cout << evaluators[i].maxBatchsize;
 
   for (int gamenum = 0; gamenum < gamesEveryThread; gamenum++)
   {

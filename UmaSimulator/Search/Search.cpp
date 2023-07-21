@@ -78,7 +78,7 @@ void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSampling
           {
             for (int chosenSpiritColor = 0; chosenSpiritColor < 3; chosenSpiritColor++)
             {
-              allChoicesValue[useVenus][8 + 1 + chosenSpiritColor].avgScoreMinusTarget = 0.0;
+              allChoicesValue[useVenus][8 + 1 + chosenSpiritColor].avgScoreMinusTarget = -1e6;
               allChoicesValue[useVenus][8 + 1 + chosenSpiritColor].winrate = 0.0;
             }
           }
@@ -92,7 +92,7 @@ void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSampling
           }
           else
           {
-            allChoicesValue[useVenus][8].avgScoreMinusTarget = 0.0;
+            allChoicesValue[useVenus][8].avgScoreMinusTarget = -1e6;
             allChoicesValue[useVenus][8].winrate = 0.0;
           }
 
