@@ -267,7 +267,7 @@ void main_playerPlay()
           }
 
 
-          assert(game.cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
+          assert(GameDatabase::AllSupportCards[game.cardId[0]].cardType == 5 && "神团卡不在第一个位置");
           if (chosenTrain >= 0 && chosenTrain < 5 && game.cardDistribution[chosenTrain][0])//神团卡在选择的训练
           {
             if (chosenSpiritColor == -1)

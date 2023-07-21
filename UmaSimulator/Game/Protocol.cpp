@@ -36,6 +36,9 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 6; i++)
     {
       int c = j["cardId"][i];
+
+      
+
       if (!GameDatabase::AllSupportCardGameIdToSimulatorId.count(c))
         throw "未知支援卡";
       cardId[i] = GameDatabase::AllSupportCardGameIdToSimulatorId.at(c);
@@ -54,6 +57,10 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 6; i++)
       zhongMaExtraBonus[i] = j["zhongMaExtraBonus"][i];
     
+
+    // std::cout << "Value load finished\n";
+
+
     isRacing = j["isRacing"];
     venusLevelYellow = j["venusLevelYellow"];
     venusLevelRed = j["venusLevelRed"];
@@ -75,6 +82,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 5; i++)
       venusCardOutgoingUsed[i] = j["venusCardOutgoingUsed"][i];
 
+    // std::cout << "VenusCard load finished\n";
+
     stageInTurn = j["stageInTurn"];
     for (int i = 0; i < 5; i++)
       for (int k = 0; k < 8; k++)
@@ -88,13 +97,15 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 8; i++)
       spiritDistribution[i] = j["spiritDistribution"][i];
 
+    // std::cout << "Others load finished\n";
 
-    if (cardId[0] != SHENTUAN_ID)//1号位不是神团，交换卡组位置，把神团换到1号位
+    // 5号是友人或团队
+    if ( GameDatabase::AllSupportCards[cardId[0]].cardType != 5)//1号位不是神团，交换卡组位置，把神团换到1号位
     {
       int s = -1;//神团原位置
       for (int i = 1; i < 6; i++)
       {
-        if (cardId[i] == SHENTUAN_ID)
+        if (GameDatabase::AllSupportCards[cardId[i]].cardType == 5)
         {
           s = i;
           break;
@@ -111,6 +122,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
 
       std::swap(cardHint[s], cardHint[0]);
     }
+
+    // std::cout << "Swap load finished\n";
 
     initRandomGenerators();
     calculateVenusSpiritsBonus();

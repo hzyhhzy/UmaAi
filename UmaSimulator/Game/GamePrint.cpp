@@ -290,7 +290,8 @@ void Game::print() const
         if (jiban != 100)
           s = s + ":" + to_string(jiban);
 
-        assert(cardId[0] == SHENTUAN_ID && "神团卡不在第一个位置");
+        assert(GameDatabase::AllSupportCards[cardId[0]].cardType == 5 && "神团卡不在第一个位置");
+
         if (cardIdx == 0)//神团
         {
           if (venusCardIsQingRe)
