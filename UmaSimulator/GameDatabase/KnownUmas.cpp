@@ -23,7 +23,9 @@ const std::string GameDatabase::AllUmaNames[ALL_UMA_NUM] = {
   "op帝王",
   "火鸡帝王",
   "爱丽数码",
-  "僵尸数码"
+  "僵尸数码",
+  "op内恰",
+  "拉恰"
 };
 
 
