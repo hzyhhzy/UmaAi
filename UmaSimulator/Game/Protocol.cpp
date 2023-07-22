@@ -3,6 +3,7 @@
 #include <cassert>
 #include "../External/json.hpp"
 #include "Game.h"
+#include "../Tests/c_color.h"
 using namespace std;
 using json = nlohmann::json;
 
@@ -137,7 +138,10 @@ bool Game::loadGameFromJson(std::string jsonStr)
   }
   catch (...)
   {
+    ColorSet colorSet;
+    colorSet.SetColor(14);
     cout << "读取游戏信息json出错：未知错误" << endl;
+    colorSet.SetColor(11);
     return false;
   }
   return true;

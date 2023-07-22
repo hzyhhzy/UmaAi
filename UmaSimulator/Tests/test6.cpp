@@ -103,9 +103,19 @@ void main_test6()
       }
     }
 
-    cout << "期望分数（未考虑技能打折和已买技能）：\033[33m" << maxScore << "\033[0m" << endl;
-    cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：\033[33m" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << "\033[0m" << endl;
+    ColorSet colorSet;
 
+    std::cout << "期望分数（未考虑技能打折和已买技能）：";
+    colorSet.SetColor(14);
+    std::cout << maxScore;
+    colorSet.SetColor(7);
+    std::cout << std::endl;
+
+    std::cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：";
+    colorSet.SetColor(14);
+    std::cout << maxScore - max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget);
+    colorSet.SetColor(7);
+    std::cout << std::endl;
 
 
     cout << endl;
