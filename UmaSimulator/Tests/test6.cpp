@@ -19,6 +19,7 @@ void main_test6()
   for (int i = 0; i < threadNum; i++)
     evaluators.push_back(Evaluator(NULL, 128));
   int lastTurn = -1;
+  int luckPivot = -10000;   // 运气评估分数
   while (true)
   {
     ifstream fs("./packets/currentGS.json");
@@ -58,6 +59,7 @@ void main_test6()
 
     search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNum);
     cout << "计算完毕" << endl;
+    cout << ">>" << endl;
     {
       auto policy = search.extractPolicyFromSearchResults(1);
       if (game.venusAvailableWisdom != 0)
@@ -97,13 +99,19 @@ void main_test6()
         if (s > maxScore)maxScore = s;
       }
     }
+    if (luckPivot == -10000 && maxScore > luckPivot)
+    {
+        // 设置初始欧气值（运气评分）为第一回合评分-1000
+        // maxScore-luckPivot<0表示评价已经很低了
+        luckPivot = maxScore - 1000;
+    }
 
-    cout << "期望分数（未考虑技能打折和已买技能）：\033[33m" << maxScore << "\033[0m" << endl;
+    cout << "期望分数：\033[33m" << maxScore << "\033[0m" << endl;
+    if (luckPivot != -10000)
+        cout << "欧气剩余（参考值>0，点技能/继承掉分是正常现象）：\033[33m" << (maxScore - luckPivot) << "\033[0m" << endl;
     cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：\033[33m" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << "\033[0m" << endl;
-
-
-
-    cout << endl;
+    cout << "<<" << endl;
+    /*
     cout << "各选项的期望分数：" << endl;
     for (int i = 0; i < 2; i++)
     {
@@ -117,6 +125,7 @@ void main_test6()
       cout << endl;
       cout << endl;
     }
+    */
 
   }
 

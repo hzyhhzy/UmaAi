@@ -6,13 +6,29 @@
 using namespace std;
 using json = nlohmann::json;
 
+// 是否把低破卡当做满破处理（会导致一定的预测偏差）
+// 为True时会把所有ID的最高位改为满破（马娘5xxx，卡4xxx）
+static bool maskUmaId = true;
+
+int hack_umaId(int umaId)
+{
+    return umaId % 1000000;
+}
+
+int hack_scId(int scId)
+{
+    return scId % 100000 + 400000;
+}
+
 bool Game::loadGameFromJson(std::string jsonStr)
 {
   try
   {
     json j = json::parse(jsonStr);
-
+    //cout << jsonStr << endl;
     umaId = j["umaId"];
+    if (maskUmaId)
+        umaId = hack_umaId(umaId);
     if (!GameDatabase::AllUmaGameIdToSimulatorId.count(umaId))
       throw "未知马娘";
     umaId = GameDatabase::AllUmaGameIdToSimulatorId.at(umaId);
@@ -36,9 +52,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 6; i++)
     {
       int c = j["cardId"][i];
-
-      
-
+      if (maskUmaId)
+          c = hack_scId(c);
       if (!GameDatabase::AllSupportCardGameIdToSimulatorId.count(c))
         throw "未知支援卡";
       cardId[i] = GameDatabase::AllSupportCardGameIdToSimulatorId.at(c);
@@ -135,11 +150,12 @@ bool Game::loadGameFromJson(std::string jsonStr)
     cout << "读取游戏信息json出错：" << e << endl;
     return false;
   }
-  catch (...)
+  catch (std::exception &e)
   {
-    cout << "读取游戏信息json出错：未知错误" << endl;
+    cout << "读取游戏信息json出错：未知错误" << e.what() << endl;
     return false;
   }
+
   return true;
 }
 
