@@ -84,9 +84,10 @@ const std::string GameDatabase::AllSupportCardNames[ALL_SUPPORTCARD_NUM] = {
   "[智]大和sr",
   "[智]福来sr",
   //45----
-   "[耐]特别周"
-   "[根]特别周"
-   "[速]阿尔丹"
+   "[根]也文",
+   "[耐]特别周",
+   "[根]特别周",
+   "[速]阿尔丹",
 };
 
 const std::map<int, int> GameDatabase::AllSupportCardGameIdToSimulatorId =
@@ -136,10 +137,10 @@ const std::map<int, int> GameDatabase::AllSupportCardGameIdToSimulatorId =
   {420012,42},
   {420002,43},
   {420016,44},
-  {430119,45},
-  {430127,46},
-  {430105,47},
-  {430001,48},
+  {430126,45},
+  {430127,47},
+  {430105,48},
+  {430119,46},
   {430,49},
   {430,50}
 };

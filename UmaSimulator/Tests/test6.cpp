@@ -129,7 +129,9 @@ void main_test6()
     {
       cout<<"\033[31m以下两个指标没有考虑技能，买技能后下降正常\033[0m" << endl;
       cout << "此局运气：\033[33m" << maxScore - scoreFirstTurn << "\033[0m" << endl;
-      cout << "此回合运气：\033[33m" << maxScore - scoreLastTurn << "\033[0m" << endl;
+      cout << "此回合运气：\033[33m" << maxScore - scoreLastTurn << "\033[0m" << endl; 
+      cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：\033[33m" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << "\033[0m" << endl;
+      cout << "<<" << endl;
     }
     scoreLastTurn = maxScore;
     /*
