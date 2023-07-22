@@ -23,7 +23,10 @@ const std::string GameDatabase::AllUmaNames[ALL_UMA_NUM] = {
   "op帝王",
   "火鸡帝王",
   "爱丽数码",
-  "僵尸数码"
+  "僵尸数码",
+  "泳装黄金船",
+  "op司机",
+  "小栗帽"
 };
 
 
@@ -42,7 +45,10 @@ const std::map<int, int> GameDatabase::AllUmaGameIdToSimulatorId =
   {100301,10},
   {100302,11},
   {101901,12},
-  {101902,13}
+  {101902,13},
+  {100702,14},
+  {100401,15},
+  {100601,16},
 };
 const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
 {
@@ -284,4 +290,64 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
         104,111,120,129,86
       },
     }
+    //14，泳装黄金船
+    {
+      3,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true,
+        false,false,false,false,false,false, false,false,false,false,false,true, //第一年
+        false,false,false,false,false,false, true,false,false,false,false,false,
+        false,false,false,false,false,false, false,true,false,false,false,true, //第二年
+        false,false,false,false,false,false, false,true,false,false,false,true,
+        false,false,false,false,false,false, false,true,false,false,false,true, //第三年
+        false,false,false,false,false,true
+      },
+      {
+        0,0,20,0,10
+      },
+      {
+        79,93,112,73,93
+      },
+
+    },
+    //15，op司机
+    {
+      3,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,false, 
+        false,false,false,false,false,false, false,false,false,false,true,false, //第一年
+        false,false,false,false,false,true, true,false,false,true,false,false, 
+        false,false,false,false,false,false, false,false,false,false,false,true, //第二年
+        false,false,false,false,false,true, false,false,false,false,true,false, 
+        false,false,false,false,false,false, false,true,false,false,false,false, //第三年
+        false,false,false,false,false,true
+      },
+      {
+        10,0,0,0,20
+      },
+      {
+        96,68,86,100,100
+      },
+
+    },
+    //16，小栗帽
+    {
+      4,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true,
+        false,false,false,false,false,false, false,false,false,false,false,false, //第一年
+        false,false,false,false,false,false, false,false,true,false,false,false, 
+        false,false,false,false,false,false, false,false,false,true,false,true, //第二年
+        false,false,false,false,false,false, false,false,false,false,false,false, 
+        false,false,false,false,false,false, false,true,false,false,false,true, //第三年
+        false,false,false,false,false,true
+      },
+      {
+        20,0,10,0,0
+      },
+      {
+        112,74,118,94,102
+      },
+
+    },
 };
