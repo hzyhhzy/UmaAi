@@ -10,6 +10,7 @@
 using namespace std;
 
 
+
 void main_test6()
 {
   const int threadNum = 12;
