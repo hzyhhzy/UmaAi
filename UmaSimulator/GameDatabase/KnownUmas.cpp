@@ -42,7 +42,9 @@ const std::map<int, int> GameDatabase::AllUmaGameIdToSimulatorId =
   {100301,10},
   {100302,11},
   {101901,12},
-  {101902,13}
+  {101902,13},
+  {106001,5},
+  {106002,6},
 };
 const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
 {
@@ -284,4 +286,36 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
         104,111,120,129,86
       },
     }
+    //14 op内恰
+    {
+      5,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
+        false,true,false,false,false,false, false,false,false,false,false,false, false,false,true,false,false,false, false,true,false,false,false,true, //第二年
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,true,false,false,true,true, //第三年
+        false,false,false,false,false,true
+      },
+      {
+        0,0,20,0,10
+      },
+      {
+        118,99,123,96,114
+      },
+      },
+      //15，拉恰
+      {
+        5,
+        {
+          false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
+          false,true,false,false,false,false, false,false,false,false,false,false, false,false,true,false,false,false, false,true,false,false,false,true, //第二年
+          false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,true,false,false,true,true, //第三年
+          false,false,false,false,false,true
+        },
+        {
+          0,10,10,0,10
+        },
+        {
+          105,105,115,105,120
+        },
+      },
 };
