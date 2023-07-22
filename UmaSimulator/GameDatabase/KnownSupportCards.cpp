@@ -84,9 +84,10 @@ const std::string GameDatabase::AllSupportCardNames[ALL_SUPPORTCARD_NUM] = {
   "[智]大和sr",
   "[智]福来sr",
   //45----
-   "[耐]特别周"
-   "[根]特别周"
-   "[速]阿尔丹"
+   "[耐]特别周",
+   "[根]特别周",
+   "[速]阿尔丹",
+   "[智]内恰"
 };
 
 const std::map<int, int> GameDatabase::AllSupportCardGameIdToSimulatorId =
@@ -111,7 +112,7 @@ const std::map<int, int> GameDatabase::AllSupportCardGameIdToSimulatorId =
   {430063,17},
   {430028,18},
   {430078,19},
-{430101,20},
+  {430101,20},
   {430029,21},
   {430032,22},
   {430151,23},
@@ -140,7 +141,7 @@ const std::map<int, int> GameDatabase::AllSupportCardGameIdToSimulatorId =
   {430127,46},
   {430105,47},
   {430001,48},
-  {430,49},
+  {430054,49},
   {430,50}
 };
 
@@ -932,6 +933,22 @@ SupportCard GameDatabase::AllSupportCards[ALL_SUPPORTCARD_NUM] =
       0, // 启发发生率提升
       35  // 得意率
     },
+    //49，智内恰
+    {
+      49, // 支援卡id，部分卡具有比较复杂的固有，根据id来辨别
+      4, // 支援卡类型，0速1耐2力3根4智5友人或团队
+      25, // 友情加成
+      0, // 干劲加成
+      15, // 训练加成
+      {0, 0, 0, 0, 2, 0}, // 速耐力根智pt的加成
+      5, // 智力彩圈体力回复量
+      {0, 0, 0, 0, 0, 0}, // 初期速耐力根智pt的提升
+      20, // 初始羁绊
+      10, // 赛后
+      {0, 0, 0, 0, 0, 10}, // 为了简化，把红点的技能等效成多少属性
+      20, // 启发发生率提升
+      35  // 得意率
+    },
 
 
 };
@@ -1158,6 +1175,11 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         {
             effect.bonus[2] = 0;
         }
+    }
+    //智内恰
+    else if (cardID == 49)
+    {
+        //啥都没有
     }
 
     else
