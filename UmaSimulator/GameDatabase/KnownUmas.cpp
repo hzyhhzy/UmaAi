@@ -45,8 +45,8 @@ const std::map<int, int> GameDatabase::AllUmaGameIdToSimulatorId =
   {100302,11},
   {101901,12},
   {101902,13},
-  {106001,5},
-  {106002,6},
+  {106001,14},
+  {106002,15},
 };
 const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
 {
