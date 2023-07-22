@@ -29,7 +29,7 @@ static void softmax(float* f, int n)
 
 void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore, int threadNum)
 {
-  cout << endl;
+  //cout << endl;
   for (int i = 0; i < 2; i++)
     for (int j = 0; j < 8 + 4 + 6; j++)
     {
@@ -47,16 +47,16 @@ void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSampling
     //先考虑是不是只有比赛
     if (game.isRacing)
     {
-      cout << "- 生涯比赛" << endl;
+     // cout << "- 生涯比赛" << endl;
       allChoicesValue[useVenus][0] = evaluateSingleAction(game, evaluators, eachSamplingNum, maxDepth, targetScore,
         rand, -1, useVenus, -1, -1, threadNum, -1);
     }
     else
     {
       //五个训练
-     if (useVenus)
-      cout << endl << "- 分析女神Buff下的情况：" << endl;
-     cout << "- 正在分析训练";
+     //if (useVenus)
+     // cout << endl << "- 分析女神Buff下的情况：" << endl;
+     //cout << "- 正在分析训练";
       //对应位置01234，女神三选一事件对应8 9 10 11（不出，红，蓝，黄），休息5，外出6和12~17，比赛7
       for (int item = 0; item < 5; item++)
       {
@@ -117,13 +117,13 @@ void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSampling
       }
 
       //休息
-      cout << endl << "- 正在分析休息";
+      //cout << endl << "- 正在分析休息";
       allChoicesValue[useVenus][5] = evaluateSingleAction(
         game, evaluators, eachSamplingNum, maxDepth, targetScore,
         rand, 5, useVenus, -1, -1, threadNum, -1);
 
       //比赛
-      cout << endl << "- 正在分析比赛";
+      //cout << endl << "- 正在分析比赛";
       if (game.turn > 12)
       {
         allChoicesValue[useVenus][7] = evaluateSingleAction(
@@ -132,7 +132,7 @@ void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSampling
       }
 
       //外出
-      cout << endl << "- 正在分析出行";
+      //cout << endl << "- 正在分析出行";
       if(!game.isXiaHeSu())
       {
         double bestWinrate = -1;//三选一里面最好的那种情况
@@ -163,7 +163,7 @@ void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSampling
 ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore,
   std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int threadNum, int forceThreeChoicesEvent)
 {
-    cout << "."; cout.flush();
+    //cout << "."; cout.flush();
   if (threadNum == 1)
   {
 

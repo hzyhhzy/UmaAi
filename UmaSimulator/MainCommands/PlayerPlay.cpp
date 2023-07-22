@@ -23,10 +23,10 @@ void main_playerPlay()
 
   random_device rd;
   auto rand = mt19937_64(rd());
-  int umaId = 1;
-  int cards[6] = { 1,2,3,4,5,6 };
-  int zhongmaBlue[5] = { 6,3,0,3,6 };   // 这里设置种马和因子
-  int zhongmaBonus[6] = { 5,15,10,15,5,80 };
+  int umaId = 4;
+  int cards[6] = { 1,2,3,4,5,6 }; 
+  int zhongmaBlue[5] = { 18,0,0,0,0 };
+  int zhongmaBonus[6] = { 20,0,40,0,20,0 };
   for(int gamenum=0;gamenum<100000;gamenum++)
   {
     Search search;
