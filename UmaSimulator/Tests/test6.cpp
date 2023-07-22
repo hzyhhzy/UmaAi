@@ -7,6 +7,7 @@
 #include <chrono>  // for std::chrono::seconds
 #include "../Game/Game.h"
 #include "../Search/Search.h"
+#include "./c_color.h"
 using namespace std;
 
 
@@ -36,7 +37,7 @@ void main_test6()
     }
     if (game.turn == lastTurn)
     {
-      std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
+      this_thread::sleep_for(300ms);//检查是否有更新
       continue;
     }
     lastTurn = game.turn;
@@ -49,11 +50,15 @@ void main_test6()
 
     auto printPolicy = [](float p)
     {
-      cout << fixed << setprecision(1);
-      if (p >= 0.2)cout << "\033[33m";
-      else cout << "\033[36m";
-      cout << p * 100 << "% ";
-      cout << "\033[0m";
+        ColorSet colorSet;
+        std::cout << std::fixed << std::setprecision(1);
+        if (p >= 0.2)
+            colorSet.SetColor(14); // Yellow
+        else
+            colorSet.SetColor(11); // Cyan
+
+        std::cout << p * 100 << "% ";
+        colorSet.SetColor(7); // Reset to default color
     };
 
     search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNum);
