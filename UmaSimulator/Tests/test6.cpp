@@ -9,6 +9,8 @@
 #include "../Search/Search.h"
 using namespace std;
 
+const bool NoColor = true;//有些电脑无法正常显示颜色
+
 
 
 void main_test6()
@@ -51,7 +53,10 @@ void main_test6()
     }
     lastTurn = game.turn;
     if (game.venusIsWisdomActive)
+    {
+      std::this_thread::sleep_for(std::chrono::milliseconds(300));
       continue;
+    }
 
     if (game.turn == 0)//第一回合
     {
@@ -66,11 +71,14 @@ void main_test6()
     auto printPolicy = [](float p)
     {
       cout << fixed << setprecision(1);
-      if (p >= 0.3)cout << "\033[33m";
-      //else if (p >= 0.1)cout << "\033[32m";
-      else cout << "\033[36m";
+      if (!NoColor)
+      {
+        if (p >= 0.3)cout << "\033[33m";
+        //else if (p >= 0.1)cout << "\033[32m";
+        else cout << "\033[36m";
+      }
       cout << p * 100 << "% ";
-      cout << "\033[0m";
+      if (!NoColor)cout << "\033[0m";
     };
 
     search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 0, threadNum);
@@ -88,7 +96,7 @@ void main_test6()
       {
         if (game.venusAvailableWisdom != 0)
         {
-          cout << "在" << (policy.useVenusPolicy > 0.5 ? "" : "\033[31m不\033[0m") << "使用女神的前提下：";
+          cout << "在" << (policy.useVenusPolicy > 0.5 ? "" : " 不 ") << "使用女神的前提下：";
         }
 
         cout << "速耐力根智：";
@@ -128,10 +136,10 @@ void main_test6()
     }
     else
     {
-      cout<<"\033[31m以下两个指标没有考虑技能，买技能后下降正常\033[0m" << endl;
-      cout << "此局运气：\033[33m" << maxScore - scoreFirstTurn << "\033[0m" << endl;
-      cout << "此回合运气：\033[33m" << maxScore - scoreLastTurn << "\033[0m" << endl; 
-      cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：\033[33m" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << "\033[0m" << endl;
+      cout<<"以下两个指标没有考虑技能，买技能后下降正常" << endl;
+      cout << "此局运气：" << maxScore - scoreFirstTurn  << endl;
+      cout << "此回合运气：" << maxScore - scoreLastTurn  << endl; 
+      cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << endl;
       cout << "<<" << endl;
     }
     scoreLastTurn = maxScore;

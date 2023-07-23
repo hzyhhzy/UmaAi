@@ -30,7 +30,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     if (maskUmaId)
         umaId = hack_umaId(umaId);
     if (!GameDatabase::AllUmaGameIdToSimulatorId.count(umaId))
-      throw "未知马娘";
+      throw string("未知马娘");
     umaId = GameDatabase::AllUmaGameIdToSimulatorId.at(umaId);
 
     turn = j["turn"];
@@ -150,9 +150,14 @@ bool Game::loadGameFromJson(std::string jsonStr)
     cout << "读取游戏信息json出错：" << e << endl;
     return false;
   }
-  catch (std::exception &e)
+  catch (std::exception& e)
   {
     cout << "读取游戏信息json出错：未知错误" << e.what() << endl;
+    return false;
+  }
+  catch (...)
+  {
+    cout << "读取游戏信息json出错：未知错误"  << endl;
     return false;
   }
 
