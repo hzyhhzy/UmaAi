@@ -1,32 +1,29 @@
 #include "GameDatabase.h"
 #include "UmaData.h"
 
-// 0 ¿Õ
-// 1 ²İÉÏ·É£¨ÎåĞÇ£©
-// 2 
-// 3
-// 4
-//
 
 
 const std::string GameDatabase::AllUmaNames[ALL_UMA_NUM] = {
-  "¿Õ",
-  "ÌØ±ğÖÜ"
-  "Ó¾×°ÌØ±ğÖÜ"
-  "×Ü´ó½«ÌØ±ğÖÜ"
-  "²İÉÏ·É",
-  "»¨ÅÚ",
-  "opÅÚ",
-  "Ğ¡ÁÖÀúÆæ",
-  "Ë®ÂóÀ¥",
-  "ÎŞÉùÁåÂ¹",
-  "opµÛÍõ",
-  "»ğ¼¦µÛÍõ",
-  "°®ÀöÊıÂë",
-  "½©Ê¬ÊıÂë",
-  "Ó¾×°»Æ½ğ´¬",
-  "opË¾»ú",
-  "Ğ¡ÀõÃ±"
+  "ç©º",
+  "ç‰¹åˆ«å‘¨"
+  "æ³³è£…ç‰¹åˆ«å‘¨"
+  "æ€»å¤§å°†ç‰¹åˆ«å‘¨"
+  "è‰ä¸Šé£",
+  "èŠ±ç‚®",
+  "opç‚®",
+  "å°æ—å†å¥‡",
+  "æ°´éº¦æ˜†",
+  "æ— å£°é“ƒé¹¿",
+  "opå¸ç‹",
+  "ç«é¸¡å¸ç‹",
+  "çˆ±ä¸½æ•°ç ",
+  "åƒµå°¸æ•°ç ",
+  "è’æ¼ ",
+  "opå†…æ°",
+  "æ‹‰æ°",
+  "æ°´èˆ¹",
+  "opå¸æœº",
+  "opæ —å¸½",
 };
 
 
@@ -46,19 +43,22 @@ const std::map<int, int> GameDatabase::AllUmaGameIdToSimulatorId =
   {100302,11},
   {101901,12},
   {101902,13},
-  {100702,14},
-  {100401,15},
-  {100601,16},
+  {104701,14},
+  {106001,15},
+  {106002,16},
+  {100702,17},
+  {100401,18},
+  {100601,19},
 };
 const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
 {
-    //0£¬¿Õ
+    //0ï¼Œç©º
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, //µÚ¶şÄê
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -69,13 +69,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       },
 
     },
-    //1£¬ÌØ±ğÖÜ
+    //1ï¼Œç‰¹åˆ«å‘¨
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,false,true,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //µÚ¶şÄê
-        false,false,false,false,false,false, false,true,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,false,true,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, false,true,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -85,14 +85,14 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
         102,108,120,110,111
       },
     },
-    //2£¬Ó¾×°ÌØ±ğÖÜ
+    //2ï¼Œæ³³è£…ç‰¹åˆ«å‘¨
 
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,false,true,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //µÚ¶şÄê
-        false,false,false,false,false,false, false,true,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,false,true,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, false,true,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -103,13 +103,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       },
     },
 
-    //3£¬×Ü´ó½«ÌØ±ğÖÜ
+    //3ï¼Œæ€»å¤§å°†ç‰¹åˆ«å‘¨
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,false,true,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //µÚ¶şÄê
-        false,false,false,false,false,false, false,true,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,false,true,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, false,true,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -119,13 +119,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
         117,100,115,100,118
       },
     },
-    //4£¬²İÉÏ·É
+    //4ï¼Œè‰ä¸Šé£
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,true,false, //µÚÒ»Äê
-        false,false,false,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //µÚ¶şÄê
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, true,false,false,false,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,true,false, //ç¬¬ä¸€å¹´
+        false,false,false,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, true,false,false,false,false,true, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -136,13 +136,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       },
     },
 
-    //5£¬»¨ÅÚ
+    //5ï¼ŒèŠ±ç‚®
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,true,false,false,false,true, //µÚ¶şÄê
-        false,false,false,false,false,true, false,true,false,false,false,true, false,false,false,false,false,false, false,true,false,false,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,true,false,false,false,true, //ç¬¬äºŒå¹´
+        false,false,false,false,false,true, false,true,false,false,false,true, false,false,false,false,false,false, false,true,false,false,false,true, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -152,13 +152,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
         102,123,100,110,115
       },
     },
-    //6£¬opÅÚ
+    //6ï¼Œopç‚®
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,true,false,false,false,true, //µÚ¶şÄê
-        false,false,false,false,false,true, false,true,false,false,false,true, false,false,false,false,false,false, false,true,false,false,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,true,false,false,false,true, //ç¬¬äºŒå¹´
+        false,false,false,false,false,true, false,true,false,false,false,true, false,false,false,false,false,false, false,true,false,false,false,true, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -168,13 +168,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
         94,130,86,123,117
       },
     },
-    //7,Ğ¡ÁÖéÕ
+    //7,å°æ—æª
     {
       4,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,true, //µÚÒ»Äê
-        false,false,false,false,false,false, true,false,false,false,false,false, false,false,false,false,true,false, false,false,false,true,false,true, //µÚ¶şÄê
-        false,false,false,true,false,false, false,false,true,false,false,true, false,false,false,false,true,false, true,false,true,false,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,true, //ç¬¬ä¸€å¹´
+        false,false,false,false,false,false, true,false,false,false,false,false, false,false,false,false,true,false, false,false,false,true,false,true, //ç¬¬äºŒå¹´
+        false,false,false,true,false,false, false,false,true,false,false,true, false,false,false,false,true,false, true,false,true,false,false,true, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -184,13 +184,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
         104,97,103,96,100
       },
     },
-    //8,Ë®ÂóÀ¥
+    //8,æ°´éº¦æ˜†
     {
       3,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,true, false,true,false,false,false,false, //µÚ¶şÄê
-        false,false,false,false,false,false, false,true,false,false,false,true, false,false,false,false,false,false, false,true,false,false,false,false, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,true, false,true,false,false,false,false, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, false,true,false,false,false,true, false,false,false,false,false,false, false,true,false,false,false,false, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
         },
       {
@@ -200,13 +200,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
         82,85,82,113,88
       },
     },
-    //9£¬ÎŞÉùÁåÂ¹
+    //9ï¼Œæ— å£°é“ƒé¹¿
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,false,false,false,true,false, false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, //µÚ¶şÄê
-        false,false,false,false,true,false, false,false,false,false,false,true, false,false,false,false,false,false, true,true,false,false,false,false, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,false,false,false,true,false, false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, //ç¬¬äºŒå¹´
+        false,false,false,false,true,false, false,false,false,false,false,true, false,false,false,false,false,false, true,true,false,false,false,false, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -218,13 +218,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
 
     },
 
-    //10£¬Ô­Æ¤µÛÍõ
+    //10ï¼ŒåŸçš®å¸ç‹
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,true,false,false,false,false, true,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //µÚ¶şÄê
-        false,false,false,false,false,false, true,false,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,true,false,false,false,false, true,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, true,false,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -236,13 +236,13 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
 
     },
 
-    //11£¬»ğ¼¦µÛÍõ
+    //11ï¼Œç«é¸¡å¸ç‹
     {
       5,
       {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
-        false,true,false,false,false,false, true,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //µÚ¶şÄê
-        false,false,false,false,false,false, true,false,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,true,false,false,false,false, true,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, true,false,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -253,16 +253,16 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       },
 
     },
-    //12-13,ÊıÂë
+    //12-13,æ•°ç 
     {
       5,
       {
         false,false,false,false,false,false, false,false,false,false,false,true,
-        false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
+        false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
         false,false,false,true,false,false, false,false,true,false,false,false,
-        true,false,false,false,false,false, false,false,false,true,false,false, //µÚ¶şÄê
+        true,false,false,false,false,false, false,false,false,true,false,false, //ç¬¬äºŒå¹´
         false,false,false,false,false,false, false,false,false,false,false,false,
-        false,false,false,false,false,false, true,false,false,false,false,false, //µÚÈıÄê
+        false,false,false,false,false,false, true,false,false,false,false,false, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -276,11 +276,11 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       5,
       {
         false,false,false,false,false,false, false,false,false,false,false,true,
-        false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
+        false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
         false,false,false,true,false,false, false,false,true,false,false,false,
-        true,false,false,false,false,false, false,false,false,true,false,false, //µÚ¶şÄê
+        true,false,false,false,false,false, false,false,false,true,false,false, //ç¬¬äºŒå¹´
         false,false,false,false,false,false, false,false,false,false,false,false,
-        false,false,false,false,false,false, true,false,false,false,false,false, //µÚÈıÄê
+        false,false,false,false,false,false, true,false,false,false,false,false, //ç¬¬ä¸‰å¹´
         false,false,false,false,false,true
       },
       {
@@ -289,17 +289,69 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       {
         104,111,120,129,86
       },
-    }
-    //14£¬Ó¾×°»Æ½ğ´¬
+    },
+    //14,è’æ¼ è‹±é›„
+    {
+      5,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true,
+        false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,false,false,false,false,false, false,true,false,true,false,false,
+        false,false,false,false,false,false, false,true,false,false,false,true, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, false,true,false,false,false,true,
+        false,false,false,false,false,false, false,true,false,true,false,true, //ç¬¬ä¸‰å¹´
+        false,false,false,false,false,true
+      },
+      {
+        0,10,0,0,20
+      },
+      {
+        108,118,111,91,122
+      },
+    },
+    //15 opå†…æ°
+    {
+      5,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,true,false,false,false,false, false,false,false,false,false,false, false,false,true,false,false,false, false,true,false,false,false,true, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,true,false,false,true,true, //ç¬¬ä¸‰å¹´
+        false,false,false,false,false,true
+      },
+      {
+        0,0,20,0,10
+      },
+      {
+        118,99,123,96,114
+      },
+    },
+    //16ï¼Œæ‹‰æ°
+    {
+      5,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //ç¬¬ä¸€å¹´
+        false,true,false,false,false,false, false,false,false,false,false,false, false,false,true,false,false,false, false,true,false,false,false,true, //ç¬¬äºŒå¹´
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,true,false,false,true,true, //ç¬¬ä¸‰å¹´
+        false,false,false,false,false,true
+      },
+      {
+        0,10,10,0,10
+      },
+      {
+        105,105,115,105,120
+      },
+    },
+  
+    //17 æ°´èˆ¹
     {
       3,
       {
         false,false,false,false,false,false, false,false,false,false,false,true,
-        false,false,false,false,false,false, false,false,false,false,false,true, //µÚÒ»Äê
+        false,false,false,false,false,false, false,false,false,false,false,true, //ï¿½ï¿½Ò»ï¿½ï¿½
         false,false,false,false,false,false, true,false,false,false,false,false,
-        false,false,false,false,false,false, false,true,false,false,false,true, //µÚ¶şÄê
+        false,false,false,false,false,false, false,true,false,false,false,true, //ï¿½Ú¶ï¿½ï¿½ï¿½
         false,false,false,false,false,false, false,true,false,false,false,true,
-        false,false,false,false,false,false, false,true,false,false,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,true,false,false,false,true, //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         false,false,false,false,false,true
       },
       {
@@ -310,16 +362,16 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       },
 
     },
-    //15£¬opË¾»ú
+    //18 opå¸æœº
     {
       3,
       {
         false,false,false,false,false,false, false,false,false,false,false,false, 
-        false,false,false,false,false,false, false,false,false,false,true,false, //µÚÒ»Äê
+        false,false,false,false,false,false, false,false,false,false,true,false, //ï¿½ï¿½Ò»ï¿½ï¿½
         false,false,false,false,false,true, true,false,false,true,false,false, 
-        false,false,false,false,false,false, false,false,false,false,false,true, //µÚ¶şÄê
+        false,false,false,false,false,false, false,false,false,false,false,true, //ï¿½Ú¶ï¿½ï¿½ï¿½
         false,false,false,false,false,true, false,false,false,false,true,false, 
-        false,false,false,false,false,false, false,true,false,false,false,false, //µÚÈıÄê
+        false,false,false,false,false,false, false,true,false,false,false,false, //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         false,false,false,false,false,true
       },
       {
@@ -330,16 +382,16 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       },
 
     },
-    //16£¬Ğ¡ÀõÃ±
+    //19 opæ —å¸½ 
     {
       4,
       {
         false,false,false,false,false,false, false,false,false,false,false,true,
-        false,false,false,false,false,false, false,false,false,false,false,false, //µÚÒ»Äê
+        false,false,false,false,false,false, false,false,false,false,false,false, //ï¿½ï¿½Ò»ï¿½ï¿½
         false,false,false,false,false,false, false,false,true,false,false,false, 
-        false,false,false,false,false,false, false,false,false,true,false,true, //µÚ¶şÄê
+        false,false,false,false,false,false, false,false,false,true,false,true, //ï¿½Ú¶ï¿½ï¿½ï¿½
         false,false,false,false,false,false, false,false,false,false,false,false, 
-        false,false,false,false,false,false, false,true,false,false,false,true, //µÚÈıÄê
+        false,false,false,false,false,false, false,true,false,false,false,true, //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         false,false,false,false,false,true
       },
       {
