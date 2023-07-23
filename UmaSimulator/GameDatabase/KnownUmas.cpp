@@ -24,6 +24,8 @@ const std::string GameDatabase::AllUmaNames[ALL_UMA_NUM] = {
   "水船",
   "op司机",
   "op栗帽",
+  "op光钻",
+  "新春光钻"
 };
 
 
@@ -49,6 +51,8 @@ const std::map<int, int> GameDatabase::AllUmaGameIdToSimulatorId =
   {100702,17},
   {100401,18},
   {100601,19},
+  {106701,20},
+  {106702,21},
 };
 const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
 {
@@ -401,5 +405,37 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
         112,74,118,94,102
       },
 
+    },
+    //20 op光钻
+    {
+      5,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
+        false,false,false,false,false,false, true,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,true, //第二年
+        false,false,false,false,false,true, false,true,false,false,false,false  , false,false,false,false,false,false, true,true,false,false,false,true, //第三年
+        false,false,false,false,false,true
+      },
+      {
+        0,15,0,0,15
+      },
+      {
+        111,108,113,101,117
+      },
+    },
+      //21 新春光钻
+    {
+      5,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
+        false,false,false,false,false,false, true,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,true, //第二年
+        false,false,false,false,false,true, false,true,false,false,false,false  , false,false,false,false,false,false, true,true,false,false,false,true, //第三年
+        false,false,false,false,false,true
+      },
+      {
+        15,15,0,0,0
+      },
+      {
+        102,118,102,113,115
+      },
     },
 };
