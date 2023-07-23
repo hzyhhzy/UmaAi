@@ -55,7 +55,7 @@
     - 不要把本插件的Version.dll放进游戏目录或覆盖TLG的同名文件
     - 在汉化插件的设置中，连锁加载URA的version.dll
     ![](Document/src/WQY51PlARaDcjDHZbkyu.png)
-    -     - 先运行URA，再启动游戏和汉化插件
+    - 先运行URA，再启动游戏和汉化插件
 
 - 育成技巧与提示
     - 推荐根据概率最高的来选。当然最终决定权还在训练员手上。如果没有选择推荐的，在下一回合也会重新分析当前策略。
@@ -73,7 +73,7 @@
     解决：确认工作目录是程序所在文件夹，且当前路径下packets文件夹存在。之后删除packets中全部文件再启动，之后需要进入育成画面
     - 颜色字乱码
     ![](Document/src/bQSNDGJJRUW.jpeg)
-    解决：使用新版（无颜色或者颜色兼容版）插件，或者使用[Windows Terminal]()运行本插件
+    解决：使用新版（无颜色或者颜色兼容版）插件，或者使用[Windows Terminal](https://github.com/microsoft/terminal)运行本插件
     - 等待游戏开始，但已经在育成画面
     ![](Document/src/2FqYj0QtaN.png)
     解决：工作目录不对：需要进入umasimulator所在目录才能执行，直接使用绝对路径可能出现找不到ura等问题。
