@@ -71,13 +71,13 @@
     - 故障排除提示：不运行游戏和URA插件时也可以利用本地的packets文件夹内容，单独运行本插件进行排错，直到显示正常
     - 错误刷屏：读取游戏数据Json出错
     ![](Document/src/PjIplEUl8iBk4.jpeg)
-    解决：确认工作目录是程序所在文件夹，且当前路径下packets文件夹存在。之后删除packets中全部文件再启动，之后需要进入育成画面
+        - 解决：确认工作目录是程序所在文件夹，且当前路径下packets文件夹存在。之后删除packets中全部文件再启动，之后需要进入育成画面
     - 颜色字乱码
     ![](Document/src/bQSNDGJJRUW.jpeg)
-    解决：使用新版（无颜色或者颜色兼容版）插件，或者使用[Windows Terminal](https://github.com/microsoft/terminal)运行本插件
+        - 解决：使用新版（无颜色或者颜色兼容版）插件，或者使用[Windows Terminal](https://github.com/microsoft/terminal)运行本插件
     - 等待游戏开始，但已经在育成画面
     ![](Document/src/2FqYj0QtaN.png)
-    解决：工作目录不对：需要进入umasimulator所在目录才能执行，直接使用绝对路径可能出现找不到ura等问题。
+        - 解决：工作目录不对：需要进入umasimulator所在目录才能执行，直接使用绝对路径可能出现找不到ura等问题。
     - 显示“未知卡”“未知马娘”或闪退
         - 解决：目前只支持列表中的马娘和卡。突破和星数不限。请检查卡组
     - 自己编译exe，显示“正在计算”后很慢或者卡死
