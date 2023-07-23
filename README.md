@@ -39,6 +39,7 @@
     - 此时进入育成，应该可以看到事件选项等数据。
 
 - URA和游戏连接成功后，即可启动本插件UmaSimulator.exe。注意UmaSimulator.exe和packets目录需要在同一文件夹内
+
 ![](Document/src/Gnebhxi.png)
 ![](Document/src/fJIYWHx.png)
     - _（注：今后预计会整合到URA中，这样就不用单独开启了）正确启动效果如图所示_
