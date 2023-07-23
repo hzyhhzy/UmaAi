@@ -11,10 +11,10 @@
 #include "../External/termcolor.hpp"
 using namespace std;
 
-const bool handWrittenEvaluationTest = true;
-const int threadNum = 12;
+const bool handWrittenEvaluationTest = false;
+const int threadNum = 20;
 const int threadNumInner = 1;
-const int searchN = handWrittenEvaluationTest ? 1 : 512;
+const int searchN = handWrittenEvaluationTest ? 1 : 1024;
 
 
 const int totalGames = handWrittenEvaluationTest ? 60000 : 10000000;
@@ -34,11 +34,11 @@ void worker()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  //int umaId = 1;//我自己的号
-  //int cards[6] = { 1,2,3,4,5,6 };
+  int umaId = 4;//我自己的号
+  int cards[6] = { 1,2,3,4,5,6 };
 
-  int umaId = 3;//二之宫
-  int cards[6] = { 1,2,14,10,11,15 };
+  //int umaId = 3;//二之宫
+  //int cards[6] = { 1,2,14,10,11,15 };
 
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,200 };

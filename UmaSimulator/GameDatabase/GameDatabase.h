@@ -14,7 +14,7 @@ public:
   static SupportCard AllSupportCards[ALL_SUPPORTCARD_NUM];
 
 
-  static const int ALL_UMA_NUM = 16;
+  static const int ALL_UMA_NUM = 17;
   static const std::string AllUmaNames[ALL_UMA_NUM];
   static const std::map<int, int> AllUmaGameIdToSimulatorId;
   static const UmaData AllUmas[ALL_UMA_NUM];
