@@ -25,7 +25,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
   try
   {
     json j = json::parse(jsonStr);
-    //cout << jsonStr << endl;
+
     umaId = j["umaId"];
     if (maskUmaId)
         umaId = hack_umaId(umaId);
@@ -147,12 +147,13 @@ bool Game::loadGameFromJson(std::string jsonStr)
   }
   catch (string e)
   {
-    cout << "读取游戏信息json出错：" << e << endl;
+    cout << "读取游戏信息json出错：" << e << endl << "-- json --" << endl << jsonStr << endl;
     return false;
   }
   catch (std::exception &e)
   {
-    cout << "读取游戏信息json出错：未知错误" << e.what() << endl;
+      cout << "读取游戏信息json出错：未知错误" << endl << e.what()
+          << endl << "-- json --" << endl << jsonStr << endl;
     return false;
   }
 

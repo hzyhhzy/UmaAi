@@ -29,14 +29,12 @@ static void softmax(float* f, int n)
 
 void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore, int threadNum)
 {
-  //cout << endl;
   for (int i = 0; i < 2; i++)
     for (int j = 0; j < 8 + 4 + 6; j++)
     {
       allChoicesValue[i][j].winrate = -1;
       allChoicesValue[i][j].avgScoreMinusTarget = -1e6;
     }
-
 
   std::random_device rd;
   auto rand = std::mt19937_64(rd());
@@ -47,16 +45,20 @@ void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSampling
     //先考虑是不是只有比赛
     if (game.isRacing)
     {
-     // cout << "- 生涯比赛" << endl;
+#ifdef SHOW_DEBUG_MSG
+      cout << "- 生涯比赛" << endl;
+#endif
       allChoicesValue[useVenus][0] = evaluateSingleAction(game, evaluators, eachSamplingNum, maxDepth, targetScore,
         rand, -1, useVenus, -1, -1, threadNum, -1);
     }
     else
     {
       //五个训练
-     //if (useVenus)
-     // cout << endl << "- 分析女神Buff下的情况：" << endl;
-     //cout << "- 正在分析训练";
+#ifdef SHOW_DEBUG_MSG
+     if (useVenus)
+       cout << endl << "- 分析女神Buff：" << endl;
+#endif
+
       //对应位置01234，女神三选一事件对应8 9 10 11（不出，红，蓝，黄），休息5，外出6和12~17，比赛7
       for (int item = 0; item < 5; item++)
       {
@@ -163,10 +165,11 @@ void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSampling
 ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore,
   std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int threadNum, int forceThreeChoicesEvent)
 {
-    //cout << "."; cout.flush();
+#ifdef SHOW_DEBUG_MSG
+  cout << "."; cout.flush();
+#endif
   if (threadNum == 1)
   {
-
     int batchsize = evaluators->maxBatchsize;
     int batchNum = (eachSamplingNum - 1) / evaluators->maxBatchsize + 1;
     eachSamplingNum = batchNum * evaluators->maxBatchsize;//凑够整数个batchsize
@@ -190,7 +193,6 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator* eva
       {
         gamesBuf[i].applyTrainingAndNextTurn(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
       }
-
 
       for (int depth = 0; depth < maxDepth; depth++)
       {
@@ -220,18 +222,14 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator* eva
     out.winrate = totalWinrate / totalNum;
     return out;
   }
-
   else
   {
-
     int eachSamplingNumEveryThread = eachSamplingNum / threadNum;
     if (eachSamplingNumEveryThread <= 0)eachSamplingNumEveryThread = 1;
 
     std::vector<std::mt19937_64> rands;
     for (int i = 0; i < threadNum; i++)
       rands.push_back(std::mt19937_64(rand()));
-
-
 
     std::vector<std::future<ModelOutputValueV1>> futures(threadNum); // 用于存储每个线程的结果
 
@@ -244,7 +242,6 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator* eva
           rands[i],
           chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, 1, forceThreeChoicesEvent);
         });
-     
     }
 
     ModelOutputValueV1 totalResult = { 0,0 };
@@ -316,7 +313,6 @@ void Search::runOneTurnUsingPolicy(std::mt19937_64& rand, Game& game, const Mode
   int chosenOutgoing = -1;
 
   //auto policy = Evaluator::handWrittenPolicy(game);
-
   {
     float bestPolicy = 0.001;
     for (int i = 0; i < 8; i++)
@@ -358,6 +354,5 @@ void Search::runOneTurnUsingPolicy(std::mt19937_64& rand, Game& game, const Mode
     game.applyTrainingAndNextTurn(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing);
   else
     game.applyTraining(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing);
-
 
 }

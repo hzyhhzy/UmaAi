@@ -5,11 +5,12 @@
 #include <cassert>
 #include <thread>  // for std::this_thread::sleep_for
 #include <chrono>  // for std::chrono::seconds
+
 #include "../Game/Game.h"
 #include "../Search/Search.h"
+#include <filesystem>
+#include <cstdlib>
 using namespace std;
-
-
 
 void main_test6()
 {
@@ -22,8 +23,16 @@ void main_test6()
   int lastTurn = -1;
   int scoreFirstTurn = 0;   // 第一回合分数
   int scoreLastTurn = 0;   // 上一回合分数
+
   while (true)
   {
+    // 检查配置
+    cout << "当前工作目录：" << filesystem::current_path() << endl;
+    while (!filesystem::exists("./packets/currentGS.json"))
+    {
+        cout << "找不到 packets/currentGS.json，请检查工作路径和URA插件连接" << endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
+    }
     ifstream fs("./packets/currentGS.json");
     if (!fs.good())
     {
@@ -60,8 +69,7 @@ void main_test6()
     }
     game.print();
     cout << endl;
-    cout << "计算中..." << endl;
-    cout << endl;
+    cout << "计算中...";
 
     auto printPolicy = [](float p)
     {
@@ -74,7 +82,7 @@ void main_test6()
     };
 
     search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 0, threadNum);
-    cout << "计算完毕" << endl;
+    cout << endl << "计算完毕" << endl;
     cout << ">>" << endl;
     {
       auto policy = search.extractPolicyFromSearchResults(1);
@@ -133,24 +141,9 @@ void main_test6()
       cout << "此回合运气：\033[33m" << maxScore - scoreLastTurn << "\033[0m" << endl; 
       cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：\033[33m" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << "\033[0m" << endl;
       cout << "<<" << endl;
+      cout.flush();
     }
     scoreLastTurn = maxScore;
-    /*
-    cout << "各选项的期望分数：" << endl;
-    for (int i = 0; i < 2; i++)
-    {
-      for (int j = 0; j < 8 + 4 + 6; j++)
-      {
-        cout
-          //<< fixed << setprecision(1) << search.allChoicesValue[i][j].winrate * 100 << "%:" 
-          << fixed << setprecision(0) << search.allChoicesValue[i][j].avgScoreMinusTarget << " ";
-        if (j == 4 || j == 7 || j == 11)cout << endl;
-      }
-      cout << endl;
-      cout << endl;
-    }
-    */
-
   }
 
 }
