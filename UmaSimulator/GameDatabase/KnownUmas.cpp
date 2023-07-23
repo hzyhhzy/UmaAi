@@ -1,12 +1,6 @@
 #include "GameDatabase.h"
 #include "UmaData.h"
 
-// 0 空
-// 1 草上飞（五星）
-// 2 
-// 3
-// 4
-//
 
 
 const std::string GameDatabase::AllUmaNames[ALL_UMA_NUM] = {
@@ -27,6 +21,9 @@ const std::string GameDatabase::AllUmaNames[ALL_UMA_NUM] = {
   "荒漠",
   "op内恰",
   "拉恰",
+  "水船",
+  "op司机",
+  "op栗帽",
 };
 
 
@@ -49,6 +46,9 @@ const std::map<int, int> GameDatabase::AllUmaGameIdToSimulatorId =
   {104701,14},
   {106001,15},
   {106002,16},
+  {100702,17},
+  {100401,18},
+  {100601,19},
 };
 const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
 {
@@ -340,5 +340,66 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       {
         105,105,115,105,120
       },
+    },
+  
+    //17 水船
+    {
+      3,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true,
+        false,false,false,false,false,false, false,false,false,false,false,true, //��һ��
+        false,false,false,false,false,false, true,false,false,false,false,false,
+        false,false,false,false,false,false, false,true,false,false,false,true, //�ڶ���
+        false,false,false,false,false,false, false,true,false,false,false,true,
+        false,false,false,false,false,false, false,true,false,false,false,true, //������
+        false,false,false,false,false,true
+      },
+      {
+        0,0,20,0,10
+      },
+      {
+        79,93,112,73,93
+      },
+
+    },
+    //18 op司机
+    {
+      3,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,false, 
+        false,false,false,false,false,false, false,false,false,false,true,false, //��һ��
+        false,false,false,false,false,true, true,false,false,true,false,false, 
+        false,false,false,false,false,false, false,false,false,false,false,true, //�ڶ���
+        false,false,false,false,false,true, false,false,false,false,true,false, 
+        false,false,false,false,false,false, false,true,false,false,false,false, //������
+        false,false,false,false,false,true
+      },
+      {
+        10,0,0,0,20
+      },
+      {
+        96,68,86,100,100
+      },
+
+    },
+    //19 op栗帽 
+    {
+      4,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true,
+        false,false,false,false,false,false, false,false,false,false,false,false, //��һ��
+        false,false,false,false,false,false, false,false,true,false,false,false, 
+        false,false,false,false,false,false, false,false,false,true,false,true, //�ڶ���
+        false,false,false,false,false,false, false,false,false,false,false,false, 
+        false,false,false,false,false,false, false,true,false,false,false,true, //������
+        false,false,false,false,false,true
+      },
+      {
+        20,0,10,0,0
+      },
+      {
+        112,74,118,94,102
+      },
+
     },
 };
