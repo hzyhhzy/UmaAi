@@ -14,6 +14,7 @@ using namespace std;
 const bool handWrittenEvaluationTest = false;
 const int threadNum = 20;
 const int threadNumInner = 1;
+const double radicalFactor = 5;//¼¤½ø¶È
 const int searchN = handWrittenEvaluationTest ? 1 : 1024;
 
 
@@ -61,7 +62,7 @@ void worker()
         policy = Evaluator::handWrittenPolicy(game);
       }
       else {
-        search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNumInner);
+        search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNumInner, radicalFactor);
         policy = search.extractPolicyFromSearchResults(1);
       }
       Search::runOneTurnUsingPolicy(rand, game, policy, true);
