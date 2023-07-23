@@ -23,7 +23,8 @@ const std::string GameDatabase::AllUmaNames[ALL_UMA_NUM] = {
   "op帝王",
   "火鸡帝王",
   "爱丽数码",
-  "僵尸数码"
+  "僵尸数码",
+  "罗布罗伊"
 };
 
 
@@ -42,7 +43,8 @@ const std::map<int, int> GameDatabase::AllUmaGameIdToSimulatorId =
   {100301,10},
   {100302,11},
   {101901,12},
-  {101902,13}
+  {101902,13},
+  {104701,14}
 };
 const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
 {
@@ -283,5 +285,23 @@ const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
       {
         104,111,120,129,86
       },
-    }
+    },
+    //14,罗布罗伊
+    {
+      5,
+      {
+        false,false,false,false,false,false, false,false,false,false,false,true,
+        false,false,false,false,false,false, false,false,false,false,false,false, //第一年
+        false,false,false,false,false,false, false,true,false,true,false,false,
+        false,false,false,false,false,false, false,true,false,false,false,true, //第二年
+        false,false,false,false,false,false, false,true,false,false,false,true,
+        false,false,false,false,false,false, false,true,false,true,false,true, //第三年
+        false,false,false,false,false,true
+      },
+      {
+        0,10,0,0,20
+      },
+      {
+        108,118,111,91,122
+      },
 };
