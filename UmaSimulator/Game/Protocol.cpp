@@ -35,7 +35,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
 
     turn = j["turn"];
     if (turn >= TOTAL_TURN && turn < 0)
-      throw "回合数不正确";
+      throw string("回合数不正确");
 
     vital = j["vital"];
     maxVital = j["maxVital"];
@@ -55,7 +55,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
       if (maskUmaId)
           c = hack_scId(c);
       if (!GameDatabase::AllSupportCardGameIdToSimulatorId.count(c))
-        throw "未知支援卡";
+        throw string("未知支援卡");
       cardId[i] = GameDatabase::AllSupportCardGameIdToSimulatorId.at(c);
     }
 
@@ -127,7 +127,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         }
       }
       if (s == -1)
-        throw "没带神团";
+        throw string("没带神团");
 
       std::swap(cardId[s], cardId[0]);
       std::swap(cardJiBan[s], cardJiBan[0]);
