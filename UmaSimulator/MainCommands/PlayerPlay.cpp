@@ -55,7 +55,7 @@ void main_playerPlay()
       assert(turn == game.turn && "回合数不正确");
       game.randomDistributeCards(rand);
       game.print();
-      search.runSearch(game, evaluators.data(), 4096, TOTAL_TURN, 27000, threadNum);
+      search.runSearch(game, evaluators.data(), 4096, TOTAL_TURN, 27000, threadNum, 0);
       for (int i = 0; i < 2; i++)
       {
         for (int j = 0; j < 8 + 4 + 6; j++)
