@@ -124,7 +124,7 @@ void Search::runSearch(const Game& game, Evaluator* evaluators, int eachSampling
 
       //比赛
       //cout << endl << "- 正在分析比赛";
-      if (game.turn > 12)
+      if (game.turn > 12 && game.turn < 72)
       {
         allChoicesValue[useVenus][7] = evaluateSingleAction(
           game, evaluators, eachSamplingNum, maxDepth, targetScore,
