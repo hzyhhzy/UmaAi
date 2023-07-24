@@ -18,6 +18,14 @@
 git clone <你的仓库 git 链接> -b master
 ```
 
+在本地仓库创建一个Dev分支并检出。
+
+```bash
+git branch dev
+git checkout dev
+```
+
+
 双击打开 `UmaSimulator.sln` 文件。Visual Studio 会自动加载整个项目。
 
 接下来就可以进行更改和测试了。
