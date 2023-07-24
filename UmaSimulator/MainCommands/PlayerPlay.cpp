@@ -38,7 +38,7 @@ void main_playerPlay()
 
 
     cout << termcolor::bright_blue << "------------------------------------------------------------------------------------------------" << termcolor::reset << endl;
-    cout << termcolor::green << "你养的马是：" << GameDatabase::AllUmaNames[umaId] << termcolor::reset << endl;
+    cout << termcolor::green << "你养的马是：" << GameDatabase::jsonUmas[umaId].name << termcolor::reset << endl;
     cout << termcolor::green << "你的配卡是：";
     for (int i = 0; i < 6; i++)
       cout << GameDatabase::AllSupportCardNames[cards[i]] << ",";
@@ -211,7 +211,7 @@ void main_playerPlay()
             if (s != "remake")
               continue;
             isRemake = true;
-            cout << termcolor::red << "你把" << termcolor::green << GameDatabase::AllUmaNames[umaId] << termcolor::red << "杀掉了" << termcolor::reset << endl;
+            cout << termcolor::red << "你把" << termcolor::green << GameDatabase::jsonUmas[umaId].name << termcolor::red << "杀掉了" << termcolor::reset << endl;
             break;
           }
           else if (s == "sigmoid")//重置卡组分配

@@ -72,13 +72,14 @@ void Game::print() const
 {
 
   cout<<"\033[31m-------------------------------------------------------------------------------------------\033[0m"<<endl;
+  cout << "当前马娘：" << GameDatabase::jsonUmas[umaId].name << endl;
   cout << termcolor::green << "回合数：" << turn + 1 << "/" << TOTAL_TURN << ", 第" << turn / 24 + 1 << "年" << (turn % 24) / 2 + 1 << "月" << (turn % 2 ? "后" : "前") << "半" << termcolor::reset << endl;
   //还有几个回合比赛
   {
     int turnsBeforeRace = -1;
     for (int i = turn; i < TOTAL_TURN; i++)
     {
-      if (GameDatabase::AllUmas[umaId].races[i])
+      if (GameDatabase::jsonUmas[umaId].races[i])
       {
         turnsBeforeRace = i - turn;
         break;

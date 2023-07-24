@@ -8,6 +8,7 @@
 
 #include "../Game/Game.h"
 #include "../Search/Search.h"
+#include "windows.h"
 #include <filesystem>
 #include <cstdlib>
 using namespace std;
@@ -30,14 +31,20 @@ void main_test6()
   int lastTurn = -1;
   int scoreFirstTurn = 0;   // 第一回合分数
   int scoreLastTurn = 0;   // 上一回合分数
+  // 检查工作目录
+  wchar_t buf[10240];
+  GetModuleFileNameW(0, buf, 10240);
+  filesystem::path exeDir = filesystem::path(buf).parent_path();
+  filesystem::current_path(exeDir);
+  //std::cout << "当前工作目录：" << filesystem::current_path() << endl;
+  cout << "当前程序目录：" << exeDir << endl;
+  GameDatabase::loadUmas("db");
 
   while (true)
   {
-    // 检查配置
-    cout << "当前工作目录：" << filesystem::current_path() << endl;
     while (!filesystem::exists("./packets/currentGS.json"))
     {
-        cout << "找不到 packets/currentGS.json，请检查工作路径和URA插件连接" << endl;
+        std::cout << "找不到 packets/currentGS.json，请检查工作路径和URA插件连接" << endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
     }
     ifstream fs("./packets/currentGS.json");
@@ -152,7 +159,7 @@ void main_test6()
       cout<<"以下两个指标没有考虑技能，买技能后下降正常" << endl;
       cout << "此局运气：" << maxScore - scoreFirstTurn  << endl;
       cout << "此回合运气：" << maxScore - scoreLastTurn  << endl; 
-      double raceLoss = maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget);
+      double raceLoss = maxScore - max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget);
       if (raceLoss < 5e5)//raceLoss大约1e6如果不能比赛
         cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：" << raceLoss << endl;
       cout << "<<" << endl;

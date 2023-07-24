@@ -38,7 +38,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
 
 
   for (int i = 0; i < 5; i++)
-    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
+    fiveStatus[i] = GameDatabase::jsonUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
   for (int i = 0; i < 6; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
@@ -611,7 +611,7 @@ void Game::calculateTrainingValueSingle(int trainType)
   //6.成长率
   double growthRates[6] = { 1,1,1,1,1,1 };
   for (int j = 0; j < 5; j++)
-    growthRates[j] = 1.0 + 0.01 * GameDatabase::AllUmas[umaId].fiveStatusBonus[j];
+    growthRates[j] = 1.0 + 0.01 * GameDatabase::jsonUmas[umaId].fiveStatusBonus[j];
 
   //下层总数值
   int totalValue[6];
@@ -1236,14 +1236,13 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   turn++;
   if (turn < TOTAL_TURN)
   {
-    isRacing = GameDatabase::AllUmas[umaId].races[turn];
+    isRacing = GameDatabase::jsonUmas[umaId].races[turn];
   }
   else
   {
     printEvents("育成结束!");
     printEvents("你的得分是：" + to_string(finalScore()));
   }
-
 
 }
 

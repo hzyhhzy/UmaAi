@@ -29,10 +29,9 @@ bool Game::loadGameFromJson(std::string jsonStr)
     umaId = j["umaId"];
     if (maskUmaId)
         umaId = hack_umaId(umaId);
-    if (!GameDatabase::AllUmaGameIdToSimulatorId.count(umaId))
+    if (!GameDatabase::jsonUmas.count(umaId))
       throw string("未知马娘");
-    umaId = GameDatabase::AllUmaGameIdToSimulatorId.at(umaId);
-
+    
     turn = j["turn"];
     if (turn >= TOTAL_TURN && turn < 0)
       throw string("回合数不正确");

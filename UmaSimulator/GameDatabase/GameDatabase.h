@@ -13,9 +13,8 @@ public:
   static const std::map<int, int> AllSupportCardGameIdToSimulatorId;
   static SupportCard AllSupportCards[ALL_SUPPORTCARD_NUM];
 
+ // static const int ALL_UMA_NUM = 20;
+  static std::map<int, JsonUmaData> jsonUmas;
 
-  static const int ALL_UMA_NUM = 20;
-  static const std::string AllUmaNames[ALL_UMA_NUM];
-  static const std::map<int, int> AllUmaGameIdToSimulatorId;
-  static const UmaData AllUmas[ALL_UMA_NUM];
+  static void loadUmas(const std::string& dir);
 };

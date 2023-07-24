@@ -206,7 +206,7 @@ void Game::getNNInputV1(float* buf, float targetScore, int mode) const
   }
 
   //513~599 马娘id
-  static_assert(GameDatabase::ALL_UMA_NUM <= 599 - 513, "超过v1版神经网络支持马娘数上限");
+  //static_assert(GameDatabase::ALL_UMA_NUM <= 599 - 513, "超过v1版神经网络支持马娘数上限");
   assert(umaId >= 0 && umaId + 513 <= 599);
   buf[513 + umaId] = 1.0;
 

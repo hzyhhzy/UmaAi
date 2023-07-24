@@ -6,3 +6,4 @@ void main_test3();
 void main_test4();
 void main_test5();
 void main_test6();
+void main_test_json();

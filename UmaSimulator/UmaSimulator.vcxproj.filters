@@ -123,6 +123,9 @@
     <ClCompile Include="Tests\test6.cpp">
       <Filter>源文件\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\test_json.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
