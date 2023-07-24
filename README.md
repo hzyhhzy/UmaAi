@@ -21,6 +21,10 @@
   <img src="https://contrib.rocks/image?repo=hzyhhzy/UmaSimulator" />
 </a>
 
+## 如何使用GitHub参与开发？
+
+[GitHub PR流程](Document/PullRequests.md)
+
 ## 安装与使用
 
 - 仅限日服PC DMM端使用
