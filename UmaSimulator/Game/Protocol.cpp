@@ -30,12 +30,12 @@ bool Game::loadGameFromJson(std::string jsonStr)
     if (maskUmaId)
         umaId = hack_umaId(umaId);
     if (!GameDatabase::AllUmaGameIdToSimulatorId.count(umaId))
-      throw "未知马娘";
+      throw string("未知马娘");
     umaId = GameDatabase::AllUmaGameIdToSimulatorId.at(umaId);
 
     turn = j["turn"];
     if (turn >= TOTAL_TURN && turn < 0)
-      throw "回合数不正确";
+      throw string("回合数不正确");
 
     vital = j["vital"];
     maxVital = j["maxVital"];
@@ -55,7 +55,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
       if (maskUmaId)
           c = hack_scId(c);
       if (!GameDatabase::AllSupportCardGameIdToSimulatorId.count(c))
-        throw "未知支援卡";
+        throw string("未知支援卡");
       cardId[i] = GameDatabase::AllSupportCardGameIdToSimulatorId.at(c);
     }
 
@@ -127,7 +127,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         }
       }
       if (s == -1)
-        throw "没带神团";
+        throw string("没带神团");
 
       std::swap(cardId[s], cardId[0]);
       std::swap(cardJiBan[s], cardJiBan[0]);
@@ -150,10 +150,15 @@ bool Game::loadGameFromJson(std::string jsonStr)
     cout << "读取游戏信息json出错：" << e << endl << "-- json --" << endl << jsonStr << endl;
     return false;
   }
-  catch (std::exception &e)
+  catch (std::exception& e)
   {
       cout << "读取游戏信息json出错：未知错误" << endl << e.what()
           << endl << "-- json --" << endl << jsonStr << endl;
+    return false;
+  }
+  catch (...)
+  {
+    cout << "读取游戏信息json出错：未知错误"  << endl;
     return false;
   }
 

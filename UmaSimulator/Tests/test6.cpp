@@ -12,10 +12,17 @@
 #include <cstdlib>
 using namespace std;
 
+const bool NoColor = false;//有些电脑无法正常显示颜色
+
 void main_test6()
 {
-  const int threadNum = 12;
-  const int searchN = 6144;
+  const double radicalFactor = 5;//激进度
+  const int threadNum = 16; //线程数
+  const int searchN = 12288; //每个选项的蒙特卡洛模拟的局数
+
+  //激进度为k，模拟n局时，标准差约为sqrt(1+k^2/(2k+1))*1200/(sqrt(n))
+  //标准差大于30时会严重影响判断准确度
+
   Search search;
   vector<Evaluator> evaluators;
   for (int i = 0; i < threadNum; i++)
@@ -60,9 +67,12 @@ void main_test6()
     }
     lastTurn = game.turn;
     if (game.venusIsWisdomActive)
+    {
+      std::this_thread::sleep_for(std::chrono::milliseconds(300));
       continue;
+    }
 
-    if (game.turn == 0)//第一回合
+    if (game.turn == 0)//第一回合，或者重启ai的第一回合
     {
       scoreFirstTurn = 0;
       scoreLastTurn = 0;
@@ -74,14 +84,17 @@ void main_test6()
     auto printPolicy = [](float p)
     {
       cout << fixed << setprecision(1);
-      if (p >= 0.3)cout << "\033[33m";
-      //else if (p >= 0.1)cout << "\033[32m";
-      else cout << "\033[36m";
+      if (!NoColor)
+      {
+        if (p >= 0.3)cout << "\033[33m";
+        //else if (p >= 0.1)cout << "\033[32m";
+        else cout << "\033[36m";
+      }
       cout << p * 100 << "% ";
-      cout << "\033[0m";
+      if (!NoColor)cout << "\033[0m";
     };
 
-    search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 0, threadNum);
+    search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 0, threadNum, radicalFactor);
     cout << endl << "计算完毕" << endl;
     cout << ">>" << endl;
     {
@@ -96,7 +109,7 @@ void main_test6()
       {
         if (game.venusAvailableWisdom != 0)
         {
-          cout << "在" << (policy.useVenusPolicy > 0.5 ? "" : "\033[31m不\033[0m") << "使用女神的前提下：";
+          cout << "在" << (policy.useVenusPolicy > 0.5 ? "" : " 不 ") << "使用女神的前提下：";
         }
 
         cout << "速耐力根智：";
@@ -109,14 +122,14 @@ void main_test6()
           printPolicy(policy.trainingPolicy[5 + i]);
         cout << endl;
 
-        cout << "红，蓝，黄：";
+        cout << "女神三选一事件：红，蓝，黄：";
         for (int i = 0; i < 3; i++)
           printPolicy(policy.threeChoicesEventPolicy[i]);
         cout << endl;
 
         cout << "五个女神外出以及普通外出：";
         for (int i = 0; i < 6; i++)
-          printPolicy(policy.outgoingPolicy[i]);
+          printPolicy(policy.outgoingPolicy[i] * policy.trainingPolicy[6]);
         cout << endl;
       }
     }
@@ -136,10 +149,12 @@ void main_test6()
     }
     else
     {
-      cout<<"\033[31m以下两个指标没有考虑技能，买技能后下降正常\033[0m" << endl;
-      cout << "此局运气：\033[33m" << maxScore - scoreFirstTurn << "\033[0m" << endl;
-      cout << "此回合运气：\033[33m" << maxScore - scoreLastTurn << "\033[0m" << endl; 
-      cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：\033[33m" << maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget) << "\033[0m" << endl;
+      cout<<"以下两个指标没有考虑技能，买技能后下降正常" << endl;
+      cout << "此局运气：" << maxScore - scoreFirstTurn  << endl;
+      cout << "此回合运气：" << maxScore - scoreLastTurn  << endl; 
+      double raceLoss = maxScore - std::max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget);
+      if (raceLoss < 5e5)//raceLoss大约1e6如果不能比赛
+        cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：" << raceLoss << endl;
       cout << "<<" << endl;
       cout.flush();
     }
