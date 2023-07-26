@@ -18,7 +18,7 @@ const double radicalFactor = 5;//激进度
 const int searchN = handWrittenEvaluationTest ? 1 : 3072;
 
 
-const int totalGames = handWrittenEvaluationTest ? 60000 : 10000000;
+const int totalGames = handWrittenEvaluationTest ? 120000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
 
 
@@ -35,14 +35,14 @@ void worker()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  //int umaId = 4;//我自己的号
-  //int cards[6] = { 1,2,3,4,5,6 };
+  int umaId = 4;//我自己的号
+  int cards[6] = { 1,2,3,4,5,6 };
 
   //int umaId = 5;//二之宫
   //int cards[6] = { 1,2,14,10,11,15 };
   // 
-  int umaId = 4;
-  int cards[6] = { 1,2,14,4,5,31 };
+  //int umaId = 4;
+  //int cards[6] = { 1,2,14,4,5,31 };
 
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,200 };

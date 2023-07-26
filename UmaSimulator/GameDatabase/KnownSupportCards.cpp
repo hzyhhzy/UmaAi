@@ -467,7 +467,7 @@ SupportCard GameDatabase::AllSupportCards[ALL_SUPPORTCARD_NUM] =
       5, // 赛后
       {0, 0, 0, 0, 0, 20}, // 为了简化，把红点的技能等效成多少属性
       30, // 启发发生率提升
-      112  // 得意率
+      116  // 得意率
     },
     //19速福来
     {
