@@ -1,405 +1,54 @@
 #include "GameDatabase.h"
 #include "UmaData.h"
+#include "../External/utils.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <filesystem>
+using json = nlohmann::json;
+using namespace std;
 
+unordered_map<int, UmaData> GameDatabase::AllUmas;
 
-
-const std::string GameDatabase::AllUmaNames[ALL_UMA_NUM] = {
-  "空",
-  "特别周"
-  "泳装特别周"
-  "总大将特别周"
-  "草上飞",
-  "花炮",
-  "op炮",
-  "小林历奇",
-  "水麦昆",
-  "无声铃鹿",
-  "op帝王",
-  "火鸡帝王",
-  "爱丽数码",
-  "僵尸数码",
-  "荒漠",
-  "op内恰",
-  "拉恰",
-  "水船",
-  "op司机",
-  "op栗帽",
-};
-
-
-const std::map<int, int> GameDatabase::AllUmaGameIdToSimulatorId =
+void GameDatabase::loadUmas(const string& dir) 
 {
-  {0,0},
-  {100101,1},
-  {100102,2},
-  {100103,3},
-  {101101,4},
-  {102402,5},
-  {102401,6},
-  {109801,7},
-  {101303,8},
-  {100201,9},
-  {100301,10},
-  {100302,11},
-  {101901,12},
-  {101902,13},
-  {104701,14},
-  {106001,15},
-  {106002,16},
-  {100702,17},
-  {100401,18},
-  {100601,19},
-};
-const UmaData GameDatabase::AllUmas[ALL_UMA_NUM] =
-{
-    //0，空
+    try
     {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, //第二年
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        6,6,6,6,6
-      },
-      {
-        110,110,110,110,110
-      },
+        for (auto entry : filesystem::directory_iterator(dir + "/"))
+        {
+            //cout << entry.path() << endl;
+            if (entry.path().extension() == ".json")
+            {
+                try
+                {
+                    ifstream ifs(entry.path());
+                    stringstream ss;
+                    ss << ifs.rdbuf();
+                    ifs.close();
+                    json j = json::parse(ss.str());
 
-    },
-    //1，特别周
+                    UmaData jdata;
+                    j.get_to(jdata);
+                    cout << "载入马娘 #" << jdata.gameId << " " << jdata.name << endl;
+                    if (AllUmas.count(jdata.gameId) > 0)
+                        cout << "错误：重复的马娘 #" << jdata.gameId << endl;
+                    else
+                        AllUmas[jdata.gameId] = jdata;
+                }
+                catch (exception& e)
+                {
+                    cout << "马娘信息JSON出错: " << entry.path() << endl << e.what() << endl;
+                }
+            }
+        }
+        cout << "共载入 " << AllUmas.size() << " 个育成马娘数据" << endl;        
+    }
+    catch (exception& e)
     {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,true,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //第二年
-        false,false,false,false,false,false, false,true,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        0,20,0,0,10
-      },
-      {
-        102,108,120,110,111
-      },
-    },
-    //2，泳装特别周
-
+        cout << "读取马娘信息出错: " << endl << e.what() << endl;
+    }
+    catch (...)
     {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,true,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //第二年
-        false,false,false,false,false,false, false,true,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        0,10,10,10,0
-      },
-      {
-        94,110,125,119,102
-      },
-    },
-
-    //3，总大将特别周
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,true,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //第二年
-        false,false,false,false,false,false, false,true,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        10,10,0,0,10
-      },
-      {
-        117,100,115,100,118
-      },
-    },
-    //4，草上飞
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,true,false, //第一年
-        false,false,false,false,false,false, false,false,false,true,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //第二年
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, true,false,false,false,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        20,0,10,0,0
-      },
-      {
-        118,91,129,96,116
-      },
-    },
-
-    //5，花炮
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,true,false,false,false,true, //第二年
-        false,false,false,false,false,true, false,true,false,false,false,true, false,false,false,false,false,false, false,true,false,false,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        10,10,0,0,10
-      },
-      {
-        102,123,100,110,115
-      },
-    },
-    //6，op炮
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,false, false,true,false,false,false,true, //第二年
-        false,false,false,false,false,true, false,true,false,false,false,true, false,false,false,false,false,false, false,true,false,false,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        0,20,0,10,0
-      },
-      {
-        94,130,86,123,117
-      },
-    },
-    //7,小林檎
-    {
-      4,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,true, //第一年
-        false,false,false,false,false,false, true,false,false,false,false,false, false,false,false,false,true,false, false,false,false,true,false,true, //第二年
-        false,false,false,true,false,false, false,false,true,false,false,true, false,false,false,false,true,false, true,false,true,false,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        0,0,10,0,20
-      },
-      {
-        104,97,103,96,100
-      },
-    },
-    //8,水麦昆
-    {
-      3,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,false,false,false,false, false,false,false,false,false,false, false,false,false,false,false,true, false,true,false,false,false,false, //第二年
-        false,false,false,false,false,false, false,true,false,false,false,true, false,false,false,false,false,false, false,true,false,false,false,false, //第三年
-        false,false,false,false,false,true
-        },
-      {
-        8,8,0,0,14
-      },
-      {
-        82,85,82,113,88
-      },
-    },
-    //9，无声铃鹿
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,false,false,true,false, false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, //第二年
-        false,false,false,false,true,false, false,false,false,false,false,true, false,false,false,false,false,false, true,true,false,false,false,false, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        20,0,0,10,0
-      },
-      {
-        124,102,94,122,108
-      },
-
-    },
-
-    //10，原皮帝王
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,true,false,false,false,false, true,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //第二年
-        false,false,false,false,false,false, true,false,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        20,10,0,0,0
-      },
-      {
-        109,109,102,112,118
-      },
-
-    },
-
-    //11，火鸡帝王
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,true,false,false,false,false, true,false,false,true,false,false, false,false,false,false,false,false, false,true,false,false,false,false, //第二年
-        false,false,false,false,false,false, true,false,false,false,false,false, false,false,false,false,false,false, false,false,false,true,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        10,10,0,10,0
-      },
-      {
-        109,125,98,106,112
-      },
-
-    },
-    //12-13,数码
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true,
-        false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,false,true,false,false, false,false,true,false,false,false,
-        true,false,false,false,false,false, false,false,false,true,false,false, //第二年
-        false,false,false,false,false,false, false,false,false,false,false,false,
-        false,false,false,false,false,false, true,false,false,false,false,false, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        8,8,7,0,7
-      },
-      {
-        104,111,101,122,112
-      },
-    },
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true,
-        false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,false,true,false,false, false,false,true,false,false,false,
-        true,false,false,false,false,false, false,false,false,true,false,false, //第二年
-        false,false,false,false,false,false, false,false,false,false,false,false,
-        false,false,false,false,false,false, true,false,false,false,false,false, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        7,7,8,8,0
-      },
-      {
-        104,111,120,129,86
-      },
-    },
-    //14,荒漠英雄
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true,
-        false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,false,false,false,false,false, false,true,false,true,false,false,
-        false,false,false,false,false,false, false,true,false,false,false,true, //第二年
-        false,false,false,false,false,false, false,true,false,false,false,true,
-        false,false,false,false,false,false, false,true,false,true,false,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        0,10,0,0,20
-      },
-      {
-        108,118,111,91,122
-      },
-    },
-    //15 op内恰
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,true,false,false,false,false, false,false,false,false,false,false, false,false,true,false,false,false, false,true,false,false,false,true, //第二年
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,true,false,false,true,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        0,0,20,0,10
-      },
-      {
-        118,99,123,96,114
-      },
-    },
-    //16，拉恰
-    {
-      5,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, //第一年
-        false,true,false,false,false,false, false,false,false,false,false,false, false,false,true,false,false,false, false,true,false,false,false,true, //第二年
-        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,true,false,false,true,true, //第三年
-        false,false,false,false,false,true
-      },
-      {
-        0,10,10,0,10
-      },
-      {
-        105,105,115,105,120
-      },
-    },
-  
-    //17 水船
-    {
-      3,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true,
-        false,false,false,false,false,false, false,false,false,false,false,true, //?????
-        false,false,false,false,false,false, true,false,false,false,false,false,
-        false,false,false,false,false,false, false,true,false,false,false,true, //?????
-        false,false,false,false,false,false, false,true,false,false,false,true,
-        false,false,false,false,false,false, false,true,false,false,false,true, //??????
-        false,false,false,false,false,true
-      },
-      {
-        0,0,20,0,10
-      },
-      {
-        79,93,112,73,93
-      },
-
-    },
-    //18 op司机
-    {
-      3,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,false, 
-        false,false,false,false,false,false, false,false,false,false,true,false, //?????
-        false,false,false,false,false,true, true,false,false,true,false,false, 
-        false,false,false,false,false,false, false,false,false,false,false,true, //?????
-        false,false,false,false,false,true, false,false,false,false,true,false, 
-        false,false,false,false,false,false, false,true,false,false,false,false, //??????
-        false,false,false,false,false,true
-      },
-      {
-        10,0,0,0,20
-      },
-      {
-        96,68,86,100,100
-      },
-
-    },
-    //19 op栗帽 
-    {
-      4,
-      {
-        false,false,false,false,false,false, false,false,false,false,false,true,
-        false,false,false,false,false,false, false,false,false,false,false,false, //?????
-        false,false,false,false,false,false, false,false,true,false,false,false, 
-        false,false,false,false,false,false, false,false,false,true,false,true, //?????
-        false,false,false,false,false,false, false,false,false,false,false,false, 
-        false,false,false,false,false,false, false,true,false,false,false,true, //??????
-        false,false,false,false,false,true
-      },
-      {
-        20,0,10,0,0
-      },
-      {
-        112,74,118,94,102
-      },
-
-    },
-};
+        cout << "读取马娘信息出错：未知错误" << endl;
+    }
+}

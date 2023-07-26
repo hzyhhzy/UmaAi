@@ -10,12 +10,12 @@ using json = nlohmann::json;
 // 为True时会把所有ID的最高位改为满破（马娘5xxx，卡4xxx）
 static bool maskUmaId = true;
 
-int hack_umaId(int umaId)
+int mask_umaId(int umaId)
 {
     return umaId % 1000000;
 }
 
-int hack_scId(int scId)
+int mask_scId(int scId)
 {
     return scId % 100000 + 400000;
 }
@@ -25,14 +25,14 @@ bool Game::loadGameFromJson(std::string jsonStr)
   try
   {
     json j = json::parse(jsonStr);
-    //cout << jsonStr << endl;
+
     umaId = j["umaId"];
     if (maskUmaId)
-        umaId = hack_umaId(umaId);
-    if (!GameDatabase::AllUmaGameIdToSimulatorId.count(umaId))
+        umaId = mask_umaId(umaId);
+    if (!GameDatabase::AllUmas.count(umaId))
       throw string("未知马娘");
-    umaId = GameDatabase::AllUmaGameIdToSimulatorId.at(umaId);
-
+    umaData = &GameDatabase::AllUmas[umaId];
+    
     turn = j["turn"];
     if (turn >= TOTAL_TURN && turn < 0)
       throw string("回合数不正确");
@@ -53,7 +53,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     {
       int c = j["cardId"][i];
       if (maskUmaId)
-          c = hack_scId(c);
+          c = mask_scId(c);
       if (!GameDatabase::AllSupportCardGameIdToSimulatorId.count(c))
         throw string("未知支援卡");
       cardId[i] = GameDatabase::AllSupportCardGameIdToSimulatorId.at(c);
@@ -147,12 +147,13 @@ bool Game::loadGameFromJson(std::string jsonStr)
   }
   catch (string e)
   {
-    cout << "读取游戏信息json出错：" << e << endl;
+    cout << "读取游戏信息json出错：" << e << endl << "-- json --" << endl << jsonStr << endl;
     return false;
   }
   catch (std::exception& e)
   {
-    cout << "读取游戏信息json出错：未知错误" << e.what() << endl;
+      cout << "读取游戏信息json出错：未知错误" << endl << e.what()
+          << endl << "-- json --" << endl << jsonStr << endl;
     return false;
   }
   catch (...)

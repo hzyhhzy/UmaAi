@@ -11,8 +11,12 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
 {
   playerPrint = enablePlayerPrint;
   umaId = newUmaId;
+  umaData = &GameDatabase::AllUmas[umaId];
   for (int i = 0; i < 6; i++)
-    cardId[i] = newCards[i];
+  {
+      cardId[i] = newCards[i];
+      cardData[i] = &GameDatabase::AllSupportCards[newCards[i]];
+  }
   assert(GameDatabase::AllSupportCards[cardId[0]].cardType == 5 && "神团卡不在第一个位置");
   for (int i = 0; i < 5; i++)
     zhongMaBlueCount[i] = newZhongMaBlueCount[i];
@@ -38,7 +42,8 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
 
 
   for (int i = 0; i < 5; i++)
-    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
+    fiveStatus[i] = umaData->fiveStatusInitial[i]; //赛马娘初始值
+    //fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
   for (int i = 0; i < 6; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
@@ -630,7 +635,8 @@ void Game::calculateTrainingValueSingle(int trainType)
   //6.成长率
   double growthRates[6] = { 1,1,1,1,1,1 };
   for (int j = 0; j < 5; j++)
-    growthRates[j] = 1.0 + 0.01 * GameDatabase::AllUmas[umaId].fiveStatusBonus[j];
+    growthRates[j] = 1.0 + 0.01 * umaData->fiveStatusBonus[j];
+    //growthRates[j] = 1.0 + 0.01 * GameDatabase::AllUmas[umaId].fiveStatusBonus[j];
 
   //下层总数值
   int totalValue[6];
@@ -640,18 +646,13 @@ void Game::calculateTrainingValueSingle(int trainType)
     if (v > 100)v = 100;
     totalValue[j] = v;
   }
-
-
-    
+  
   //7.碎片
   for (int j = 0; j < 6; j++)
   {
     if (totalValue[j] > 0)//关联属性
       totalValue[j] += spiritBonus[j];
-  }
-
-    
-
+  } 
     
   //8.女神等级加成
   double venusMultiplying = 1.00 + 0.01 * (
@@ -1280,14 +1281,14 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   turn++;
   if (turn < TOTAL_TURN)
   {
-    isRacing = GameDatabase::AllUmas[umaId].races[turn];
+    isRacing = umaData->races[turn] & TURN_RACE;
+    //isRacing = GameDatabase::AllUmas[umaId].races[turn] & TURN_RACE;
   }
   else
   {
     printEvents("育成结束!");
     printEvents("你的得分是：" + to_string(finalScore()));
   }
-
 
 }
 
