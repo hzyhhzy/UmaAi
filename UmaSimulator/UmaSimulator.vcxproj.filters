@@ -126,6 +126,12 @@
     <ClCompile Include="Tests\test_json.cpp">
       <Filter>源文件\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="External\utils.cpp">
+      <Filter>头文件\External</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDatabase\GameConfig.cpp">
+      <Filter>头文件\GameDatabase</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
@@ -169,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="NeuralNet\Model.h">
       <Filter>头文件\NeuralNet</Filter>
+    </ClInclude>
+    <ClInclude Include="External\utils.h">
+      <Filter>头文件\External</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDatabase\GameConfig.h">
+      <Filter>头文件\GameDatabase</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

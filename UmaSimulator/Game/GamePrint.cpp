@@ -36,7 +36,7 @@ static string spiritStr(int x)
   if (color == 0)
     s = "\033[31m" + s + "\033[0m";
   else if (color == 1)
-    s = "\033[34m" + s + "\033[0m";
+    s = "\033[36m" + s + "\033[0m";
   else if (color == 2)
     s = "\033[33m" + s + "\033[0m";
 
@@ -72,14 +72,14 @@ void Game::print() const
 {
 
   cout<<"\033[31m-------------------------------------------------------------------------------------------\033[0m"<<endl;
-  cout << "当前马娘：" << GameDatabase::jsonUmas[umaId].name << endl;
+  cout << "当前马娘：" << GameDatabase::AllUmas[umaId].name << endl;
   cout << termcolor::green << "回合数：" << turn + 1 << "/" << TOTAL_TURN << ", 第" << turn / 24 + 1 << "年" << (turn % 24) / 2 + 1 << "月" << (turn % 2 ? "后" : "前") << "半" << termcolor::reset << endl;
   //还有几个回合比赛
   {
     int turnsBeforeRace = -1;
     for (int i = turn; i < TOTAL_TURN; i++)
     {
-      if (GameDatabase::jsonUmas[umaId].races[i])
+      if (GameDatabase::AllUmas[umaId].races[i] & TURN_RACE)
       {
         turnsBeforeRace = i - turn;
         break;
@@ -142,7 +142,7 @@ void Game::print() const
     cout << endl;
   }
   {
-    cout << "女神等级：" << termcolor::yellow << venusLevelYellow << " " << termcolor::red << venusLevelRed << " " << termcolor::blue << venusLevelBlue << termcolor::reset << endl;
+    cout << "女神等级：" << termcolor::yellow << venusLevelYellow << " " << termcolor::red << venusLevelRed << " " << termcolor::cyan << venusLevelBlue << termcolor::reset << endl;
   }
 
   //女神卡状态
@@ -315,7 +315,7 @@ void Game::print() const
         }
         else//理事长，记者
         {
-          s = "\033[34m" + s + "\033[0m";
+          s = "\033[36m" + s + "\033[0m";
         }
         oneRow[item] = s;
       }

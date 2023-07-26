@@ -61,6 +61,13 @@ struct Game
   std::discrete_distribution<> cardDistributionRandom[8];
   std::discrete_distribution<> venusSpiritTypeRandom[8];
 
+  // 当前游戏的马娘
+  // 指针只指向静态内容，相当于存放Int64数据，不会影响对象复制
+  UmaData* umaData;
+
+  // 当前游戏的卡组
+  // 指针只指向静态内容，相当于存放Int64数据，不会影响对象复制
+  SupportCard* cardData[6];
 
   //显示相关
   bool playerPrint;//给人玩的时候，显示更多信息

@@ -10,12 +10,12 @@ using json = nlohmann::json;
 // 为True时会把所有ID的最高位改为满破（马娘5xxx，卡4xxx）
 static bool maskUmaId = true;
 
-int hack_umaId(int umaId)
+int mask_umaId(int umaId)
 {
     return umaId % 1000000;
 }
 
-int hack_scId(int scId)
+int mask_scId(int scId)
 {
     return scId % 100000 + 400000;
 }
@@ -28,9 +28,10 @@ bool Game::loadGameFromJson(std::string jsonStr)
 
     umaId = j["umaId"];
     if (maskUmaId)
-        umaId = hack_umaId(umaId);
-    if (!GameDatabase::jsonUmas.count(umaId))
+        umaId = mask_umaId(umaId);
+    if (!GameDatabase::AllUmas.count(umaId))
       throw string("未知马娘");
+    umaData = &GameDatabase::AllUmas[umaId];
     
     turn = j["turn"];
     if (turn >= TOTAL_TURN && turn < 0)
@@ -52,7 +53,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     {
       int c = j["cardId"][i];
       if (maskUmaId)
-          c = hack_scId(c);
+          c = mask_scId(c);
       if (!GameDatabase::AllSupportCardGameIdToSimulatorId.count(c))
         throw string("未知支援卡");
       cardId[i] = GameDatabase::AllSupportCardGameIdToSimulatorId.at(c);

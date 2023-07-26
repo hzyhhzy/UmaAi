@@ -6,6 +6,7 @@
 #include <atomic>
 #include <future>
 #include "Search.h"
+#include "../GameDatabase/GameConfig.h"
 #include <iostream>
 using namespace std;
 
@@ -46,19 +47,16 @@ void Search::runSearch(const Game& game, Evaluator* evaluators,
     //先考虑是不是只有比赛
     if (game.isRacing)
     {
-#ifdef SHOW_DEBUG_MSG
-      cout << "- 生涯比赛" << endl;
-#endif
+        if (GameConfig::debugPrint)
+            cout << "- 生涯比赛" << endl;
       allChoicesValue[useVenus][0] = evaluateSingleAction(game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum, radicalFactor,
         rand, -1, useVenus, -1, -1, -1);
     }
     else
     {
       //五个训练
-#ifdef SHOW_DEBUG_MSG
-     if (useVenus)
+     if (GameConfig::debugPrint && useVenus)
        cout << endl << "- 分析女神Buff：" << endl;
-#endif
 
       //对应位置01234，女神三选一事件对应8 9 10 11（不出，红，蓝，黄），休息5，外出6和12~17，比赛7
       for (int item = 0; item < 5; item++)
@@ -184,9 +182,6 @@ static double getWeightedAvg(const ModelOutputValueV1* allResults, int n, double
 static void evaluateSingleActionStoreAll(ModelOutputValueV1* allResults, const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore, int threadNum,
   std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
 {
-#ifdef SHOW_DEBUG_MSG
-  cout << "."; cout.flush();
-#endif
   if (threadNum == 1)
   {
     int batchsize = evaluators->maxBatchsize;
@@ -283,7 +278,9 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator* eva
   int chosenOutgoing,
   int forceThreeChoicesEvent)
 {
-
+    if (GameConfig::debugPrint) {
+        cout << "."; cout.flush();
+    }
   int eachSamplingNumEveryThread = eachSamplingNum / threadNum;
   if (eachSamplingNumEveryThread <= 0)eachSamplingNumEveryThread = 1;
 

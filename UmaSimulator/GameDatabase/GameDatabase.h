@@ -1,9 +1,8 @@
 #pragma once
 #include <string>
-#include <map>
+#include <unordered_map>
 #include "UmaData.h"
 #include "../SupportCard/SupportCard.h"
-
 
 class GameDatabase
 {
@@ -13,8 +12,8 @@ public:
   static const std::map<int, int> AllSupportCardGameIdToSimulatorId;
   static SupportCard AllSupportCards[ALL_SUPPORTCARD_NUM];
 
- // static const int ALL_UMA_NUM = 20;
-  static std::map<int, JsonUmaData> jsonUmas;
+  // unordered_map 是Hash存储，查询均摊复杂度O(1)
+  static std::unordered_map<int, UmaData> AllUmas;
 
   static void loadUmas(const std::string& dir);
 };
