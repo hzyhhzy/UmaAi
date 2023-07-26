@@ -210,6 +210,17 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
       double expectSpiritNum = int(game.spiritDistribution[item] / 32) + 1;
       double value = 0;
       assert(GameDatabase::AllSupportCards[game.cardId[0]].cardType == 5 && "神团卡不在第一个位置");
+
+      int cardHintNum = 0;//所有hint随机取一个，所以打分的时候取平均
+      for (int head = 0; head < 6; head++)
+      {
+        if (game.cardDistribution[item][head] && game.cardHint[head])
+          cardHintNum++;
+      }
+      if (game.venusIsWisdomActive && game.venusAvailableWisdom == 2)//开蓝所有hint生效
+        cardHintNum = 1;
+
+
       for (int head = 0; head < 6; head++)
       {
         if (!game.cardDistribution[item][head])
@@ -251,22 +262,23 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
         {
           if (game.cardJiBan[head] < 80)
           {
-            int jibanAdd = 7;
+            float jibanAdd = 7;
             if (game.isAiJiao)jibanAdd += 2;
             if (game.cardHint[head])
             {
-              jibanAdd += 5;
-              if (game.isAiJiao)jibanAdd += 2;
+              jibanAdd += 5 / cardHintNum;
+              if (game.isAiJiao)jibanAdd += 2 / cardHintNum;
             }
-            jibanAdd = std::min(80 - game.cardJiBan[head], jibanAdd);
+            jibanAdd = std::min(float(80 - game.cardJiBan[head]), jibanAdd);
 
             value += jibanAdd * jibanValue;
           }
         }
         if (game.cardHint[head])
         {
-          for (int i = 0; i < 6; i++)
-            value += GameDatabase::AllSupportCards[game.cardId[head]].hintBonus[i] * statusWeights[i];
+          for (int i = 0; i < 5; i++)
+            value += GameDatabase::AllSupportCards[game.cardId[head]].hintBonus[i] * statusWeights[i] / cardHintNum;
+          value += GameDatabase::AllSupportCards[game.cardId[head]].hintBonus[5] * ptWeight / cardHintNum;
         }
 
       }
@@ -274,8 +286,9 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
       if (game.venusAvailableWisdom == 2 && game.venusIsWisdomActive)
       {
         auto blueBonus = game.calculateBlueVenusBonus(item);
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
           value += blueBonus[i] * statusWeights[i];
+        value += blueBonus[5] * ptWeight;
       }
 
 

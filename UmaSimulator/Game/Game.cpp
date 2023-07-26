@@ -191,7 +191,26 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
     }
 
   }
+
   calculateTrainingValue();
+
+  //如果单个训练出现6个或者更多人头，则重新分配卡组
+  bool have6orMoreHeads = false;
+  for (int i = 0; i < 5; i++)
+  {
+    int c = 0;
+    for (int j = 0; j < 8; j++)
+      if (cardDistribution[i][j])
+        c++;
+    if (c >= 6)
+    {
+      have6orMoreHeads = true;
+      break;
+    }
+  }
+  if (have6orMoreHeads)
+    randomDistributeCards(rand);
+
 }
 
 void Game::calculateTrainingValue()
@@ -714,9 +733,9 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
   }
   else if (chosenTrain == 7)//比赛
   {
-    if (turn <= 12)
+    if (turn <= 12 || turn >= 72)
     {
-      printEvents("前13回合无法比赛");
+      printEvents("前13回合和最后6回合无法比赛");
       return false;
     }
     if (useVenus)
@@ -726,7 +745,7 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
       else
         return false;
     }
-    runRace(GameConstants::NormalRaceFiveStatusBonus, GameConstants::NormalRacePtBonus);
+    runRace(2, 40);//粗略的近似
     addSpirit(rand, spiritDistribution[chosenTrain]);
   }
   else if (chosenTrain == 6)//外出
@@ -809,8 +828,8 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
         addStatus(i, trainValue[chosenTrain][i]);
       skillPt += trainValue[chosenTrain][5];
       addVital(trainValue[chosenTrain][6]);
-      
-      //羁绊，红点
+
+      //羁绊
       for (int i = 0; i < 8; i++)
       {
         if (cardDistribution[chosenTrain][i])
@@ -822,16 +841,27 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
             addJiBan(i, 7);
           if (i == 6)skillPt += 2;//理事长
           if (i >= 6)continue;//理事长和记者
-          if (cardHint[i])//红点
-          {
-            addJiBan(i, 5);
-            auto& hintBonus = GameDatabase::AllSupportCards[cardId[i]].hintBonus;
-            for (int i = 0; i < 5; i++)
-              addStatus(i, hintBonus[i]);
-            skillPt += hintBonus[5];
-          }
         }
       }
+
+      //红点(hint)
+      vector<int> hintCards;
+      for (int i = 0; i < 6; i++)
+      {
+        if (cardDistribution[chosenTrain][i] && cardHint[i])
+        {
+          hintCards.push_back(i);
+        }
+      }
+
+      auto applyHint= [this](int i)  {
+        addJiBan(i, 5);
+        auto& hintBonus = GameDatabase::AllSupportCards[cardId[i]].hintBonus;
+        for (int i = 0; i < 5; i++)
+          addStatus(i, hintBonus[i]);
+        skillPt += hintBonus[5];
+      };
+
       
       //开蓝
       if (venusIsWisdomActive && venusAvailableWisdom == 2)
@@ -840,6 +870,17 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
         for (int i = 0; i < 5; i++)
           addStatus(i, blueVenusBonus[i]);
         skillPt += blueVenusBonus[5];
+
+        for (auto i = 0; i < hintCards.size(); i++)
+          applyHint(hintCards[i]);
+      }
+      else//一次只有一张卡的红点可以生效，除非开蓝
+      {
+        if (hintCards.size() != 0)
+        {
+          int hintCard = hintCards[rand() % hintCards.size()];
+          applyHint(hintCard);
+        }
       }
 
       //加碎片
@@ -1195,8 +1236,11 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   }
 
   //模拟乱七八糟加属性事件
-  addAllStatus(1);
-  printEvents("模拟随机事件：全属性+1");
+  if (turn < 72)
+  {
+    addAllStatus(1);
+    printEvents("模拟随机事件：全属性+1");
+  }
 
   //加体力
   if (randBool(rand, 0.1))
@@ -1206,14 +1250,14 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   }
 
   //加心情
-  if (randBool(rand, 0.03))
+  if (randBool(rand, 0.02))
   {
     addMotivation(1);
     printEvents("模拟随机事件：心情+1");
   }
 
   //掉心情
-  if (randBool(rand, 0.03))
+  if (randBool(rand, 0.04))
   {
     addMotivation(-1);
     printEvents("模拟随机事件：\033[0m\033[33m心情-1\033[0m\033[32m");
