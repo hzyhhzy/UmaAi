@@ -147,27 +147,27 @@ void main_test6()
           printPolicy(policy.outgoingPolicy[i] * policy.trainingPolicy[6]);
         cout << endl;
 
-        cout << "本局决策：是否使用女神：";
+        cout << "\033[1m\033[33m" << "本局决策：" << "\033[0m" << "是否使用女神：";
         if (policy.useVenusPolicy > 0.5) {
-            cout << "是，";
+            cout << "\033[32m" << "是" << "\033[0m" << "，选择：";
             std::size_t godChoice = findMaxIndex(policy.threeChoicesEventPolicy);
             switch (godChoice) {
             case 0:
-                cout << "选择红（1）";
+                cout << "\033[41m" << "红（1）" << "\033[0m";
                 break;
             case 1:
-                cout << "选择蓝（2）";
+                cout << "\033[44m" << "蓝（2）" << "\033[0m";
                 break;
             case 2:
-                cout << "选择黄（3）";
+                cout << "\033[43m" << "黄（3）" << "\033[0m";
                 break;
             }
         }
         else {
-            cout << "否;";
+            cout << "\033[31m" << "否";
         }
 
-        cout << "本局决策：";
+        cout << "\033[0m" << " | 本局决策：" << "\033[32m";
         std::size_t trainChoice = findMaxIndex(policy.trainingPolicy);
         switch (trainChoice) {
         case 0:
@@ -196,25 +196,26 @@ void main_test6()
             std::size_t outgoingPolicy = findMaxIndex(policy.outgoingPolicy);
             switch(outgoingPolicy) {
             case 0:
-                cout << "三女神 - 1";
+                cout << "\033[31m" << "三女神 - 1";
                 break;
             case 1:
-                cout << "三女神 - 2";
+                cout << "\033[34m" << "三女神 - 2";
                 break;
             case 2:
-                cout << "三女神 - 3";
+                cout << "\033[33m" << "三女神 - 3";
                 break;
             case 3:
-                cout << "三女神 - 4-1";
+                cout << "\033[36m" << "三女神 - 4-1";
                 break;
             case 4:
-                cout << "三女神 - 4-2";
+                cout << "\033[36m" << "三女神 - 4-2";
                 break;
             case 5:
-                cout << "普通外出";
+                cout << "\033[35m" << "普通外出";
             }
+            cout << "\033[0m";
         }
-        cout << endl;
+        cout << "\033[0m" << endl;
       }
     }
 
