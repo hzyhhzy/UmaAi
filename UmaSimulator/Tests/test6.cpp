@@ -191,10 +191,10 @@ void main_test6()
             cout << "休息;";
             break;
         case 6:
-            cout << "比赛;";
+            cout << "外出;";
             break;
         case 7:
-            cout << "外出；";
+            cout << "比赛；";
             std::size_t outgoingPolicy = findMaxIndex(policy.outgoingPolicy);
             switch(outgoingPolicy) {
             case 0:
