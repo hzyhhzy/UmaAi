@@ -149,7 +149,7 @@ void main_test6()
 
         cout << "\033[1m\033[33m" << "本局决策：" << "\033[0m" << "是否使用女神：";
         if (policy.useVenusPolicy > 0.5) {
-            cout << "\033[32m" << "是" << "\033[0m" << "，三选一：";
+            cout << "\033[32m" << "是" << "\033[0m" << "，神团三选一：";
             std::size_t godChoice = findMaxIndex(policy.threeChoicesEventPolicy);
             switch (godChoice) {
             case 0:
