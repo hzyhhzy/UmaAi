@@ -154,10 +154,13 @@ void main_test6()
             switch (godChoice) {
             case 0:
                 cout << "选择红（1）";
+                break;
             case 1:
                 cout << "选择蓝（2）";
+                break;
             case 2:
                 cout << "选择黄（3）";
+                break;
             }
         }
         else {
@@ -169,32 +172,44 @@ void main_test6()
         switch (trainChoice) {
         case 0:
             cout << "速度训练；";
+            break;
         case 1:
-            cout << "耐力训练";
+            cout << "耐力训练;";
+            break;
         case 2:
-            cout << "力量训练";
+            cout << "力量训练;";
+            break;
         case 3:
-            cout << "根性训练";
+            cout << "根性训练;";
+            break;
         case 4:
-            cout << "智力训练";
+            cout << "智力训练;";
+            break;
         case 5:
-            cout << "休息";
+            cout << "休息;";
+            break;
         case 6:
-            cout << "比赛";
+            cout << "比赛;";
+            break;
         case 7:
             cout << "外出；";
             std::size_t outgoingPolicy = findMaxIndex(policy.outgoingPolicy);
             switch(outgoingPolicy) {
             case 0:
                 cout << "三女神 - 1";
+                break;
             case 1:
                 cout << "三女神 - 2";
+                break;
             case 2:
                 cout << "三女神 - 3";
+                break;
             case 3:
                 cout << "三女神 - 4-1";
+                break;
             case 4:
                 cout << "三女神 - 4-2";
+                break;
             case 5:
                 cout << "普通外出";
             }
