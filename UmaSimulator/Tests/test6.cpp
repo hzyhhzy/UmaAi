@@ -147,7 +147,7 @@ void main_test6()
           printPolicy(policy.outgoingPolicy[i] * policy.trainingPolicy[6]);
         cout << endl;
 
-        cout << "是否使用女神：";
+        cout << "本局决策：是否使用女神：";
         if (policy.useVenusPolicy > 0.5) {
             cout << "是，";
             std::size_t godChoice = findMaxIndex(policy.threeChoicesEventPolicy);
