@@ -171,19 +171,19 @@ void main_test6()
         std::size_t trainChoice = findMaxIndex(policy.trainingPolicy);
         switch (trainChoice) {
         case 0:
-            cout << "ËÙ¶ÈÑµÁ·£»";
+            cout << "ËÙ¶ÈÑµÁ·£¨ÑµÁ·1£©£»";
             break;
         case 1:
-            cout << "ÄÍÁ¦ÑµÁ·;";
+            cout << "ÄÍÁ¦ÑµÁ·£¨ÑµÁ·2£©;";
             break;
         case 2:
-            cout << "Á¦Á¿ÑµÁ·;";
+            cout << "Á¦Á¿ÑµÁ·£¨ÑµÁ·3£©;";
             break;
         case 3:
-            cout << "¸ùÐÔÑµÁ·;";
+            cout << "¸ùÐÔÑµÁ·£¨ÑµÁ·4£©;";
             break;
         case 4:
-            cout << "ÖÇÁ¦ÑµÁ·;";
+            cout << "ÖÇÁ¦ÑµÁ·£¨ÑµÁ·5£©;";
             break;
         case 5:
             cout << "ÐÝÏ¢;";
