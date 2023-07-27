@@ -25,7 +25,7 @@ void GameDatabase::loadUmas(const string& dir)
                     stringstream ss;
                     ss << ifs.rdbuf();
                     ifs.close();
-                    json j = json::parse(ss.str());
+                    json j = json::parse(ss.str(), nullptr, true, true);
 
                     UmaData jdata;
                     j.get_to(jdata);

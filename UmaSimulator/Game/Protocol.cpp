@@ -142,7 +142,18 @@ bool Game::loadGameFromJson(std::string jsonStr)
 
     initRandomGenerators();
     calculateVenusSpiritsBonus();
-    calculateTrainingValue();
+
+    for (int i = 0; i < 5; i++)
+      for (int k = 0; k < 7; k++)
+      {
+        trainValue[i][k] = j["trainValue"][i][k];
+      }
+
+    for (int i = 0; i < 5; i++)
+      failRate[i] = j["failRate"][i];
+
+
+    //calculateTrainingValue();
 
   }
   catch (string e)

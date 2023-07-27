@@ -17,7 +17,7 @@ void GameConfig::load(const string& path)
 		stringstream ss;
 		ss << ifs.rdbuf();
 		ifs.close();
-		json j = json::parse(ss.str());
+		json j = json::parse(ss.str(),nullptr,true,true);
 
 		j.at("noColor").get_to(GameConfig::noColor);
 		j.at("radicalFactor").get_to(GameConfig::radicalFactor);

@@ -38,7 +38,7 @@ void main_test6()
   //std::cout << "当前工作目录：" << filesystem::current_path() << endl;
   cout << "当前程序目录：" << exeDir << endl;
   GameDatabase::loadUmas("db/uma");
-  GameConfig::load("config.json");
+  GameConfig::load("aiConfig.json");
 
   for (int i = 0; i < GameConfig::threadNum; i++)
       evaluators.push_back(Evaluator(NULL, 128));
