@@ -190,10 +190,11 @@ void main_test6()
         case 5:
             cout << "休息;";
             break;
-        case 6:
+        case 6: 
+        {
             cout << "外出；";
             std::size_t outgoingPolicy = findMaxIndex(policy.outgoingPolicy);
-            switch(outgoingPolicy) {
+            switch (outgoingPolicy) {
             case 0:
                 cout << "\033[31m" << "三女神 - 1";
                 break;
@@ -213,6 +214,8 @@ void main_test6()
                 cout << "\033[35m" << "普通外出";
             }
             cout << "\033[0m";
+            break;
+        }
         case 7:
             cout << "比赛;";
             break;
