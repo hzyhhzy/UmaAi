@@ -14,6 +14,11 @@
 #include <cstdlib>
 using namespace std;
 
+template <typename T, std::size_t N>
+std::size_t findMaxIndex(const T(&arr)[N]) {
+    return std::distance(arr, std::max_element(arr, arr + N));
+}
+
 void main_test6()
 {
   //const double radicalFactor = 5;//激进度
@@ -140,6 +145,60 @@ void main_test6()
         cout << "五个女神外出以及普通外出：";
         for (int i = 0; i < 6; i++)
           printPolicy(policy.outgoingPolicy[i] * policy.trainingPolicy[6]);
+        cout << endl;
+
+        cout << "是否使用女神：";
+        if (policy.useVenusPolicy > 0.5) {
+            cout << "是，";
+            std::size_t godChoice = findMaxIndex(policy.threeChoicesEventPolicy);
+            switch (godChoice) {
+            case 0:
+                cout << "选择红（1）";
+            case 1:
+                cout << "选择蓝（2）";
+            case 2:
+                cout << "选择黄（3）";
+            }
+        }
+        else {
+            cout << "否;";
+        }
+
+        cout << "本局决策：";
+        std::size_t trainChoice = findMaxIndex(policy.trainingPolicy);
+        switch (trainChoice) {
+        case 0:
+            cout << "速度训练；";
+        case 1:
+            cout << "耐力训练";
+        case 2:
+            cout << "力量训练";
+        case 3:
+            cout << "根性训练";
+        case 4:
+            cout << "智力训练";
+        case 5:
+            cout << "休息";
+        case 6:
+            cout << "比赛";
+        case 7:
+            cout << "外出；";
+            std::size_t outgoingPolicy = findMaxIndex(policy.outgoingPolicy);
+            switch(outgoingPolicy) {
+            case 0:
+                cout << "三女神 - 1";
+            case 1:
+                cout << "三女神 - 2";
+            case 2:
+                cout << "三女神 - 3";
+            case 3:
+                cout << "三女神 - 4-1";
+            case 4:
+                cout << "三女神 - 4-2";
+            case 5:
+                cout << "普通外出";
+            }
+        }
         cout << endl;
       }
     }
