@@ -182,5 +182,11 @@
     <ClInclude Include="GameDatabase\GameConfig.h">
       <Filter>头文件\GameDatabase</Filter>
     </ClInclude>
+    <ClInclude Include="GameDatabase\CardData.h">
+      <Filter>头文件\GameDatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDatabase\SkillData.h">
+      <Filter>头文件\GameDatabase</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

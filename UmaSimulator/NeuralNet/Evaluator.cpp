@@ -209,7 +209,7 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
 
       double expectSpiritNum = int(game.spiritDistribution[item] / 32) + 1;
       double value = 0;
-      assert(GameDatabase::AllSupportCards[game.cardId[0]].cardType == 5 && "神团卡不在第一个位置");
+      assert(game.cardData[0]->cardType == 5 && "神团卡不在第一个位置");
 
       int cardHintNum = 0;//所有hint随机取一个，所以打分的时候取平均
       for (int head = 0; head < 6; head++)
@@ -277,8 +277,8 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
         if (game.cardHint[head])
         {
           for (int i = 0; i < 5; i++)
-            value += GameDatabase::AllSupportCards[game.cardId[head]].hintBonus[i] * statusWeights[i] / cardHintNum;
-          value += GameDatabase::AllSupportCards[game.cardId[head]].hintBonus[5] * ptWeight / cardHintNum;
+            value += game.cardData[head]->hintBonus[i] * statusWeights[i] / cardHintNum;
+          value += game.cardData[head]->hintBonus[5] * ptWeight / cardHintNum;
         }
 
       }

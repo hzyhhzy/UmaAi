@@ -283,7 +283,7 @@ void Game::print() const
 
         //找到人头了
         thisRowIsNotEmpty = true;
-        string s = cardIdx < 6 ? GameDatabase::AllSupportCardNames[cardId[cardIdx]]
+        string s = cardIdx < 6 ? GameDatabase::AllCards[cardId[cardIdx]].cardName
           : cardIdx == 6 ? "理事长"
           : cardIdx == 7 ? "记者"
           : "未知";
@@ -291,7 +291,7 @@ void Game::print() const
         if (jiban != 100)
           s = s + ":" + to_string(jiban);
 
-        assert(GameDatabase::AllSupportCards[cardId[0]].cardType == 5 && "神团卡不在第一个位置");
+        assert(GameDatabase::AllCards[cardId[0]].cardType == 5 && "神团卡不在第一个位置");
 
         if (cardIdx == 0)//神团
         {
@@ -302,7 +302,7 @@ void Game::print() const
         }
         else if (cardIdx < 6)//其他支援卡
         {
-          int cardType = GameDatabase::AllSupportCards[cardId[cardIdx]].cardType;
+          int cardType = GameDatabase::AllCards[cardId[cardIdx]].cardType;
           assert(cardType < 5 && cardType >= 0 && "第2到第6张卡必须为速耐力根智卡");
           assert(!venusIsWisdomActive && "开女神睿智是在玩家选择之后");//排除了开黄闪彩的情况
           if(jiban<80)

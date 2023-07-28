@@ -17,7 +17,7 @@ int mask_umaId(int umaId)
 
 int mask_scId(int scId)
 {
-    return scId % 100000 + 400000;
+    return scId % 100000;
 }
 
 bool Game::loadGameFromJson(std::string jsonStr)
@@ -52,11 +52,17 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 6; i++)
     {
       int c = j["cardId"][i];
-      if (maskUmaId)
-          c = mask_scId(c);
-      if (!GameDatabase::AllSupportCardGameIdToSimulatorId.count(c))
+      int type = c / 100000;
+      c = c % 100000;
+
+      if (!GameDatabase::AllCards.count(c))
         throw string("未知支援卡");
-      cardId[i] = GameDatabase::AllSupportCardGameIdToSimulatorId.at(c);
+      cardId[i] = c;
+
+      GameDatabase::AllCards[c].cardValueInit(type);
+      
+      cardData[i] = &GameDatabase::AllCards[c];
+
     }
 
     for (int i = 0; i < 8; i++)
@@ -112,15 +118,14 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 8; i++)
       spiritDistribution[i] = j["spiritDistribution"][i];
 
-    // std::cout << "Others load finished\n";
 
     // 5号是友人或团队
-    if ( GameDatabase::AllSupportCards[cardId[0]].cardType != 5)//1号位不是神团，交换卡组位置，把神团换到1号位
+    if ( GameDatabase::AllCards[cardId[0]].cardType != 5)//1号位不是神团，交换卡组位置，把神团换到1号位
     {
       int s = -1;//神团原位置
       for (int i = 1; i < 6; i++)
       {
-        if (GameDatabase::AllSupportCards[cardId[i]].cardType == 5)
+        if (GameDatabase::AllCards[cardId[i]].cardType == 5)
         {
           s = i;
           break;
@@ -130,6 +135,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         throw string("没带神团");
 
       std::swap(cardId[s], cardId[0]);
+      std::swap(cardData[s], cardData[0]);
       std::swap(cardJiBan[s], cardJiBan[0]);
 
       for (int i = 0; i < 5; i++)

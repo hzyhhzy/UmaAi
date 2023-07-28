@@ -8,6 +8,11 @@ struct CardTrainingEffect
   double xunLian;//训练加成
   double bonus[6];//速耐力根智pt的加成
   int vitalBonus;//体力回复量（主要是智彩圈）
+  double failRateDrop; //失败率降低
+  double vitalCostDrop; //体力消费下降
+
+
+
   //int initialBonus[6];//初期速耐力根智pt的提升
   //int initialJiBan;//初始羁绊
   //double saiHou;//赛后

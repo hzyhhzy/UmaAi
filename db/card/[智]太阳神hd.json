@@ -1,0 +1,60 @@
+{
+    "cardId": 30155,
+    "cardName": "[智]太阳神hd",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 4,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0
+            ],
+            "deYiLv": 75.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 50.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15
+            ],
+            "hintProbIncrease": 40.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                35,
+                0
+            ],
+            "initialJiBan": 25,
+            "saiHou": 5.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 5,
+            "xunLian": 5.0,
+            "youQing": 15.0
+        }
+    ]
+}

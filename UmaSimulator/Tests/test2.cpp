@@ -47,13 +47,13 @@ void main_test2()
       }
       total += bestv;
     }
-    cout <<GameDatabase::AllSupportCardNames[gen]<<": "<< total / N << endl;
+    cout <<GameDatabase::AllCards[gen].cardName<<": "<< total / N << endl;
   }
 
   game.cardId[4] = 4;//改乌拉拉的友情加成
   for (int yq = 0; yq <= 100; yq+=10)
   {
-    GameDatabase::AllSupportCards[4].youQingBasic = yq;
+    GameDatabase::AllCards[30019].youQing = yq;
     int N = 300000;
     double total = 0;
     for (int i = 0; i < N; i++)
@@ -74,11 +74,11 @@ void main_test2()
     }
     cout << "友情="<<yq << ": " << total / N << endl;
   }
-  GameDatabase::AllSupportCards[4].youQingBasic = 32;
+  GameDatabase::AllCards[30019].youQing = 32;
 
   for (int d = 0; d <= 100; d += 10)
   {
-    GameDatabase::AllSupportCards[4].deYiLv=d;
+    GameDatabase::AllCards[30019].deYiLv=d;
     int N = 300000;
     double total = 0;
     for (int i = 0; i < N; i++)
@@ -100,11 +100,11 @@ void main_test2()
     cout << "得意率=" << d << ": " << total / N << endl;
   }
 
-  GameDatabase::AllSupportCards[4].deYiLv = 50;
+  GameDatabase::AllCards[30134].deYiLv = 50;
 
   for (int d = 0; d <= 100; d += 10)
   {
-    GameDatabase::AllSupportCards[2].deYiLv = d;
+    GameDatabase::AllCards[30134].deYiLv = d;
     int N = 300000;
     double total = 0;
     for (int i = 0; i < N; i++)
@@ -126,11 +126,11 @@ void main_test2()
     cout << "高峰得意率=" << d << ": " << total / N << endl;
   }
 
-  GameDatabase::AllSupportCards[2].deYiLv = 50;
+  GameDatabase::AllCards[30134].deYiLv = 50;
 
   for (int d = 0; d <= 20; d += 2)
   {
-    GameDatabase::AllSupportCards[4].xunLianBasic = d;
+    GameDatabase::AllCards[30019].xunLian = d;
     int N = 300000;
     double total = 0;
     for (int i = 0; i < N; i++)

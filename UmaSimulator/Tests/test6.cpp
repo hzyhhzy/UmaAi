@@ -7,8 +7,10 @@
 #include <chrono>  // for std::chrono::seconds
 
 #include "../Game/Game.h"
+#include "../GameDatabase/GameDatabase.h"
 #include "../GameDatabase/GameConfig.h"
 #include "../Search/Search.h"
+
 #include "windows.h"
 #include <filesystem>
 #include <cstdlib>
@@ -37,8 +39,9 @@ void main_test6()
   filesystem::current_path(exeDir);
   //std::cout << "当前工作目录：" << filesystem::current_path() << endl;
   cout << "当前程序目录：" << exeDir << endl;
-  GameDatabase::loadUmas("db/uma");
-  GameConfig::load("aiConfig.json");
+  GameDatabase::loadUmas("./db/uma");
+  GameDatabase::loadCards("./db/card");
+  GameConfig::load("./aiConfig.json");
 
   for (int i = 0; i < GameConfig::threadNum; i++)
       evaluators.push_back(Evaluator(NULL, 128));

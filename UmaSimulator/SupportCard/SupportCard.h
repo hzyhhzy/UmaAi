@@ -1,6 +1,6 @@
 #pragma once
 #include "CardEffect.h"
-
+/*
 class Game;
 
 struct SupportCard
@@ -21,6 +21,9 @@ struct SupportCard
   double hintProbIncrease;//启发发生率提升
   double deYiLv;//得意率
 
+  int specialCount; // 用来处理特殊的固有
+
 
   CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan) const;//根据游戏状态计算支援卡的“固有”
 };
+*/
