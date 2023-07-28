@@ -9,6 +9,10 @@
 #include "../NeuralNet/Evaluator.h"
 #include "../Search/Search.h"
 #include "../External/termcolor.hpp"
+
+#include "../GameDatabase/GameDatabase.h"
+#include "../GameDatabase/GameConfig.h"
+
 using namespace std;
 
 const bool handWrittenEvaluationTest = true;
@@ -35,8 +39,14 @@ void worker()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  int umaId = 4;//我自己的号
-  int cards[6] = { 1,2,3,4,5,6 };
+  int umaId = 101101;//我自己的号
+  int cards[6] = { 30137,30134,30010,30019,30011,30107};
+
+  for (int i = 0; i < 6; ++i) {
+
+      GameDatabase::AllCards[cards[i]].cardValueInit(4);
+
+  }
 
   //int umaId = 5;//二之宫
   //int cards[6] = { 1,2,14,10,11,15 };
@@ -112,6 +122,20 @@ void worker()
 
 void main_test5()
 {
+
+
+    // 检查工作目录
+    wchar_t buf[10240];
+    GetModuleFileNameW(0, buf, 10240);
+    filesystem::path exeDir = filesystem::path(buf).parent_path();
+    filesystem::current_path(exeDir);
+    //std::cout << "当前工作目录：" << filesystem::current_path() << endl;
+    cout << "当前程序目录：" << exeDir << endl;
+    GameDatabase::loadUmas("./db/uma");
+    GameDatabase::loadCards("./db/card");
+    GameConfig::load("./aiConfig.json");
+
+
   for (int i = 0; i < 200; i++)segmentStats[i] = 0;
 
 

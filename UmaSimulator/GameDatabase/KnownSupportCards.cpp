@@ -58,12 +58,14 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
 {
     CardTrainingEffect effect =
     {
-      youQing,
-      ganJing,
-      xunLian,
-      {bonus[0],bonus[1],bonus[2],bonus[3],bonus[4],bonus[5]},
-      wizVitalBonus
+      youQingBasic,
+      ganJingBasic,
+      xunLianBasic,
+      {bonusBasic[0],bonusBasic[1],bonusBasic[2],bonusBasic[3],bonusBasic[4],bonusBasic[5]},
+      wizVitalBonusBasic
     };
+
+
 
     bool isShining = true;//是否闪彩
     if (cardType < 5)//速耐力根智卡
@@ -71,7 +73,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         if (jiBan < 80)isShining = false;
         if (cardType != atTrain)isShining = false;
     }
-    else if (GameDatabase::AllCards[cardID].cardType == 5)//神团
+    else if (cardType == 5)//神团
     {
         if (!game.venusCardIsQingRe)
             isShining = false;
@@ -90,7 +92,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
 
     //接下来是各种固有
     //1.神团
-    if (cardID == 1)
+    if (cardID == 30137)
     {
         if (jiBan < 100)
         {
@@ -102,29 +104,30 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     }
     //2.高峰
     //为了简化，视为初始训练加成是4%，第一年逐渐增大到20%，也就是第n个回合4+n*(2/3)%
-    else if (cardID == 2)
+    else if (cardID == 30134)
     {
         if (game.turn < 24)
             effect.xunLian = 4 + 0.6666667 * game.turn;
     }
     //3.美妙
-    else if (cardID == 3)
+    else if (cardID == 30010)
     {
         //啥都没有
     }
     //4.根乌拉拉
-    else if (cardID == 4)
+    else if (cardID == 30019)
     {
         //啥都没有
     }
     //5.根风神
-    else if (cardID == 5)
+    else if (cardID == 30011)
     {
         //啥都没有
     }
     //6.水司机
-    else if (cardID == 6)
+    else if (cardID ==30107)
     {
+
         int traininglevel = game.getTrainingLevel(atTrain);
         effect.xunLian = 5 + traininglevel * 5;
         if (effect.xunLian > 25)effect.xunLian = 25;

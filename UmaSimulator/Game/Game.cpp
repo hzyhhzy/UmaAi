@@ -96,11 +96,8 @@ void Game::initRandomGenerators()
     std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
     if (i < 6)
     {
-
-        
-
-      int cardType = GameDatabase::AllCards[cardId[i]].cardType;
-      int deYiLv = GameDatabase::AllCards[cardId[i]].deYiLv;
+      int cardType = cardData[i]->cardType;
+      int deYiLv = cardData[i]->deYiLv;
       if (cardType >= 0 && cardType < 5)//速耐力根智卡
         probs[cardType] += deYiLv;
       else //友人卡，鸽的概率较高
@@ -180,7 +177,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
           {
             if (cardDistribution[i][card])//这个卡在这个训练
             {
-              isShining |= cardData[i]->getCardEffect(*this, i, cardJiBan[card], cardData[i]->effectFactor).youQing > 0;
+              isShining |= cardData[card]->getCardEffect(*this, i, cardJiBan[card], cardData[card]->effectFactor).youQing > 0;
             }
           }
           if (isShining)

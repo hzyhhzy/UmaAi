@@ -53,7 +53,7 @@ void main_test2()
   game.cardId[4] = 4;//改乌拉拉的友情加成
   for (int yq = 0; yq <= 100; yq+=10)
   {
-    GameDatabase::AllCards[30019].youQing = yq;
+    GameDatabase::AllCards[30019].youQingBasic = yq;
     int N = 300000;
     double total = 0;
     for (int i = 0; i < N; i++)
@@ -74,7 +74,7 @@ void main_test2()
     }
     cout << "友情="<<yq << ": " << total / N << endl;
   }
-  GameDatabase::AllCards[30019].youQing = 32;
+  GameDatabase::AllCards[30019].youQingBasic = 32;
 
   for (int d = 0; d <= 100; d += 10)
   {
@@ -130,7 +130,7 @@ void main_test2()
 
   for (int d = 0; d <= 20; d += 2)
   {
-    GameDatabase::AllCards[30019].xunLian = d;
+    GameDatabase::AllCards[30019].xunLianBasic = d;
     int N = 300000;
     double total = 0;
     for (int i = 0; i < N; i++)

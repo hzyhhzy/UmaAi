@@ -13,11 +13,11 @@ class Game;
 struct CardValue {
 	//去除掉了basic字段
 	bool filled;
-	double youQing;//友情加成
-	double ganJing;//干劲加成
-	double xunLian;//训练加成
-	double bonus[6];//速耐力根智pt的加成
-	int wizVitalBonus;//智力彩圈体力回复量
+	double youQingBasic;//友情加成
+	double ganJingBasic;//干劲加成
+	double xunLianBasic;//训练加成
+	double bonusBasic[6];//速耐力根智pt的加成
+	int wizVitalBonusBasic;//智力彩圈体力回复量
 	int initialBonus[6];//初期速耐力根智pt的提升
 	int initialJiBan;//初始羁绊
 	double saiHou;//赛后
@@ -40,11 +40,11 @@ struct SupportCard
 	CardValue level[5];
 	// 各个突破等级的数据
 
-	double youQing;//友情加成
-	double ganJing;//干劲加成
-	double xunLian;//训练加成
-	double bonus[6];//速耐力根智pt的加成
-	int wizVitalBonus;//智力彩圈体力回复量
+	double youQingBasic;//友情加成
+	double ganJingBasic;//干劲加成
+	double xunLianBasic;//训练加成
+	double bonusBasic[6];//速耐力根智pt的加成
+	int wizVitalBonusBasic;//智力彩圈体力回复量
 	int initialBonus[6];//初期速耐力根智pt的提升
 	int initialJiBan;//初始羁绊
 	double saiHou;//赛后
@@ -62,7 +62,6 @@ struct SupportCard
 	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effecFactor) const;//根据游戏状态计算支援卡的“固有”
 
 	void cardValueInit(int x) {
-
 		while (x <= 4 && level[x].filled == false)
 			x++;
 		if (x > 4) {
@@ -70,18 +69,18 @@ struct SupportCard
 			exit(0);
 		}
 
-		youQing = level[x].youQing; 
-		ganJing = level[x].ganJing;
-		xunLian = level[x].xunLian;
+		youQingBasic = level[x].youQingBasic;
+		ganJingBasic = level[x].ganJingBasic;
+		xunLianBasic = level[x].xunLianBasic;
 		for (int i = 0; i < 6; ++i)
-			bonus[i] = level[x].bonus[i];
-		wizVitalBonus = level[x].wizVitalBonus;
+			bonusBasic[i] = level[x].bonusBasic[i];
+		wizVitalBonusBasic = level[x].wizVitalBonusBasic;
 		for (int i = 0; i < 6; ++i)
-			initialBonus[6] = level[x].initialBonus[i];
+			initialBonus[i] = level[x].initialBonus[i];
 		initialJiBan = level[x].initialJiBan;
 		saiHou = level[x].saiHou;
 		for (int i = 0; i < 6; ++i)
-			hintBonus[6] = level[x].hintBonus[i];
+			hintBonus[i] = level[x].hintBonus[i];
 		hintProbIncrease = level[x].hintProbIncrease;
 		deYiLv = level[x].deYiLv;
 		failRateDrop = level[x].failRateDrop;
@@ -111,11 +110,11 @@ struct SupportCard
 				continue;
 			}
 			j["cardValue"][x]["filled"] = true;
-			j["cardValue"][x]["youQing"] = level[x].youQing;
-			j["cardValue"][x]["ganJing"] = level[x].ganJing;
-			j["cardValue"][x]["xunLian"] = level[x].xunLian;
-			j["cardValue"][x]["bonus"] = level[x].bonus;
-			j["cardValue"][x]["wizVitalBonus"] = level[x].wizVitalBonus;
+			j["cardValue"][x]["youQing"] = level[x].youQingBasic;
+			j["cardValue"][x]["ganJing"] = level[x].ganJingBasic;
+			j["cardValue"][x]["xunLian"] = level[x].xunLianBasic;
+			j["cardValue"][x]["bonus"] = level[x].bonusBasic;
+			j["cardValue"][x]["wizVitalBonus"] = level[x].wizVitalBonusBasic;
 			j["cardValue"][x]["initialBonus"] = level[x].initialBonus;
 			j["cardValue"][x]["initialJiBan"] = level[x].initialJiBan;
 			j["cardValue"][x]["saiHou"] = level[x].saiHou;
@@ -149,11 +148,11 @@ struct SupportCard
 			j["cardValue"][x].at("filled").get_to(level[x].filled);
 			if (level[x].filled == false) continue;
 
-			j["cardValue"][x].at("youQing").get_to(level[x].youQing);
-			j["cardValue"][x].at("ganJing").get_to(level[x].ganJing);
-			j["cardValue"][x].at("xunLian").get_to(level[x].xunLian);
-			j["cardValue"][x].at("bonus").get_to(level[x].bonus);
-			j["cardValue"][x].at("wizVitalBonus").get_to(level[x].wizVitalBonus);
+			j["cardValue"][x].at("youQing").get_to(level[x].youQingBasic);
+			j["cardValue"][x].at("ganJing").get_to(level[x].ganJingBasic);
+			j["cardValue"][x].at("xunLian").get_to(level[x].xunLianBasic);
+			j["cardValue"][x].at("bonus").get_to(level[x].bonusBasic);
+			j["cardValue"][x].at("wizVitalBonus").get_to(level[x].wizVitalBonusBasic);
 			j["cardValue"][x].at("initialBonus").get_to(level[x].initialBonus);
 			j["cardValue"][x].at("initialJiBan").get_to(level[x].initialJiBan);
 			j["cardValue"][x].at("saiHou").get_to(level[x].saiHou);
