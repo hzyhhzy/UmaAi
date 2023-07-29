@@ -5,6 +5,7 @@
 
 UmaSimulator/packets
 packets
+__pycache__
 
 # User-specific files
 *.rsuser
