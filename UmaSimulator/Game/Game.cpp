@@ -47,7 +47,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
   for (int i = 0; i < 6; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
-      addStatus(j, cardData[j]->initialBonus[j]);
+      addStatus(j, cardData[i]->initialBonus[j]);
     skillPt += cardData[i]->initialBonus[5];
   }
   for (int i = 0; i < 5; i++)
