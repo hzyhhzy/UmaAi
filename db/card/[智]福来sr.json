@@ -1,0 +1,60 @@
+{
+    "cardId": 20016,
+    "cardName": "[智]福来sr",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 4,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0
+            ],
+            "deYiLv": 35.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 50.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                10
+            ],
+            "hintProbIncrease": 40.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 40,
+            "saiHou": 0.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 4,
+            "xunLian": 5.0,
+            "youQing": 32.0
+        }
+    ]
+}

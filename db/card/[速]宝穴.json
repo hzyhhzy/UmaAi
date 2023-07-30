@@ -1,0 +1,60 @@
+{
+    "cardId": 30147,
+    "cardName": "[速]宝穴",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 0,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                3.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deYiLv": 65.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 0.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15
+            ],
+            "hintProbIncrease": 40.0,
+            "initialBonus": [
+                35,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 30,
+            "saiHou": 10.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 10.0,
+            "youQing": 30.0
+        }
+    ]
+}

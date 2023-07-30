@@ -1,0 +1,60 @@
+{
+    "cardId": 30016,
+    "cardName": "[耐]海湾",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 1,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "deYiLv": 62.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 0.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                5
+            ],
+            "hintProbIncrease": 0.0,
+            "initialBonus": [
+                0,
+                35,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 30,
+            "saiHou": 10.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 15.0,
+            "youQing": 37.5
+        }
+    ]
+}

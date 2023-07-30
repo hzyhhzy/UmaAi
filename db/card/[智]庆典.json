@@ -1,0 +1,60 @@
+{
+    "cardId": 30108,
+    "cardName": "[智]庆典",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 4,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0
+            ],
+            "deYiLv": 0.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 60.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                30
+            ],
+            "hintProbIncrease": 50.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 20,
+            "saiHou": 10.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 5,
+            "xunLian": 15.0,
+            "youQing": 20.0
+        }
+    ]
+}

@@ -61,7 +61,7 @@ void Search::runSearch(const Game& game, Evaluator* evaluators,
       //对应位置01234，女神三选一事件对应8 9 10 11（不出，红，蓝，黄），休息5，外出6和12~17，比赛7
       for (int item = 0; item < 5; item++)
       {
-        assert(GameDatabase::AllSupportCards[game.cardId[0]].cardType == 5 && "神团卡不在第一个位置");
+        assert(GameDatabase::AllCards[game.cardId[0]].cardType == 5 && "神团卡不在第一个位置");
         if (game.cardDistribution[item][0])//神团在这里，需要考虑三选一事件
         {
           double threeChoicesProb = game.getThreeChoicesEventProb(useVenus);
@@ -192,6 +192,7 @@ static void evaluateSingleActionStoreAll(ModelOutputValueV1* allResults, const G
     targetScores.assign(batchsize, targetScore);
 
     Game gameCopy = game;
+
     gameCopy.playerPrint = false;
     std::vector<Game> gamesBuf;
 

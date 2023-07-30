@@ -1,0 +1,60 @@
+{
+    "cardId": 30141,
+    "cardName": "[智]波旁",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 4,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                2.0,
+                0.0
+            ],
+            "deYiLv": 65.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 0.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15
+            ],
+            "hintProbIncrease": 40.0,
+            "initialBonus": [
+                12,
+                12,
+                12,
+                12,
+                12,
+                0
+            ],
+            "initialJiBan": 30,
+            "saiHou": 0.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 5,
+            "xunLian": 15.0,
+            "youQing": 30.0
+        }
+    ]
+}

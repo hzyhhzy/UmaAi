@@ -1,0 +1,60 @@
+{
+    "cardId": 30010,
+    "cardName": "[智]美妙",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 4,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0
+            ],
+            "deYiLv": 35.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 30.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                5
+            ],
+            "hintProbIncrease": 0.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                35,
+                0
+            ],
+            "initialJiBan": 15,
+            "saiHou": 10.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 5,
+            "xunLian": 15.0,
+            "youQing": 37.5
+        }
+    ]
+}

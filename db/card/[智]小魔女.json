@@ -1,0 +1,60 @@
+{
+    "cardId": 30128,
+    "cardName": "[智]小魔女",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 4,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                2.0,
+                1.0
+            ],
+            "deYiLv": 75.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 30.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15
+            ],
+            "hintProbIncrease": 50.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 15,
+            "saiHou": 5.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 5,
+            "xunLian": 0.0,
+            "youQing": 30.0
+        }
+    ]
+}

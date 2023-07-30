@@ -1,0 +1,60 @@
+{
+    "cardId": 30078,
+    "cardName": "[速]福来",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 0,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "deYiLv": 0.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 45.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "hintProbIncrease": 0.0,
+            "initialBonus": [
+                30,
+                30,
+                30,
+                30,
+                30,
+                0
+            ],
+            "initialJiBan": 20,
+            "saiHou": 10.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 10.0,
+            "youQing": 20.0
+        }
+    ]
+}

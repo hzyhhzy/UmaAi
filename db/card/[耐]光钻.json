@@ -1,0 +1,60 @@
+{
+    "cardId": 30029,
+    "cardName": "[耐]光钻",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 1,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0
+            ],
+            "deYiLv": 50.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 55.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "hintProbIncrease": 0.0,
+            "initialBonus": [
+                0,
+                20,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 40,
+            "saiHou": 10.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 10.0,
+            "youQing": 20.0
+        }
+    ]
+}

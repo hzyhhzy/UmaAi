@@ -1,0 +1,60 @@
+{
+    "cardId": 30142,
+    "cardName": "[耐]桂冠",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 1,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                3.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deYiLv": 50.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 30.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                10
+            ],
+            "hintProbIncrease": 40.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 30,
+            "saiHou": 5.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 5.0,
+            "youQing": 30.0
+        }
+    ]
+}

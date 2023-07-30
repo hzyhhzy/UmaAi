@@ -1,0 +1,60 @@
+{
+    "cardId": 20048,
+    "cardName": "[根]小栗帽sr",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 3,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                1.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "deYiLv": 50.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 0.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                20
+            ],
+            "hintProbIncrease": 40.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 20,
+            "saiHou": 10.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 5.0,
+            "youQing": 30.0
+        }
+    ]
+}

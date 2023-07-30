@@ -1,0 +1,60 @@
+{
+    "cardId": 20012,
+    "cardName": "[智]速子sr",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 4,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0
+            ],
+            "deYiLv": 50.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 40.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "hintProbIncrease": 20.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                20,
+                0
+            ],
+            "initialJiBan": 25,
+            "saiHou": 10.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 4,
+            "xunLian": 5.0,
+            "youQing": 20.0
+        }
+    ]
+}

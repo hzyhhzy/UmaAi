@@ -1,0 +1,60 @@
+{
+    "cardId": 30146,
+    "cardName": "[智]小栗帽",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 4,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                2.0,
+                0.0
+            ],
+            "deYiLv": 50.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 0.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                8
+            ],
+            "hintProbIncrease": 30.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 15,
+            "saiHou": 5.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 5,
+            "xunLian": 10.0,
+            "youQing": 35.0
+        }
+    ]
+}

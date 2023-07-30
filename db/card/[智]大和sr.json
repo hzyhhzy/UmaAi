@@ -1,0 +1,60 @@
+{
+    "cardId": 20002,
+    "cardName": "[智]大和sr",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 4,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0
+            ],
+            "deYiLv": 50.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 45.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                10
+            ],
+            "hintProbIncrease": 30.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 40,
+            "saiHou": 5.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 4,
+            "xunLian": 0.0,
+            "youQing": 30.0
+        }
+    ]
+}
