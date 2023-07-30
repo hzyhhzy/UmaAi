@@ -132,6 +132,9 @@
     <ClCompile Include="GameDatabase\GameConfig.cpp">
       <Filter>头文件\GameDatabase</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\test7.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
