@@ -1,0 +1,46 @@
+{
+    "fiveStatusBonus": [
+        14,
+        0,
+        8,
+        0,
+        8
+    ],
+    "fiveStatusInitial": [
+        117,
+        108,
+        120,
+        95,
+        110
+    ],
+    "freeRaces": [
+        {
+            "startTurn": 12,
+            "endTurn": 23,
+            "count": 1
+        }
+    ],
+    "gameId": 103402,
+    "name": "稻荷二",
+    "preferRaces": [
+        22,
+        23,
+        32
+    ],
+    "preferReds": [
+        47,
+        71
+    ],
+    "races": [
+        11,
+        36,
+        47,
+        55,
+        59,
+        66,
+        67,
+        71,
+        77
+    ],
+    "star": 5
+}

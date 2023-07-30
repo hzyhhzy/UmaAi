@@ -1,0 +1,45 @@
+{
+    "fiveStatusBonus": [
+        10,
+        10,
+        0,
+        0,
+        10
+    ],
+    "fiveStatusInitial": [
+        111,
+        118,
+        97,
+        105,
+        119
+    ],
+    "freeRaces": [
+        {
+            "startTurn": 12,
+            "endTurn": 30,
+            "count": 1
+        }
+    ],
+    "gameId": 109901,
+    "name": "北港火山",
+    "preferRaces": [
+        23
+    ],
+    "preferReds": [
+        23,
+        71
+    ],
+    "races": [
+        11,
+        38,
+        46,
+        50,
+        56,
+        59,
+        68,
+        70,
+        71,
+        77
+    ],
+    "star": 5
+}

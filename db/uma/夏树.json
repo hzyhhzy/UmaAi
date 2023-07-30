@@ -1,0 +1,39 @@
+{
+    "fiveStatusBonus": [
+        0,
+        0,
+        30,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        124,
+        87,
+        130,
+        112,
+        97
+    ],
+    "freeRaces": [],
+    "gameId": 101002,
+    "name": "夏日大树",
+    "preferRaces": [
+        22,
+        51
+    ],
+    "preferReds": [
+        47,
+        71
+    ],
+    "races": [
+        11,
+        24,
+        32,
+        35,
+        45,
+        58,
+        65,
+        69,
+        77
+    ],
+    "star": 5
+}

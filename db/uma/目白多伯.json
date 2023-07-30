@@ -1,0 +1,40 @@
+{
+    "fiveStatusBonus": [
+        10,
+        0,
+        0,
+        0,
+        20
+    ],
+    "fiveStatusInitial": [
+        117,
+        104,
+        119,
+        92,
+        118
+    ],
+    "freeRaces": [],
+    "gameId": 105901,
+    "name": "目白多伯",
+    "preferRaces": [
+        56
+    ],
+    "preferReds": [
+        47,
+        71
+    ],
+    "races": [
+        11,
+        22,
+        30,
+        33,
+        43,
+        47,
+        53,
+        59,
+        66,
+        68,
+        77
+    ],
+    "star": 5
+}

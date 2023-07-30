@@ -1,0 +1,28 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,0,0,15,15
+    ],
+    "fiveStatusInitial": [
+        93,91,94,112,110
+    ],
+    "freeRaces": [
+        {
+            "startTurn": 12,
+            "endTurn": 29,
+            "count": 1
+          }
+    ],
+    "gameId": 110001,
+    "name": "奇锐骏",
+    "preferRaces": [23,44],
+    "preferReds": [23, 47, 71],
+    "races": [
+        false,false,false,false,false,false, false,false,false,false,false,true, false,false,false,false,false,false, false,false,false,false,false,false, 
+        false,false,false,false,false,false, false,false,false,false,false,false, true,false,false,false,false,true, false,false,false,false,false,true, 
+        false,false,true,false,false,false, false,false,true,false,false,true, false,false,false,false,false,false, false,false,true,false,true,true, 
+        false,false,false,false,false,true
+    ],
+    "star": 4
+  }
+  

@@ -1,0 +1,50 @@
+{
+    "fiveStatusBonus": [
+        30,
+        0,
+        0,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        137,
+        98,
+        107,
+        119,
+        89
+    ],
+    "freeRaces": [
+        {
+            "startTurn": 12,
+            "endTurn": 28,
+            "count": 1
+        },
+        {
+            "startTurn": 42,
+            "endTurn": 56,
+            "count": 3
+        }
+    ],
+    "gameId": 106601,
+    "name": "大喷老师",
+    "preferRaces": [
+        23,
+        45,
+        53,
+        56
+    ],
+    "preferReds": [
+        47,
+        71
+    ],
+    "races": [
+        11,
+        36,
+        41,
+        60,
+        65,
+        71,
+        77
+    ],
+    "star": 5
+}

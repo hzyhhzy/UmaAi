@@ -2,6 +2,6 @@
     "noColor": false,
     "radicalFactor": 5,
     "threadNum": 12,
-    "searchN": 6144,
+    "searchN": 12288,
     "debugPrint": true
 }
