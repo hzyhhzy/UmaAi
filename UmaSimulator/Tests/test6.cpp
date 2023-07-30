@@ -220,7 +220,7 @@ void main_test6()
             break;
         }
         case 7:
-            cout << "比赛;";
+            cout << "比赛（如果有可以获胜的比赛）;";
             break;
         }
         cout << (GameConfig::noColor ? "" : "\033[0m") << endl;
