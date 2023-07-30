@@ -29,6 +29,9 @@ BonusKeys = {
 def short_name(card):
     return re.sub(r"\[.*\]", "[%s]" % ShortType[card.type], card.original_name)
 
+def file_name(card):
+    return re.sub(r"[\.\*\?\/\\\&\$\:]", "", card.original_name) + ".json"
+
 db = Umadb('master.mdb')
 trans = translators.TrainersLegendTranslator(None)
 
@@ -61,15 +64,15 @@ for card in card_list:
     
     # 转换成UmaSim格式
     ucard = dict(
-        cardId = trans_card.id,
+        cardId = int(trans_card.id),
         cardName = trans_card.name,
         fullName = trans_card.original_name,
         rarity = trans_card.rarity.value,
         cardSkill = dict(
-            SkillList = trans_card.train_skill_list,
+            skillList = list(map(lambda x: int(x), trans_card.train_skill_list)),
             skillNum = len(trans_card.train_skill_list)
         ),
-        cardType = trans_card.type.value,
+        cardType = trans_card.type.value - 1, # 从0开始
         cardValue = [],
         uniqueEffect = trans_card.unique_effect
     )
@@ -77,7 +80,8 @@ for card in card_list:
         d = dict(
             filled = True,
             bonus = [0, 0, 0, 0, 0, 0],
-            initialBonus = [0, 0, 0, 0, 0, 0]
+            initialBonus = [0, 0, 0, 0, 0, 0],
+            hintBonus = [0, 0, 0, 0, 0, 5] # 暂定
         )
         for key, value in trans_card.effect_row_dict.items():
             if key in DirectKeys:
@@ -88,8 +92,8 @@ for card in card_list:
                 d['bonus'][BonusKeys[key]] = value[i]
         ucard["cardValue"].append(d)
     result[trans_card.id] = ucard
-    
-with codecs.open('card/card.json', 'w', encoding='utf-8') as f:
+
+with codecs.open('card/cardDB.json', 'w', encoding='utf-8') as f:
     f.write(jsons.dumps(result, jdkwargs=dict(ensure_ascii=False, indent=2)))
     f.write("\n")
     

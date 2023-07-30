@@ -5,11 +5,11 @@
 #include "GameDatabase.h"
 #include "../Game/Game.h"
 
-
 using json = nlohmann::json;
 using namespace std;
 
 unordered_map<int, SupportCard> GameDatabase::AllCards;
+unordered_map<int, SupportCard> GameDatabase::DBCards;
 
 void GameDatabase::loadCards(const string& dir)
 {
@@ -31,10 +31,10 @@ void GameDatabase::loadCards(const string& dir)
                     SupportCard jdata;
                     jdata.load_from_json(j);
                     cout << "载入支援卡 #" << jdata.cardName<<" --- "<<jdata.cardID << endl;
-                    if (AllCards.count(jdata.cardID) > 0)
+                    if (GameDatabase::AllCards.count(jdata.cardID) > 0)
                         cout << "错误：重复支援卡 #" << jdata.cardName << " --- " << jdata.cardID << endl;
                     else
-                        AllCards[jdata.cardID] = jdata;
+                        GameDatabase::AllCards[jdata.cardID] = jdata;
                 }
                 catch (exception& e)
                 {
@@ -42,7 +42,36 @@ void GameDatabase::loadCards(const string& dir)
                 }
             }
         }
-        cout << "共载入 " << AllCards.size() << " 个支援卡数据" << endl;
+        cout << "共载入 " << GameDatabase::AllCards.size() << " 个支援卡数据" << endl;
+    }
+    catch (exception& e)
+    {
+        cout << "读取支援卡信息出错: " << endl << e.what() << endl;
+    }
+    catch (...)
+    {
+        cout << "读取支援卡信息出错：未知错误" << endl;
+    }
+}
+
+void GameDatabase::loadDBCards(const string& pathname)
+{
+    try
+    {
+        ifstream ifs(pathname);
+        stringstream ss;
+        ss << ifs.rdbuf();
+        ifs.close();
+        json j = json::parse(ss.str(), nullptr, true, true);
+
+        SupportCard jdata;
+        for (auto & it : j.items()) 
+        {
+            SupportCard jdata;
+            jdata.load_from_json(it.value());
+            GameDatabase::DBCards[jdata.cardID] = jdata;
+        }
+        cout << "共载入 " << GameDatabase::DBCards.size() << " 支援卡元数据" << endl;
     }
     catch (exception& e)
     {

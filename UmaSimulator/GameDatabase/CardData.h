@@ -5,6 +5,7 @@
 #include "../External/utils.h"
 #include <vector>
 #include <cstdlib>
+#include <string>
 #include <iostream>
 using json = nlohmann::json;
 
@@ -59,6 +60,7 @@ struct SupportCard
 	//卡片拥有的技能列表
 	
 	int effectFactor; // 作为特殊固有处理的参数
+	//std::string uniqueText;
 	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effecFactor) const;//根据游戏状态计算支援卡的“固有”
 
 	void cardValueInit(int x) {
@@ -125,13 +127,9 @@ struct SupportCard
 			j["cardValue"][x]["vitalCostDrop"] = level[x].vitalCostDrop;
 		}
 
-
-		
-
-
 		j["cardSkill"]["skillNum"] = 0;
 		j["cardSkill"]["SkillList"] = NULL;
-		
+
 	}
 
 	void load_from_json(json& j) {
@@ -142,25 +140,24 @@ struct SupportCard
 		j.at("cardName").get_to(st);
 		cardName = UTF8_To_string(st);
 
-
 		for (int x = 0; x < 5; ++x) {
 
 			j["cardValue"][x].at("filled").get_to(level[x].filled);
 			if (level[x].filled == false) continue;
 
-			j["cardValue"][x].at("youQing").get_to(level[x].youQingBasic);
-			j["cardValue"][x].at("ganJing").get_to(level[x].ganJingBasic);
-			j["cardValue"][x].at("xunLian").get_to(level[x].xunLianBasic);
+			level[x].youQingBasic = j["cardValue"][x].value("youQing", 0);
+			level[x].ganJingBasic = j["cardValue"][x].value("ganJing", 0);
+			level[x].xunLianBasic = j["cardValue"][x].value("xunLian", 0);
 			j["cardValue"][x].at("bonus").get_to(level[x].bonusBasic);
-			j["cardValue"][x].at("wizVitalBonus").get_to(level[x].wizVitalBonusBasic);
+			level[x].wizVitalBonusBasic = j["cardValue"][x].value("wizVitalBonus", 0);
 			j["cardValue"][x].at("initialBonus").get_to(level[x].initialBonus);
-			j["cardValue"][x].at("initialJiBan").get_to(level[x].initialJiBan);
-			j["cardValue"][x].at("saiHou").get_to(level[x].saiHou);
+			level[x].initialJiBan = j["cardValue"][x].value("initialJiBan", 0);
+			level[x].saiHou = j["cardValue"][x].value("saiHou", 0);
 			j["cardValue"][x].at("hintBonus").get_to(level[x].hintBonus);
-			j["cardValue"][x].at("hintProbIncrease").get_to(level[x].hintProbIncrease);
-			j["cardValue"][x].at("deYiLv").get_to(level[x].deYiLv);
-			j["cardValue"][x].at("failRateDrop").get_to(level[x].failRateDrop);
-			j["cardValue"][x].at("vitalCostDrop").get_to(level[x].vitalCostDrop);
+			level[x].hintProbIncrease = j["cardValue"][x].value("hintProbIncrease", 0);
+			level[x].deYiLv = j["cardValue"][x].value("deYiLv", 0);
+			level[x].failRateDrop = j["cardValue"][x].value("failRateDrop", 0);
+			level[x].vitalCostDrop = j["cardValue"][x].value("vitalCostDrop", 0);
 		}
 
 		cardSkill.skillNum = j["cardSkill"]["skillNum"];
@@ -169,7 +166,12 @@ struct SupportCard
 		for (int i = 0; i < cardSkill.skillNum; ++i) {
 			cardSkill.skillIdList[i] = j["cardSkill"]["skillList"][i];
 		}
-
+		/*
+		if (j["uniqueEffect"].is_array()) {
+			j["uniqueEffect"].at(0).get_to(uniqueText);
+			uniqueText = UTF8_To_string(uniqueText);
+		}
+		*/
 		return;
 	}
 };
