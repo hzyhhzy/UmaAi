@@ -1,0 +1,17 @@
+{ 
+"bonusData": [],
+"fiveStatusBonus":[10,0,20,0,0],
+"fiveStatusInitial":[
+108,65,118,101,108
+],
+"freeRaces":[
+{"startTurn":1,"endTurn":2,"count":1}
+],
+"gameId":103801,
+"name":"op莲",
+"preferRaces":[],
+"preferReds":[23,47,71],
+
+"races":[11,28,33,35,41,53,54,65,77],
+"star":5
+}

@@ -1,0 +1,26 @@
+{
+    "fiveStatusBonus": [
+      10, 0, 10, 0, 10
+    ],
+    "fiveStatusInitial": [
+      122, 65, 133, 104, 126
+    ],
+    "freeRaces": [
+        {
+            "startTurn": 12,
+            "endTurn": 23,
+            "count": 1
+        }
+    ],
+    "gameId": 103802,
+    "name": "婚纱卡莲",
+    "preferRaces": [23],
+    "preferReds": [
+      23, 47, 71
+    ],
+    "races": [
+      12, 29, 34, 36, 42, 53, 54, 66, 77
+    ],
+    "star": 5
+  }
+  
