@@ -56,8 +56,8 @@
   - 此时进入育成，应该可以看到事件选项等数据。
 - URA和游戏连接成功后，即可启动本插件UmaSimulator.exe。注意UmaSimulator.exe和packets目录需要在同一文件夹内
 
-![](Document/src/Gnebhxi.png)
-![](Document/src/fJIYWHx.png)
+    ![](Document/src/Gnebhxi.png)
+    ![](Document/src/fJIYWHx.png)
 
 - *（注：今后预计会整合到URA中，这样就不用单独开启了）正确启动效果如图所示*
 
@@ -100,14 +100,14 @@
     注意需要使用**魔改版URA插件**才会生成packets文件夹。原版或者点击了更新插件则不会生成
 
 - 错误刷屏：读取游戏数据Json出错
- ![读取JSON出错](Document/src/PjIplEUl8iBk4.jpeg)
+  ![读取JSON出错](Document/src/PjIplEUl8iBk4.jpeg)
   - 解决：删除packets中全部文件再启动
 - 颜色字乱码
-![颜色转义符](Document/src/bQSNDGJJRUW.jpeg)
+  ![颜色转义符](Document/src/bQSNDGJJRUW.jpeg)
   - 解决：使用新版（无颜色或者颜色兼容版）插件，或者使用Windows Terminal运行本插件
   - 修改aiConfig.json 设置 "noColor": true, （注意不要漏了最后的逗号）
 - 等待游戏开始，但已经在育成画面
- ![等待游戏开始](Document/src/2FqYj0QtaN.png)
+  ![等待游戏开始](Document/src/2FqYj0QtaN.png)
   - 解决：工作目录不对
   - 新版插件基本解决了工作目录问题；
   - 如果使用老版本插件，需要在命令行中CD到插件目录下运行。
@@ -164,7 +164,7 @@
 | 北港火山      | 天狼星           | 葛城王牌      |
 | 乌拉拉-原/换  | 黄金城-原/换     |               |
 
-*欢迎编辑、提交更多马娘*
+欢迎编辑、提交更多马娘
 
 ### 支援卡（对应3.0版）
 
