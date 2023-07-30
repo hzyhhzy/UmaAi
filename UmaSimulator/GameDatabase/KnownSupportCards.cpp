@@ -133,7 +133,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         if (effect.xunLian > 25)effect.xunLian = 25;
     }
     //7.根凯斯
-    else if (cardID == 7)
+    else if (cardID == 30130)
     {
         if (jiBan < 80)
         {
@@ -141,7 +141,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //8.根皇帝
-    else if (cardID == 8)
+    else if (cardID == 30037)
     {
         if (jiBan < 80)
         {
@@ -149,12 +149,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //9.根善信
-    else if (cardID == 9)
+    else if (cardID == 30027)
     {
         //啥都没有
     }
     //10.速宝穴
-    else if (cardID == 10)
+    else if (cardID == 30147)
     {
         if (jiBan < 100)
         {
@@ -162,12 +162,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //11.耐海湾
-    else if (cardID == 11)
+    else if (cardID == 30016)
     {
         //啥都没有
     }
     //12.智好歌剧
-    else if (cardID == 12)
+    else if (cardID == 30152)
     {
         if (jiBan < 80)
         {
@@ -175,7 +175,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //13.根黄金城
-    else if (cardID == 13)
+    else if (cardID == 30153)
     {
         if (jiBan < 100)
         {
@@ -183,49 +183,27 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //14.智波旁
-    else if (cardID == 14)
+    else if (cardID == 30141)
     {
         //啥都没有
     }
     //15.耐狄杜斯
-    else if (cardID == 15)
+    else if (cardID == 30099)
     {
         int totalJiBan = 0;
         for (int i = 0; i < 6; i++)
             totalJiBan += game.cardJiBan[i];
         effect.xunLian = totalJiBan / 30;
     }
-    //16.智小栗帽
-    else if (cardID == 16)
-    {
-        //啥都没有
-    }
-    //17根大脚
-    else if (cardID == 17) {
-        //啥都没有
-    }
-    //速北黑
-    else if (cardID == 18) {
-        //啥都没有
-    }
-    //福来
-    else if (cardID == 19) {
-        //啥都没有
-    }
     //速子
-    else if (cardID == 20) {
+    else if (cardID == 30101) {
         if (jiBan < 100)
         {
             effect.youQing = 22;
         }
     }
-    //21耐光钻
-    else if (cardID == 21)
-    {
-        //啥都没有
-    }
     //22，耐桂冠
-    else if (cardID == 22)
+    else if (cardID == 30142)
     {
       if (game.turn < 24)
         effect.bonus[1] = 1;
@@ -235,14 +213,14 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         effect.bonus[1] = 3;
     }
     //23力白仁
-    else if (cardID == 23)
+    else if (cardID == 30123)
     {
       int traininglevel = game.getTrainingLevel(atTrain);
       effect.xunLian = 5 + traininglevel * 5;
       if (effect.xunLian > 25)effect.xunLian = 25;
     }
     //24力重炮
-    else if (cardID == 24)
+    else if (cardID == 30151)
     {
         if (jiBan < 100)
         {
@@ -250,7 +228,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //25力内恰
-    else if (cardID == 25)
+    else if (cardID == 30138)
     {
       if (jiBan < 100)
       {
@@ -258,18 +236,18 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       }
     }
     //28根涡轮
-    else if (cardID == 28)
+    else if (cardID == 30112)
     {
       //以后再想办法
     }
     //29根进王
-    else if (cardID == 29)
+    else if (cardID == 30083)
     {
       if (jiBan < 80 || atTrain == 3)
         effect.xunLian = 0;
     }
     //30根青竹
-    else if (cardID == 30)
+    else if (cardID == 30094)
     {
       if (effect.youQing > 0)
       {
@@ -283,7 +261,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
 
     }
     //也问
-    else if (cardID == 45)
+    else if (cardID == 30126)
     {
         if (jiBan < 80)
         {
@@ -292,7 +270,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //耐特
-    else if (cardID == 46)
+    else if (cardID == 30127)
     {
         if (isShining)
         {
@@ -305,17 +283,19 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         //null
     }
     //速尔丹
-    else if (cardID == 48)
+    else if (cardID == 30119)
     {
         if (jiBan < 80)
         {
             effect.bonus[2] = 0;
         }
     }
-    //智内恰
-    else if (cardID == 49)
-    {
-        //啥都没有
+    // 皇团
+    else if (cardID == 30067) {
+
+        if (jiBan < 80)
+            effect.bonus[5] = 0;
+
     }
 
     else
