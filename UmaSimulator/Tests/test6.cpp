@@ -16,6 +16,11 @@
 #include <cstdlib>
 using namespace std;
 
+template <typename T, std::size_t N>
+std::size_t findMaxIndex(const T(&arr)[N]) {
+    return std::distance(arr, std::max_element(arr, arr + N));
+}
+
 void main_test6()
 {
   //const double radicalFactor = 5;//激进度
@@ -144,6 +149,81 @@ void main_test6()
         for (int i = 0; i < 6; i++)
           printPolicy(policy.outgoingPolicy[i] * policy.trainingPolicy[6]);
         cout << endl;
+
+        cout << (GameConfig::noColor ? "" : "\033[1m\033[33m") << "本局决策：" << (GameConfig::noColor ? "" : "\033[0m") << "是否使用女神：";
+        if (policy.useVenusPolicy > 0.5) {
+            cout << (GameConfig::noColor ? "" : "\033[32m") << "是" << (GameConfig::noColor ? "" : "\033[0m");
+        }
+        else {
+            cout << (GameConfig::noColor ? "" : "\033[31m") << "否" << (GameConfig::noColor ? "" : "\033[0m");
+        }
+
+        cout << "，神团三选一：";
+        std::size_t godChoice = findMaxIndex(policy.threeChoicesEventPolicy);
+        switch (godChoice) {
+        case 0:
+            cout << (GameConfig::noColor ? "" : "\033[41m") << "红（1）" << (GameConfig::noColor ? "" : "\033[0m");
+            break;
+        case 1:
+            cout << (GameConfig::noColor ? "" : "\033[44m") << "蓝（2）" << (GameConfig::noColor ? "" : "\033[0m");
+            break;
+        case 2:
+            cout << (GameConfig::noColor ? "" : "\033[43m") << "黄（3）" << (GameConfig::noColor ? "" : "\033[0m");
+            break;
+        }
+
+        cout << (GameConfig::noColor ? "" : "\033[0m") << " | 行动：" << (GameConfig::noColor ? "" : "\033[32m");
+        std::size_t trainChoice = findMaxIndex(policy.trainingPolicy);
+        switch (trainChoice) {
+        case 0:
+            cout << "速度训练（训练1）；";
+            break;
+        case 1:
+            cout << "耐力训练（训练2）;";
+            break;
+        case 2:
+            cout << "力量训练（训练3）;";
+            break;
+        case 3:
+            cout << "根性训练（训练4）;";
+            break;
+        case 4:
+            cout << "智力训练（训练5）;";
+            break;
+        case 5:
+            cout << "休息;";
+            break;
+        case 6: 
+        {
+            cout << "外出；";
+            std::size_t outgoingPolicy = findMaxIndex(policy.outgoingPolicy);
+            switch (outgoingPolicy) {
+            case 0:
+                cout << (GameConfig::noColor ? "" : "\033[31m") << "三女神 - 1";
+                break;
+            case 1:
+                cout << (GameConfig::noColor ? "" : "\033[34m") << "三女神 - 2";
+                break;
+            case 2:
+                cout << (GameConfig::noColor ? "" : "\033[33m") << "三女神 - 3";
+                break;
+            case 3:
+                cout << (GameConfig::noColor ? "" : "\033[36m") << "三女神 - 4-1";
+                break;
+            case 4:
+                cout << (GameConfig::noColor ? "" : "\033[36m") << "三女神 - 4-2";
+                break;
+            case 5:
+                cout << (GameConfig::noColor ? "" : "\033[35m") << "普通外出";
+            }
+            cout << (GameConfig::noColor ? "" : "\033[0m");
+            break;
+        }
+        case 7:
+            cout << "比赛;";
+            break;
+        }
+        cout << (GameConfig::noColor ? "" : "\033[0m") << endl;
       }
     }
 
