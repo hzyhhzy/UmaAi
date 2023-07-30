@@ -100,13 +100,16 @@
     注意需要使用**魔改版URA插件**才会生成packets文件夹。原版或者点击了更新插件则不会生成
 
 - 错误刷屏：读取游戏数据Json出错
+
   ![读取JSON出错](Document/src/PjIplEUl8iBk4.jpeg)
   - 解决：删除packets中全部文件再启动
 - 颜色字乱码
+
   ![颜色转义符](Document/src/bQSNDGJJRUW.jpeg)
   - 解决：使用新版（无颜色或者颜色兼容版）插件，或者使用Windows Terminal运行本插件
   - 修改aiConfig.json 设置 "noColor": true, （注意不要漏了最后的逗号）
 - 等待游戏开始，但已经在育成画面
+
   ![等待游戏开始](Document/src/2FqYj0QtaN.png)
   - 解决：工作目录不对
   - 新版插件基本解决了工作目录问题；
