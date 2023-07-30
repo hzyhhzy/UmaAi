@@ -154,6 +154,7 @@
     <ClCompile Include="Tests\test4.cpp" />
     <ClCompile Include="Tests\test5.cpp" />
     <ClCompile Include="Tests\test6.cpp" />
+    <ClCompile Include="Tests\test7.cpp" />
     <ClCompile Include="Tests\test_json.cpp" />
     <ClCompile Include="UmaSimulator.cpp" />
   </ItemGroup>
