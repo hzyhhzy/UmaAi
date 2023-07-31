@@ -11,28 +11,48 @@ bool GameConfig::debugPrint = false;
 
 void GameConfig::load(const string& path)
 {
-	try
-	{
-		ifstream ifs(path);
-		stringstream ss;
-		ss << ifs.rdbuf();
-		ifs.close();
-		json j = json::parse(ss.str(),nullptr,true,true);
+    try
+    {
+        ifstream ifs(path);
+        if (!ifs) // 文件不存在
+        {
+            // 创建默认配置
+            json j = {
+                {"noColor", GameConfig::noColor},
+                {"radicalFactor", GameConfig::radicalFactor},
+                {"threadNum", GameConfig::threadNum},
+                {"searchN", GameConfig::searchN},
+                {"debugPrint", GameConfig::debugPrint}
+            };
+            // 写入文件
+            ofstream ofs(path);
+            ofs << j.dump(2);
+            ofs.close();
 
-		j.at("noColor").get_to(GameConfig::noColor);
-		j.at("radicalFactor").get_to(GameConfig::radicalFactor);
-		j.at("threadNum").get_to(GameConfig::threadNum);
-		j.at("searchN").get_to(GameConfig::searchN);
-		j.at("debugPrint").get_to(GameConfig::debugPrint);
+            cout << "找不到配置文件，已使用默认配置: " << j.dump(2) << endl;
+            return;
+        }
 
-		cout << "当前配置: " << j.dump(2) << endl;
-	}
-	catch (exception& e)
-	{
-		cout << "载入配置出错: " << e.what() << endl;
-	}
-	catch (...)
-	{
-		cout << "载入配置时发生未知错误" << endl;
-	}
+        stringstream ss;
+        ss << ifs.rdbuf();
+        ifs.close();
+
+        json j = json::parse(ss.str(), nullptr, true, true);
+
+        j.at("noColor").get_to(GameConfig::noColor);
+        j.at("radicalFactor").get_to(GameConfig::radicalFactor);
+        j.at("threadNum").get_to(GameConfig::threadNum);
+        j.at("searchN").get_to(GameConfig::searchN);
+        j.at("debugPrint").get_to(GameConfig::debugPrint);
+
+        cout << "当前配置: " << j.dump(2) << endl;
+    }
+    catch (exception& e)
+    {
+        cout << "载入配置出错: " << e.what() << endl;
+    }
+    catch (...)
+    {
+        cout << "载入配置时发生未知错误" << endl;
+    }
 }
