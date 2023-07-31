@@ -24,7 +24,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
 {
   try
   {
-    json j = json::parse(jsonStr);
+    json j = json::parse(jsonStr, nullptr, true, true);
 
     umaId = j["umaId"];
     if (maskUmaId)

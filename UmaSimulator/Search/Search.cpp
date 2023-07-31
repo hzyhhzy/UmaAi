@@ -47,8 +47,6 @@ void Search::runSearch(const Game& game, Evaluator* evaluators,
     //先考虑是不是只有比赛
     if (game.isRacing)
     {
-        if (GameConfig::debugPrint)
-            cout << "- 生涯比赛" << endl;
       allChoicesValue[useVenus][0] = evaluateSingleAction(game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum, radicalFactor,
         rand, -1, useVenus, -1, -1, -1);
     }

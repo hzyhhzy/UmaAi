@@ -8,6 +8,7 @@ int GameConfig::radicalFactor = 5;
 int GameConfig::threadNum = 12;
 int GameConfig::searchN = 6144;
 bool GameConfig::debugPrint = false;
+string GameConfig::role = "default";
 
 void GameConfig::load(const string& path)
 {
@@ -24,6 +25,7 @@ void GameConfig::load(const string& path)
 		j.at("threadNum").get_to(GameConfig::threadNum);
 		j.at("searchN").get_to(GameConfig::searchN);
 		j.at("debugPrint").get_to(GameConfig::debugPrint);
+		GameConfig::role = j.value("role", "default");
 
 		cout << "µ±Ç°ÅäÖÃ: " << j.dump(2) << endl;
 	}

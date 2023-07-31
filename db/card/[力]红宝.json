@@ -1,0 +1,190 @@
+{
+    "cardId": 30114,
+    "cardName": "[力]红宝",
+    "fullName": "[啊，华丽一族]第一红宝石",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200602,
+        200672,
+        200831,
+        200841,
+        200851,
+        201022,
+        201092,
+        201152,
+        201382,
+        201641,
+        202122
+      ],
+      "skillNum": 11
+    },
+    "cardType": 2,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          25,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "xunLian": 5,
+        "initialJiBan": 25,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          26,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 26,
+        "xunLian": 5,
+        "initialJiBan": 27,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          27,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 27,
+        "xunLian": 5,
+        "initialJiBan": 30,
+        "deYiLv": 65
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          28,
+          15,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 28,
+        "xunLian": 5,
+        "initialJiBan": 32,
+        "deYiLv": 72
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          30,
+          30,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 30,
+        "xunLian": 5,
+        "initialJiBan": 35,
+        "deYiLv": 80
+      }
+    ],
+    "uniqueEffect": [
+      "絆ゲージが80以上の時パワーボーナス2,",
+      [
+        {
+          "type": "TrainingPowerUp",
+          "value": 2
+        }
+      ],
+      30
+    ]
+  }

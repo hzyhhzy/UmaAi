@@ -326,7 +326,11 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.bonus[5] = 0;
 
     }
-
+    // ºì±¦
+    else if (cardID == 30114) {
+        if (jiBan < 80)
+            effect.bonus[2] = 0;
+    }
     else
     {
       //  std::cout << "Î´Öª¿¨";
