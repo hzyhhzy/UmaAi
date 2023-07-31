@@ -14,9 +14,9 @@ void GameConfig::load(const string& path)
     try
     {
         ifstream ifs(path);
-        if (!ifs) // 文件不存在
+        if (!ifs) // 文件不存在的处理
         {
-            // 创建默认配置
+            // 创建默认配置JSON
             json j = {
                 {"noColor", GameConfig::noColor},
                 {"radicalFactor", GameConfig::radicalFactor},
@@ -24,7 +24,7 @@ void GameConfig::load(const string& path)
                 {"searchN", GameConfig::searchN},
                 {"debugPrint", GameConfig::debugPrint}
             };
-            // 写入文件
+            // 写入
             ofstream ofs(path);
             ofs << j.dump(2);
             ofs.close();
