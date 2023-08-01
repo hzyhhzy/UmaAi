@@ -8,17 +8,133 @@
     "cardType": 5,
     "cardValue": [
         {
-            "filled": false
-        },
-        {
-            "filled": false
-        },
-        {
-            "filled": false
-        },
-        {
-            "filled": false
-        },
+          "filled": true,
+          "bonus": [
+              1,
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            "initialBonus": [
+                0,
+                0,
+                25,
+                0,
+                0,
+                0
+            ],
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                5
+            ],
+            "youQing": 26.5,
+            "ganJing": 15.0,
+            "xunLian": 0,
+            "initialJiBan": 15,
+            "wizVitalBonus": 1
+            },
+            {
+            "filled": true,
+            "bonus": [
+                1,
+                1,
+                1,
+                0,
+                0,
+                1
+            ],
+            "initialBonus": [
+                0,
+                0,
+                27,
+                0,
+                0,
+                0
+            ],
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                5
+            ],
+            "youQing": 27.6,
+            "ganJing": 15.0,
+            "xunLian": 0,
+            "initialJiBan": 16,
+            "wizVitalBonus": 1
+            },
+            {
+            "filled": true,
+            "bonus": [
+                1,
+                1,
+                1,
+                0,
+                0,
+                1
+            ],
+            "initialBonus": [
+                0,
+                0,
+                30,
+                0,
+                0,
+                0
+            ],
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                5
+            ],
+            "youQing": 29.8,
+            "ganJing": 15.0,
+            "xunLian": 0,
+            "initialJiBan": 18,
+            "wizVitalBonus": 1
+            },
+            {
+            "filled": true,
+            "bonus": [
+                1,
+                1,
+                1,
+                0,
+                0,
+                1
+            ],
+            "initialBonus": [
+                0,
+                0,
+                32,
+                0,
+                0,
+                0
+            ],
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                5
+            ],
+            "youQing": 32,
+            "ganJing": 15.0,
+            "xunLian": 5,
+            "initialJiBan": 20,
+            "wizVitalBonus": 2
+            },
         {
             "bonus": [
                 1.0,

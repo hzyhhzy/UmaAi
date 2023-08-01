@@ -1,0 +1,198 @@
+{
+  "cardId": 30012,
+  "cardName": "[根]胜利奖券",
+  "fullName": "[B・N・Winner!!]胜利奖券",
+  "rarity": 3,
+  "cardSkill": {
+    "skillList": [
+      200152,
+      200222,
+      200592,
+      200602,
+      200612
+    ],
+    "skillNum": 5
+  },
+  "cardType": 3,
+  "cardValue": [
+    {
+      "filled": true,
+      "bonus": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "initialBonus": [
+        0,
+        0,
+        0,
+        15,
+        0,
+        0
+      ],
+      "hintBonus": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        5
+      ],
+      "youQing": 26.5,
+      "ganJing": 30,
+      "initialJiBan": 20,
+      "saiHou": 5,
+      "hintProbIncrease": 20,
+      "deYiLv": 35
+    },
+    {
+      "filled": true,
+      "bonus": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "initialBonus": [
+        0,
+        0,
+        0,
+        16,
+        0,
+        0
+      ],
+      "hintBonus": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        5
+      ],
+      "youQing": 27.6,
+      "ganJing": 33,
+      "initialJiBan": 21,
+      "saiHou": 6,
+      "hintProbIncrease": 20,
+      "deYiLv": 40
+    },
+    {
+      "filled": true,
+      "bonus": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "initialBonus": [
+        0,
+        0,
+        0,
+        18,
+        0,
+        0
+      ],
+      "hintBonus": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        5
+      ],
+      "youQing": 29.8,
+      "ganJing": 36,
+      "initialJiBan": 23,
+      "saiHou": 7,
+      "hintProbIncrease": 20,
+      "deYiLv": 45
+    },
+    {
+      "filled": true,
+      "bonus": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "initialBonus": [
+        0,
+        0,
+        0,
+        20,
+        0,
+        0
+      ],
+      "hintBonus": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        5
+      ],
+      "youQing": 32,
+      "ganJing": 40,
+      "initialJiBan": 25,
+      "saiHou": 8,
+      "hintProbIncrease": 50,
+      "deYiLv": 50
+    },
+    {
+      "filled": true,
+      "bonus": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "initialBonus": [
+        0,
+        0,
+        0,
+        20,
+        0,
+        0
+      ],
+      "hintBonus": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        5
+      ],
+      "youQing": 32,
+      "ganJing": 40,
+      "initialJiBan": 25,
+      "saiHou": 10,
+      "hintProbIncrease": 60,
+      "deYiLv": 50
+    }
+  ],
+  "uniqueEffect": [
+    "youQing10,hintProbIncrease20",
+    [
+      {
+        "type": "SpecialTagEffectUp",
+        "value": 10
+      },
+      {
+        "type": "SkillTipsEventRateUp",
+        "value": 20
+      }
+    ],
+    30
+  ]
+}
