@@ -22,8 +22,14 @@ const double radicalFactor = 5;//激进度
 const int searchN = handWrittenEvaluationTest ? 1 : 3072;
 
 
-const int totalGames = handWrittenEvaluationTest ? 120000 : 10000000;
+const int totalGames = handWrittenEvaluationTest ? 1200000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
+
+
+
+int umaId = 101101;//草上飞
+int cards[6] = { 30137,30134,30010,30019,30011,30107 };//神团，高峰，美妙，乌拉拉，风神，司机
+//手写逻辑应当为27699±5（1000000局）
 
 
 std::atomic<double> totalScore = 0;
@@ -39,8 +45,6 @@ void worker()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  int umaId = 101101;//我自己的号
-  int cards[6] = { 30137,30134,30010,30019,30011,30107};
 
   for (int i = 0; i < 6; ++i) {
 
@@ -125,15 +129,8 @@ void main_test5()
 
 
     // 检查工作目录
-    wchar_t buf[10240];
-    GetModuleFileNameW(0, buf, 10240);
-    filesystem::path exeDir = filesystem::path(buf).parent_path();
-    filesystem::current_path(exeDir);
-    //std::cout << "当前工作目录：" << filesystem::current_path() << endl;
-    cout << "当前程序目录：" << exeDir << endl;
-    GameDatabase::loadUmas("./db/uma");
-    GameDatabase::loadCards("./db/card");
-    GameConfig::load("./aiConfig.json");
+    GameDatabase::loadUmas("../db/uma");
+    GameDatabase::loadCards("../db/card");
 
 
   for (int i = 0; i < 200; i++)segmentStats[i] = 0;

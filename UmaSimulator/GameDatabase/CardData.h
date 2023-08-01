@@ -145,19 +145,19 @@ struct SupportCard
 			j["cardValue"][x].at("filled").get_to(level[x].filled);
 			if (level[x].filled == false) continue;
 
-			level[x].youQingBasic = j["cardValue"][x].value("youQing", 0);
-			level[x].ganJingBasic = j["cardValue"][x].value("ganJing", 0);
-			level[x].xunLianBasic = j["cardValue"][x].value("xunLian", 0);
+			level[x].youQingBasic = j["cardValue"][x].value<double>("youQing", 0);
+			level[x].ganJingBasic = j["cardValue"][x].value<double>("ganJing", 0);
+			level[x].xunLianBasic = j["cardValue"][x].value<double>("xunLian", 0);
 			j["cardValue"][x].at("bonus").get_to(level[x].bonusBasic);
 			level[x].wizVitalBonusBasic = j["cardValue"][x].value("wizVitalBonus", 0);
 			j["cardValue"][x].at("initialBonus").get_to(level[x].initialBonus);
 			level[x].initialJiBan = j["cardValue"][x].value("initialJiBan", 0);
-			level[x].saiHou = j["cardValue"][x].value("saiHou", 0);
+			level[x].saiHou = j["cardValue"][x].value<double>("saiHou", 0);
 			j["cardValue"][x].at("hintBonus").get_to(level[x].hintBonus);
-			level[x].hintProbIncrease = j["cardValue"][x].value("hintProbIncrease", 0);
-			level[x].deYiLv = j["cardValue"][x].value("deYiLv", 0);
-			level[x].failRateDrop = j["cardValue"][x].value("failRateDrop", 0);
-			level[x].vitalCostDrop = j["cardValue"][x].value("vitalCostDrop", 0);
+			level[x].hintProbIncrease = j["cardValue"][x].value<double>("hintProbIncrease", 0);
+			level[x].deYiLv = j["cardValue"][x].value<double>("deYiLv", 0);
+			level[x].failRateDrop = j["cardValue"][x].value<double>("failRateDrop", 0);
+			level[x].vitalCostDrop = j["cardValue"][x].value<double>("vitalCostDrop", 0);
 		}
 
 		cardSkill.skillNum = j["cardSkill"]["skillNum"];
