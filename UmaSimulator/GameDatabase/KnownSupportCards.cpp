@@ -28,13 +28,20 @@ void GameDatabase::loadCards(const string& dir)
                     ifs.close();
                     json j = json::parse(ss.str(), nullptr, true, true);
 
-                    SupportCard jdata;
-                    jdata.load_from_json(j);
-                    cout << "载入支援卡 #" << jdata.cardName<<" --- "<<jdata.cardID << endl;
-                    if (GameDatabase::AllCards.count(jdata.cardID) > 0)
-                        cout << "错误：重复支援卡 #" << jdata.cardName << " --- " << jdata.cardID << endl;
-                    else
-                        GameDatabase::AllCards[jdata.cardID] = jdata;
+                    SupportCard jdata[5];
+
+                    for (int x = 0; x < 5; ++x) {
+                        jdata[x].load_from_json(j, x);
+                    }
+
+                    cout << "载入支援卡 #" << jdata[4].cardName << " --- " << jdata[4].cardID << endl;
+                    if (GameDatabase::AllCards.count(jdata[4].cardID) > 0)
+                        cout << "错误：重复支援卡 #" << jdata[4].cardName << " --- " << jdata[4].cardID << endl;
+                    else {
+                        for (int x = 0; x < 5; ++x) 
+                            GameDatabase::AllCards[jdata[x].cardID] = jdata[x];
+                    }
+                        
                 }
                 catch (exception& e)
                 {
@@ -67,11 +74,19 @@ void GameDatabase::loadDBCards(const string& pathname)
         SupportCard jdata;
         for (auto & it : j.items()) 
         {
-            SupportCard jdata;
-            jdata.load_from_json(it.value());
-            GameDatabase::DBCards[jdata.cardID] = jdata;
+
+
+            for (int x = 0; x < 5; ++x) {
+                SupportCard jdata;
+                jdata.load_from_json(it.value(),x);
+                if (GameDatabase::AllCards.count(jdata.cardID) > 0) continue;
+
+                GameDatabase::AllCards[jdata.cardID] = jdata;
+
+            }
+            
         }
-        cout << "共载入 " << GameDatabase::DBCards.size() << " 支援卡元数据" << endl;
+        cout << "共载入 " << GameDatabase::AllCards.size() << " 支援卡元数据" << endl;
     }
     catch (exception& e)
     {

@@ -11,23 +11,6 @@ using json = nlohmann::json;
 
 class Game;
 
-struct CardValue {
-	//去除掉了basic字段
-	bool filled;
-	double youQingBasic;//友情加成
-	double ganJingBasic;//干劲加成
-	double xunLianBasic;//训练加成
-	double bonusBasic[6];//速耐力根智pt的加成
-	int wizVitalBonusBasic;//智力彩圈体力回复量
-	int initialBonus[6];//初期速耐力根智pt的提升
-	int initialJiBan;//初始羁绊
-	double saiHou;//赛后
-	int hintBonus[6];//为了简化，把红点的技能等效成多少属性。综合考虑技能有效率（例如高峰90%有效，除了集中力），平均性价比与折扣，种马重复给技能（假设30%）
-	double hintProbIncrease;//启发发生率提升
-	double deYiLv;//得意率
-	double failRateDrop; //失败率降低
-	double vitalCostDrop; //体力消费下降
-};
 struct SkillList {
 	int skillNum;
 	std::vector<int> skillIdList; // 卡片拥有的技能编号
@@ -38,9 +21,7 @@ struct SupportCard
 	int cardType;//支援卡类型，0速1耐2力3根4智5友人或团队
 	std::string cardName; //卡片名称
 
-	CardValue level[5];
-	// 各个突破等级的数据
-
+	bool filled;
 	double youQingBasic;//友情加成
 	double ganJingBasic;//干劲加成
 	double xunLianBasic;//训练加成
@@ -63,68 +44,35 @@ struct SupportCard
 	//std::string uniqueText;
 	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effecFactor) const;//根据游戏状态计算支援卡的“固有”
 
-	void cardValueInit(int x) {
-		while (x <= 4 && level[x].filled == false)
-			x++;
-		if (x > 4) {
-			std::cout << "未知卡片信息，或卡片内容录入错误: " << cardName << '\n';
-			exit(0);
-		}
-
-		youQingBasic = level[x].youQingBasic;
-		ganJingBasic = level[x].ganJingBasic;
-		xunLianBasic = level[x].xunLianBasic;
-		for (int i = 0; i < 6; ++i)
-			bonusBasic[i] = level[x].bonusBasic[i];
-		wizVitalBonusBasic = level[x].wizVitalBonusBasic;
-		for (int i = 0; i < 6; ++i)
-			initialBonus[i] = level[x].initialBonus[i];
-		initialJiBan = level[x].initialJiBan;
-		saiHou = level[x].saiHou;
-		for (int i = 0; i < 6; ++i)
-			hintBonus[i] = level[x].hintBonus[i];
-		hintProbIncrease = level[x].hintProbIncrease;
-		deYiLv = level[x].deYiLv;
-		failRateDrop = level[x].failRateDrop;
-		vitalCostDrop = level[x].vitalCostDrop;
-
-		effectFactor = 0;
-
-		return ;
-
-	}
 
 	void write_to_json(json& j,const std::string cdname,const int id)
 	{
-		j["cardId"] = id;
+		j["cardId"] = id/10;
 		j["cardType"] = cardType;
 
 		j["cardName"] = string_To_UTF8(cdname);
 
-		j["cardValue"][0]["filled"] = false;
 		j["cardValue"][1]["filled"] = false;
 		j["cardValue"][2]["filled"] = false;
 		j["cardValue"][3]["filled"] = false;
 
-		for (int x = 0; x < 5; ++x) {
-			if (j["cardValue"][x]["filled"] == false) {
-				j["cardValue"][x]["filled"] = false;
-				continue;
-			}
+		int x = id % 10;
+		j["cardValue"][x]["filled"] = filled;
+		if (filled == true) {
 			j["cardValue"][x]["filled"] = true;
-			j["cardValue"][x]["youQing"] = level[x].youQingBasic;
-			j["cardValue"][x]["ganJing"] = level[x].ganJingBasic;
-			j["cardValue"][x]["xunLian"] = level[x].xunLianBasic;
-			j["cardValue"][x]["bonus"] = level[x].bonusBasic;
-			j["cardValue"][x]["wizVitalBonus"] = level[x].wizVitalBonusBasic;
-			j["cardValue"][x]["initialBonus"] = level[x].initialBonus;
-			j["cardValue"][x]["initialJiBan"] = level[x].initialJiBan;
-			j["cardValue"][x]["saiHou"] = level[x].saiHou;
-			j["cardValue"][x]["hintBonus"] = level[x].hintBonus;
-			j["cardValue"][x]["hintProbIncrease"] = level[x].hintProbIncrease;
-			j["cardValue"][x]["deYiLv"] = level[x].deYiLv;
-			j["cardValue"][x]["failRateDrop"] = level[x].failRateDrop;
-			j["cardValue"][x]["vitalCostDrop"] = level[x].vitalCostDrop;
+			j["cardValue"][x]["youQing"] = youQingBasic;
+			j["cardValue"][x]["ganJing"] = ganJingBasic;
+			j["cardValue"][x]["xunLian"] = xunLianBasic;
+			j["cardValue"][x]["bonus"] = bonusBasic;
+			j["cardValue"][x]["wizVitalBonus"] = wizVitalBonusBasic;
+			j["cardValue"][x]["initialBonus"] = initialBonus;
+			j["cardValue"][x]["initialJiBan"] = initialJiBan;
+			j["cardValue"][x]["saiHou"] = saiHou;
+			j["cardValue"][x]["hintBonus"] = hintBonus;
+			j["cardValue"][x]["hintProbIncrease"] = hintProbIncrease;
+			j["cardValue"][x]["deYiLv"] = deYiLv;
+			j["cardValue"][x]["failRateDrop"] = failRateDrop;
+			j["cardValue"][x]["vitalCostDrop"] = vitalCostDrop;
 		}
 
 		j["cardSkill"]["skillNum"] = 0;
@@ -132,32 +80,31 @@ struct SupportCard
 
 	}
 
-	void load_from_json(json& j) {
+	void load_from_json(json& j,int x) {
 
 		j.at("cardId").get_to(cardID);
+		cardID = cardID * 10 + x;
 		j.at("cardType").get_to(cardType);
 		std::string st;
 		j.at("cardName").get_to(st);
 		cardName = UTF8_To_string(st);
 
-		for (int x = 0; x < 5; ++x) {
+		j["cardValue"][x].at("filled").get_to(filled);
+		if (filled == true) {
 
-			j["cardValue"][x].at("filled").get_to(level[x].filled);
-			if (level[x].filled == false) continue;
-
-			level[x].youQingBasic = j["cardValue"][x].value<double>("youQing", 0);
-			level[x].ganJingBasic = j["cardValue"][x].value<double>("ganJing", 0);
-			level[x].xunLianBasic = j["cardValue"][x].value<double>("xunLian", 0);
-			j["cardValue"][x].at("bonus").get_to(level[x].bonusBasic);
-			level[x].wizVitalBonusBasic = j["cardValue"][x].value("wizVitalBonus", 0);
-			j["cardValue"][x].at("initialBonus").get_to(level[x].initialBonus);
-			level[x].initialJiBan = j["cardValue"][x].value("initialJiBan", 0);
-			level[x].saiHou = j["cardValue"][x].value<double>("saiHou", 0);
-			j["cardValue"][x].at("hintBonus").get_to(level[x].hintBonus);
-			level[x].hintProbIncrease = j["cardValue"][x].value<double>("hintProbIncrease", 0);
-			level[x].deYiLv = j["cardValue"][x].value<double>("deYiLv", 0);
-			level[x].failRateDrop = j["cardValue"][x].value<double>("failRateDrop", 0);
-			level[x].vitalCostDrop = j["cardValue"][x].value<double>("vitalCostDrop", 0);
+			youQingBasic = j["cardValue"][x].value<double>("youQing", 0);
+			ganJingBasic = j["cardValue"][x].value<double>("ganJing", 0);
+			xunLianBasic = j["cardValue"][x].value<double>("xunLian", 0);
+			j["cardValue"][x].at("bonus").get_to(bonusBasic);
+			wizVitalBonusBasic = j["cardValue"][x].value("wizVitalBonus", 0);
+			j["cardValue"][x].at("initialBonus").get_to(initialBonus);
+			initialJiBan = j["cardValue"][x].value("initialJiBan", 0);
+			saiHou = j["cardValue"][x].value<double>("saiHou", 0);
+			j["cardValue"][x].at("hintBonus").get_to(hintBonus);
+			hintProbIncrease = j["cardValue"][x].value<double>("hintProbIncrease", 0);
+			deYiLv = j["cardValue"][x].value<double>("deYiLv", 0);
+			failRateDrop = j["cardValue"][x].value<double>("failRateDrop", 0);
+			vitalCostDrop = j["cardValue"][x].value<double>("vitalCostDrop", 0);
 		}
 
 		cardSkill.skillNum = j["cardSkill"]["skillNum"];

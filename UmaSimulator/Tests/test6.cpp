@@ -92,9 +92,11 @@ void main_test6()
   filesystem::current_path(exeDir);
   //std::cout << "当前工作目录：" << filesystem::current_path() << endl;
   cout << "当前程序目录：" << exeDir << endl;
+  GameConfig::load("./aiConfig.json");
   GameDatabase::loadUmas("./db/uma");
   GameDatabase::loadCards("./db/card");
-  GameConfig::load("./aiConfig.json");
+  if(GameConfig::extraCardData == true)
+    GameDatabase::loadDBCards("db/cardDB.json");
   loadRole();   // roleplay
 
   for (int i = 0; i < GameConfig::threadNum; i++)
