@@ -165,8 +165,11 @@ void main_test6()
       cout << p * 100 << "% ";
       if (!GameConfig::noColor)cout << "\033[0m";
     };
-
-    search.runSearch(game, evaluators.data(), GameConfig::searchN, TOTAL_TURN, 0, GameConfig::threadNum, GameConfig::radicalFactor);
+    
+    //最后几回合降低激进度
+    double modifiedRadicalFactor = GameConfig::radicalFactor * (1 - exp(-double(TOTAL_TURN - game.turn) / 10.0));
+    
+    search.runSearch(game, evaluators.data(), GameConfig::searchN, TOTAL_TURN, 0, GameConfig::threadNum, modifiedRadicalFactor);
     //cout << endl << rpText["finish"] << endl;
     cout << endl << rpText["analyze"] << " >>" << endl;
     {
