@@ -28,7 +28,7 @@ const int gamesEveryThread = totalGames / threadNum;
 
 
 int umaId = 101101;//草上飞
-int cards[6] = { 30137,30134,30010,30019,30011,30107 };//神团，高峰，美妙，乌拉拉，风神，司机
+int cards[6] = { 301374,301344,300104,300194,300114,301074 };//神团，高峰，美妙，乌拉拉，风神，司机
 //手写逻辑应当为27699±5（1000000局）
 
 
@@ -45,13 +45,13 @@ void worker()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-
+/*
   for (int i = 0; i < 6; ++i) {
 
       GameDatabase::AllCards[cards[i]].cardValueInit(4);
 
   }
-
+*/
   //int umaId = 5;//二之宫
   //int cards[6] = { 1,2,14,10,11,15 };
   // 

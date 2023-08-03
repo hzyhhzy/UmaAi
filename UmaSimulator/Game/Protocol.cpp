@@ -54,13 +54,20 @@ bool Game::loadGameFromJson(std::string jsonStr)
       int c = j["cardId"][i];
       int type = c / 100000;
       c = c % 100000;
+      c = c * 10;
 
-      if (!GameDatabase::AllCards.count(c))
-        throw string("未知支援卡");
+      if (!GameDatabase::AllCards.count(c+type))
+          throw string("未知支援卡");
+
+      while (GameDatabase::AllCards[c + type].filled == false && type < 4)
+          ++type;
+
+      if (type == 5) {
+          throw string("没有填写对应的突破数据以及满破数据");
+      }
+      c += type;
+
       cardId[i] = c;
-
-      GameDatabase::AllCards[c].cardValueInit(type);
-      
       cardData[i] = &GameDatabase::AllCards[c];
 
     }
