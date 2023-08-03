@@ -96,23 +96,26 @@ void main_test6()
   GameDatabase::loadUmas("./db/uma");
   GameDatabase::loadCards("./db/card");
   if(GameConfig::extraCardData == true)
-    GameDatabase::loadDBCards("db/cardDB.json");
+    GameDatabase::loadDBCards("./db/cardDB.json");
   loadRole();   // roleplay
+
+  string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/packets/currentGS.json";
+
 
   for (int i = 0; i < GameConfig::threadNum; i++)
       evaluators.push_back(Evaluator(NULL, 128));
 
   while (true)
   {
-    while (!filesystem::exists("./packets/currentGS.json"))
+    while (!filesystem::exists(currentGameStagePath))
     {
-        std::cout << "找不到 packets/currentGS.json，请检查小黑板是否正确显示" << endl;
+      std::cout << "找不到" + currentGameStagePath + "，可能是游戏未开始或小黑板未正常工作" << endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
     }
-    ifstream fs("./packets/currentGS.json");
+    ifstream fs(currentGameStagePath);
     if (!fs.good())
     {
-      cout << "等待游戏开始" << endl;
+      cout << "读取文件错误" << endl;
       std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
       continue;
     }
