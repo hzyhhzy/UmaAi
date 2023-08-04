@@ -1,0 +1,42 @@
+{
+  "default": {
+    "name": "AI",
+    "calc":     "计算中",
+    "finish":   "计算完毕",
+    "decision": "的决策",
+    "speed":    "训练速度",
+    "stamina":  "训练耐力",
+    "power":    "训练力量",
+    "guts":     "训练根性",
+    "wisdom":   "训练智力",
+    "rest":     "休息",
+    "out":      "外出",
+    "venus1":   "三女神",
+    "venus2":   "三女神",
+    "date":     "担当马娘",
+    "race":     "比赛（如有合适比赛）",
+    "luck":     "运气指标",
+    "analyze":  "局面分析",
+    "career":   "生涯比赛"
+  },
+  "aoi": {
+    "name": "桐生院",
+    "calc":     "心算中",
+    "finish":   "决定了！",
+    "decision": "的建议",
+    "speed":    "训练速度",
+    "stamina":  "...只能练耐力了",
+    "power":    "训练力量",
+    "guts":     "训练根性",
+    "wisdom":   "训练智力",
+    "rest":     "休息，牡蛎——",
+    "out":      "约会",
+    "venus1":   "三女神",
+    "venus2":   "三女神去温泉",
+    "date":     "担当马娘",
+    "race":     "不如比赛吧！",
+    "luck":     "现在的运气？",
+    "analyze":  "本回合的状态是……",
+    "career":   "参赛"
+  }
+}

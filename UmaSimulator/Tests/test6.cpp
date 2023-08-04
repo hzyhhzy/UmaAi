@@ -10,15 +10,63 @@
 #include "../GameDatabase/GameDatabase.h"
 #include "../GameDatabase/GameConfig.h"
 #include "../Search/Search.h"
+#include "../External/utils.h"
 
 #include "windows.h"
 #include <filesystem>
 #include <cstdlib>
 using namespace std;
+using json = nlohmann::json;
 
 template <typename T, std::size_t N>
 std::size_t findMaxIndex(const T(&arr)[N]) {
     return std::distance(arr, std::max_element(arr, arr + N));
+}
+
+map<string, string> rpText;
+void loadRole()
+{
+    try
+    {
+        ifstream ifs("db/roleplay.json");
+        stringstream ss;
+        ss << ifs.rdbuf();
+        ifs.close();
+
+        rpText.clear();
+        json j = json::parse(ss.str(), nullptr, true, true);
+        json entry = j.at(GameConfig::role);
+        for (auto & item : entry.items())
+        {
+            rpText[item.key()] = UTF8_To_string(item.value());
+        }
+        cout << "当前RP角色：" << rpText["name"] << endl;
+    }
+    catch (...)
+    {
+        cout << "读取配置信息出错：roleplay.json" << endl;
+    }
+}
+
+void print_luck(int luck)
+{
+    int u = -1000;
+    int sigma = 1200;
+    string color = "";
+    if (luck > 20000) u = 27000;
+
+    if (!GameConfig::noColor)
+    {
+        if (luck > u + sigma / 2)
+            color = "\033[32m"; // 2 3 1
+        else if (luck > u - sigma / 2)
+            color = "\033[33m";
+        else
+            color = "\033[31m";
+        cout << color << luck << "\033[0m";
+    }
+    else
+        cout << luck;
 }
 
 void main_test6()
@@ -44,24 +92,30 @@ void main_test6()
   filesystem::current_path(exeDir);
   //std::cout << "当前工作目录：" << filesystem::current_path() << endl;
   cout << "当前程序目录：" << exeDir << endl;
+  GameConfig::load("./aiConfig.json");
   GameDatabase::loadUmas("./db/uma");
   GameDatabase::loadCards("./db/card");
-  GameConfig::load("./aiConfig.json");
+  if(GameConfig::extraCardData == true)
+    GameDatabase::loadDBCards("./db/cardDB.json");
+  loadRole();   // roleplay
+
+  string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/packets/currentGS.json";
+
 
   for (int i = 0; i < GameConfig::threadNum; i++)
       evaluators.push_back(Evaluator(NULL, 128));
 
   while (true)
   {
-    while (!filesystem::exists("./packets/currentGS.json"))
+    while (!filesystem::exists(currentGameStagePath))
     {
-        std::cout << "找不到 packets/currentGS.json，请检查工作路径和URA插件连接" << endl;
+      std::cout << "找不到" + currentGameStagePath + "，可能是游戏未开始或小黑板未正常工作" << endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
     }
-    ifstream fs("./packets/currentGS.json");
+    ifstream fs(currentGameStagePath);
     if (!fs.good())
     {
-      cout << "等待游戏开始" << endl;
+      cout << "读取文件错误" << endl;
       std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
       continue;
     }
@@ -97,7 +151,7 @@ void main_test6()
     }
     game.print();
     cout << endl;
-    cout << "计算中...";
+    cout << rpText["name"] << rpText["calc"];
 
     auto printPolicy = [](float p)
     {
@@ -111,10 +165,13 @@ void main_test6()
       cout << p * 100 << "% ";
       if (!GameConfig::noColor)cout << "\033[0m";
     };
-
-    search.runSearch(game, evaluators.data(), GameConfig::searchN, TOTAL_TURN, 0, GameConfig::threadNum, GameConfig::radicalFactor);
-    cout << endl << "计算完毕" << endl;
-    cout << ">>" << endl;
+    
+    //最后几回合降低激进度
+    double modifiedRadicalFactor = GameConfig::radicalFactor * (1 - exp(-double(TOTAL_TURN - game.turn) / 10.0));
+    
+    search.runSearch(game, evaluators.data(), GameConfig::searchN, TOTAL_TURN, 0, GameConfig::threadNum, modifiedRadicalFactor);
+    //cout << endl << rpText["finish"] << endl;
+    cout << endl << rpText["analyze"] << " >>" << endl;
     {
       auto policy = search.extractPolicyFromSearchResults(1);
       if (game.venusAvailableWisdom != 0)
@@ -148,110 +205,125 @@ void main_test6()
         cout << "五个女神外出以及普通外出：";
         for (int i = 0; i < 6; i++)
           printPolicy(policy.outgoingPolicy[i] * policy.trainingPolicy[6]);
-        cout << endl;
+        cout << endl << "<<" << endl;
 
-        cout << (GameConfig::noColor ? "" : "\033[1m\033[33m") << "本局决策：" << (GameConfig::noColor ? "" : "\033[0m") << "是否使用女神：";
-        if (policy.useVenusPolicy > 0.5) {
-            cout << (GameConfig::noColor ? "" : "\033[32m") << "是" << (GameConfig::noColor ? "" : "\033[0m");
+        // 输出运气分
+        float maxScore = -1e6;
+        for (int i = 0; i < 2; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                float s = search.allChoicesValue[i][j].avgScoreMinusTarget;
+                if (s > maxScore)maxScore = s;
+            }
         }
-        else {
-            cout << (GameConfig::noColor ? "" : "\033[31m") << "否" << (GameConfig::noColor ? "" : "\033[0m");
+        if (game.turn == 0 || scoreFirstTurn == 0)
+        {
+            scoreFirstTurn = maxScore;
         }
+        else
+        {
+            cout << rpText["luck"] << " | 本局：";
+            print_luck(maxScore - scoreFirstTurn);
+            cout << " | 本回合：" << maxScore - scoreLastTurn
+                 << " | 评分预测: " << maxScore << endl;
 
-        cout << "，神团三选一：";
+            double raceLoss = maxScore - max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget);
+            if (raceLoss < 5e5)//raceLoss大约1e6如果不能比赛
+                cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：" << raceLoss << endl;
+            cout << "----" << endl;
+            cout.flush();
+        }
+        scoreLastTurn = maxScore;
+
+        // 输出本回合决策
+        cout << (GameConfig::noColor ? "" : "\033[1m\033[33m") << rpText["name"] << rpText["decision"] << ": "
+             << (GameConfig::noColor ? "" : "\033[32m");
+
+        std::size_t trainChoice = findMaxIndex(policy.trainingPolicy);
+        switch (trainChoice) {
+            case 0:
+                cout << rpText["speed"];
+                break;
+            case 1:
+                cout << rpText["stamina"];
+                break;
+            case 2:
+                cout << rpText["power"];
+                break;
+            case 3:
+                cout << rpText["guts"];
+                break;
+            case 4:
+                cout << rpText["wisdom"];
+                break;
+            case 5:
+                cout << rpText["rest"];
+                break;
+            case 6:
+            {
+                cout << "和 ";
+                std::size_t outgoingPolicy = findMaxIndex(policy.outgoingPolicy);
+                switch (outgoingPolicy) {
+                case 0:
+                    cout << (GameConfig::noColor ? "" : "\033[31m") << "红女神";
+                    break;
+                case 1:
+                    cout << (GameConfig::noColor ? "" : "\033[36m") << "蓝女神";
+                    break;
+                case 2:
+                    cout << (GameConfig::noColor ? "" : "\033[33m") << "黄女神";
+                    break;
+                case 3:
+                    cout << (GameConfig::noColor ? "" : "\033[36m") << rpText["venus1"];
+                    break;
+                case 4:
+                    cout << (GameConfig::noColor ? "" : "\033[36m") << rpText["venus2"];
+                    break;
+                case 5:
+                    cout << (GameConfig::noColor ? "" : "\033[35m") << rpText["date"];
+                }
+                cout << (GameConfig::noColor ? "" : "\033[0m") << " " << rpText["out"];
+                break;
+            }
+            case 7:
+                cout << rpText["race"];
+                break;
+        }  // switch
+        cout << (GameConfig::noColor ? "" : "\033[0m") << " | ";
+        
+        // 女神相关决策        
+        if (policy.useVenusPolicy > 0.6) {
+            cout << (GameConfig::noColor ? "" : "\033[32m") << " 要使用";
+        } else if (policy.useVenusPolicy > 0.4) {
+            cout << (GameConfig::noColor ? "" : "\033[33m") << " 可以使用";
+        } else if (policy.useVenusPolicy == 0) {
+            cout << (GameConfig::noColor ? "" : "\033[0m") << " 无";
+        } else {
+            cout << (GameConfig::noColor ? "" : "\033[31m") << " 不使用";
+        }
+        cout << (GameConfig::noColor ? "" : "\033[0m") << "女神Buff";
+        cout << " |  神团三选一：";
         std::size_t godChoice = findMaxIndex(policy.threeChoicesEventPolicy);
         switch (godChoice) {
         case 0:
-            cout << (GameConfig::noColor ? "" : "\033[41m") << "红（1）" << (GameConfig::noColor ? "" : "\033[0m");
+            cout << (GameConfig::noColor ? "" : "\033[41m") << "1-红";
             break;
         case 1:
-            cout << (GameConfig::noColor ? "" : "\033[44m") << "蓝（2）" << (GameConfig::noColor ? "" : "\033[0m");
+            cout << (GameConfig::noColor ? "" : "\033[44m") << "2-蓝";
             break;
         case 2:
-            cout << (GameConfig::noColor ? "" : "\033[43m") << "黄（3）" << (GameConfig::noColor ? "" : "\033[0m");
-            break;
-        }
-
-        cout << (GameConfig::noColor ? "" : "\033[0m") << " | 行动：" << (GameConfig::noColor ? "" : "\033[32m");
-        std::size_t trainChoice = findMaxIndex(policy.trainingPolicy);
-        switch (trainChoice) {
-        case 0:
-            cout << "速度训练（训练1）；";
-            break;
-        case 1:
-            cout << "耐力训练（训练2）;";
-            break;
-        case 2:
-            cout << "力量训练（训练3）;";
-            break;
-        case 3:
-            cout << "根性训练（训练4）;";
-            break;
-        case 4:
-            cout << "智力训练（训练5）;";
-            break;
-        case 5:
-            cout << "休息;";
-            break;
-        case 6: 
-        {
-            cout << "外出；";
-            std::size_t outgoingPolicy = findMaxIndex(policy.outgoingPolicy);
-            switch (outgoingPolicy) {
-            case 0:
-                cout << (GameConfig::noColor ? "" : "\033[31m") << "三女神 - 1";
-                break;
-            case 1:
-                cout << (GameConfig::noColor ? "" : "\033[34m") << "三女神 - 2";
-                break;
-            case 2:
-                cout << (GameConfig::noColor ? "" : "\033[33m") << "三女神 - 3";
-                break;
-            case 3:
-                cout << (GameConfig::noColor ? "" : "\033[36m") << "三女神 - 4-1";
-                break;
-            case 4:
-                cout << (GameConfig::noColor ? "" : "\033[36m") << "三女神 - 4-2";
-                break;
-            case 5:
-                cout << (GameConfig::noColor ? "" : "\033[35m") << "普通外出";
-            }
-            cout << (GameConfig::noColor ? "" : "\033[0m");
-            break;
-        }
-        case 7:
-            cout << "比赛（如果有可以获胜的比赛）;";
+            cout << (GameConfig::noColor ? "" : "\033[43m") << "3-黄";
             break;
         }
         cout << (GameConfig::noColor ? "" : "\033[0m") << endl;
-      }
-    }
-
-    float maxScore = -1e6;
-    for (int i = 0; i < 2; i++)
-    {
-      for (int j = 0; j < 8; j++)
+      } // if isRacing
+      else
       {
-        float s = search.allChoicesValue[i][j].avgScoreMinusTarget;
-        if (s > maxScore)maxScore = s;
+          cout << rpText["career"] << endl;
       }
-    }
-    if(game.turn==0)
-    {
-      scoreFirstTurn = maxScore;
-    }
-    else
-    {
-      cout<<"以下两个指标没有考虑技能，买技能后下降正常" << endl;
-      cout << "此局运气：" << maxScore - scoreFirstTurn  << endl;
-      cout << "此回合运气：" << maxScore - scoreLastTurn  << endl; 
-      double raceLoss = maxScore - max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget);
-      if (raceLoss < 5e5)//raceLoss大约1e6如果不能比赛
-        cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：" << raceLoss << endl;
-      cout << "<<" << endl;
-      cout.flush();
-    }
-    scoreLastTurn = maxScore;
-  }
+    } // 输出结果Block
+
+  } // while
 
 }
