@@ -1132,6 +1132,11 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
       printEvents("抽奖：你抽中了厕纸");
     }
   }
+  else if (turn == 49)//升固有
+  {
+    skillPt += 170 / GameConstants::ScorePtRate;//固有直接等价成pt
+    printEvents("固有等级+1");
+  }
   else if (turn == 53)//第三年继承&理事长升固有
   {
     for (int i = 0; i < 5; i++)
@@ -1151,6 +1156,11 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
       addVital(-5);
       skillPt += 25;
     }
+  }
+  else if (turn == 70)//升固有
+  {
+    skillPt += 170 / GameConstants::ScorePtRate;//固有直接等价成pt
+    printEvents("固有等级+1");
   }
   else if (turn == 71)//第三年年底
   {
