@@ -1,0 +1,21 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    14, 8, 0, 8, 0 
+  ],
+  "fiveStatusInitial": [
+    113, 101, 115, 113, 108 
+  ],
+  "freeRaces": [ 
+  ],
+  "gameId": 102102, 
+  "name": "玉藻十字（庆典）",
+  "preferRaces": [
+  ],
+  "preferReds": [
+  ],
+  "races": [
+    11,53,55,59,67,71
+  ],
+  "star": 5
+}

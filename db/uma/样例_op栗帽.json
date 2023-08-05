@@ -1,0 +1,33 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    20, 0, 10, 0, 0
+  ],
+  "fiveStatusInitial": [
+    112, 74, 118, 94, 102
+  ],
+  "freeRaces": [
+    {
+      "startTurn": 12,
+      "endTurn": 23,
+      "count": 1
+    },
+    {
+      "startTurn": 48,
+      "endTurn": 59,
+      "count": 2
+    }
+  ],
+  "gameId": 100601,
+  "name": "op栗帽",
+  "preferRaces": [
+    22, 23, 50, 51, 53, 56, 58
+  ],
+  "preferReds": [
+    23, 47, 71
+  ],
+  "races": [
+    11, 32, 45, 47, 67, 71, 77
+  ],
+  "star": 5
+}

@@ -1,0 +1,21 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    0, 0, 15, 0, 15 
+  ],
+  "fiveStatusInitial": [
+    109, 109, 92, 126, 114 
+  ],
+  "freeRaces": [ 
+  ],
+  "gameId": 105802, 
+  "name": "名将怒涛（万圣节）",
+  "preferRaces": [
+  ],
+  "preferReds": [
+  ],
+  "races": [
+    11,48,52,59,67,69,71
+  ],
+  "star": 5 
+}

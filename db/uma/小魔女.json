@@ -1,0 +1,21 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    10, 0, 20, 0, 0  
+  ],
+  "fiveStatusInitial": [
+    123, 104, 135, 79, 109 
+  ],
+  "freeRaces": [
+  ],
+  "gameId": 104401,
+  "name": "东商变革",
+  "preferRaces": [
+  ],
+  "preferReds": [
+  ],
+  "races": [
+    11,22,30,33,43,44,58,59,67,68 
+  ],
+  "star": 5 
+}

@@ -1,0 +1,21 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    8, 0, 14, 0, 8 
+  ],
+  "fiveStatusInitial": [
+    120, 94, 124, 96, 116 
+  ],
+  "freeRaces": [
+  ],
+  "gameId": 100502, 
+  "name": "富士奇石（舞会）",
+  "preferRaces": [
+  ],
+  "preferReds": [
+  ],
+  "races": [
+    11,22,28,30,32,43,53,58,67,71 
+  ],
+  "star": 5 
+}

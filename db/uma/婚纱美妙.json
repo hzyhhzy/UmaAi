@@ -1,0 +1,21 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    0, 0, 0, 10, 20 
+  ],
+  "fiveStatusInitial": [
+    109, 96, 109, 115, 121 
+  ],
+  "freeRaces": [
+  ],
+  "gameId": 102202,
+  "name": "美妙姿势（婚纱）",
+  "preferRaces": [
+  ],
+  "preferReds": [
+  ],
+  "races": [
+    11,30,33,43,44,53,59,63,67 
+  ],
+  "star": 5 
+}
