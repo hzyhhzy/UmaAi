@@ -1,0 +1,21 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    10, 0, 20, 0, 0 
+  ],
+  "fiveStatusInitial": [
+    124, 79, 136, 97, 114  
+  ],
+  "freeRaces": [
+  ],
+  "gameId": 100801, 
+  "name": "伏特加",
+  "preferRaces": [ 
+  ],
+  "preferReds": [
+  ],
+  "races": [
+    11,22,28,30,33,43,47,56,58,67
+  ],
+  "star": 5 
+}

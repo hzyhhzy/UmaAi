@@ -1,25 +1,26 @@
 {
-  "fiveStatusBonus": [
-    8, 0, 8, 14, 0
-  ],
-  "fiveStatusInitial": [
-    101, 89, 84, 88, 88
-  ],
-  "freeRaces": [
-    {
-      "startTurn": 12,
-      "endTurn": 23,
-      "count": 1
-    }
-  ],
-  "gameId": 102002,
-  "name": "op星云天空",
-  "preferRaces": [23],
-  "preferReds": [
-    23, 47, 71
-  ],
-  "races": [
-    11, 30, 33, 43, 47, 55, 59, 67, 71, 77
-  ],
-  "star": 3
+    "fiveStatusBonus": [
+      0, 10, 0, 0, 20
+    ],
+    "fiveStatusInitial": [
+      120, 120, 108, 101, 101
+    ],
+    "freeRaces": [
+        {
+            "startTurn": 12,
+            "endTurn": 23,
+            "count": 1
+        }
+    ],
+    "gameId": 102001,
+    "name": "星云天空-原皮",
+    "preferRaces": [23],
+    "preferReds": [
+      23, 47, 71
+    ],
+    "races": [
+      11, 30, 33, 43, 47, 55, 59, 67, 71, 77
+    ],
+    "star": 5
 }
+  

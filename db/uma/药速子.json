@@ -1,0 +1,38 @@
+{
+    "fiveStatusBonus": [
+        8,
+        0,
+        8,
+        0,
+        14
+    ],
+    "fiveStatusInitial": [
+        109,
+        104,
+        112,
+        103,
+        122
+    ],
+    "freeRaces": [],
+    "gameId": 103202,
+    "name": "药速子",
+    "preferRaces": [],
+    "preferReds": [
+        23,
+        47,
+        71
+    ],
+    "races": [
+        11,
+        28,
+        30,
+        32,
+        43,
+        53,
+        59,
+        67,
+        71,
+        77
+    ],
+    "star": 5
+}

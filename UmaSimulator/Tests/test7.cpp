@@ -23,6 +23,8 @@ inline int64_t now_ms()
 //benchmark
 void main_test7()
 {
+  GameDatabase::loadUmas("../db/uma");
+  GameDatabase::loadCards("../db/card");
 
   const int threadNum = 1;
   const double radicalFactor = 5;//激进度
@@ -40,7 +42,7 @@ void main_test7()
 
 
   int umaId = 101101;//草上飞
-  int cards[6] = { 1,2,3,4,5,6 };
+  int cards[6] = { 301374,301344,300104,300194,300114,301074 };//神团，高峰，美妙，乌拉拉，风神，司机
 
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,200 };

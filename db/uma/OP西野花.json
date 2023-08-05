@@ -1,0 +1,21 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    15, 0, 15, 0, 0 
+  ],
+  "fiveStatusInitial": [
+    113, 99, 116, 105, 117 
+  ],
+  "freeRaces": [ 
+  ],
+  "gameId": 105101, 
+  "name": "西野花",
+  "preferRaces": [ 
+  ],
+  "preferReds": [
+  ],
+  "races": [
+    11,22,30,33,41,53,55,58,65
+  ],
+  "star": 5 
+}

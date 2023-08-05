@@ -4,55 +4,61 @@ using namespace std;
 using json = nlohmann::json;
 
 bool GameConfig::noColor = false;
-int GameConfig::radicalFactor = 5;
+double GameConfig::radicalFactor = 5;
 int GameConfig::threadNum = 12;
 int GameConfig::searchN = 6144;
 bool GameConfig::debugPrint = false;
+bool GameConfig::extraCardData = false;
+string GameConfig::role = "default";
 
 void GameConfig::load(const string& path)
 {
-    try
+	try
+	{
+		ifstream ifs(path);
+    if (!ifs) // Êñá‰ª∂‰∏çÂ≠òÂú®ÁöÑÂ§ÑÁêÜ
     {
-        ifstream ifs(path);
-        if (!ifs) // Œƒº˛≤ª¥Ê‘⁄µƒ¥¶¿Ì
-        {
-            // ¥¥Ω®ƒ¨»œ≈‰÷√JSON
-            json j = {
-                {"noColor", GameConfig::noColor},
-                {"radicalFactor", GameConfig::radicalFactor},
-                {"threadNum", GameConfig::threadNum},
-                {"searchN", GameConfig::searchN},
-                {"debugPrint", GameConfig::debugPrint}
-            };
-            // –¥»Î
-            ofstream ofs(path);
-            ofs << j.dump(2);
-            ofs.close();
+      // ÂàõÂª∫ÈªòËÆ§ÈÖçÁΩÆJSON
+      json j = {
+        {"noColor", GameConfig::noColor},
+        {"radicalFactor", GameConfig::radicalFactor},
+        {"threadNum", GameConfig::threadNum},
+        {"searchN", GameConfig::searchN},
+        {"debugPrint", GameConfig::debugPrint},
+        {"extraCardData", GameConfig::extraCardData},
+        {"role", GameConfig::role}
+        };
+      // ÂÜôÂÖ•
+      ofstream ofs(path);
+      ofs << j.dump(2);
+      ofs.close();
 
-            cout << "’“≤ªµΩ≈‰÷√Œƒº˛£¨“— π”√ƒ¨»œ≈‰÷√: " << j.dump(2) << endl;
-            return;
-        }
-
-        stringstream ss;
-        ss << ifs.rdbuf();
-        ifs.close();
-
-        json j = json::parse(ss.str(), nullptr, true, true);
-
-        j.at("noColor").get_to(GameConfig::noColor);
-        j.at("radicalFactor").get_to(GameConfig::radicalFactor);
-        j.at("threadNum").get_to(GameConfig::threadNum);
-        j.at("searchN").get_to(GameConfig::searchN);
-        j.at("debugPrint").get_to(GameConfig::debugPrint);
-
-        cout << "µ±«∞≈‰÷√: " << j.dump(2) << endl;
+      cout << "Êâæ‰∏çÂà∞ÈÖçÁΩÆÊñá‰ª∂ÔºåÂ∑≤‰ΩøÁî®ÈªòËÆ§ÈÖçÁΩÆ: " << j.dump(2) << endl;
+      return;
     }
-    catch (exception& e)
-    {
-        cout << "‘ÿ»Î≈‰÷√≥ˆ¥Ì: " << e.what() << endl;
-    }
-    catch (...)
-    {
-        cout << "‘ÿ»Î≈‰÷√ ±∑¢…˙Œ¥÷™¥ÌŒÛ" << endl;
-    }
+
+		stringstream ss;
+		ss << ifs.rdbuf();
+		ifs.close();
+		json j = json::parse(ss.str(),nullptr,true,true);
+
+		j.at("noColor").get_to(GameConfig::noColor);
+		j.at("radicalFactor").get_to(GameConfig::radicalFactor);
+		j.at("threadNum").get_to(GameConfig::threadNum);
+		j.at("searchN").get_to(GameConfig::searchN);
+		j.at("debugPrint").get_to(GameConfig::debugPrint);
+		j.at("extraCardData").get_to(GameConfig::extraCardData);
+		GameConfig::role = j.value("role", "default");
+
+		cout << GameConfig::radicalFactor << endl;
+		cout << "ÂΩìÂâçÈÖçÁΩÆ: " << j.dump(2) << endl;
+	}
+	catch (exception& e)
+	{
+		cout << "ËΩΩÂÖ•ÈÖçÁΩÆÂá∫Èîô: " << e.what() << endl;
+	}
+	catch (...)
+	{
+		cout << "ËΩΩÂÖ•ÈÖçÁΩÆÊó∂ÂèëÁîüÊú™Áü•ÈîôËØØ" << endl;
+	}
 }
