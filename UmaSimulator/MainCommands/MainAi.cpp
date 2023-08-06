@@ -69,7 +69,7 @@ void print_luck(int luck)
         cout << luck;
 }
 
-void main_test6()
+void main_ai()
 {
   //const double radicalFactor = 5;//激进度
   //const int threadNum = 16; //线程数
