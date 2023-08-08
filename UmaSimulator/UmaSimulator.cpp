@@ -8,7 +8,7 @@
 int main()
 {
   //main_playerPlay(); 
-  main_test5();
+  main_test6();
   //main_test_json();
 }
 
