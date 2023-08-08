@@ -585,6 +585,9 @@ void Game::calculateTrainingValueSingle(int trainType)
   failRate[trainType] = calculateFailureRate(trainType);//计算失败率
 
   vector<CardTrainingEffect> effects;
+
+  double vitalCostDrop = 1;
+
   for (int card = 0; card < 6; card++)
   {
     if (cardDistribution[trainType][card])//这个卡在这个训练
@@ -592,6 +595,11 @@ void Game::calculateTrainingValueSingle(int trainType)
       effects.push_back(cardData[card]->getCardEffect(*this, trainType, cardJiBan[card], cardData[card]->effectFactor));
     }
   }
+  for (int i = 0; i < effects.size(); ++i) {
+      failRate[trainType] *= (1-0.01*effects[i].failRateDrop);
+      vitalCostDrop *= (1 - 0.01 * effects[i].vitalCostDrop);
+  }
+
   //先算非女神的训练
   //1.人头数倍率
   int cardNum = effects.size();
@@ -672,7 +680,7 @@ void Game::calculateTrainingValueSingle(int trainType)
     vitalChange += effects[i].vitalBonus;
   if (vitalChange < 0)//消耗体力时，检查红女神等级
   {
-    vitalChange = round(vitalChange*(1- 0.01*GameConstants::RedVenusLevelVitalCostDown[venusLevelRed]));
+    vitalChange = round(vitalChange*(1- 0.01*GameConstants::RedVenusLevelVitalCostDown[venusLevelRed])*vitalCostDrop);
   }
 
 

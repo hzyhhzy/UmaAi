@@ -106,7 +106,9 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       ganJingBasic,
       xunLianBasic,
       {bonusBasic[0],bonusBasic[1],bonusBasic[2],bonusBasic[3],bonusBasic[4],bonusBasic[5]},
-      wizVitalBonusBasic
+      wizVitalBonusBasic,
+      failRateDrop,
+      vitalCostDrop
     };
 
 
@@ -349,6 +351,15 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     else if (cardSpecialEffectId == 30114) {
         if (jiBan < 80)
             effect.bonus[2] = 0;
+    }
+    // ¸£À´
+    else if (cardSpecialEffectId == 30078) {
+        effect.failRateDrop += 10;
+    }
+    // ÂÌÃ±
+    else if (cardSpecialEffectId == 30021) {
+        effect.failRateDrop += 7;
+        effect.vitalCostDrop += 4;
     }
     else
     {
