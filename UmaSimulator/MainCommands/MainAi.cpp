@@ -50,16 +50,16 @@ void loadRole()
 
 void print_luck(int luck)
 {
-    int u = -1000;
+    int u = 0;//新版平均运气大约500，但为了照顾种马比较一般和卡没满破的人（这两种情况ai打分会偏高），就设成0了
     int sigma = 1200;
     string color = "";
-    if (luck > 20000) u = 27000;
+    if (luck > 20000) u = 28500;//好点的卡平均值约为uf9
 
     if (!GameConfig::noColor)
     {
-        if (luck > u + sigma / 2)
+        if (luck > u + sigma * 1.0)
             color = "\033[32m"; // 2 3 1
-        else if (luck > u - sigma / 2)
+        else if (luck > u - sigma * 1.0)
             color = "\033[33m";
         else
             color = "\033[31m";
@@ -109,7 +109,7 @@ void main_ai()
   {
     while (!filesystem::exists(currentGameStagePath))
     {
-      std::cout << "找不到" + currentGameStagePath + "，可能是游戏未开始或小黑板未正常工作" << endl;
+      std::cout << "找不到" + currentGameStagePath + "，可能是育成未开始或小黑板未正常工作" << endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
     }
     ifstream fs(currentGameStagePath);
@@ -293,14 +293,12 @@ void main_ai()
         cout << (GameConfig::noColor ? "" : "\033[0m") << " | ";
         
         // 女神相关决策        
-        if (policy.useVenusPolicy > 0.6) {
-            cout << (GameConfig::noColor ? "" : "\033[32m") << " 要使用";
-        } else if (policy.useVenusPolicy > 0.4) {
-            cout << (GameConfig::noColor ? "" : "\033[33m") << " 可以使用";
+        if (policy.useVenusPolicy >= 0.5) {
+            cout << (GameConfig::noColor ? "" : "\033[32m") << " 建议使用";
         } else if (policy.useVenusPolicy == 0) {
             cout << (GameConfig::noColor ? "" : "\033[0m") << " 无";
         } else {
-            cout << (GameConfig::noColor ? "" : "\033[31m") << " 不使用";
+            cout << (GameConfig::noColor ? "" : "\033[31m") << " 不建议使用";
         }
         cout << (GameConfig::noColor ? "" : "\033[0m") << "女神Buff";
         cout << " |  神团三选一：";

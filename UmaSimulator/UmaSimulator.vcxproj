@@ -24,6 +24,7 @@
     <ProjectGuid>{f553a90b-cfb6-475f-8926-7b8abb96760b}</ProjectGuid>
     <RootNamespace>UmaSimulator</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>UmaAi</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
