@@ -21,7 +21,7 @@ inline int64_t now_ms()
 }
 
 //benchmark
-void main_test7()
+void main_benchmark()
 {
   GameDatabase::loadUmas("../db/uma");
   GameDatabase::loadCards("../db/card");

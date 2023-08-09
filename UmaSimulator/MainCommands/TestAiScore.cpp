@@ -124,7 +124,7 @@ void worker()
 
 }
 
-void main_test5()
+void main_testAiScore()
 {
 
 
