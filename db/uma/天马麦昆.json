@@ -1,0 +1,21 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    0, 10, 10, 0, 10 
+  ],
+  "fiveStatusInitial": [
+    90, 134, 89, 132, 105  
+  ],
+  "freeRaces": [ 
+  ],
+  "gameId": 101302, 
+  "name": "麦昆（天马）",
+  "preferRaces": [
+  ],
+  "preferReds": [
+  ],
+  "races": [
+    11,41,43,55,59,67
+  ],
+  "star": 5  
+}

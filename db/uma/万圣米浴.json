@@ -1,0 +1,21 @@
+{
+  "bonusData": [],
+  "fiveStatusBonus": [
+    0, 15, 15, 0, 0
+  ],
+  "fiveStatusInitial": [
+    93, 148, 82, 118, 109 
+  ],
+  "freeRaces": [
+  ],
+  "gameId": 103002, 
+  "name": "米浴（万圣节）",
+  "preferRaces": [
+  ],
+  "preferReds": [
+  ],
+  "races": [
+    11,29,33,43,53,55,59,71  
+  ],
+  "star": 5 
+}
