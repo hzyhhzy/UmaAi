@@ -134,7 +134,7 @@ QQ群： ![](Document/src/image1.png) **751367941** ，入群问题：哪个训�
 
 用记事本打开aiConfig.json，如下图所示
 
-![](RackMultipart20230809-1-xpxc13_html_6cbe84ed578d075d.png)
+![](Document/src/image23.png)
 
 **noColor** ：是否关闭颜色。此设置已无用，遇到乱码可以参考b)部分的说明
 
@@ -167,7 +167,7 @@ QQ群： ![](Document/src/image1.png) **751367941** ，入群问题：哪个训�
 
 7. ai完全没有考虑技能， **对于[智]目白高峰等固有词条涉及到技能的支援卡（下图），需要自己手动购买技能，ai不会提醒你！**
 
-![](Document/src/image23.png)
+![](Document/src/image24.png)
 
 
 # 8.算法

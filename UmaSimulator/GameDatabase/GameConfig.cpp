@@ -16,6 +16,27 @@ void GameConfig::load(const string& path)
 	try
 	{
 		ifstream ifs(path);
+    if (!ifs) // æ–‡ä»¶ä¸å­˜åœ¨çš„å¤„ç†
+    {
+      // åˆ›å»ºé»˜è®¤é…ç½®JSON
+      json j = {
+        {"noColor", GameConfig::noColor},
+        {"radicalFactor", GameConfig::radicalFactor},
+        {"threadNum", GameConfig::threadNum},
+        {"searchN", GameConfig::searchN},
+        {"debugPrint", GameConfig::debugPrint},
+        {"extraCardData", GameConfig::extraCardData},
+        {"role", GameConfig::role}
+        };
+      // å†™å…¥
+      ofstream ofs(path);
+      ofs << j.dump(2);
+      ofs.close();
+
+      cout << "æ‰¾ä¸åˆ°é…ç½®æ–‡ä»¶ï¼Œå·²ä½¿ç”¨é»˜è®¤é…ç½®: " << j.dump(2) << endl;
+      return;
+    }
+
 		stringstream ss;
 		ss << ifs.rdbuf();
 		ifs.close();
@@ -30,14 +51,14 @@ void GameConfig::load(const string& path)
 		GameConfig::role = j.value("role", "default");
 
 		cout << GameConfig::radicalFactor << endl;
-		cout << "µ±Ç°ÅäÖÃ: " << j.dump(2) << endl;
+		cout << "å½“å‰é…ç½®: " << j.dump(2) << endl;
 	}
 	catch (exception& e)
 	{
-		cout << "ÔØÈëÅäÖÃ³ö´í: " << e.what() << endl;
+		cout << "è½½å…¥é…ç½®å‡ºé”™: " << e.what() << endl;
 	}
 	catch (...)
 	{
-		cout << "ÔØÈëÅäÖÃÊ±·¢ÉúÎ´Öª´íÎó" << endl;
+		cout << "è½½å…¥é…ç½®æ—¶å‘ç”ŸæœªçŸ¥é”™è¯¯" << endl;
 	}
 }
