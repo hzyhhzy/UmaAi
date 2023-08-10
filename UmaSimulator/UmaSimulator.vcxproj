@@ -24,6 +24,7 @@
     <ProjectGuid>{f553a90b-cfb6-475f-8926-7b8abb96760b}</ProjectGuid>
     <RootNamespace>UmaSimulator</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>UmaAi</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -141,7 +142,10 @@
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GamePrint.cpp" />
     <ClCompile Include="Game\Protocol.cpp" />
+    <ClCompile Include="MainCommands\Benchmark.cpp" />
+    <ClCompile Include="MainCommands\MainAi.cpp" />
     <ClCompile Include="MainCommands\PlayerPlay.cpp" />
+    <ClCompile Include="MainCommands\TestAiScore.cpp" />
     <ClCompile Include="NeuralNet\Evaluator.cpp" />
     <ClCompile Include="NeuralNet\Model.cpp" />
     <ClCompile Include="NeuralNet\NNInput.cpp" />
@@ -152,9 +156,6 @@
     <ClCompile Include="Tests\test2.cpp" />
     <ClCompile Include="Tests\test3.cpp" />
     <ClCompile Include="Tests\test4.cpp" />
-    <ClCompile Include="Tests\test5.cpp" />
-    <ClCompile Include="Tests\test6.cpp" />
-    <ClCompile Include="Tests\test7.cpp" />
     <ClCompile Include="Tests\test_json.cpp" />
     <ClCompile Include="UmaSimulator.cpp" />
   </ItemGroup>
