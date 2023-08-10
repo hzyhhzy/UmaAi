@@ -18,17 +18,18 @@ using namespace std;
 const bool handWrittenEvaluationTest = true;
 const int threadNum = 16;
 const int threadNumInner = 1;
-const double radicalFactor = 5;//激进度
+const double radicalFactor = 3;//激进度
 const int searchN = handWrittenEvaluationTest ? 1 : 3072;
 
 
-const int totalGames = handWrittenEvaluationTest ? 1200000 : 10000000;
+const int totalGames = handWrittenEvaluationTest ? 120000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
 
 
 
 int umaId = 101101;//草上飞
 int cards[6] = { 301374,301344,300104,300194,300114,301074 };//神团，高峰，美妙，乌拉拉，风神，司机
+//int cards[6] = { 301374,301344,301414,300374,300114,301304 };//神团，高峰，波旁，皇帝，风神，凯斯
 //手写逻辑应当为27699±5（1000000局）
 
 
@@ -118,7 +119,8 @@ void worker()
         << "31000分概率=" << float(segmentStats[310]) / n << ","
         << "31500分概率=" << float(segmentStats[315]) / n << ","
         << "32000分概率=" << float(segmentStats[320]) / n << ","
-        << "32500分概率=" << float(segmentStats[325]) / n << endl;
+        << "32500分概率=" << float(segmentStats[325]) / n << ","
+        << "33000分概率=" << float(segmentStats[330]) / n << endl;
     }
   }
 
