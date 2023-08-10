@@ -34,9 +34,9 @@ void GameDatabase::loadCards(const string& dir)
                         jdata[x].load_from_json(j, x);
                     }
 
-                    cout << "ÔØÈëÖ§Ô®¿¨ #" << jdata[4].cardName << " --- " << jdata[4].cardID << endl;
+                    cout << "è½½å…¥æ”¯æ´å¡ #" << jdata[4].cardName << " --- " << jdata[4].cardID << endl;
                     if (GameDatabase::AllCards.count(jdata[4].cardID) > 0)
-                        cout << "´íÎó£ºÖØ¸´Ö§Ô®¿¨ #" << jdata[4].cardName << " --- " << jdata[4].cardID << endl;
+                        cout << "é”™è¯¯ï¼šé‡å¤æ”¯æ´å¡ #" << jdata[4].cardName << " --- " << jdata[4].cardID << endl;
                     else {
                         for (int x = 0; x < 5; ++x) 
                             GameDatabase::AllCards[jdata[x].cardID] = jdata[x];
@@ -45,19 +45,19 @@ void GameDatabase::loadCards(const string& dir)
                 }
                 catch (exception& e)
                 {
-                    cout << "Ö§Ô®¿¨ĞÅÏ¢JSON³ö´í: " << entry.path() << endl << e.what() << endl;
+                    cout << "æ”¯æ´å¡ä¿¡æ¯JSONå‡ºé”™: " << entry.path() << endl << e.what() << endl;
                 }
             }
         }
-        cout << "¹²ÔØÈë " << GameDatabase::AllCards.size() << " ¸öÖ§Ô®¿¨Êı¾İ" << endl;
+        cout << "å…±è½½å…¥ " << GameDatabase::AllCards.size() << " ä¸ªæ”¯æ´å¡æ•°æ®" << endl;
     }
     catch (exception& e)
     {
-        cout << "¶ÁÈ¡Ö§Ô®¿¨ĞÅÏ¢³ö´í: " << endl << e.what() << endl;
+        cout << "è¯»å–æ”¯æ´å¡ä¿¡æ¯å‡ºé”™: " << endl << e.what() << endl;
     }
     catch (...)
     {
-        cout << "¶ÁÈ¡Ö§Ô®¿¨ĞÅÏ¢³ö´í£ºÎ´Öª´íÎó" << endl;
+        cout << "è¯»å–æ”¯æ´å¡ä¿¡æ¯å‡ºé”™ï¼šæœªçŸ¥é”™è¯¯" << endl;
     }
 }
 
@@ -86,15 +86,15 @@ void GameDatabase::loadDBCards(const string& pathname)
             }
             
         }
-        cout << "¹²ÔØÈë " << GameDatabase::AllCards.size() << " Ö§Ô®¿¨ÔªÊı¾İ" << endl;
+        cout << "å…±è½½å…¥ " << GameDatabase::AllCards.size() << " æ”¯æ´å¡å…ƒæ•°æ®" << endl;
     }
     catch (exception& e)
     {
-        cout << "¶ÁÈ¡Ö§Ô®¿¨ĞÅÏ¢³ö´í: " << endl << e.what() << endl;
+        cout << "è¯»å–æ”¯æ´å¡ä¿¡æ¯å‡ºé”™: " << endl << e.what() << endl;
     }
     catch (...)
     {
-        cout << "¶ÁÈ¡Ö§Ô®¿¨ĞÅÏ¢³ö´í£ºÎ´Öª´íÎó" << endl;
+        cout << "è¯»å–æ”¯æ´å¡ä¿¡æ¯å‡ºé”™ï¼šæœªçŸ¥é”™è¯¯" << endl;
     }
 }
 
@@ -106,25 +106,27 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       ganJingBasic,
       xunLianBasic,
       {bonusBasic[0],bonusBasic[1],bonusBasic[2],bonusBasic[3],bonusBasic[4],bonusBasic[5]},
-      wizVitalBonusBasic
+      wizVitalBonusBasic,
+      failRateDrop,
+      vitalCostDrop
     };
 
 
 
-    bool isShining = true;//ÊÇ·ñÉÁ²Ê
-    if (cardType < 5)//ËÙÄÍÁ¦¸ùÖÇ¿¨
+    bool isShining = true;//æ˜¯å¦é—ªå½©
+    if (cardType < 5)//é€Ÿè€åŠ›æ ¹æ™ºå¡
     {
         if (jiBan < 80)isShining = false;
         if (cardType != atTrain)isShining = false;
     }
-    else if (cardType == 5)//ÉñÍÅ
+    else if (cardType == 5)//ç¥å›¢
     {
         if (!game.venusCardIsQingRe)
             isShining = false;
     }
-    else std::cout << "Î´Öª¿¨";
+    else std::cout << "æœªçŸ¥å¡";
 
-    if (game.venusIsWisdomActive && game.venusAvailableWisdom == 3)//»ÆÅ®Éñ
+    if (game.venusIsWisdomActive && game.venusAvailableWisdom == 3)//é»„å¥³ç¥
         isShining = true;
 
     if (!isShining)
@@ -138,8 +140,8 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     int cardSpecialEffectId = cardID / 10;
 
 
-    //½ÓÏÂÀ´ÊÇ¸÷ÖÖ¹ÌÓĞ
-    //1.ÉñÍÅ
+    //æ¥ä¸‹æ¥æ˜¯å„ç§å›ºæœ‰
+    //1.ç¥å›¢
     if (cardSpecialEffectId == 30137)
     {
         if (jiBan < 100)
@@ -150,29 +152,29 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.bonus[5] = 0;
         }
     }
-    //2.¸ß·å
-    //ÎªÁË¼ò»¯£¬ÊÓÎª³õÊ¼ÑµÁ·¼Ó³ÉÊÇ4%£¬µÚÒ»ÄêÖğ½¥Ôö´óµ½20%£¬Ò²¾ÍÊÇµÚn¸ö»ØºÏ4+n*(2/3)%
+    //2.é«˜å³°
+    //ä¸ºäº†ç®€åŒ–ï¼Œè§†ä¸ºåˆå§‹è®­ç»ƒåŠ æˆæ˜¯4%ï¼Œç¬¬ä¸€å¹´é€æ¸å¢å¤§åˆ°20%ï¼Œä¹Ÿå°±æ˜¯ç¬¬nä¸ªå›åˆ4+n*(2/3)%
     else if (cardSpecialEffectId == 30134)
     {
         if (game.turn < 24)
             effect.xunLian = 4 + 0.6666667 * game.turn;
     }
-    //3.ÃÀÃî
+    //3.ç¾å¦™
     else if (cardSpecialEffectId == 30010)
     {
-        //É¶¶¼Ã»ÓĞ
+        //å•¥éƒ½æ²¡æœ‰
     }
-    //4.¸ùÎÚÀ­À­
+    //4.æ ¹ä¹Œæ‹‰æ‹‰
     else if (cardSpecialEffectId == 30019)
     {
-        //É¶¶¼Ã»ÓĞ
+        //å•¥éƒ½æ²¡æœ‰
     }
-    //5.¸ù·çÉñ
+    //5.æ ¹é£ç¥
     else if (cardSpecialEffectId == 30011)
     {
-        //É¶¶¼Ã»ÓĞ
+        //å•¥éƒ½æ²¡æœ‰
     }
-    //6.Ë®Ë¾»ú
+    //6.æ°´å¸æœº
     else if (cardSpecialEffectId ==30107)
     {
 
@@ -180,7 +182,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         effect.xunLian = 5 + traininglevel * 5;
         if (effect.xunLian > 25)effect.xunLian = 25;
     }
-    //7.¸ù¿­Ë¹
+    //7.æ ¹å‡¯æ–¯
     else if (cardSpecialEffectId == 30130)
     {
         if (jiBan < 80)
@@ -188,7 +190,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.bonus[2] = 0;
         }
     }
-    //8.¸ù»ÊµÛ
+    //8.æ ¹çš‡å¸
     else if (cardSpecialEffectId == 30037)
     {
         if (jiBan < 80)
@@ -196,12 +198,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.bonus[0] = 0;
         }
     }
-    //9.¸ùÉÆĞÅ
+    //9.æ ¹å–„ä¿¡
     else if (cardSpecialEffectId == 30027)
     {
-        //É¶¶¼Ã»ÓĞ
+        //å•¥éƒ½æ²¡æœ‰
     }
-    //10.ËÙ±¦Ñ¨
+    //10.é€Ÿå®ç©´
     else if (cardSpecialEffectId == 30147)
     {
         if (jiBan < 100)
@@ -209,12 +211,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.bonus[0] = 0;
         }
     }
-    //11.ÄÍº£Íå
+    //11.è€æµ·æ¹¾
     else if (cardSpecialEffectId == 30016)
     {
-        //É¶¶¼Ã»ÓĞ
+        //å•¥éƒ½æ²¡æœ‰
     }
-    //12.ÖÇºÃ¸è¾ç
+    //12.æ™ºå¥½æ­Œå‰§
     else if (cardSpecialEffectId == 30152)
     {
         if (jiBan < 80)
@@ -222,7 +224,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.bonus[0] = 0;
         }
     }
-    //13.¸ù»Æ½ğ³Ç
+    //13.æ ¹é»„é‡‘åŸ
     else if (cardSpecialEffectId == 30153)
     {
         if (jiBan < 100)
@@ -230,12 +232,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.bonus[3] = 0;
         }
     }
-    //14.ÖÇ²¨ÅÔ
+    //14.æ™ºæ³¢æ—
     else if (cardSpecialEffectId == 30141)
     {
-        //É¶¶¼Ã»ÓĞ
+        //å•¥éƒ½æ²¡æœ‰
     }
-    //15.ÄÍµÒ¶ÅË¹
+    //15.è€ç‹„æœæ–¯
     else if (cardSpecialEffectId == 30099)
     {
         int totalJiBan = 0;
@@ -243,14 +245,14 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             totalJiBan += game.cardJiBan[i];
         effect.xunLian = totalJiBan / 30;
     }
-    //ËÙ×Ó
+    //é€Ÿå­
     else if (cardSpecialEffectId == 30101) {
         if (jiBan < 100)
         {
             effect.youQing = 22;
         }
     }
-    //22£¬ÄÍ¹ğ¹Ú
+    //22ï¼Œè€æ¡‚å† 
     else if (cardSpecialEffectId == 30142)
     {
       if (game.turn < 24)
@@ -260,14 +262,14 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       else
         effect.bonus[1] = 3;
     }
-    //23Á¦°×ÈÊ
+    //23åŠ›ç™½ä»
     else if (cardSpecialEffectId == 30123)
     {
       int traininglevel = game.getTrainingLevel(atTrain);
       effect.xunLian = 5 + traininglevel * 5;
       if (effect.xunLian > 25)effect.xunLian = 25;
     }
-    //24Á¦ÖØÅÚ
+    //24åŠ›é‡ç‚®
     else if (cardSpecialEffectId == 30151)
     {
         if (jiBan < 100)
@@ -275,7 +277,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.xunLian = 0;
         }
     }
-    //25Á¦ÄÚÇ¡
+    //25åŠ›å†…æ°
     else if (cardSpecialEffectId == 30138)
     {
       if (jiBan < 100)
@@ -283,18 +285,18 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         effect.bonus[2] = 0;
       }
     }
-    //28¸ùÎĞÂÖ
+    //28æ ¹æ¶¡è½®
     else if (cardSpecialEffectId == 30112)
     {
-      //ÒÔºóÔÙÏë°ì·¨
+      //ä»¥åå†æƒ³åŠæ³•
     }
-    //29¸ù½øÍõ
+    //29æ ¹è¿›ç‹
     else if (cardSpecialEffectId == 30083)
     {
       if (jiBan < 80 || atTrain == 3)
         effect.xunLian = 0;
     }
-    //30¸ùÇàÖñ
+    //30æ ¹é’ç«¹
     else if (cardSpecialEffectId == 30094)
     {
       if (effect.youQing > 0)
@@ -308,7 +310,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       }
 
     }
-    //Ò²ÎÊ
+    //ä¹Ÿé—®
     else if (cardSpecialEffectId == 30126)
     {
         if (jiBan < 80)
@@ -317,7 +319,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.bonus[5] = 0;
         }
     }
-    //ÄÍÌØ
+    //è€ç‰¹
     else if (cardSpecialEffectId == 30127)
     {
         if (isShining)
@@ -325,12 +327,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.ganJing = 60;
         }
     }
-    //¸ùÌØ
+    //æ ¹ç‰¹
     else if (cardSpecialEffectId == 47)
     {
         //null
     }
-    //ËÙ¶ûµ¤
+    //é€Ÿå°”ä¸¹
     else if (cardSpecialEffectId == 30119)
     {
         if (jiBan < 80)
@@ -338,19 +340,28 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             effect.bonus[2] = 0;
         }
     }
-    // »ÊÍÅ
+    // çš‡å›¢
     else if (cardSpecialEffectId == 30067) {
 
         if (jiBan < 80)
             effect.bonus[5] = 0;
 
     }
-    // ºì±¦
+    // çº¢å®
     else if (cardSpecialEffectId == 30114) {
         if (jiBan < 80)
             effect.bonus[2] = 0;
     }
-    // ÖÇ²è×ù
+    // ç¦æ¥
+    else if (cardSpecialEffectId == 30078) {
+        effect.failRateDrop += 10;
+    }
+    // ç»¿å¸½
+    else if (cardSpecialEffectId == 30021) {
+        effect.failRateDrop += 7;
+        effect.vitalCostDrop += 4;
+    }
+    // æ™ºèŒ¶åº§
     else if (cardSpecialEffectId == 30157) {
       if (jiBan < 100)
       {
@@ -360,7 +371,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     }
     else
     {
-      //  std::cout << "Î´Öª¿¨";
+      //  std::cout << "æœªçŸ¥å¡";
     }
 
     return effect;
