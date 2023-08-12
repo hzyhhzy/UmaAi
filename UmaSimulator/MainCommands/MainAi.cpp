@@ -99,8 +99,8 @@ void main_ai()
     GameDatabase::loadDBCards("./db/cardDB.json");
   loadRole();   // roleplay
 
-  string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/packets/currentGS.json";
-
+  //string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/packets/currentGS.json";
+  string currentGameStagePath = "packets/thisTurn.json";
 
   for (int i = 0; i < GameConfig::threadNum; i++)
       evaluators.push_back(Evaluator(NULL, 128));
