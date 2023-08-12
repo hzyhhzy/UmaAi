@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        8,
+        14,
+        0,
+        0,
+        8
+    ],
+    "fiveStatusInitial": [
+        101,
+        107,
+        110,
+        110,
+        122
+    ],
+    "freeRaces": [],
+    "gameId": 101702,
+    "name": "symboli-rudolf",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        18,
+        30,
+        33,
+        43,
+        47,
+        55,
+        69,
+        71
+    ],
+    "star": 5
+}

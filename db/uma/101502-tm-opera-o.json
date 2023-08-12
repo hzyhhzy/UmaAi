@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        14,
+        8,
+        0,
+        0,
+        8
+    ],
+    "fiveStatusInitial": [
+        106,
+        124,
+        91,
+        107,
+        122
+    ],
+    "freeRaces": [],
+    "gameId": 101502,
+    "name": "tm-opera-o",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        30,
+        33,
+        47,
+        55,
+        59,
+        69,
+        71
+    ],
+    "star": 5
+}

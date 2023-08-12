@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        0,
+        20,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        113,
+        104,
+        126,
+        101,
+        106
+    ],
+    "freeRaces": [],
+    "gameId": 106202,
+    "name": "matikanetannhauser",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        30,
+        33,
+        43,
+        51,
+        55,
+        59,
+        69,
+        71
+    ],
+    "star": 5
+}

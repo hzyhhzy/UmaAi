@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        10,
+        0,
+        0,
+        10
+    ],
+    "fiveStatusInitial": [
+        102,
+        123,
+        100,
+        110,
+        115
+    ],
+    "freeRaces": [],
+    "gameId": 102402,
+    "name": "mayano-top-gun",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        43,
+        47,
+        53,
+        55,
+        59,
+        67,
+        71
+    ],
+    "star": 5
+}

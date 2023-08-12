@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        20,
+        0,
+        0,
+        10,
+        0
+    ],
+    "fiveStatusInitial": [
+        121,
+        89,
+        118,
+        120,
+        102
+    ],
+    "freeRaces": [],
+    "gameId": 108701,
+    "name": "aston-machan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        20,
+        22,
+        28,
+        30,
+        41,
+        53,
+        65
+    ],
+    "star": 5
+}

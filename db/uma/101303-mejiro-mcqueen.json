@@ -1,0 +1,31 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        8,
+        8,
+        0,
+        0,
+        14
+    ],
+    "fiveStatusInitial": [
+        100,
+        104,
+        100,
+        138,
+        108
+    ],
+    "freeRaces": [],
+    "gameId": 101303,
+    "name": "mejiro-mcqueen",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        41,
+        43,
+        55,
+        59,
+        67
+    ],
+    "star": 5
+}

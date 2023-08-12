@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        10,
+        10,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        123,
+        83,
+        112,
+        117,
+        115
+    ],
+    "freeRaces": [],
+    "gameId": 102602,
+    "name": "mihono-bourbon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        22,
+        29,
+        30,
+        33,
+        43,
+        55,
+        69,
+        71
+    ],
+    "star": 5
+}

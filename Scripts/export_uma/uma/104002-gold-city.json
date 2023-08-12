@@ -1,0 +1,35 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        8,
+        0,
+        8,
+        0,
+        14
+    ],
+    "fiveStatusInitial": [
+        105,
+        120,
+        105,
+        119,
+        101
+    ],
+    "freeRaces": [],
+    "gameId": 104002,
+    "name": "gold-city",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        22,
+        30,
+        33,
+        43,
+        47,
+        53,
+        55,
+        59,
+        69
+    ],
+    "star": 5
+}

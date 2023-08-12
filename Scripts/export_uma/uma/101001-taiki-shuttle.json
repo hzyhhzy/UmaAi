@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        20,
+        0,
+        0,
+        0,
+        10
+    ],
+    "fiveStatusInitial": [
+        118,
+        87,
+        119,
+        113,
+        113
+    ],
+    "freeRaces": [],
+    "gameId": 101001,
+    "name": "taiki-shuttle",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        24,
+        32,
+        35,
+        45,
+        58,
+        65,
+        69
+    ],
+    "star": 5
+}

@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        30,
+        0,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        101,
+        120,
+        115,
+        105,
+        109
+    ],
+    "freeRaces": [],
+    "gameId": 102501,
+    "name": "manhattan-cafe",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        28,
+        41,
+        43,
+        47,
+        55,
+        59,
+        69,
+        71
+    ],
+    "star": 5
+}

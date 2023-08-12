@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        10,
+        10,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        119,
+        113,
+        121,
+        92,
+        105
+    ],
+    "freeRaces": [],
+    "gameId": 104901,
+    "name": "nakayama-festa",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        24,
+        30,
+        33,
+        43,
+        46,
+        59,
+        69
+    ],
+    "star": 5
+}

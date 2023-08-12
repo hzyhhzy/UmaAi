@@ -1,0 +1,35 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        0,
+        10,
+        0,
+        20
+    ],
+    "fiveStatusInitial": [
+        122,
+        101,
+        113,
+        100,
+        114
+    ],
+    "freeRaces": [],
+    "gameId": 103701,
+    "name": "eishin-flash",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        24,
+        30,
+        33,
+        45,
+        47,
+        53,
+        55,
+        67,
+        71
+    ],
+    "star": 5
+}
