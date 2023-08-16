@@ -369,6 +369,19 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         effect.bonus[5] = 0;
       }
     }
+    // Á¦ÄÌÄÌ
+    else if (cardSpecialEffectId == 30156) {
+      if (jiBan < 80)
+      {
+        effect.bonus[2] = 0;
+      }
+    }
+    // Á¦·É¾Ô
+    else if (cardSpecialEffectId == 30132) {
+      int guyouLevel = (game.maxVital - 100) / 4;
+      if (guyouLevel > 5)guyouLevel = 5;
+      effect.xunLian = 5 + 3 * guyouLevel;
+    }
     else
     {
       //  std::cout << "Î´Öª¿¨";

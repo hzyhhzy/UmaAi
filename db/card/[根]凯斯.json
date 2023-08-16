@@ -11,13 +11,81 @@
             "filled": false
         },
         {
-            "filled": false
+            "bonus": [
+                0.0,
+                0.0,
+                2.0,
+                1.0,
+                0.0,
+                0.0
+            ],
+            "deYiLv": 53.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 42.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15
+            ],
+            "hintProbIncrease": 33.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 16,
+            "saiHou": 5.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 0.0,
+            "youQing": 26.0
         },
         {
             "filled": false
         },
         {
-            "filled": false
+            "bonus": [
+                0.0,
+                0.0,
+                2.0,
+                1.0,
+                0.0,
+                0.0
+            ],
+            "deYiLv": 61.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 47.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15
+            ],
+            "hintProbIncrease": 40.0,
+            "initialBonus": [
+                0,
+                0,
+                15,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 20,
+            "saiHou": 5.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 0.0,
+            "youQing": 28.0
         },
         {
             "bonus": [

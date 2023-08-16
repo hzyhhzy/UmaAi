@@ -1,6 +1,6 @@
 {
-    "cardId": 30123,
-    "cardName": "[力]白仁",
+    "cardId": 30156,
+    "cardName": "[力]奇锐骏",
     "cardSkill": {
         "SkillList": 0,
         "skillNum": 0
@@ -23,24 +23,24 @@
             "bonus": [
                 0.0,
                 2.0,
-                0.0,
+                2.0,
                 0.0,
                 0.0,
                 1.0
             ],
-            "deYiLv": 65.0,
+            "deYiLv": 50.0,
             "failRateDrop": 0.0,
             "filled": true,
-            "ganJing": 0.0,
+            "ganJing": 40.0,
             "hintBonus": [
                 0,
                 0,
                 0,
                 0,
                 0,
-                15
+                20
             ],
-            "hintProbIncrease": 30.0,
+            "hintProbIncrease": 60.0,
             "initialBonus": [
                 0,
                 0,
@@ -49,12 +49,12 @@
                 0,
                 0
             ],
-            "initialJiBan": 20,
+            "initialJiBan": 25,
             "saiHou": 5.0,
             "vitalCostDrop": 0.0,
             "wizVitalBonus": 0,
-            "xunLian": 25.0,
-            "youQing": 20.0
+            "xunLian": 5.0,
+            "youQing": 25.0
         }
     ]
 }

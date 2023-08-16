@@ -133,6 +133,7 @@ void main_testAiScore()
     // 检查工作目录
     GameDatabase::loadUmas("../db/uma");
     GameDatabase::loadCards("../db/card");
+    GameDatabase::loadDBCards("../db/cardDB.json");
 
 
   for (int i = 0; i < 200; i++)segmentStats[i] = 0;
