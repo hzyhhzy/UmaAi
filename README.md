@@ -1,3 +1,6 @@
+# 凯旋门剧本的ai预计还需要一个月   
+# The AI of the LArc scenario will take about one month   
+
 # UmaAi使用说明
 
 更新时间 2023-08-13
