@@ -2,72 +2,74 @@
 #include <random>
 #include <array>
 #include "../GameDatabase/GameDatabase.h"
+#include "../Game/Person.h"
 
 struct Game
 {
   //基本状态，不包括当前回合的训练信息
-  int umaId;//马娘编号，见KnownUmas.cpp
-  int turn;//回合数，从0开始，到77结束
-  int vital;//体力，叫做“vital”是因为游戏里就这样叫的
-  int maxVital;//体力上限
+  int16_t umaId;//马娘编号，见KnownUmas.cpp
+  int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
+  int16_t turn;//回合数，从0开始，到77结束
+  int16_t vital;//体力，叫做“vital”是因为游戏里就这样叫的
+  int16_t maxVital;//体力上限
   bool isQieZhe;//切者
   bool isAiJiao;//爱娇
-  int failureRateBias;//失败率改变量。练习上手=2，练习下手=-2
-  int fiveStatus[5];//五维属性，1200以上不减半
+  int16_t failureRateBias;//失败率改变量。练习上手=2，练习下手=-2
+  int16_t fiveStatus[5];//五维属性，1200以上不减半
   //int fiveStatusUmaBonus[5];//马娘自身加成
-  int fiveStatusLimit[5];//五维属性上限，1200以上不减半
-  int skillPt;//技能点
-  int motivation;//干劲，从1到5分别是绝不调到绝好调
-  int cardId[6];//6张卡的id
-  int cardJiBan[8];//羁绊，六张卡分别012345，理事长6，记者7
-  int trainLevelCount[5];//五个训练的等级的计数，实际训练等级=min(5,t/12+1)
-  int zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
-  int zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
-  int isRacing;//这个回合是否在比赛
+  int16_t fiveStatusLimit[5];//五维属性上限，1200以上不减半
+  int16_t skillPt;//技能点
+  int16_t motivation;//干劲，从1到5分别是绝不调到绝好调
+  //int cardId[6];//6张卡的id
+  //int cardJiBan[8];//羁绊，六张卡分别012345，理事长6，记者7
+  int16_t trainLevelCount[5];//五个训练的等级的计数，实际训练等级=min(5,t/4+1)
+  int16_t zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
+  int16_t zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
   //bool raceTurns[TOTAL_TURN];//哪些回合是比赛 //用umaId替代，在GameDatabase::AllUmas里找
+  Person persons[18];//如果不带其他友人团队卡，最多18个头。依次是15个可充电人头（先是支援卡：0~4或5，再是npc：5或6~14），理事长15，记者16，佐岳17（带没带卡都是17）
+  bool isRacing;//这个回合是否在比赛
 
-  //女神杯相关
-  int venusLevelYellow;//女神等级
-  int venusLevelRed;
-  int venusLevelBlue;
+  int motivationDropCount;//掉过几次心情了（已知同一个掉心情不会出现多次，一共3个掉心情事件，所以之前掉过越多，之后掉的概率越低）
 
-  int venusSpiritsBottom[8];//底层碎片。8*颜色+属性。颜色012对应红蓝黄，属性123456对应速耐力根智pt。叫做“spirit”是因为游戏里就这样叫的
-  int venusSpiritsUpper[4 + 2];//按顺序分别是第二层和第三层的碎片，编号与底层碎片一致。*2还是*3现场算
-  int venusAvailableWisdom;//顶层的女神睿智，123分别是红蓝黄，0是没有
-  bool venusIsWisdomActive;//是否正在使用睿智
 
-  //神团卡专属
-  bool venusCardFirstClick;// 是否已经点击过神团卡
-  bool venusCardUnlockOutgoing;// 是否解锁外出
-  bool venusCardIsQingRe;// 情热zone
-  int venusCardQingReContinuousTurns;//女神连着情热了几个回合
-  bool venusCardOutgoingUsed[5];// 用过哪些出行，依次是红黄蓝和最后两个
+  //凯旋门相关
+
+  bool larc_isAbroad;//这个回合是否在海外
+  int32_t larc_supportPt;//所有人的支援pt，每1700支援pt对应1%期待度
+  int16_t larc_shixingPt;//适性pt
+  int16_t larc_levels[10];//10个海外适性的等级，0为未解锁
+  bool larc_isSSS;//是否为sss
+  bool larc_isFirstLarcWin;// 第一场凯旋门赢没赢
+  bool larc_allowedDebuffsFirstLarc[3][8];//第一次凯旋门可以不消哪些debuff。玩家可以设置3种组合，满足一种即可
+
+  int16_t larc_zuoyueType;//没带佐岳卡=0，带的SSR卡=1，带的R卡=2
+  int16_t larc_zuoyueCardLevel;//佐岳卡的等级
+  bool larc_zuoyueFirstClick;//佐岳是否点过第一次
+  bool larc_zuoyueOutgoingUnlocked;//佐岳外出解锁
+  int16_t larc_zuoyueOutgoingUsed;//佐岳外出走了几段了
+
+
+
 
   //当前回合的训练信息
   //0支援卡还未分配，1支援卡分配完毕或比赛开始前，2训练结束后或比赛结束后，0检查各种固定事件与随机事件并进入下一个回合
   //stageInTurn=0时可以输入神经网络输出估值，stageInTurn=1时可以输入神经网络输出policy
-  int stageInTurn;
-  bool cardDistribution[5][8];//支援卡分布，六张卡分别012345，理事长6，记者7
+  int16_t stageInTurn;
+  int16_t personDistribution[5][5];//每个训练有哪些人头id，personDistribution[哪个训练][第几个人头]，空人头为-1
   bool cardHint[6];//六张卡分别有没有亮红点
-  int spiritDistribution[5 + 3];//碎片分布，依次是五训练01234，休息5，外出6，比赛7。若为2碎片，则加32
+  int16_t spiritDistribution[5 + 3];//碎片分布，依次是五训练01234，休息5，外出6，比赛7。若为2碎片，则加32
 
   //通过计算获得的信息
-  int spiritBonus[6];//碎片加成
-  int trainValue[5][7];//第一个数是第几个训练，第二个数依次是速耐力根智pt体力
-  int failRate[5];//训练失败率
+  int16_t trainValue[5][7];//第一个数是第几个训练，第二个数依次是速耐力根智pt体力
+  int16_t failRate[5];//训练失败率
+  int16_t larc_trainBonus;//期待度训练加成
+  int16_t larc_ssPersonsCount;//ss有几个人
+  int16_t larc_ssPersons[5];//ss有哪几个人
+  int16_t larc_ssValue[7];//ss的速耐力根智pt体力（上层的属性也算，技能换算成pt）
+  int16_t larc_ssSpecialEffects[13];//ss的特殊buff（去掉与上面重复的。比如“体力+心情”在此处只考虑心情）
+  int16_t larc_ssSupportPtGain;//ss的支援pt总共加多少（自己+其他人头）
 
-  //随机数发生器，用于分配卡组和碎片
-  //前提是得意率为常数
-  std::discrete_distribution<> cardDistributionRandom[8];
-  std::discrete_distribution<> venusSpiritTypeRandom[8];
 
-  // 当前游戏的马娘
-  // 指针只指向静态内容，相当于存放Int64数据，不会影响对象复制
-  UmaData* umaData;
-
-  // 当前游戏的卡组
-  // 指针只指向静态内容，相当于存放Int64数据，不会影响对象复制
-  SupportCard* cardData[6];
 
   //显示相关
   bool playerPrint;//给人玩的时候，显示更多信息

@@ -135,6 +135,12 @@
     <ClCompile Include="MainCommands\TestAiScore.cpp">
       <Filter>源文件\MainCommands</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Action.cpp">
+      <Filter>源文件\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Person.cpp">
+      <Filter>源文件\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
@@ -190,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="GameDatabase\SkillData.h">
       <Filter>头文件\GameDatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Person.h">
+      <Filter>头文件\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action.h">
+      <Filter>头文件\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
