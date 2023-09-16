@@ -3,6 +3,7 @@
 #include <random>
 #include <string>
 struct SupportCard;
+struct Game;
 struct Person //任何一个可能出现在训练里的人头
 {
   int8_t personType;//0代表未加载（例如前两个回合的npc），1代表佐岳支援卡（R或SSR都行），2代表普通支援卡，3代表npc人头，4理事长，5记者，6不带卡的佐岳。暂不支持其他友人/团队卡
@@ -15,7 +16,7 @@ struct Person //任何一个可能出现在训练里的人头
   bool isShining;//是否闪彩。无法闪彩的卡或者npc恒为false
   int8_t cardRecord;//记录一些可能随着时间而改变的参数，例如根涡轮的固有
 
-  int8_t larc_isLinkCard;//是否为link支援卡
+  bool larc_isLinkCard;//是否为link支援卡
   int8_t larc_charge;//现在充了几格
   bool larc_atSS;//是否在ss对战里
   int8_t larc_statusType;//速耐力根智01234
@@ -33,5 +34,6 @@ struct Person //任何一个可能出现在训练里的人头
 
 
   void writeSinglePersonNNInput(float* buf) const;//神经网络输入向量
-  std::string getPersonName();//获得人物名称
+  std::string getPersonName(const Game& game);//获得人物名称
+  std::string getPersonNameColored(const Game& game);//获得人物名称并标注颜色
 };

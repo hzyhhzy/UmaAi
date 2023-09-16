@@ -23,33 +23,85 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   skillPt = 120;
   skillScore = umaStars >= 3 ? 170 * (1 + umaStars) : 120 * (3 + umaStars);//固有技能
   motivation = 3;
+  isPositiveThinking = false;
   for (int i = 0; i < 5; i++)
     trainLevelCount[i] = 0;
   isRacing = false;
 
+  larc_zuoyueType = 0;
+  larc_zuoyueCardLevel = 0;
+  for (int i = 0; i < 18; i++)
+  {
+    persons[i] = Person();
+  }
+  persons[15].personType = 4;
+  persons[16].personType = 5;
+  persons[17].personType = 6;
 
 
+  normalCardCount = 0;//速耐力根智卡的数量
+  for (int i = 0; i < 6; i++)
+  {
+    int cardId = newCards[i];
+    cardParam[i] = GameDatabase::AllCards[cardId];
+    SupportCard& cardP = cardParam[i];
+    int cardType = cardP.cardType;
+    if (cardType == 5 || cardType == 6)
+    {
 
+      int realCardId = cardId / 10;
+      if (realCardId == 30160 || realCardId == 10094)//佐岳卡
+      {
+        if (realCardId == 30160)
+          larc_zuoyueType = 1;
+        else 
+          larc_zuoyueType = 2;
 
+        larc_zuoyueCardLevel = cardId % 10;
+        persons[17].personType = 1;
+        persons[17].cardIdInGame = i;
+      }
+      else
+      {
+        throw string("不支持带佐岳以外的友人或团队卡");
+      }
+    }
+    else//速耐力根智卡
+    {
+      Person& p = persons[normalCardCount];
+      normalCardCount += 1;
+      p.personType = 2;
+      p.cardIdInGame = i;
+      p.friendship = cardP.initialJiBan;
+      p.larc_isLinkCard = cardP.larc_isLink;
 
-
+      std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
+      probs[cardP.cardType] += cardP.deYiLv;
+      p.distribution = std::discrete_distribution<>(probs.begin(), probs.end());
+    }
+  }
 
 
   motivationDropCount = 0;
 
+  larc_isAbroad = false;
+  larc_supportPtAll = 0;
+  larc_shixingPt = 0;
+  for (int i = 0; i < 10; i++)larc_levels[i] = 0;
+  larc_isSSS = false;
+  larc_ssWin = 0;
+  larc_ssWinSinceLastSSS = 0;
+  larc_isFirstLarcWin = false;
+  for (int i = 0; i < 3; i++)for (int j = 0; j < 8; j++)
+    larc_allowedDebuffsFirstLarc[i][j] = false;
+
+  //larc_zuoyueType
+  //larc_zuoyueCardLevel
+  larc_zuoyueFirstClick = false;
+  larc_zuoyueOutgoingUnlocked = false;
+  larc_zuoyueOutgoingUsed = 0;
 
 
-
-
-
-
-  umaData = &GameDatabase::AllUmas[umaId];
-  for (int i = 0; i < 6; i++)
-  {
-    cardId[i] = newCards[i];
-    cardData[i] = &GameDatabase::AllCards[newCards[i]];
-  }
-  assert(cardData[0]->cardType == 5 && "神团卡不在第一个位置");
   for (int i = 0; i < 5; i++)
     zhongMaBlueCount[i] = newZhongMaBlueCount[i];
   for (int i = 0; i < 6; i++)
@@ -59,44 +111,27 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   for (int i = 0; i < 5; i++)
     fiveStatusLimit[i] = GameConstants::BasicFiveStatusLimit[i]; //原始属性上限
   for (int i = 0; i < 5; i++)
-    fiveStatusLimit[i] += zhongMaBlueCount[i] * 7 * 2; //属性上限--种马基础值
-  for (int i = 0; i < 5; i++)
-    fiveStatusLimit[i] += rand() % 20; //属性上限--后两次继承随机增加
+    fiveStatusLimit[i] += int(zhongMaBlueCount[i] * 5.34 * 2); //属性上限--种马基础值
+
+  //后两次继承的事情，到时候再说
+  //for (int i = 0; i < 5; i++)
+   // fiveStatusLimit[i] += rand() % 20; //属性上限--后两次继承随机增加
 
 
   for (int i = 0; i < 5; i++)
-    fiveStatus[i] = umaData->fiveStatusInitial[i]; //赛马娘初始值
-    //fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
+    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
   for (int i = 0; i < 6; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
-      addStatus(j, cardData[i]->initialBonus[j]);
-    skillPt += cardData[i]->initialBonus[5];
+      addStatus(j, cardParam[i].initialBonus[j]);
+    skillPt += cardParam[i].initialBonus[5];
   }
   for (int i = 0; i < 5; i++)
     addStatus(i, zhongMaBlueCount[i] * 7); //种马
 
 
 
-  venusLevelYellow = 0;
-  venusLevelRed = 0;
-  venusLevelBlue = 0;
-  for (int i = 0; i < 8; i++)
-    venusSpiritsBottom[i] = 0;
-  for (int i = 0; i < 6; i++)
-    venusSpiritsUpper[i] = 0;
-  venusAvailableWisdom = 0;
-  venusIsWisdomActive = false;
-
-
-  venusCardFirstClick = false;
-  venusCardUnlockOutgoing = false;
-  venusCardIsQingRe = false;
-  venusCardQingReContinuousTurns = 0;
-  for (int i = 0; i < 5; i++)
-    venusCardOutgoingUsed[i] = false;
-
-  initRandomGenerators();
+  //initRandomGenerators();
 
   stageInTurn = 0;
   calculateVenusSpiritsBonus();
@@ -257,11 +292,23 @@ void Game::addVital(int value)
 }
 void Game::addMotivation(int value)
 {
-  motivation += value;
-  if (motivation > 5)
-    motivation = 5;
-  if (vital < 1)
-    motivation = 1;
+  if (value < 0)
+  {
+    if (isPositiveThinking)
+      isPositiveThinking = false;
+    else
+    {
+      motivation += value;
+      if (motivation < 1)
+        motivation = 1;
+    }
+  }
+  else
+  {
+    motivation += value;
+    if (motivation > 5)
+      motivation = 5;
+  }
 }
 void Game::addJiBan(int idx, int value)
 {
@@ -424,75 +471,6 @@ int Game::calculateFailureRate(int trainType) const
   if (fr < 0)fr = 0;
   if (fr > 100)fr = 100;
   return fr;
-}
-void Game::calculateVenusSpiritsBonus()
-{
-  for (int i = 0; i < 6; i++)
-    spiritBonus[i] = 0;
-  //先算底层
-  for (int i = 0; i < 8; i++)
-  {
-    int s = venusSpiritsBottom[i];
-    int type = s % 8 - 1;//012345对应速耐力根智pt
-    if (type == -1)//空碎片槽
-      break;
-    int color = s / 8; //012对应红蓝黄
-    spiritBonus[type] += 1;
-  }
-  //再算第二层
-  for (int i = 0; i < 4; i++)
-  {
-    int s = venusSpiritsUpper[i];
-    int sL = venusSpiritsBottom[i * 2];//左下碎片
-    int sR = venusSpiritsBottom[i * 2 + 1];//右下碎片
-    int type = s % 8 - 1;//012345对应速耐力根智pt
-    if (type == -1)//空碎片槽
-      break;
-    if (sL / 8 == sR / 8)//左侧和右侧碎片颜色相同
-      spiritBonus[type] += 2;
-    else
-      spiritBonus[type] += 3;
-  }
-
-  //再算第三层
-  for (int i = 0; i < 2; i++)
-  {
-    int s = venusSpiritsUpper[i + 4];
-    int sL = venusSpiritsUpper[i * 2];//左下碎片
-    int sR = venusSpiritsUpper[i * 2 + 1];//右下碎片
-    int type = s % 8 - 1;//012345对应速耐力根智pt
-    if (type == -1)//空碎片槽
-      break;
-    if (sL / 8 == sR / 8)//左侧和右侧碎片颜色相同
-      spiritBonus[type] += 2;
-    else
-      spiritBonus[type] += 3;
-  }
-}
-std::array<int, 6> Game::calculateBlueVenusBonus(int trainType) const
-{
-  std::array<int, 6> value = { 0,0,0,0,0,0 };
-  int cardCount = 0;
-  for (int i = 0; i < 6; i++)
-  {
-    if (cardDistribution[trainType][i])
-    {
-      int cardType = cardData[i]->cardType;
-      if (cardType < 5)//速耐力根智
-      {
-        cardCount++;
-        for (int j = 0; j < 6; j++)
-          value[j] += GameConstants::BlueVenusRelatedStatus[cardType][j];
-      }
-    }
-  }
-  for (int j = 0; j < 6; j++)
-  {
-    if (value[j] > 0)//关联属性
-      value[j] += spiritBonus[j];
-  }
-  value[5] += 20 * cardCount;
-  return value;
 }
 void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 {

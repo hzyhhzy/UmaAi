@@ -24,17 +24,19 @@ struct Game
   int16_t skillPt;//技能点
   int16_t skillScore;//已买技能的分数
   int16_t motivation;//干劲，从1到5分别是绝不调到绝好调
+  bool isPositiveThinking;//ポジティブ思考，友人第三段出行选上的buff，可以防一次掉心情
   //int cardId[6];//6张卡的id
   //int cardJiBan[8];//羁绊，六张卡分别012345，理事长6，记者7
   int16_t trainLevelCount[5];//五个训练的等级的计数，实际训练等级=min(5,t/4+1)
   int16_t zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
   int16_t zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
   //bool raceTurns[TOTAL_TURN];//哪些回合是比赛 //用umaId替代，在GameDatabase::AllUmas里找
-  SupportCard cardParam[6];//六张卡的参数，参数也拷贝进来。这样做的目的是训练ai时可能要随机改变卡的参数提高鲁棒性，所以每个game的卡的参数可能不一样
+  int normalCardCount = 0;//速耐力根智卡的数量
+  SupportCard cardParam[6];//六张卡的参数，拷贝到Game类里，一整局内不变，顺序任意。这样做的目的是训练ai时可能要随机改变卡的参数提高鲁棒性，所以每个game的卡的参数可能不一样
   Person persons[18];//如果不带其他友人团队卡，最多18个头。依次是15个可充电人头（先是支援卡（顺序随意）：0~4或5，再是npc：5或6~14），理事长15，记者16，佐岳17（带没带卡都是17）
   bool isRacing;//这个回合是否在比赛
 
-  int motivationDropCount;//掉过几次心情了（已知同一个掉心情不会出现多次，一共3个掉心情事件，所以之前掉过越多，之后掉的概率越低）
+  int motivationDropCount;//掉过几次心情了，不包括剧本事件（已知同一个掉心情不会出现多次，一共3个掉心情事件，所以之前掉过越多，之后掉的概率越低）
 
 
   //凯旋门相关
@@ -45,12 +47,13 @@ struct Game
   int16_t larc_shixingPt;//适性pt
   int16_t larc_levels[10];//10个海外适性的等级，0为未解锁
   bool larc_isSSS;//是否为sss
-  bool larc_ssWinSinceLastSSS;//从上次sss到现在win过几次ss（决定了下一个是sss的概率）
+  int16_t larc_ssWin;//一共多少人头的ss
+  int16_t larc_ssWinSinceLastSSS;//从上次sss到现在win过几次ss（决定了下一个是sss的概率）
   bool larc_isFirstLarcWin;// 第一场凯旋门赢没赢
-  bool larc_allowedDebuffsFirstLarc[3][8];//第一次凯旋门可以不消哪些debuff。玩家可以设置3种组合，满足一种即可
+  bool larc_allowedDebuffsFirstLarc[3][8];//第一次凯旋门可以不消哪些debuff。玩家可以设置3种组合，满足一种ai则认为可以赢凯旋门
 
   int16_t larc_zuoyueType;//没带佐岳卡=0，带的SSR卡=1，带的R卡=2
-  int16_t larc_zuoyueCardLevel;//佐岳卡的等级
+  int16_t larc_zuoyueCardLevel;//佐岳卡的破数
   bool larc_zuoyueFirstClick;//佐岳是否点过第一次
   bool larc_zuoyueOutgoingUnlocked;//佐岳外出解锁
   int16_t larc_zuoyueOutgoingUsed;//佐岳外出走了几段了
@@ -64,12 +67,12 @@ struct Game
   int16_t stageInTurn;
   int16_t personDistribution[5][5];//每个训练有哪些人头id，personDistribution[哪个训练][第几个人头]，空人头为-1
   bool cardHint[6];//六张卡分别有没有亮红点
-  int16_t spiritDistribution[5 + 3];//碎片分布，依次是五训练01234，休息5，外出6，比赛7。若为2碎片，则加32
 
   //通过计算获得的信息
   int16_t trainValue[5][7];//第一个数是第几个训练，第二个数依次是速耐力根智pt体力
   int16_t failRate[5];//训练失败率
   int16_t trainShiningNum[5];//这个训练有几个彩圈
+  int16_t larc_shixingPtGainAbroad;//海外训练适性pt收益
   int16_t larc_trainBonus;//期待度训练加成
   int16_t larc_ssPersonsCount;//ss有几个人
   int16_t larc_ssPersons[5];//ss有哪几个人
@@ -164,22 +167,19 @@ struct Game
   void printFinalStats() const;//显示最终结果
 
   void addStatus(int idx, int value);//增加属性值，并处理溢出
-  void addAllStatus(int value);//增加五个属性值
-  void addVital(int value);//增加体力，并处理溢出
-  void addMotivation(int value);//增加心情
+  void addAllStatus(int value);//同时增加五个属性值
+  void addVital(int value);//增加或减少体力，并处理溢出
+  void addMotivation(int value);//增加或减少心情，同时考虑“isPositiveThinking”
   void addJiBan(int idx,int value);//增加羁绊，并考虑爱娇
-  void addTrainingLevelCount(int item, int value);//增加训练等级计数（每12为1级，训练+2，碎片+1，特殊比赛
-  void addSpirit(std::mt19937_64& rand, int s);//添加碎片
-  void clearSpirit();//清空碎片
+  void addTrainingLevelCount(int item, int value);//增加训练等级计数（每4为1级，训练+1，期待度达到某几个等级+4）
+
   int calculateFailureRate(int trainType) const;//计算训练失败率
-  void calculateVenusSpiritsBonus();//计算碎片加成  
-  std::array<int,6> calculateBlueVenusBonus(int trainType) const;//计算开蓝女神的加成
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
 
 
   //一些过于复杂的事件放在这里
-  void handleVenusOutgoing(int chosenOutgoing);//女神外出
-  void handleVenusThreeChoicesEvent(std::mt19937_64& rand, int chosenColor);//女神三选一事件
+  void handleFriendOutgoing();//友人外出
+  void handleFriendEvent(std::mt19937_64& rand);//友人事件（お疲れ様）
 
   //显示事件
   void printEvents(std::string s) const;//用绿色字体显示事件
