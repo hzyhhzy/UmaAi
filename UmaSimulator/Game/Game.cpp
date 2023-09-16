@@ -7,22 +7,13 @@ static bool randBool(mt19937_64& rand, double p)
   return rand() % 65536 < p * 65536;
 }
 
-void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int newCards[6], int newZhongMaBlueCount[5], int newZhongMaExtraBonus[6])
+void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int umaStars, int newCards[6], int newZhongMaBlueCount[5], int newZhongMaExtraBonus[6])
 {
   playerPrint = enablePlayerPrint;
-  umaId = newUmaId;
-  umaData = &GameDatabase::AllUmas[umaId];
-  for (int i = 0; i < 6; i++)
-  {
-      cardId[i] = newCards[i];
-      cardData[i] = &GameDatabase::AllCards[newCards[i]];
-  }
-  assert(cardData[0]->cardType == 5 && "神团卡不在第一个位置");
-  for (int i = 0; i < 5; i++)
-    zhongMaBlueCount[i] = newZhongMaBlueCount[i];
-  for (int i = 0; i < 6; i++)
-    zhongMaExtraBonus[i] = newZhongMaExtraBonus[i];
 
+  umaId = newUmaId;
+  for (int i = 0; i < 5; i++)
+    fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
   turn = 0;
   vital = 100;
   maxVital = 100;
@@ -30,7 +21,39 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
   isAiJiao = false; 
   failureRateBias = 0;
   skillPt = 120;
-  skillPt += 170 * 5 / GameConstants::ScorePtRate;//固有技能换算成pt
+  skillScore = umaStars >= 3 ? 170 * (1 + umaStars) : 120 * (3 + umaStars);//固有技能
+  motivation = 3;
+  for (int i = 0; i < 5; i++)
+    trainLevelCount[i] = 0;
+  isRacing = false;
+
+
+
+
+
+
+
+
+
+  motivationDropCount = 0;
+
+
+
+
+
+
+
+  umaData = &GameDatabase::AllUmas[umaId];
+  for (int i = 0; i < 6; i++)
+  {
+    cardId[i] = newCards[i];
+    cardData[i] = &GameDatabase::AllCards[newCards[i]];
+  }
+  assert(cardData[0]->cardType == 5 && "神团卡不在第一个位置");
+  for (int i = 0; i < 5; i++)
+    zhongMaBlueCount[i] = newZhongMaBlueCount[i];
+  for (int i = 0; i < 6; i++)
+    zhongMaExtraBonus[i] = newZhongMaExtraBonus[i];
 
 
   for (int i = 0; i < 5; i++)
@@ -53,15 +76,6 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int n
   for (int i = 0; i < 5; i++)
     addStatus(i, zhongMaBlueCount[i] * 7); //种马
 
-
-  motivation = 3;
-  for (int i = 0; i < 6; i++)
-    cardJiBan[i] = cardData[i]->initialJiBan;
-  cardJiBan[6] = 0; 
-  cardJiBan[7] = 0;
-  for (int i = 0; i < 5; i++)
-    trainLevelCount[i] = 0;
-  isRacing = false;
 
 
   venusLevelYellow = 0;

@@ -6,6 +6,9 @@
 
 struct Game
 {
+  //显示相关
+  bool playerPrint;//给人玩的时候，显示更多信息
+
   //基本状态，不包括当前回合的训练信息
   int16_t umaId;//马娘编号，见KnownUmas.cpp
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
@@ -19,6 +22,7 @@ struct Game
   //int fiveStatusUmaBonus[5];//马娘自身加成
   int16_t fiveStatusLimit[5];//五维属性上限，1200以上不减半
   int16_t skillPt;//技能点
+  int16_t skillScore;//已买技能的分数
   int16_t motivation;//干劲，从1到5分别是绝不调到绝好调
   //int cardId[6];//6张卡的id
   //int cardJiBan[8];//羁绊，六张卡分别012345，理事长6，记者7
@@ -26,7 +30,8 @@ struct Game
   int16_t zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
   int16_t zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
   //bool raceTurns[TOTAL_TURN];//哪些回合是比赛 //用umaId替代，在GameDatabase::AllUmas里找
-  Person persons[18];//如果不带其他友人团队卡，最多18个头。依次是15个可充电人头（先是支援卡：0~4或5，再是npc：5或6~14），理事长15，记者16，佐岳17（带没带卡都是17）
+  SupportCard cardParam[6];//六张卡的参数，参数也拷贝进来。这样做的目的是训练ai时可能要随机改变卡的参数提高鲁棒性，所以每个game的卡的参数可能不一样
+  Person persons[18];//如果不带其他友人团队卡，最多18个头。依次是15个可充电人头（先是支援卡（顺序随意）：0~4或5，再是npc：5或6~14），理事长15，记者16，佐岳17（带没带卡都是17）
   bool isRacing;//这个回合是否在比赛
 
   int motivationDropCount;//掉过几次心情了（已知同一个掉心情不会出现多次，一共3个掉心情事件，所以之前掉过越多，之后掉的概率越低）
@@ -35,10 +40,12 @@ struct Game
   //凯旋门相关
 
   bool larc_isAbroad;//这个回合是否在海外
-  int32_t larc_supportPt;//所有人的支援pt，每1700支援pt对应1%期待度
+  //int32_t larc_supportPt;//自己的支援pt
+  int32_t larc_supportPtAll;//所有人（自己+其他人）的支援pt之和，每1700支援pt对应1%期待度
   int16_t larc_shixingPt;//适性pt
   int16_t larc_levels[10];//10个海外适性的等级，0为未解锁
   bool larc_isSSS;//是否为sss
+  bool larc_ssWinSinceLastSSS;//从上次sss到现在win过几次ss（决定了下一个是sss的概率）
   bool larc_isFirstLarcWin;// 第一场凯旋门赢没赢
   bool larc_allowedDebuffsFirstLarc[3][8];//第一次凯旋门可以不消哪些debuff。玩家可以设置3种组合，满足一种即可
 
@@ -62,17 +69,16 @@ struct Game
   //通过计算获得的信息
   int16_t trainValue[5][7];//第一个数是第几个训练，第二个数依次是速耐力根智pt体力
   int16_t failRate[5];//训练失败率
+  int16_t trainShiningNum[5];//这个训练有几个彩圈
   int16_t larc_trainBonus;//期待度训练加成
   int16_t larc_ssPersonsCount;//ss有几个人
   int16_t larc_ssPersons[5];//ss有哪几个人
   int16_t larc_ssValue[7];//ss的速耐力根智pt体力（上层的属性也算，技能换算成pt）
   int16_t larc_ssSpecialEffects[13];//ss的特殊buff（去掉与上面重复的。比如“体力+心情”在此处只考虑心情）
   int16_t larc_ssSupportPtGain;//ss的支援pt总共加多少（自己+其他人头）
+  int16_t larc_ssFailRate;//ss的失败率
 
 
-
-  //显示相关
-  bool playerPrint;//给人玩的时候，显示更多信息
 
   //游戏流程:
   //newGame();
@@ -103,10 +109,12 @@ struct Game
 
   void newGame(std::mt19937_64& rand,
     bool enablePlayerPrint,
-    int newUmaId,
+    int newUmaId, 
+    int umaStars,
     int newCards[6],
     int newZhongMaBlueCount[5],
     int newZhongMaExtraBonus[6]);//重置游戏，开局。umaId是马娘编号
+  void initHeads();//第三回合初始化npc人头
 
   bool loadGameFromJson(std::string jsonStr);
 

@@ -5,11 +5,11 @@
 struct SupportCard;
 struct Person //任何一个可能出现在训练里的人头
 {
-  int8_t personType;//1代表佐岳（R或SSR都行），2代表普通支援卡，3代表npc人头，4理事长，5记者，6不带卡的佐岳。暂不支持其他友人/团队卡
-  int16_t cardId;//支援卡id，不是支援卡就0
+  int8_t personType;//0代表未加载（例如前两个回合的npc），1代表佐岳支援卡（R或SSR都行），2代表普通支援卡，3代表npc人头，4理事长，5记者，6不带卡的佐岳。暂不支持其他友人/团队卡
+  //int16_t cardId;//支援卡id，不是支援卡就0
   int16_t charaId;//npc人头的马娘id，不是npc就0，懒得写也可以一律0（只用于获得npc的名字）
 
-  SupportCard* cardData;// 当前卡的各种参数。指针只指向静态内容，相当于存放Int64数据，可以随意复制
+  int8_t cardIdInGame;// Game.cardParam里的支援卡序号，非支援卡为-1
   int8_t friendship;//羁绊
   bool atTrain[5];//是否在五个训练里。对于普通的卡只是one-hot或者全空，对于ssr佐岳可能有两个true
   bool isShining;//是否闪彩。无法闪彩的卡或者npc恒为false
@@ -27,6 +27,11 @@ struct Person //任何一个可能出现在训练里的人头
   
   std::discrete_distribution<> distribution;//distribution(rand)可以根据得意率生成0~5的整数，代表这张卡出现在速耐力根智鸽。ssr佐岳调用两次
 
-  void writeSinglePersonNNInput(float* buf);//神经网络输入向量
+  Person();//未加载的人头
+  //更复杂的初始化一律扔到Game类里
+
+
+
+  void writeSinglePersonNNInput(float* buf) const;//神经网络输入向量
   std::string getPersonName();//获得人物名称
 };

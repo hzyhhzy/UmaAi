@@ -18,7 +18,7 @@ struct SkillList {
 struct SupportCard
 {
 	int cardID;//支援卡id，部分卡具有比较复杂的固有，根据id来辨别
-	int cardType;//支援卡类型，0速1耐2力3根4智5友人或团队
+	int cardType;//支援卡类型，0速1耐2力3根4智5团队6友人
 	std::string cardName; //卡片名称
 
 	bool filled;
@@ -37,10 +37,12 @@ struct SupportCard
 	double vitalCostDrop; //体力消费下降
 	// 方便调用，根据卡片的等级在游戏初始阶段赋值
 
+	bool larc_isLink;//是否为link卡
+	int larc_linkSpecialEffect;//link效果
+
 	SkillList cardSkill;
 	//卡片拥有的技能列表
 	
-	int effectFactor; // 作为特殊固有处理的参数
 	//std::string uniqueText;
 	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effecFactor) const;//根据游戏状态计算支援卡的“固有”
 
@@ -106,6 +108,16 @@ struct SupportCard
 			failRateDrop = j["cardValue"][x].value<double>("failRateDrop", 0);
 			vitalCostDrop = j["cardValue"][x].value<double>("vitalCostDrop", 0);
 		}
+
+		if (j.contains("larc_isLink"))
+			larc_isLink = j["larc_isLink"];
+		else
+			larc_isLink = false;
+
+		if (j.contains("larc_linkSpecialEffect"))
+			larc_linkSpecialEffect = j["larc_linkSpecialEffect"];
+		else
+			larc_linkSpecialEffect = 0;
 
 		cardSkill.skillNum = j["cardSkill"]["skillNum"];
 
