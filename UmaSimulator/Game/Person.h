@@ -23,17 +23,21 @@ struct Person //任何一个可能出现在训练里的人头
   int8_t larc_specialBuff;//每3级的特殊固有，编号同游戏内
   int8_t larc_level;//几级
   int8_t larc_nextThreeBuffs[3];//当前以及以下两级的buff
-  int8_t larc_assignedStatusTypeWhenFull;//如果对应的buff是“属性加成”，加哪个属性在满的时候已经确定
-
+  
+  //int8_t larc_assignedStatusTypeWhenFull;//如果对应的buff是“属性加成”，加哪个属性在满的时候已经确定
+  //懒得弄了，直接随机算了
   
   std::discrete_distribution<> distribution;//distribution(rand)可以根据得意率生成0~5的整数，代表这张卡出现在速耐力根智鸽。ssr佐岳调用两次
 
   Person();//未加载的人头
-  //更复杂的初始化一律扔到Game类里
+  void initAtTurn3(int specialBuff, int statusType);//第三回合初始化
 
+  
 
+  void larc_afterSS(std::mt19937_64& rand);//加一级，并计算新的buff
+  //int larc_getNextBuff(std::mt19937_64& rand);//计算larc_level+3级的buff
 
   void writeSinglePersonNNInput(float* buf) const;//神经网络输入向量
-  std::string getPersonName(const Game& game);//获得人物名称
-  std::string getPersonNameColored(const Game& game);//获得人物名称并标注颜色
+  std::string getPersonName(const Game& game) const;//获得人物名称
+  std::string getPersonNameColored(const Game& game) const;//获得人物名称并标注颜色
 };

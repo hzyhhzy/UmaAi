@@ -134,8 +134,11 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   //initRandomGenerators();
 
   stageInTurn = 0;
-  calculateVenusSpiritsBonus();
   randomDistributeCards(rand); 
+}
+
+void Game::initNPCsTurn3()
+{
 }
 
 void Game::initRandomGenerators()

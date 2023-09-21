@@ -2,7 +2,8 @@
 #include <random>
 #include <array>
 #include "../GameDatabase/GameDatabase.h"
-#include "../Game/Person.h"
+#include "Person.h"
+#include "Action.h"
 
 struct Game
 {
@@ -117,7 +118,8 @@ struct Game
     int newCards[6],
     int newZhongMaBlueCount[5],
     int newZhongMaExtraBonus[6]);//重置游戏，开局。umaId是马娘编号
-  void initHeads();//第三回合初始化npc人头
+
+  void initNPCsTurn3();//第三回合初始化npc人头
 
   bool loadGameFromJson(std::string jsonStr);
 
@@ -135,20 +137,12 @@ struct Game
   // forceThreeChoicesEvent是强制召唤三选一事件，1为强制召唤，-1为强制不召唤，0为正常（按概率召唤）。此设置仅用于ai搜索
   bool applyTraining(
     std::mt19937_64& rand, 
-    int chosenTrain, 
-    bool useVenus, 
-    int chosenSpiritColor, 
-    int chosenOutgoing,
-    int forceThreeChoicesEvent = 0);
+    Action action);
   void checkEventAfterTrain(std::mt19937_64& rand);//检查固定事件和随机事件，并进入下一个回合
 
   void applyTrainingAndNextTurn(
     std::mt19937_64& rand,
-    int chosenTrain,
-    bool useVenus,
-    int chosenSpiritColor,
-    int chosenOutgoing,
-    int forceThreeChoicesEvent = 0);//一直往后进行，直到下一次需要玩家决策
+    Action action);//一直往后进行，直到下一次需要玩家决策
 
   int finalScore() const;//最终总分
   bool isEnd() const;//
