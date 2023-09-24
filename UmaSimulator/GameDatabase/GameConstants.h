@@ -22,6 +22,8 @@ public:
   static const double VenusQingReDeactivateProb[10];//不同回合数女神情热离去的概率
 
   //女神杯
+
+  static const int UpdateId50pEachTrain[5] = { 3,1,2,0,4 };//+50%分别对应第几个升级
   static const int VenusLevelTrainBonus[6];//女神等级训练加成
   static const int RedVenusLevelVitalCostDown[6];//红女神体力消耗下降比例
   static const int BlueVenusLevelHintProbBonus[6];//蓝女神事件发生概率提升

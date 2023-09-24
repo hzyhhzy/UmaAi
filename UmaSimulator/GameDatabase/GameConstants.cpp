@@ -10,15 +10,7 @@ const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3
 const int GameConstants::NormalRacePtBonus = 45;//常规比赛pt加成,G1=45
 
 
-const double GameConstants::VenusUnlockOutgoingProbEveryTurn = 0.06;//每回合解锁外出的概率
-const double GameConstants::VenusThreeChoicesEventProb = 0.4;//三选一事件概率，暂时猜测为40%*(1+蓝女神等级加成)
-const double GameConstants::VenusQingReDeactivateProb[10] = { 0,0,0.5,0.5,0.5,0.8,0.8,0.8,1,1 };//不同回合数女神情热离去的概率
-
-const int GameConstants::VenusLevelTrainBonus[6] = { 0,5,8,11,13,15 };
-const int GameConstants::RedVenusLevelVitalCostDown[6] = { 0,10,15,18,20,23 };//红女神体力消耗下降比例
-const int GameConstants::BlueVenusLevelHintProbBonus[6] = { 0,20,25,30,33,35 };//蓝女神事件发生概率提升
-const int GameConstants::YellowVenusLevelEventBonus[6] = { 0,10,15,20,23,25 };//黄女神事件数值增加量
-const int GameConstants::YellowVenusLevelContinuousEventProb[6] = { 0,20,40,50,80,90 };//黄女神连续事件发生率提升
+const int GameConstants::UpdateId50pEachTrain[5] = { 3,1,2,0,4 };
 
 const int GameConstants::BlueVenusRelatedStatus[5][6] = //蓝女神关联属性
 {

@@ -44,7 +44,7 @@ struct SupportCard
 	//卡片拥有的技能列表
 	
 	//std::string uniqueText;
-	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effecFactor) const;//根据游戏状态计算支援卡的“固有”
+	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effectFactor) const;//根据游戏状态计算支援卡的“固有”
 
 
 	void write_to_json(json& j,const std::string cdname,const int id)

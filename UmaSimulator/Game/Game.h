@@ -32,7 +32,7 @@ struct Game
   int16_t zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
   int16_t zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
   //bool raceTurns[TOTAL_TURN];//哪些回合是比赛 //用umaId替代，在GameDatabase::AllUmas里找
-  int normalCardCount = 0;//速耐力根智卡的数量
+  int normalCardCount;//速耐力根智卡的数量
   SupportCard cardParam[6];//六张卡的参数，拷贝到Game类里，一整局内不变，顺序任意。这样做的目的是训练ai时可能要随机改变卡的参数提高鲁棒性，所以每个game的卡的参数可能不一样
   Person persons[18];//如果不带其他友人团队卡，最多18个头。依次是15个可充电人头（先是支援卡（顺序随意）：0~4或5，再是npc：5或6~14），理事长15，记者16，佐岳17（带没带卡都是17）
   bool isRacing;//这个回合是否在比赛
@@ -46,7 +46,7 @@ struct Game
   //int32_t larc_supportPt;//自己的支援pt
   int32_t larc_supportPtAll;//所有人（自己+其他人）的支援pt之和，每1700支援pt对应1%期待度
   int16_t larc_shixingPt;//适性pt
-  int16_t larc_levels[10];//10个海外适性的等级，0为未解锁
+  int16_t larc_levels[10];//10个海外适性的等级，0为未解锁。顺序是游戏里从左上到右下的顺序，顺序编号在小黑板传过来的时候已经处理好了
   bool larc_isSSS;//是否为sss
   int16_t larc_ssWin;//一共多少人头的ss
   int16_t larc_ssWinSinceLastSSS;//从上次sss到现在win过几次ss（决定了下一个是sss的概率）
@@ -67,20 +67,23 @@ struct Game
   //stageInTurn=0时可以输入神经网络输出估值，stageInTurn=1时可以输入神经网络输出policy
   int16_t stageInTurn;
   int16_t personDistribution[5][5];//每个训练有哪些人头id，personDistribution[哪个训练][第几个人头]，空人头为-1
-  bool cardHint[6];//六张卡分别有没有亮红点
+
+  int16_t larc_ssPersonsCount;//ss有几个人
+  int16_t larc_ssPersons[5];//ss有哪几个人
+  int16_t larc_ssPersonsCountLastTurn;//上个非比赛非远征回合有几个ss人头，只用来判断这个回合是不是新的ss，用来计算sss。为了避免满10人连出两个ss时计算错误，使用ss的时候把这个置零
 
   //通过计算获得的信息
   int16_t trainValue[5][7];//第一个数是第几个训练，第二个数依次是速耐力根智pt体力
   int16_t failRate[5];//训练失败率
   int16_t trainShiningNum[5];//这个训练有几个彩圈
-  int16_t larc_shixingPtGainAbroad;//海外训练适性pt收益
+  int16_t larc_staticBonus[6];//适性升级的收益，包括前5个1级和第6个的1级3级pt+10
+  int16_t larc_shixingPtGainAbroad[5];//海外训练适性pt收益
   int16_t larc_trainBonus;//期待度训练加成
-  int16_t larc_ssPersonsCount;//ss有几个人
-  int16_t larc_ssPersons[5];//ss有哪几个人
   int16_t larc_ssValue[7];//ss的速耐力根智pt体力（上层的属性也算，技能换算成pt）
   int16_t larc_ssSpecialEffects[13];//ss的特殊buff（去掉与上面重复的。比如“体力+心情”在此处只考虑心情）
   int16_t larc_ssSupportPtGain;//ss的支援pt总共加多少（自己+其他人头）
   int16_t larc_ssFailRate;//ss的失败率
+
 
 
 
@@ -119,13 +122,12 @@ struct Game
     int newZhongMaBlueCount[5],
     int newZhongMaExtraBonus[6]);//重置游戏，开局。umaId是马娘编号
 
-  void initNPCsTurn3();//第三回合初始化npc人头
+  void initNPCsTurn3(std::mt19937_64& rand);//第三回合初始化npc人头
 
   bool loadGameFromJson(std::string jsonStr);
 
-  void initRandomGenerators();
 
-  void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组和碎片
+  void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组和npc
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率
 
   // 计算训练后的变化。如果不合法，则返回false，且保证不做任何修改
@@ -148,6 +150,7 @@ struct Game
   bool isEnd() const;//
 
   //辅助函数
+  double sssProb(int ssWinSinceLastSSS) const;//出sss的概率
   void activateVenusWisdom();//使用女神睿智
   int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，红女神是5级
   bool isOutgoingLegal(int chosenOutgoing) const;//这个外出是否是可以进行的
@@ -179,5 +182,6 @@ struct Game
   void printEvents(std::string s) const;//用绿色字体显示事件
 
   void calculateTrainingValueSingle(int trainType);//计算每个训练加多少
+  void calculateSS();//计算ss的数值
 };
 

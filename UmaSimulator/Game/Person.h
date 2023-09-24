@@ -12,8 +12,9 @@ struct Person //任何一个可能出现在训练里的人头
 
   int8_t cardIdInGame;// Game.cardParam里的支援卡序号，非支援卡为-1
   int8_t friendship;//羁绊
-  bool atTrain[5];//是否在五个训练里。对于普通的卡只是one-hot或者全空，对于ssr佐岳可能有两个true
+  //bool atTrain[5];//是否在五个训练里。对于普通的卡只是one-hot或者全空，对于ssr佐岳可能有两个true
   bool isShining;//是否闪彩。无法闪彩的卡或者npc恒为false
+  bool isHint;//是否有hint。友人卡或者npc恒为false
   int8_t cardRecord;//记录一些可能随着时间而改变的参数，例如根涡轮的固有
 
   bool larc_isLinkCard;//是否为link支援卡
@@ -25,19 +26,19 @@ struct Person //任何一个可能出现在训练里的人头
   int8_t larc_nextThreeBuffs[3];//当前以及以下两级的buff
   
   //int8_t larc_assignedStatusTypeWhenFull;//如果对应的buff是“属性加成”，加哪个属性在满的时候已经确定
-  //懒得弄了，直接随机算了
+  //懒得弄了，直接全属性+2算了。如果有小黑板传过来的数据则以小黑板为准
   
   std::discrete_distribution<> distribution;//distribution(rand)可以根据得意率生成0~5的整数，代表这张卡出现在速耐力根智鸽。ssr佐岳调用两次
 
   Person();//未加载的人头
-  void initAtTurn3(int specialBuff, int statusType);//第三回合初始化
+  void initAtTurn3(std::mt19937_64& rand, int specialBuff, int statusType);//第三回合初始化
 
   
 
-  void larc_afterSS(std::mt19937_64& rand);//加一级，并计算新的buff
+  void larc_afterSS(std::mt19937_64& rand);//加一级，并计算新的buff，不处理羁绊之类的
   //int larc_getNextBuff(std::mt19937_64& rand);//计算larc_level+3级的buff
 
-  void writeSinglePersonNNInput(float* buf) const;//神经网络输入向量
+  void writeSinglePersonNNInput(float* buf) const;//神经网络输入向量，不同类型的人头长度不同
   std::string getPersonName(const Game& game) const;//获得人物名称
   std::string getPersonNameColored(const Game& game) const;//获得人物名称并标注颜色
 };
