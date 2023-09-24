@@ -19,7 +19,6 @@ struct Person //任何一个可能出现在训练里的人头
 
   bool larc_isLinkCard;//是否为link支援卡
   int8_t larc_charge;//现在充了几格
-  bool larc_atSS;//是否在ss对战里
   int8_t larc_statusType;//速耐力根智01234
   int8_t larc_specialBuff;//每3级的特殊固有，编号同游戏内
   int8_t larc_level;//几级

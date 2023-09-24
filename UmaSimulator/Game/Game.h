@@ -34,6 +34,7 @@ struct Game
   //bool raceTurns[TOTAL_TURN];//哪些回合是比赛 //用umaId替代，在GameDatabase::AllUmas里找
   int normalCardCount;//速耐力根智卡的数量
   SupportCard cardParam[6];//六张卡的参数，拷贝到Game类里，一整局内不变，顺序任意。这样做的目的是训练ai时可能要随机改变卡的参数提高鲁棒性，所以每个game的卡的参数可能不一样
+  int16_t saihou;//赛后加成
   Person persons[18];//如果不带其他友人团队卡，最多18个头。依次是15个可充电人头（先是支援卡（顺序随意）：0~4或5，再是npc：5或6~14），理事长15，记者16，佐岳17（带没带卡都是17）
   bool isRacing;//这个回合是否在比赛
 
@@ -54,9 +55,11 @@ struct Game
   bool larc_allowedDebuffsFirstLarc[3][8];//第一次凯旋门可以不消哪些debuff。玩家可以设置3种组合，满足一种ai则认为可以赢凯旋门
 
   int16_t larc_zuoyueType;//没带佐岳卡=0，带的SSR卡=1，带的R卡=2
-  int16_t larc_zuoyueCardLevel;//佐岳卡的破数
+  double larc_zuoyueVitalBonus;//佐岳卡的回复量倍数（满破1.8）
+  double larc_zuoyueStatusBonus;//佐岳卡的事件效果倍数（满破1.2）
   bool larc_zuoyueFirstClick;//佐岳是否点过第一次
   bool larc_zuoyueOutgoingUnlocked;//佐岳外出解锁
+  bool larc_zuoyueOutgoingRefused;//是否拒绝了佐岳外出
   int16_t larc_zuoyueOutgoingUsed;//佐岳外出走了几段了
 
 
@@ -79,9 +82,9 @@ struct Game
   int16_t larc_staticBonus[6];//适性升级的收益，包括前5个1级和第6个的1级3级pt+10
   int16_t larc_shixingPtGainAbroad[5];//海外训练适性pt收益
   int16_t larc_trainBonus;//期待度训练加成
-  int16_t larc_ssValue[7];//ss的速耐力根智pt体力（上层的属性也算，技能换算成pt）
-  int16_t larc_ssSpecialEffects[13];//ss的特殊buff（去掉与上面重复的。比如“体力+心情”在此处只考虑心情）
-  int16_t larc_ssSupportPtGain;//ss的支援pt总共加多少（自己+其他人头）
+  int16_t larc_ssValue[5];//ss的速耐力根智（不包括上层的属性）
+  //int16_t larc_ssSpecialEffects[13];//ss的特殊buff
+  //int16_t larc_ssSupportPtGain;//ss的支援pt总共加多少（自己+其他人头）
   int16_t larc_ssFailRate;//ss的失败率
 
 
@@ -174,9 +177,13 @@ struct Game
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
 
 
-  //一些过于复杂的事件放在这里
+  //友人卡相关事件
+  void addStatusZuoyue(int idx, int value);//佐岳卡事件，增加属性值或者pt（idx=5），考虑事件加成
+  void addVitalZuoyue(int value);//佐岳卡事件，增加体力，考虑回复量加成
+  void handleFriendUnlock();//友人外出解锁
   void handleFriendOutgoing();//友人外出
-  void handleFriendEvent(std::mt19937_64& rand);//友人事件（お疲れ様）
+  void handleFriendClickEvent(std::mt19937_64& rand);//友人事件（お疲れ様）
+  void handleFriendFixedEvent();//友人固定事件，拜年+结算
 
   //显示事件
   void printEvents(std::string s) const;//用绿色字体显示事件

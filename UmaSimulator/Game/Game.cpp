@@ -29,7 +29,8 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   isRacing = false;
 
   larc_zuoyueType = 0;
-  larc_zuoyueCardLevel = 0;
+  larc_zuoyueVitalBonus = 0;
+  larc_zuoyueStatusBonus = 0;
   for (int i = 0; i < 18; i++)
   {
     persons[i] = Person();
@@ -45,11 +46,13 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
 
   normalCardCount = 0;//速耐力根智卡的数量
+  saihou = 0;
   for (int i = 0; i < 6; i++)
   {
     int cardId = newCards[i];
     cardParam[i] = GameDatabase::AllCards[cardId];
     SupportCard& cardP = cardParam[i];
+    saihou += cardP.saiHou;
     int cardType = cardP.cardType;
     if (cardType == 5 || cardType == 6)
     {
@@ -62,7 +65,20 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
         else 
           larc_zuoyueType = 2;
 
-        larc_zuoyueCardLevel = cardId % 10;
+        int zuoyueLevel = cardId % 10;
+        if (larc_zuoyueType==1)
+        {
+          larc_zuoyueVitalBonus = GameConstants::ZuoyueVitalBonusSSR[zuoyueLevel];
+          larc_zuoyueStatusBonus = GameConstants::ZuoyueStatusBonusSSR[zuoyueLevel];
+        }
+        else
+        {
+          larc_zuoyueVitalBonus = GameConstants::ZuoyueVitalBonusR[zuoyueLevel];
+          larc_zuoyueStatusBonus = GameConstants::ZuoyueStatusBonusR[zuoyueLevel];
+        }
+        larc_zuoyueVitalBonus += 1e-10;
+        larc_zuoyueStatusBonus += 1e-10;//加个小量，避免因为舍入误差而算错
+
         persons[17].personType = 1;
         persons[17].cardIdInGame = i;
       }
@@ -103,7 +119,8 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   //larc_zuoyueType
   //larc_zuoyueCardLevel
   larc_zuoyueFirstClick = false;
-  larc_zuoyueOutgoingUnlocked = false;
+  larc_zuoyueOutgoingUnlocked = false; 
+  larc_zuoyueOutgoingRefused = false;
   larc_zuoyueOutgoingUsed = 0;
 
 
@@ -324,7 +341,9 @@ void Game::calculateTrainingValue()
   if (larc_levels[7] >= 1)
     larc_staticBonus[3] += 3;
 
-  larc_trainBonus=
+  int larc_trainBonusLevel = larc_supportPtAll / GameConstants::SupportPtEvery5Percent;
+  if (larc_trainBonusLevel > 40)larc_trainBonusLevel = 40;
+  larc_trainBonus = GameConstants::LArcTrainBonusEvery5Percent[larc_trainBonusLevel];
 
 
 
@@ -372,9 +391,19 @@ void Game::addMotivation(int value)
 }
 void Game::addJiBan(int idx, int value)
 {
-  if (idx < 6 && isAiJiao)value += 2;
-  cardJiBan[idx] += value;
-  if (cardJiBan[idx] > 100)cardJiBan[idx] = 100;
+  auto& p = persons[idx];
+  if (p.personType == 1 || p.personType == 2)
+  {
+    if (isAiJiao)value += 2;
+  }
+  else if (p.personType == 4 || p.personType == 5 || p.personType == 6)
+  {
+
+  }
+  else
+    value = 0;
+  p.friendship += value;
+  if (p.friendship > 100)p.friendship = 100;
 }
 void Game::addTrainingLevelCount(int item, int value)
 {
@@ -385,134 +414,6 @@ void Game::addTrainingLevelCount(int item, int value)
 void Game::addAllStatus(int value)
 {
   for (int i = 0; i < 5; i++)addStatus(i, value);
-}
-void Game::addSpirit(std::mt19937_64& rand, int s)
-{
-  if (s > 32)//两个碎片
-  {
-    addSpirit(rand, s % 32);
-    addSpirit(rand, s % 32);
-    return;
-  }
-
-  int place = -1;//在第几个碎片槽
-  for (int i = 0; i < 8; i++)
-  {
-    if (venusSpiritsBottom[i] == 0)
-    {
-      place = i;
-      break;
-    }
-  }
-  if (place == -1)return;//碎片槽满了
-  venusSpiritsBottom[place] = s;
-
-  //训练等级计数+1
-  {
-    int type = s % 8 - 1;
-    if (type < 5 && type >= 0)
-      addTrainingLevelCount(type, 1);
-  }
-
-  if (place % 2 == 1)//第二层有新碎片
-  {
-    int sL = venusSpiritsBottom[place - 1];
-    int colorL = sL / 8;
-    int typeL = sL % 8;
-    int typeR = s % 8;
-
-    int type = typeL;
-    if (rand() % 5 == 0)
-      type = typeR;//有20%概率是右侧碎片的属性
-    int sU = type + 8 * colorL;//上层碎片
-    int layer2Place = place / 2;
-    venusSpiritsUpper[layer2Place] = sU;
-
-
-    if(layer2Place%2==1)//第三层有新碎片
-    {
-      int sL = venusSpiritsUpper[layer2Place - 1];
-      int colorL = sL / 8;
-      int typeL = sL % 8;
-      int typeR = sU % 8;
-
-      int type = typeL;
-      if (rand() % 5 == 0)
-        type = typeR;//有20%概率是右侧碎片的属性
-      int sU2 = type + 8 * colorL;//上层碎片
-      int layer3Place = 4 + layer2Place / 2;
-      venusSpiritsUpper[layer3Place] = sU2;
-
-    }
-  }
-
-  if (place == 7)//碎片槽满了
-  {
-    int wiseColor = -1;
-    int color1 = venusSpiritsBottom[0] / 8;
-    int color2 = venusSpiritsBottom[4] / 8;
-    if (color1 == color2)//1号位和5号位同色
-    {
-      wiseColor = color1;
-    }
-    else//数一下哪个多
-    {
-      int count = 0; 
-      for (int i = 0; i < 8; i++)
-      {
-        int c = venusSpiritsBottom[i] / 8;
-        if (c == color1)count += 1;
-        else if (c == color2)count -= 1;
-      }
-      if (count > 0)wiseColor = color1;
-      else if (count < 0)wiseColor = color2;
-      else//个数相等
-      {
-        wiseColor = rand() % 2 ? color1 : color2;
-      }
-    }
-
-    venusAvailableWisdom = wiseColor + 1;//123分别是红蓝黄
-  }
-  calculateVenusSpiritsBonus();
-
-}
-void Game::activateVenusWisdom()
-{
-  assert(venusAvailableWisdom != 0);
-  assert(venusIsWisdomActive == false);
-  venusIsWisdomActive = true;
-  if (venusAvailableWisdom == 1)//开红
-  {
-    if (venusLevelRed < 5)
-      venusLevelRed += 1;
-    addVital(50);
-    motivation = 5;
-    //其他项目不在这里处理
-  }
-  if (venusAvailableWisdom == 2)//开蓝
-  {
-    if (venusLevelBlue < 5)
-      venusLevelBlue += 1;
-    for (int i = 0; i < 6; i++)
-    {
-      if (cardData[i]->cardType < 5)
-        cardHint[i] = true;
-    }
-    //其他项目不在这里处理
-  }
-  if (venusAvailableWisdom == 3)//开黄
-  {
-    if (venusLevelYellow < 5)
-      venusLevelYellow += 1;
-    //友情训练不在这里处理
-  }
-
-  calculateTrainingValue();//重新计算训练值
-}
-void Game::clearSpirit()
-{
-
 }
 int Game::calculateFailureRate(int trainType) const
 {
@@ -527,109 +428,75 @@ int Game::calculateFailureRate(int trainType) const
   if (vital > 60)fr = 0;//由于是二次函数，体力超过103时算出来的fr大于0，所以需要手动修正
   if (fr < 0)fr = 0;
   if (fr > 99)fr = 99;//无练习下手，失败率最高99%
-  fr += failureRateBias;
-  if (fr < 0)fr = 0;
-  if (fr > 100)fr = 100;
+  //fr += failureRateBias;
+  //if (fr < 0)fr = 0;
+  //if (fr > 100)fr = 100;
   return fr;
 }
 void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 {
-  int cardRaceBonus = 0;
-  for (int card = 0; card < 6; card++)
-  {
-    cardRaceBonus += cardData[card]->saiHou;
-  }
-  double raceMultiply = 1 + 0.01 * cardRaceBonus;
-  if (venusAvailableWisdom == 1 && venusIsWisdomActive)//开红
-    raceMultiply *= 1.35;
+  double raceMultiply = 1 + 0.01 * saihou;
   int fiveStatusBonus = floor(raceMultiply * basicFiveStatusBonus);
   int ptBonus = floor(raceMultiply * basicPtBonus);
   addAllStatus(fiveStatusBonus);
   skillPt += basicPtBonus;
 }
-void Game::handleVenusOutgoing(int chosenOutgoing)
+
+void Game::addStatusZuoyue(int idx, int value)
 {
-  venusCardOutgoingUsed[chosenOutgoing] = true;
-  assert(cardData[0]->cardType == 5 && "神团卡不在第一个位置");
-  if (chosenOutgoing == 0)//红
-  {
-    addVital(45);
-    addMotivation(1);
-    skillPt += 24;
-    skillPt += 10;//技能等价
-    addJiBan(0, 5);
-  }
-  else if (chosenOutgoing == 1)//蓝
-  {
-    addVital(32);
-    addMotivation(1);
-    addStatus(0, 12);
-    addStatus(4, 12);
-    skillPt += 10;//技能等价
-    addJiBan(0, 5);
-  }
-  else if (chosenOutgoing == 2)//黄
-  {
-    maxVital += 4;
-    addVital(32);
-    addMotivation(1);
-    addStatus(1, 8);
-    addStatus(2, 8);
-    addStatus(3, 8);
-    skillPt += 15;//技能等价
-    addJiBan(0, 5);
-
-  }
-  else if (chosenOutgoing == 3)//团1
-  {
-    addVital(45);
-    addMotivation(1);
-    addStatus(1, 15);
-    addStatus(2, 15);
-    addStatus(3, 15);
-    addJiBan(0, 5);
-
-  }
-  else if (chosenOutgoing == 4)//团2
-  {
-    addVital(52);
-    addMotivation(1);
-    addAllStatus(9);
-    skillPt += 36;
-    skillPt += 50;//技能等价
-    addJiBan(0, 5);
-    venusCardIsQingRe = true;
-  }
-  else assert(false && "未知的神团出行");
+  value = int(value * larc_zuoyueStatusBonus);
+  if (idx == 5)skillPt += value;
+  else addStatus(idx, value);
 }
-void Game::handleVenusThreeChoicesEvent(std::mt19937_64& rand, int chosenColor)
-{
-  printEvents("出现女神三选一事件");
-  int spiritType = chosenColor * 8 + rand() % 6 + 1;//碎片类型
-  addSpirit(rand, spiritType);
-  assert(cardData[0]->cardType == 5 && "神团卡不在第一个位置");
-  addJiBan(0, 5);
-  if (chosenColor == 0)
-  {
-    skillPt += 4;
-    if(venusCardIsQingRe)
-      skillPt += 5;
-  }
-  else if (chosenColor == 1)
-  {
-    addStatus(0, 4);
-    if (venusCardIsQingRe)
-      skillPt += 4;
-  }
-  else if (chosenColor == 2)
-  {
-    addStatus(1, 4);
-    if (venusCardIsQingRe)
-      skillPt += 4;
-  }
 
-  if (venusCardUnlockOutgoing)
-    venusCardIsQingRe = true;//情热是否消失在checkEventAfterTrain里处理
+void Game::addVitalZuoyue(int value)
+{
+  value = int(value * larc_zuoyueVitalBonus);
+  addVital(value);
+}
+
+
+void Game::handleFriendOutgoing()
+{
+  assert(larc_zuoyueOutgoingUnlocked && larc_zuoyueOutgoingUsed < 5);
+  if (larc_zuoyueOutgoingUsed == 0)
+  {
+    addVitalZuoyue(30);
+    addMotivation(1);
+    addStatus(3, 5);
+    addJiBan(17, 5);
+  }
+  else if (larc_zuoyueOutgoingUsed == 1)
+  {
+    addVitalZuoyue(25);
+    addMotivation(1);
+    addStatus(2, 5);
+    addStatus(3, 5);
+    addJiBan(17, 5);
+  }
+  else if (larc_zuoyueOutgoingUsed == 2)
+  {
+    addVitalZuoyue(35);
+    addMotivation(1);
+    addStatus(3, 15);
+    isPositiveThinking = true;
+    addJiBan(17, 5);
+  }
+  else if (larc_zuoyueOutgoingUsed == 3)
+  {
+    addVitalZuoyue(25);
+    addStatus(3, 20);
+    addJiBan(17, 5);
+  }
+  else if (larc_zuoyueOutgoingUsed == 4)//分为大成功和成功，取个平均
+  {
+    addVitalZuoyue(37);
+    addStatus(3, 7);
+    addMotivation(1);
+    addJiBan(17, 5);
+  }
+  else assert(false && "未知的出行");
+  larc_zuoyueOutgoingUsed += 1;
 }
 void Game::calculateTrainingValueSingle(int trainType)
 {
@@ -667,7 +534,17 @@ void Game::calculateTrainingValueSingle(int trainType)
     vitalCostDrop *= (1 - 0.01 * effects[i].vitalCostDrop);//体力消耗下降
     if (effects[i].youQing > 0)trainShiningNum[trainType] += 1;//统计彩圈数
   }
-  failRate[trainType] = round(failRateBasic);
+
+  int fr= round(failRateBasic);
+  fr += failureRateBias;
+  if (fr < 0)fr = 0;
+  if (fr > 100)fr = 100;
+  failRate[trainType] = fr;
+
+  if (larc_isAbroad)
+    larc_shixingPtGainAbroad[trainType] = personCount * 20 + trainShiningNum[trainType] * 20 + (trainType == 4 ? 30 : 50);
+  else
+    larc_shixingPtGainAbroad[trainType] = 0;
 
   //先算下层数值
   int cardNum = effects.size();
@@ -731,7 +608,7 @@ void Game::calculateTrainingValueSingle(int trainType)
     upperRate += 0.5;//海外+50%
   if (larc_levels[8] >= 1)//倒数第二个升级，训练+5%
     upperRate += 0.05;
-  if (larc_levels[7] >= 3)//友情+20%
+  if (larc_levels[7] >= 3 && trainShiningNum[trainType] > 0)//友情+20%
     upperRate *= 1.2;
 
 
@@ -761,7 +638,36 @@ void Game::calculateTrainingValueSingle(int trainType)
 
   trainValue[trainType][6] = round(vitalChange);
 }
+void Game::calculateSS()
+{
+  for (int i = 0; i < 5; i++)larc_ssValue[i] = 0;
+  int linkn = 0;
+  for (int i = 0; i < larc_ssPersonsCount; i++)
+  {
+    if (persons[larc_ssPersons[i]].larc_isLinkCard)
+      linkn += 1;
+  }
+  int p = larc_ssPersonsCount;
 
+  int totalValue =
+    turn < 40 ?
+    5 * p + (4 * p + 2 * linkn) * (0.8 + larc_supportPtAll * 6e-6) :
+    5 * p + (5 * p + 2 * linkn) * (1.0 + larc_supportPtAll * 6e-6);//凑出来拟合的公式。误差挺大的但应该不太影响决策
+  if (larc_isSSS)totalValue += 75;
+
+  totalValue -= (4 * p + 2 * linkn);//4 * p + 2 * linkn是按照人头属性分配
+  //剩下的平均分配
+  int div5 = totalValue / 5;
+  for (int i = 0; i < 5; i++)larc_ssValue[i] = div5;
+  for (int i = 0; i < totalValue - div5 * 5; i++)larc_ssValue[i] += 1;
+
+  //人头属性
+  for (int i = 0; i < larc_ssPersonsCount; i++)
+  {
+    auto& p = persons[larc_ssPersons[i]];
+    larc_ssValue[p.larc_statusType] += (p.larc_isLinkCard ? 6 : 4);
+  }
+}
 bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
 {
   assert(stageInTurn == 1);

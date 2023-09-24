@@ -16,24 +16,19 @@ public:
   static const int NormalRaceFiveStatusBonus;//常规比赛属性加成=3
   static const int NormalRacePtBonus;//常规比赛pt加成
 
-  //女神卡
-  static const double VenusUnlockOutgoingProbEveryTurn;//每回合解锁外出的概率
-  static const double VenusThreeChoicesEventProb;//三选一事件概率，暂时猜测为40%*(1+蓝女神等级加成)
-  static const double VenusQingReDeactivateProb[10];//不同回合数女神情热离去的概率
+  //剧本卡相关
+  static const double FriendUnlockOutgoingProbEveryTurn;//每回合解锁外出的概率
+  static const double FriendEventProb;//友人事件概率
+  static const double ZuoyueVitalBonusSSR[5];//佐岳SSR卡的回复量倍数（满破1.8）
+  static const double ZuoyueVitalBonusR[5];//佐岳R卡的回复量倍数
+  static const double ZuoyueStatusBonusSSR[5];//佐岳SSR卡的事件效果倍数（满破1.2）
+  static const double ZuoyueStatusBonusR[5];//佐岳R卡的事件效果倍数
+  
 
-  //女神杯
-
-  static const int UpdateId50pEachTrain[5] = { 3,1,2,0,4 };//+50%分别对应第几个升级
-  static const int VenusLevelTrainBonus[6];//女神等级训练加成
-  static const int RedVenusLevelVitalCostDown[6];//红女神体力消耗下降比例
-  static const int BlueVenusLevelHintProbBonus[6];//蓝女神事件发生概率提升
-  static const int YellowVenusLevelEventBonus[6];//黄女神事件数值增加量
-  static const int YellowVenusLevelContinuousEventProb[6];//黄女神连续事件发生率提升
-
-  static const int BlueVenusRelatedStatus[5][6];//蓝女神关联属性
-  static const int VenusSpiritTypeProb[8][6];//碎片属性概率，01234分别是速耐力根智，5是休息，6是外出，7是比赛
-
-
+  //剧本相关
+  static const int UpdateId50pEachTrain[5];//+50%分别对应第几个升级
+  static const int SupportPtEvery5Percent;//每5%期待度对应多少总适性pt，=8500
+  static const int LArcTrainBonusEvery5Percent[41];//期待度对应的训练加成，每5%一档
 
   //评分
   static const int FiveStatusFinalScore[1200+800*2+1];//不同属性对应的评分
