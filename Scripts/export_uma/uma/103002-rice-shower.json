@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        15,
+        15,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        93,
+        148,
+        82,
+        118,
+        109
+    ],
+    "freeRaces": [],
+    "gameId": 103002,
+    "name": "rice-shower",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        29,
+        33,
+        43,
+        53,
+        55,
+        59,
+        71
+    ],
+    "star": 5
+}

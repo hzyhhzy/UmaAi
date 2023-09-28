@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        8,
+        0,
+        8,
+        0,
+        14
+    ],
+    "fiveStatusInitial": [
+        109,
+        104,
+        112,
+        103,
+        122
+    ],
+    "freeRaces": [],
+    "gameId": 103202,
+    "name": "agnes-tachyon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        28,
+        30,
+        32,
+        43,
+        53,
+        59,
+        67,
+        71
+    ],
+    "star": 5
+}

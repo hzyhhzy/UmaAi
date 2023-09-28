@@ -1,0 +1,60 @@
+{
+    "cardId": 30156,
+    "cardName": "[力]奇锐骏",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 2,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                0.0,
+                2.0,
+                2.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deYiLv": 50.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 40.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                20
+            ],
+            "hintProbIncrease": 60.0,
+            "initialBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 25,
+            "saiHou": 5.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 5.0,
+            "youQing": 25.0
+        }
+    ]
+}

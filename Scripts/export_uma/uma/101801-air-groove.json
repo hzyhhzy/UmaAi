@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        0,
+        20,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        111,
+        105,
+        105,
+        112,
+        117
+    ],
+    "freeRaces": [],
+    "gameId": 101801,
+    "name": "air-groove",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        22,
+        30,
+        33,
+        43,
+        53,
+        59,
+        63,
+        67
+    ],
+    "star": 5
+}

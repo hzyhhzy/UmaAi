@@ -28,7 +28,7 @@
                 0.0,
                 0.0
             ],
-            "deYiLv": 85.0,
+            "deYiLv": 98.0,
             "failRateDrop": 0.0,
             "filled": true,
             "ganJing": 40.0,
@@ -44,7 +44,7 @@
             "initialBonus": [
                 0,
                 0,
-                20,
+                0,
                 0,
                 0,
                 0
@@ -53,8 +53,8 @@
             "saiHou": 5.0,
             "vitalCostDrop": 0.0,
             "wizVitalBonus": 0,
-            "xunLian": 10.0,
-            "youQing": 48.0
+            "xunLian": 0.0,
+            "youQing": 48.5
         }
     ]
 }

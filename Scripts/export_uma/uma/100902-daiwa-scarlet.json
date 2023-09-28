@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        20,
+        0,
+        0,
+        0,
+        10
+    ],
+    "fiveStatusInitial": [
+        108,
+        100,
+        122,
+        120,
+        100
+    ],
+    "freeRaces": [],
+    "gameId": 100902,
+    "name": "daiwa-scarlet",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        28,
+        30,
+        33,
+        43,
+        44,
+        53,
+        67,
+        71
+    ],
+    "star": 5
+}

@@ -1,0 +1,35 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        10,
+        0,
+        0,
+        20
+    ],
+    "fiveStatusInitial": [
+        108,
+        118,
+        111,
+        91,
+        122
+    ],
+    "freeRaces": [],
+    "gameId": 104701,
+    "name": "zenno-rob-roy",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        31,
+        33,
+        43,
+        47,
+        55,
+        59,
+        67,
+        69,
+        71
+    ],
+    "star": 5
+}

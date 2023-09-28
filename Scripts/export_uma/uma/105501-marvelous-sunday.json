@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        0,
+        15,
+        0,
+        15
+    ],
+    "fiveStatusInitial": [
+        115,
+        100,
+        121,
+        93,
+        121
+    ],
+    "freeRaces": [],
+    "gameId": 105501,
+    "name": "marvelous-sunday",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        46,
+        53,
+        55,
+        59,
+        67,
+        69,
+        71
+    ],
+    "star": 5
+}

@@ -1,0 +1,32 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        10,
+        0,
+        0,
+        10
+    ],
+    "fiveStatusInitial": [
+        117,
+        100,
+        115,
+        100,
+        118
+    ],
+    "freeRaces": [],
+    "gameId": 100103,
+    "name": "special-week",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        26,
+        33,
+        43,
+        55,
+        69,
+        71
+    ],
+    "star": 5
+}

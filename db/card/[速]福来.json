@@ -51,7 +51,7 @@
             ],
             "initialJiBan": 20,
             "saiHou": 10.0,
-            "vitalCostDrop": 0.0,
+            "vitalCostDrop": 10.0,
             "wizVitalBonus": 0,
             "xunLian": 10.0,
             "youQing": 20.0

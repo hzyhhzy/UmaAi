@@ -1,0 +1,32 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        15,
+        15,
+        0,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        123,
+        123,
+        97,
+        104,
+        103
+    ],
+    "freeRaces": [],
+    "gameId": 100202,
+    "name": "silence-suzuka",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        28,
+        41,
+        52,
+        59,
+        66,
+        67
+    ],
+    "star": 5
+}

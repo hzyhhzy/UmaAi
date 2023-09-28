@@ -78,8 +78,23 @@ struct UmaData
 		  }
 		  else // is int
 		  {
-			  for (auto turn : j["races"])
-				  me.races[turn] |= TURN_RACE;
+				me.races[TOTAL_TURN - 1] = true;//Grand Master（最后一战）
+
+				for (auto turn : j["races"])
+				{
+					static_assert(TOTAL_TURN < 1000);
+					if(turn<TOTAL_TURN)
+						me.races[turn] |= TURN_RACE;
+					else if (turn > 1000)//年月月半，例如1061代表第一年6月上半，2112代表第二年11月下半
+					{
+						int year = turn / 1000 - 1;
+						int month = (turn % 1000) / 10 - 1;
+						int halfmonth = turn % 10 - 1;
+						int realTurn = year * 24 + month * 2 + halfmonth;
+						me.races[realTurn] |= TURN_RACE;
+
+					}
+				}
 		  }
 		  for (auto turn : j["preferRaces"])
 			  me.races[turn] |= TURN_PREFER_RACE;

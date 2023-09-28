@@ -30,7 +30,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     if (maskUmaId)
         umaId = mask_umaId(umaId);
     if (!GameDatabase::AllUmas.count(umaId))
-      throw string("未知马娘");
+      throw string("未知马娘，需要更新ai");
     umaData = &GameDatabase::AllUmas[umaId];
     
     turn = j["turn"];
@@ -54,14 +54,23 @@ bool Game::loadGameFromJson(std::string jsonStr)
       int c = j["cardId"][i];
       int type = c / 100000;
       c = c % 100000;
+      c = c * 10;
 
-      if (!GameDatabase::AllCards.count(c))
-        throw string("未知支援卡");
+      if (!GameDatabase::AllCards.count(c+type))
+          throw string("未知支援卡，需要更新ai");
+
+      while (GameDatabase::AllCards[c + type].filled == false && type < 4)
+          ++type;
+
+      if (type == 5) {
+          throw string("没有填写对应的突破数据以及满破数据");
+      }
+      c += type;
+
       cardId[i] = c;
-
-      GameDatabase::AllCards[c].cardValueInit(type);
-      
       cardData[i] = &GameDatabase::AllCards[c];
+      if ((cardData[i]->cardType == 5 || cardData[i]->cardType == 6) && (c / 10 != 30137))//神团以外的友人卡不支持
+        throw string("不支持神团以外的友人/团队卡");
 
     }
 

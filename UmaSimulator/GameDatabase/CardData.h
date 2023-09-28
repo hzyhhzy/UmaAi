@@ -11,120 +11,70 @@ using json = nlohmann::json;
 
 class Game;
 
-struct CardValue {
-	//È¥³ıµôÁËbasic×Ö¶Î
-	bool filled;
-	double youQingBasic;//ÓÑÇé¼Ó³É
-	double ganJingBasic;//¸É¾¢¼Ó³É
-	double xunLianBasic;//ÑµÁ·¼Ó³É
-	double bonusBasic[6];//ËÙÄÍÁ¦¸ùÖÇptµÄ¼Ó³É
-	int wizVitalBonusBasic;//ÖÇÁ¦²ÊÈ¦ÌåÁ¦»Ø¸´Á¿
-	int initialBonus[6];//³õÆÚËÙÄÍÁ¦¸ùÖÇptµÄÌáÉı
-	int initialJiBan;//³õÊ¼î¿°í
-	double saiHou;//Èüºó
-	int hintBonus[6];//ÎªÁË¼ò»¯£¬°ÑºìµãµÄ¼¼ÄÜµÈĞ§³É¶àÉÙÊôĞÔ¡£×ÛºÏ¿¼ÂÇ¼¼ÄÜÓĞĞ§ÂÊ£¨ÀıÈç¸ß·å90%ÓĞĞ§£¬³ıÁË¼¯ÖĞÁ¦£©£¬Æ½¾ùĞÔ¼Û±ÈÓëÕÛ¿Û£¬ÖÖÂíÖØ¸´¸ø¼¼ÄÜ£¨¼ÙÉè30%£©
-	double hintProbIncrease;//Æô·¢·¢ÉúÂÊÌáÉı
-	double deYiLv;//µÃÒâÂÊ
-	double failRateDrop; //Ê§°ÜÂÊ½µµÍ
-	double vitalCostDrop; //ÌåÁ¦Ïû·ÑÏÂ½µ
-};
 struct SkillList {
 	int skillNum;
-	std::vector<int> skillIdList; // ¿¨Æ¬ÓµÓĞµÄ¼¼ÄÜ±àºÅ
+	std::vector<int> skillIdList; // ï¿½ï¿½Æ¬Óµï¿½ĞµÄ¼ï¿½ï¿½Ü±ï¿½ï¿½
 };
 struct SupportCard
 {
-	int cardID;//Ö§Ô®¿¨id£¬²¿·Ö¿¨¾ßÓĞ±È½Ï¸´ÔÓµÄ¹ÌÓĞ£¬¸ù¾İidÀ´±æ±ğ
-	int cardType;//Ö§Ô®¿¨ÀàĞÍ£¬0ËÙ1ÄÍ2Á¦3¸ù4ÖÇ5ÓÑÈË»òÍÅ¶Ó
-	std::string cardName; //¿¨Æ¬Ãû³Æ
+	int cardID;//Ö§Ô®ï¿½ï¿½idï¿½ï¿½ï¿½ï¿½ï¿½Ö¿ï¿½ï¿½ï¿½ï¿½Ğ±È½Ï¸ï¿½ï¿½ÓµÄ¹ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½idï¿½ï¿½ï¿½ï¿½ï¿½
+	int cardType;//Ö§Ô®ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½0ï¿½ï¿½1ï¿½ï¿½2ï¿½ï¿½3ï¿½ï¿½4ï¿½ï¿½5ï¿½Å¶ï¿½6ï¿½ï¿½ï¿½ï¿½
+	std::string cardName; //ï¿½ï¿½Æ¬ï¿½ï¿½ï¿½ï¿½
 
-	CardValue level[5];
-	// ¸÷¸öÍ»ÆÆµÈ¼¶µÄÊı¾İ
+	bool filled;
+	double youQingBasic;//ï¿½ï¿½ï¿½ï¿½Ó³ï¿½
+	double ganJingBasic;//ï¿½É¾ï¿½ï¿½Ó³ï¿½
+	double xunLianBasic;//Ñµï¿½ï¿½ï¿½Ó³ï¿½
+	double bonusBasic[6];//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ptï¿½Ä¼Ó³ï¿½
+	int wizVitalBonusBasic;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¦ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½
+	int initialBonus[6];//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ptï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	int initialJiBan;//ï¿½ï¿½Ê¼î¿°ï¿½
+	double saiHou;//ï¿½ï¿½ï¿½ï¿½
+	int hintBonus[6];//Îªï¿½Ë¼ò»¯£ï¿½ï¿½Ñºï¿½ï¿½Ä¼ï¿½ï¿½Üµï¿½Ğ§ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¡ï¿½ï¿½ÛºÏ¿ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ß·ï¿½90%ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½ï¿½ï¿½Ë¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½ï¿½Ô¼Û±ï¿½ï¿½ï¿½ï¿½Û¿Û£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½30%ï¿½ï¿½
+	double hintProbIncrease;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	double deYiLv;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	double failRateDrop; //Ê§ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½
+	double vitalCostDrop; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½İ¿ï¿½Æ¬ï¿½ÄµÈ¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½Ê¼ï¿½×¶Î¸ï¿½Öµ
 
-	double youQingBasic;//ÓÑÇé¼Ó³É
-	double ganJingBasic;//¸É¾¢¼Ó³É
-	double xunLianBasic;//ÑµÁ·¼Ó³É
-	double bonusBasic[6];//ËÙÄÍÁ¦¸ùÖÇptµÄ¼Ó³É
-	int wizVitalBonusBasic;//ÖÇÁ¦²ÊÈ¦ÌåÁ¦»Ø¸´Á¿
-	int initialBonus[6];//³õÆÚËÙÄÍÁ¦¸ùÖÇptµÄÌáÉı
-	int initialJiBan;//³õÊ¼î¿°í
-	double saiHou;//Èüºó
-	int hintBonus[6];//ÎªÁË¼ò»¯£¬°ÑºìµãµÄ¼¼ÄÜµÈĞ§³É¶àÉÙÊôĞÔ¡£×ÛºÏ¿¼ÂÇ¼¼ÄÜÓĞĞ§ÂÊ£¨ÀıÈç¸ß·å90%ÓĞĞ§£¬³ıÁË¼¯ÖĞÁ¦£©£¬Æ½¾ùĞÔ¼Û±ÈÓëÕÛ¿Û£¬ÖÖÂíÖØ¸´¸ø¼¼ÄÜ£¨¼ÙÉè30%£©
-	double hintProbIncrease;//Æô·¢·¢ÉúÂÊÌáÉı
-	double deYiLv;//µÃÒâÂÊ
-	double failRateDrop; //Ê§°ÜÂÊ½µµÍ
-	double vitalCostDrop; //ÌåÁ¦Ïû·ÑÏÂ½µ
-	// ·½±ãµ÷ÓÃ£¬¸ù¾İ¿¨Æ¬µÄµÈ¼¶ÔÚÓÎÏ·³õÊ¼½×¶Î¸³Öµ
+	bool larc_isLink;//ï¿½Ç·ï¿½Îªlinkï¿½ï¿½
+	int larc_linkSpecialEffect;//linkĞ§ï¿½ï¿½
 
 	SkillList cardSkill;
-	//¿¨Æ¬ÓµÓĞµÄ¼¼ÄÜÁĞ±í
+	//ï¿½ï¿½Æ¬Óµï¿½ĞµÄ¼ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½
 	
-	int effectFactor; // ×÷ÎªÌØÊâ¹ÌÓĞ´¦ÀíµÄ²ÎÊı
 	//std::string uniqueText;
-	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effecFactor) const;//¸ù¾İÓÎÏ·×´Ì¬¼ÆËãÖ§Ô®¿¨µÄ¡°¹ÌÓĞ¡±
+	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effectFactor) const;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·×´Ì¬ï¿½ï¿½ï¿½ï¿½Ö§Ô®ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½Ğ¡ï¿½
 
-	void cardValueInit(int x) {
-		while (x <= 4 && level[x].filled == false)
-			x++;
-		if (x > 4) {
-			std::cout << "Î´Öª¿¨Æ¬ĞÅÏ¢£¬»ò¿¨Æ¬ÄÚÈİÂ¼Èë´íÎó: " << cardName << '\n';
-			exit(0);
-		}
-
-		youQingBasic = level[x].youQingBasic;
-		ganJingBasic = level[x].ganJingBasic;
-		xunLianBasic = level[x].xunLianBasic;
-		for (int i = 0; i < 6; ++i)
-			bonusBasic[i] = level[x].bonusBasic[i];
-		wizVitalBonusBasic = level[x].wizVitalBonusBasic;
-		for (int i = 0; i < 6; ++i)
-			initialBonus[i] = level[x].initialBonus[i];
-		initialJiBan = level[x].initialJiBan;
-		saiHou = level[x].saiHou;
-		for (int i = 0; i < 6; ++i)
-			hintBonus[i] = level[x].hintBonus[i];
-		hintProbIncrease = level[x].hintProbIncrease;
-		deYiLv = level[x].deYiLv;
-		failRateDrop = level[x].failRateDrop;
-		vitalCostDrop = level[x].vitalCostDrop;
-
-		effectFactor = 0;
-
-		return ;
-
-	}
 
 	void write_to_json(json& j,const std::string cdname,const int id)
 	{
-		j["cardId"] = id;
+		j["cardId"] = id/10;
 		j["cardType"] = cardType;
 
 		j["cardName"] = string_To_UTF8(cdname);
 
-		j["cardValue"][0]["filled"] = false;
 		j["cardValue"][1]["filled"] = false;
 		j["cardValue"][2]["filled"] = false;
 		j["cardValue"][3]["filled"] = false;
 
-		for (int x = 0; x < 5; ++x) {
-			if (j["cardValue"][x]["filled"] == false) {
-				j["cardValue"][x]["filled"] = false;
-				continue;
-			}
+		int x = id % 10;
+		j["cardValue"][x]["filled"] = filled;
+		if (filled == true) {
 			j["cardValue"][x]["filled"] = true;
-			j["cardValue"][x]["youQing"] = level[x].youQingBasic;
-			j["cardValue"][x]["ganJing"] = level[x].ganJingBasic;
-			j["cardValue"][x]["xunLian"] = level[x].xunLianBasic;
-			j["cardValue"][x]["bonus"] = level[x].bonusBasic;
-			j["cardValue"][x]["wizVitalBonus"] = level[x].wizVitalBonusBasic;
-			j["cardValue"][x]["initialBonus"] = level[x].initialBonus;
-			j["cardValue"][x]["initialJiBan"] = level[x].initialJiBan;
-			j["cardValue"][x]["saiHou"] = level[x].saiHou;
-			j["cardValue"][x]["hintBonus"] = level[x].hintBonus;
-			j["cardValue"][x]["hintProbIncrease"] = level[x].hintProbIncrease;
-			j["cardValue"][x]["deYiLv"] = level[x].deYiLv;
-			j["cardValue"][x]["failRateDrop"] = level[x].failRateDrop;
-			j["cardValue"][x]["vitalCostDrop"] = level[x].vitalCostDrop;
+			j["cardValue"][x]["youQing"] = youQingBasic;
+			j["cardValue"][x]["ganJing"] = ganJingBasic;
+			j["cardValue"][x]["xunLian"] = xunLianBasic;
+			j["cardValue"][x]["bonus"] = bonusBasic;
+			j["cardValue"][x]["wizVitalBonus"] = wizVitalBonusBasic;
+			j["cardValue"][x]["initialBonus"] = initialBonus;
+			j["cardValue"][x]["initialJiBan"] = initialJiBan;
+			j["cardValue"][x]["saiHou"] = saiHou;
+			j["cardValue"][x]["hintBonus"] = hintBonus;
+			j["cardValue"][x]["hintProbIncrease"] = hintProbIncrease;
+			j["cardValue"][x]["deYiLv"] = deYiLv;
+			j["cardValue"][x]["failRateDrop"] = failRateDrop;
+			j["cardValue"][x]["vitalCostDrop"] = vitalCostDrop;
 		}
 
 		j["cardSkill"]["skillNum"] = 0;
@@ -132,33 +82,42 @@ struct SupportCard
 
 	}
 
-	void load_from_json(json& j) {
+	void load_from_json(json& j,int x) {
 
 		j.at("cardId").get_to(cardID);
+		cardID = cardID * 10 + x;
 		j.at("cardType").get_to(cardType);
 		std::string st;
 		j.at("cardName").get_to(st);
 		cardName = UTF8_To_string(st);
 
-		for (int x = 0; x < 5; ++x) {
+		j["cardValue"][x].at("filled").get_to(filled);
+		if (filled == true) {
 
-			j["cardValue"][x].at("filled").get_to(level[x].filled);
-			if (level[x].filled == false) continue;
-
-			level[x].youQingBasic = j["cardValue"][x].value<double>("youQing", 0);
-			level[x].ganJingBasic = j["cardValue"][x].value<double>("ganJing", 0);
-			level[x].xunLianBasic = j["cardValue"][x].value<double>("xunLian", 0);
-			j["cardValue"][x].at("bonus").get_to(level[x].bonusBasic);
-			level[x].wizVitalBonusBasic = j["cardValue"][x].value("wizVitalBonus", 0);
-			j["cardValue"][x].at("initialBonus").get_to(level[x].initialBonus);
-			level[x].initialJiBan = j["cardValue"][x].value("initialJiBan", 0);
-			level[x].saiHou = j["cardValue"][x].value<double>("saiHou", 0);
-			j["cardValue"][x].at("hintBonus").get_to(level[x].hintBonus);
-			level[x].hintProbIncrease = j["cardValue"][x].value<double>("hintProbIncrease", 0);
-			level[x].deYiLv = j["cardValue"][x].value<double>("deYiLv", 0);
-			level[x].failRateDrop = j["cardValue"][x].value<double>("failRateDrop", 0);
-			level[x].vitalCostDrop = j["cardValue"][x].value<double>("vitalCostDrop", 0);
+			youQingBasic = j["cardValue"][x].value<double>("youQing", 0);
+			ganJingBasic = j["cardValue"][x].value<double>("ganJing", 0);
+			xunLianBasic = j["cardValue"][x].value<double>("xunLian", 0);
+			j["cardValue"][x].at("bonus").get_to(bonusBasic);
+			wizVitalBonusBasic = j["cardValue"][x].value("wizVitalBonus", 0);
+			j["cardValue"][x].at("initialBonus").get_to(initialBonus);
+			initialJiBan = j["cardValue"][x].value("initialJiBan", 0);
+			saiHou = j["cardValue"][x].value<double>("saiHou", 0);
+			j["cardValue"][x].at("hintBonus").get_to(hintBonus);
+			hintProbIncrease = j["cardValue"][x].value<double>("hintProbIncrease", 0);
+			deYiLv = j["cardValue"][x].value<double>("deYiLv", 0);
+			failRateDrop = j["cardValue"][x].value<double>("failRateDrop", 0);
+			vitalCostDrop = j["cardValue"][x].value<double>("vitalCostDrop", 0);
 		}
+
+		if (j.contains("larc_isLink"))
+			larc_isLink = j["larc_isLink"];
+		else
+			larc_isLink = false;
+
+		if (j.contains("larc_linkSpecialEffect"))
+			larc_linkSpecialEffect = j["larc_linkSpecialEffect"];
+		else
+			larc_linkSpecialEffect = 0;
 
 		cardSkill.skillNum = j["cardSkill"]["skillNum"];
 

@@ -45,7 +45,7 @@ bool compare_array(const T* a, const T* b, size_t len, const string& key)
 		
 }
 
-bool compare_card_value(const CardValue& a, const CardValue& b)
+bool compare_card_value(const SupportCard& a, const SupportCard& b)
 {
 	bool ret = true;
 	//	CardValue level[5];	// 各个突破等级的数据
@@ -73,8 +73,8 @@ bool compare_card(const SupportCard& a, const SupportCard& b)
 	COMPARE(cardName);
 	for (int i = 0; i < 5; ++i)
 	{
-		if (a.level[i].filled) {
-			ret &= compare_card_value(a.level[i], b.level[i]);
+		if (a.filled) {
+			ret &= compare_card_value(a, b);
 		}
 	}
 //	if (!ret)

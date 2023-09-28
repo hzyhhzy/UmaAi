@@ -2,90 +2,70 @@
 #include "UmaData.h"
 
 //常数或者比较短的列表放在最前面
-const double GameConstants::ScorePtRate = 1.8;
-const double GameConstants::ScorePtRateQieZhe = 2.0;
-const int GameConstants::BasicFiveStatusLimit[5] = { 1800,1600,1800,1400,1400 }; //游戏里原来是1500 1400 1500 1300 1300，模拟器中1200以上翻倍
+const double GameConstants::ScorePtRate = 1.9;
+const double GameConstants::ScorePtRateQieZhe = 2.1;
+const int GameConstants::BasicFiveStatusLimit[5] = { 2000,2000,1800,1800,1400 }; //游戏里原来是1600 1600 1500 1500 1300，模拟器中1200以上翻倍
 
 const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3
 const int GameConstants::NormalRacePtBonus = 45;//常规比赛pt加成,G1=45
 
+const int GameConstants::SupportPtEvery5Percent = 8500;
+const int GameConstants::UpdateId50pEachTrain[5] = { 3,1,2,0,4 };
+const int GameConstants::LArcTrainBonusEvery5Percent[41] = { 0, 5, 8, 10, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 30, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37, 38, 38, 39, 39, 40 };
 
-const double GameConstants::VenusUnlockOutgoingProbEveryTurn = 0.06;//每回合解锁外出的概率
-const double GameConstants::VenusThreeChoicesEventProb = 0.4;//三选一事件概率，暂时猜测为40%*(1+蓝女神等级加成)
-const double GameConstants::VenusQingReDeactivateProb[10] = { 0,0,0.5,0.5,0.5,0.8,0.8,0.8,1,1 };//不同回合数女神情热离去的概率
 
-const int GameConstants::VenusLevelTrainBonus[6] = { 0,5,8,11,13,15 };
-const int GameConstants::RedVenusLevelVitalCostDown[6] = { 0,10,15,18,20,23 };//红女神体力消耗下降比例
-const int GameConstants::BlueVenusLevelHintProbBonus[6] = { 0,20,25,30,33,35 };//蓝女神事件发生概率提升
-const int GameConstants::YellowVenusLevelEventBonus[6] = { 0,10,15,20,23,25 };//黄女神事件数值增加量
-const int GameConstants::YellowVenusLevelContinuousEventProb[6] = { 0,20,40,50,80,90 };//黄女神连续事件发生率提升
 
-const int GameConstants::BlueVenusRelatedStatus[5][6] = //蓝女神关联属性
-{
-  {6,0,2,0,0,0},
-  {0,6,0,2,0,0},
-  {0,2,6,0,0,0},
-  {1,0,1,6,0,0},
-  {0,0,0,0,6,5},
-};
-const int GameConstants::VenusSpiritTypeProb[8][6] =
-{
-  {4,1,4,1,1,4},
-  {1,4,1,4,1,4},
-  {1,4,4,1,1,4},
-  {17,6,17,17,6,17},
-  {4,1,1,1,4,4},
-  {1,1,1,1,1,1},
-  {1,1,1,1,1,1},
-  {1,1,1,1,1,1},
-};
+const double GameConstants::ZuoyueVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//佐岳SSR卡的回复量倍数（满破1.8）
+const double GameConstants::ZuoyueVitalBonusR[5] = { 1.3,1.32,1.35,1.37,1.4 };//佐岳R卡的回复量倍数
+const double GameConstants::ZuoyueStatusBonusSSR[5] = { 1.15,1.16,1.18,1.2,1.2 };//佐岳SSR卡的事件效果倍数（满破1.2）
+const double GameConstants::ZuoyueStatusBonusR[5] = { 1.05,1.06,1.08,1.1,1.1 };//佐岳R卡的事件效果倍数
 
 const int GameConstants::TrainingBasicValue[5][6][7] =
 {
   //速
   {
-    { 10, 0, 3, 0, 0, 5, -19},
-    { 11, 0, 3, 0, 0, 5, -21},
-    { 12, 0, 3, 0, 0, 5, -22},
-    { 13, 0, 4, 0, 0, 5, -24},
-    { 14, 0, 5, 0, 0, 5, -25},
-    { 15, 0, 6, 0, 0, 5, -26},
+    { 10, 0, 3, 0, 0, 6, -21},
+    { 11, 0, 3, 0, 0, 6, -21},
+    { 12, 0, 3, 0, 0, 6, -21},
+    { 13, 0, 4, 0, 0, 6, -21},
+    { 14, 0, 5, 0, 0, 6, -21},
+    { 15, 0, 6, 0, 0, 6, -21},
   },
   //耐
   {
-    { 0, 8, 0, 6, 0, 5, -20},
-    { 0, 9, 0, 6, 0, 5, -22},
-    { 0, 10, 0, 7, 0, 5, -23},
-    { 0, 11, 0, 7, 0, 5, -25},
-    { 0, 12, 0, 8, 0, 5, -26},
-    { 0, 13, 0, 9, 0, 5, -27},
+    { 0, 9, 0, 4, 0, 6, -19},
+    { 0, 10, 0, 4, 0, 6, -19},
+    { 0, 11, 0, 4, 0, 6, -19},
+    { 0, 12, 0, 5, 0, 6, -19},
+    { 0, 13, 0, 6, 0, 6, -19},
+    { 0, 14, 0, 7, 0, 6, -19},
   },
   //力
   {
-    { 0, 4, 9, 0, 0, 5, -20},
-    { 0, 4, 10, 0, 0, 5, -22},
-    { 0, 4, 11, 0, 0, 5, -23},
-    { 0, 5, 12, 0, 0, 5, -25},
-    { 0, 6, 13, 0, 0, 5, -26},
-    { 0, 7, 14, 0, 0, 5, -27},
+    { 0, 5, 11, 0, 0, 6, -20},
+    { 0, 5, 12, 0, 0, 6, -20},
+    { 0, 5, 13, 0, 0, 6, -20},
+    { 0, 6, 14, 0, 0, 6, -20},
+    { 0, 7, 15, 0, 0, 6, -20},
+    { 0, 8, 16, 0, 0, 6, -20},
   },
   //根
   {
-    { 2, 0, 3, 9, 0, 5, -20},
-    { 2, 0, 3, 10, 0, 5, -22},
-    { 2, 0, 3, 11, 0, 5, -23},
-    { 3, 0, 3, 12, 0, 5, -25},
-    { 3, 0, 4, 13, 0, 5, -26},
-    { 4, 0, 5, 14, 0, 5, -27},
+    { 3, 0, 2, 10, 0, 6, -21},
+    { 3, 0, 2, 11, 0, 6, -21},
+    { 3, 0, 2, 12, 0, 6, -21},
+    { 4, 0, 2, 13, 0, 6, -21},
+    { 4, 0, 3, 14, 0, 6, -21},
+    { 5, 0, 4, 16, 0, 6, -21},
   },
   //智
   {
-    { 2, 0, 0, 0, 8, 5, 5},
-    { 2, 0, 0, 0, 9, 5, 5},
-    { 2, 0, 0, 0, 10, 5, 5},
-    { 3, 0, 0, 0, 11, 5, 5},
-    { 4, 0, 0, 0, 12, 5, 5},
-    { 5, 0, 0, 0, 13, 5, 5},
+    { 2, 0, 0, 0, 9, 6, 5},
+    { 2, 0, 0, 0, 10, 6, 5},
+    { 2, 0, 0, 0, 11, 6, 5},
+    { 3, 0, 0, 0, 12, 6, 5},
+    { 4, 0, 0, 0, 13, 6, 5},
+    { 5, 0, 0, 0, 14, 6, 5},
   },
 };
 

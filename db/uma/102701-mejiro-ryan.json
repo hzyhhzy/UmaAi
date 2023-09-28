@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        0,
+        20,
+        0,
+        10
+    ],
+    "fiveStatusInitial": [
+        120,
+        91,
+        130,
+        98,
+        111
+    ],
+    "freeRaces": [],
+    "gameId": 102701,
+    "name": "mejiro-ryan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        24,
+        30,
+        33,
+        43,
+        47,
+        55,
+        59,
+        71
+    ],
+    "star": 5
+}

@@ -28,13 +28,20 @@ void GameDatabase::loadCards(const string& dir)
                     ifs.close();
                     json j = json::parse(ss.str(), nullptr, true, true);
 
-                    SupportCard jdata;
-                    jdata.load_from_json(j);
-                    cout << "载入支援卡 #" << jdata.cardName<<" --- "<<jdata.cardID << endl;
-                    if (GameDatabase::AllCards.count(jdata.cardID) > 0)
-                        cout << "错误：重复支援卡 #" << jdata.cardName << " --- " << jdata.cardID << endl;
-                    else
-                        GameDatabase::AllCards[jdata.cardID] = jdata;
+                    SupportCard jdata[5];
+
+                    for (int x = 0; x < 5; ++x) {
+                        jdata[x].load_from_json(j, x);
+                    }
+
+                    cout << "载入支援卡 #" << jdata[4].cardName << " --- " << jdata[4].cardID << endl;
+                    if (GameDatabase::AllCards.count(jdata[4].cardID) > 0)
+                        cout << "错误：重复支援卡 #" << jdata[4].cardName << " --- " << jdata[4].cardID << endl;
+                    else {
+                        for (int x = 0; x < 5; ++x) 
+                            GameDatabase::AllCards[jdata[x].cardID] = jdata[x];
+                    }
+                        
                 }
                 catch (exception& e)
                 {
@@ -67,11 +74,19 @@ void GameDatabase::loadDBCards(const string& pathname)
         SupportCard jdata;
         for (auto & it : j.items()) 
         {
-            SupportCard jdata;
-            jdata.load_from_json(it.value());
-            GameDatabase::DBCards[jdata.cardID] = jdata;
+
+
+            for (int x = 0; x < 5; ++x) {
+                SupportCard jdata;
+                jdata.load_from_json(it.value(),x);
+                if (GameDatabase::AllCards.count(jdata.cardID) > 0) continue;
+
+                GameDatabase::AllCards[jdata.cardID] = jdata;
+
+            }
+            
         }
-        cout << "共载入 " << GameDatabase::DBCards.size() << " 支援卡元数据" << endl;
+        cout << "共载入 " << GameDatabase::AllCards.size() << " 支援卡元数据" << endl;
     }
     catch (exception& e)
     {
@@ -91,7 +106,9 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       ganJingBasic,
       xunLianBasic,
       {bonusBasic[0],bonusBasic[1],bonusBasic[2],bonusBasic[3],bonusBasic[4],bonusBasic[5]},
-      wizVitalBonusBasic
+      wizVitalBonusBasic,
+      failRateDrop,
+      vitalCostDrop
     };
 
 
@@ -119,9 +136,13 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     if (!isShining || atTrain != 4)
         effect.vitalBonus = 0;
 
+
+    int cardSpecialEffectId = cardID / 10;
+
+
     //接下来是各种固有
     //1.神团
-    if (cardID == 30137)
+    if (cardSpecialEffectId == 30137)
     {
         if (jiBan < 100)
         {
@@ -133,28 +154,28 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     }
     //2.高峰
     //为了简化，视为初始训练加成是4%，第一年逐渐增大到20%，也就是第n个回合4+n*(2/3)%
-    else if (cardID == 30134)
+    else if (cardSpecialEffectId == 30134)
     {
         if (game.turn < 24)
             effect.xunLian = 4 + 0.6666667 * game.turn;
     }
     //3.美妙
-    else if (cardID == 30010)
+    else if (cardSpecialEffectId == 30010)
     {
         //啥都没有
     }
     //4.根乌拉拉
-    else if (cardID == 30019)
+    else if (cardSpecialEffectId == 30019)
     {
         //啥都没有
     }
     //5.根风神
-    else if (cardID == 30011)
+    else if (cardSpecialEffectId == 30011)
     {
         //啥都没有
     }
     //6.水司机
-    else if (cardID ==30107)
+    else if (cardSpecialEffectId ==30107)
     {
 
         int traininglevel = game.getTrainingLevel(atTrain);
@@ -162,7 +183,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         if (effect.xunLian > 25)effect.xunLian = 25;
     }
     //7.根凯斯
-    else if (cardID == 30130)
+    else if (cardSpecialEffectId == 30130)
     {
         if (jiBan < 80)
         {
@@ -170,7 +191,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //8.根皇帝
-    else if (cardID == 30037)
+    else if (cardSpecialEffectId == 30037)
     {
         if (jiBan < 80)
         {
@@ -178,12 +199,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //9.根善信
-    else if (cardID == 30027)
+    else if (cardSpecialEffectId == 30027)
     {
         //啥都没有
     }
     //10.速宝穴
-    else if (cardID == 30147)
+    else if (cardSpecialEffectId == 30147)
     {
         if (jiBan < 100)
         {
@@ -191,12 +212,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //11.耐海湾
-    else if (cardID == 30016)
+    else if (cardSpecialEffectId == 30016)
     {
         //啥都没有
     }
     //12.智好歌剧
-    else if (cardID == 30152)
+    else if (cardSpecialEffectId == 30152)
     {
         if (jiBan < 80)
         {
@@ -204,7 +225,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //13.根黄金城
-    else if (cardID == 30153)
+    else if (cardSpecialEffectId == 30153)
     {
         if (jiBan < 100)
         {
@@ -212,12 +233,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //14.智波旁
-    else if (cardID == 30141)
+    else if (cardSpecialEffectId == 30141)
     {
         //啥都没有
     }
     //15.耐狄杜斯
-    else if (cardID == 30099)
+    else if (cardSpecialEffectId == 30099)
     {
         int totalJiBan = 0;
         for (int i = 0; i < 6; i++)
@@ -225,14 +246,14 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         effect.xunLian = totalJiBan / 30;
     }
     //速子
-    else if (cardID == 30101) {
+    else if (cardSpecialEffectId == 30101) {
         if (jiBan < 100)
         {
             effect.youQing = 22;
         }
     }
     //22，耐桂冠
-    else if (cardID == 30142)
+    else if (cardSpecialEffectId == 30142)
     {
       if (game.turn < 24)
         effect.bonus[1] = 1;
@@ -242,14 +263,14 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         effect.bonus[1] = 3;
     }
     //23力白仁
-    else if (cardID == 30123)
+    else if (cardSpecialEffectId == 30123)
     {
       int traininglevel = game.getTrainingLevel(atTrain);
       effect.xunLian = 5 + traininglevel * 5;
       if (effect.xunLian > 25)effect.xunLian = 25;
     }
     //24力重炮
-    else if (cardID == 30151)
+    else if (cardSpecialEffectId == 30151)
     {
         if (jiBan < 100)
         {
@@ -257,7 +278,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //25力内恰
-    else if (cardID == 30138)
+    else if (cardSpecialEffectId == 30138)
     {
       if (jiBan < 100)
       {
@@ -265,18 +286,18 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       }
     }
     //28根涡轮
-    else if (cardID == 30112)
+    else if (cardSpecialEffectId == 30112)
     {
       //以后再想办法
     }
     //29根进王
-    else if (cardID == 30083)
+    else if (cardSpecialEffectId == 30083)
     {
       if (jiBan < 80 || atTrain == 3)
         effect.xunLian = 0;
     }
     //30根青竹
-    else if (cardID == 30094)
+    else if (cardSpecialEffectId == 30094)
     {
       if (effect.youQing > 0)
       {
@@ -290,7 +311,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
 
     }
     //也问
-    else if (cardID == 30126)
+    else if (cardSpecialEffectId == 30126)
     {
         if (jiBan < 80)
         {
@@ -299,7 +320,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //耐特
-    else if (cardID == 30127)
+    else if (cardSpecialEffectId == 30127)
     {
         if (isShining)
         {
@@ -307,12 +328,12 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     //根特
-    else if (cardID == 47)
+    else if (cardSpecialEffectId == 47)
     {
         //null
     }
     //速尔丹
-    else if (cardID == 30119)
+    else if (cardSpecialEffectId == 30119)
     {
         if (jiBan < 80)
         {
@@ -320,16 +341,46 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         }
     }
     // 皇团
-    else if (cardID == 30067) {
+    else if (cardSpecialEffectId == 30067) {
 
         if (jiBan < 80)
             effect.bonus[5] = 0;
 
     }
     // 红宝
-    else if (cardID == 30114) {
+    else if (cardSpecialEffectId == 30114) {
         if (jiBan < 80)
             effect.bonus[2] = 0;
+    }
+    // 福来
+    else if (cardSpecialEffectId == 30078) {
+        effect.failRateDrop += 10;
+    }
+    // 绿帽
+    else if (cardSpecialEffectId == 30021) {
+        effect.failRateDrop += 7;
+        effect.vitalCostDrop += 4;
+    }
+    // 智茶座
+    else if (cardSpecialEffectId == 30157) {
+      if (jiBan < 100)
+      {
+        effect.bonus[4] = 0;
+        effect.bonus[5] = 0;
+      }
+    }
+    // 力奶奶
+    else if (cardSpecialEffectId == 30156) {
+      if (jiBan < 80)
+      {
+        effect.bonus[2] = 0;
+      }
+    }
+    // 力飞驹
+    else if (cardSpecialEffectId == 30132) {
+      int guyouLevel = (game.maxVital - 100) / 4;
+      if (guyouLevel > 5)guyouLevel = 5;
+      effect.xunLian = 5 + 3 * guyouLevel;
     }
     else
     {

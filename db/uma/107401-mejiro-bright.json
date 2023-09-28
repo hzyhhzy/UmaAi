@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        14,
+        0,
+        8,
+        8
+    ],
+    "fiveStatusInitial": [
+        109,
+        130,
+        106,
+        92,
+        113
+    ],
+    "freeRaces": [],
+    "gameId": 107401,
+    "name": "mejiro-bright",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        23,
+        30,
+        33,
+        43,
+        46,
+        55,
+        67,
+        71
+    ],
+    "star": 5
+}

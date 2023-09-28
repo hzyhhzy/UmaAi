@@ -1,0 +1,36 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        0,
+        30,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        121,
+        101,
+        125,
+        100,
+        103
+    ],
+    "freeRaces": [],
+    "gameId": 108401,
+    "name": "tanino-gimlet",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        24,
+        30,
+        32,
+        33,
+        41,
+        43,
+        58,
+        59,
+        67,
+        69
+    ],
+    "star": 5
+}

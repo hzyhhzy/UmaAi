@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        0,
+        20,
+        10,
+        0
+    ],
+    "fiveStatusInitial": [
+        120,
+        74,
+        132,
+        111,
+        113
+    ],
+    "freeRaces": [],
+    "gameId": 102801,
+    "name": "hishi-akebono",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        41,
+        43,
+        45,
+        53,
+        58,
+        65,
+        69
+    ],
+    "star": 5
+}

@@ -114,14 +114,8 @@
     <ClCompile Include="NeuralNet\Model.cpp">
       <Filter>源文件\NeuralNet</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\test5.cpp">
-      <Filter>源文件\Tests</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Protocol.cpp">
       <Filter>源文件\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\test6.cpp">
-      <Filter>源文件\Tests</Filter>
     </ClCompile>
     <ClCompile Include="Tests\test_json.cpp">
       <Filter>源文件\Tests</Filter>
@@ -132,8 +126,20 @@
     <ClCompile Include="GameDatabase\GameConfig.cpp">
       <Filter>头文件\GameDatabase</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\test7.cpp">
-      <Filter>源文件\Tests</Filter>
+    <ClCompile Include="MainCommands\Benchmark.cpp">
+      <Filter>源文件\MainCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCommands\MainAi.cpp">
+      <Filter>源文件\MainCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCommands\TestAiScore.cpp">
+      <Filter>源文件\MainCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action.cpp">
+      <Filter>源文件\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Person.cpp">
+      <Filter>源文件\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="GameDatabase\SkillData.h">
       <Filter>头文件\GameDatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Person.h">
+      <Filter>头文件\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action.h">
+      <Filter>头文件\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

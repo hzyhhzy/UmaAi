@@ -58714,5 +58714,604 @@
       ],
       30
     ]
+  },
+  "30157": {
+    "cardId": 30157,
+    "cardName": "[智]曼城茶座",
+    "fullName": "[与你共见的泡沫]曼城茶座",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200742,
+        201172,
+        202072,
+        202422,
+        202522,
+        202562,
+        202592
+      ],
+      "skillNum": 7
+    },
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 0,
+        "xunLian": 10,
+        "initialJiBan": 0,
+        "saiHou": 5,
+        "hintProbIncrease": 20,
+        "deYiLv": 35,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 21,
+        "ganJing": 20,
+        "xunLian": 11,
+        "initialJiBan": 0,
+        "saiHou": 6,
+        "hintProbIncrease": 20,
+        "deYiLv": 40,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 23,
+        "ganJing": 40,
+        "xunLian": 12,
+        "initialJiBan": 0,
+        "saiHou": 7,
+        "hintProbIncrease": 20,
+        "deYiLv": 45,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 40,
+        "xunLian": 13,
+        "initialJiBan": 15,
+        "saiHou": 8,
+        "hintProbIncrease": 20,
+        "deYiLv": 50,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 40,
+        "xunLian": 15,
+        "initialJiBan": 30,
+        "saiHou": 10,
+        "hintProbIncrease": 20,
+        "deYiLv": 50,
+        "wizVitalBonus": 5
+      }
+    ],
+    "uniqueEffect": [
+      "絆ゲージが100以上の時賢さボーナス2スキルポイントボーナス1,",
+      [
+        {
+          "type": "TrainingWizUp",
+          "value": 2
+        },
+        {
+          "type": "SkillPointBonus",
+          "value": 1
+        }
+      ],
+      30
+    ]
+  },
+  "30158": {
+    "cardId": 30158,
+    "cardName": "[根]森林宝穴",
+    "fullName": "[飞驰吧盛夏！]森林宝穴",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200592,
+        200602,
+        201102,
+        201392,
+        201412,
+        201542,
+        202082,
+        202612,
+        202622
+      ],
+      "skillNum": 9
+    },
+    "cardType": 3,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 15,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 20,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 16,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 23,
+        "deYiLv": 53
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 18,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 26,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 30,
+        "deYiLv": 61
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          30,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 30,
+        "deYiLv": 65
+      }
+    ],
+    "uniqueEffect": [
+      "絆ゲージが100以上の時youQing20,",
+      [
+        {
+          "type": "SpecialTagEffectUp",
+          "value": 20
+        }
+      ],
+      30
+    ]
+  },
+  "30159": {
+    "cardId": 30159,
+    "cardName": "[速]气槽",
+    "fullName": "[Seaside Bloom]气槽",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200562,
+        201322,
+        201342,
+        201372,
+        201532,
+        201902,
+        202372
+      ],
+      "skillNum": 7
+    },
+    "cardType": 0,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 15,
+        "ganJing": 0,
+        "initialJiBan": 15,
+        "saiHou": 1,
+        "hintProbIncrease": 30,
+        "deYiLv": 20
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 16,
+        "ganJing": 0,
+        "initialJiBan": 16,
+        "saiHou": 2,
+        "hintProbIncrease": 33,
+        "deYiLv": 25
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 18,
+        "ganJing": 0,
+        "initialJiBan": 18,
+        "saiHou": 3,
+        "hintProbIncrease": 36,
+        "deYiLv": 30
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 15,
+        "initialJiBan": 20,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 30,
+        "initialJiBan": 20,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 35
+      }
+    ],
+    "uniqueEffect": [
+      "絆ゲージが80以上の時xunLian10,",
+      [
+        {
+          "type": "TrainingEffectUp",
+          "value": 10
+        }
+      ],
+      40
+    ]
   }
 }

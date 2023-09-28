@@ -1,0 +1,36 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        20,
+        0,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        113,
+        109,
+        122,
+        108,
+        98
+    ],
+    "freeRaces": [],
+    "gameId": 101601,
+    "name": "narita-brian",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        22,
+        30,
+        33,
+        43,
+        47,
+        53,
+        55,
+        67,
+        69,
+        71
+    ],
+    "star": 5
+}

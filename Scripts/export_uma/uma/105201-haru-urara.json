@@ -1,0 +1,31 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        0,
+        10,
+        20,
+        0
+    ],
+    "fiveStatusInitial": [
+        115,
+        79,
+        123,
+        119,
+        114
+    ],
+    "freeRaces": [],
+    "gameId": 105201,
+    "name": "haru-urara",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        49,
+        51,
+        62,
+        68,
+        71
+    ],
+    "star": 5
+}
