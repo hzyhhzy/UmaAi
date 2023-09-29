@@ -16636,6 +16636,175 @@
     ],
     "uniqueEffect": null
   },
+  "10094": {
+    "cardId": 10094,
+    "cardName": "[友]佐岳五月",
+    "fullName": "[URA职员]佐岳五月",
+    "rarity": 1,
+    "cardSkill": {
+      "skillList": [],
+      "skillNum": 0
+    },
+    "cardType": 5,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          15,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "xunLian": 5,
+        "initialJiBan": 20,
+        "failRateDrop": 15,
+        "vitalCostDrop": 5
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          16,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "xunLian": 5,
+        "initialJiBan": 21,
+        "failRateDrop": 16,
+        "vitalCostDrop": 6
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          18,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "xunLian": 5,
+        "initialJiBan": 22,
+        "failRateDrop": 17,
+        "vitalCostDrop": 8
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "xunLian": 5,
+        "initialJiBan": 23,
+        "failRateDrop": 18,
+        "vitalCostDrop": 10
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "xunLian": 5,
+        "initialJiBan": 25,
+        "failRateDrop": 20,
+        "vitalCostDrop": 10
+      }
+    ],
+    "uniqueEffect": null
+  },
   "20001": {
     "cardId": 20001,
     "cardName": "[智]富士奇石",
@@ -16824,20 +16993,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "スキルポイントボーナス1,初期賢さアップ20",
-      [
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        },
-        {
-          "type": "InitialWizUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "スキルポイントボーナス(1),初期賢さアップ(20)",
+      "effect": {
+        "SkillPointBonus": 1,
+        "InitialWizUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20002": {
     "cardId": 20002,
@@ -17028,20 +17193,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,initialJiBan15",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),initialJiBan(15)",
+      "effect": {
+        "MotivationUp": 15,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20003": {
     "cardId": 20003,
@@ -17221,20 +17382,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,saiHou5",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),saiHou(5)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20004": {
     "cardId": 20004,
@@ -17425,20 +17582,16 @@
         "deYiLv": 60
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,saiHou5",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),saiHou(5)",
+      "effect": {
+        "MotivationUp": 15,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20005": {
     "cardId": 20005,
@@ -17624,20 +17777,16 @@
         "hintProbIncrease": 40
       }
     ],
-    "uniqueEffect": [
-      "youQing10,初期パワーアップ20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitialPowerUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),初期パワーアップ(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitialPowerUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20006": {
     "cardId": 20006,
@@ -17827,20 +17976,16 @@
         "deYiLv": 60
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),hintProbIncrease(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20007": {
     "cardId": 20007,
@@ -18021,20 +18166,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,deYiLv20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),deYiLv(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20008": {
     "cardId": 20008,
@@ -18220,20 +18361,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,deYiLv20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),deYiLv(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20009": {
     "cardId": 20009,
@@ -18412,20 +18549,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,hintProbIncrease20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),hintProbIncrease(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20010": {
     "cardId": 20010,
@@ -18609,20 +18742,16 @@
         "hintProbIncrease": 50
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,saiHou5",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),saiHou(5)",
+      "effect": {
+        "MotivationUp": 15,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20011": {
     "cardId": 20011,
@@ -18806,20 +18935,16 @@
         "deYiLv": 60
       }
     ],
-    "uniqueEffect": [
-      "根性ボーナス1,初期根性アップ20",
-      [
-        {
-          "type": "TrainingGutsUp",
-          "value": 1
-        },
-        {
-          "type": "InitialGutsUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "根性ボーナス(1),初期根性アップ(20)",
+      "effect": {
+        "TrainingGutsUp": 1,
+        "InitialGutsUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20012": {
     "cardId": 20012,
@@ -19008,20 +19133,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "スキルポイントボーナス1,hintProbIncrease20",
-      [
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "スキルポイントボーナス(1),hintProbIncrease(20)",
+      "effect": {
+        "SkillPointBonus": 1,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20013": {
     "cardId": 20013,
@@ -19206,20 +19327,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,saiHou5",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),saiHou(5)",
+      "effect": {
+        "MotivationUp": 15,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20014": {
     "cardId": 20014,
@@ -19406,20 +19523,16 @@
         "hintProbIncrease": 40
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,deYiLv20",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),deYiLv(20)",
+      "effect": {
+        "MotivationUp": 15,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20015": {
     "cardId": 20015,
@@ -19609,20 +19722,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,初期賢さアップ20",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "InitialWizUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),初期賢さアップ(20)",
+      "effect": {
+        "MotivationUp": 15,
+        "InitialWizUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20016": {
     "cardId": 20016,
@@ -19814,20 +19923,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "youQing10,initialJiBan15",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),initialJiBan(15)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20017": {
     "cardId": 20017,
@@ -20009,20 +20114,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),hintProbIncrease(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20018": {
     "cardId": 20018,
@@ -20212,20 +20313,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期賢さアップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialWizUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期賢さアップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialWizUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20019": {
     "cardId": 20019,
@@ -20413,20 +20510,16 @@
         "hintProbIncrease": 50
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,初期根性アップ20",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "InitialGutsUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),初期根性アップ(20)",
+      "effect": {
+        "MotivationUp": 15,
+        "InitialGutsUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20020": {
     "cardId": 20020,
@@ -20612,20 +20705,16 @@
         "deYiLv": 60
       }
     ],
-    "uniqueEffect": [
-      "速度ボーナス1,初期速度アップ20",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "InitialSpeedUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),初期速度アップ(20)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "InitialSpeedUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20021": {
     "cardId": 20021,
@@ -20794,20 +20883,16 @@
         "vitalCostDrop": 20
       }
     ],
-    "uniqueEffect": [
-      "failRateDrop10,vitalCostDrop5",
-      [
-        {
-          "type": "TrainingFailureRateDown",
-          "value": 10
-        },
-        {
-          "type": "TrainingHPConsumptionDown",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "failRateDrop(10),vitalCostDrop(5)",
+      "effect": {
+        "TrainingFailureRateDown": 10,
+        "TrainingHPConsumptionDown": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20022": {
     "cardId": 20022,
@@ -20989,20 +21074,16 @@
         "deYiLv": 60
       }
     ],
-    "uniqueEffect": [
-      "スキルポイントボーナス1,初期根性アップ20",
-      [
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        },
-        {
-          "type": "InitialGutsUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "スキルポイントボーナス(1),初期根性アップ(20)",
+      "effect": {
+        "SkillPointBonus": 1,
+        "InitialGutsUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20023": {
     "cardId": 20023,
@@ -21189,20 +21270,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),hintProbIncrease(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20024": {
     "cardId": 20024,
@@ -21389,20 +21466,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,deYiLv20",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),deYiLv(20)",
+      "effect": {
+        "MotivationUp": 15,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20025": {
     "cardId": 20025,
@@ -21582,20 +21655,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "賢さボーナス1,deYiLv20",
-      [
-        {
-          "type": "TrainingWizUp",
-          "value": 1
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "賢さボーナス(1),deYiLv(20)",
+      "effect": {
+        "TrainingWizUp": 1,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20026": {
     "cardId": 20026,
@@ -21783,20 +21852,16 @@
         "wizVitalBonus": 3
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期賢さアップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialWizUp",
-          "value": 20
-        }
-      ],
-      35
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期賢さアップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialWizUp": 20
+      },
+      "unlockLevel": 35,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20027": {
     "cardId": 20027,
@@ -21981,20 +22046,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,saiHou5",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),saiHou(5)",
+      "effect": {
+        "MotivationUp": 15,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20028": {
     "cardId": 20028,
@@ -22182,20 +22243,16 @@
         "deYiLv": 60
       }
     ],
-    "uniqueEffect": [
-      "youQing10,初期持久力アップ20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitalStaminaUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),初期持久力アップ(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitalStaminaUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20029": {
     "cardId": 20029,
@@ -22381,20 +22438,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,initialJiBan15",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),initialJiBan(15)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20030": {
     "cardId": 20030,
@@ -22579,20 +22632,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,saiHou5",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),saiHou(5)",
+      "effect": {
+        "MotivationUp": 15,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20031": {
     "cardId": 20031,
@@ -22771,20 +22820,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,initialJiBan15",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),initialJiBan(15)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20032": {
     "cardId": 20032,
@@ -22967,20 +23012,16 @@
         "deYiLv": 60
       }
     ],
-    "uniqueEffect": [
-      "youQing10,持久力ボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "TrainingStaminaUp",
-          "value": 1
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),持久力ボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "TrainingStaminaUp": 1
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20033": {
     "cardId": 20033,
@@ -23165,20 +23206,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "速度ボーナス1,deYiLv20",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),deYiLv(20)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20034": {
     "cardId": 20034,
@@ -23368,20 +23405,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,hintProbIncrease20",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),hintProbIncrease(20)",
+      "effect": {
+        "MotivationUp": 15,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20035": {
     "cardId": 20035,
@@ -23562,20 +23595,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,saiHou5",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),saiHou(5)",
+      "effect": {
+        "MotivationUp": 15,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20037": {
     "cardId": 20037,
@@ -23755,20 +23784,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,initialJiBan15",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),initialJiBan(15)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20038": {
     "cardId": 20038,
@@ -23947,20 +23972,16 @@
         "deYiLv": 60
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期速度アップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialSpeedUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期速度アップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialSpeedUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20039": {
     "cardId": 20039,
@@ -24149,20 +24170,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),hintProbIncrease(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20040": {
     "cardId": 20040,
@@ -24340,20 +24357,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,根性ボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "TrainingGutsUp",
-          "value": 1
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),根性ボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "TrainingGutsUp": 1
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20041": {
     "cardId": 20041,
@@ -24533,20 +24546,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "速度ボーナス1,saiHou5",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),saiHou(5)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20042": {
     "cardId": 20042,
@@ -24729,20 +24738,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,deYiLv20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),deYiLv(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20043": {
     "cardId": 20043,
@@ -24919,20 +24924,16 @@
         "hintProbIncrease": 40
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期パワーアップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialPowerUp",
-          "value": 20
-        }
-      ],
-      35
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期パワーアップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialPowerUp": 20
+      },
+      "unlockLevel": 35,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20044": {
     "cardId": 20044,
@@ -25112,20 +25113,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "youQing10,saiHou5",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),saiHou(5)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20045": {
     "cardId": 20045,
@@ -25302,20 +25299,16 @@
         "hintProbIncrease": 50
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期パワーアップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialPowerUp",
-          "value": 20
-        }
-      ],
-      35
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期パワーアップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialPowerUp": 20
+      },
+      "unlockLevel": 35,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20046": {
     "cardId": 20046,
@@ -25502,20 +25495,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期賢さアップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialWizUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期賢さアップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialWizUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20047": {
     "cardId": 20047,
@@ -25696,20 +25685,16 @@
         "hintProbIncrease": 50
       }
     ],
-    "uniqueEffect": [
-      "初期持久力アップ20,初期根性アップ20",
-      [
-        {
-          "type": "InitalStaminaUp",
-          "value": 20
-        },
-        {
-          "type": "InitialGutsUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "初期持久力アップ(20),初期根性アップ(20)",
+      "effect": {
+        "InitalStaminaUp": 20,
+        "InitialGutsUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20048": {
     "cardId": 20048,
@@ -25897,20 +25882,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,saiHou5",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),saiHou(5)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20049": {
     "cardId": 20049,
@@ -26090,20 +26071,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "速度ボーナス1,初期賢さアップ20",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "InitialWizUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),初期賢さアップ(20)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "InitialWizUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20050": {
     "cardId": 20050,
@@ -26294,20 +26271,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20051": {
     "cardId": 20051,
@@ -26483,20 +26456,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "youQing10,スキルポイントボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),スキルポイントボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20052": {
     "cardId": 20052,
@@ -26676,20 +26645,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "根性ボーナス1,xunLian5",
-      [
-        {
-          "type": "TrainingGutsUp",
-          "value": 1
-        },
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "根性ボーナス(1),xunLian(5)",
+      "effect": {
+        "TrainingGutsUp": 1,
+        "TrainingEffectUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20053": {
     "cardId": 20053,
@@ -26869,20 +26834,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,saiHou5",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),saiHou(5)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20054": {
     "cardId": 20054,
@@ -27061,20 +27022,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,持久力ボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "TrainingStaminaUp",
-          "value": 1
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),持久力ボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "TrainingStaminaUp": 1
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20055": {
     "cardId": 20055,
@@ -27256,20 +27213,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,速度ボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),速度ボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "TrainingSpeedUp": 1
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20056": {
     "cardId": 20056,
@@ -27456,20 +27409,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,スキルポイントボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),スキルポイントボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20057": {
     "cardId": 20057,
@@ -27655,20 +27604,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20058": {
     "cardId": 20058,
@@ -27856,20 +27801,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "youQing10,持久力ボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "TrainingStaminaUp",
-          "value": 1
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),持久力ボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "TrainingStaminaUp": 1
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20059": {
     "cardId": 20059,
@@ -28053,20 +27994,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,initialJiBan15",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),initialJiBan(15)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20060": {
     "cardId": 20060,
@@ -28248,20 +28185,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,スキルポイントボーナス1",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),スキルポイントボーナス(1)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20061": {
     "cardId": 20061,
@@ -28460,20 +28393,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20062": {
     "cardId": 20062,
@@ -28660,20 +28589,16 @@
         "wizVitalBonus": 4
       }
     ],
-    "uniqueEffect": [
-      "youQing10,初期賢さアップ20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitialWizUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),初期賢さアップ(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitialWizUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20063": {
     "cardId": 20063,
@@ -28861,20 +28786,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,initialJiBan15",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),initialJiBan(15)",
+      "effect": {
+        "MotivationUp": 15,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20064": {
     "cardId": 20064,
@@ -29062,20 +28983,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      25
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),hintProbIncrease(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "20065": {
     "cardId": 20065,
@@ -29256,20 +29173,411 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
+  },
+  "20066": {
+    "cardId": 20066,
+    "cardName": "[耐]北部玄驹",
+    "fullName": "[助人大将与小魔女]北部玄驹",
+    "rarity": 2,
+    "cardSkill": {
+      "skillList": [
+        200332,
+        200352,
+        200382,
+        200762,
+        201192,
+        201242,
+        202462
       ],
-      25
-    ]
+      "skillNum": 7
+    },
+    "cardType": 1,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          15,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "initialJiBan": 20,
+        "saiHou": 0,
+        "hintProbIncrease": 20,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          16,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 21,
+        "ganJing": 42,
+        "initialJiBan": 21,
+        "saiHou": 1,
+        "hintProbIncrease": 23,
+        "deYiLv": 53
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          18,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 22,
+        "ganJing": 45,
+        "initialJiBan": 22,
+        "saiHou": 3,
+        "hintProbIncrease": 26,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          20,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 23,
+        "ganJing": 47,
+        "initialJiBan": 23,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 61
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          20,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 50,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 65
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期根性アップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialGutsUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
+  },
+  "20067": {
+    "cardId": 20067,
+    "cardName": "[智]大树快车",
+    "fullName": "[撒娇鬼Night]大树快车",
+    "rarity": 2,
+    "cardSkill": {
+      "skillList": [
+        200682,
+        201042,
+        201052,
+        201062,
+        201082
+      ],
+      "skillNum": 5
+    },
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 15,
+        "xunLian": 10,
+        "initialJiBan": 20,
+        "saiHou": 1,
+        "hintProbIncrease": 0,
+        "deYiLv": 20,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 16,
+        "xunLian": 11,
+        "initialJiBan": 21,
+        "saiHou": 2,
+        "hintProbIncrease": 20,
+        "deYiLv": 25,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 18,
+        "xunLian": 12,
+        "initialJiBan": 22,
+        "saiHou": 3,
+        "hintProbIncrease": 25,
+        "deYiLv": 30,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "xunLian": 13,
+        "initialJiBan": 23,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 35,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          30,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "xunLian": 15,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 35,
+        "wizVitalBonus": 4
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),deYiLv(20)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 25,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30001": {
     "cardId": 30001,
@@ -29456,20 +29764,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "根性ボーナス1,初期根性アップ20",
-      [
-        {
-          "type": "TrainingGutsUp",
-          "value": 1
-        },
-        {
-          "type": "InitialGutsUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "根性ボーナス(1),初期根性アップ(20)",
+      "effect": {
+        "TrainingGutsUp": 1,
+        "InitialGutsUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30002": {
     "cardId": 30002,
@@ -29653,20 +29957,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,hintProbIncrease20",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),hintProbIncrease(20)",
+      "effect": {
+        "MotivationUp": 15,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30003": {
     "cardId": 30003,
@@ -29852,20 +30152,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,初期速度アップ20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitialSpeedUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),初期速度アップ(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitialSpeedUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30004": {
     "cardId": 30004,
@@ -30054,20 +30350,16 @@
         "hintProbIncrease": 60
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,initialJiBan15",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),initialJiBan(15)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30005": {
     "cardId": 30005,
@@ -30256,20 +30548,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "youQing10,deYiLv20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),deYiLv(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30006": {
     "cardId": 30006,
@@ -30452,20 +30740,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,initialJiBan15",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),initialJiBan(15)",
+      "effect": {
+        "MotivationUp": 15,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30007": {
     "cardId": 30007,
@@ -30652,20 +30936,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,deYiLv20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),deYiLv(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30008": {
     "cardId": 30008,
@@ -30851,20 +31131,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,deYiLv20",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),deYiLv(20)",
+      "effect": {
+        "MotivationUp": 15,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30009": {
     "cardId": 30009,
@@ -31051,20 +31327,16 @@
         "hintProbIncrease": 50
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期持久力アップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitalStaminaUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期持久力アップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitalStaminaUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30010": {
     "cardId": 30010,
@@ -31249,20 +31521,16 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "youQing10,initialJiBan15",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),initialJiBan(15)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30011": {
     "cardId": 30011,
@@ -31452,20 +31720,16 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期根性アップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialGutsUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期根性アップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialGutsUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30012": {
     "cardId": 30012,
@@ -31650,20 +31914,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,hintProbIncrease20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),hintProbIncrease(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30013": {
     "cardId": 30013,
@@ -31846,20 +32106,16 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,initialJiBan15",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),initialJiBan(15)",
+      "effect": {
+        "MotivationUp": 15,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30014": {
     "cardId": 30014,
@@ -32042,20 +32298,16 @@
         "hintProbIncrease": 60
       }
     ],
-    "uniqueEffect": [
-      "速度ボーナス1,初期速度アップ20",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "InitialSpeedUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),初期速度アップ(20)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "InitialSpeedUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30015": {
     "cardId": 30015,
@@ -32243,20 +32495,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,initialJiBan15",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),initialJiBan(15)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30016": {
     "cardId": 30016,
@@ -32436,20 +32684,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,deYiLv20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),deYiLv(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30017": {
     "cardId": 30017,
@@ -32637,20 +32881,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,初期パワーアップ20",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "InitialPowerUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),初期パワーアップ(20)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "InitialPowerUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30018": {
     "cardId": 30018,
@@ -32835,20 +33075,16 @@
         "hintProbIncrease": 50
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,initialJiBan15",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),initialJiBan(15)",
+      "effect": {
+        "MotivationUp": 15,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30019": {
     "cardId": 30019,
@@ -33022,20 +33258,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,saiHou5",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),saiHou(5)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30020": {
     "cardId": 30020,
@@ -33217,20 +33449,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,deYiLv20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),deYiLv(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30021": {
     "cardId": 30021,
@@ -33399,20 +33627,16 @@
         "vitalCostDrop": 25
       }
     ],
-    "uniqueEffect": [
-      "failRateDrop10,vitalCostDrop5",
-      [
-        {
-          "type": "TrainingFailureRateDown",
-          "value": 10
-        },
-        {
-          "type": "TrainingHPConsumptionDown",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "failRateDrop(10),vitalCostDrop(5)",
+      "effect": {
+        "TrainingFailureRateDown": 10,
+        "TrainingHPConsumptionDown": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30022": {
     "cardId": 30022,
@@ -33602,20 +33826,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "持久力ボーナス1,初期持久力アップ20",
-      [
-        {
-          "type": "TrainingStaminaUp",
-          "value": 1
-        },
-        {
-          "type": "InitalStaminaUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "持久力ボーナス(1),初期持久力アップ(20)",
+      "effect": {
+        "TrainingStaminaUp": 1,
+        "InitalStaminaUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30023": {
     "cardId": 30023,
@@ -33804,20 +34024,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,hintProbIncrease20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),hintProbIncrease(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30024": {
     "cardId": 30024,
@@ -34007,20 +34223,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,初期パワーアップ20",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "InitialPowerUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),初期パワーアップ(20)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "InitialPowerUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30025": {
     "cardId": 30025,
@@ -34202,20 +34414,16 @@
         "deYiLv": 30
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30026": {
     "cardId": 30026,
@@ -34401,20 +34609,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,saiHou5",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),saiHou(5)",
+      "effect": {
+        "MotivationUp": 15,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30027": {
     "cardId": 30027,
@@ -34601,20 +34805,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期根性アップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialGutsUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期根性アップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialGutsUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30028": {
     "cardId": 30028,
@@ -34807,20 +35007,16 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,deYiLv20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),deYiLv(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30029": {
     "cardId": 30029,
@@ -35007,20 +35203,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,initialJiBan15",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),initialJiBan(15)",
+      "effect": {
+        "MotivationUp": 15,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30030": {
     "cardId": 30030,
@@ -35200,20 +35392,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "youQing10,初期根性アップ20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitialGutsUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),初期根性アップ(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitialGutsUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30031": {
     "cardId": 30031,
@@ -35397,20 +35585,16 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30032": {
     "cardId": 30032,
@@ -35595,20 +35779,16 @@
         "hintProbIncrease": 60
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,deYiLv20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),deYiLv(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30033": {
     "cardId": 30033,
@@ -35793,20 +35973,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "youQing10,initialJiBan15",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),initialJiBan(15)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30034": {
     "cardId": 30034,
@@ -35995,20 +36171,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "持久力ボーナス1,xunLian5",
-      [
-        {
-          "type": "TrainingStaminaUp",
-          "value": 1
-        },
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "持久力ボーナス(1),xunLian(5)",
+      "effect": {
+        "TrainingStaminaUp": 1,
+        "TrainingEffectUp": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30036": {
     "cardId": 30036,
@@ -36182,20 +36354,16 @@
         "vitalCostDrop": 15
       }
     ],
-    "uniqueEffect": [
-      "failRateDrop10,vitalCostDrop5",
-      [
-        {
-          "type": "TrainingFailureRateDown",
-          "value": 10
-        },
-        {
-          "type": "TrainingHPConsumptionDown",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "failRateDrop(10),vitalCostDrop(5)",
+      "effect": {
+        "TrainingFailureRateDown": 10,
+        "TrainingHPConsumptionDown": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30037": {
     "cardId": 30037,
@@ -36387,16 +36555,22 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時速度ボーナス2,",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 2
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时速度ボーナス(2)",
+      "effect": {
+        "TrainingSpeedUp": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        3,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30038": {
     "cardId": 30038,
@@ -36580,20 +36754,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30039": {
     "cardId": 30039,
@@ -36772,20 +36942,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "速度ボーナス1,初期速度アップ20",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "InitialSpeedUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),初期速度アップ(20)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "InitialSpeedUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30040": {
     "cardId": 30040,
@@ -36971,20 +37137,16 @@
         "deYiLv": 20
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,deYiLv20",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),deYiLv(20)",
+      "effect": {
+        "MotivationUp": 15,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30041": {
     "cardId": 30041,
@@ -37169,20 +37331,16 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30042": {
     "cardId": 30042,
@@ -37363,20 +37521,16 @@
         "hintProbIncrease": 40
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,初期パワーアップ20",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "InitialPowerUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),初期パワーアップ(20)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "InitialPowerUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30043": {
     "cardId": 30043,
@@ -37565,20 +37719,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,根性ボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "TrainingGutsUp",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),根性ボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "TrainingGutsUp": 1
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30044": {
     "cardId": 30044,
@@ -37761,20 +37911,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "速度ボーナス1,初期速度アップ20",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "InitialSpeedUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),初期速度アップ(20)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "InitialSpeedUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30045": {
     "cardId": 30045,
@@ -37951,20 +38097,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "youQing10,速度ボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),速度ボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "TrainingSpeedUp": 1
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30046": {
     "cardId": 30046,
@@ -38144,20 +38286,16 @@
         "hintProbIncrease": 50
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,持久力ボーナス1",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "TrainingStaminaUp",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),持久力ボーナス(1)",
+      "effect": {
+        "MotivationUp": 15,
+        "TrainingStaminaUp": 1
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30047": {
     "cardId": 30047,
@@ -38338,20 +38476,16 @@
         "deYiLv": 20
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期パワーアップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialPowerUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期パワーアップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialPowerUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30048": {
     "cardId": 30048,
@@ -38535,20 +38669,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,スキルポイントボーナス1",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),スキルポイントボーナス(1)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30052": {
     "cardId": 30052,
@@ -38722,16 +38852,22 @@
         "vitalCostDrop": 10
       }
     ],
-    "uniqueEffect": [
-      "友情トレーニングが発生しているトレーニングに参加した場合vitalCostDrop30,",
-      [
-        {
-          "type": "TrainingHPConsumptionDown",
-          "value": 30
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "参加友情训练时，vitalCostDrop(30)",
+      "effect": {
+        "TrainingHPConsumptionDown": 30
+      },
+      "unlockLevel": 30,
+      "type": 113,
+      "uniqueParams": [
+        113,
+        28,
+        30,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30053": {
     "cardId": 30053,
@@ -38917,20 +39053,23 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時速度ボーナス1スキルポイントボーナス1,",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时速度ボーナス(1)スキルポイントボーナス(1)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        3,
+        1,
+        30,
+        1
+      ]
+    }
   },
   "30054": {
     "cardId": 30054,
@@ -39123,20 +39262,16 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "賢さボーナス1,saiHou5",
-      [
-        {
-          "type": "TrainingWizUp",
-          "value": 1
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "賢さボーナス(1),saiHou(5)",
+      "effect": {
+        "TrainingWizUp": 1,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30055": {
     "cardId": 30055,
@@ -39322,20 +39457,16 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "速度ボーナス1,初期賢さアップ20",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "InitialWizUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),初期賢さアップ(20)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "InitialWizUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30056": {
     "cardId": 30056,
@@ -39516,20 +39647,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,deYiLv20",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),deYiLv(20)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30057": {
     "cardId": 30057,
@@ -39718,20 +39845,16 @@
         "hintProbIncrease": 40
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),hintProbIncrease(20)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30058": {
     "cardId": 30058,
@@ -39912,20 +40035,16 @@
         "deYiLv": 20
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,初期パワーアップ20",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "InitialPowerUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),初期パワーアップ(20)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "InitialPowerUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30059": {
     "cardId": 30059,
@@ -40104,20 +40223,16 @@
         "hintProbIncrease": 40
       }
     ],
-    "uniqueEffect": [
-      "持久力ボーナス1,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingStaminaUp",
-          "value": 1
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "持久力ボーナス(1),hintProbIncrease(20)",
+      "effect": {
+        "TrainingStaminaUp": 1,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30060": {
     "cardId": 30060,
@@ -40298,20 +40413,16 @@
         "deYiLv": 20
       }
     ],
-    "uniqueEffect": [
-      "根性ボーナス1,saiHou5",
-      [
-        {
-          "type": "TrainingGutsUp",
-          "value": 1
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "根性ボーナス(1),saiHou(5)",
+      "effect": {
+        "TrainingGutsUp": 1,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30061": {
     "cardId": 30061,
@@ -40501,20 +40612,16 @@
         "wizVitalBonus": 3
       }
     ],
-    "uniqueEffect": [
-      "賢さボーナス1,initialJiBan15",
-      [
-        {
-          "type": "TrainingWizUp",
-          "value": 1
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "賢さボーナス(1),initialJiBan(15)",
+      "effect": {
+        "TrainingWizUp": 1,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30062": {
     "cardId": 30062,
@@ -40698,20 +40805,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期持久力アップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitalStaminaUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期持久力アップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitalStaminaUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30063": {
     "cardId": 30063,
@@ -40896,20 +40999,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30064": {
     "cardId": 30064,
@@ -41091,20 +41190,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "youQing10,initialJiBan15",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),initialJiBan(15)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30065": {
     "cardId": 30065,
@@ -41292,20 +41387,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,xunLian5",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),xunLian(5)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "TrainingEffectUp": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30066": {
     "cardId": 30066,
@@ -41489,20 +41580,16 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,初期速度アップ20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "InitialSpeedUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),初期速度アップ(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "InitialSpeedUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30067": {
     "cardId": 30067,
@@ -41676,16 +41763,22 @@
         "wizVitalBonus": 2
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時スキルポイントボーナス2,",
-      [
-        {
-          "type": "SkillPointBonus",
-          "value": 2
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时スキルポイントボーナス(2)",
+      "effect": {
+        "SkillPointBonus": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        30,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30068": {
     "cardId": 30068,
@@ -41875,20 +41968,16 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,saiHou5",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),saiHou(5)",
+      "effect": {
+        "MotivationUp": 15,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30069": {
     "cardId": 30069,
@@ -42081,20 +42170,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,deYiLv20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),deYiLv(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30070": {
     "cardId": 30070,
@@ -42273,20 +42358,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,initialJiBan15",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),initialJiBan(15)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30071": {
     "cardId": 30071,
@@ -42473,20 +42554,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,initialJiBan15",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),initialJiBan(15)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30072": {
     "cardId": 30072,
@@ -42672,20 +42749,16 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,initialJiBan15",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),initialJiBan(15)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30073": {
     "cardId": 30073,
@@ -42867,20 +42940,16 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "速度ボーナス1,deYiLv20",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "速度ボーナス(1),deYiLv(20)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "GoodTrainingRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30074": {
     "cardId": 30074,
@@ -43050,20 +43119,16 @@
         "saiHou": 10
       }
     ],
-    "uniqueEffect": [
-      "youQing10,saiHou5",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),saiHou(5)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30075": {
     "cardId": 30075,
@@ -43244,20 +43309,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "youQing10,持久力ボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "TrainingStaminaUp",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "youQing(10),持久力ボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "TrainingStaminaUp": 1
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30076": {
     "cardId": 30076,
@@ -43441,20 +43502,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,saiHou5",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),saiHou(5)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30077": {
     "cardId": 30077,
@@ -43639,20 +43696,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),hintProbIncrease(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30078": {
     "cardId": 30078,
@@ -43839,20 +43892,16 @@
         "vitalCostDrop": 10
       }
     ],
-    "uniqueEffect": [
-      "ganJing15,failRateDrop10",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "TrainingFailureRateDown",
-          "value": 10
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "ganJing(15),failRateDrop(10)",
+      "effect": {
+        "MotivationUp": 15,
+        "TrainingFailureRateDown": 10
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30079": {
     "cardId": 30079,
@@ -44034,20 +44083,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),hintProbIncrease(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30080": {
     "cardId": 30080,
@@ -44206,11 +44251,13 @@
         "initialJiBan": 25
       }
     ],
-    "uniqueEffect": [
-      "",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30081": {
     "cardId": 30081,
@@ -44384,16 +44431,22 @@
         "wizVitalBonus": 2
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
   },
   "30082": {
     "cardId": 30082,
@@ -44578,16 +44631,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時賢さボーナス3,",
-      [
-        {
-          "type": "TrainingWizUp",
-          "value": 3
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时賢さボーナス(3)",
+      "effect": {
+        "TrainingWizUp": 3
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        7,
+        3,
+        0,
+        0
+      ]
+    }
   },
   "30083": {
     "cardId": 30083,
@@ -44770,16 +44829,22 @@
         "hintProbIncrease": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上かつ得意トレーニングでない時、トレーニング効果アップ (20),",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80且不是擅长训练时，训练效果提高(20)",
+      "effect": {
+        "TrainingEffectUp": 20
+      },
+      "unlockLevel": 30,
+      "type": 102,
+      "uniqueParams": [
+        102,
+        80,
+        20,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30084": {
     "cardId": 30084,
@@ -44960,20 +45025,16 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "xunLian5,hintProbIncrease20",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 5
-        },
-        {
-          "type": "SkillTipsEventRateUp",
-          "value": 20
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "xunLian(5),hintProbIncrease(20)",
+      "effect": {
+        "TrainingEffectUp": 5,
+        "SkillTipsEventRateUp": 20
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30085": {
     "cardId": 30085,
@@ -45159,16 +45220,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "編成しているサポートカードのタイプが5種類以上ならトレーニング効果アップ (15),",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "编入支援卡种类>=5时，训练效果提高 (15)",
+      "effect": {
+        "TrainingEffectUp": 15
+      },
+      "unlockLevel": 30,
+      "type": 103,
+      "uniqueParams": [
+        103,
+        5,
+        15,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30086": {
     "cardId": 30086,
@@ -45350,16 +45417,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "最大200000人ファンまで各10000人ファンでトレーニング効果アップ (1)を獲得 (合計トレーニング効果アップ (20)),",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "最大200000人/每10000粉丝，训练效果+1%(总共+(20))",
+      "effect": {
+        "TrainingEffectUp": 20
+      },
+      "unlockLevel": 30,
+      "type": 104,
+      "uniqueParams": [
+        104,
+        10000,
+        20,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30087": {
     "cardId": 30087,
@@ -45534,16 +45607,22 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時持久力ボーナス2,",
-      [
-        {
-          "type": "TrainingStaminaUp",
-          "value": 2
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时持久力ボーナス(2)",
+      "effect": {
+        "TrainingStaminaUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        4,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30088": {
     "cardId": 30088,
@@ -45729,16 +45808,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "編成しているサポートカードのタイプが4種類以上ならトレーニング効果アップ (10),",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "编入支援卡种类>=4时，训练效果提高 (10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 103,
+      "uniqueParams": [
+        103,
+        4,
+        10,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30089": {
     "cardId": 30089,
@@ -45918,16 +46003,22 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時ganJing60,",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 60
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时ganJing(60)",
+      "effect": {
+        "MotivationUp": 60
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        2,
+        60,
+        0,
+        0
+      ]
+    }
   },
   "30090": {
     "cardId": 30090,
@@ -46115,11 +46206,20 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "編成しているサポートカードのタイプに応じて初期基礎能力アップ (10)、友情かグループタイプの場合で各初期礎能力アップ (2),",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "根据编成支援卡类型的初始属性加成(对应属性+10，友人/团队卡全属性+2)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 105,
+      "uniqueParams": [
+        105,
+        10,
+        2,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30091": {
     "cardId": 30091,
@@ -46309,11 +46409,20 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "このカードと友情トレーニングをする度に最大5回までyouQing (3),",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "友情训练后提升友情加成，最多5次youQing (3)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 106,
+      "uniqueParams": [
+        106,
+        5,
+        1,
+        3,
+        0,
+        0
+      ]
+    }
   },
   "30092": {
     "cardId": 30092,
@@ -46498,16 +46607,22 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時速度ボーナス2,",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 2
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时速度ボーナス(2)",
+      "effect": {
+        "TrainingSpeedUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        3,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30093": {
     "cardId": 30093,
@@ -46682,16 +46797,22 @@
         "hintProbIncrease": 30
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時パワーボーナス2,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 2
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时パワーボーナス(2)",
+      "effect": {
+        "TrainingPowerUp": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        5,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30094": {
     "cardId": 30094,
@@ -46872,11 +46993,20 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "現在の体力が少ないほど、友情ボーナス,",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "体力越低友情加成越高，基础5，体力<=30时最大15友情",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 107,
+      "uniqueParams": [
+        107,
+        1,
+        10,
+        30,
+        15,
+        5
+      ]
+    }
   },
   "30095": {
     "cardId": 30095,
@@ -47060,11 +47190,20 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "体力最大値が高いほど、トレーニング効果アップ,",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "体力最大值越高训练效果提升越高，基础5，体力每+4，训练效果+3%，合计+20",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 108,
+      "uniqueParams": [
+        108,
+        8,
+        100,
+        75,
+        5,
+        20
+      ]
+    }
   },
   "30096": {
     "cardId": 30096,
@@ -47238,20 +47377,16 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,saiHou5",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "RaceStatusUp",
-          "value": 5
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),saiHou(5)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "RaceStatusUp": 5
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30097": {
     "cardId": 30097,
@@ -47448,20 +47583,23 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時賢さボーナス1スキルポイントボーナス1,",
-      [
-        {
-          "type": "TrainingWizUp",
-          "value": 1
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时賢さボーナス(1)スキルポイントボーナス(1)",
+      "effect": {
+        "TrainingWizUp": 1,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        7,
+        1,
+        30,
+        1
+      ]
+    }
   },
   "30098": {
     "cardId": 30098,
@@ -47640,16 +47778,15 @@
         "hintProbIncrease": 60
       }
     ],
-    "uniqueEffect": [
-      "スキルポイントボーナス1,",
-      [
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "スキルポイントボーナス(1)",
+      "effect": {
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30099": {
     "cardId": 30099,
@@ -47831,11 +47968,20 @@
         "hintProbIncrease": 40
       }
     ],
-    "uniqueEffect": [
-      "編成したサポートカードの絆ゲージの合計が高いほどトレーニング効果アップ,",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "支援卡羁绊总和越高训练加成越高(最大xunLian)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 109,
+      "uniqueParams": [
+        109,
+        8,
+        30,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30100": {
     "cardId": 30100,
@@ -48021,16 +48167,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        1
+      ]
+    }
   },
   "30101": {
     "cardId": 30101,
@@ -48213,16 +48365,22 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時youQing20,",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时youQing(20)",
+      "effect": {
+        "SpecialTagEffectUp": 20
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        1,
+        20,
+        0,
+        0
+      ]
+    }
   },
   "30102": {
     "cardId": 30102,
@@ -48404,11 +48562,20 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "同じトレーニングに参加したサポートカードが多いほどxunLian (5),",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "同时训练支援卡数量越多，xunLian提升越高 (5)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 110,
+      "uniqueParams": [
+        110,
+        8,
+        5,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30103": {
     "cardId": 30103,
@@ -48589,16 +48756,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時wizVitalBonus5,",
-      [
-        {
-          "type": "WizRecoverUp",
-          "value": 5
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时wizVitalBonus(5)",
+      "effect": {
+        "WizRecoverUp": 5
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        31,
+        5,
+        0,
+        0
+      ]
+    }
   },
   "30104": {
     "cardId": 30104,
@@ -48779,16 +48952,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
   },
   "30105": {
     "cardId": 30105,
@@ -48979,20 +49158,16 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "パワーボーナス1,initialJiBan15",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "InitalEvaluationUp",
-          "value": 15
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "パワーボーナス(1),initialJiBan(15)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "InitalEvaluationUp": 15
+      },
+      "unlockLevel": 40,
+      "type": null,
+      "uniqueParams": null
+    }
   },
   "30106": {
     "cardId": 30106,
@@ -49173,20 +49348,23 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時パワーボーナス1スキルポイントボーナス1,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时パワーボーナス(1)スキルポイントボーナス(1)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        5,
+        1,
+        30,
+        1
+      ]
+    }
   },
   "30107": {
     "cardId": 30107,
@@ -49376,16 +49554,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "参加したトレーニングのトレーニングLvが高いほどトレーニング効果アップ (8)パワーボーナス0,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 0
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "参与训练的设施等级越高，xunLian效果越高 (5%/每级)パワーボーナス(0)",
+      "effect": {
+        "TrainingPowerUp": 0
+      },
+      "unlockLevel": 30,
+      "type": 111,
+      "uniqueParams": [
+        111,
+        8,
+        5,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30108": {
     "cardId": 30108,
@@ -49582,11 +49766,20 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "20%の確率で参加したトレーニングの失敗率が0%になることがある,",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "参与的训练有20%概率失败率为0%",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 112,
+      "uniqueParams": [
+        112,
+        20,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30109": {
     "cardId": 30109,
@@ -49758,16 +49951,22 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        1
+      ]
+    }
   },
   "30110": {
     "cardId": 30110,
@@ -49954,16 +50153,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時持久力ボーナス2,",
-      [
-        {
-          "type": "TrainingStaminaUp",
-          "value": 2
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时持久力ボーナス(2)",
+      "effect": {
+        "TrainingStaminaUp": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        4,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30111": {
     "cardId": 30111,
@@ -50151,11 +50356,20 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "編成したサポートカードの絆ゲージの合計が高いほどトレーニング効果アップ,",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "支援卡羁绊总和越高训练加成越高(最大xunLian)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 109,
+      "uniqueParams": [
+        109,
+        8,
+        30,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30112": {
     "cardId": 30112,
@@ -50332,11 +50546,20 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "このカードと友情トレーニングをする度に最大5回までyouQing (3),",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "友情训练后提升友情加成，最多5次youQing (3)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 106,
+      "uniqueParams": [
+        106,
+        5,
+        1,
+        3,
+        0,
+        0
+      ]
+    }
   },
   "30113": {
     "cardId": 30113,
@@ -50522,16 +50745,22 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
   },
   "30114": {
     "cardId": 30114,
@@ -50712,16 +50941,22 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時パワーボーナス2,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 2
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时パワーボーナス(2)",
+      "effect": {
+        "TrainingPowerUp": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        5,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30115": {
     "cardId": 30115,
@@ -50899,11 +51134,20 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffect": [
-      "体力が多いほど、トレーニング効果アップが増える,",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "剩余体力越多，xunLian效果越高（最大20%）",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 114,
+      "uniqueParams": [
+        114,
+        8,
+        5,
+        20,
+        0,
+        0
+      ]
+    }
   },
   "30116": {
     "cardId": 30116,
@@ -51087,11 +51331,20 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "編成しているサポートカードのタイプに応じて初期基礎能力アップ (10)、友情かグループタイプの場合で各初期礎能力アップ (2),",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "根据编成支援卡类型的初始属性加成(对应属性+10，友人/团队卡全属性+2)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 105,
+      "uniqueParams": [
+        105,
+        10,
+        2,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30117": {
     "cardId": 30117,
@@ -51270,16 +51523,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
   },
   "30118": {
     "cardId": 30118,
@@ -51472,16 +51731,22 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時根性ボーナス2,",
-      [
-        {
-          "type": "TrainingGutsUp",
-          "value": 2
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时根性ボーナス(2)",
+      "effect": {
+        "TrainingGutsUp": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        6,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30119": {
     "cardId": 30119,
@@ -51661,16 +51926,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時パワーボーナス2,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 2
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时パワーボーナス(2)",
+      "effect": {
+        "TrainingPowerUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        5,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30120": {
     "cardId": 30120,
@@ -51852,16 +52123,22 @@
         "hintProbIncrease": 30
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時根性ボーナス3,",
-      [
-        {
-          "type": "TrainingGutsUp",
-          "value": 3
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时根性ボーナス(3)",
+      "effect": {
+        "TrainingGutsUp": 3
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        6,
+        3,
+        0,
+        0
+      ]
+    }
   },
   "30121": {
     "cardId": 30121,
@@ -52037,16 +52314,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
   },
   "30122": {
     "cardId": 30122,
@@ -52228,20 +52511,23 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時パワーボーナス1スキルポイントボーナス1,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 1
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时パワーボーナス(1)スキルポイントボーナス(1)",
+      "effect": {
+        "TrainingPowerUp": 1,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        5,
+        1,
+        30,
+        1
+      ]
+    }
   },
   "30123": {
     "cardId": 30123,
@@ -52426,16 +52712,22 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "参加したトレーニングのトレーニングLvが高いほどトレーニング効果アップ (8)パワーボーナス0,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 0
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "参与训练的设施等级越高，xunLian效果越高 (5%/每级)パワーボーナス(0)",
+      "effect": {
+        "TrainingPowerUp": 0
+      },
+      "unlockLevel": 30,
+      "type": 111,
+      "uniqueParams": [
+        111,
+        8,
+        5,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30124": {
     "cardId": 30124,
@@ -52628,20 +52920,23 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時速度ボーナス1スキルポイントボーナス1,",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 1
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时速度ボーナス(1)スキルポイントボーナス(1)",
+      "effect": {
+        "TrainingSpeedUp": 1,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        3,
+        1,
+        30,
+        1
+      ]
+    }
   },
   "30125": {
     "cardId": 30125,
@@ -52825,16 +53120,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時持久力ボーナス2,",
-      [
-        {
-          "type": "TrainingStaminaUp",
-          "value": 2
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时持久力ボーナス(2)",
+      "effect": {
+        "TrainingStaminaUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        4,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30126": {
     "cardId": 30126,
@@ -53023,16 +53324,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時スキルポイントボーナス2,",
-      [
-        {
-          "type": "SkillPointBonus",
-          "value": 2
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时スキルポイントボーナス(2)",
+      "effect": {
+        "SkillPointBonus": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        30,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30127": {
     "cardId": 30127,
@@ -53222,16 +53529,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "友情トレーニングが発生しているトレーニングに参加した場合ganJing60,",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 60
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "参加友情训练时，ganJing(60)",
+      "effect": {
+        "MotivationUp": 60
+      },
+      "unlockLevel": 30,
+      "type": 113,
+      "uniqueParams": [
+        113,
+        2,
+        60,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30128": {
     "cardId": 30128,
@@ -53424,16 +53737,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時deYiLv40,",
-      [
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 40
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时deYiLv(40)",
+      "effect": {
+        "GoodTrainingRateUp": 40
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        19,
+        40,
+        0,
+        0
+      ]
+    }
   },
   "30129": {
     "cardId": 30129,
@@ -53613,16 +53932,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
   },
   "30130": {
     "cardId": 30130,
@@ -53808,16 +54133,22 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時パワーボーナス2,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 2
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时パワーボーナス(2)",
+      "effect": {
+        "TrainingPowerUp": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        5,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30131": {
     "cardId": 30131,
@@ -54005,16 +54336,22 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時xunLian15,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 15
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时xunLian(15)",
+      "effect": {
+        "TrainingEffectUp": 15
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        8,
+        15,
+        0,
+        0
+      ]
+    }
   },
   "30132": {
     "cardId": 30132,
@@ -54196,11 +54533,20 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "体力最大値が高いほど、トレーニング効果アップ,",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "体力最大值越高训练效果提升越高，基础5，体力每+4，训练效果+3%，合计+20",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 108,
+      "uniqueParams": [
+        108,
+        8,
+        100,
+        75,
+        5,
+        20
+      ]
+    }
   },
   "30133": {
     "cardId": 30133,
@@ -54386,16 +54732,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時賢さボーナス2,",
-      [
-        {
-          "type": "TrainingWizUp",
-          "value": 2
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时賢さボーナス(2)",
+      "effect": {
+        "TrainingWizUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        7,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30134": {
     "cardId": 30134,
@@ -54584,16 +54936,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "最大5個まで速度が上がるスキルの所持数に応じてxunLian効果アップ(4),",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 20
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "根据速度技能个数，提高xunLian效果(每个+4, 最大5个)",
+      "effect": {
+        "TrainingEffectUp": 20
+      },
+      "unlockLevel": 30,
+      "type": 116,
+      "uniqueParams": [
+        116,
+        1,
+        8,
+        4,
+        5,
+        0
+      ]
+    }
   },
   "30135": {
     "cardId": 30135,
@@ -54782,16 +55140,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時速度ボーナス2,",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 2
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时速度ボーナス(2)",
+      "effect": {
+        "TrainingSpeedUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        3,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30136": {
     "cardId": 30136,
@@ -54972,16 +55336,22 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時根性ボーナス2,",
-      [
-        {
-          "type": "TrainingGutsUp",
-          "value": 2
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时根性ボーナス(2)",
+      "effect": {
+        "TrainingGutsUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        6,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30137": {
     "cardId": 30137,
@@ -55150,24 +55520,24 @@
         "wizVitalBonus": 2
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時youQing10ganJing15,絆ゲージが100以上の時スキルポイントボーナス1",
-      [
-        {
-          "type": "SpecialTagEffectUp",
-          "value": 10
-        },
-        {
-          "type": "MotivationUp",
-          "value": 15
-        },
-        {
-          "type": "SkillPointBonus",
-          "value": 1
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时youQing(10)ganJing(15),羁绊>=100时スキルポイントボーナス(1)",
+      "effect": {
+        "SpecialTagEffectUp": 10,
+        "MotivationUp": 15,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        30,
+        1,
+        0,
+        0
+      ]
+    }
   },
   "30138": {
     "cardId": 30138,
@@ -55355,16 +55725,22 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時パワーボーナス3,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 3
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时パワーボーナス(3)",
+      "effect": {
+        "TrainingPowerUp": 3
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        5,
+        3,
+        0,
+        0
+      ]
+    }
   },
   "30139": {
     "cardId": 30139,
@@ -55548,16 +55924,22 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時持久力ボーナス3,",
-      [
-        {
-          "type": "TrainingStaminaUp",
-          "value": 3
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时持久力ボーナス(3)",
+      "effect": {
+        "TrainingStaminaUp": 3
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        4,
+        3,
+        0,
+        0
+      ]
+    }
   },
   "30140": {
     "cardId": 30140,
@@ -55734,16 +56116,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
   },
   "30141": {
     "cardId": 30141,
@@ -55932,11 +56320,20 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "編成しているサポートカードのタイプに応じて初期基礎能力アップ (10)、友情かグループタイプの場合で各初期礎能力アップ (2),",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "根据编成支援卡类型的初始属性加成(对应属性+10，友人/团队卡全属性+2)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 105,
+      "uniqueParams": [
+        105,
+        10,
+        2,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30142": {
     "cardId": 30142,
@@ -56129,16 +56526,22 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "最大3個まで持久力が回復するスキルの所持数に応じて持久力ボーナス効果アップ(1),",
-      [
-        {
-          "type": "TrainingStaminaUp",
-          "value": 3
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "根据体力回复技能个数，提高持久力ボーナス效果(每个+1, 最大3个)",
+      "effect": {
+        "TrainingStaminaUp": 3
+      },
+      "unlockLevel": 30,
+      "type": 116,
+      "uniqueParams": [
+        116,
+        3,
+        4,
+        1,
+        3,
+        0
+      ]
+    }
   },
   "30143": {
     "cardId": 30143,
@@ -56318,16 +56721,22 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時持久力ボーナス2,",
-      [
-        {
-          "type": "TrainingStaminaUp",
-          "value": 2
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时持久力ボーナス(2)",
+      "effect": {
+        "TrainingStaminaUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        4,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30145": {
     "cardId": 30145,
@@ -56508,16 +56917,22 @@
         "hintProbIncrease": 20
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時パワーボーナス2,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 2
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时パワーボーナス(2)",
+      "effect": {
+        "TrainingPowerUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        5,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30146": {
     "cardId": 30146,
@@ -56714,11 +57129,20 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "編成したサポートカードのinitialJiBan (5),",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "编成支援卡的 initialJiBan 提升(5)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 115,
+      "uniqueParams": [
+        115,
+        14,
+        5,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30147": {
     "cardId": 30147,
@@ -56905,16 +57329,22 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時速度ボーナス3,",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 3
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时速度ボーナス(3)",
+      "effect": {
+        "TrainingSpeedUp": 3
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        3,
+        3,
+        0,
+        0
+      ]
+    }
   },
   "30148": {
     "cardId": 30148,
@@ -57099,11 +57529,20 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffect": [
-      "",
-      [],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "总训练设施等级越高，xunLian越高(最高+20)",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 117,
+      "uniqueParams": [
+        117,
+        8,
+        25,
+        20,
+        0,
+        0
+      ]
+    }
   },
   "30149": {
     "cardId": 30149,
@@ -57295,16 +57734,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "友情トレーニングが発生しているトレーニングに参加した場合ganJing60,",
-      [
-        {
-          "type": "MotivationUp",
-          "value": 60
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "参加友情训练时，ganJing(60)",
+      "effect": {
+        "MotivationUp": 60
+      },
+      "unlockLevel": 30,
+      "type": 113,
+      "uniqueParams": [
+        113,
+        2,
+        60,
+        0,
+        0,
+        0
+      ]
+    }
   },
   "30150": {
     "cardId": 30150,
@@ -57490,16 +57935,22 @@
         "deYiLv": 35
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
   },
   "30151": {
     "cardId": 30151,
@@ -57686,16 +58137,22 @@
         "deYiLv": 65
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時xunLian10,",
-      [
-        {
-          "type": "TrainingEffectUp",
-          "value": 10
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
   },
   "30152": {
     "cardId": 30152,
@@ -57894,16 +58351,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時賢さボーナス2,",
-      [
-        {
-          "type": "TrainingWizUp",
-          "value": 2
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时賢さボーナス(2)",
+      "effect": {
+        "TrainingWizUp": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        7,
+        2,
+        0,
+        0
+      ]
+    }
   },
   "30153": {
     "cardId": 30153,
@@ -58095,16 +58558,22 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが100以上の時根性ボーナス3,",
-      [
-        {
-          "type": "TrainingGutsUp",
-          "value": 3
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=100时根性ボーナス(3)",
+      "effect": {
+        "TrainingGutsUp": 3
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        6,
+        3,
+        0,
+        0
+      ]
+    }
   },
   "30154": {
     "cardId": 30154,
@@ -58294,16 +58763,22 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffect": [
-      "最大3個まで持久力が回復するスキルの所持数に応じて速度ボーナス効果アップ(1),",
-      [
-        {
-          "type": "TrainingSpeedUp",
-          "value": 3
-        }
-      ],
-      30
-    ]
+    "uniqueEffect": {
+      "summary": "根据体力回复技能个数，提高速度ボーナス效果(每个+1, 最大3个)",
+      "effect": {
+        "TrainingSpeedUp": 3
+      },
+      "unlockLevel": 30,
+      "type": 116,
+      "uniqueParams": [
+        116,
+        3,
+        3,
+        1,
+        3,
+        0
+      ]
+    }
   },
   "30155": {
     "cardId": 30155,
@@ -58501,16 +58976,22 @@
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時deYiLv40,",
-      [
-        {
-          "type": "GoodTrainingRateUp",
-          "value": 40
-        }
-      ],
-      40
-    ]
+    "uniqueEffect": {
+      "summary": "羁绊>=80时deYiLv(40)",
+      "effect": {
+        "GoodTrainingRateUp": 40
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        19,
+        40,
+        0,
+        0
+      ]
+    }
   },
   "30156": {
     "cardId": 30156,
@@ -58704,15 +59185,1628 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffect": [
-      "絆ゲージが80以上の時パワーボーナス2,",
-      [
-        {
-          "type": "TrainingPowerUp",
-          "value": 2
-        }
+    "uniqueEffect": {
+      "summary": "羁绊>=80时パワーボーナス(2)",
+      "effect": {
+        "TrainingPowerUp": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        5,
+        2,
+        0,
+        0
+      ]
+    }
+  },
+  "30157": {
+    "cardId": 30157,
+    "cardName": "[智]曼城茶座",
+    "fullName": "[与你共见的泡沫]曼城茶座",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200742,
+        201172,
+        202072,
+        202422,
+        202522,
+        202562,
+        202592
       ],
-      30
-    ]
+      "skillNum": 7
+    },
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 0,
+        "xunLian": 10,
+        "initialJiBan": 0,
+        "saiHou": 5,
+        "hintProbIncrease": 20,
+        "deYiLv": 35,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 21,
+        "ganJing": 20,
+        "xunLian": 11,
+        "initialJiBan": 0,
+        "saiHou": 6,
+        "hintProbIncrease": 20,
+        "deYiLv": 40,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 23,
+        "ganJing": 40,
+        "xunLian": 12,
+        "initialJiBan": 0,
+        "saiHou": 7,
+        "hintProbIncrease": 20,
+        "deYiLv": 45,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 40,
+        "xunLian": 13,
+        "initialJiBan": 15,
+        "saiHou": 8,
+        "hintProbIncrease": 20,
+        "deYiLv": 50,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 40,
+        "xunLian": 15,
+        "initialJiBan": 30,
+        "saiHou": 10,
+        "hintProbIncrease": 20,
+        "deYiLv": 50,
+        "wizVitalBonus": 5
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "羁绊>=100时賢さボーナス(2)スキルポイントボーナス(1)",
+      "effect": {
+        "TrainingWizUp": 2,
+        "SkillPointBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        7,
+        2,
+        30,
+        1
+      ]
+    }
+  },
+  "30158": {
+    "cardId": 30158,
+    "cardName": "[根]森林宝穴",
+    "fullName": "[飞驰吧盛夏！]森林宝穴",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200592,
+        200602,
+        201102,
+        201392,
+        201412,
+        201542,
+        202082,
+        202612,
+        202622
+      ],
+      "skillNum": 9
+    },
+    "cardType": 3,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 15,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 20,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 16,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 23,
+        "deYiLv": 53
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 18,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 26,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 30,
+        "deYiLv": 61
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          30,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "hintProbIncrease": 30,
+        "deYiLv": 65
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "羁绊>=100时youQing(20)",
+      "effect": {
+        "SpecialTagEffectUp": 20
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        1,
+        20,
+        0,
+        0
+      ]
+    }
+  },
+  "30159": {
+    "cardId": 30159,
+    "cardName": "[速]气槽",
+    "fullName": "[Seaside Bloom]气槽",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200562,
+        201322,
+        201342,
+        201372,
+        201532,
+        201902,
+        202372
+      ],
+      "skillNum": 7
+    },
+    "cardType": 0,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 15,
+        "ganJing": 0,
+        "initialJiBan": 15,
+        "saiHou": 1,
+        "hintProbIncrease": 30,
+        "deYiLv": 20
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 16,
+        "ganJing": 0,
+        "initialJiBan": 16,
+        "saiHou": 2,
+        "hintProbIncrease": 33,
+        "deYiLv": 25
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 18,
+        "ganJing": 0,
+        "initialJiBan": 18,
+        "saiHou": 3,
+        "hintProbIncrease": 36,
+        "deYiLv": 30
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 15,
+        "initialJiBan": 20,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 30,
+        "initialJiBan": 20,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 35
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
+  },
+  "30160": {
+    "cardId": 30160,
+    "cardName": "[友]佐岳五月",
+    "fullName": "[迫近黎明]佐岳五月",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [],
+      "skillNum": 0
+    },
+    "cardType": 5,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 25,
+        "failRateDrop": 15,
+        "vitalCostDrop": 15
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 26,
+        "failRateDrop": 16,
+        "vitalCostDrop": 17
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 27,
+        "failRateDrop": 18,
+        "vitalCostDrop": 20
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          15,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 28,
+        "failRateDrop": 20,
+        "vitalCostDrop": 22
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          30,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 30,
+        "failRateDrop": 20,
+        "vitalCostDrop": 25
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "羁绊>=60时，可以出现在2个位置",
+      "effect": {},
+      "unlockLevel": 30,
+      "type": 118,
+      "uniqueParams": [
+        118,
+        1,
+        60,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "30161": {
+    "cardId": 30161,
+    "cardName": "[速]神鹰",
+    "fullName": "[宏愿振翅]神鹰",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200332,
+        200352,
+        201112,
+        201322,
+        202132,
+        202172,
+        202372,
+        202712
+      ],
+      "skillNum": 8
+    },
+    "cardType": 0,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 15,
+        "ganJing": 30,
+        "xunLian": 0,
+        "initialJiBan": 25,
+        "saiHou": 1,
+        "hintProbIncrease": 40,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          21,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 16,
+        "ganJing": 33,
+        "xunLian": 0,
+        "initialJiBan": 26,
+        "saiHou": 2,
+        "hintProbIncrease": 42,
+        "deYiLv": 53
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          23,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 18,
+        "ganJing": 36,
+        "xunLian": 0,
+        "initialJiBan": 27,
+        "saiHou": 3,
+        "hintProbIncrease": 45,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          25,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "xunLian": 5,
+        "initialJiBan": 28,
+        "saiHou": 5,
+        "hintProbIncrease": 47,
+        "deYiLv": 61
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          25,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "xunLian": 10,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 50,
+        "deYiLv": 65
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "羁绊>=100时スキルポイントボーナス(1)全属性Bonus(1)",
+      "effect": {
+        "SkillPointBonus": 1,
+        "AllStatusBonus": 1
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        100,
+        30,
+        1,
+        41,
+        1
+      ]
+    }
+  },
+  "30162": {
+    "cardId": 30162,
+    "cardName": "[耐]爱慕织姬",
+    "fullName": "[Precious☆Moments]爱慕织姬",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200622,
+        200632,
+        201462,
+        201502,
+        202022
+      ],
+      "skillNum": 5
+    },
+    "cardType": 1,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 0,
+        "initialJiBan": 20,
+        "hintProbIncrease": 30,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 26,
+        "ganJing": 20,
+        "initialJiBan": 21,
+        "hintProbIncrease": 33,
+        "deYiLv": 40
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 27,
+        "ganJing": 40,
+        "initialJiBan": 23,
+        "hintProbIncrease": 36,
+        "deYiLv": 45
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          15,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 28,
+        "ganJing": 40,
+        "initialJiBan": 25,
+        "hintProbIncrease": 40,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          30,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 30,
+        "ganJing": 40,
+        "initialJiBan": 25,
+        "hintProbIncrease": 40,
+        "deYiLv": 50
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "羁绊>=80时持久力ボーナス(2)",
+      "effect": {
+        "TrainingStaminaUp": 2
+      },
+      "unlockLevel": 40,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        4,
+        2,
+        0,
+        0
+      ]
+    }
+  },
+  "30163": {
+    "cardId": 30163,
+    "cardName": "[智]中山庆典",
+    "fullName": "[傲放于赌场的堇色兰]中山庆典",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200462,
+        200512,
+        201641,
+        202442,
+        202652,
+        202732
+      ],
+      "skillNum": 6
+    },
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "initialJiBan": 15,
+        "deYiLv": 50,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          10,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 21,
+        "ganJing": 45,
+        "initialJiBan": 16,
+        "deYiLv": 57,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          25,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 23,
+        "ganJing": 50,
+        "initialJiBan": 18,
+        "deYiLv": 65,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          25,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 55,
+        "initialJiBan": 20,
+        "deYiLv": 72,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          2,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          25,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 60,
+        "initialJiBan": 20,
+        "deYiLv": 80,
+        "wizVitalBonus": 5
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "羁绊>=80时xunLian(10)",
+      "effect": {
+        "TrainingEffectUp": 10
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        8,
+        10,
+        0,
+        0
+      ]
+    }
+  },
+  "30164": {
+    "cardId": 30164,
+    "cardName": "[力]菱亚马逊",
+    "fullName": "[胸怀炽热斗志]菱亚马逊",
+    "rarity": 3,
+    "cardSkill": {
+      "skillList": [
+        200332,
+        200492,
+        200512,
+        200622,
+        200632,
+        201452
+      ],
+      "skillNum": 6
+    },
+    "cardType": 2,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "xunLian": 0,
+        "initialJiBan": 25,
+        "saiHou": 0,
+        "hintProbIncrease": 40,
+        "deYiLv": 20
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 21,
+        "ganJing": 42,
+        "xunLian": 0,
+        "initialJiBan": 26,
+        "saiHou": 5,
+        "hintProbIncrease": 45,
+        "deYiLv": 25
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 23,
+        "ganJing": 45,
+        "xunLian": 0,
+        "initialJiBan": 27,
+        "saiHou": 5,
+        "hintProbIncrease": 50,
+        "deYiLv": 30
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 47,
+        "xunLian": 5,
+        "initialJiBan": 28,
+        "saiHou": 5,
+        "hintProbIncrease": 55,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 50,
+        "xunLian": 10,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 60,
+        "deYiLv": 35
+      }
+    ],
+    "uniqueEffect": {
+      "summary": "羁绊>=80时スキルポイントボーナス(2)",
+      "effect": {
+        "SkillPointBonus": 2
+      },
+      "unlockLevel": 30,
+      "type": 101,
+      "uniqueParams": [
+        101,
+        80,
+        30,
+        2,
+        0,
+        0
+      ]
+    }
   }
 }
