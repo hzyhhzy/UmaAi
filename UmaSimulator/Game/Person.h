@@ -22,6 +22,7 @@ struct Person //任何一个可能出现在训练里的人头
   int8_t larc_statusType;//速耐力根智01234
   int8_t larc_specialBuff;//每3级的特殊固有，编号同游戏内
   int8_t larc_level;//几级
+  int8_t larc_buffLevel;//第几个buff
   int8_t larc_nextThreeBuffs[3];//当前以及以下两级的buff
   
   //int8_t larc_assignedStatusTypeWhenFull;//如果对应的buff是“属性加成”，加哪个属性在满的时候已经确定
@@ -34,7 +35,7 @@ struct Person //任何一个可能出现在训练里的人头
 
   
 
-  void larc_afterSS(std::mt19937_64& rand);//加一级，并计算新的buff，不处理羁绊之类的
+  void larc_nextBuff(std::mt19937_64& rand);//删掉最前面的buff，计算新的buff
   //int larc_getNextBuff(std::mt19937_64& rand);//计算larc_level+3级的buff
 
   void writeSinglePersonNNInput(float* buf) const;//神经网络输入向量，不同类型的人头长度不同

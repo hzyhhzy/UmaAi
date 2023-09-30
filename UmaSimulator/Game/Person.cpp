@@ -20,6 +20,7 @@ Person::Person()
   larc_statusType = -1;
   larc_specialBuff = 0;
   larc_level = 0;
+  larc_bufflevel = 0;
   for (int i = 0; i < 3; i++)larc_nextThreeBuffs[i] = 0;
   //larc_assignedStatusTypeWhenFull = -1;
 
@@ -33,6 +34,7 @@ void Person::initAtTurn3(std::mt19937_64& rand, int specialBuff, int statusType)
   larc_specialBuff = specialBuff;
   larc_statusType = statusType;
   larc_level = 1;
+  larc_bufflevel = 1;
 
 
   //黄金船爱娇，神鹰练习上手，与其他的不一样
@@ -73,50 +75,45 @@ void Person::initAtTurn3(std::mt19937_64& rand, int specialBuff, int statusType)
   }
 }
 
-void Person::larc_afterSS(std::mt19937_64& rand)
+void Person::larc_nextBuff(std::mt19937_64& rand)
 {
-  larc_charge = 0;
-  larc_atSS = false;
-  larc_level += 1;
-    
-  //int levelLoop = larc_level % 3;//buff每三级循环一次，三级内buff必为一个是随机的
-  //if(levelLoop)
-  // 
-  //算了直接随机
+  int newBuffLevel = larc_buffLevel + 3;
+  int levelLoop = newBuffLevel % 3;//buff每三级循环一次，
 
-  int c = rand() % 6;
   int nextBuff = 0;
-  
-  //黄金船爱娇，神鹰练习上手，与其他的不一样
-  //这里只处理4级以后，前三级不在这里处理
-  if (larc_specialBuff == 8)//爱娇
+
+  if (levelLoop == 1)//必为技能
   {
-    if (c == 0 || c == 1 || c == 2 || c == 3)//不会重复爱娇，会加属性（有待验证）
-      nextBuff = 11;
-    else
-      nextBuff = 1;
+    nextBuff = 1;
   }
-  else if (larc_specialBuff == 9)
+  else if (levelLoop == 2)//一半概率特殊buff，一半概率属性
   {
-    if (c == 0)//会重复练习上手（有待验证）
-      nextBuff = 9;
-    else if (c == 1)
-      nextBuff = 11;
-    else if (c == 2 || c == 3)
-      nextBuff = 7;
-    else
-      nextBuff = 1;
-  }
-  else //比较常规的特殊buff
-  {
-    if (c == 0 || c == 1)
+    nextBuff = 11;
+    if (rand() % 2)
       nextBuff = larc_specialBuff;
-    else if (c == 2 || c == 3)
-      nextBuff = 11;
+    if (nextBuff == 8)
+      nextBuff = 11;//不会重复爱娇，会加属性
+    if (nextBuff == 9)
+      nextBuff = 7;//练习上手换成适性pt
+  }
+  else if (levelLoop == 0)//这一级和上一级，一个是特殊buff一个是属性
+  {
+    int lastBuff = larc_nextThreeBuffs[2];
+    if (lastBuff == 11)
+      nextBuff = larc_specialBuff;
     else
-      nextBuff = 1;
+      nextBuff = 11;
+
+    if (nextBuff == 8)
+      nextBuff = 11;//不会重复爱娇，会加属性
+    if (nextBuff == 9)
+      nextBuff = 7;//练习上手换成适性pt
   }
 
+
+
+
+  larc_buffLevel += 1;
   larc_nextThreeBuffs[0] = larc_nextThreeBuffs[1];
   larc_nextThreeBuffs[1] = larc_nextThreeBuffs[2];
   larc_nextThreeBuffs[2] = nextBuff;

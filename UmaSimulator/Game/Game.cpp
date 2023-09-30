@@ -351,7 +351,8 @@ void Game::calculateTrainingValue()
   {
     calculateTrainingValueSingle(trainType);
   }
-  calculateSS();
+  if(!larc_isAbroad)
+    calculateSS();
 }
 void Game::addStatus(int idx, int value)
 {
@@ -368,6 +369,121 @@ void Game::addVital(int value)
     vital = maxVital;
   if (vital < 0)
     vital = 0;
+}
+void Game::runSS(std::mt19937_64& rand)
+{
+  //ss失败的没有特殊buff，特殊buff也不会滚动，自己的支援者pt少一半，对手的没有少。除此以外（加属性，羁绊，适性pt等）完全相同
+  //sss必胜
+
+  int ssWinNum = 0;
+
+  //体力和爱娇最后加，因为先加体力上限再加体力，先加羁绊再爱娇
+  int vitalGain = 0;
+  bool newAiJiao = false;
+
+  for (int i = 0; i < larc_ssPersonsCount; i++)
+  {
+    int id = larc_ssPersons[i];
+    Person& p = persons[id];
+    p.larc_charge = 0;
+    p.larc_level += 1;
+    bool suc = larc_ssFailRate > 0 ? randBool(rand, 0.01 * (100 - larc_ssFailRate)) : true;
+    if (suc)//特殊buff生效
+    {
+      ssWinNum += 1;
+      int buff = p.larc_nextThreeBuffs[0];
+      if (buff == 1)//技能
+      {
+        int equalPt = 6;//等效pt。路人人头随机给的1级技能大概率没用，所以分给低点
+        if (p.personType == 2)//支援卡
+        {
+          equalPt = cardParam[p.cardIdInGame].hintBonus[5];
+          if (equalPt == 0)equalPt = 6;//乌拉拉之类的没技能
+        }
+      }
+      else if (buff == 3)//体力
+      {
+        vitalGain += 20;
+      }
+      else if (buff == 4)//体力与上限
+      {
+        maxVital += 4;
+        vitalGain += 20;
+      }
+      else if (buff == 5)//体力与干劲
+      {
+        addMotivation(1);
+        vitalGain += 20;
+      }
+      else if (buff == 6)//充电
+      {
+        p.larc_charge = 3;
+      }
+      else if (buff == 7)//适性pt
+      {
+        larc_shixingPt += 50;
+      }
+      else if (buff == 8)//爱娇
+      {
+        assert(!isAiJiao && "不会重复出爱娇");
+        newAiJiao = true;
+      }
+      else if (buff == 9)//练习上手
+      {
+        failureRateBias = -2;
+      }
+      else if (buff == 11)//属性
+      {
+        addAllStatus(2);//随机一个属性+10，为了方便直接平摊
+      }
+      else if (buff == 12)//技能点
+      {
+        skillPt += 20;
+      }
+      else
+      {
+        assert(false && "未知的ss buff");
+      }
+
+
+      p.larc_nextBuff(rand);
+    }
+
+    if (p.personType == 2)//支援卡，加羁绊
+    {
+      addJiBan(id, 7);
+    }
+  
+  }
+  if (newAiJiao)isAiJiao = true;
+  addVital(vitalGain);
+
+
+  for (int i = 0; i < 5; i++)
+    addStatus(i, larc_ssValue[i]);
+  skillPt += 5 * larc_ssPersonsCount;
+  if (larc_isSSS)skillPt += 25;
+  larc_shixingPt += 10 * larc_ssPersonsCount;
+
+  int supportPtFactor = larc_ssPersonsCount + ssWinNum;//输了的约等于半个人头
+  int supportPtEveryHalfHead = larc_isSSS ? 1000 + rand() % 64 : 580 + rand() % 64;//半个人头的supportPt的增加量，和这几个人头在所有人中的排名有关系，非常复杂，为了省事就取了个平均再加一些随机
+  larc_supportPtAll += supportPtFactor * supportPtEveryHalfHead;
+
+  larc_ssWin += ssWinNum;
+
+  if (larc_isSSS)
+    larc_ssWinSinceLastSSS = 0;
+  else
+    larc_ssWinSinceLastSSS += ssWinNum;
+
+
+  //清理
+  larc_ssPersonsCount = 0;
+  larc_ssPersonsCountLastTurn = 0;
+
+  for (int i = 0; i < 5; i++)larc_ssPersons[i] = -1;
+  larc_isSSS = false;
+
 }
 void Game::addMotivation(int value)
 {
@@ -398,9 +514,9 @@ void Game::addJiBan(int idx, int value)
   }
   else if (p.personType == 4 || p.personType == 5 || p.personType == 6)
   {
-
+    //不变
   }
-  else
+  else //npc
     value = 0;
   p.friendship += value;
   if (p.friendship > 100)p.friendship = 100;
@@ -411,11 +527,16 @@ void Game::addTrainingLevelCount(int item, int value)
   trainLevelCount[item] += value;
   if (trainLevelCount[item] > 48)trainLevelCount[item] = 48;
 }
+void Game::charge(int idx, int value)
+{
+  persons[idx].larc_charge += value;
+  if (persons[idx].larc_charge > 3)persons[idx].larc_charge = 3;
+}
 void Game::addAllStatus(int value)
 {
   for (int i = 0; i < 5; i++)addStatus(i, value);
 }
-int Game::calculateFailureRate(int trainType) const
+int Game::calculateFailureRate(int trainType, double failRateMultiply) const
 {
   //粗略拟合的训练失败率，二次函数 A*x^2 + B*x + C + 0.5 * trainLevel
   //误差应该在2%以内
@@ -424,13 +545,15 @@ int Game::calculateFailureRate(int trainType) const
   static const double C[5] = { 130,127,129,133.5,80.2 };
 
   double f = A * vital * vital + B[trainType] * vital + C[trainType] + 0.5 * getTrainingLevel(trainType);
+  //int fr = round(f);
+  if (vital > 60)f = 0;//由于是二次函数，体力超过103时算出来的fr大于0，所以需要手动修正
+  if (f < 0)f = 0;
+  if (f > 99)f = 99;//无练习下手，失败率最高99%
+  f *= failRateMultiply;//支援卡的训练失败率下降词条
   int fr = round(f);
-  if (vital > 60)fr = 0;//由于是二次函数，体力超过103时算出来的fr大于0，所以需要手动修正
+  fr += failureRateBias;
   if (fr < 0)fr = 0;
-  if (fr > 99)fr = 99;//无练习下手，失败率最高99%
-  //fr += failureRateBias;
-  //if (fr < 0)fr = 0;
-  //if (fr > 100)fr = 100;
+  if (fr > 100)fr = 100;
   return fr;
 }
 void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
@@ -463,47 +586,105 @@ void Game::handleFriendOutgoing()
   {
     addVitalZuoyue(30);
     addMotivation(1);
-    addStatus(3, 5);
+    addStatusZuoyue(3, 5);
     addJiBan(17, 5);
   }
   else if (larc_zuoyueOutgoingUsed == 1)
   {
     addVitalZuoyue(25);
     addMotivation(1);
-    addStatus(2, 5);
-    addStatus(3, 5);
+    addStatusZuoyue(2, 5);
+    addStatusZuoyue(3, 5);
     addJiBan(17, 5);
   }
   else if (larc_zuoyueOutgoingUsed == 2)
   {
     addVitalZuoyue(35);
     addMotivation(1);
-    addStatus(3, 15);
+    addStatusZuoyue(3, 15);
     isPositiveThinking = true;
     addJiBan(17, 5);
   }
   else if (larc_zuoyueOutgoingUsed == 3)
   {
     addVitalZuoyue(25);
-    addStatus(3, 20);
+    addStatusZuoyue(3, 20);
     addJiBan(17, 5);
   }
   else if (larc_zuoyueOutgoingUsed == 4)//分为大成功和成功，取个平均
   {
     addVitalZuoyue(37);
-    addStatus(3, 7);
+    addStatusZuoyue(3, 7);
     addMotivation(1);
     addJiBan(17, 5);
   }
   else assert(false && "未知的出行");
   larc_zuoyueOutgoingUsed += 1;
 }
+void Game::handleFriendUnlock(std::mt19937_64& rand)
+{
+  //假设: 2选项50%成功，成功时选下面，失败时选上面
+  larc_zuoyueOutgoingUnlocked = true;
+  larc_zuoyueOutgoingRefused = false;
+  if (rand() % 2)
+  {
+    addVitalZuoyue(35);
+    addMotivation(1);
+    addJiBan(17, 10);
+  }
+  else
+  {
+    addVitalZuoyue(15);
+    addMotivation(1);
+    addStatusZuoyue(3, 5);
+    addJiBan(17, 5);
+  }
+}
+void Game::handleFriendClickEvent(std::mt19937_64& rand)
+{
+  addJiBan(17, 7);
+  addStatus(3, 3);
+  skillPt += 3;
+  if (rand() % 10 == 0)
+    addMotivation(1);//10%概率加心情
+
+  if (!larc_isAbroad)
+  {
+    //从电量没满的人里面随机挑五个
+    int toChargePersons[5] = { -1,-1,-1,-1,-1 };
+    int count = 0;
+    for (int i = 0; i < 15; i++)
+    {
+      if (persons[i].larc_charge < 3)
+      {
+        count += 1;
+        if (count <= 5)
+          toChargePersons[count - 1] = i;
+        else
+        {
+          int y = rand() % count;
+          if (y < 5)toChargePersons[y] = i;
+        }
+      }
+    }
+    for (int i = 0; i < 5; i++)
+    {
+      if (toChargePersons[i] != -1)
+        charge(toChargePersons[i], 1);
+    }
+  }
+  else
+  {
+    larc_shixingPt += 50;
+  }
+
+}
 void Game::calculateTrainingValueSingle(int trainType)
 {
   //分配完了，接下来计算属性加值
   //failRate[trainType] = 
 
-  double failRateBasic = calculateFailureRate(trainType);//计算基础失败率
+  //double failRateBasic = calculateFailureRate(trainType);//计算基础失败率
 
   int personCount = 0;//卡+npc的人头数，不包括理事长和记者
   vector<CardTrainingEffect> effects;
@@ -529,17 +710,14 @@ void Game::calculateTrainingValueSingle(int trainType)
   }
 
   trainShiningNum[trainType] = 0;
+  double failRateMultiply = 1;
   for (int i = 0; i < effects.size(); ++i) {
-    failRateBasic *= (1 - 0.01 * effects[i].failRateDrop);//失败率下降
+    failRateMultiply *= (1 - 0.01 * effects[i].failRateDrop);//失败率下降
     vitalCostDrop *= (1 - 0.01 * effects[i].vitalCostDrop);//体力消耗下降
     if (effects[i].youQing > 0)trainShiningNum[trainType] += 1;//统计彩圈数
   }
 
-  int fr= round(failRateBasic);
-  fr += failureRateBias;
-  if (fr < 0)fr = 0;
-  if (fr > 100)fr = 100;
-  failRate[trainType] = fr;
+  failRate[trainType] = calculateFailureRate(trainType,failRateMultiply);
 
   if (larc_isAbroad)
     larc_shixingPtGainAbroad[trainType] = personCount * 20 + trainShiningNum[trainType] * 20 + (trainType == 4 ? 30 : 50);
@@ -667,42 +845,32 @@ void Game::calculateSS()
     auto& p = persons[larc_ssPersons[i]];
     larc_ssValue[p.larc_statusType] += (p.larc_isLinkCard ? 6 : 4);
   }
+
+  //ss的失败率，瞎猜的。
+  //目前已知20体及以上不会失败（双圈）,10~19是单圈，1~9是三角，0是叉
+  //但是具体多少概率没测过，我觉得也不重要，因为没体力的时候肯定先休息/外出再ss，否则就算ss成功了下一个回合也没法训练
+  if(larc_isSSS)larc_ssFailRate = 0;
+  else if (vital < 1)larc_ssFailRate = 80;
+  else if (vital < 10)larc_ssFailRate = 50;
+  else if (vital < 20)larc_ssFailRate = 30;
+  else larc_ssFailRate = 0;
 }
-bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
+bool Game::applyTraining(std::mt19937_64& rand, Action action)
 {
   assert(stageInTurn == 1);
   stageInTurn = 2;
   if (isRacing)
   {
-    if (useVenus)
-    {
-      if (venusAvailableWisdom != 0)
-        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
-      else
-        return false;
-    }
-    if (turn != TOTAL_TURN - 1)//除了GrandMaster
-      runRace(GameConstants::NormalRaceFiveStatusBonus, GameConstants::NormalRacePtBonus);
-    addJiBan(6, 4);//理事长羁绊+4
-
-    int newSpirit = (rand() % 6 + 1) + (rand() % 3) * 8;//随机加两个碎片
-    addSpirit(rand, newSpirit);
-    addSpirit(rand, newSpirit);
-    return true;//GUR,WBC,SWBC,GrandMaster四场比赛在checkEventAfterTrain()里处理，不在这个函数
+    assert(false && "凯旋门所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
+    return false;//凯旋门所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
   }
-  if (chosenTrain == 5)//休息
+  if (action.train == 5)//休息
   {
-    if (useVenus)
+    if (larc_isAbroad)
     {
-      if (venusAvailableWisdom != 0)
-        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
-      else
-        return false;
-    }
-    if (isXiaHeSu())
-    {
-      addVital(40);
+      addVital(50);
       addMotivation(1);
+      larc_shixingPt += 100;
     }
     else
     {
@@ -715,79 +883,67 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
         addVital(30);
     }
 
-    addSpirit(rand, spiritDistribution[chosenTrain]);
   }
-  else if (chosenTrain == 7)//比赛
+  else if (action.train == 8)//比赛
   {
-    if (turn <= 12 || turn >= 72)
+    if (turn <= 12 || larc_isAbroad)
     {
-      printEvents("前13回合和最后6回合无法比赛");
+      printEvents("前13回合和远征中无法比赛");
       return false;
-    }
-    if (useVenus)
-    {
-      if (venusAvailableWisdom != 0)
-        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
-      else
-        return false;
     }
     runRace(2, 40);//粗略的近似
-    addSpirit(rand, spiritDistribution[chosenTrain]);
+
+    //随机扣体
+    if (rand() % 2)
+      addVital(-15);
+    else
+      addVital(-5);
+
+    //随机给两个头充电
+    for (int i = 0; i < 2; i++)
+      charge(rand() % 15, 1);
   }
-  else if (chosenTrain == 6)//外出
+  else if (action.train == 6)//普通外出
   {
-    if (isXiaHeSu())
+    if (larc_isAbroad)
     {
-      printEvents("夏合宿只能休息，不能外出");
+      printEvents("海外只能休息，不能外出");
       return false;
     }
-    if(!isOutgoingLegal(chosenOutgoing))
+    //懒得查概率了，就50%加2心情，50%加1心情10体力
+    if (rand() % 2)
+      addMotivation(2);
+    else
     {
-      printEvents("不合法的外出");
-      return false;
-    }
-    assert(!isXiaHeSu() && "夏合宿不允许外出");
-    assert(isOutgoingLegal(chosenOutgoing) && "不合法的外出");
-    if (useVenus)
-    {
-      if (venusAvailableWisdom != 0)
-        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
-      else
-        return false;
-    }
-    if (chosenOutgoing < 5)//神团外出
-      handleVenusOutgoing(chosenOutgoing);
-    else if (chosenOutgoing == 6)//普通外出
-    {
-      //懒得查概率了，就50%加2心情，50%加1心情10体力
-      if (rand() % 2)
-        addMotivation(2);
-      else
-      {
-        addMotivation(1);
-        addVital(10);
-      }
+      addMotivation(1);
+      addVital(10);
     }
 
-    addSpirit(rand, spiritDistribution[chosenTrain]);
   }
-  else if (chosenTrain <= 4 && chosenTrain >= 0)//常规训练
+  else if (action.train == 7)//友人外出
   {
-    if (useVenus)
+    if (larc_isAbroad)
     {
-      if (venusAvailableWisdom != 0)
-        activateVenusWisdom();//在checkEventAfterTrain()里关闭女神并清空碎片
-      else
-        return false;
+      printEvents("海外只能休息，不能友人外出");
+      return false;
     }
-    if (rand() % 100 < failRate[chosenTrain])//训练失败
+    if (!larc_zuoyueOutgoingUnlocked || larc_zuoyueOutgoingUsed == 5)
     {
-      if (failRate[chosenTrain] >= 20 && (rand() % 100 < failRate[chosenTrain]))//训练大失败，概率是瞎猜的
+      printEvents("友人出行未解锁或者已走完");
+      return false;
+    }
+    handleFriendOutgoing();
+  }
+  else if (action.train <= 4 && action.train >= 0)//常规训练
+  {
+    if (rand() % 100 < failRate[action.train])//训练失败
+    {
+      if (failRate[action.train] >= 20 && (rand() % 100 < failRate[action.train]))//训练大失败，概率是瞎猜的
       {
         printEvents("训练大失败！");
-        addStatus(chosenTrain, -10);
-        if (fiveStatus[chosenTrain] > 1200)
-          addStatus(chosenTrain, -10);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
+        addStatus(action.train, -10);
+        if (fiveStatus[action.train] > 1200)
+          addStatus(action.train, -10);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
         //随机扣2个10，不妨改成全属性-4降低随机性
         for (int i = 0; i < 5; i++)
         {
@@ -801,9 +957,9 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
       else//小失败
       {
         printEvents("训练小失败！");
-        addStatus(chosenTrain, -5);
-        if (fiveStatus[chosenTrain] > 1200)
-          addStatus(chosenTrain, -5);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
+        addStatus(action.train, -5);
+        if (fiveStatus[action.train] > 1200)
+          addStatus(action.train, -5);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
         addMotivation(-1);
       }
     }
@@ -811,9 +967,9 @@ bool Game::applyTraining(std::mt19937_64& rand, int chosenTrain, bool useVenus, 
     {
       //先加上训练值
       for (int i = 0; i < 5; i++)
-        addStatus(i, trainValue[chosenTrain][i]);
-      skillPt += trainValue[chosenTrain][5];
-      addVital(trainValue[chosenTrain][6]);
+        addStatus(i, trainValue[action.train][i]);
+      skillPt += trainValue[action.train][5];
+      addVital(trainValue[action.train][6]);
 
       //羁绊
       for (int i = 0; i < 8; i++)
@@ -972,10 +1128,6 @@ bool Game::isOutgoingLegal(int chosenOutgoing) const
 
 }
 
-bool Game::isXiaHeSu() const
-{
-  return (turn >= 36 && turn <= 39) || (turn >= 60 && turn <= 63);
-}
 
 double Game::getThreeChoicesEventProb(bool useVenusIfFull) const
 {
