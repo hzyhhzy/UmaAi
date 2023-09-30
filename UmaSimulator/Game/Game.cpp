@@ -525,7 +525,7 @@ void Game::addTrainingLevelCount(int item, int value)
 {
   assert(item >= 0 && item < 5 && "addTrainingLevelCount不合法训练");
   trainLevelCount[item] += value;
-  if (trainLevelCount[item] > 48)trainLevelCount[item] = 48;
+  if (trainLevelCount[item] > 4 * 4)trainLevelCount[item] = 4 * 4;
 }
 void Game::charge(int idx, int value)
 {
@@ -642,40 +642,52 @@ void Game::handleFriendUnlock(std::mt19937_64& rand)
 }
 void Game::handleFriendClickEvent(std::mt19937_64& rand)
 {
-  addJiBan(17, 7);
-  addStatus(3, 3);
-  skillPt += 3;
-  if (rand() % 10 == 0)
-    addMotivation(1);//10%概率加心情
-
-  if (!larc_isAbroad)
+  if (!larc_zuoyueFirstClick)
   {
-    //从电量没满的人里面随机挑五个
-    int toChargePersons[5] = { -1,-1,-1,-1,-1 };
-    int count = 0;
-    for (int i = 0; i < 15; i++)
-    {
-      if (persons[i].larc_charge < 3)
-      {
-        count += 1;
-        if (count <= 5)
-          toChargePersons[count - 1] = i;
-        else
-        {
-          int y = rand() % count;
-          if (y < 5)toChargePersons[y] = i;
-        }
-      }
-    }
-    for (int i = 0; i < 5; i++)
-    {
-      if (toChargePersons[i] != -1)
-        charge(toChargePersons[i], 1);
-    }
+    larc_zuoyueFirstClick = true;
+    addJiBan(17, 10);
+    addStatusZuoyue(3, 15);
+    addStatusZuoyue(5, 5);
+    addMotivation(1);
   }
   else
   {
-    larc_shixingPt += 50;
+    if (rand() % 5 < 3)return;//40%概率出事件，60%概率不出
+    addJiBan(17, 7);
+    addStatus(3, 3);
+    skillPt += 3;
+    if (rand() % 10 == 0)
+      addMotivation(1);//10%概率加心情
+
+    if (!larc_isAbroad)
+    {
+      //从电量没满的人里面随机挑五个
+      int toChargePersons[5] = { -1,-1,-1,-1,-1 };
+      int count = 0;
+      for (int i = 0; i < 15; i++)
+      {
+        if (persons[i].larc_charge < 3)
+        {
+          count += 1;
+          if (count <= 5)
+            toChargePersons[count - 1] = i;
+          else
+          {
+            int y = rand() % count;
+            if (y < 5)toChargePersons[y] = i;
+          }
+        }
+      }
+      for (int i = 0; i < 5; i++)
+      {
+        if (toChargePersons[i] != -1)
+          charge(toChargePersons[i], 1);
+      }
+    }
+    else
+    {
+      larc_shixingPt += 50;
+    }
   }
 
 }
@@ -971,92 +983,67 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
       skillPt += trainValue[action.train][5];
       addVital(trainValue[action.train][6]);
 
-      //羁绊
-      for (int i = 0; i < 8; i++)
+      int chargeNum = trainShiningNum[action.train] + 1;//充几格电
+      vector<int> hintCards;//有哪几个卡出红感叹号了
+      bool clickZuoyue = false;//这个训练有没有佐岳
+      for (int i = 0; i < 5; i++)
       {
-        if (cardDistribution[chosenTrain][i])
+        int p = personDistribution[action.train][i];
+        if (p < 0)break;//没人
+        int personType = persons[p].personType;
+
+        if (personType == 1)//佐岳卡
         {
-          assert(cardData[0]->cardType == 5 && "神团卡不在第一个位置");
-          if (i == 0) //神团点一次+4羁绊
-            addJiBan(i, 4);
-          else
-            addJiBan(i, 7);
-          if (i == 6)skillPt += 2;//理事长
-          if (i >= 6)continue;//理事长和记者
+          addJiBan(p, 4);
+          clickZuoyue = true;
+        }
+        else if (personType==2)//普通卡
+        {
+          addJiBan(p, 7);
+          if (!larc_isAbroad)charge(p, chargeNum);
+          if(persons[p].isHint)
+            hintCards.push_back(p);
+        }
+        else if (personType == 3)//npc
+        {
+          if (!larc_isAbroad)charge(p, chargeNum);
+        }
+        else if (personType == 4)//理事长
+        {
+          skillPt += 2;
+          addJiBan(p, 7);
+        }
+        else if (personType == 5)//记者
+        {
+          addStatus(action.train, 2);
+          addJiBan(p, 7);
+        }
+        else if (personType == 6)//无卡佐岳
+        {
+          未知
+          addJiBan(p, 7);
         }
       }
 
-      //红点(hint)
-      vector<int> hintCards;
-      for (int i = 0; i < 6; i++)
+      if (hintCards.size() > 0)
       {
-        if (cardDistribution[chosenTrain][i] && cardHint[i])
-        {
-          hintCards.push_back(i);
-        }
-      }
+        int hintCard = hintCards[rand() % hintCards.size()];//随机一张卡出hint
 
-      auto applyHint= [this](int i)  {
-        addJiBan(i, 5);
-        auto& hintBonus = cardData[i]->hintBonus;
+        addJiBan(hintCard, 5);
+        auto& hintBonus = cardParam[persons[hintCard].cardIdInGame].hintBonus;
         for (int i = 0; i < 5; i++)
           addStatus(i, hintBonus[i]);
         skillPt += hintBonus[5];
-      };
+      }
 
+      if (clickZuoyue)
+        handleFriendClickEvent(rand);
       
-      //开蓝
-      if (venusIsWisdomActive && venusAvailableWisdom == 2)
-      {
-        auto blueVenusBonus = calculateBlueVenusBonus(chosenTrain);
-        for (int i = 0; i < 5; i++)
-          addStatus(i, blueVenusBonus[i]);
-        skillPt += blueVenusBonus[5];
+      if (larc_isAbroad)
+        larc_shixingPt += larc_shixingPtGainAbroad[action.train];
+      else
+        addTrainingLevelCount(action.train, 1);
 
-        for (auto i = 0; i < hintCards.size(); i++)
-          applyHint(hintCards[i]);
-      }
-      else//一次只有一张卡的红点可以生效，除非开蓝
-      {
-        if (hintCards.size() != 0)
-        {
-          int hintCard = hintCards[rand() % hintCards.size()];
-          applyHint(hintCard);
-        }
-      }
-
-      //加碎片
-      addSpirit(rand, spiritDistribution[chosenTrain]);
-
-      //点击了女神所在的训练
-      assert(cardData[0]->cardType == 5 && "神团卡不在第一个位置");
-      if (cardDistribution[chosenTrain][0])
-      {
-        if (!venusCardFirstClick)//第一次点
-        {
-          printEvents("第一次点女神");
-          venusCardFirstClick = true;
-          addAllStatus(3);
-          addVital(10);
-          addJiBan(0, 10);
-        }
-        else
-        {
-          //三选一事件概率，暂时猜测为40%*(1+蓝女神等级加成)
-          bool activateThreeChoicesEvent = randBool(rand,getThreeChoicesEventProb(useVenus));
-          if (forceThreeChoicesEvent == 1)
-            activateThreeChoicesEvent = true;
-          else if (forceThreeChoicesEvent == -1)
-              activateThreeChoicesEvent = false;
-          if (activateThreeChoicesEvent)
-            handleVenusThreeChoicesEvent(rand, chosenSpiritColor);
-        }
-
-      }
-
-      //训练等级计数+2
-      if(!isXiaHeSu())
-        addTrainingLevelCount(chosenTrain, 2);
     }
   }
   else
