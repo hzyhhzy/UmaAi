@@ -145,6 +145,10 @@ struct Game
     Action action);
   void checkEventAfterTrain(std::mt19937_64& rand);//检查固定事件和随机事件，并进入下一个回合
 
+  void checkFixedEvents(std::mt19937_64& rand);//每回合的固定事件，包括剧本事件和固定比赛等
+  void checkSupportPtEvents(int oldSupportPt, int newSupportPt);//期待度上升事件
+  void checkRandomEvents(std::mt19937_64& rand);//模拟支援卡事件和马娘事件（随机加羁绊，体力，心情，掉心情等）
+
   void applyTrainingAndNextTurn(
     std::mt19937_64& rand,
     Action action);//一直往后进行，直到下一次需要玩家决策
@@ -154,10 +158,7 @@ struct Game
 
   //辅助函数
   double sssProb(int ssWinSinceLastSSS) const;//出sss的概率
-  void activateVenusWisdom();//使用女神睿智
-  int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，红女神是5级
-  bool isOutgoingLegal(int chosenOutgoing) const;//这个外出是否是可以进行的
-  double getThreeChoicesEventProb(bool useVenusIfFull) const;//点击三女神出事件的概率
+  int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，远征是5级
   //void runTestGame();
 
   void getNNInputV1(float* buf, float targetScore, int mode) const;//神经网络输入，mode=0是value，1是policy
@@ -172,6 +173,9 @@ struct Game
   void addJiBan(int idx,int value);//增加羁绊，并考虑爱娇
   void addTrainingLevelCount(int item, int value);//增加训练等级计数（每4为1级，训练+1，期待度达到某几个等级+4）
   void charge(int idx, int value);//充电
+  void unlockUpgrade(int idx);//解锁某个升级
+  bool tryBuyUpgrade(int idx, int level);//购买某个升级，如果买不起则返回false
+  bool tryRemoveAllDebuffs();//在两次凯旋门前计算是否可以消除所有debuff，若可以消除则消除且返回true，否则什么都不买且返回false
 
   int calculateFailureRate(int trainType, double failRateMultiply) const;//计算训练失败率，failRateMultiply是训练失败率乘数=(1-支援卡1的失败率下降)*(1-支援卡2的失败率下降)*...
   void calculateTrainingValueSingle(int trainType);//计算每个训练加多少

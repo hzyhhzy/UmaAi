@@ -10,7 +10,7 @@ const int GameConstants::NormalRaceFiveStatusBonus = 3;//³£¹æ±ÈÈüÊôĞÔ¼Ó³É=3
 const int GameConstants::NormalRacePtBonus = 45;//³£¹æ±ÈÈüpt¼Ó³É,G1=45
 
 const int GameConstants::SupportPtEvery5Percent = 8500;
-const int GameConstants::UpdateId50pEachTrain[5] = { 3,1,2,0,4 };
+const int GameConstants::UpgradeId50pEachTrain[5] = { 3,1,2,0,4 };
 const int GameConstants::LArcTrainBonusEvery5Percent[41] = { 0, 5, 8, 10, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 30, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37, 38, 38, 39, 39, 40 };
 
 
@@ -19,6 +19,35 @@ const double GameConstants::ZuoyueVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//×
 const double GameConstants::ZuoyueVitalBonusR[5] = { 1.3,1.32,1.35,1.37,1.4 };//×ôÔÀR¿¨µÄ»Ø¸´Á¿±¶Êı
 const double GameConstants::ZuoyueStatusBonusSSR[5] = { 1.15,1.16,1.18,1.2,1.2 };//×ôÔÀSSR¿¨µÄÊÂ¼şĞ§¹û±¶Êı£¨ÂúÆÆ1.2£©
 const double GameConstants::ZuoyueStatusBonusR[5] = { 1.05,1.06,1.08,1.1,1.1 };//×ôÔÀR¿¨µÄÊÂ¼şĞ§¹û±¶Êı
+
+
+const bool LArcIsRace[TOTAL_TURN] = {//ÊÇ·ñÎªÕ¼ÓÃ»ØºÏµÄÈü³Ì
+  false,false,false,false,false,false,false,false,false,false,false,true,
+  false,false,false,false,false,false,false,false,false,false,false,false,
+  false,false,false,false,false,false,false,false,false,true ,false,false,
+  false,false,false,false,true ,false,true ,false,false,false,false,false,
+  false,false,false,false,false,false,false,false,false,false,false,true,
+  false,false,false,false,true ,false,true
+};
+const int LArcSupportPtGainEveryTurn[TOTAL_TURN] = {//Ã¿»ØºÏ¹Ì¶¨µÄsupportPtÔö³¤£¬¼¸¸ölarc´ú±íÈü²»ÊÇ¹Ì¶¨µÄ£¬È¡¾öÓÚ³ÉÔ±µÄÅÅÃû¡£´Ë´¦´ÖÂÔ¹À¼ÆÒ»ÏÂÆ½¾ùÖµ
+  0,12400,800,800,800,800,800,800,800,800,800,800,
+  800,800,800,800,800,800,800,800,800,800,800,5600,
+  2000,2000,2000,2000,2000,2000,2000,2000,2000,4750,2000,2700,
+     0,   0,   0,   0,2700,   0,5000,2000,2000,2000,2000,2000,
+  2400,2400,2400,2400,2400,4000,2400,2400,2400,2400,2400,4500,
+     0,   0,   0,   0,2400,   0,   0
+};
+const int LArcUpgradesCostLv2[10] = {//lv2Òª¶àÉÙÊÊĞÔpt
+  50,50,100,100,100,
+  100,200,200,200,150
+};
+const int LArcUpgradesCostLv3[8] = { //lv3Òª¶àÉÙÊÊĞÔpt
+  200,200,200,200,200,
+  200,300,300
+};
+
+
+
 
 const int GameConstants::TrainingBasicValue[5][6][7] =
 {
