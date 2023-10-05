@@ -113,7 +113,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   larc_ssWin = 0;
   larc_ssWinSinceLastSSS = 0;
   larc_isFirstLarcWin = false;
-  for (int i = 0; i < 8; i++)
+  for (int i = 0; i < 9; i++)
     larc_allowedDebuffsFirstLarc[i] = false;
 
   //larc_zuoyueType
@@ -254,9 +254,11 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
 
   for (int i = 0; i < 18; i++)
   {
-    if (turn < 2 && persons[i].personType != 2)//前两回合没有佐岳和npc
+    if (turn < 2 && persons[i].personType != 2)//前两回合没有佐岳和npc和理事长记者等
       continue;
     if (larc_isAbroad && (i == 15 || i == 16))//远征时理事长记者不在
+      continue;
+    if (turn < 10 && i == 16)//记者大概第10个回合来，具体记不清楚了
       continue;
 
     if (i == 17 && larc_zuoyueType == 1 && persons[i].friendship >= 60)//ssr佐岳且羁绊60，会分身，因此单独处理
@@ -574,6 +576,35 @@ bool Game::tryBuyUpgrade(int idx, int level)
     calculateTrainingValue();
 
   return true;
+}
+bool Game::tryRemoveDebuffsFirstN(int n)
+{
+  int totalCost = 0;
+
+  for (int i = 0; i < n; i++)
+  {
+    if (larc_allowedDebuffsFirstLarc[i])
+      continue;
+    if (larc_levels[i] == 0)
+      return false;
+    else if (larc_levels[i] == 1)
+      totalCost += GameConstants::LArcUpgradesCostLv2[i];
+  }
+
+  if (larc_shixingPt < totalCost)
+    return false;
+
+  for (int i = 0; i < n; i++)
+  {
+    if (larc_allowedDebuffsFirstLarc[i])
+      continue;
+    else if (larc_levels[i] == 1)
+    {
+      bool suc = tryBuyUpgrade(i, 2);
+      assert(suc);
+    }
+  }
+
 }
 void Game::addAllStatus(int value)
 {
@@ -1186,7 +1217,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
         }
         else if (personType == 6)//无卡佐岳
         {
-          未知
+          skillPt += 2;
           addJiBan(p, 7);
         }
       }
@@ -1291,9 +1322,9 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   if (turn < TOTAL_TURN)
   {
     isRacing = GameConstants::LArcIsRace[turn];
-    larc_isAbroad = todo;
-    if(isRacing)
-      跳过这个回合
+    larc_isAbroad = (turn >= 36 && turn <= 42) || (turn >= 60 && turn <= 67);
+    if (isRacing)
+      checkEventAfterTrain(rand);//跳过这个回合
   }
   else
   {
@@ -1317,6 +1348,12 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   }
   else if (turn == 23)//第一年年底
   {
+    tryRemoveDebuffsFirstN(2);
+    tryRemoveDebuffsFirstN(4);
+    //达成育成目标
+    addAllStatus(3);
+    skillPt += 20;
+
     //larc1
     runRace(5, 20);
     larc_shixingPt += 50;
@@ -1387,7 +1424,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   }
   else if (turn == 42)//凯旋门1
   {
-    bool willWin = tryRemoveAllDebuffs();//能成功消除所有设定的debuff，模拟器就假设可以获胜，否则认为不能获胜
+    bool willWin = tryRemoveDebuffsFirstN(8);//能成功消除所有设定的debuff，模拟器就假设可以获胜，否则认为不能获胜
     if (willWin)
     {
       runRace(7, 50);
@@ -1398,10 +1435,9 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     }
     else
     {
-      todo
+      assert(false && "不知道输了第二年凯旋门加多少");
       runRace(7, 50);
       larc_shixingPt += 80;
-      skillPt += 15;//技能等效
 
       printEvents("第二年凯旋门结束，你没有消除所有设定的debuff，ai假设不可以获胜");
     }
@@ -1422,6 +1458,9 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   }
   else if (turn == 53)//第三年继承&larc3
   {
+    //达成育成目标
+    addAllStatus(7);
+    skillPt += 50;
     runRace(7, 30);
     larc_shixingPt += 80;
 
@@ -1451,6 +1490,9 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     addMotivation(1);
     skillPt += 20;//技能等效
 
+    if(larc_ssWin>=40)
+      unlockUpgrade(8);
+
   }
   else if (turn == 64)//富瓦赏
   {
@@ -1463,43 +1505,48 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   else if (turn == 66)//凯旋门2，游戏结束
   {
 
-    bool willWin = tryRemoveAllDebuffs();//能成功消除所有设定的debuff，模拟器就假设可以获胜，否则认为不能获胜
-    tryBuyUpgrade(9, 2);
+    tryBuyUpgrade(9, 2);//“凯旋门属性提升”比消debuff更值钱
+    bool willWin = tryRemoveDebuffsFirstN(9);//能成功消除所有设定的debuff，模拟器就假设可以获胜，否则认为不能获胜
     if (larc_levels[9] >= 2)//买了最后一个升级了
     {
       if (willWin)
         runRace(30, 140);
       else
-        runRace(25, ?);
+        runRace(25, 120);
     }
     else
     {
       if (willWin)
         runRace(10, 60);
       else
-        runRace(?, ? );
-    }
-    if (larc_levels[9] >= 1)
-      skillPt += 10;//三个小绿技能等效pt
+      {
 
-    //女神卡事件
-    if (venusCardOutgoingUsed[4])//出行走完了
-    {
-      addAllStatus(12);
-      skillPt += 12;
+        //runRace(? , ? );
+        assert(false && "不知道输了第三年凯旋门且没买比赛加成加多少");
+      }
     }
-    else
+
+    //友人卡事件
+    if (larc_zuoyueOutgoingUsed==5)//出行走完了
     {
-      addAllStatus(8);
+      addStatusZuoyue(2, 15);
+      addStatusZuoyue(3, 25);
+      addStatusZuoyue(5, 30);
+    }
+    else if(larc_zuoyueOutgoingUnlocked)
+    {
+      addStatusZuoyue(2, 15);
+      addStatusZuoyue(3, 18);
+      addStatusZuoyue(5, 20);
     }
 
     //记者
-    if (cardJiBan[7] >= 100)
+    if (persons[16].friendship >= 100)
     {
       addAllStatus(5);
       skillPt += 20;
     }
-    else if (cardJiBan[7] >= 80)
+    else if (persons[16].friendship >= 80)
     {
       addAllStatus(3);
       skillPt += 10;
@@ -1548,14 +1595,9 @@ void Game::checkSupportPtEvents(int oldSupportPt, int newSupportPt)
   bound = 100 * 1700 - 85;//期待度计算是SupportPt/170四舍五入，所以20.0%期待度对应的是20 * 1700 - 85
   if (oldSupportPt < bound && newSupportPt >= bound)
   {
-    //addAllStatus(2);
+    addAllStatus(5);
     for (int i = 0; i < 5; i++)
       addTrainingLevelCount(i, 4);
-  }
-  bound = 120 * 1700 - 85;//期待度计算是SupportPt/170四舍五入，所以20.0%期待度对应的是20 * 1700 - 85
-  if (oldSupportPt < bound && newSupportPt >= bound)
-  {
-    //addAllStatus(2);
   }
 
 }
@@ -1604,10 +1646,10 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   }
 
   //加体力
-  if (randBool(rand, 0.03))
+  if (randBool(rand, 0.15))
   {
-    addVital(10);
-    printEvents("模拟随机事件：体力+10");
+    addVital(5);
+    printEvents("模拟随机事件：体力+5");
   }
 
   //加30体力（吃饭事件）
@@ -1633,25 +1675,18 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
 
 }
 
-void Game::applyTrainingAndNextTurn(std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
+void Game::applyTrainingAndNextTurn(std::mt19937_64& rand, Action action)
 {
   assert(stageInTurn == 1);
   assert(turn < TOTAL_TURN && "Game::applyTrainingAndNextTurn游戏已结束");
-  bool suc = applyTraining(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
+  assert(!isRacing && "比赛回合都在checkEventAfterTrain里跳过了");
+  bool suc = applyTraining(rand, action);
   assert(suc && "Game::applyTrainingAndNextTurn选择了不合法的训练");
 
   checkEventAfterTrain(rand);
   if (isEnd()) return;
 
-  if (isRacing)
-  {
-    if (venusAvailableWisdom == 0)//比赛回合且无法开女神，再进行一个回合
-    {
-      randomDistributeCards(rand);//把stageInTurn改成1
-      bool useVenus = false;
-      applyTrainingAndNextTurn(rand, -1, useVenus, -1, -1, -1);
-    }
-  }
+  assert(!isRacing && "比赛回合都在checkEventAfterTrain里跳过了");
 
   randomDistributeCards(rand);
 
