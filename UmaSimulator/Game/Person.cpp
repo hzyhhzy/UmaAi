@@ -118,3 +118,4 @@ void Person::larc_nextBuff(std::mt19937_64& rand)
   larc_nextThreeBuffs[2] = nextBuff;
 }
 
+

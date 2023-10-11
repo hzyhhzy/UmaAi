@@ -1,0 +1,57 @@
+{
+    "cardId": 30160,
+    "cardName": "[友]佐岳",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 6,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": true,
+            "bonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            "initialBonus": [
+                0,
+                0,
+                30,
+                0,
+                0,
+                0
+            ],
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "youQing": 0,
+            "ganJing": 20.0,
+            "xunLian": 5,
+            "initialJiBan": 30,
+            "wizVitalBonus": 0,
+            "vitalCostDrop": 25.0,
+            "failRateDrop": 20.0
+        }
+    ]
+}

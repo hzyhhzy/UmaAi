@@ -8,40 +8,59 @@ using std::string;
 using std::endl;
 using std::to_string;
 
-static string spiritStr(int x)
+std::string Person::getPersonStrColored(const Game& game) const
 {
-  if (x == 0)
-    return "〇";
+  string s =
+    personType == 0 ? "未加载" :
+    personType == 1 ? "[友]佐岳" :
+    personType == 2 ? game.cardParam[cardIdInGame].cardName.substr(0, 8) :
+    personType == 3 ? "NPC" :
+    personType == 4 ? "理事长" :
+    personType == 5 ? "记者" :
+    personType == 6 ? "佐岳" :
+    "未知";
+  if (personType == 1 || personType == 2 || personType == 4 || personType == 5 || personType == 6)
+  {
+    if (friendship < 100)
+      s = s + ":" + to_string(friendship);
+  }
 
-  bool doubled = x > 32;
-  x = x % 32;
-  int type = x % 8;
-  int color = x / 8;
-  string s;
-  if (type == 1)
-    s = "速";
-  else if (type == 2)
-    s = "耐";
-  else if (type == 3)
-    s = "力";
-  else if (type == 4)
-    s = "根";
-  else if (type == 5)
-    s = "智";
-  else if (type == 6)
-    s = "星";
+  //根据闪彩等给名称加颜色
+  if (personType == 1)
+    s = "\033[32m" + s + "\033[0m"; // 友人
+  else if (personType == 2)
+  {
+    if(isShining)
+      s = "\033[1;36m" + s + "\033[0m"; //闪彩
+    else if(friendship<80)
+      s = "\033[33m" + s + "\033[0m"; //需要拉羁绊
+  }
+  else if (personType == 3)
+  {
+    if (!game.larc_isAbroad && larc_charge < 3)
+      s = "\033[36m" + s + "\033[0m"; //可充电
+    else
+      s = "\033[34m" + s + "\033[0m"; //不可充电
+  }
+  else if (personType == 4 || personType == 5 || personType == 6)
+  {
+    s = "\033[35m" + s + "\033[0m"; //理事长记者等
+  }
   else
-    s = "? ";
+    s = "\033[31m" + s + "\033[0m"; //bug
 
-  if (color == 0)
-    s = "\033[31m" + s + "\033[0m";
-  else if (color == 1)
-    s = "\033[36m" + s + "\033[0m";
-  else if (color == 2)
-    s = "\033[33m" + s + "\033[0m";
+  //技能启发
+  if (personType == 2 && isHint)
+    s = "\033[31m!\033[0m" + s;
 
-  if(doubled)
-    s = s + "\033[32m" + "x2" + "\033[0m";
+  //充电状态与ss buff
+  if (personType == 2 || personType == 3)
+  {
+    if (larc_charge < 3)
+      s = s + ";" + to_string(larc_charge);
+    for (int i = 0; i < 3; i++)
+      s = s + GameConstants::LArcSSBuffNames[larc_nextThreeBuffs[i]];
+  }
   return s;
 }
 
@@ -111,48 +130,25 @@ void Game::print() const
   }
   {
 
-    cout << "  ";
-    for (int i = 0; i < 4; i++)
-      cout << spiritStr(venusSpiritsUpper[i]) << "      ";
-    cout << endl;
-
-    cout << "      " << spiritStr(venusSpiritsUpper[4]) << "              " << spiritStr(venusSpiritsUpper[5]);
-    cout << endl;
-    cout << endl;
-    cout << "碎片加成：";
-    for (int i = 0; i < 6; i++)
-      cout << spiritBonus[i] << " ";
-    cout << endl;
-    if (venusAvailableWisdom > 0)
-    {
-      cout << "当前可使用女神睿智：";
-      if (venusAvailableWisdom == 1)
-        cout << termcolor::bright_red << "红" << termcolor::reset << endl;
-      else if (venusAvailableWisdom == 2)
-        cout << termcolor::bright_blue << "蓝" << termcolor::reset << endl;
-      else if (venusAvailableWisdom == 3)
-        cout << termcolor::bright_yellow << "黄" << termcolor::reset << endl;
-    }
 
 
     cout << endl;
   }
+
+  //友人卡状态
+  if (larc_zuoyueType == 1 || larc_zuoyueType == 2)
   {
-    cout << "女神等级：" << termcolor::yellow << venusLevelYellow << " " << termcolor::red << venusLevelRed << " " << termcolor::cyan << venusLevelBlue << termcolor::reset << endl;
+    if (!larc_zuoyueFirstClick)
+      cout << termcolor::cyan << "友人卡未点击" << termcolor::reset << endl;
+    else if (!larc_zuoyueOutgoingRefused)
+      cout << termcolor::cyan << "友人出行已拒绝" << termcolor::reset << endl;
+    else if (!larc_zuoyueOutgoingUnlocked)
+      cout << termcolor::cyan << "友人出行未解锁" << termcolor::reset << endl;
+    else if (larc_zuoyueOutgoingUsed < 5)
+      cout << termcolor::cyan << "友人出行已走" << termcolor::yellow << larc_zuoyueOutgoingUsed << termcolor::cyan << "段" << termcolor::reset << endl;
+    else if (larc_zuoyueOutgoingUsed == 5)
+      cout << termcolor::cyan << "友人出行已走完" << termcolor::reset << endl;
   }
-
-  //女神卡状态
-  if (!venusCardFirstClick)
-    cout << termcolor::cyan << "女神卡未点击" << termcolor::reset << endl;
-  else if (!venusCardUnlockOutgoing)
-    cout << termcolor::cyan << "女神出行未解锁" << termcolor::reset << endl;
-  else if (!venusCardIsQingRe)
-    cout << termcolor::cyan << "女神处于非情热状态" << termcolor::reset << endl;
-  else if (!venusCardIsQingRe)
-    cout << termcolor::cyan << "女神处于非情热状态" << termcolor::reset << endl;
-  else
-    cout << termcolor::cyan << "女神情热已持续" << termcolor::yellow << venusCardQingReContinuousTurns << termcolor::cyan << "回合" << termcolor::reset << endl;
-
 
   if (isRacing)
   {
@@ -185,14 +181,6 @@ void Game::print() const
       else
         s = s + "(0%)";
 
-      int sp = spiritDistribution[i];
-      if (venusSpiritsBottom[7] > 0)//满了，不显示碎片
-        sp = 0;
-      else if (venusSpiritsBottom[6] > 0)//最多一个碎片
-        sp = sp % 32;
-      if (sp != 0)
-        s = s + "-" + spiritStr(sp);
-      oneRow[i] = s;
     }
     printTableRow(oneRow);
   }
@@ -254,70 +242,18 @@ void Game::print() const
   //人头
   cout << divLine;
   {
-    for (int head = 0; head < 8; head++)
+    for (int head = 0; head < 5; head++)
     {
       string oneRow[5];//表格中一行要显示的内容
-      bool thisRowIsNotEmpty = false;
       for (int item = 0; item < 5; item++)
       {
-        //找找这个位置要不要显示人头
-        int cardIdx = -1;
-        int count = 0;
-        for (int i = 0; i < 8; i++)
-        {
-          if (cardDistribution[item][i])
-          {
-            if (count == head)
-            {
-              cardIdx = i;
-              break;
-            }
-            count++;
-          }
-        }
-        if (cardIdx == -1)continue;
-
-        //找到人头了
-        thisRowIsNotEmpty = true;
-        string s = cardIdx < 6 ? GameDatabase::AllCards[cardId[cardIdx]].cardName
-          : cardIdx == 6 ? "理事长"
-          : cardIdx == 7 ? "记者"
-          : "未知";
-        int jiban = cardJiBan[cardIdx];
-        if (jiban != 100)
-          s = s + ":" + to_string(jiban);
-
-        assert(GameDatabase::AllCards[cardId[0]].cardType == 5 && "神团卡不在第一个位置");
-
-        if (cardIdx == 0)//神团
-        {
-          if (venusCardIsQingRe)
-            s = "\033[32m" + s + "\033[0m";
-          else
-            s = "\033[35m" + s + "\033[0m";
-        }
-        else if (cardIdx < 6)//其他支援卡
-        {
-          int cardType = GameDatabase::AllCards[cardId[cardIdx]].cardType;
-          assert(cardType < 5 && cardType >= 0 && "第2到第6张卡必须为速耐力根智卡");
-          assert(!venusIsWisdomActive && "开女神睿智是在玩家选择之后");//排除了开黄闪彩的情况
-          if(jiban<80)
-            s = "\033[33m" + s + "\033[0m";
-          if (item == cardType)//常规闪彩
-            s = "\033[36m" + s + "\033[0m";
-
-          if (cardHint[cardIdx])//红点
-            s = "\033[31m!\033[0m" + s;
-        }
-        else//理事长，记者
-        {
-          s = "\033[36m" + s + "\033[0m";
-        }
-        oneRow[item] = s;
+        int personId = personDistribution[item][head];
+        if (personId == -1)
+          oneRow[item] = "";
+        else
+          oneRow[item] = persons[personId].getPersonStrColored(*this);
       }
-      if (thisRowIsNotEmpty || head < 5)
-        printTableRow(oneRow);
-      else break;
+      printTableRow(oneRow);
     }
   }
 
@@ -350,27 +286,6 @@ void Game::print() const
     }
   }
   cout << divLine;
-  //休息，外出，比赛的碎片
-  {
-    string oneRow[5];//表格中一行要显示的内容
-    oneRow[0] = "出行-" + spiritStr(spiritDistribution[6]);
-    oneRow[1] = "休息-" + spiritStr(spiritDistribution[5]);
-    oneRow[2] = "比赛-" + spiritStr(spiritDistribution[7]);
-    if (venusCardUnlockOutgoing)
-    {
-      oneRow[3] = "可用女神出行：";
-      string s = "1 2 3 4 5";
-      for (int i = 0; i < 5; i++)
-        if (venusCardOutgoingUsed[i])
-          s[i * 2] = 'X';
-      oneRow[4] = s;
-    }
-    else
-      oneRow[3] = "女神出行未解锁";
-    printTableRow(oneRow);
-  }
-  cout << divLine;
-
 
   cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
 }

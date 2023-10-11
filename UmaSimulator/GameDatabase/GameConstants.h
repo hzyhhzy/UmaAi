@@ -35,6 +35,8 @@ public:
   static const int LArcUpgradesCostLv2[10];//lv2要多少适性pt
   static const int LArcUpgradesCostLv3[8];//lv3要多少适性pt
 
+  static const std::string LArcSSBuffNames[13];//ss获得的项目的名称，单字带颜色
+
 
   //评分
   static const int FiveStatusFinalScore[1200+800*2+1];//不同属性对应的评分

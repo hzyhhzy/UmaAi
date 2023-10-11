@@ -84,6 +84,7 @@ const double outgoingBonusIfNotFullMotivation = 30;//掉心情时提高女神外出分数
 
 ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
 {
+  return ModelOutputPolicyV1();
   /*
   ModelOutputPolicyV1 policy=
   {

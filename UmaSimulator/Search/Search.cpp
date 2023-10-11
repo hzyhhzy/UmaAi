@@ -203,7 +203,8 @@ static void evaluateSingleActionStoreAll(ModelOutputValueV1* allResults, const G
       //先走第一步
       for (int i = 0; i < batchsize; i++)
       {
-        gamesBuf[i].applyTrainingAndNextTurn(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
+        Action action;
+        gamesBuf[i].applyTrainingAndNextTurn(rand, action);
       }
 
       for (int depth = 0; depth < maxDepth; depth++)
@@ -400,9 +401,10 @@ void Search::runOneTurnUsingPolicy(std::mt19937_64& rand, Game& game, const Mode
       }
     }
   }
+  Action action;
   if(distributeCards)
-    game.applyTrainingAndNextTurn(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing);
+    game.applyTrainingAndNextTurn(rand, action);
   else
-    game.applyTraining(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing);
+    game.applyTraining(rand, action);
 
 }
