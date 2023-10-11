@@ -10,6 +10,7 @@ using namespace std;
 
 void main_test3()
 {
+  /*
   //超简单的逻辑
 
   random_device rd;
@@ -157,5 +158,5 @@ void main_test3()
     //game.printFinalStats();
   }
   cout << n << "局，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
-  
+  */
 }

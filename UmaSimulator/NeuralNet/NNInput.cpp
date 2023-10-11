@@ -6,6 +6,7 @@ using namespace std;
 
 void Game::getNNInputV1(float* buf, float targetScore, int mode) const
 {
+  /*
   for (int i = 0; i < NNINPUT_CHANNELS_V1; i++)buf[i] = 0.0;
   if (isEnd())return;
   //stageInTurn=0是还没分配卡组，让神经网络估计一下达标概率（value）。stageInTurn=1是分配了卡组等待玩家选择，让神经网络估计每个选项是最优解的概率（policy）
@@ -225,7 +226,7 @@ void Game::getNNInputV1(float* buf, float targetScore, int mode) const
 
 
 
-
+  */
 
 
 

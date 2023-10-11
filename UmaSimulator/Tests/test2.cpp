@@ -7,6 +7,7 @@ using namespace std;
 
 void main_test2()
 {
+  /*
   random_device rd;
   auto rand = mt19937_64(rd());
 
@@ -151,4 +152,5 @@ void main_test2()
     }
     cout << "ÑµÁ·¼Ó³É=" << d << ": " << total / N << endl;
   }
+  */
 }

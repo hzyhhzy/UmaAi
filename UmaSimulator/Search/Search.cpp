@@ -31,6 +31,7 @@ static void softmax(float* f, int n)
 void Search::runSearch(const Game& game, Evaluator* evaluators,
   int eachSamplingNum, int maxDepth, int targetScore, int threadNum, double radicalFactor)
 {
+  /*
   for (int i = 0; i < 2; i++)
     for (int j = 0; j < 8 + 4 + 6; j++)
     {
@@ -155,6 +156,7 @@ void Search::runSearch(const Game& game, Evaluator* evaluators,
 
     }
   }
+  */
 }
 
 static double getWeightedAvg(const ModelOutputValueV1* allResults, int n, double p)

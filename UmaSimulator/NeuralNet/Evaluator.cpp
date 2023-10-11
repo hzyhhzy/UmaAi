@@ -58,37 +58,9 @@ static double vitalEvaluation(int vital,int maxVital)
 
 static const int fixedBonusAfterTurn[TOTAL_TURN] = //在这个回合之后的各种事件（swbc等）的固定属性收益
 {
-  166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,166,
-  150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,//wbc前
+ 150,150,150,150,150,150,150,150,150,150,150,150,//wbc前
   115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,115,//swbc前，假设一半概率卡红
   74,74,74,74,74,64//最后6回合
-};
-
-static const int nearestBigRaceTurn[TOTAL_TURN] = //距离最近的大比赛还有多少回合
-{
-  23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0,
-  23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0,
-  23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0,
-  5,4,3,2,1,0
-};
-static const int nearestBigRace[TOTAL_TURN] = //最近的大比赛是哪个
-{
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-  3,3,3,3,3,3,
-};
-//大比赛捏红系数
-const float reserveRedFactorGUR = 1;
-const float reserveRedFactorWBC = 3;
-const float reserveRedFactorSWBC = 6;
-const float reserveRedFactorGM = 6; 
-static const int reserveRedFactor[TOTAL_TURN] =
-{
-  reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,reserveRedFactorGUR,
-  reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,reserveRedFactorWBC,
-  reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,reserveRedFactorSWBC,
-  reserveRedFactorGM,reserveRedFactorGM,reserveRedFactorGM,reserveRedFactorGM,reserveRedFactorGM,reserveRedFactorGM
 };
 
 
@@ -112,6 +84,7 @@ const double outgoingBonusIfNotFullMotivation = 30;//掉心情时提高女神外出分数
 
 ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
 {
+  /*
   ModelOutputPolicyV1 policy=
   {
     {0,0,0,0,0,0,0,0},
@@ -384,4 +357,5 @@ ModelOutputPolicyV1 Evaluator::handWrittenPolicy(const Game& game0)
   policy.threeChoicesEventPolicy[chosenSpiritColor] = 1.0;
   policy.outgoingPolicy[chosenOutgoing] = 1.0;
   return policy;
+  */
 }

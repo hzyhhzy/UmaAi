@@ -1435,9 +1435,8 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     }
     else
     {
-      assert(false && "不知道输了第二年凯旋门加多少");
-      runRace(7, 50);
-      larc_shixingPt += 80;
+      runRace(5, 50);
+      larc_shixingPt += 50;
 
       printEvents("第二年凯旋门结束，你没有消除所有设定的debuff，ai假设不可以获胜");
     }
@@ -1519,11 +1518,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
       if (willWin)
         runRace(10, 60);
       else
-      {
-
-        //runRace(? , ? );
-        assert(false && "不知道输了第三年凯旋门且没买比赛加成加多少");
-      }
+        runRace(5, 40);
     }
 
     //友人卡事件
@@ -1611,9 +1606,8 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   //模拟各种随机事件
 
   //支援卡连续事件，随机给一个卡加5羁绊
-  //粗略估计概率随着回合数指数型下降
   int nonAbroadTurns = turn < 40 ? turn : turn - 7;
-  double p = 0.4 * exp(-nonAbroadTurns / 30.0);//平均发生12次支援卡事件，和真实值应该差距不大
+  double p = 0.4;
   if (randBool(rand, p))
   {
     int card = rand() % normalCardCount;
@@ -1621,17 +1615,17 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
     addAllStatus(4);
     printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，全属性+4");
 
-    if (randBool(rand, 0.3))
+    if (randBool(rand, 0.2))
     {
       addMotivation(1);
       printEvents("模拟支援卡随机事件：心情+1");
     }
-    if (randBool(rand, 0.4))
+    if (randBool(rand, 0.3))
     {
       addVital(10);
       printEvents("模拟支援卡随机事件：体力+10");
     }
-    else if (randBool(rand, 0.1))
+    else if (randBool(rand, 0.07))
     {
       addVital(-10);
       printEvents("模拟支援卡随机事件：体力-10");

@@ -121,13 +121,13 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     }
     else if (cardType == 5)//神团
     {
-        if (!game.venusCardIsQingRe)
+    //    if (!game.venusCardIsQingRe)
             isShining = false;
     }
     else std::cout << "未知卡";
 
-    if (game.venusIsWisdomActive && game.venusAvailableWisdom == 3)//黄女神
-        isShining = true;
+    //if (game.venusIsWisdomActive && game.venusAvailableWisdom == 3)//黄女神
+    //    isShining = true;
 
     if (!isShining)
     {
@@ -241,8 +241,10 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     else if (cardSpecialEffectId == 30099)
     {
         int totalJiBan = 0;
-        for (int i = 0; i < 6; i++)
-            totalJiBan += game.cardJiBan[i];
+        for (int i = 0; i < game.normalCardCount; i++)
+            totalJiBan += game.persons[i].friendship;
+        if(game.larc_zuoyueType!=0)
+          totalJiBan += game.persons[17].friendship;
         effect.xunLian = totalJiBan / 30;
     }
     //速子

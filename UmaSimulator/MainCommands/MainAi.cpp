@@ -138,7 +138,7 @@ void main_ai()
       continue;
     }
     lastTurn = game.turn;
-    if (game.venusIsWisdomActive)
+    //if (game.venusIsWisdomActive)
     {
       std::this_thread::sleep_for(std::chrono::milliseconds(300));
       continue;
@@ -174,18 +174,8 @@ void main_ai()
     cout << endl << rpText["analyze"] << " >>" << endl;
     {
       auto policy = search.extractPolicyFromSearchResults(1);
-      if (game.venusAvailableWisdom != 0)
-      {
-        cout << "使用女神率：";
-        printPolicy(policy.useVenusPolicy);
-        cout << endl;
-      }
       if (!game.isRacing)
       {
-        if (game.venusAvailableWisdom != 0)
-        {
-          cout << "在" << (policy.useVenusPolicy > 0.5 ? "" : " 不 ") << "使用女神的前提下：";
-        }
 
         cout << "速耐力根智：";
         for (int i = 0; i < 5; i++)

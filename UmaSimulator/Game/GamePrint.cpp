@@ -110,10 +110,6 @@ void Game::print() const
       cout << termcolor::bright_yellow << "有爱娇" << termcolor::reset << endl;
   }
   {
-    cout << "当前碎片组" << endl;
-    for (int i = 0; i < 8; i++)
-      cout << spiritStr(venusSpiritsBottom[i]) << "  ";
-    cout << endl;
 
     cout << "  ";
     for (int i = 0; i < 4; i++)
