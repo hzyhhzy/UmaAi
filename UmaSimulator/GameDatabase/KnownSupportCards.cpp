@@ -386,6 +386,15 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       if (guyouLevel > 5)guyouLevel = 5;
       effect.xunLian = 5 + 3 * guyouLevel;
     }
+    //ÀŸ…Ò”•
+    else if (cardSpecialEffectId == 30161)
+    {
+      if (jiBan < 100)
+      {
+        for (int i = 0; i < 5; i++)
+          effect.bonus[i] -= 1;
+      }
+    }
     else
     {
       //  std::cout << "Œ¥÷™ø®";

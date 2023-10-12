@@ -9,7 +9,6 @@ const int GameConstants::BasicFiveStatusLimit[5] = { 2000,2000,1800,1800,1400 };
 const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3
 const int GameConstants::NormalRacePtBonus = 45;//常规比赛pt加成,G1=45
 
-const int GameConstants::SupportPtEvery5Percent = 8500;
 const int GameConstants::UpgradeId50pEachTrain[5] = { 3,1,2,0,4 };
 const int GameConstants::LArcTrainBonusEvery5Percent[41] = { 0, 5, 8, 10, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 30, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37, 38, 38, 39, 39, 40 };
 

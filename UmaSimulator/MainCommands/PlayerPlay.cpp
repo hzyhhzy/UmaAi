@@ -13,9 +13,9 @@ using namespace std;
 
 void main_playerPlay()
 {
-  GameDatabase::loadUmas("../db/uma");
-  GameDatabase::loadCards("../db/card");
-  GameDatabase::loadDBCards("../db/cardDB.json");
+  GameDatabase::loadUmas("./db/uma");
+  GameDatabase::loadCards("./db/card");
+  GameDatabase::loadDBCards("./db/cardDB.json");
 
   const int threadNum = 4;
 
@@ -23,14 +23,16 @@ void main_playerPlay()
   cout << termcolor::cyan << "作者 Sigmoid，QQ: 2658628026" << termcolor::reset << endl;
   cout << termcolor::cyan << "代码开源：" << termcolor::yellow << "https://github.com/hzyhhzy/UmaAi" << termcolor::reset << endl;
   cout << termcolor::bright_cyan << "此模拟器界面类似“小黑板”。为了方便，并没有买技能的功能，把固有技能和各种技能hint都换算成pt，每pt计为" << GameConstants::ScorePtRate << "分（切者" << GameConstants::ScorePtRateQieZhe << "分）" << termcolor::reset << endl;
+  cout << termcolor::bright_cyan << "所有Lv2的升级（消除debuff）均自动进行，Lv3需要玩家手动购买" << termcolor::reset << endl;
+  cout << termcolor::bright_cyan << "第二年的凯旋门允许不消智力debuff，如果pt不够消除其他debuff则模拟器按输凯旋门计算" << termcolor::reset << endl;
   cout << endl;
 
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  int umaId = 101101;//草上飞
+  int umaId = 103001;//米浴
   int umaStars = 5;
-  int cards[6] = { 301604,301344,300104,300194,300114,301074 };//友人，高峰，美妙，乌拉拉，风神，司机
+  int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,0 };
   for (int gamenum = 0; gamenum < 100000; gamenum++)
@@ -41,6 +43,7 @@ void main_playerPlay()
       evaluators.push_back(Evaluator(NULL, 128));
     Game game;
     game.newGame(rand, true, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
+    game.larc_allowedDebuffsFirstLarc[4] = true;//允许不消除智力debuff
 
 
     cout << termcolor::bright_blue << "------------------------------------------------------------------------------------------------" << termcolor::reset << endl;
@@ -56,7 +59,7 @@ void main_playerPlay()
     }
     cout << endl;
 
-    for (int turn = 0; turn < TOTAL_TURN - 7; turn++)
+    while(game.turn < TOTAL_TURN)
     {
       //assert(turn == game.turn && "回合数不正确");
       game.randomDistributeCards(rand);
@@ -112,8 +115,13 @@ void main_playerPlay()
 
           string s;
 
-          cout << termcolor::cyan << "请选择训练：1速，2耐，3力，4根，5智，6SS对战，a友人出行，b普通出行，c休息，d额外比赛，remake重开，cheat作弊" << termcolor::reset << endl;
+          cout << termcolor::cyan << "请选择训练：1速，2耐，3力，4根，5智，S键SS对战，a友人出行，b普通出行，c休息，d额外比赛，remake重开，cheat作弊" << termcolor::reset << endl;
+          if (game.larc_isAbroad)
+          {
+            cout << termcolor::cyan << "输入b1购买速+50%，b2购买耐+50%，b3购买力+50%，b4购买根+50%，b5购买智+50%，b6购买pt+10，b7购买体力消费-20%，b8购买友情+20%" << termcolor::reset << endl;
+          }
           cin >> s;
+
 
           if (s == "1")
             action.train = 0;
@@ -125,7 +133,7 @@ void main_playerPlay()
             action.train = 3;
           else if (s == "5")
             action.train = 4;
-          else if (s == "6")
+          else if (s == "s")
             action.train = 5;
           else if (s == "a")
           {
@@ -174,6 +182,30 @@ void main_playerPlay()
             cout << termcolor::bright_cyan << "卡组重新分配！" << termcolor::reset << endl;
             game.randomDistributeCards(rand);
             game.print();
+            continue;
+          }
+          else if (s.size() == 2 && s[0] == 'b' && (s[1] >= '1' && s[1] <= '8'))
+          {
+            int buy_idx = s[1] == '1' ? 3:
+              s[1] == '2' ? 1:
+              s[1] == '3' ? 2:
+              s[1] == '4' ? 0:
+              s[1] == '5' ? 4:
+              s[1] == '6' ? 5:
+              s[1] == '7' ? 6:
+              s[1] == '8' ? 7:
+              -1;
+            bool suc = game.tryBuyUpgrade(buy_idx, 3);
+            if (!suc)
+            {
+              cout << termcolor::red << "购买失败！" << termcolor::reset << endl;
+              std::this_thread::sleep_for(std::chrono::seconds(1));//等几秒让人看清楚
+            }
+            else
+            {
+              cout << termcolor::cyan << "购买" << buy_idx + 1 << "号升级Lv3成功" << termcolor::reset << endl;
+              game.print();
+            }
             continue;
           }
           else
@@ -305,7 +337,7 @@ void main_playerPlay()
       }
       cout << endl;
       game.checkEventAfterTrain(rand);
-      std::this_thread::sleep_for(std::chrono::seconds(1));//等几秒让人看清楚
+      std::this_thread::sleep_for(std::chrono::seconds(2));//等几秒让人看清楚
     }
     cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
     game.printFinalStats();

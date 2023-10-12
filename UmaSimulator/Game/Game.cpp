@@ -81,6 +81,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
         persons[17].personType = 1;
         persons[17].cardIdInGame = i;
+        persons[17].friendship = cardP.initialJiBan;
       }
       else
       {
@@ -344,7 +345,7 @@ void Game::calculateTrainingValue()
   if (larc_levels[7] >= 1)
     larc_staticBonus[3] += 3;
 
-  int larc_trainBonusLevel = larc_supportPtAll / GameConstants::SupportPtEvery5Percent;
+  int larc_trainBonusLevel = (larc_supportPtAll + 85) / 8500;
   if (larc_trainBonusLevel > 40)larc_trainBonusLevel = 40;
   larc_trainBonus = GameConstants::LArcTrainBonusEvery5Percent[larc_trainBonusLevel];
 
@@ -408,6 +409,7 @@ void Game::runSS(std::mt19937_64& rand)
           equalPt = cardParam[p.cardIdInGame].hintBonus[5];
           if (equalPt == 0)equalPt = 6;//乌拉拉之类的没技能
         }
+        skillPt += equalPt;
       }
       else if (buff == 3)//体力
       {
@@ -475,7 +477,10 @@ void Game::runSS(std::mt19937_64& rand)
 
   int supportPtFactor = larc_ssPersonsCount + ssWinNum;//输了的约等于半个人头
   int supportPtEveryHalfHead = larc_isSSS ? 1000 + rand() % 64 : 580 + rand() % 64;//半个人头的supportPt的增加量，和这几个人头在所有人中的排名有关系，非常复杂，为了省事就取了个平均再加一些随机
+
+  int oldSupportPt = larc_supportPtAll;
   larc_supportPtAll += supportPtFactor * supportPtEveryHalfHead;
+  checkSupportPtEvents(oldSupportPt, larc_supportPtAll);//期待度上升事件
 
   larc_ssWin += ssWinNum;
 
@@ -704,10 +709,10 @@ void Game::handleFriendOutgoing()
 }
 void Game::handleFriendUnlock(std::mt19937_64& rand)
 {
-  //假设: 2选项50%成功，成功时选下面，失败时选上面
+  //假设: 2选项2/3概率成功，成功时选下面，失败时选上面
   larc_zuoyueOutgoingUnlocked = true;
   larc_zuoyueOutgoingRefused = false;
-  if (rand() % 2)
+  if (rand() % 3 > 0)
   {
     printEvents("友人外出解锁！2选项成功");
     addVitalZuoyue(35);
@@ -1153,7 +1158,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
     if (turn >= 43)//第二次凯旋门后，如果买得起+20%友情就立刻买，然后如果买得起pt+10就立刻买
     {
       bool anyUpgrade = false;
-      if (larc_levels[7] < 3 && action.buyFriend20)
+      if (larc_levels[7] < 3)
       {
         bool suc = tryBuyUpgrade(7, 3);
         if (suc)
@@ -1162,7 +1167,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
           anyUpgrade = true;
         }
       }
-      if (larc_levels[5] < 3 && larc_levels[7] == 3 && action.buyPt10)
+      if (larc_levels[5] < 3 && larc_levels[7] == 3)
       {
         bool suc = tryBuyUpgrade(5, 3);
         if (suc)
@@ -1285,7 +1290,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
 float Game::getSkillScore() const
 {
   float scorePtRate = isQieZhe ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate;
-  return scorePtRate * skillPt;
+  return scorePtRate * skillPt + skillScore;
 }
 
 int Game::finalScore() const
@@ -1330,7 +1335,6 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   assert(stageInTurn == 2 || isRacing);
   stageInTurn = 0;
 
-  int oldSupportPt = 0;
 
   //友人会不会解锁出行
   if (larc_zuoyueFirstClick&&(!larc_zuoyueOutgoingRefused)&&(!larc_zuoyueOutgoingUnlocked))
@@ -1345,7 +1349,6 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
 
   checkRandomEvents(rand);
 
-  checkSupportPtEvents(oldSupportPt, larc_supportPtAll);//期待度上升事件
 
   //回合数+1
   turn++;
@@ -1367,6 +1370,9 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
 void Game::checkFixedEvents(std::mt19937_64& rand)
 {
   //处理各种固定事件
+  int oldSupportPt = larc_supportPtAll;
+  larc_supportPtAll += GameConstants::LArcSupportPtGainEveryTurn[turn];
+  checkSupportPtEvents(oldSupportPt, larc_supportPtAll);//期待度上升事件
 
   if (turn == 1)//加载npc
   {
@@ -1600,6 +1606,7 @@ void Game::checkSupportPtEvents(int oldSupportPt, int newSupportPt)
   bound = 20 * 1700 - 85;//期待度计算是SupportPt/170四舍五入，所以20.0%期待度对应的是20 * 1700 - 85
   if (oldSupportPt < bound && newSupportPt >= bound)
   {
+    printEvents("期待度达到20%");
     addAllStatus(2);
     for (int i = 0; i < 5; i++)
       addTrainingLevelCount(i, 4);
@@ -1607,11 +1614,13 @@ void Game::checkSupportPtEvents(int oldSupportPt, int newSupportPt)
   bound = 40 * 1700 - 85;//期待度计算是SupportPt/170四舍五入，所以20.0%期待度对应的是20 * 1700 - 85
   if (oldSupportPt < bound && newSupportPt >= bound)
   {
+    printEvents("期待度达到40%");
     addAllStatus(3);
   }
   bound = 60 * 1700 - 85;//期待度计算是SupportPt/170四舍五入，所以20.0%期待度对应的是20 * 1700 - 85
   if (oldSupportPt < bound && newSupportPt >= bound)
   {
+    printEvents("期待度达到60%");
     addAllStatus(4);
     for (int i = 0; i < 5; i++)
       addTrainingLevelCount(i, 4);
@@ -1619,11 +1628,13 @@ void Game::checkSupportPtEvents(int oldSupportPt, int newSupportPt)
   bound = 80 * 1700 - 85;//期待度计算是SupportPt/170四舍五入，所以20.0%期待度对应的是20 * 1700 - 85
   if (oldSupportPt < bound && newSupportPt >= bound)
   {
+    printEvents("期待度达到80%");
     addAllStatus(5);
   }
   bound = 100 * 1700 - 85;//期待度计算是SupportPt/170四舍五入，所以20.0%期待度对应的是20 * 1700 - 85
   if (oldSupportPt < bound && newSupportPt >= bound)
   {
+    printEvents("期待度达到100%");
     addAllStatus(5);
     for (int i = 0; i < 5; i++)
       addTrainingLevelCount(i, 4);
@@ -1647,7 +1658,8 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
     int card = rand() % normalCardCount;
     addJiBan(card, 5);
     addAllStatus(4);
-    printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，全属性+4");
+    skillPt += 20;
+    printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，全属性+4，pt+20");
 
     if (randBool(rand, 0.2))
     {

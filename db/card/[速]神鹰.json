@@ -1,0 +1,60 @@
+{
+    "cardId": 30161,
+    "cardName": "[速]神鹰",
+    "cardSkill": {
+        "SkillList": 0,
+        "skillNum": 0
+    },
+    "cardType": 0,
+    "cardValue": [
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "filled": false
+        },
+        {
+            "bonus": [
+                2.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                2.0
+            ],
+            "deYiLv": 65.0,
+            "failRateDrop": 0.0,
+            "filled": true,
+            "ganJing": 40.0,
+            "hintBonus": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                20
+            ],
+            "hintProbIncrease": 50.0,
+            "initialBonus": [
+                0,
+                0,
+                25,
+                0,
+                0,
+                0
+            ],
+            "initialJiBan": 30,
+            "saiHou": 5.0,
+            "vitalCostDrop": 0.0,
+            "wizVitalBonus": 0,
+            "xunLian": 10.0,
+            "youQing": 20.0
+        }
+    ]
+}
