@@ -54,11 +54,14 @@ std::string Person::getPersonStrColored(const Game& game) const
     s = "\033[31m!\033[0m" + s;
 
   //充电状态与ss buff
-  if (personType == 2 || personType == 3)
+  if ((personType == 2 || personType == 3) && !(game.turn < 2 || game.larc_isAbroad))
   {
+    if (personType == 3)//npc把自己的特殊buff写在名字里
+      s = s + GameConstants::LArcSSBuffNames[larc_specialBuff];
+    s = s + ";";
     if (larc_charge < 3)
-      s = s + ";" + to_string(larc_charge);
-    for (int i = 0; i < 3; i++)
+      s = s + "\033[1;31m" + to_string(larc_charge) + "\033[0m";
+    for (int i = 0; i < 1; i++)
       s = s + GameConstants::LArcSSBuffNames[larc_nextThreeBuffs[i]];
   }
   return s;
@@ -77,12 +80,25 @@ static void printTableRow(string strs[5])
   for (int i = 0; i < 5; i++)
   {
     string s = strs[i];
-    int count = std::count(s.begin(), s.end(), '\033');
-    //无论有多少组颜色代码，一律统一成10个，这样长度就统一了
-    for (int j = 0; j < 10 - count / 2; j++)
-      s = s + "\033[33m\033[0m";
+
+    //计算字符串中颜色代码的长度
+    int colorCodeLen = 0;
+    bool inColorCode = false;
+    for (int j = 0; j < s.size(); j++)
+    {
+      char c = s[j];
+      if (c == '\033')
+        inColorCode = true;
+
+      if (inColorCode)
+      {
+        colorCodeLen += 1;
+        if (c == 'm')
+          inColorCode = false;
+      }
+    }
     s = "| " + s;
-    cout << std::setw(width + 10 * 9 - (i == 0 ? 0 : 0)) << s;
+    cout << std::setw(width + colorCodeLen) << s;
   }
   cout << "|" << endl << std::internal;
 }
@@ -140,7 +156,7 @@ void Game::print() const
   {
     if (!larc_zuoyueFirstClick)
       cout << termcolor::cyan << "友人卡未点击" << termcolor::reset << endl;
-    else if (!larc_zuoyueOutgoingRefused)
+    else if (larc_zuoyueOutgoingRefused)
       cout << termcolor::cyan << "友人出行已拒绝" << termcolor::reset << endl;
     else if (!larc_zuoyueOutgoingUnlocked)
       cout << termcolor::cyan << "友人出行未解锁" << termcolor::reset << endl;
@@ -180,7 +196,7 @@ void Game::print() const
         s = s + "(\033[31m" + to_string(fRate) + "%\033[0m)";
       else
         s = s + "(0%)";
-
+      oneRow[i] = s;
     }
     printTableRow(oneRow);
   }

@@ -323,6 +323,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
       larc_isSSS = randBool(rand, sssProb(larc_ssWinSinceLastSSS));
     }
   }
+  calculateTrainingValue();
 }
 
 void Game::calculateTrainingValue()
@@ -348,6 +349,11 @@ void Game::calculateTrainingValue()
   larc_trainBonus = GameConstants::LArcTrainBonusEvery5Percent[larc_trainBonusLevel];
 
 
+
+  for (int i = 0; i < 6; i++)
+  {
+    persons[i].isShining = false;
+  }
 
   for (int trainType = 0; trainType < 5; trainType++)
   {
@@ -531,6 +537,7 @@ void Game::addTrainingLevelCount(int item, int value)
 }
 void Game::charge(int idx, int value)
 {
+  if (value == 0)return;
   persons[idx].larc_charge += value;
   if (persons[idx].larc_charge > 3)persons[idx].larc_charge = 3;
 }
@@ -702,12 +709,14 @@ void Game::handleFriendUnlock(std::mt19937_64& rand)
   larc_zuoyueOutgoingRefused = false;
   if (rand() % 2)
   {
+    printEvents("友人外出解锁！2选项成功");
     addVitalZuoyue(35);
     addMotivation(1);
     addJiBan(17, 10);
   }
   else
   {
+    printEvents("友人外出解锁！2选项失败，已选择1选项");
     addVitalZuoyue(15);
     addMotivation(1);
     addStatusZuoyue(3, 5);
@@ -718,6 +727,7 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand)
 {
   if (!larc_zuoyueFirstClick)
   {
+    printEvents("第一次点友人");
     larc_zuoyueFirstClick = true;
     addJiBan(17, 10);
     addStatusZuoyue(3, 15);
@@ -730,11 +740,17 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand)
     addJiBan(17, 7);
     addStatus(3, 3);
     skillPt += 3;
+    bool isMotivationFull = motivation == 5;
     if (rand() % 10 == 0)
+    {
+      if (!isMotivationFull)
+        printEvents("友人事件心情+1");
       addMotivation(1);//10%概率加心情
+    }
 
     if (!larc_isAbroad)
     {
+      printEvents("触发友人充电");
       //从电量没满的人里面随机挑五个
       int toChargePersons[5] = { -1,-1,-1,-1,-1 };
       int count = 0;
@@ -760,6 +776,7 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand)
     }
     else
     {
+      printEvents("触发友人加适性pt");
       larc_shixingPt += 50;
     }
   }
@@ -771,6 +788,11 @@ void Game::calculateTrainingValueSingle(int trainType)
   //failRate[trainType] = 
 
   //double failRateBasic = calculateFailureRate(trainType);//计算基础失败率
+
+  for (int j = 0; j < 6; j++)
+  {
+    trainValue[trainType][j] = 0;
+  }
 
   int personCount = 0;//卡+npc的人头数，不包括理事长和记者
   vector<CardTrainingEffect> effects;
@@ -785,8 +807,12 @@ void Game::calculateTrainingValueSingle(int trainType)
     if (personType == 1 || personType == 2)//卡
     {
       personCount += 1; 
-      effects.push_back(cardParam[persons[p].cardIdInGame].getCardEffect(*this, trainType, persons[p].friendship, persons[p].cardRecord));
-
+      CardTrainingEffect eff = cardParam[persons[p].cardIdInGame].getCardEffect(*this, trainType, persons[p].friendship, persons[p].cardRecord);
+      effects.push_back(eff);
+      if (eff.youQing > 0)
+      {
+        persons[p].isShining = true;
+      }
     }
     else if (personType == 3)//npc
     {
@@ -879,7 +905,11 @@ void Game::calculateTrainingValueSingle(int trainType)
   for (int j = 0; j < 6; j++)
   {
     int lower = totalValueLower[j];
-    if (lower == 0)continue;
+    if (lower == 0)
+    {
+      trainValue[trainType][j] = 0;
+      continue;
+    }
     int total = int(double(lower + larc_staticBonus[j]) * upperRate);
     int upper = total - lower;
     if (upper > 100)upper = 100;
@@ -1181,6 +1211,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
       addVital(trainValue[action.train][6]);
 
       int chargeNum = trainShiningNum[action.train] + 1;//充几格电
+      if (turn < 2 || larc_isAbroad)chargeNum = 0;//前两回合与远征无法充电
       vector<int> hintCards;//有哪几个卡出红感叹号了
       bool clickZuoyue = false;//这个训练有没有佐岳
       for (int i = 0; i < 5; i++)
@@ -1296,7 +1327,7 @@ double Game::sssProb(int ssWinSinceLastSSS) const
 
 void Game::checkEventAfterTrain(std::mt19937_64& rand)
 {
-  assert(stageInTurn == 2);
+  assert(stageInTurn == 2 || isRacing);
   stageInTurn = 0;
 
   int oldSupportPt = 0;
@@ -1306,7 +1337,6 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   {
     if (randBool(rand, GameConstants::FriendUnlockOutgoingProbEveryTurn))//启动
     {
-      printEvents("友人外出解锁！");
       handleFriendUnlock(rand);
     }
   }
@@ -1338,7 +1368,11 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
 {
   //处理各种固定事件
 
-  if (turn == 11)//出道战
+  if (turn == 1)//加载npc
+  {
+    initNPCsTurn3(rand);
+  }
+  else if (turn == 11)//出道战
   {
     runRace(3, 30);
   }

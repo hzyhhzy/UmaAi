@@ -33,7 +33,7 @@ void main_playerPlay()
   int cards[6] = { 301604,301344,300104,300194,300114,301074 };//友人，高峰，美妙，乌拉拉，风神，司机
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,0 };
-  for(int gamenum=0;gamenum<100000;gamenum++)
+  for (int gamenum = 0; gamenum < 100000; gamenum++)
   {
     Search search;
     vector<Evaluator> evaluators;
@@ -50,23 +50,24 @@ void main_playerPlay()
       cout << GameDatabase::AllCards[cards[i]].cardName << ",";
     cout << termcolor::reset << endl;
     {
-      cout << termcolor::bright_cyan << "按Enter键开始游戏" << termcolor::reset << endl; 
+      cout << termcolor::bright_cyan << "按Enter键开始游戏" << termcolor::reset << endl;
       if (gamenum != 0)std::cin.ignore(1000000, '\n');
       std::cin.get();
     }
     cout << endl;
 
-    for (int turn = 0; turn < TOTAL_TURN; turn++)
+    for (int turn = 0; turn < TOTAL_TURN - 7; turn++)
     {
-      assert(turn == game.turn && "回合数不正确");
+      //assert(turn == game.turn && "回合数不正确");
       game.randomDistributeCards(rand);
       game.print();
-      search.runSearch(game, evaluators.data(), 4096, TOTAL_TURN, 27000, threadNum, 0);
+      /*
+      //search.runSearch(game, evaluators.data(), 4096, TOTAL_TURN, 27000, threadNum, 0);
       for (int i = 0; i < 2; i++)
       {
         for (int j = 0; j < 8 + 4 + 6; j++)
         {
-          cout 
+          cout
             //<< fixed << setprecision(1) << search.allChoicesValue[i][j].winrate * 100 << "%:" 
             << fixed << setprecision(0) << search.allChoicesValue[i][j].avgScoreMinusTarget << " ";
           if (j == 4 || j == 7 || j == 11)cout << endl;
@@ -90,6 +91,7 @@ void main_playerPlay()
           cout << fixed << setprecision(1) << policy.outgoingPolicy[i] * 100 << "% ";
         cout << endl;
       }
+      */
 
       if (game.isRacing)//比赛回合
       {
@@ -110,7 +112,7 @@ void main_playerPlay()
 
           string s;
 
-          cout << termcolor::cyan << "请选择训练：1速，2耐，3力，4根，5智，S键SS对战，a友人出行，b普通出行，c休息，d额外比赛，remake重开，sigmoid作弊" << termcolor::reset << endl;
+          cout << termcolor::cyan << "请选择训练：1速，2耐，3力，4根，5智，6SS对战，a友人出行，b普通出行，c休息，d额外比赛，remake重开，cheat作弊" << termcolor::reset << endl;
           cin >> s;
 
           if (s == "1")
@@ -123,7 +125,7 @@ void main_playerPlay()
             action.train = 3;
           else if (s == "5")
             action.train = 4;
-          else if (s == "s")
+          else if (s == "6")
             action.train = 5;
           else if (s == "a")
           {
@@ -167,7 +169,7 @@ void main_playerPlay()
             cout << termcolor::red << "你把" << termcolor::green << GameDatabase::AllUmas[umaId].name << termcolor::red << "做成马肉汉堡了" << termcolor::reset << endl;
             break;
           }
-          else if (s == "sigmoid")//重置卡组分配
+          else if (s == "cheat")//重置卡组分配
           {
             cout << termcolor::bright_cyan << "卡组重新分配！" << termcolor::reset << endl;
             game.randomDistributeCards(rand);
@@ -303,7 +305,7 @@ void main_playerPlay()
       }
       cout << endl;
       game.checkEventAfterTrain(rand);
-      std::this_thread::sleep_for(std::chrono::seconds(2));//等几秒让人看清楚
+      std::this_thread::sleep_for(std::chrono::seconds(1));//等几秒让人看清楚
     }
     cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
     game.printFinalStats();

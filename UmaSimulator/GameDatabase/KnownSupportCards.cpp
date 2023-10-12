@@ -124,6 +124,8 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     //    if (!game.venusCardIsQingRe)
             isShining = false;
     }
+    else if (cardType == 6)//友人
+      isShining = false;
     else std::cout << "未知卡";
 
     //if (game.venusIsWisdomActive && game.venusAvailableWisdom == 3)//黄女神

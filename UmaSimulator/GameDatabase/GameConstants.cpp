@@ -49,13 +49,13 @@ const int GameConstants::LArcUpgradesCostLv3[8] = { //lv3要多少适性pt
 
 const std::string GameConstants::LArcSSBuffNames[13] = {
   "空",
-  "技"
+  "技",
   "?2",
   "\033[32m体\033[0m",
   "\033[36m体\033[0m",
   "\033[32m心\033[0m",
   "\033[35m充\033[0m",
-  "适"
+  "适",
   "\033[33m娇\033[0m",
   "练",
   "?10",

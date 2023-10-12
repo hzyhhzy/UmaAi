@@ -10,7 +10,6 @@ Person::Person()
   cardIdInGame = -1;
   friendship = 0;
   //for (int i = 0; i < 5; i++)atTrain[i] = false;
-  isShining = false;
   isHint = false;
   cardRecord = 0;
 
