@@ -163,7 +163,7 @@ static double getWeightedAvg(const ModelOutputValueV1* allResults, int n, double
 {
   vector<double> allScores(n);
   for (int i = 0; i < n; i++)
-    allScores[i] = allResults[i].avgScoreMinusTarget;
+    allScores[i] = allResults[i].scoreMean;
   sort(allScores.begin(), allScores.end());//从小到大
 
   double weightSum = 0;
@@ -224,8 +224,8 @@ static void evaluateSingleActionStoreAll(ModelOutputValueV1* allResults, const G
       evaluators->evaluate(gamesBuf.data(), targetScores.data(), 0, batchsize);//计算value
       for (int i = 0; i < batchsize; i++)
       {
-        allResults[batch * batchsize + i].avgScoreMinusTarget = evaluators->valueResults[i].avgScoreMinusTarget;
-        allResults[batch * batchsize + i].winrate = evaluators->valueResults[i].winrate;
+        allResults[batch * batchsize + i].scoreMean = evaluators->valueResults[i].scoreMean;
+        allResults[batch * batchsize + i].winRate = evaluators->valueResults[i].winRate;
       }
 
     }
@@ -303,8 +303,8 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator* eva
   double score = getWeightedAvg(allResults.data(), eachSamplingNum, radicalFactor);
 
   ModelOutputValueV1 r;
-  r.avgScoreMinusTarget = score;
-  r.winrate = 0.5;
+  r.scoreMean = score;
+  r.winRate = 0.5;
   return r;
 }
 
@@ -318,39 +318,12 @@ ModelOutputPolicyV1 Search::extractPolicyFromSearchResults(int mode, float delta
   }
   float deltaInv = 1 / delta;
 
-  bool useVenus;//先看看用不用女神
-  {
-    float bestValueNotUseVenus = -1e30;
-    for (int i = 0; i < 8; i++)
-    {
-      if (allChoicesValue[0][i].extract(mode) > bestValueNotUseVenus)bestValueNotUseVenus = allChoicesValue[0][i].extract(mode);
-    }
-    float bestValueUseVenus = -1e30;
-    for (int i = 0; i < 8; i++)
-    {
-      if (allChoicesValue[1][i].extract(mode) > bestValueUseVenus)bestValueUseVenus = allChoicesValue[1][i].extract(mode);
-    }
-    useVenus = bestValueUseVenus > bestValueNotUseVenus;
 
-    float useVenusPolicy[2] = { bestValueUseVenus * deltaInv,bestValueNotUseVenus * deltaInv };
-    softmax(useVenusPolicy, 2);
-    policy.useVenusPolicy = useVenusPolicy[0];
-  }
-
+  assert(false);
   //训练8选1
   for (int i = 0; i < 8; i++)
-    policy.trainingPolicy[i] = deltaInv * allChoicesValue[int(useVenus)][i].extract(mode);
+    policy.trainingPolicy[i] = deltaInv * allChoicesValue[0][i].extract(mode);
   softmax(policy.trainingPolicy, 8);
-
-  //三选一事件
-  for (int i = 0; i < 3; i++)
-    policy.threeChoicesEventPolicy[i] = deltaInv * allChoicesValue[int(useVenus)][8 + 1 + i].extract(mode);
-  softmax(policy.threeChoicesEventPolicy, 3);
-
-  //选外出
-  for (int i = 0; i < 6; i++)
-    policy.outgoingPolicy[i] = deltaInv * allChoicesValue[int(useVenus)][8 + 4 + i].extract(mode);
-  softmax(policy.outgoingPolicy, 6);
 
   return policy;
 }
@@ -372,31 +345,6 @@ void Search::runOneTurnUsingPolicy(std::mt19937_64& rand, Game& game, const Mode
       if (p > bestPolicy)
       {
         chosenTrain = i;
-        bestPolicy = p;
-      }
-    }
-  }
-  useVenus = policy.useVenusPolicy >= 0.5;
-  {
-    float bestPolicy = 0.001;
-    for (int i = 0; i < 3; i++)
-    {
-      float p = policy.threeChoicesEventPolicy[i];
-      if (p > bestPolicy)
-      {
-        chosenSpiritColor = i;
-        bestPolicy = p;
-      }
-    }
-  }
-  {
-    float bestPolicy = 0.001;
-    for (int i = 0; i < 6; i++)
-    {
-      float p = policy.outgoingPolicy[i];
-      if (p > bestPolicy)
-      {
-        chosenOutgoing = i;
         bestPolicy = p;
       }
     }

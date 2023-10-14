@@ -142,7 +142,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
 
   for (int i = 0; i < 5; i++)
-    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
+    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i] - 10 * (5 - umaStars); //赛马娘初始值
   for (int i = 0; i < 6; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
@@ -1658,7 +1658,7 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
     int card = rand() % normalCardCount;
     addJiBan(card, 5);
     addAllStatus(4);
-    skillPt += 20;
+    skillPt += 5;
     printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，全属性+4，pt+20");
 
     if (randBool(rand, 0.2))

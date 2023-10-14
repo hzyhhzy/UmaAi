@@ -26,11 +26,11 @@ const int totalGames = handWrittenEvaluationTest ? 120000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
 
 
-
-int umaId = 101101;//草上飞
-int cards[6] = { 301374,301344,300104,300194,300114,301074 };//神团，高峰，美妙，乌拉拉，风神，司机
-//int cards[6] = { 301374,301344,301414,300374,300114,301304 };//神团，高峰，波旁，皇帝，风神，凯斯
-//手写逻辑应当为27699±5（1000000局）
+int umaId = 103001;//米浴
+int umaStars = 5;
+int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
+int zhongmaBlue[5] = { 18,0,0,0,0 };
+int zhongmaBonus[6] = { 20,0,40,0,20,150 };
 
 
 std::atomic<double> totalScore = 0;
@@ -46,22 +46,6 @@ void worker()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-/*
-  for (int i = 0; i < 6; ++i) {
-
-      GameDatabase::AllCards[cards[i]].cardValueInit(4);
-
-  }
-*/
-  //int umaId = 5;//二之宫
-  //int cards[6] = { 1,2,14,10,11,15 };
-  // 
-  //int umaId = 4;
-  //int cards[6] = { 1,2,14,4,5,31 };
-
-  int zhongmaBlue[5] = { 18,0,0,0,0 };
-  int zhongmaBonus[6] = { 20,0,40,0,20,200 };
-
   Search search;
   vector<Evaluator> evaluators;
   for (int i = 0; i < threadNumInner; i++)
@@ -71,22 +55,27 @@ void worker()
   {
 
     Game game;
-    game.newGame(rand, false, umaId, 5, cards, zhongmaBlue, zhongmaBonus);
+    game.newGame(rand, false, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
 
     while(!game.isEnd())
     {
-      ModelOutputPolicyV1 policy;
+      Action action;
       if (handWrittenEvaluationTest) {
-        policy = Evaluator::handWrittenPolicy(game);
+        action = Evaluator::handWrittenStrategy(game);
       }
       else {
         search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNumInner, radicalFactor);
-        policy = search.extractPolicyFromSearchResults(1);
+        assert(false);
+        //policy = search.extractPolicyFromSearchResults(1);
       }
-      Search::runOneTurnUsingPolicy(rand, game, policy, true);
+      //assert(false);
+      //Search::runOneTurnUsingPolicy(rand, game, policy, true);
+      game.applyTrainingAndNextTurn(rand, action);
     }
     //cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
     int score = game.finalScore();
+    //if (score > 37000)
+    //  game.printFinalStats();
     n += 1;
     totalScore += score;
     totalScoreSqr += score * score;
@@ -113,14 +102,18 @@ void worker()
       game.printFinalStats();
       cout << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
       cout
-        << "29500分概率=" << float(segmentStats[295]) / n << ","
-        << "30000分概率=" << float(segmentStats[300]) / n << ","
-        << "30500分概率=" << float(segmentStats[305]) / n << ","
-        << "31000分概率=" << float(segmentStats[310]) / n << ","
-        << "31500分概率=" << float(segmentStats[315]) / n << ","
-        << "32000分概率=" << float(segmentStats[320]) / n << ","
-        << "32500分概率=" << float(segmentStats[325]) / n << ","
-        << "33000分概率=" << float(segmentStats[330]) / n << endl;
+        << "33500分概率=" << float(segmentStats[335]) / n << ","
+        << "34000分概率=" << float(segmentStats[340]) / n << ","
+        << "34500分概率=" << float(segmentStats[345]) / n << ","
+        << "35000分概率=" << float(segmentStats[350]) / n << ","
+        << "35500分概率=" << float(segmentStats[355]) / n << ","
+        << "36000分概率=" << float(segmentStats[360]) / n << ","
+        << "36500分概率=" << float(segmentStats[365]) / n << ","
+        << "37000分概率=" << float(segmentStats[370]) / n << ","
+        << "37500分概率=" << float(segmentStats[375]) / n << ","
+        << "38000分概率=" << float(segmentStats[380]) / n << ","
+        << "38500分概率=" << float(segmentStats[385]) / n << ","
+        << "39000分概率=" << float(segmentStats[390]) / n << endl;
     }
   }
 

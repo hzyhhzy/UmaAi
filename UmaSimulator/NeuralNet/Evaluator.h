@@ -21,5 +21,5 @@ public:
   
   Evaluator(Model* model, int maxBatchsize);
 
-  static ModelOutputPolicyV1 handWrittenPolicy(const Game& game0);
+  static Action handWrittenStrategy(const Game& game);
 };
