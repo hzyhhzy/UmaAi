@@ -16,21 +16,23 @@
 using namespace std;
 
 const bool handWrittenEvaluationTest = true;
-const int threadNum = 16;
+const int threadNum = 8;
 const int threadNumInner = 1;
 const double radicalFactor = 3;//激进度
 const int searchN = handWrittenEvaluationTest ? 1 : 3072;
+const bool recordGame = false;
 
 
-const int totalGames = handWrittenEvaluationTest ? 120000 : 10000000;
+const int totalGames = handWrittenEvaluationTest ? 1000000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
 
 
-int umaId = 103001;//米浴
+int umaId = 108401;//谷水，30力加成
 int umaStars = 5;
 int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
 int zhongmaBlue[5] = { 18,0,0,0,0 };
 int zhongmaBonus[6] = { 20,0,40,0,20,150 };
+bool allowedDebuffs[9] = { false, false, false, false, true, false, false, false, false };//第二年可以不消第几个debuff。第五个是智力，第七个是强心脏
 
 
 std::atomic<double> totalScore = 0;
@@ -38,7 +40,7 @@ std::atomic<double> totalScoreSqr = 0;
 
 std::atomic<int> bestScore = 0;
 std::atomic<int> n = 0;
-vector<atomic<int>> segmentStats= vector<atomic<int>>(500);//100分一段，500段
+vector<atomic<int>> segmentStats= vector<atomic<int>>(700);//100分一段，700段
 
 
 void worker()
@@ -51,14 +53,22 @@ void worker()
   for (int i = 0; i < threadNumInner; i++)
     evaluators.push_back(Evaluator(NULL, 128));
 
+  vector<Game> gameHistory;
+  if (recordGame)
+    gameHistory.resize(TOTAL_TURN);
+
   for (int gamenum = 0; gamenum < gamesEveryThread; gamenum++)
   {
 
     Game game;
     game.newGame(rand, false, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
+    for (int i = 0; i < 9; i++)
+      game.larc_allowedDebuffsFirstLarc[i] = allowedDebuffs[i];
 
     while(!game.isEnd())
     {
+      if (recordGame)
+        gameHistory[game.turn] = game;
       Action action;
       if (handWrittenEvaluationTest) {
         action = Evaluator::handWrittenStrategy(game);
@@ -74,12 +84,18 @@ void worker()
     }
     //cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
     int score = game.finalScore();
-    //if (score > 37000)
-    //  game.printFinalStats();
+    if (score > 39200)
+    {
+      if (recordGame)
+        for (int i = 0; i < TOTAL_TURN; i++)
+          if (!GameConstants::LArcIsRace[i])
+            gameHistory[i].print();
+      game.printFinalStats();
+    }
     n += 1;
     totalScore += score;
     totalScoreSqr += score * score;
-    for (int i = 0; i < 500; i++)
+    for (int i = 0; i < 700; i++)
     {
       int refScore = i * 100;
       if (score >= refScore)
@@ -97,23 +113,26 @@ void worker()
 
 
     //game.print();
-    if (!handWrittenEvaluationTest)
+    if (!handWrittenEvaluationTest || n == totalGames)
     {
-      game.printFinalStats();
+      if(!handWrittenEvaluationTest)
+        game.printFinalStats();
       cout << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
       cout
-        << "33500分概率=" << float(segmentStats[335]) / n << ","
-        << "34000分概率=" << float(segmentStats[340]) / n << ","
-        << "34500分概率=" << float(segmentStats[345]) / n << ","
-        << "35000分概率=" << float(segmentStats[350]) / n << ","
-        << "35500分概率=" << float(segmentStats[355]) / n << ","
-        << "36000分概率=" << float(segmentStats[360]) / n << ","
-        << "36500分概率=" << float(segmentStats[365]) / n << ","
-        << "37000分概率=" << float(segmentStats[370]) / n << ","
-        << "37500分概率=" << float(segmentStats[375]) / n << ","
-        << "38000分概率=" << float(segmentStats[380]) / n << ","
-        << "38500分概率=" << float(segmentStats[385]) / n << ","
-        << "39000分概率=" << float(segmentStats[390]) / n << endl;
+        << "UE7概率=" << float(segmentStats[327]) / n << ","
+        << "UE8概率=" << float(segmentStats[332]) / n << ","
+        << "UE9概率=" << float(segmentStats[338]) / n << ","
+        << "UD0概率=" << float(segmentStats[344]) / n << ","
+        << "UD1概率=" << float(segmentStats[350]) / n << ","
+        << "UD2概率=" << float(segmentStats[356]) / n << ","
+        << "UD3概率=" << float(segmentStats[362]) / n << ","
+        << "UD4概率=" << float(segmentStats[368]) / n << ","
+        << "UD5概率=" << float(segmentStats[375]) / n << ","
+        << "UD6概率=" << float(segmentStats[381]) / n << ","
+        << "UD7概率=" << float(segmentStats[387]) / n << ","
+        << "UD8概率=" << float(segmentStats[394]) / n << ","
+        << "UD9概率=" << float(segmentStats[400]) / n << ","
+        << "UC0概率=" << float(segmentStats[407]) / n << endl;
     }
   }
 

@@ -14,10 +14,16 @@ void Evaluator::evaluate(const Game* games, const float* targetScores, int mode,
         const Game& game = games[i];
         assert(game.isEnd() && "无神经网络时，只有游戏结束后才可计算value");
         int score = game.finalScore();
+
+        auto& v = valueResults[i];
+        v.scoreMean = score;
+        v.scoreOverTargetMean = score > targetScores[i] ? score : targetScores[i];
+        v.scoreStdev = 0; //单个已终局的样本，方差必为0
+        v.scoreOverTargetStdev = 0;
         if (score >= targetScores[i])
-          valueResults[i].winRate = 1.0;
-        else valueResults[i].winRate = 0.0;
-        valueResults[i].scoreMean = score - targetScores[i];
+          v.winRate = 1.0;
+        else 
+          v.winRate = 0.0;
         assert(false);
       }
     }
@@ -25,8 +31,7 @@ void Evaluator::evaluate(const Game* games, const float* targetScores, int mode,
     {
       for (int i = 0; i < gameNum; i++)
       {
-        assert(false);
-        //policyResults[i] = handWrittenPolicy(games[i]);
+        actionResults[i] = handWrittenStrategy(games[i]);
       }
     }
   }
@@ -38,10 +43,12 @@ void Evaluator::evaluate(const Game* games, const float* targetScores, int mode,
 
 Evaluator::Evaluator(Model* model, int maxBatchsize):model(model), maxBatchsize(maxBatchsize)
 {
+  gameBuf.resize(maxBatchsize);
   inputBuf.resize(NNINPUT_CHANNELS_V1 * maxBatchsize);
   outputBuf.resize(NNOUTPUT_CHANNELS_V1 * maxBatchsize);
   valueResults.resize(maxBatchsize);
-  policyResults.resize(maxBatchsize);
+  //policyResults.resize(maxBatchsize);
+  actionResults.resize(maxBatchsize);
   
 }
 
