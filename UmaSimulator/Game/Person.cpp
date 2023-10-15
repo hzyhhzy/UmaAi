@@ -10,17 +10,15 @@ Person::Person()
   cardIdInGame = -1;
   friendship = 0;
   //for (int i = 0; i < 5; i++)atTrain[i] = false;
-  isShining = false;
   isHint = false;
   cardRecord = 0;
 
   larc_isLinkCard = false;
   larc_charge = 0;
-  larc_atSS = false;
   larc_statusType = -1;
   larc_specialBuff = 0;
   larc_level = 0;
-  larc_bufflevel = 0;
+  larc_buffLevel = 0;
   for (int i = 0; i < 3; i++)larc_nextThreeBuffs[i] = 0;
   //larc_assignedStatusTypeWhenFull = -1;
 
@@ -34,7 +32,7 @@ void Person::initAtTurn3(std::mt19937_64& rand, int specialBuff, int statusType)
   larc_specialBuff = specialBuff;
   larc_statusType = statusType;
   larc_level = 1;
-  larc_bufflevel = 1;
+  larc_buffLevel = 1;
 
 
   //黄金船爱娇，神鹰练习上手，与其他的不一样
@@ -118,4 +116,5 @@ void Person::larc_nextBuff(std::mt19937_64& rand)
   larc_nextThreeBuffs[1] = larc_nextThreeBuffs[2];
   larc_nextThreeBuffs[2] = nextBuff;
 }
+
 

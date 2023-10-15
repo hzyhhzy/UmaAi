@@ -22,6 +22,8 @@ int mask_scId(int scId)
 
 bool Game::loadGameFromJson(std::string jsonStr)
 {
+  assert(false);
+  /*
   try
   {
     json j = json::parse(jsonStr, nullptr, true, true);
@@ -187,7 +189,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     cout << "读取游戏信息json出错：未知错误"  << endl;
     return false;
   }
-
+  */
   return true;
 }
 

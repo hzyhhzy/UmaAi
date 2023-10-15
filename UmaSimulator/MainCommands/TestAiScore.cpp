@@ -71,7 +71,7 @@ void worker()
   {
 
     Game game;
-    game.newGame(rand, false, umaId, cards, zhongmaBlue, zhongmaBonus);
+    game.newGame(rand, false, umaId, 5, cards, zhongmaBlue, zhongmaBonus);
 
     while(!game.isEnd())
     {

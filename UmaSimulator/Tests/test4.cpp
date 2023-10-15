@@ -24,7 +24,7 @@ void main_test4()
   int n = 0;
   int stat[7] = { 0,0,0,0,0,0,0 };
   Game game;
-  game.newGame(rand, false, umaId, cards, zhongmaBlue, zhongmaBonus);
+  game.newGame(rand, false, umaId, 5, cards, zhongmaBlue, zhongmaBonus);
   game.turn = 50;
   for (int gamenum = 0; gamenum < 10000000; gamenum++)
   {
@@ -34,9 +34,9 @@ void main_test4()
     for (int item = 0; item < 5; item++)
     {
       int h = 0;
-      for (int j = 0; j < 6; j++)
+      for (int j = 0; j < 5; j++)
       {
-        if (game.cardDistribution[item][j])
+        if (game.personDistribution[item][j]!=-1)
           h++;
       }
       if (h > maxHead)maxHead = h;

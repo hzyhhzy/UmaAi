@@ -121,13 +121,15 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     }
     else if (cardType == 5)//神团
     {
-        if (!game.venusCardIsQingRe)
+    //    if (!game.venusCardIsQingRe)
             isShining = false;
     }
+    else if (cardType == 6)//友人
+      isShining = false;
     else std::cout << "未知卡";
 
-    if (game.venusIsWisdomActive && game.venusAvailableWisdom == 3)//黄女神
-        isShining = true;
+    //if (game.venusIsWisdomActive && game.venusAvailableWisdom == 3)//黄女神
+    //    isShining = true;
 
     if (!isShining)
     {
@@ -241,8 +243,10 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     else if (cardSpecialEffectId == 30099)
     {
         int totalJiBan = 0;
-        for (int i = 0; i < 6; i++)
-            totalJiBan += game.cardJiBan[i];
+        for (int i = 0; i < game.normalCardCount; i++)
+            totalJiBan += game.persons[i].friendship;
+        if(game.larc_zuoyueType!=0)
+          totalJiBan += game.persons[17].friendship;
         effect.xunLian = totalJiBan / 30;
     }
     //速子
@@ -381,6 +385,15 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
       int guyouLevel = (game.maxVital - 100) / 4;
       if (guyouLevel > 5)guyouLevel = 5;
       effect.xunLian = 5 + 3 * guyouLevel;
+    }
+    //速神鹰
+    else if (cardSpecialEffectId == 30161)
+    {
+      if (jiBan < 100)
+      {
+        for (int i = 0; i < 5; i++)
+          effect.bonus[i] -= 1;
+      }
     }
     else
     {

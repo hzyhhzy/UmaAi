@@ -31,6 +31,7 @@ static void softmax(float* f, int n)
 void Search::runSearch(const Game& game, Evaluator* evaluators,
   int eachSamplingNum, int maxDepth, int targetScore, int threadNum, double radicalFactor)
 {
+  /*
   for (int i = 0; i < 2; i++)
     for (int j = 0; j < 8 + 4 + 6; j++)
     {
@@ -155,6 +156,7 @@ void Search::runSearch(const Game& game, Evaluator* evaluators,
 
     }
   }
+  */
 }
 
 static double getWeightedAvg(const ModelOutputValueV1* allResults, int n, double p)
@@ -201,7 +203,8 @@ static void evaluateSingleActionStoreAll(ModelOutputValueV1* allResults, const G
       //先走第一步
       for (int i = 0; i < batchsize; i++)
       {
-        gamesBuf[i].applyTrainingAndNextTurn(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
+        Action action;
+        gamesBuf[i].applyTrainingAndNextTurn(rand, action);
       }
 
       for (int depth = 0; depth < maxDepth; depth++)
@@ -398,9 +401,10 @@ void Search::runOneTurnUsingPolicy(std::mt19937_64& rand, Game& game, const Mode
       }
     }
   }
+  Action action;
   if(distributeCards)
-    game.applyTrainingAndNextTurn(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing);
+    game.applyTrainingAndNextTurn(rand, action);
   else
-    game.applyTraining(rand, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing);
+    game.applyTraining(rand, action);
 
 }

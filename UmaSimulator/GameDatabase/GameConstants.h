@@ -27,13 +27,14 @@ public:
 
   //剧本相关
   static const int UpgradeId50pEachTrain[5];//+50%分别对应第几个升级
-  static const int SupportPtEvery5Percent;//每5%期待度对应多少总适性pt，=8500
   static const int LArcTrainBonusEvery5Percent[41];//期待度对应的训练加成，每5%一档
 
   static const bool LArcIsRace[TOTAL_TURN];//是否为占用回合的赛程
   static const int LArcSupportPtGainEveryTurn[TOTAL_TURN];//每回合固定的supportPt增长
   static const int LArcUpgradesCostLv2[10];//lv2要多少适性pt
   static const int LArcUpgradesCostLv3[8];//lv3要多少适性pt
+
+  static const std::string LArcSSBuffNames[13];//ss获得的项目的名称，单字带颜色
 
 
   //评分

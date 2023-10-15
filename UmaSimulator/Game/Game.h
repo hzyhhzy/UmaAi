@@ -11,7 +11,7 @@ struct Game
   bool playerPrint;//给人玩的时候，显示更多信息
 
   //基本状态，不包括当前回合的训练信息
-  int16_t umaId;//马娘编号，见KnownUmas.cpp
+  int32_t umaId;//马娘编号，见KnownUmas.cpp
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
   int16_t turn;//回合数，从0开始，到77结束
   int16_t vital;//体力，叫做“vital”是因为游戏里就这样叫的
