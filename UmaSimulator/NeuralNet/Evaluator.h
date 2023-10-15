@@ -13,7 +13,8 @@ public:
   //static lock;//所有的evaluator共用一个lock
   int maxBatchsize;
 
-  std::vector<Game> gameBuf;
+  std::vector<Game> gameInput;
+
   std::vector<float> inputBuf;
   std::vector<float> outputBuf;
 
@@ -22,7 +23,8 @@ public:
   std::vector<Action> actionResults;
 
 
-  void evaluate(const Game* games, const float* targetScores, int mode, int gameNum);//计算gamesBuf中gameNum局游戏的输出。如果没有model，就使用手写逻辑计算policy，但不能计算非结束状态的value
+  //void evaluate(const Game* games, const float* targetScores, int mode, int gameNum);//计算games中gameNum局游戏的输出。如果没有model，就使用手写逻辑计算policy，但不能计算非结束状态的value
+  void evaluateSelf(int mode, float targetScore);//计算gameInput的输出。如果没有model，就使用手写逻辑计算policy，但不能计算非结束状态的value
   
   Evaluator(Model* model, int maxBatchsize);
 

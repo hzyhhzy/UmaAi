@@ -2,36 +2,40 @@
 #include <iostream>
 #include "Evaluator.h"
 
-void Evaluator::evaluate(const Game* games, const float* targetScores, int mode, int gameNum)
+//void Evaluator::evaluate(const Game* games, const float* targetScores, int mode, int gameNum)
+//{
+//  assert(false);
+//}
+
+void Evaluator::evaluateSelf(int mode, float targetScore)
 {
-  assert(gameNum <= maxBatchsize);
   if (model == NULL)//没神经网络，手写逻辑
   {
     if (mode == 0)//value，必须终局才可计算
     {
-      for (int i = 0; i < gameNum; i++)
+      for (int i = 0; i < maxBatchsize; i++)
       {
-        const Game& game = games[i];
+        const Game& game = gameInput[i];
         assert(game.isEnd() && "无神经网络时，只有游戏结束后才可计算value");
         int score = game.finalScore();
 
         auto& v = valueResults[i];
         v.scoreMean = score;
-        v.scoreOverTargetMean = score > targetScores[i] ? score : targetScores[i];
+        v.scoreOverTargetMean = score > targetScore ? score : targetScore;
         v.scoreStdev = 0; //单个已终局的样本，方差必为0
         v.scoreOverTargetStdev = 0;
-        if (score >= targetScores[i])
+        if (score >= targetScore)
           v.winRate = 1.0;
-        else 
+        else
           v.winRate = 0.0;
         assert(false);
       }
     }
     else if (mode == 1)//policy，手写逻辑，最优的选择是1，其他的是0
     {
-      for (int i = 0; i < gameNum; i++)
+      for (int i = 0; i < maxBatchsize; i++)
       {
-        actionResults[i] = handWrittenStrategy(games[i]);
+        actionResults[i] = handWrittenStrategy(gameInput[i]);
       }
     }
   }
@@ -43,7 +47,7 @@ void Evaluator::evaluate(const Game* games, const float* targetScores, int mode,
 
 Evaluator::Evaluator(Model* model, int maxBatchsize):model(model), maxBatchsize(maxBatchsize)
 {
-  gameBuf.resize(maxBatchsize);
+  gameInput.resize(maxBatchsize);
   inputBuf.resize(NNINPUT_CHANNELS_V1 * maxBatchsize);
   outputBuf.resize(NNOUTPUT_CHANNELS_V1 * maxBatchsize);
   valueResults.resize(maxBatchsize);
