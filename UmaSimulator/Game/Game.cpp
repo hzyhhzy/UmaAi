@@ -142,7 +142,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
 
   for (int i = 0; i < 5; i++)
-    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i]; //赛马娘初始值
+    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i] - 10 * (5 - umaStars); //赛马娘初始值
   for (int i = 0; i < 6; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
@@ -589,7 +589,7 @@ bool Game::tryBuyUpgrade(int idx, int level)
 
   return true;
 }
-bool Game::tryRemoveDebuffsFirstN(int n)
+int Game::removeDebuffsFirstNCost(int n) const
 {
   int totalCost = 0;
 
@@ -598,12 +598,18 @@ bool Game::tryRemoveDebuffsFirstN(int n)
     if (larc_allowedDebuffsFirstLarc[i])
       continue;
     if (larc_levels[i] == 0)
-      return false;
+      return 10000;
     else if (larc_levels[i] == 1)
       totalCost += GameConstants::LArcUpgradesCostLv2[i];
   }
 
-  if (larc_shixingPt < totalCost)
+  return totalCost;
+}
+
+bool Game::tryRemoveDebuffsFirstN(int n)
+{
+
+  if (larc_shixingPt < removeDebuffsFirstNCost(n))
     return false;
 
   for (int i = 0; i < n; i++)
@@ -1097,6 +1103,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
       }
       if (action.buyFriend20)
       {
+        assert(false && "买友情20%已经改成全自动的了");
         if (larc_levels[7] < 3)
         {
           bool suc = tryBuyUpgrade(7, 3);
@@ -1155,6 +1162,41 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
       if (anyUpgrade)
         calculateTrainingValue();
     }
+
+    if (turn == 41)//第二次凯旋门前的那一个回合，如果买了+20%友情（和pt+10）后训练成功后还能消完预定的debuff就买
+    {
+      int shixingPtAssumeSuccess = larc_shixingPt + larc_shixingPtGainAbroad[action.train];
+      int removeDebuffCost = removeDebuffsFirstNCost(8);
+      int remainPt = shixingPtAssumeSuccess - removeDebuffCost;
+      assert(larc_levels[7] < 3);
+      bool buy20p = remainPt >= 300;
+      bool buy10pt = remainPt >= 500 && failRate[action.train] < 5 && larc_levels[5] < 3;
+      
+
+
+      bool anyUpgrade = false;
+      if (buy20p)
+      {
+        bool suc = tryBuyUpgrade(7, 3);
+        if (suc)
+        {
+          printEvents("ai替你买友情+20%了");
+          anyUpgrade = true;
+        }
+      }
+      if (buy10pt)
+      {
+        bool suc = tryBuyUpgrade(5, 3);
+        if (suc)
+        {
+          printEvents("ai替你买pt+10了");
+          anyUpgrade = true;
+        }
+      }
+      if (anyUpgrade)
+        calculateTrainingValue();
+    }
+
     if (turn >= 43)//第二次凯旋门后，如果买得起+20%友情就立刻买，然后如果买得起pt+10就立刻买
     {
       bool anyUpgrade = false;
@@ -1658,7 +1700,7 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
     int card = rand() % normalCardCount;
     addJiBan(card, 5);
     addAllStatus(4);
-    skillPt += 20;
+    skillPt += 5;
     printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，全属性+4，pt+20");
 
     if (randBool(rand, 0.2))

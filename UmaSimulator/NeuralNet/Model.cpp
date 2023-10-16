@@ -2,5 +2,6 @@
 
 float ModelOutputValueV1::extract(int i)
 {
-  return i == 0 ? winrate : avgScoreMinusTarget;
+  assert(false);
+  return i == 0 ? winRate : scoreMean;
 }

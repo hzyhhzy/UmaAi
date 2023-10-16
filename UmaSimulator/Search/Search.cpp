@@ -28,8 +28,19 @@ static void softmax(float* f, int n)
     f[i] *= totalInv;
 }
 
-void Search::runSearch(const Game& game, Evaluator* evaluators,
-  int eachSamplingNum, int maxDepth, int targetScore, int threadNum, double radicalFactor)
+Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame(threadNumInGame), batchSize(batchSize)
+{
+  evaluators.resize(threadNumInGame);
+  for (int i = 0; i < threadNumInGame; i++)
+    evaluators[i] = Evaluator(model, batchSize);
+  
+}
+
+
+
+
+void Search::runSearch(const Game& game,
+  int samplingNum, int maxDepth, int targetScore)
 {
   /*
   for (int i = 0; i < 2; i++)
@@ -159,153 +170,129 @@ void Search::runSearch(const Game& game, Evaluator* evaluators,
   */
 }
 
-static double getWeightedAvg(const ModelOutputValueV1* allResults, int n, double p)
+
+ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, int samplingNum, int maxDepth, int targetScore, std::mt19937_64& rand, Action action)
 {
-  vector<double> allScores(n);
-  for (int i = 0; i < n; i++)
-    allScores[i] = allResults[i].avgScoreMinusTarget;
-  sort(allScores.begin(), allScores.end());//从小到大
+  int batchEveryThread = (samplingNum - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
+  if (batchEveryThread <= 0)batchEveryThread = 1;
+  int samplingNumEveryThread = threadNumInGame * batchSize;
+  samplingNum = batchEveryThread * samplingNumEveryThread;
+  resultBuf.resize(samplingNum);
 
-  double weightSum = 0;
-  double weightedScoreSum = 0;
-  for (int i = 0; i < n; i++)
+
+
+
+  if (threadNumInGame > 1)
   {
-    double w = (i + 0.5) / n;
-    w = pow(w, p);
-    weightSum += w;
-    weightedScoreSum += w * allScores[i];
-  }
-  return weightedScoreSum / weightSum;
-}
-
-//保存所有结果
-static void evaluateSingleActionStoreAll(ModelOutputValueV1* allResults, const Game& game, Evaluator* evaluators, int eachSamplingNum, int maxDepth, int targetScore, int threadNum,
-  std::mt19937_64& rand, int chosenTrain, bool useVenus, int chosenSpiritColor, int chosenOutgoing, int forceThreeChoicesEvent)
-{
-  if (threadNum == 1)
-  {
-    int batchsize = evaluators->maxBatchsize;
-    int batchNum = (eachSamplingNum - 1) / evaluators->maxBatchsize + 1;
-    eachSamplingNum = batchNum * evaluators->maxBatchsize;//凑够整数个batchsize
-
-    std::vector<float> targetScores;
-    targetScores.assign(batchsize, targetScore);
-
-    Game gameCopy = game;
-
-    gameCopy.playerPrint = false;
-    std::vector<Game> gamesBuf;
-
-    for (int batch = 0; batch < batchNum; batch++)
-    {
-      gamesBuf.assign(batchsize, gameCopy);
-
-      //先走第一步
-      for (int i = 0; i < batchsize; i++)
-      {
-        Action action;
-        gamesBuf[i].applyTrainingAndNextTurn(rand, action);
-      }
-
-      for (int depth = 0; depth < maxDepth; depth++)
-      {
-        evaluators->evaluate(gamesBuf.data(), targetScores.data(), 1, batchsize);//计算policy
-        bool distributeCards = (depth != maxDepth - 1);//最后一层就不分配卡组了，直接调用神经网络估值
-
-
-        bool allFinished = true;
-        for (int i = 0; i < batchsize; i++)
-        {
-          Search::runOneTurnUsingPolicy(rand, gamesBuf[i], evaluators->policyResults[i], distributeCards);
-          if (!gamesBuf[i].isEnd())allFinished = false;
-        }
-        if (allFinished)break;
-      }
-      evaluators->evaluate(gamesBuf.data(), targetScores.data(), 0, batchsize);//计算value
-      for (int i = 0; i < batchsize; i++)
-      {
-        allResults[batch * batchsize + i].avgScoreMinusTarget = evaluators->valueResults[i].avgScoreMinusTarget;
-        allResults[batch * batchsize + i].winrate = evaluators->valueResults[i].winrate;
-      }
-
-    }
-  }
-  else
-  {
-    int eachSamplingNumEveryThread = eachSamplingNum / threadNum;
-    if (eachSamplingNumEveryThread <= 0)eachSamplingNumEveryThread = 1;
-
-    int batchNumEveryThread = (eachSamplingNumEveryThread - 1) / evaluators->maxBatchsize + 1;
-    eachSamplingNumEveryThread = batchNumEveryThread * evaluators->maxBatchsize;//每个线程都凑够整数个batchsize
-    eachSamplingNum = eachSamplingNumEveryThread * threadNum;
-
-
     std::vector<std::mt19937_64> rands;
-    for (int i = 0; i < threadNum; i++)
+    for (int i = 0; i < threadNumInGame; i++)
       rands.push_back(std::mt19937_64(rand()));
 
-
-
     std::vector<std::thread> threads;
-    for (int i = 0; i < threadNum; ++i) {
+    for (int i = 0; i < threadNumInGame; ++i) {
       threads.push_back(std::thread(
 
-        [i, &allResults, &game, &evaluators, eachSamplingNumEveryThread, maxDepth, targetScore, &rands, chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent]() {
-
-          evaluateSingleActionStoreAll(allResults + i * eachSamplingNumEveryThread, game, evaluators + i, eachSamplingNumEveryThread, maxDepth, targetScore, 1,
-          rands[i],
-          chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
+        [&]() {
+          evaluateSingleActionThread(
+            i,
+            resultBuf.data() + samplingNumEveryThread * i,
+            game,
+            samplingNumEveryThread,
+            maxDepth,
+            targetScore,
+            rands[i],
+            action
+          );
         })
       );
-        
-        
+
+
     }
     for (auto& thread : threads) {
       thread.join();
     }
-
-
   }
+  else
+  {
+    evaluateSingleActionThread(
+      0,
+      resultBuf.data(),
+      game,
+      samplingNumEveryThread,
+      maxDepth,
+      targetScore,
+      rand,
+      action
+    );
+  }
+
+
+  //整合所有结果
+  double scoreTotal;//score的和
+  double scoreSqrTotal;//score的平方和
+  double winNum;//score>=target的次数期望
+  double scoreOverTargetTotal;//max(target,score)的和
+  double scoreOverTargetSqrTotal;//max(target,score)的平方和
+  for (int i = 0; i < samplingNum; i++)
+  {
+    ModelOutputValueV1 v = resultBuf[i];
+    scoreTotal += v.scoreMean;
+    scoreSqrTotal += double(v.scoreMean) * v.scoreMean + double(v.scoreStdev) * v.scoreStdev;
+    scoreOverTargetTotal += v.scoreOverTargetMean;
+    scoreOverTargetSqrTotal += double(v.scoreOverTargetMean) * v.scoreOverTargetMean + double(v.scoreOverTargetStdev) * v.scoreOverTargetStdev;
+    winNum += v.winRate;
+  }
+
+  ModelOutputValueV1 v;
+  v.scoreMean = scoreTotal / samplingNum;
+  v.scoreStdev = sqrt(scoreSqrTotal * samplingNum - scoreTotal * scoreTotal) / samplingNum;
+  v.scoreOverTargetMean = scoreOverTargetTotal / samplingNum;
+  v.scoreOverTargetStdev = sqrt(scoreOverTargetSqrTotal * samplingNum - scoreOverTargetTotal * scoreOverTargetTotal) / samplingNum;
+  v.winRate = winNum / samplingNum;
+  return v;
 }
 
-ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, Evaluator* evaluators,
-  int eachSamplingNum, int maxDepth, int targetScore,
-  int threadNum, double radicalFactor,
-
-
-  std::mt19937_64& rand,
-  int chosenTrain,
-  bool useVenus,
-  int chosenSpiritColor,
-  int chosenOutgoing,
-  int forceThreeChoicesEvent)
+void Search::evaluateSingleActionThread(int threadIdx, ModelOutputValueV1* resultBuf, const Game& game, int samplingNum, int maxDepth, int targetScore, std::mt19937_64& rand, Action action)
 {
-    if (GameConfig::debugPrint) {
-        cout << "."; cout.flush();
+  Evaluator& eva = evaluators[threadIdx];
+  assert(eva.maxBatchsize == batchSize);
+  assert(samplingNum % batchSize == 0);
+  int batchNum = samplingNum / batchSize;
+
+
+
+  for (int batch = 0; batch < batchNum; batch++)
+  {
+    eva.gameInput.assign(batchSize, game);
+
+    //先走第一步
+    for (int i = 0; i < batchSize; i++)
+    {
+      Action action;
+      eva.gameInput[i].applyTrainingAndNextTurn(rand, action);
     }
-  int eachSamplingNumEveryThread = eachSamplingNum / threadNum;
-  if (eachSamplingNumEveryThread <= 0)eachSamplingNumEveryThread = 1;
 
-  int batchNumEveryThread = (eachSamplingNumEveryThread - 1) / evaluators->maxBatchsize + 1;
-  eachSamplingNumEveryThread = batchNumEveryThread * evaluators->maxBatchsize;//每个线程都凑够整数个batchsize
-  eachSamplingNum = eachSamplingNumEveryThread * threadNum;
-
+    for (int depth = 0; depth < maxDepth; depth++)
+    {
+      eva.evaluateSelf(1, targetScore);//计算policy
+      bool distributeCards = (depth != maxDepth - 1);//最后一层就不分配卡组了，直接调用神经网络估值
 
 
-  vector< ModelOutputValueV1> allResults(eachSamplingNum);
-  evaluateSingleActionStoreAll
-  (
-    allResults.data(),
-    game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum,
-    rand,
-    chosenTrain, useVenus, chosenSpiritColor, chosenOutgoing, forceThreeChoicesEvent);
+      bool allFinished = true;
+      for (int i = 0; i < batchSize; i++)
+      {
+        //Search::runOneTurnUsingPolicy(rand, gamesBuf[i], evaluators->policyResults[i], distributeCards);
+        if (!eva.gameInput[i].isEnd())allFinished = false;
+      }
+      if (allFinished)break;
+    }
+    eva.evaluateSelf(0, targetScore);//计算value
+    for (int i = 0; i < batchSize; i++)
+    {
+      resultBuf[batch * batchSize + i] = eva.valueResults[i];
+    }
 
-  double score = getWeightedAvg(allResults.data(), eachSamplingNum, radicalFactor);
-
-  ModelOutputValueV1 r;
-  r.avgScoreMinusTarget = score;
-  r.winrate = 0.5;
-  return r;
+  }
 }
 
 ModelOutputPolicyV1 Search::extractPolicyFromSearchResults(int mode, float delta)
@@ -318,39 +305,12 @@ ModelOutputPolicyV1 Search::extractPolicyFromSearchResults(int mode, float delta
   }
   float deltaInv = 1 / delta;
 
-  bool useVenus;//先看看用不用女神
-  {
-    float bestValueNotUseVenus = -1e30;
-    for (int i = 0; i < 8; i++)
-    {
-      if (allChoicesValue[0][i].extract(mode) > bestValueNotUseVenus)bestValueNotUseVenus = allChoicesValue[0][i].extract(mode);
-    }
-    float bestValueUseVenus = -1e30;
-    for (int i = 0; i < 8; i++)
-    {
-      if (allChoicesValue[1][i].extract(mode) > bestValueUseVenus)bestValueUseVenus = allChoicesValue[1][i].extract(mode);
-    }
-    useVenus = bestValueUseVenus > bestValueNotUseVenus;
 
-    float useVenusPolicy[2] = { bestValueUseVenus * deltaInv,bestValueNotUseVenus * deltaInv };
-    softmax(useVenusPolicy, 2);
-    policy.useVenusPolicy = useVenusPolicy[0];
-  }
-
+  assert(false);
   //训练8选1
   for (int i = 0; i < 8; i++)
-    policy.trainingPolicy[i] = deltaInv * allChoicesValue[int(useVenus)][i].extract(mode);
+    policy.trainingPolicy[i] = deltaInv * allChoicesValue[0][i].extract(mode);
   softmax(policy.trainingPolicy, 8);
-
-  //三选一事件
-  for (int i = 0; i < 3; i++)
-    policy.threeChoicesEventPolicy[i] = deltaInv * allChoicesValue[int(useVenus)][8 + 1 + i].extract(mode);
-  softmax(policy.threeChoicesEventPolicy, 3);
-
-  //选外出
-  for (int i = 0; i < 6; i++)
-    policy.outgoingPolicy[i] = deltaInv * allChoicesValue[int(useVenus)][8 + 4 + i].extract(mode);
-  softmax(policy.outgoingPolicy, 6);
 
   return policy;
 }
@@ -372,31 +332,6 @@ void Search::runOneTurnUsingPolicy(std::mt19937_64& rand, Game& game, const Mode
       if (p > bestPolicy)
       {
         chosenTrain = i;
-        bestPolicy = p;
-      }
-    }
-  }
-  useVenus = policy.useVenusPolicy >= 0.5;
-  {
-    float bestPolicy = 0.001;
-    for (int i = 0; i < 3; i++)
-    {
-      float p = policy.threeChoicesEventPolicy[i];
-      if (p > bestPolicy)
-      {
-        chosenSpiritColor = i;
-        bestPolicy = p;
-      }
-    }
-  }
-  {
-    float bestPolicy = 0.001;
-    for (int i = 0; i < 6; i++)
-    {
-      float p = policy.outgoingPolicy[i];
-      if (p > bestPolicy)
-      {
-        chosenOutgoing = i;
         bestPolicy = p;
       }
     }

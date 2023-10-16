@@ -363,6 +363,15 @@ void Game::print() const
     printTableRow(oneRow);
 
   }
+  if (larc_isAbroad)
+  {
+    string oneRow[5];//表格中一行要显示的内容
+    for (int i = 0; i < 5; i++)
+    {
+      oneRow[i] = "适性pt:\033[32m" + to_string(larc_shixingPtGainAbroad[i]) + "\033[0m";
+    }
+    printTableRow(oneRow);
+  }
   
 
   cout << divLine;

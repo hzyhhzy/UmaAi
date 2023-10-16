@@ -7,8 +7,8 @@
 
 int main()
 {
-  main_playerPlay(); 
-  //main_testAiScore();
+  //main_playerPlay(); 
+  main_testAiScore();
   //main_ai();
   //main_test_json();
 }

@@ -175,6 +175,7 @@ struct Game
   void charge(int idx, int value);//充电
   void unlockUpgrade(int idx);//解锁某个升级
   bool tryBuyUpgrade(int idx, int level);//购买某个升级，如果买不起则返回false
+  int removeDebuffsFirstNCost(int n) const;//计算消除前n个debuff的花费
   bool tryRemoveDebuffsFirstN(int n);//计算是否可以消除前n个debuff，若可以消除则消除且返回true，否则什么都不买且返回false
 
   int calculateFailureRate(int trainType, double failRateMultiply) const;//计算训练失败率，failRateMultiply是训练失败率乘数=(1-支援卡1的失败率下降)*(1-支援卡2的失败率下降)*...

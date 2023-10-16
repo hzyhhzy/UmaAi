@@ -13,9 +13,9 @@ using namespace std;
 
 void main_playerPlay()
 {
-  GameDatabase::loadUmas("./db/uma");
-  GameDatabase::loadCards("./db/card");
-  GameDatabase::loadDBCards("./db/cardDB.json");
+  GameDatabase::loadUmas("../db/uma");
+  GameDatabase::loadCards("../db/card");
+  GameDatabase::loadDBCards("../db/cardDB.json");
 
   const int threadNum = 4;
 
@@ -34,7 +34,7 @@ void main_playerPlay()
   int umaStars = 5;
   int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
   int zhongmaBlue[5] = { 18,0,0,0,0 };
-  int zhongmaBonus[6] = { 20,0,40,0,20,0 };
+  int zhongmaBonus[6] = { 20,0,40,0,20,150 };
   for (int gamenum = 0; gamenum < 100000; gamenum++)
   {
     Search search;
@@ -64,6 +64,30 @@ void main_playerPlay()
       //assert(turn == game.turn && "回合数不正确");
       game.randomDistributeCards(rand);
       game.print();
+
+      Action handWrittenStrategy = Evaluator::handWrittenStrategy(game);
+      string strategyText[10] =
+      {
+        "速",
+        "耐",
+        "力",
+        "根",
+        "智",
+        "SS",
+        "休息",
+        "友人外出",
+        "普通外出",
+        "比赛"
+      };
+      cout << "手写逻辑：" << strategyText[handWrittenStrategy.train];
+      if (game.larc_isAbroad)
+      {
+        cout << "   ";
+        if (!handWrittenStrategy.buy50p)
+          cout << "不";
+        cout << "购买+50%";
+      }
+      cout << endl;
       /*
       //search.runSearch(game, evaluators.data(), 4096, TOTAL_TURN, 27000, threadNum, 0);
       for (int i = 0; i < 2; i++)

@@ -187,23 +187,13 @@ void main_ai()
           printPolicy(policy.trainingPolicy[5 + i]);
         cout << endl;
 
-        cout << "女神三选一事件：红，蓝，黄：";
-        for (int i = 0; i < 3; i++)
-          printPolicy(policy.threeChoicesEventPolicy[i]);
-        cout << endl;
-
-        cout << "五个女神外出以及普通外出：";
-        for (int i = 0; i < 6; i++)
-          printPolicy(policy.outgoingPolicy[i] * policy.trainingPolicy[6]);
-        cout << endl << "<<" << endl;
-
         // 输出运气分
         float maxScore = -1e6;
         for (int i = 0; i < 2; i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                float s = search.allChoicesValue[i][j].avgScoreMinusTarget;
+                float s = search.allChoicesValue[i][j].scoreMean;
                 if (s > maxScore)maxScore = s;
             }
         }
@@ -218,7 +208,7 @@ void main_ai()
             cout << " | 本回合：" << maxScore - scoreLastTurn
                  << " | 评分预测: " << maxScore << endl;
 
-            double raceLoss = maxScore - max(search.allChoicesValue[0][7].avgScoreMinusTarget, search.allChoicesValue[1][7].avgScoreMinusTarget);
+            double raceLoss = maxScore - max(search.allChoicesValue[0][7].scoreMean, search.allChoicesValue[1][7].scoreMean);
             if (raceLoss < 5e5)//raceLoss大约1e6如果不能比赛
                 cout << "比赛亏损（用于选择比赛回合，以完成粉丝数目标）：" << raceLoss << endl;
             cout << "----" << endl;
@@ -252,27 +242,6 @@ void main_ai()
                 break;
             case 6:
             {
-                cout << "和 ";
-                std::size_t outgoingPolicy = findMaxIndex(policy.outgoingPolicy);
-                switch (outgoingPolicy) {
-                case 0:
-                    cout << (GameConfig::noColor ? "" : "\033[31m") << "红女神";
-                    break;
-                case 1:
-                    cout << (GameConfig::noColor ? "" : "\033[36m") << "蓝女神";
-                    break;
-                case 2:
-                    cout << (GameConfig::noColor ? "" : "\033[33m") << "黄女神";
-                    break;
-                case 3:
-                    cout << (GameConfig::noColor ? "" : "\033[36m") << rpText["venus1"];
-                    break;
-                case 4:
-                    cout << (GameConfig::noColor ? "" : "\033[36m") << rpText["venus2"];
-                    break;
-                case 5:
-                    cout << (GameConfig::noColor ? "" : "\033[35m") << rpText["date"];
-                }
                 cout << (GameConfig::noColor ? "" : "\033[0m") << " " << rpText["out"];
                 break;
             }
@@ -282,28 +251,6 @@ void main_ai()
         }  // switch
         cout << (GameConfig::noColor ? "" : "\033[0m") << " | ";
         
-        // 女神相关决策        
-        if (policy.useVenusPolicy >= 0.5) {
-            cout << (GameConfig::noColor ? "" : "\033[32m") << " 建议使用";
-        } else if (policy.useVenusPolicy == 0) {
-            cout << (GameConfig::noColor ? "" : "\033[0m") << " 无";
-        } else {
-            cout << (GameConfig::noColor ? "" : "\033[31m") << " 不建议使用";
-        }
-        cout << (GameConfig::noColor ? "" : "\033[0m") << "女神Buff";
-        cout << " |  神团三选一：";
-        std::size_t godChoice = findMaxIndex(policy.threeChoicesEventPolicy);
-        switch (godChoice) {
-        case 0:
-            cout << (GameConfig::noColor ? "" : "\033[41m") << "1-红";
-            break;
-        case 1:
-            cout << (GameConfig::noColor ? "" : "\033[44m") << "2-蓝";
-            break;
-        case 2:
-            cout << (GameConfig::noColor ? "" : "\033[43m") << "3-黄";
-            break;
-        }
         cout << (GameConfig::noColor ? "" : "\033[0m") << endl;
       } // if isRacing
       else
