@@ -78,7 +78,7 @@ void main_ai()
   //激进度为k，模拟n局时，标准差约为sqrt(1+k^2/(2k+1))*1200/(sqrt(n))
   //标准差大于30时会严重影响判断准确度
 
-  Search search;
+  Search search(NULL, 128, GameConfig::threadNum);
   vector<Evaluator> evaluators;
 
   int lastTurn = -1;
@@ -168,8 +168,8 @@ void main_ai()
     
     //最后几回合降低激进度
     double modifiedRadicalFactor = GameConfig::radicalFactor * (1 - exp(-double(TOTAL_TURN - game.turn) / 10.0));
-    
-    search.runSearch(game, evaluators.data(), GameConfig::searchN, TOTAL_TURN, 0, GameConfig::threadNum, modifiedRadicalFactor);
+    assert(false);
+    //search.runSearch(game, evaluators.data(), GameConfig::searchN, TOTAL_TURN, 0, GameConfig::threadNum, modifiedRadicalFactor);
     //cout << endl << rpText["finish"] << endl;
     cout << endl << rpText["analyze"] << " >>" << endl;
     {

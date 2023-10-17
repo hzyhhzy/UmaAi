@@ -21,7 +21,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   isAiJiao = false; 
   failureRateBias = 0;
   skillPt = 120;
-  skillScore = umaStars >= 3 ? 170 * (1 + umaStars) : 120 * (3 + umaStars);//固有技能
+  skillScore = umaStars >= 3 ? 170 * (umaStars - 2) : 120 * (umaStars);//固有技能
   motivation = 3;
   isPositiveThinking = false;
   for (int i = 0; i < 5; i++)
@@ -257,9 +257,9 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   {
     if (turn < 2 && persons[i].personType != 2)//前两回合没有佐岳和npc和理事长记者等
       continue;
-    if (larc_isAbroad && (i == 15 || i == 16))//远征时理事长记者不在
+    if (larc_isAbroad && (i == 15 || i == 16 || (i == 17 && persons[i].personType != 1)))//远征时理事长记者不在，不带卡的佐岳也不在
       continue;
-    if (turn < 10 && i == 16)//记者大概第10个回合来，具体记不清楚了
+    if (turn < 10 && i == 16)//记者第10个回合来
       continue;
 
     if (i == 17 && larc_zuoyueType == 1 && persons[i].friendship >= 60)//ssr佐岳且羁绊60，会分身，因此单独处理
@@ -1063,6 +1063,16 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
   }
   else if (action.train == 5)//ss match
   {
+    if (larc_isAbroad)
+    {
+      printEvents("海外不能SS");
+      return false;
+    }
+    if (larc_ssPersonsCount == 0)
+    {
+      printEvents("没有满格人头不能SS");
+      return false;
+    }
     runSS(rand);
     if (larc_ssWin >= 5)
     {
@@ -1490,6 +1500,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     larc_shixingPt += 50;
     unlockUpgrade(4);
     unlockUpgrade(5);
+    skillScore += 170;//固有技能等级+1
 
     printEvents("larc2结束，准备远征");
 
@@ -1544,6 +1555,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     skillPt += 50;
     runRace(7, 30);
     larc_shixingPt += 80;
+    skillScore += 170;//固有技能等级+1
 
     for (int i = 0; i < 5; i++)
       addStatus(i, zhongMaBlueCount[i] * 6); //蓝因子典型值
@@ -1570,6 +1582,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     addAllStatus(10);
     addMotivation(1);
     skillPt += 20;//技能等效
+    skillScore += 170;//固有技能等级+1
 
     if(larc_ssWin>=40)
       unlockUpgrade(8);
@@ -1633,8 +1646,10 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
       skillPt += 5;
     }
 
-
-    addAllStatus(30);
+    if (persons[17].friendship < 60)  //有待考证，分界线不一定是60
+      addAllStatus(20);
+    else
+      addAllStatus(30);
     skillPt += 60;
     skillPt += 40;//技能等效
 

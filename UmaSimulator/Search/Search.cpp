@@ -28,6 +28,42 @@ static void softmax(float* f, int n)
     f[i] *= totalInv;
 }
 
+int Search::buyBuffChoiceNum(int turn)
+{
+  return
+    (turn <= 35 || (43 <= turn && turn <= 59)) ? 1 :
+      turn == 41 ? 2 :
+      ((36 <= turn && turn <= 39) || turn >= 60) ? 4 :
+      -1;
+}
+
+Action Search::buyBuffAction(int idx, int turn)
+{
+  Action action;
+  action.train = -1;
+  action.buy50p = false;
+  action.buyFriend20 = false;
+  action.buyPt10 = false;
+  action.buyVital20 = false;
+
+  if (36 <= turn && turn <= 39)
+  {
+    action.buy50p = idx % 2;
+    action.buyPt10 = idx / 2;
+  }
+  else if (turn >= 60)
+  {
+    action.buy50p = idx % 2;
+    action.buyVital20 = idx / 2;
+  }
+  else if (turn == 41)
+  {
+    action.buy50p = idx % 2;
+  }
+
+  return action;
+}
+
 Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame(threadNumInGame), batchSize(batchSize)
 {
   evaluators.resize(threadNumInGame);
@@ -39,144 +75,82 @@ Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame
 
 
 
-void Search::runSearch(const Game& game,
-  int samplingNum, int maxDepth, int targetScore)
+Action Search::runSearch(const Game& game,
+  int samplingNum, int maxDepth, int targetScore,
+  std::mt19937_64& rand)
 {
-  /*
-  for (int i = 0; i < 2; i++)
-    for (int j = 0; j < 8 + 4 + 6; j++)
-    {
-      allChoicesValue[i][j].winrate = -1;
-      allChoicesValue[i][j].avgScoreMinusTarget = -1e6;
-    }
 
-  std::random_device rd;
-  auto rand = std::mt19937_64(rd());
-  //gamesBuf.assign(eachSamplingNum,rootGame);
-  int activateVenusChoices = game.venusAvailableWisdom > 0 ? 2 : 1;
-  for (int useVenus = 0; useVenus < activateVenusChoices; useVenus++)
+  ModelOutputValueV1 illegalValue;
   {
-    //先考虑是不是只有比赛
-    if (game.isRacing)
-    {
-      allChoicesValue[useVenus][0] = evaluateSingleAction(game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum, radicalFactor,
-        rand, -1, useVenus, -1, -1, -1);
-    }
-    else
-    {
-      //五个训练
-     if (GameConfig::debugPrint && useVenus)
-       cout << endl << "- 分析女神Buff：" << endl;
-
-      //对应位置01234，女神三选一事件对应8 9 10 11（不出，红，蓝，黄），休息5，外出6和12~17，比赛7
-      for (int item = 0; item < 5; item++)
-      {
-        assert(GameDatabase::AllCards[game.cardId[0]].cardType == 5 && "神团卡不在第一个位置");
-        if (game.cardDistribution[item][0])//神团在这里，需要考虑三选一事件
-        {
-          double threeChoicesProb = game.getThreeChoicesEventProb(useVenus);
-          //女神出来的情况
-          double bestWinrateIfThreeChoices = -1;//三选一里面最好的那种情况
-          double bestScoreIfThreeChoices = -1e6;
-          if (threeChoicesProb > 0.0)
-          {
-            for (int chosenSpiritColor = 0; chosenSpiritColor < 3; chosenSpiritColor++)
-            {
-              auto value = evaluateSingleAction(
-                game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum, radicalFactor,
-                rand, item, useVenus, chosenSpiritColor, -1, 1);
-              allChoicesValue[useVenus][8 + 1 + chosenSpiritColor] = value;
-              if (value.avgScoreMinusTarget > bestScoreIfThreeChoices)
-                bestScoreIfThreeChoices = value.avgScoreMinusTarget;
-              if (value.winrate > bestWinrateIfThreeChoices)
-                bestWinrateIfThreeChoices = value.winrate;
-            }
-          }
-          else
-          {
-            for (int chosenSpiritColor = 0; chosenSpiritColor < 3; chosenSpiritColor++)
-            {
-              allChoicesValue[useVenus][8 + 1 + chosenSpiritColor].avgScoreMinusTarget = -1e6;
-              allChoicesValue[useVenus][8 + 1 + chosenSpiritColor].winrate = 0.0;
-            }
-          }
-
-          //女神不出来的情况
-          if (threeChoicesProb < 1.0)
-          {
-            allChoicesValue[useVenus][8] = evaluateSingleAction(
-              game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum, radicalFactor, 
-              rand, item, useVenus, -1, -1,  -1);
-          }
-          else
-          {
-            allChoicesValue[useVenus][8].avgScoreMinusTarget = -1e6;
-            allChoicesValue[useVenus][8].winrate = 0.0;
-          }
-
-          //出来和不出来取平均
-          allChoicesValue[useVenus][item].avgScoreMinusTarget = allChoicesValue[useVenus][8].avgScoreMinusTarget * (1 - threeChoicesProb) + bestScoreIfThreeChoices * threeChoicesProb;
-          allChoicesValue[useVenus][item].winrate = allChoicesValue[useVenus][8].winrate * (1 - threeChoicesProb) + bestWinrateIfThreeChoices * threeChoicesProb;
-
-        }
-        else//女神不在这个训练
-        {
-          allChoicesValue[useVenus][item] = evaluateSingleAction(
-            game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum, radicalFactor,
-            rand, item, useVenus, -1, -1, -1);
-        }
-      }
-
-      //休息
-      //cout << endl << "- 正在分析休息";
-      allChoicesValue[useVenus][5] = evaluateSingleAction(
-        game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum, radicalFactor,
-        rand, 5, useVenus, -1, -1, -1);
-
-      //比赛
-      //cout << endl << "- 正在分析比赛";
-      if (game.turn > 12 && game.turn < 72)
-      {
-        allChoicesValue[useVenus][7] = evaluateSingleAction(
-          game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum, radicalFactor,
-          rand, 7, useVenus, -1, -1, -1);
-      }
-
-      //外出
-      //cout << endl << "- 正在分析出行";
-      if(!game.isXiaHeSu())
-      {
-        double bestWinrate = -1;//三选一里面最好的那种情况
-        double bestScore = -1e6;
-        for (int chosenOutgoing= 0; chosenOutgoing < 6; chosenOutgoing++)
-        {
-          if (!game.isOutgoingLegal(chosenOutgoing))
-            continue;
-          auto value = evaluateSingleAction(
-            game, evaluators, eachSamplingNum, maxDepth, targetScore, threadNum, radicalFactor,
-            rand, 6, useVenus, -1, chosenOutgoing, -1);
-          allChoicesValue[useVenus][8 + 4 + chosenOutgoing] = value;
-          if (value.avgScoreMinusTarget > bestScore)
-            bestScore = value.avgScoreMinusTarget;
-          if (value.winrate > bestWinrate)
-            bestWinrate = value.winrate;
-        }
-        allChoicesValue[useVenus][6].avgScoreMinusTarget = bestScore;
-        allChoicesValue[useVenus][6].winrate = bestWinrate;
-      }
-
-    }
+    illegalValue.scoreMean = -1e5;
+    illegalValue.scoreOverTargetMean = -1e5;
+    illegalValue.winRate = 0;
+    illegalValue.scoreStdev = 0;
+    illegalValue.scoreOverTargetStdev = 0;
   }
-  */
+
+  for (int i = 0; i < 4; i++)
+    for (int j = 0; j < 10; j++)
+    {
+      allChoicesValue[i][j] = illegalValue;
+    }
+
+
+
+  for (int buyBuffChoice = 0; buyBuffChoice < buyBuffChoiceNum(game.turn); buyBuffChoice++)
+  {
+    Action action0=buyBuffAction(buyBuffChoice,game.turn);
+    int trainNumToConsider = //如果买训练buff，则一定不休息
+      buyBuffChoice == 0 ? 10 :
+      action0.buyVital20 ? 4 : //买体力消耗减少的buff肯定不点智力
+      5;
+    for (int t = 0; t < trainNumToConsider; t++)
+    {
+      Action action = action0;
+      action.train = t;
+      allChoicesValue[buyBuffChoice][t] = evaluateSingleAction(game, samplingNum, maxDepth, targetScore, rand, action);
+    }
+
+  }
+
+  Action action;
+  double bestValue = -5e4;
+  for (int i = 0; i < 4; i++)
+    for (int j = 0; j < 10; j++)
+    {
+      double v = allChoicesValue[i][j].scoreOverTargetMean;
+      if (v > bestValue)
+      {
+        bestValue = v;
+        action = buyBuffAction(i, game.turn);
+        action.train = j;
+      }
+    }
+  return action;
 }
 
 
 ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, int samplingNum, int maxDepth, int targetScore, std::mt19937_64& rand, Action action)
 {
+  //先检查action是否合法
+  Game game1 = game;
+  bool isLegal = game1.applyTraining(rand, action);
+  if (!isLegal)
+  {
+    ModelOutputValueV1 v;
+    v.scoreMean = -1e5;
+    v.scoreOverTargetMean = -1e5;
+    v.winRate = 0;
+    v.scoreStdev = 0;
+    v.scoreOverTargetStdev = 0;
+    return v;
+  }
+
+
   int batchEveryThread = (samplingNum - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
   if (batchEveryThread <= 0)batchEveryThread = 1;
-  int samplingNumEveryThread = threadNumInGame * batchSize;
-  samplingNum = batchEveryThread * samplingNumEveryThread;
+  int samplingNumEveryThread = batchSize * batchEveryThread;
+  samplingNum = threadNumInGame * samplingNumEveryThread;
   resultBuf.resize(samplingNum);
 
 
@@ -192,7 +166,7 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, int samplingNu
     for (int i = 0; i < threadNumInGame; ++i) {
       threads.push_back(std::thread(
 
-        [&]() {
+        [this, i, samplingNumEveryThread, &game, maxDepth, targetScore, &rands, action]() {
           evaluateSingleActionThread(
             i,
             resultBuf.data() + samplingNumEveryThread * i,
@@ -228,17 +202,18 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, int samplingNu
 
 
   //整合所有结果
-  double scoreTotal;//score的和
-  double scoreSqrTotal;//score的平方和
-  double winNum;//score>=target的次数期望
-  double scoreOverTargetTotal;//max(target,score)的和
-  double scoreOverTargetSqrTotal;//max(target,score)的平方和
+  double scoreTotal = 0;//score的和
+  double scoreSqrTotal = 0;//score的平方和
+  double winNum = 0;//score>=target的次数期望
+  double scoreOverTargetTotal = 0;//max(target,score)的和
+  double scoreOverTargetSqrTotal = 0;//max(target,score)的平方和
   for (int i = 0; i < samplingNum; i++)
   {
     ModelOutputValueV1 v = resultBuf[i];
     scoreTotal += v.scoreMean;
     scoreSqrTotal += double(v.scoreMean) * v.scoreMean + double(v.scoreStdev) * v.scoreStdev;
     scoreOverTargetTotal += v.scoreOverTargetMean;
+    //cout << v.scoreMean << " ";
     scoreOverTargetSqrTotal += double(v.scoreOverTargetMean) * v.scoreOverTargetMean + double(v.scoreOverTargetStdev) * v.scoreOverTargetStdev;
     winNum += v.winRate;
   }
@@ -268,19 +243,20 @@ void Search::evaluateSingleActionThread(int threadIdx, ModelOutputValueV1* resul
     //先走第一步
     for (int i = 0; i < batchSize; i++)
     {
-      Action action;
       eva.gameInput[i].applyTrainingAndNextTurn(rand, action);
     }
 
     for (int depth = 0; depth < maxDepth; depth++)
     {
       eva.evaluateSelf(1, targetScore);//计算policy
-      bool distributeCards = (depth != maxDepth - 1);//最后一层就不分配卡组了，直接调用神经网络估值
+      //bool distributeCards = (depth != maxDepth - 1);//最后一层就不分配卡组了，直接调用神经网络估值
 
 
       bool allFinished = true;
       for (int i = 0; i < batchSize; i++)
       {
+        if(!eva.gameInput[i].isEnd())
+          eva.gameInput[i].applyTrainingAndNextTurn(rand, eva.actionResults[i]);
         //Search::runOneTurnUsingPolicy(rand, gamesBuf[i], evaluators->policyResults[i], distributeCards);
         if (!eva.gameInput[i].isEnd())allFinished = false;
       }

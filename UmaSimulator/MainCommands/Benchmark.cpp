@@ -27,14 +27,12 @@ void main_benchmark()
   GameDatabase::loadCards("../db/card");
 
   const int threadNum = 1;
-  const double radicalFactor = 5;//激进度
+  //const double radicalFactor = 5;//激进度
   const int searchN = 2048;
+  const double targetScore = 33000;
 
 
-  Search search;
-  vector<Evaluator> evaluators;
-  for (int i = 0; i < threadNum; i++)
-    evaluators.push_back(Evaluator(NULL, 128));
+  Search search(NULL,128,threadNum);
 
 
 
@@ -53,7 +51,7 @@ void main_benchmark()
   //game.print();
 
   const int64_t time0 = now_ms();
-  search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNum, radicalFactor);
+  search.runSearch(game, searchN, TOTAL_TURN, targetScore, rand);
   const int64_t time1 = now_ms();
 
   int64_t timeUsedMs = time1 - time0;

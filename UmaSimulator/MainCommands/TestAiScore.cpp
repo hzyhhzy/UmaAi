@@ -18,8 +18,9 @@ using namespace std;
 const bool handWrittenEvaluationTest = true;
 const int threadNum = 8;
 const int threadNumInner = 1;
-const double radicalFactor = 3;//激进度
-const int searchN = handWrittenEvaluationTest ? 1 : 3072;
+const double targetScore = 0;
+//const double radicalFactor = 3;//激进度
+const int searchN = handWrittenEvaluationTest ? 1 : 1024;
 const bool recordGame = false;
 
 
@@ -48,10 +49,7 @@ void worker()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  Search search;
-  vector<Evaluator> evaluators;
-  for (int i = 0; i < threadNumInner; i++)
-    evaluators.push_back(Evaluator(NULL, 128));
+  Search search(NULL, 16, threadNumInner);
 
   vector<Game> gameHistory;
   if (recordGame)
@@ -74,12 +72,8 @@ void worker()
         action = Evaluator::handWrittenStrategy(game);
       }
       else {
-        search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNumInner, radicalFactor);
-        assert(false);
-        //policy = search.extractPolicyFromSearchResults(1);
+        action = search.runSearch(game, searchN, TOTAL_TURN, targetScore, rand);
       }
-      //assert(false);
-      //Search::runOneTurnUsingPolicy(rand, game, policy, true);
       game.applyTrainingAndNextTurn(rand, action);
     }
     //cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
