@@ -27,7 +27,7 @@ void main_benchmark()
   GameDatabase::loadCards("../db/card");
 
   const int threadNum = 1;
-  //const double radicalFactor = 5;//æ¿€è¿›åº¦
+  //const double radicalFactor = 5;//¼¤½ø¶È
   const int searchN = 2048;
   const double targetScore = 33000;
 
@@ -39,8 +39,8 @@ void main_benchmark()
 
 
 
-  int umaId = 101101;//è‰ä¸Šé£
-  int cards[6] = { 301374,301344,300104,300194,300114,301074 };//ç¥å›¢ï¼Œé«˜å³°ï¼Œç¾å¦™ï¼Œä¹Œæ‹‰æ‹‰ï¼Œé£ç¥ï¼Œå¸æœº
+  int umaId = 101101;//²İÉÏ·É
+  int cards[6] = { 301374,301344,300104,300194,300114,301074 };//ÉñÍÅ£¬¸ß·å£¬ÃÀÃî£¬ÎÚÀ­À­£¬·çÉñ£¬Ë¾»ú
 
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,200 };
@@ -56,7 +56,7 @@ void main_benchmark()
 
   int64_t timeUsedMs = time1 - time0;
   float speed = 1000 * searchN / float(timeUsedMs);
-  cout << "æ€»æœç´¢å±€æ•°" << searchN << "ï¼Œç”¨æ—¶" << timeUsedMs << "msï¼Œå¹³å‡é€Ÿåº¦" << speed << "å±€æ¯ç§’ï¼Œçº¿ç¨‹æ•°=" << threadNum << endl;
-  cout << "æŒ‰ä»»æ„é”®é€€å‡º...";
+  cout << "×ÜËÑË÷¾ÖÊı" << searchN << "£¬ÓÃÊ±" << timeUsedMs << "ms£¬Æ½¾ùËÙ¶È" << speed << "¾ÖÃ¿Ãë£¬Ïß³ÌÊı=" << threadNum << endl;
+  cout << "°´ÈÎÒâ¼üÍË³ö...";
   cin.get();
 }

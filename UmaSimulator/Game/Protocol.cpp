@@ -47,7 +47,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     normalCardCount = 5;    // 默认值
     saihou = 0; // 默认值
     // todo: 马娘，支援卡
-    copy(resp.cardJiBan.begin(), resp.cardJiBan.end(), cardJiBan);
+    //copy(resp.cardJiBan.begin(), resp.cardJiBan.end(), cardJiBan);
     // 小黑板的训练等级要除以3
     for (int i = 0; i < 5; ++i)
         trainLevelCount[i] = resp.trainLevelCount[i] / 3;

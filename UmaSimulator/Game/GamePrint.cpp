@@ -197,7 +197,7 @@ void Game::print() const
 
     int totalCharge = 0;
     for (int i = 0; i < 15; i++)
-      totalCharge += (persons[i].larc_level) * 3 + persons[i].larc_charge; // larc_level是从0开始的不需要-1
+      totalCharge += (persons[i].larc_level - 1) * 3 + persons[i].larc_charge; // larc_level是从1开始的需要-1，如果和小黑板不一致请修改小黑板
     cout << "总格数:\033[1;36m" << totalCharge << "\033[0m   "
       << "总SS胜数:\033[1;36m" << larc_ssWin << "\033[0m   "
       << "距离上次SSS的胜数:\033[1;36m" << larc_ssWinSinceLastSSS << "\033[0m" << endl;

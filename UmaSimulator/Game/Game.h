@@ -26,8 +26,6 @@ struct Game
   int16_t skillScore;//已买技能的分数
   int16_t motivation;//干劲，从1到5分别是绝不调到绝好调
   bool isPositiveThinking;//ポジティブ思考，友人第三段出行选上的buff，可以防一次掉心情
-  //int cardId[6];//6张卡的id
-  int cardJiBan[8];//羁绊，六张卡分别012345，理事长6，记者7
   int16_t trainLevelCount[5];//五个训练的等级的计数，实际训练等级=min(5,t/4+1)
   int16_t zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
   int16_t zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
