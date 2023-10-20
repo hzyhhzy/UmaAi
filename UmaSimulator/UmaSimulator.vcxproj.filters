@@ -203,5 +203,8 @@
     <ClInclude Include="Game\Action.h">
       <Filter>头文件\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Protocol.h">
+      <Filter>头文件\Game</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -21,6 +21,7 @@ _TEXT_SKILL_NAME = 47
 _TEXT_SKILL_DESCRIPTION = 48
 _TEXT_CARD_NAME = 4
 _TEXT_SUPPORT_CARD_NAME = 75
+_TEXT_SUPPORT_CARD_UNIQUE_DESCIPTION = 155
 
 @dataclass
 class _TextData:
@@ -412,13 +413,15 @@ class Umadb:
             unique_effect_dict[effect.id] = effect
         ret = []
         name_dict = text_dict[_TEXT_SUPPORT_CARD_NAME]
+        unique_effect_desc_dict = text_dict[_TEXT_SUPPORT_CARD_UNIQUE_DESCIPTION]
         for card in support_card_data:
             name = name_dict[card.id]
+            unique_effect_desc = unique_effect_desc_dict.get(card.id, "")
             rarity = SupportCardRarity(card.rarity)
             type = self._get_support_card_type(card)
             effect_row_dict = self._get_effect_row_dict(effect_dict.get(card.id))
             unique_effect = self._get_unique_effect_row(unique_effect_dict.get(card.id))     
-            support_card = SupportCard(str(card.id), name, rarity, type,
+            support_card = SupportCard(str(card.id), card.chara_id, name, unique_effect_desc,rarity, type,
                                        train_skill_list=hint_skill_dict[card.id],
                                        unique_effect=unique_effect,effect_row_dict=effect_row_dict)
             ret.append(support_card)

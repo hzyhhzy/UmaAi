@@ -27,7 +27,7 @@ struct Game
   int16_t motivation;//干劲，从1到5分别是绝不调到绝好调
   bool isPositiveThinking;//ポジティブ思考，友人第三段出行选上的buff，可以防一次掉心情
   //int cardId[6];//6张卡的id
-  //int cardJiBan[8];//羁绊，六张卡分别012345，理事长6，记者7
+  int cardJiBan[8];//羁绊，六张卡分别012345，理事长6，记者7
   int16_t trainLevelCount[5];//五个训练的等级的计数，实际训练等级=min(5,t/4+1)
   int16_t zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
   int16_t zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
@@ -39,7 +39,6 @@ struct Game
   bool isRacing;//这个回合是否在比赛
 
   int motivationDropCount;//掉过几次心情了，不包括剧本事件（已知同一个掉心情不会出现多次，一共3个掉心情事件，所以之前掉过越多，之后掉的概率越低）
-
 
   //凯旋门相关
 
@@ -62,9 +61,6 @@ struct Game
   bool larc_zuoyueOutgoingRefused;//是否拒绝了佐岳外出
   int16_t larc_zuoyueOutgoingUsed;//佐岳外出走了几段了
 
-
-
-
   //当前回合的训练信息
   //0支援卡还未分配，1支援卡分配完毕或比赛开始前，2训练结束后或比赛结束后，0检查各种固定事件与随机事件并进入下一个回合
   //stageInTurn=0时可以输入神经网络输出估值，stageInTurn=1时可以输入神经网络输出policy
@@ -86,9 +82,6 @@ struct Game
   //int16_t larc_ssSpecialEffects[13];//ss的特殊buff
   //int16_t larc_ssSupportPtGain;//ss的支援pt总共加多少（自己+其他人头）
   int16_t larc_ssFailRate;//ss的失败率
-
-
-
 
   //游戏流程:
   //newGame();

@@ -1,4 +1,4 @@
-//²âÊÔÑµÁ·ÊôĞÔÖµËã·¨
+//æµ‹è¯•è®­ç»ƒå±æ€§å€¼ç®—æ³•
 #include <iostream>
 #include <random>
 #include <sstream>
@@ -19,21 +19,19 @@ const bool handWrittenEvaluationTest = true;
 const int threadNum = 12;
 const int threadNumInner = 1;
 const double targetScore = 0;
-//const double radicalFactor = 3;//¼¤½ø¶È
+//const double radicalFactor = 3;//æ¿€è¿›åº¦
 const int searchN = handWrittenEvaluationTest ? 1 : 2048;
 const bool recordGame = false;
-
 
 const int totalGames = handWrittenEvaluationTest ? 1000000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
 
-
-int umaId = 108401;//¹ÈË®£¬30Á¦¼Ó³É
+int umaId = 108401;//è°·æ°´ï¼Œ30åŠ›åŠ æˆ
 int umaStars = 5;
-int cards[6] = { 301604,301344,301614,300194,300114,301074 };//ÓÑÈË£¬¸ß·å£¬ÉñÓ¥£¬ÎÚÀ­À­£¬·çÉñ£¬Ë¾»ú
+int cards[6] = { 301604,301344,301614,300194,300114,301074 };//å‹äººï¼Œé«˜å³°ï¼Œç¥é¹°ï¼Œä¹Œæ‹‰æ‹‰ï¼Œé£ç¥ï¼Œå¸æœº
 int zhongmaBlue[5] = { 18,0,0,0,0 };
 int zhongmaBonus[6] = { 20,0,40,0,20,150 };
-bool allowedDebuffs[9] = { false, false, false, false, true, false, false, false, false };//µÚ¶şÄê¿ÉÒÔ²»ÏûµÚ¼¸¸ödebuff¡£µÚÎå¸öÊÇÖÇÁ¦£¬µÚÆß¸öÊÇÇ¿ĞÄÔà
+bool allowedDebuffs[9] = { false, false, false, false, true, false, false, false, false };//ç¬¬äºŒå¹´å¯ä»¥ä¸æ¶ˆç¬¬å‡ ä¸ªdebuffã€‚ç¬¬äº”ä¸ªæ˜¯æ™ºåŠ›ï¼Œç¬¬ä¸ƒä¸ªæ˜¯å¼ºå¿ƒè„
 
 
 std::atomic<double> totalScore = 0;
@@ -41,7 +39,7 @@ std::atomic<double> totalScoreSqr = 0;
 
 std::atomic<int> bestScore = 0;
 std::atomic<int> n = 0;
-vector<atomic<int>> segmentStats= vector<atomic<int>>(700);//100·ÖÒ»¶Î£¬700¶Î
+vector<atomic<int>> segmentStats= vector<atomic<int>>(700);//100åˆ†ä¸€æ®µï¼Œ700æ®µ
 
 
 void worker()
@@ -57,7 +55,6 @@ void worker()
 
   for (int gamenum = 0; gamenum < gamesEveryThread; gamenum++)
   {
-
     Game game;
     game.newGame(rand, false, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
     for (int i = 0; i < 9; i++)
@@ -72,11 +69,12 @@ void worker()
         action = Evaluator::handWrittenStrategy(game);
       }
       else {
+
         action = search.runSearch(game, searchN, TOTAL_TURN, targetScore, rand);
       }
       game.applyTrainingAndNextTurn(rand, action);
     }
-    //cout << termcolor::red << "Óı³É½áÊø£¡" << termcolor::reset << endl;
+    //cout << termcolor::red << "è‚²æˆç»“æŸï¼" << termcolor::reset << endl;
     int score = game.finalScore();
     if (score > 39200)
     {
@@ -100,9 +98,9 @@ void worker()
 
     int bestScoreOld = bestScore;
     while (score > bestScoreOld && !bestScore.compare_exchange_weak(bestScoreOld, score)) {
-      // Èç¹ûval´óÓÚold_max£¬²¢ÇÒmax_valµÄÖµ»¹ÊÇold_max£¬ÄÇÃ´¾Í½«max_valµÄÖµ¸üĞÂÎªval
-      // Èç¹ûmax_valµÄÖµÒÑ¾­±»ÆäËûÏß³Ì¸üĞÂ£¬ÄÇÃ´¾Í²»×öÈÎºÎÊÂÇé£¬²¢ÇÒold_max»á±»ÉèÖÃÎªmax_valµÄĞÂÖµ
-      // È»ºóÎÒÃÇÔÙ´Î½øĞĞ±È½ÏºÍ½»»»²Ù×÷£¬Ö±µ½³É¹¦ÎªÖ¹
+      // å¦‚æœvalå¤§äºold_maxï¼Œå¹¶ä¸”max_valçš„å€¼è¿˜æ˜¯old_maxï¼Œé‚£ä¹ˆå°±å°†max_valçš„å€¼æ›´æ–°ä¸ºval
+      // å¦‚æœmax_valçš„å€¼å·²ç»è¢«å…¶ä»–çº¿ç¨‹æ›´æ–°ï¼Œé‚£ä¹ˆå°±ä¸åšä»»ä½•äº‹æƒ…ï¼Œå¹¶ä¸”old_maxä¼šè¢«è®¾ç½®ä¸ºmax_valçš„æ–°å€¼
+      // ç„¶åæˆ‘ä»¬å†æ¬¡è¿›è¡Œæ¯”è¾ƒå’Œäº¤æ¢æ“ä½œï¼Œç›´åˆ°æˆåŠŸä¸ºæ­¢
     }
 
 
@@ -111,22 +109,29 @@ void worker()
     {
       if(!handWrittenEvaluationTest)
         game.printFinalStats();
-      cout << n << "¾Ö£¬ËÑË÷Á¿=" << searchN << "£¬Æ½¾ù·Ö" << totalScore / n << "£¬±ê×¼²î" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "£¬×î¸ß·Ö" << bestScore << endl;
-      cout
-        << "UE7¸ÅÂÊ=" << float(segmentStats[327]) / n << ","
-        << "UE8¸ÅÂÊ=" << float(segmentStats[332]) / n << ","
-        << "UE9¸ÅÂÊ=" << float(segmentStats[338]) / n << ","
-        << "UD0¸ÅÂÊ=" << float(segmentStats[344]) / n << ","
-        << "UD1¸ÅÂÊ=" << float(segmentStats[350]) / n << ","
-        << "UD2¸ÅÂÊ=" << float(segmentStats[356]) / n << ","
-        << "UD3¸ÅÂÊ=" << float(segmentStats[362]) / n << ","
-        << "UD4¸ÅÂÊ=" << float(segmentStats[368]) / n << ","
-        << "UD5¸ÅÂÊ=" << float(segmentStats[375]) / n << ","
-        << "UD6¸ÅÂÊ=" << float(segmentStats[381]) / n << ","
-        << "UD7¸ÅÂÊ=" << float(segmentStats[387]) / n << ","
-        << "UD8¸ÅÂÊ=" << float(segmentStats[394]) / n << ","
-        << "UD9¸ÅÂÊ=" << float(segmentStats[400]) / n << ","
-        << "UC0¸ÅÂÊ=" << float(segmentStats[407]) / n << endl;
+      cout << n << "å±€ï¼Œæœç´¢é‡=" << searchN << "ï¼Œå¹³å‡åˆ†" << totalScore / n << "ï¼Œæ ‡å‡†å·®" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "ï¼Œæœ€é«˜åˆ†" << bestScore << endl;
+      for (int i=0; i<400; ++i)
+          cout << i*100 << ",";
+      cout << endl;
+      for (int i=0; i<400; ++i)
+          cout << float(segmentStats[i]) / n << ",";
+      cout << endl;
+/*      cout
+        << "UE7æ¦‚ç‡=" << float(segmentStats[327]) / n << ","
+        << "UE8æ¦‚ç‡=" << float(segmentStats[332]) / n << ","
+        << "UE9æ¦‚ç‡=" << float(segmentStats[338]) / n << ","
+        << "UD0æ¦‚ç‡=" << float(segmentStats[344]) / n << ","
+        << "UD1æ¦‚ç‡=" << float(segmentStats[350]) / n << ","
+        << "UD2æ¦‚ç‡=" << float(segmentStats[356]) / n << ","
+        << "UD3æ¦‚ç‡=" << float(segmentStats[362]) / n << ","
+        << "UD4æ¦‚ç‡=" << float(segmentStats[368]) / n << ","
+        << "UD5æ¦‚ç‡=" << float(segmentStats[375]) / n << ","
+        << "UD6æ¦‚ç‡=" << float(segmentStats[381]) / n << ","
+        << "UD7æ¦‚ç‡=" << float(segmentStats[387]) / n << ","
+        << "UD8æ¦‚ç‡=" << float(segmentStats[394]) / n << ","
+        << "UD9æ¦‚ç‡=" << float(segmentStats[400]) / n << ","
+        << "UC0æ¦‚ç‡=" << float(segmentStats[407]) / n << endl;
+        */
     }
   }
 
@@ -136,7 +141,7 @@ void main_testAiScore()
 {
 
 
-    // ¼ì²é¹¤×÷Ä¿Â¼
+    // æ£€æŸ¥å·¥ä½œç›®å½•
     GameDatabase::loadUmas("../db/uma");
     GameDatabase::loadCards("../db/card");
     GameDatabase::loadDBCards("../db/cardDB.json");
@@ -153,6 +158,6 @@ void main_testAiScore()
     thread.join();
   }
 
-  cout << n << "¾Ö£¬ËÑË÷Á¿=" << searchN << "£¬Æ½¾ù·Ö" << totalScore / n << "£¬±ê×¼²î" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "£¬×î¸ß·Ö" << bestScore << endl;
+  cout << n << "å±€ï¼Œæœç´¢é‡=" << searchN << "ï¼Œå¹³å‡åˆ†" << totalScore / n << "ï¼Œæ ‡å‡†å·®" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "ï¼Œæœ€é«˜åˆ†" << bestScore << endl;
 
 }

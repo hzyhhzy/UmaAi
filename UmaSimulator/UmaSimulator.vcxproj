@@ -71,6 +71,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -174,6 +180,7 @@
     <ClInclude Include="Game\Action.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Person.h" />
+    <ClInclude Include="Game\Protocol.h" />
     <ClInclude Include="MainCommands\MainCommands.h" />
     <ClInclude Include="NeuralNet\Evaluator.h" />
     <ClInclude Include="NeuralNet\Model.h" />

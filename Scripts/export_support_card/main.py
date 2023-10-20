@@ -65,13 +65,11 @@ for card in card_list:
     # 转换成UmaSim格式
     ucard = dict(
         cardId = int(trans_card.id),
+        charaId = trans_card.chara_id,
         cardName = trans_card.name,
         fullName = trans_card.original_name,
         rarity = trans_card.rarity.value,
-        cardSkill = dict(
-            skillList = list(map(lambda x: int(x), trans_card.train_skill_list)),
-            skillNum = len(trans_card.train_skill_list)
-        ),
+        cardSkill = list(map(lambda x: int(x), trans_card.train_skill_list)),
         cardType = trans_card.type.value - 1, # 从0开始
         cardValue = [],
         uniqueEffect = trans_card.unique_effect
@@ -91,7 +89,7 @@ for card in card_list:
             elif 'ボーナス' in key:
                 d['bonus'][BonusKeys[key]] = value[i]
         ucard["cardValue"].append(d)
-    result[trans_card.id] = ucard
+    result[int(trans_card.id)] = ucard
 
 with codecs.open('card/cardDB.json', 'w', encoding='utf-8') as f:
     f.write(jsons.dumps(result, jdkwargs=dict(ensure_ascii=False, indent=2)))

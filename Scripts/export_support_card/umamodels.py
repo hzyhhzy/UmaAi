@@ -48,7 +48,7 @@ class SkillType(Enum):
     TargetLane = 35
     ActivateRandomNormalAndRareSkill = 36
     ActivateRandomRareSkill = 37
-    NOUSE_17 = 38
+    DebuffCancel = 38
     NOUSE_18 = 39
     ChallengeMatchBonus_Old = 501
     ChallengeMatchBonusStatus = 502
@@ -75,6 +75,10 @@ class SkillValueType(Enum):
     AddDistanceDiffTop = 19
     MultiplyBlockedSideMaxContinueTimePhaseMiddleRun1 = 20
     MultiplyBlockedSideMaxContinueTimePhaseMiddleRun2 = 21
+    MultiplySpeed1 = 22
+    MultiplySpeed2 = 23
+    MultiplyArcGlobalPotentialLevel = 24
+    MultiplyTopLeadAmount = 25
 
 class SkillTimeType(Enum):
     UNKNOWN = 0
@@ -93,7 +97,7 @@ class SkillRarity(Enum):
     Unique = 3
     Upgrade = 4
 
-class SupportCardEffectType(IntEnum):
+class SupportCardEffectType(Enum):
     NONE = 0
     SpecialTagEffectUp = 1
     MotivationUp = 2
@@ -199,7 +203,9 @@ class SupportCardEffect:
 @dataclass
 class SupportCard:
     id: str
+    chara_id: str
     name: str
+    unique_effect_description:str
     rarity:SupportCardRarity
     type:SupportCardType
     event_skill_list:list[str] = None

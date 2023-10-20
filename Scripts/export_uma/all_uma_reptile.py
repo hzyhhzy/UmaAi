@@ -7,9 +7,6 @@ import json
 with open('example.json', 'r') as file:
     example_json = json.load(file)
 
-
-
-
 # 从文件中读取文本
 with open('links.txt', 'r', encoding='utf-8') as file:
     text = file.read()
@@ -20,7 +17,7 @@ names = re.findall(r'/umamusume/characters/(\d+-[a-z-]+)', text)
 #print(names)
 urls=["https://gametora.com/umamusume/characters/"+i for i in names]
 
-
+pool = {}
 
 for URL in urls:
     nameid=URL[42:]
@@ -83,9 +80,16 @@ for URL in urls:
     umadata["gameId"]=umaid
     umadata["name"]=name
     umadata["races"]=all_races
+    pool[umaid] = umadata
 
-    with open('uma/'+nameid+".json", 'w') as file:
-        json.dump(umadata, file, indent=4)
+#    with open('uma/'+nameid+".json", 'w') as file:
+#        json.dump(umadata, file, indent=4)
 
-    #print(URL,umadata["fiveStatusBonus"])
+sortedPool = dict(sorted(pool.items(), key=lambda x: int(x[0])))
+
+with open('umaDB.json', 'w') as file:
+    json.dump(sortedPool, file, indent=2)
+
+
+        #print(URL,umadata["fiveStatusBonus"])
         # Extracting character URLs

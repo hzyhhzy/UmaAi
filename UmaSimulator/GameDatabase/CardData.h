@@ -13,38 +13,38 @@ class Game;
 
 struct SkillList {
 	int skillNum;
-	std::vector<int> skillIdList; // ¿¨Æ¬ÓµÓÐµÄ¼¼ÄÜ±àºÅ
+	std::vector<int> skillIdList; // ï¿½ï¿½Æ¬Óµï¿½ÐµÄ¼ï¿½ï¿½Ü±ï¿½ï¿½
 };
 struct SupportCard
 {
-	int cardID;//Ö§Ô®¿¨id£¬²¿·Ö¿¨¾ßÓÐ±È½Ï¸´ÔÓµÄ¹ÌÓÐ£¬¸ù¾ÝidÀ´±æ±ð
-	int cardType;//Ö§Ô®¿¨ÀàÐÍ£¬0ËÙ1ÄÍ2Á¦3¸ù4ÖÇ5ÍÅ¶Ó6ÓÑÈË
-	std::string cardName; //¿¨Æ¬Ãû³Æ
+	int cardID;//Ö§Ô®ï¿½ï¿½idï¿½ï¿½ï¿½ï¿½ï¿½Ö¿ï¿½ï¿½ï¿½ï¿½Ð±È½Ï¸ï¿½ï¿½ÓµÄ¹ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½idï¿½ï¿½ï¿½ï¿½ï¿½
+	int cardType;//Ö§Ô®ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½0ï¿½ï¿½1ï¿½ï¿½2ï¿½ï¿½3ï¿½ï¿½4ï¿½ï¿½5ï¿½Å¶ï¿½6ï¿½ï¿½ï¿½ï¿½
+	std::string cardName; //ï¿½ï¿½Æ¬ï¿½ï¿½ï¿½ï¿½
 
 	bool filled;
-	double youQingBasic;//ÓÑÇé¼Ó³É
-	double ganJingBasic;//¸É¾¢¼Ó³É
-	double xunLianBasic;//ÑµÁ·¼Ó³É
-	double bonusBasic[6];//ËÙÄÍÁ¦¸ùÖÇptµÄ¼Ó³É
-	int wizVitalBonusBasic;//ÖÇÁ¦²ÊÈ¦ÌåÁ¦»Ø¸´Á¿
-	int initialBonus[6];//³õÆÚËÙÄÍÁ¦¸ùÖÇptµÄÌáÉý
-	int initialJiBan;//³õÊ¼î¿°í
-	double saiHou;//Èüºó
-	int hintBonus[6];//ÎªÁË¼ò»¯£¬°ÑºìµãµÄ¼¼ÄÜµÈÐ§³É¶àÉÙÊôÐÔ¡£×ÛºÏ¿¼ÂÇ¼¼ÄÜÓÐÐ§ÂÊ£¨ÀýÈç¸ß·å90%ÓÐÐ§£¬³ýÁË¼¯ÖÐÁ¦£©£¬Æ½¾ùÐÔ¼Û±ÈÓëÕÛ¿Û£¬ÖÖÂíÖØ¸´¸ø¼¼ÄÜ£¨¼ÙÉè30%£©
-	double hintProbIncrease;//Æô·¢·¢ÉúÂÊÌáÉý
-	double deYiLv;//µÃÒâÂÊ
-	double failRateDrop; //Ê§°ÜÂÊ½µµÍ
-	double vitalCostDrop; //ÌåÁ¦Ïû·ÑÏÂ½µ
-	// ·½±ãµ÷ÓÃ£¬¸ù¾Ý¿¨Æ¬µÄµÈ¼¶ÔÚÓÎÏ·³õÊ¼½×¶Î¸³Öµ
+	double youQingBasic;//ï¿½ï¿½ï¿½ï¿½Ó³ï¿½
+	double ganJingBasic;//ï¿½É¾ï¿½ï¿½Ó³ï¿½
+	double xunLianBasic;//Ñµï¿½ï¿½ï¿½Ó³ï¿½
+	double bonusBasic[6];//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ptï¿½Ä¼Ó³ï¿½
+	int wizVitalBonusBasic;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¦ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½
+	int initialBonus[6];//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ptï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	int initialJiBan;//ï¿½ï¿½Ê¼î¿°ï¿½
+	double saiHou;//ï¿½ï¿½ï¿½ï¿½
+	int hintBonus[6];//Îªï¿½Ë¼ò»¯£ï¿½ï¿½Ñºï¿½ï¿½Ä¼ï¿½ï¿½Üµï¿½Ð§ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¡ï¿½ï¿½ÛºÏ¿ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ß·ï¿½90%ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½Ë¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½ï¿½Ô¼Û±ï¿½ï¿½ï¿½ï¿½Û¿Û£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½30%ï¿½ï¿½
+	double hintProbIncrease;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	double deYiLv;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	double failRateDrop; //Ê§ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½
+	double vitalCostDrop; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½Æ¬ï¿½ÄµÈ¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½Ê¼ï¿½×¶Î¸ï¿½Öµ
 
-	bool larc_isLink;//ÊÇ·ñÎªlink¿¨
-	int larc_linkSpecialEffect;//linkÐ§¹û
+	bool larc_isLink;//ï¿½Ç·ï¿½Îªlinkï¿½ï¿½
+	int larc_linkSpecialEffect;//linkÐ§ï¿½ï¿½
 
 	SkillList cardSkill;
-	//¿¨Æ¬ÓµÓÐµÄ¼¼ÄÜÁÐ±í
+	//ï¿½ï¿½Æ¬Óµï¿½ÐµÄ¼ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 	
 	//std::string uniqueText;
-	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effectFactor) const;//¸ù¾ÝÓÎÏ·×´Ì¬¼ÆËãÖ§Ô®¿¨µÄ¡°¹ÌÓÐ¡±
+	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effectFactor) const;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·×´Ì¬ï¿½ï¿½ï¿½ï¿½Ö§Ô®ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½
 
 
 	void write_to_json(json& j,const std::string cdname,const int id)

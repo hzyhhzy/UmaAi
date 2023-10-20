@@ -349,19 +349,20 @@ void Game::calculateTrainingValue()
   if (larc_trainBonusLevel > 40)larc_trainBonusLevel = 40;
   larc_trainBonus = GameConstants::LArcTrainBonusEvery5Percent[larc_trainBonusLevel];
 
-
-
   for (int i = 0; i < 6; i++)
   {
     persons[i].isShining = false;
   }
-
+  
+  // TODO: 卡组同步之前以下方法无法执行
   for (int trainType = 0; trainType < 5; trainType++)
   {
     calculateTrainingValueSingle(trainType);
   }
+
   if(!larc_isAbroad)
     calculateSS();
+      
 }
 void Game::addStatus(int idx, int value)
 {
