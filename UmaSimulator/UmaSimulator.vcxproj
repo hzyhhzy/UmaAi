@@ -171,7 +171,6 @@
     <ClInclude Include="External\rang.hpp" />
     <ClInclude Include="External\termcolor.hpp" />
     <ClInclude Include="External\utils.h" />
-    <ClInclude Include="GameDatabase\CardData.h" />
     <ClInclude Include="GameDatabase\GameConfig.h" />
     <ClInclude Include="GameDatabase\GameConstants.h" />
     <ClInclude Include="GameDatabase\GameDatabase.h" />

@@ -30,7 +30,7 @@ public:
   // 2.对于evaluateSingleAction，把eachSamplingNum局游戏拆成threadNumInGame组，每组一个线程(Evaluator)。每个线程分成eachSamplingNum/(threadNumInGame*batchsize)小组，每小组batchsize局游戏，依次计算每个小组的分数，都计算完毕之后整合起来
   // 3.如果要跑很多局（例如跑谱），会同时跑threadGame局，总线程数为threadGame*threadNumInGame。若eachSamplingNum较小batchsize较大，可以让threadNumInGame=1
   // 嵌套结构：Search(threadGame个)->Evaluator(threadGame*threadNumInGame个)->Model(1个)
-  Search() {}
+  
   Search(Model* model, int batchSize, int threadNumInGame);
 
 
@@ -60,7 +60,5 @@ public:
   //根据搜索结果选出最佳选择，policy也做一定的软化
   //mode=0是根据胜率，=1是根据平均分
   ModelOutputPolicyV1 extractPolicyFromSearchResults(int mode, float delta = 0);
-
-  static void runOneTurnUsingPolicy(std::mt19937_64& rand, Game& game, const ModelOutputPolicyV1& policy, bool distributeCards);
 
 };

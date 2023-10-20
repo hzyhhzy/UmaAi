@@ -2,7 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include "UmaData.h"
-#include "CardData.h"
+#include "../SupportCard/SupportCard.h"
 #include "SkillData.h"
 
 class GameDatabase

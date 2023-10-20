@@ -290,32 +290,3 @@ ModelOutputPolicyV1 Search::extractPolicyFromSearchResults(int mode, float delta
 
   return policy;
 }
-
-void Search::runOneTurnUsingPolicy(std::mt19937_64& rand, Game& game, const ModelOutputPolicyV1& policy, bool distributeCards)
-{
-  if (game.isEnd())return;
-  bool useVenus = false;
-  int chosenSpiritColor = -1;
-  int chosenTrain = -1;
-  int chosenOutgoing = -1;
-
-  //auto policy = Evaluator::handWrittenPolicy(game);
-  {
-    float bestPolicy = 0.001;
-    for (int i = 0; i < 8; i++)
-    {
-      float p = policy.trainingPolicy[i];
-      if (p > bestPolicy)
-      {
-        chosenTrain = i;
-        bestPolicy = p;
-      }
-    }
-  }
-  Action action;
-  if(distributeCards)
-    game.applyTrainingAndNextTurn(rand, action);
-  else
-    game.applyTraining(rand, action);
-
-}
