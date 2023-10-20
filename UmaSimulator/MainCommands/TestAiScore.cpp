@@ -16,11 +16,11 @@
 using namespace std;
 
 const bool handWrittenEvaluationTest = true;
-const int threadNum = 8;
+const int threadNum = 12;
 const int threadNumInner = 1;
 const double targetScore = 0;
 //const double radicalFactor = 3;//¼¤½ø¶È
-const int searchN = handWrittenEvaluationTest ? 1 : 1024;
+const int searchN = handWrittenEvaluationTest ? 1 : 2048;
 const bool recordGame = false;
 
 

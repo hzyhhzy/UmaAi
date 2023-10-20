@@ -444,7 +444,10 @@ void Game::runSS(std::mt19937_64& rand)
       }
       else if (buff == 11)//属性
       {
-        addAllStatus(2);//随机一个属性+10，为了方便直接平摊
+        if(p.larc_isLinkCard)
+          addAllStatus(3);//随机一个属性+15，为了方便直接平摊
+        else
+          addAllStatus(2);//随机一个属性+10，为了方便直接平摊
       }
       else if (buff == 12)//技能点
       {
@@ -622,6 +625,7 @@ bool Game::tryRemoveDebuffsFirstN(int n)
       assert(suc);
     }
   }
+  return true;
 
 }
 void Game::addAllStatus(int value)
@@ -1018,13 +1022,13 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
       printEvents("前13回合和远征中无法比赛");
       return false;
     }
+    addAllStatus(1);//武者振
     runRace(2, 40);//粗略的近似
 
-    //随机扣体
-    if (rand() % 2)
-      addVital(-15);
-    else
-      addVital(-5);
+    //扣体固定15
+    addVital(-15);
+    if (rand() % 10 == 0)
+      addMotivation(1);
 
     //随机给两个头充电
     for (int i = 0; i < 2; i++)
