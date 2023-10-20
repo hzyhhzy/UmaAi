@@ -13,43 +13,43 @@ class Game;
 
 struct SkillList {
 	int skillNum;
-	std::vector<int> skillIdList; // ��Ƭӵ�еļ��ܱ��
+	std::vector<int> skillIdList; // 卡片拥有的技能编号
 };
 struct SupportCard
 {
-	int cardID;//֧Ԯ��id�����ֿ����бȽϸ��ӵĹ��У�����id�����
-	int cardType;//֧Ԯ�����ͣ�0��1��2��3��4��5�Ŷ�6����
-	std::string cardName; //��Ƭ����
+	int cardID;//支援卡id，部分卡具有比较复杂的固有，根据id来辨别
+	int cardType;//支援卡类型，0速1耐2力3根4智5团队6友人
+	std::string cardName; //卡片名称
 
 	bool filled;
-	double youQingBasic;//����ӳ�
-	double ganJingBasic;//�ɾ��ӳ�
-	double xunLianBasic;//ѵ���ӳ�
-	double bonusBasic[6];//����������pt�ļӳ�
-	int wizVitalBonusBasic;//������Ȧ�����ظ���
-	int initialBonus[6];//��������������pt������
-	int initialJiBan;//��ʼ�
-	double saiHou;//����
-	int hintBonus[6];//Ϊ�˼򻯣��Ѻ��ļ��ܵ�Ч�ɶ������ԡ��ۺϿ��Ǽ�����Ч�ʣ�����߷�90%��Ч�����˼���������ƽ���Լ۱����ۿۣ������ظ������ܣ�����30%��
-	double hintProbIncrease;//��������������
-	double deYiLv;//������
-	double failRateDrop; //ʧ���ʽ���
-	double vitalCostDrop; //���������½�
-	// ������ã����ݿ�Ƭ�ĵȼ�����Ϸ��ʼ�׶θ�ֵ
+	double youQingBasic;//友情加成
+	double ganJingBasic;//干劲加成
+	double xunLianBasic;//训练加成
+	double bonusBasic[6];//速耐力根智pt的加成
+	int wizVitalBonusBasic;//智力彩圈体力回复量
+	int initialBonus[6];//初期速耐力根智pt的提升
+	int initialJiBan;//初始羁绊
+	double saiHou;//赛后
+	int hintBonus[6];//为了简化，把红点的技能等效成多少属性。综合考虑技能有效率（例如高峰90%有效，除了集中力），平均性价比与折扣，种马重复给技能（假设30%）
+	double hintProbIncrease;//启发发生率提升
+	double deYiLv;//得意率
+	double failRateDrop; //失败率降低
+	double vitalCostDrop; //体力消费下降
+	// 方便调用，根据卡片的等级在游戏初始阶段赋值
 
-	bool larc_isLink;//�Ƿ�Ϊlink��
-	int larc_linkSpecialEffect;//linkЧ��
+	bool larc_isLink;//是否为link卡
+	int larc_linkSpecialEffect;//link效果
 
 	SkillList cardSkill;
-	//��Ƭӵ�еļ����б�
-	
+	//卡片拥有的技能列表
+
 	//std::string uniqueText;
-	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effectFactor) const;//������Ϸ״̬����֧Ԯ���ġ����С�
+	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effectFactor) const;//根据游戏状态计算支援卡的“固有”
 
 
-	void write_to_json(json& j,const std::string cdname,const int id)
+	void write_to_json(json& j, const std::string cdname, const int id)
 	{
-		j["cardId"] = id/10;
+		j["cardId"] = id / 10;
 		j["cardType"] = cardType;
 
 		j["cardName"] = string_To_UTF8(cdname);
@@ -82,7 +82,7 @@ struct SupportCard
 
 	}
 
-	void load_from_json(json& j,int x) {
+	void load_from_json(json& j, int x) {
 
 		j.at("cardId").get_to(cardID);
 		cardID = cardID * 10 + x;
