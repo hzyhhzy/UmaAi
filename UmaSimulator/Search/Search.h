@@ -17,6 +17,8 @@ public:
   //第一次远征尼尔赏前(36<=turn<=39)，allChoicesValue[0~3]有效，allChoicesValue[buy50 + 2*buyPt10][action.train]
   //第一次远征尼尔赏后(turn==41)，allChoicesValue[0~1]有效，allChoicesValue[buy50][action.train]，从这里开始买20%友情和10pt全自动
   //第二次远征(turn>=60)，allChoicesValue[0~3]有效，allChoicesValue[buy50 + 2*buyVital20][action.train]
+  static int buyBuffChoiceNum(int turn);//有几种可能的买buff的方式
+  static Action buyBuffAction(int idx, int turn);//四种买buff的方式
   ModelOutputValueV1 allChoicesValue[4][10];
 
   std::vector<ModelOutputValueV1> resultBuf;
@@ -33,14 +35,14 @@ public:
 
 
 
-  void runSearch(const Game& game, 
-    int samplingNum, int maxDepth, int targetScore);
+  Action runSearch(const Game& game, 
+    int samplingNum, int maxDepth, int targetScore,
+    std::mt19937_64& rand);
 
   //计算单个action的数值
   ModelOutputValueV1 evaluateSingleAction(
     const Game& game,
     int samplingNum, int maxDepth, int targetScore,
-
     std::mt19937_64& rand,
     Action action);
 

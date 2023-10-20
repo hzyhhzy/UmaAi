@@ -4,13 +4,13 @@
 #include "Model.h"
 #include "../Game/Game.h"
 
-//Ã¿¸öÏß³ÌÒ»¸öevaluator
-//ËùÓÐÏß³Ì¹²ÓÃÒ»¸ömodel
+//æ¯ä¸ªçº¿ç¨‹ä¸€ä¸ªevaluator
+//æ‰€æœ‰çº¿ç¨‹å…±ç”¨ä¸€ä¸ªmodel
 class Evaluator
 {
 public:
   Model* model;
-  //static lock;//ËùÓÐµÄevaluator¹²ÓÃÒ»¸ölock
+  //static lock;//æ‰€æœ‰çš„evaluatorå…±ç”¨ä¸€ä¸ªlock
   int maxBatchsize;
 
   std::vector<Game> gameInput;
@@ -23,10 +23,10 @@ public:
   std::vector<Action> actionResults;
 
 
-  //void evaluate(const Game* games, const float* targetScores, int mode, int gameNum);//¼ÆËãgamesÖÐgameNum¾ÖÓÎÏ·µÄÊä³ö¡£Èç¹ûÃ»ÓÐmodel£¬¾ÍÊ¹ÓÃÊÖÐ´Âß¼­¼ÆËãpolicy£¬µ«²»ÄÜ¼ÆËã·Ç½áÊø×´Ì¬µÄvalue
-  void evaluateSelf(int mode, float targetScore);//¼ÆËãgameInputµÄÊä³ö¡£Èç¹ûÃ»ÓÐmodel£¬¾ÍÊ¹ÓÃÊÖÐ´Âß¼­¼ÆËãpolicy£¬µ«²»ÄÜ¼ÆËã·Ç½áÊø×´Ì¬µÄvalue
+  //void evaluate(const Game* games, const float* targetScores, int mode, int gameNum);//è®¡ç®—gamesä¸­gameNumå±€æ¸¸æˆçš„è¾“å‡ºã€‚å¦‚æžœæ²¡æœ‰modelï¼Œå°±ä½¿ç”¨æ‰‹å†™é€»è¾‘è®¡ç®—policyï¼Œä½†ä¸èƒ½è®¡ç®—éžç»“æŸçŠ¶æ€çš„value
+  void evaluateSelf(int mode, float targetScore);//è®¡ç®—gameInputçš„è¾“å‡ºã€‚å¦‚æžœæ²¡æœ‰modelï¼Œå°±ä½¿ç”¨æ‰‹å†™é€»è¾‘è®¡ç®—policyï¼Œä½†ä¸èƒ½è®¡ç®—éžç»“æŸçŠ¶æ€çš„value
   
-  Evaluator() {}
+  Evaluator();
   Evaluator(Model* model, int maxBatchsize);
 
   static Action handWrittenStrategy(const Game& game);

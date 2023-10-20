@@ -1,6 +1,8 @@
 {
     "cardId": 30161,
     "cardName": "[速]神鹰",
+    "larc_isLink": true,
+    "larc_linkSpecialEffect": 9,
     "cardSkill": {
         "SkillList": 0,
         "skillNum": 0

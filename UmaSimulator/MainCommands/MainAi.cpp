@@ -40,20 +40,20 @@ void loadRole()
         {
             rpText[item.key()] = UTF8_To_string(item.value());
         }
-        cout << "µ±Ç°RP½ÇÉ«£º" << rpText["name"] << endl;
+        cout << "å½“å‰RPè§’è‰²ï¼š" << rpText["name"] << endl;
     }
     catch (...)
     {
-        cout << "¶ÁÈ¡ÅäÖÃĞÅÏ¢³ö´í£ºroleplay.json" << endl;
+        cout << "è¯»å–é…ç½®ä¿¡æ¯å‡ºé”™ï¼šroleplay.json" << endl;
     }
 }
 
 void print_luck(int luck)
 {
-    int u = 0;//ĞÂ°æÆ½¾ùÔËÆø´óÔ¼500£¬µ«ÎªÁËÕÕ¹ËÖÖÂí±È½ÏÒ»°ãºÍ¿¨Ã»ÂúÆÆµÄÈË£¨ÕâÁ½ÖÖÇé¿öai´ò·Ö»áÆ«¸ß£©£¬¾ÍÉè³É0ÁË
+    int u = 0;//æ–°ç‰ˆå¹³å‡è¿æ°”å¤§çº¦500ï¼Œä½†ä¸ºäº†ç…§é¡¾ç§é©¬æ¯”è¾ƒä¸€èˆ¬å’Œå¡æ²¡æ»¡ç ´çš„äººï¼ˆè¿™ä¸¤ç§æƒ…å†µaiæ‰“åˆ†ä¼šåé«˜ï¼‰ï¼Œå°±è®¾æˆ0äº†
     int sigma = 1200;
     string color = "";
-    if (luck > 20000) u = 28500;//ºÃµãµÄ¿¨Æ½¾ùÖµÔ¼Îªuf9
+    if (luck > 20000) u = 28500;//å¥½ç‚¹çš„å¡å¹³å‡å€¼çº¦ä¸ºuf9
 
     if (!GameConfig::noColor)
     {
@@ -71,27 +71,27 @@ void print_luck(int luck)
 
 void main_ai()
 {
-  //const double radicalFactor = 5;//¼¤½ø¶È
-  //const int threadNum = 16; //Ïß³ÌÊı
- // const int searchN = 12288; //Ã¿¸öÑ¡ÏîµÄÃÉÌØ¿¨ÂåÄ£ÄâµÄ¾ÖÊı
+  //const double radicalFactor = 5;//æ¿€è¿›åº¦
+  //const int threadNum = 16; //çº¿ç¨‹æ•°
+ // const int searchN = 12288; //æ¯ä¸ªé€‰é¡¹çš„è’™ç‰¹å¡æ´›æ¨¡æ‹Ÿçš„å±€æ•°
 
-  //¼¤½ø¶ÈÎªk£¬Ä£Äân¾ÖÊ±£¬±ê×¼²îÔ¼Îªsqrt(1+k^2/(2k+1))*1200/(sqrt(n))
-  //±ê×¼²î´óÓÚ30Ê±»áÑÏÖØÓ°ÏìÅĞ¶Ï×¼È·¶È
+  //æ¿€è¿›åº¦ä¸ºkï¼Œæ¨¡æ‹Ÿnå±€æ—¶ï¼Œæ ‡å‡†å·®çº¦ä¸ºsqrt(1+k^2/(2k+1))*1200/(sqrt(n))
+  //æ ‡å‡†å·®å¤§äº30æ—¶ä¼šä¸¥é‡å½±å“åˆ¤æ–­å‡†ç¡®åº¦
 
-  Search search;
+  Search search(NULL, 128, GameConfig::threadNum);
   vector<Evaluator> evaluators;
 
   int lastTurn = -1;
-  int scoreFirstTurn = 0;   // µÚÒ»»ØºÏ·ÖÊı
-  int scoreLastTurn = 0;   // ÉÏÒ»»ØºÏ·ÖÊı
+  int scoreFirstTurn = 0;   // ç¬¬ä¸€å›åˆåˆ†æ•°
+  int scoreLastTurn = 0;   // ä¸Šä¸€å›åˆåˆ†æ•°
 
-  // ¼ì²é¹¤×÷Ä¿Â¼
+  // æ£€æŸ¥å·¥ä½œç›®å½•
   wchar_t buf[10240];
   GetModuleFileNameW(0, buf, 10240);
   filesystem::path exeDir = filesystem::path(buf).parent_path();
   filesystem::current_path(exeDir);
-  //std::cout << "µ±Ç°¹¤×÷Ä¿Â¼£º" << filesystem::current_path() << endl;
-  cout << "µ±Ç°³ÌĞòÄ¿Â¼£º" << exeDir << endl;
+  //std::cout << "å½“å‰å·¥ä½œç›®å½•ï¼š" << filesystem::current_path() << endl;
+  cout << "å½“å‰ç¨‹åºç›®å½•ï¼š" << exeDir << endl;
   GameConfig::load("./aiConfig.json");
   GameDatabase::loadUmas("./db/uma");
   GameDatabase::loadCards("./db/card");
@@ -109,14 +109,14 @@ void main_ai()
   {
     while (!filesystem::exists(currentGameStagePath))
     {
-      std::cout << "ÕÒ²»µ½" + currentGameStagePath + "£¬¿ÉÄÜÊÇÓı³ÉÎ´¿ªÊ¼»òĞ¡ºÚ°åÎ´Õı³£¹¤×÷" << endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));//ÑÓ³Ù¼¸Ãë£¬±ÜÃâË¢ÆÁ
+      std::cout << "æ‰¾ä¸åˆ°" + currentGameStagePath + "ï¼Œå¯èƒ½æ˜¯è‚²æˆæœªå¼€å§‹æˆ–å°é»‘æ¿æœªæ­£å¸¸å·¥ä½œ" << endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(3000));//å»¶è¿Ÿå‡ ç§’ï¼Œé¿å…åˆ·å±
     }
     ifstream fs(currentGameStagePath);
     if (!fs.good())
     {
-      cout << "¶ÁÈ¡ÎÄ¼ş´íÎó" << endl;
-      std::this_thread::sleep_for(std::chrono::milliseconds(3000));//ÑÓ³Ù¼¸Ãë£¬±ÜÃâË¢ÆÁ
+      cout << "è¯»å–æ–‡ä»¶é”™è¯¯" << endl;
+      std::this_thread::sleep_for(std::chrono::milliseconds(3000));//å»¶è¿Ÿå‡ ç§’ï¼Œé¿å…åˆ·å±
       continue;
     }
     ostringstream tmp;
@@ -128,13 +128,13 @@ void main_ai()
     bool suc = game.loadGameFromJson(jsonStr);
     if (!suc)
     {
-      cout << "³öÏÖ´íÎó" << endl;
-      std::this_thread::sleep_for(std::chrono::milliseconds(3000));//ÑÓ³Ù¼¸Ãë£¬±ÜÃâË¢ÆÁ
+      cout << "å‡ºç°é”™è¯¯" << endl;
+      std::this_thread::sleep_for(std::chrono::milliseconds(3000));//å»¶è¿Ÿå‡ ç§’ï¼Œé¿å…åˆ·å±
       continue;
     }
     if (game.turn == lastTurn)
     {
-      std::this_thread::sleep_for(std::chrono::milliseconds(300));//¼ì²éÊÇ·ñÓĞ¸üĞÂ
+      std::this_thread::sleep_for(std::chrono::milliseconds(300));//æ£€æŸ¥æ˜¯å¦æœ‰æ›´æ–°
       continue;
     }
     lastTurn = game.turn;
@@ -145,7 +145,7 @@ void main_ai()
       continue;
     }
     */
-    if (game.turn == 0)//µÚÒ»»ØºÏ£¬»òÕßÖØÆôaiµÄµÚÒ»»ØºÏ
+    if (game.turn == 0)//ç¬¬ä¸€å›åˆï¼Œæˆ–è€…é‡å¯aiçš„ç¬¬ä¸€å›åˆ
     {
       scoreFirstTurn = 0;
       scoreLastTurn = 0;
@@ -167,11 +167,9 @@ void main_ai()
       if (!GameConfig::noColor)cout << "\033[0m";
     };
     
-    //×îºó¼¸»ØºÏ½µµÍ¼¤½ø¶È
+    //æœ€åå‡ å›åˆé™ä½æ¿€è¿›åº¦
     double modifiedRadicalFactor = GameConfig::radicalFactor * (1 - exp(-double(TOTAL_TURN - game.turn) / 10.0));
-    
-    //search.runSearch(game, evaluators.data(), GameConfig::searchN, TOTAL_TURN, 0, GameConfig::threadNum, modifiedRadicalFactor);
-    search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0);
+    search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0); todo
     //cout << endl << rpText["finish"] << endl;
     cout << endl << rpText["analyze"] << " >>" << endl;
     {
@@ -179,17 +177,17 @@ void main_ai()
       if (!game.isRacing)
       {
 
-        cout << "ËÙÄÍÁ¦¸ùÖÇ£º";
+        cout << "é€Ÿè€åŠ›æ ¹æ™ºï¼š";
         for (int i = 0; i < 5; i++)
           printPolicy(policy.trainingPolicy[i]);
         cout << endl;
 
-        cout << "ĞİÏ¢£¬Íâ³ö£¬±ÈÈü£º";
+        cout << "ä¼‘æ¯ï¼Œå¤–å‡ºï¼Œæ¯”èµ›ï¼š";
         for (int i = 0; i < 3; i++)
           printPolicy(policy.trainingPolicy[5 + i]);
         cout << endl;
 
-        // Êä³öÔËÆø·Ö
+        // è¾“å‡ºè¿æ°”åˆ†
         float maxScore = -1e6;
         for (int i = 0; i < 2; i++)
         {
@@ -205,20 +203,20 @@ void main_ai()
         }
         else
         {
-            cout << rpText["luck"] << " | ±¾¾Ö£º";
+            cout << rpText["luck"] << " | æœ¬å±€ï¼š";
             print_luck(maxScore - scoreFirstTurn);
-            cout << " | ±¾»ØºÏ£º" << maxScore - scoreLastTurn
-                 << " | ÆÀ·ÖÔ¤²â: " << maxScore << endl;
+            cout << " | æœ¬å›åˆï¼š" << maxScore - scoreLastTurn
+                 << " | è¯„åˆ†é¢„æµ‹: " << maxScore << endl;
 
             double raceLoss = maxScore - max(search.allChoicesValue[0][7].scoreMean, search.allChoicesValue[1][7].scoreMean);
-            if (raceLoss < 5e5)//raceLoss´óÔ¼1e6Èç¹û²»ÄÜ±ÈÈü
-                cout << "±ÈÈü¿÷Ëğ£¨ÓÃÓÚÑ¡Ôñ±ÈÈü»ØºÏ£¬ÒÔÍê³É·ÛË¿ÊıÄ¿±ê£©£º" << raceLoss << endl;
+            if (raceLoss < 5e5)//raceLosså¤§çº¦1e6å¦‚æœä¸èƒ½æ¯”èµ›
+                cout << "æ¯”èµ›äºæŸï¼ˆç”¨äºé€‰æ‹©æ¯”èµ›å›åˆï¼Œä»¥å®Œæˆç²‰ä¸æ•°ç›®æ ‡ï¼‰ï¼š" << raceLoss << endl;
             cout << "----" << endl;
             cout.flush();
         }
         scoreLastTurn = maxScore;
 
-        // Êä³ö±¾»ØºÏ¾ö²ß
+        // è¾“å‡ºæœ¬å›åˆå†³ç­–
         cout << (GameConfig::noColor ? "" : "\033[1m\033[33m") << rpText["name"] << rpText["decision"] << ": "
              << (GameConfig::noColor ? "" : "\033[32m");
 
@@ -259,7 +257,7 @@ void main_ai()
       {
           cout << rpText["career"] << endl;
       }
-    } // Êä³ö½á¹ûBlock
+    } // è¾“å‡ºç»“æœBlock
 
   } // while
 

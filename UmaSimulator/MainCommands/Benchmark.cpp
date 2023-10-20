@@ -27,22 +27,20 @@ void main_benchmark()
   GameDatabase::loadCards("../db/card");
 
   const int threadNum = 1;
-  const double radicalFactor = 5;//¼¤½ø¶È
+  //const double radicalFactor = 5;//æ¿€è¿›åº¦
   const int searchN = 2048;
+  const double targetScore = 33000;
 
 
-  Search search;
-  vector<Evaluator> evaluators;
-  for (int i = 0; i < threadNum; i++)
-    evaluators.push_back(Evaluator(NULL, 128));
+  Search search(NULL,128,threadNum);
 
 
 
 
 
 
-  int umaId = 101101;//²ÝÉÏ·É
-  int cards[6] = { 301374,301344,300104,300194,300114,301074 };//ÉñÍÅ£¬¸ß·å£¬ÃÀÃî£¬ÎÚÀ­À­£¬·çÉñ£¬Ë¾»ú
+  int umaId = 101101;//è‰ä¸Šé£ž
+  int cards[6] = { 301374,301344,300104,300194,300114,301074 };//ç¥žå›¢ï¼Œé«˜å³°ï¼Œç¾Žå¦™ï¼Œä¹Œæ‹‰æ‹‰ï¼Œé£Žç¥žï¼Œå¸æœº
 
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,200 };
@@ -53,13 +51,12 @@ void main_benchmark()
   //game.print();
 
   const int64_t time0 = now_ms();
-  //search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNum, radicalFactor);
-  search.runSearch(game, searchN, TOTAL_TURN, 27000);
+  search.runSearch(game, searchN, TOTAL_TURN, targetScore, rand);
   const int64_t time1 = now_ms();
 
   int64_t timeUsedMs = time1 - time0;
   float speed = 1000 * searchN / float(timeUsedMs);
-  cout << "×ÜËÑË÷¾ÖÊý" << searchN << "£¬ÓÃÊ±" << timeUsedMs << "ms£¬Æ½¾ùËÙ¶È" << speed << "¾ÖÃ¿Ãë£¬Ïß³ÌÊý=" << threadNum << endl;
-  cout << "°´ÈÎÒâ¼üÍË³ö...";
+  cout << "æ€»æœç´¢å±€æ•°" << searchN << "ï¼Œç”¨æ—¶" << timeUsedMs << "msï¼Œå¹³å‡é€Ÿåº¦" << speed << "å±€æ¯ç§’ï¼Œçº¿ç¨‹æ•°=" << threadNum << endl;
+  cout << "æŒ‰ä»»æ„é”®é€€å‡º...";
   cin.get();
 }

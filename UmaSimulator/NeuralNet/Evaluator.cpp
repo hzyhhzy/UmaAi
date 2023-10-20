@@ -28,7 +28,6 @@ void Evaluator::evaluateSelf(int mode, float targetScore)
           v.winRate = 1.0;
         else
           v.winRate = 0.0;
-        assert(false);
       }
     }
     else if (mode == 1)//policy，手写逻辑，最优的选择是1，其他的是0
@@ -43,6 +42,10 @@ void Evaluator::evaluateSelf(int mode, float targetScore)
   {
     assert(false && "还没写");
   }
+}
+
+Evaluator::Evaluator()
+{
 }
 
 Evaluator::Evaluator(Model* model, int maxBatchsize):model(model), maxBatchsize(maxBatchsize)
@@ -143,7 +146,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     else
       basicChoiceValues[5] = 25 * game.larc_ssPersonsCount;
   }
-  else
+  else if (!game.larc_isAbroad && game.larc_ssPersonsCount != 0)
   {
     if (game.larc_ssPersonsCount >= 5)
       basicChoiceValues[5] = ssPriorityValue;
