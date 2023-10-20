@@ -1392,14 +1392,6 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   stageInTurn = 0;
 
 
-  //友人会不会解锁出行
-  if (larc_zuoyueFirstClick&&(!larc_zuoyueOutgoingRefused)&&(!larc_zuoyueOutgoingUnlocked))
-  {
-    if (randBool(rand, GameConstants::FriendUnlockOutgoingProbEveryTurn))//启动
-    {
-      handleFriendUnlock(rand);
-    }
-  }
 
   checkFixedEvents(rand);
 
@@ -1708,6 +1700,14 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   if (larc_isAbroad)
     return;//远征期间不会发生各种随机事件
 
+  //友人会不会解锁出行
+  if (larc_zuoyueFirstClick && (!larc_zuoyueOutgoingRefused) && (!larc_zuoyueOutgoingUnlocked))
+  {
+    if (randBool(rand, GameConstants::FriendUnlockOutgoingProbEveryTurn))//启动
+    {
+      handleFriendUnlock(rand);
+    }
+  }
 
   //模拟各种随机事件
 
