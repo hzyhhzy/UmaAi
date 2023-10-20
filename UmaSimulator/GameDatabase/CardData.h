@@ -119,12 +119,12 @@ struct SupportCard
 		else
 			larc_linkSpecialEffect = 0;
 
-		cardSkill.skillNum = j["cardSkill"]["skillNum"];
+		//cardSkill.skillNum = j["cardSkill"]["skillNum"];
 
-		cardSkill.skillIdList.resize(cardSkill.skillNum);
-		for (int i = 0; i < cardSkill.skillNum; ++i) {
-			cardSkill.skillIdList[i] = j["cardSkill"]["skillList"][i];
-		}
+		//cardSkill.skillIdList.resize(cardSkill.skillNum);
+		//for (int i = 0; i < cardSkill.skillNum; ++i) {
+		//	cardSkill.skillIdList[i] = j["cardSkill"]["skillList"][i];
+		//}
 		/*
 		if (j["uniqueEffect"].is_array()) {
 			j["uniqueEffect"].at(0).get_to(uniqueText);
