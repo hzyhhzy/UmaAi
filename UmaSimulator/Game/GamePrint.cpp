@@ -137,8 +137,6 @@ void Game::print() const
   }
   {
 
-
-
     cout << endl;
   }
 
@@ -199,12 +197,11 @@ void Game::print() const
 
     int totalCharge = 0;
     for (int i = 0; i < 15; i++)
-      totalCharge += (persons[i].larc_level - 1) * 3 + persons[i].larc_charge;
+      totalCharge += (persons[i].larc_level) * 3 + persons[i].larc_charge; // larc_level是从0开始的不需要-1
     cout << "总格数:\033[1;36m" << totalCharge << "\033[0m   "
       << "总SS胜数:\033[1;36m" << larc_ssWin << "\033[0m   "
       << "距离上次SSS的胜数:\033[1;36m" << larc_ssWinSinceLastSSS << "\033[0m" << endl;
   }
-  //cout << "体力：" << termcolor::green << vital << termcolor::reset << "/" << maxVital << "   ";
   {
     string ganjingStr =
       motivation == 1 ? "\033[31m绝不调\033[0m" :
@@ -213,7 +210,6 @@ void Game::print() const
       motivation == 4 ? "\033[33m好调\033[0m" :
       motivation == 5 ? "\033[32m绝好调\033[0m" :
       "\033[36m未知\033[0m";
-    //cout << "干劲" << ganjingStr << endl;
 
 
     cout << "体力|" << termcolor::green;
@@ -230,19 +226,6 @@ void Game::print() const
     cout << termcolor::red << "比赛回合" << termcolor::reset << endl;
     return;//比赛回合就不显示训练了
   }
-
-
-    
-
-
-
-
-
-
-
-
-
-
 
   string divLine = "|------------------------------------------------------------------------------------|\n";
   cout << divLine;
@@ -383,7 +366,7 @@ void Game::print() const
       for (int item = 0; item < 5; item++)
       {
         int personId = personDistribution[item][head];
-        if (personId == -1)
+        if (personId < 0)
           oneRow[item] = "";
         else
           oneRow[item] = persons[personId].getPersonStrColored(*this);
@@ -485,10 +468,6 @@ void Game::print() const
     }
 
   }
-
-
-
-
 
   cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
 }

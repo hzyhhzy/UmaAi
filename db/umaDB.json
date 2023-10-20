@@ -1,0 +1,4845 @@
+{
+  "100101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      102,
+      108,
+      120,
+      110,
+      110
+    ],
+    "freeRaces": [],
+    "gameId": 100101,
+    "name": "special-week",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      26,
+      33,
+      43,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "100102": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      94,
+      110,
+      125,
+      119,
+      102
+    ],
+    "freeRaces": [],
+    "gameId": 100102,
+    "name": "special-week",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      26,
+      33,
+      43,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "100103": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      117,
+      100,
+      115,
+      100,
+      118
+    ],
+    "freeRaces": [],
+    "gameId": 100103,
+    "name": "special-week",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      26,
+      33,
+      43,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "100201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      102,
+      94,
+      122,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 100201,
+    "name": "silence-suzuka",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      41,
+      52,
+      59,
+      66,
+      67
+    ],
+    "star": 5
+  },
+  "100202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      15,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      123,
+      97,
+      104,
+      103
+    ],
+    "freeRaces": [],
+    "gameId": 100202,
+    "name": "silence-suzuka",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      41,
+      52,
+      59,
+      66,
+      67
+    ],
+    "star": 5
+  },
+  "100301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      10,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      109,
+      109,
+      102,
+      112,
+      118
+    ],
+    "freeRaces": [],
+    "gameId": 100301,
+    "name": "tokai-teio",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      25,
+      30,
+      33,
+      43,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "100302": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      109,
+      125,
+      98,
+      106,
+      112
+    ],
+    "freeRaces": [],
+    "gameId": 100302,
+    "name": "tokai-teio",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      25,
+      30,
+      33,
+      43,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "100401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      118,
+      84,
+      105,
+      122,
+      121
+    ],
+    "freeRaces": [],
+    "gameId": 100401,
+    "name": "maruzensky",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      29,
+      30,
+      33,
+      47,
+      53,
+      58,
+      67
+    ],
+    "star": 5
+  },
+  "100402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      0,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      122,
+      85,
+      114,
+      107,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 100402,
+    "name": "maruzensky",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      29,
+      30,
+      33,
+      47,
+      53,
+      58,
+      67
+    ],
+    "star": 5
+  },
+  "100501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      117,
+      107,
+      118,
+      100,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 100501,
+    "name": "fuji-kiseki",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      28,
+      30,
+      32,
+      43,
+      53,
+      58,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "100502": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      0,
+      14,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      120,
+      94,
+      124,
+      96,
+      116
+    ],
+    "freeRaces": [],
+    "gameId": 100502,
+    "name": "fuji-kiseki",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      28,
+      30,
+      32,
+      43,
+      53,
+      58,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "100601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      81,
+      130,
+      103,
+      112
+    ],
+    "freeRaces": [],
+    "gameId": 100601,
+    "name": "oguri-cap",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      32,
+      45,
+      47,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "100602": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      15,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      111,
+      136,
+      93,
+      95
+    ],
+    "freeRaces": [],
+    "gameId": 100602,
+    "name": "oguri-cap",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      32,
+      45,
+      47,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "100701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      106,
+      124,
+      129,
+      99,
+      92
+    ],
+    "freeRaces": [],
+    "gameId": 100701,
+    "name": "gold-ship",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      43,
+      47,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "100702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      96,
+      113,
+      137,
+      89,
+      115
+    ],
+    "freeRaces": [],
+    "gameId": 100702,
+    "name": "gold-ship",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      43,
+      47,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "100703": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      14,
+      8,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      108,
+      123,
+      114,
+      102,
+      103
+    ],
+    "freeRaces": [],
+    "gameId": 100703,
+    "name": "gold-ship",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      43,
+      47,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "100801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      79,
+      136,
+      97,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 100801,
+    "name": "vodka",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      28,
+      30,
+      33,
+      43,
+      47,
+      56,
+      58,
+      67
+    ],
+    "star": 5
+  },
+  "100802": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      120,
+      100,
+      122,
+      100,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 100802,
+    "name": "vodka",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      28,
+      30,
+      33,
+      43,
+      47,
+      56,
+      58,
+      67
+    ],
+    "star": 5
+  },
+  "100901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      109,
+      99,
+      103,
+      122,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 100901,
+    "name": "daiwa-scarlet",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      33,
+      43,
+      44,
+      53,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "100902": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      108,
+      100,
+      122,
+      120,
+      100
+    ],
+    "freeRaces": [],
+    "gameId": 100902,
+    "name": "daiwa-scarlet",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      33,
+      43,
+      44,
+      53,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "101001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      118,
+      87,
+      119,
+      113,
+      113
+    ],
+    "freeRaces": [],
+    "gameId": 101001,
+    "name": "taiki-shuttle",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      32,
+      35,
+      45,
+      58,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "101002": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      30,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      87,
+      130,
+      112,
+      97
+    ],
+    "freeRaces": [],
+    "gameId": 101002,
+    "name": "taiki-shuttle",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      32,
+      35,
+      45,
+      58,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "101101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      118,
+      91,
+      129,
+      96,
+      116
+    ],
+    "freeRaces": [],
+    "gameId": 101101,
+    "name": "grass-wonder",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      33,
+      45,
+      47,
+      59,
+      66,
+      71
+    ],
+    "star": 5
+  },
+  "101102": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      15,
+      0,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      111,
+      101,
+      119,
+      96,
+      123
+    ],
+    "freeRaces": [],
+    "gameId": 101102,
+    "name": "grass-wonder",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      33,
+      45,
+      47,
+      59,
+      66,
+      71
+    ],
+    "star": 5
+  },
+  "101201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      113,
+      103,
+      129,
+      100,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 101201,
+    "name": "hishi-amazon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      47,
+      53,
+      58,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      103,
+      101,
+      121,
+      112,
+      113
+    ],
+    "freeRaces": [],
+    "gameId": 101202,
+    "name": "hishi-amazon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      47,
+      53,
+      58,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      87,
+      136,
+      87,
+      125,
+      115
+    ],
+    "freeRaces": [],
+    "gameId": 101301,
+    "name": "mejiro-mcqueen",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      41,
+      43,
+      55,
+      59,
+      67
+    ],
+    "star": 5
+  },
+  "101302": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      90,
+      134,
+      89,
+      132,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 101302,
+    "name": "mejiro-mcqueen",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      41,
+      43,
+      55,
+      59,
+      67
+    ],
+    "star": 5
+  },
+  "101303": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      8,
+      0,
+      0,
+      14
+    ],
+    "fiveStatusInitial": [
+      100,
+      104,
+      100,
+      138,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 101303,
+    "name": "mejiro-mcqueen",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      41,
+      43,
+      55,
+      59,
+      67
+    ],
+    "star": 5
+  },
+  "101401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      110,
+      98,
+      103,
+      121,
+      118
+    ],
+    "freeRaces": [],
+    "gameId": 101401,
+    "name": "el-condor-pasa",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      26,
+      32,
+      33,
+      42,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      0,
+      15,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      91,
+      112,
+      119,
+      106
+    ],
+    "freeRaces": [],
+    "gameId": 101402,
+    "name": "el-condor-pasa",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      26,
+      32,
+      33,
+      42,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      91,
+      132,
+      91,
+      125,
+      111
+    ],
+    "freeRaces": [],
+    "gameId": 101501,
+    "name": "tm-opera-o",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      47,
+      55,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101502": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      8,
+      0,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      106,
+      124,
+      91,
+      107,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 101502,
+    "name": "tm-opera-o",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      47,
+      55,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      20,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      113,
+      109,
+      122,
+      108,
+      98
+    ],
+    "freeRaces": [],
+    "gameId": 101601,
+    "name": "narita-brian",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      47,
+      53,
+      55,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101602": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      113,
+      120,
+      101,
+      118,
+      98
+    ],
+    "freeRaces": [],
+    "gameId": 101602,
+    "name": "narita-brian",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      47,
+      53,
+      55,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      106,
+      111,
+      101,
+      118,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 101701,
+    "name": "symboli-rudolf",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      18,
+      30,
+      33,
+      43,
+      47,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      14,
+      0,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      101,
+      107,
+      110,
+      110,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 101702,
+    "name": "symboli-rudolf",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      18,
+      30,
+      33,
+      43,
+      47,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "101801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      111,
+      105,
+      105,
+      112,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 101801,
+    "name": "air-groove",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      53,
+      59,
+      63,
+      67
+    ],
+    "star": 5
+  },
+  "101802": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      100,
+      111,
+      107,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 101802,
+    "name": "air-groove",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      53,
+      59,
+      63,
+      67
+    ],
+    "star": 5
+  },
+  "101901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      8,
+      7,
+      0,
+      7
+    ],
+    "fiveStatusInitial": [
+      104,
+      111,
+      101,
+      122,
+      112
+    ],
+    "freeRaces": [],
+    "gameId": 101901,
+    "name": "agnes-digital",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      27,
+      32,
+      36,
+      45,
+      67
+    ],
+    "star": 5
+  },
+  "101902": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      7,
+      7,
+      8,
+      8,
+      0
+    ],
+    "fiveStatusInitial": [
+      104,
+      111,
+      120,
+      129,
+      86
+    ],
+    "freeRaces": [],
+    "gameId": 101902,
+    "name": "agnes-digital",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      27,
+      32,
+      36,
+      45,
+      67
+    ],
+    "star": 5
+  },
+  "102001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      120,
+      120,
+      108,
+      101,
+      101
+    ],
+    "freeRaces": [],
+    "gameId": 102001,
+    "name": "seiun-sky",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      47,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "102002": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      0,
+      8,
+      14,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      109,
+      103,
+      108,
+      107
+    ],
+    "freeRaces": [],
+    "gameId": 102002,
+    "name": "seiun-sky",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      47,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "102101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      101,
+      116,
+      129,
+      102,
+      102
+    ],
+    "freeRaces": [],
+    "gameId": 102101,
+    "name": "tamamo-cross",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      53,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "102102": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      8,
+      0,
+      8,
+      0
+    ],
+    "fiveStatusInitial": [
+      113,
+      101,
+      115,
+      113,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 102102,
+    "name": "tamamo-cross",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      53,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "102201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      117,
+      102,
+      116,
+      108,
+      107
+    ],
+    "freeRaces": [],
+    "gameId": 102201,
+    "name": "fine-motion",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      44,
+      53,
+      59,
+      63,
+      67
+    ],
+    "star": 5
+  },
+  "102202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      0,
+      10,
+      20
+    ],
+    "fiveStatusInitial": [
+      109,
+      96,
+      109,
+      115,
+      121
+    ],
+    "freeRaces": [],
+    "gameId": 102202,
+    "name": "fine-motion",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      44,
+      53,
+      59,
+      63,
+      67
+    ],
+    "star": 5
+  },
+  "102301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      0,
+      10,
+      20
+    ],
+    "fiveStatusInitial": [
+      104,
+      114,
+      101,
+      114,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 102301,
+    "name": "biwa-hayahide",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "102302": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      12,
+      12,
+      0,
+      6
+    ],
+    "fiveStatusInitial": [
+      102,
+      121,
+      93,
+      117,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 102302,
+    "name": "biwa-hayahide",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "102401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      94,
+      130,
+      86,
+      123,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 102401,
+    "name": "mayano-top-gun",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      43,
+      47,
+      53,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "102402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      102,
+      123,
+      100,
+      110,
+      115
+    ],
+    "freeRaces": [],
+    "gameId": 102402,
+    "name": "mayano-top-gun",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      43,
+      47,
+      53,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "102501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      30,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      101,
+      120,
+      115,
+      105,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 102501,
+    "name": "manhattan-cafe",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      41,
+      43,
+      47,
+      55,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "102601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      117,
+      88,
+      112,
+      124,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 102601,
+    "name": "mihono-bourbon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      29,
+      30,
+      33,
+      43,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "102602": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      83,
+      112,
+      117,
+      115
+    ],
+    "freeRaces": [],
+    "gameId": 102602,
+    "name": "mihono-bourbon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      29,
+      30,
+      33,
+      43,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "102701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      120,
+      91,
+      130,
+      98,
+      111
+    ],
+    "freeRaces": [],
+    "gameId": 102701,
+    "name": "mejiro-ryan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      43,
+      47,
+      55,
+      59,
+      71
+    ],
+    "star": 5
+  },
+  "102702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      125,
+      91,
+      122,
+      111,
+      101
+    ],
+    "freeRaces": [],
+    "gameId": 102702,
+    "name": "mejiro-ryan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      43,
+      47,
+      55,
+      59,
+      71
+    ],
+    "star": 5
+  },
+  "102801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      120,
+      74,
+      132,
+      111,
+      113
+    ],
+    "freeRaces": [],
+    "gameId": 102801,
+    "name": "hishi-akebono",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      41,
+      43,
+      45,
+      53,
+      58,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "102901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      117,
+      106,
+      102,
+      117,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 102901,
+    "name": "yukino-bijin",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      37,
+      43,
+      53,
+      56,
+      68,
+      69
+    ],
+    "star": 5
+  },
+  "103001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      87,
+      143,
+      86,
+      125,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 103001,
+    "name": "rice-shower",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      29,
+      33,
+      43,
+      53,
+      55,
+      59,
+      71
+    ],
+    "star": 5
+  },
+  "103002": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      15,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      93,
+      148,
+      82,
+      118,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 103002,
+    "name": "rice-shower",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      29,
+      33,
+      43,
+      53,
+      55,
+      59,
+      71
+    ],
+    "star": 5
+  },
+  "103101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      0,
+      15,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      117,
+      88,
+      120,
+      103
+    ],
+    "freeRaces": [],
+    "gameId": 103101,
+    "name": "ines-fujin",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      53,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "103102": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      0,
+      0,
+      8,
+      8
+    ],
+    "fiveStatusInitial": [
+      125,
+      116,
+      88,
+      104,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 103102,
+    "name": "ines-fujin",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      53,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "103201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      112,
+      104,
+      104,
+      108,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 103201,
+    "name": "agnes-tachyon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      32,
+      43,
+      53,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      0,
+      8,
+      0,
+      14
+    ],
+    "fiveStatusInitial": [
+      109,
+      104,
+      112,
+      103,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 103202,
+    "name": "agnes-tachyon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      32,
+      43,
+      53,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      118,
+      96,
+      132,
+      85,
+      119
+    ],
+    "freeRaces": [],
+    "gameId": 103301,
+    "name": "admire-vega",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "103401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      108,
+      122,
+      133,
+      90,
+      97
+    ],
+    "freeRaces": [],
+    "gameId": 103401,
+    "name": "inari-one",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      36,
+      47,
+      55,
+      59,
+      66,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      0,
+      8,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      117,
+      108,
+      120,
+      95,
+      110
+    ],
+    "freeRaces": [],
+    "gameId": 103402,
+    "name": "inari-one",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      36,
+      47,
+      55,
+      59,
+      66,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      120,
+      93,
+      125,
+      101,
+      111
+    ],
+    "freeRaces": [],
+    "gameId": 103501,
+    "name": "winning-ticket",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      28,
+      30,
+      33,
+      43,
+      53,
+      59,
+      71
+    ],
+    "star": 5
+  },
+  "103502": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      0,
+      14,
+      8,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      90,
+      133,
+      106,
+      98
+    ],
+    "freeRaces": [],
+    "gameId": 103502,
+    "name": "winning-ticket",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      28,
+      30,
+      33,
+      43,
+      53,
+      59,
+      71
+    ],
+    "star": 5
+  },
+  "103601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      0,
+      0,
+      30
+    ],
+    "fiveStatusInitial": [
+      120,
+      104,
+      116,
+      84,
+      126
+    ],
+    "freeRaces": [],
+    "gameId": 103601,
+    "name": "air-shakur",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      45,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103602": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      14,
+      8,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      103,
+      113,
+      99,
+      109,
+      126
+    ],
+    "freeRaces": [],
+    "gameId": 103602,
+    "name": "air-shakur",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      45,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      10,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      122,
+      101,
+      113,
+      100,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 103701,
+    "name": "eishin-flash",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      45,
+      47,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      8,
+      8,
+      0,
+      14
+    ],
+    "fiveStatusInitial": [
+      115,
+      107,
+      103,
+      100,
+      125
+    ],
+    "freeRaces": [],
+    "gameId": 103702,
+    "name": "eishin-flash",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      45,
+      47,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      119,
+      71,
+      130,
+      111,
+      119
+    ],
+    "freeRaces": [],
+    "gameId": 103801,
+    "name": "curren-chan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      33,
+      35,
+      41,
+      52,
+      53,
+      65
+    ],
+    "star": 5
+  },
+  "103802": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      122,
+      65,
+      133,
+      104,
+      126
+    ],
+    "freeRaces": [],
+    "gameId": 103802,
+    "name": "curren-chan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      33,
+      35,
+      41,
+      52,
+      53,
+      65
+    ],
+    "star": 5
+  },
+  "103901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      10,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      87,
+      131,
+      101,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 103901,
+    "name": "kawakami-princess",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      33,
+      43,
+      44,
+      52,
+      56,
+      59,
+      68
+    ],
+    "star": 5
+  },
+  "104001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      10,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      109,
+      113,
+      114,
+      112,
+      102
+    ],
+    "freeRaces": [],
+    "gameId": 104001,
+    "name": "gold-city",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      47,
+      53,
+      55,
+      59,
+      69
+    ],
+    "star": 5
+  },
+  "104002": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      0,
+      8,
+      0,
+      14
+    ],
+    "fiveStatusInitial": [
+      105,
+      120,
+      105,
+      119,
+      101
+    ],
+    "freeRaces": [],
+    "gameId": 104002,
+    "name": "gold-city",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      47,
+      53,
+      55,
+      59,
+      69
+    ],
+    "star": 5
+  },
+  "104101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      120,
+      74,
+      128,
+      116,
+      112
+    ],
+    "freeRaces": [],
+    "gameId": 104101,
+    "name": "sakura-bakushin-o",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      20,
+      29,
+      33,
+      41,
+      53,
+      59,
+      60,
+      64,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "104102": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      0,
+      8,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      131,
+      74,
+      114,
+      117,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 104102,
+    "name": "sakura-bakushin-o",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      20,
+      29,
+      33,
+      41,
+      53,
+      59,
+      60,
+      64,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "104201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      121,
+      79,
+      127,
+      114,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 104201,
+    "name": "seeking-the-pearl",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      20,
+      22,
+      30,
+      32,
+      40,
+      45,
+      53,
+      58,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "104301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      121,
+      93,
+      131,
+      98,
+      107
+    ],
+    "freeRaces": [],
+    "gameId": 104301,
+    "name": "shinko-windy",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      35,
+      36,
+      49,
+      51,
+      59,
+      70
+    ],
+    "star": 5
+  },
+  "104401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      104,
+      135,
+      79,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 104401,
+    "name": "sweep-tosho",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      44,
+      58,
+      59,
+      67,
+      68
+    ],
+    "star": 5
+  },
+  "104501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      84,
+      129,
+      92,
+      129,
+      116
+    ],
+    "freeRaces": [],
+    "gameId": 104501,
+    "name": "super-creek",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      27,
+      43,
+      47,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "104502": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      8,
+      0,
+      8,
+      0
+    ],
+    "fiveStatusInitial": [
+      90,
+      129,
+      92,
+      119,
+      120
+    ],
+    "freeRaces": [],
+    "gameId": 104502,
+    "name": "super-creek",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      27,
+      43,
+      47,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "104601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      104,
+      104,
+      122,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 104601,
+    "name": "smart-falcon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      36,
+      44,
+      47,
+      51,
+      59,
+      68,
+      70,
+      71
+    ],
+    "star": 5
+  },
+  "104602": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      121,
+      100,
+      100,
+      128,
+      101
+    ],
+    "freeRaces": [],
+    "gameId": 104602,
+    "name": "smart-falcon",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      36,
+      44,
+      47,
+      51,
+      59,
+      68,
+      70,
+      71
+    ],
+    "star": 5
+  },
+  "104701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      108,
+      118,
+      111,
+      91,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 104701,
+    "name": "zenno-rob-roy",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      31,
+      33,
+      43,
+      47,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "104801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      109,
+      120,
+      92,
+      123,
+      106
+    ],
+    "freeRaces": [],
+    "gameId": 104801,
+    "name": "tosen-jordan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      44,
+      47,
+      53,
+      55,
+      59,
+      67
+    ],
+    "star": 5
+  },
+  "104802": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      8,
+      14,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      119,
+      102,
+      121,
+      105,
+      103
+    ],
+    "freeRaces": [],
+    "gameId": 104802,
+    "name": "tosen-jordan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      44,
+      47,
+      53,
+      55,
+      59,
+      67
+    ],
+    "star": 5
+  },
+  "104901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      119,
+      113,
+      121,
+      92,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 104901,
+    "name": "nakayama-festa",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      43,
+      46,
+      59,
+      69
+    ],
+    "star": 5
+  },
+  "105001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      118,
+      100,
+      121,
+      97,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 105001,
+    "name": "narita-taishin",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "105002": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      8,
+      0,
+      8,
+      14
+    ],
+    "fiveStatusInitial": [
+      110,
+      103,
+      113,
+      100,
+      124
+    ],
+    "freeRaces": [],
+    "gameId": 105002,
+    "name": "narita-taishin",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "105101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      113,
+      99,
+      116,
+      105,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 105101,
+    "name": "nishino-flower",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      41,
+      53,
+      55,
+      58,
+      65
+    ],
+    "star": 5
+  },
+  "105102": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      114,
+      98,
+      110,
+      108,
+      120
+    ],
+    "freeRaces": [],
+    "gameId": 105102,
+    "name": "nishino-flower",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      41,
+      53,
+      55,
+      58,
+      65
+    ],
+    "star": 5
+  },
+  "105201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      10,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      79,
+      123,
+      119,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 105201,
+    "name": "haru-urara",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      49,
+      51,
+      62,
+      68,
+      71
+    ],
+    "star": 5
+  },
+  "105202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      66,
+      130,
+      119,
+      120
+    ],
+    "freeRaces": [],
+    "gameId": 105202,
+    "name": "haru-urara",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      49,
+      51,
+      62,
+      68,
+      71
+    ],
+    "star": 5
+  },
+  "105301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      119,
+      90,
+      127,
+      112,
+      102
+    ],
+    "freeRaces": [],
+    "gameId": 105301,
+    "name": "bamboo-memory",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      43,
+      53,
+      58,
+      59,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "105302": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      0,
+      8,
+      8,
+      0
+    ],
+    "fiveStatusInitial": [
+      134,
+      79,
+      133,
+      102,
+      102
+    ],
+    "freeRaces": [],
+    "gameId": 105302,
+    "name": "bamboo-memory",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      43,
+      53,
+      58,
+      59,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "105501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      115,
+      100,
+      121,
+      93,
+      121
+    ],
+    "freeRaces": [],
+    "gameId": 105501,
+    "name": "marvelous-sunday",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      46,
+      53,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "105601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      106,
+      111,
+      121,
+      111,
+      101
+    ],
+    "freeRaces": [],
+    "gameId": 105601,
+    "name": "matikanefukukitaru",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      33,
+      43,
+      52,
+      59,
+      60,
+      71
+    ],
+    "star": 5
+  },
+  "105602": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      106,
+      122,
+      115,
+      115,
+      92
+    ],
+    "freeRaces": [],
+    "gameId": 105602,
+    "name": "matikanefukukitaru",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      33,
+      43,
+      52,
+      59,
+      60,
+      71
+    ],
+    "star": 5
+  },
+  "105701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      123,
+      105,
+      113,
+      102,
+      107
+    ],
+    "freeRaces": [],
+    "gameId": 105701,
+    "name": "mr-cb",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      26,
+      30,
+      33,
+      43,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "105801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      113,
+      116,
+      104,
+      118,
+      99
+    ],
+    "freeRaces": [],
+    "gameId": 105801,
+    "name": "meisho-doto",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      48,
+      52,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "105802": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      109,
+      109,
+      92,
+      126,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 105802,
+    "name": "meisho-doto",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      48,
+      52,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "105901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      117,
+      104,
+      119,
+      92,
+      118
+    ],
+    "freeRaces": [],
+    "gameId": 105901,
+    "name": "mejiro-dober",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      47,
+      53,
+      59,
+      66,
+      68
+    ],
+    "star": 5
+  },
+  "105902": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      115,
+      95,
+      113,
+      105,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 105902,
+    "name": "mejiro-dober",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      47,
+      53,
+      59,
+      66,
+      68
+    ],
+    "star": 5
+  },
+  "106001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      118,
+      99,
+      123,
+      96,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 106001,
+    "name": "nice-nature",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      25,
+      38,
+      43,
+      47,
+      59,
+      67,
+      70,
+      71
+    ],
+    "star": 5
+  },
+  "106002": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      105,
+      105,
+      115,
+      105,
+      120
+    ],
+    "freeRaces": [],
+    "gameId": 106002,
+    "name": "nice-nature",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      25,
+      38,
+      43,
+      47,
+      59,
+      67,
+      70,
+      71
+    ],
+    "star": 5
+  },
+  "106101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      120,
+      82,
+      127,
+      100,
+      121
+    ],
+    "freeRaces": [],
+    "gameId": 106101,
+    "name": "king-halo",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      53,
+      58,
+      65,
+      67
+    ],
+    "star": 5
+  },
+  "106102": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      76,
+      134,
+      108,
+      110
+    ],
+    "freeRaces": [],
+    "gameId": 106102,
+    "name": "king-halo",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      53,
+      58,
+      65,
+      67
+    ],
+    "star": 5
+  },
+  "106201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      103,
+      117,
+      106,
+      114,
+      110
+    ],
+    "freeRaces": [],
+    "gameId": 106201,
+    "name": "matikanetannhauser",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      51,
+      55,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "106202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      113,
+      104,
+      126,
+      101,
+      106
+    ],
+    "freeRaces": [],
+    "gameId": 106202,
+    "name": "matikanetannhauser",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      51,
+      55,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "106401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      112,
+      126,
+      93,
+      111,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 106401,
+    "name": "mejiro-palmer",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      36,
+      48,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "106501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      108,
+      119,
+      106,
+      95
+    ],
+    "freeRaces": [],
+    "gameId": 106501,
+    "name": "daitaku-helios",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      33,
+      45,
+      53,
+      55,
+      58,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "106601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      30,
+      0,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      137,
+      98,
+      107,
+      119,
+      89
+    ],
+    "freeRaces": [],
+    "gameId": 106601,
+    "name": "twin-turbo",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      36,
+      41,
+      60,
+      65,
+      71
+    ],
+    "star": 5
+  },
+  "106701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      15,
+      0,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      111,
+      108,
+      113,
+      101,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 106701,
+    "name": "satono-diamond",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      47,
+      53,
+      55,
+      66,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "106702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      15,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      102,
+      118,
+      102,
+      113,
+      115
+    ],
+    "freeRaces": [],
+    "gameId": 106702,
+    "name": "satono-diamond",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      47,
+      53,
+      55,
+      66,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "106703": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      14,
+      0,
+      8,
+      0
+    ],
+    "fiveStatusInitial": [
+      111,
+      121,
+      102,
+      111,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 106703,
+    "name": "satono-diamond",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      47,
+      53,
+      55,
+      66,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "106801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      10,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      119,
+      122,
+      97,
+      105,
+      107
+    ],
+    "freeRaces": [],
+    "gameId": 106801,
+    "name": "kitasan-black",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      41,
+      43,
+      47,
+      53,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "106802": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      122,
+      104,
+      108,
+      100,
+      116
+    ],
+    "freeRaces": [],
+    "gameId": 106802,
+    "name": "kitasan-black",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      41,
+      43,
+      47,
+      53,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "106901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      114,
+      117,
+      95,
+      114,
+      110
+    ],
+    "freeRaces": [],
+    "gameId": 106901,
+    "name": "sakura-chiyono-o",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      58,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "106902": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      0,
+      14,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      114,
+      102,
+      121,
+      100,
+      113
+    ],
+    "freeRaces": [],
+    "gameId": 106902,
+    "name": "sakura-chiyono-o",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      58,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "107001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      10,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      103,
+      107,
+      116,
+      104,
+      120
+    ],
+    "freeRaces": [],
+    "gameId": 107001,
+    "name": "sirius-symboli",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      18,
+      30,
+      33,
+      43,
+      47,
+      53,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "107101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      113,
+      109,
+      109,
+      98,
+      121
+    ],
+    "freeRaces": [],
+    "gameId": 107101,
+    "name": "mejiro-ardan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      31,
+      33,
+      43,
+      53,
+      59,
+      66,
+      67
+    ],
+    "star": 5
+  },
+  "107102": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      8,
+      0,
+      0,
+      14
+    ],
+    "fiveStatusInitial": [
+      116,
+      116,
+      94,
+      103,
+      121
+    ],
+    "freeRaces": [],
+    "gameId": 107102,
+    "name": "mejiro-ardan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      31,
+      33,
+      43,
+      53,
+      59,
+      66,
+      67
+    ],
+    "star": 5
+  },
+  "107201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      113,
+      99,
+      119,
+      119,
+      100
+    ],
+    "freeRaces": [],
+    "gameId": 107201,
+    "name": "yaeno-muteki",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      29,
+      30,
+      33,
+      43,
+      53,
+      58,
+      59,
+      67
+    ],
+    "star": 5
+  },
+  "107401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      14,
+      0,
+      8,
+      8
+    ],
+    "fiveStatusInitial": [
+      109,
+      130,
+      106,
+      92,
+      113
+    ],
+    "freeRaces": [],
+    "gameId": 107401,
+    "name": "mejiro-bright",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      46,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "107601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      101,
+      123,
+      106,
+      120,
+      100
+    ],
+    "freeRaces": [],
+    "gameId": 107601,
+    "name": "sakura-laurel",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      48,
+      55,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "107701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      10,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      112,
+      124,
+      101,
+      112,
+      101
+    ],
+    "freeRaces": [],
+    "gameId": 107701,
+    "name": "narita-top-road",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      33,
+      43,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "107801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      119,
+      101,
+      99,
+      118,
+      113
+    ],
+    "freeRaces": [],
+    "gameId": 107801,
+    "name": "yamanin-zephyr",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      41,
+      45,
+      58,
+      65,
+      67
+    ],
+    "star": 5
+  },
+  "108301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      15,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      104,
+      117,
+      125,
+      102,
+      102
+    ],
+    "freeRaces": [],
+    "gameId": 108301,
+    "name": "symboli-kris-s",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      31,
+      33,
+      43,
+      47,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "108302": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      116,
+      99,
+      125,
+      105,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 108302,
+    "name": "symboli-kris-s",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      31,
+      33,
+      43,
+      47,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "108401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      30,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      121,
+      101,
+      125,
+      100,
+      103
+    ],
+    "freeRaces": [],
+    "gameId": 108401,
+    "name": "tanino-gimlet",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      32,
+      33,
+      41,
+      43,
+      58,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "108501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      121,
+      82,
+      132,
+      101,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 108501,
+    "name": "daiichi-ruby",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      33,
+      40,
+      53,
+      58,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "108601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      0,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      119,
+      107,
+      109,
+      102,
+      113
+    ],
+    "freeRaces": [],
+    "gameId": 108601,
+    "name": "mejiro-ramonu",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      56,
+      59,
+      68,
+      69
+    ],
+    "star": 5
+  },
+  "108701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      121,
+      89,
+      118,
+      120,
+      102
+    ],
+    "freeRaces": [],
+    "gameId": 108701,
+    "name": "aston-machan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      20,
+      22,
+      28,
+      30,
+      41,
+      53,
+      65
+    ],
+    "star": 5
+  },
+  "109301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      0,
+      15,
+      0
+    ],
+    "fiveStatusInitial": [
+      125,
+      88,
+      109,
+      125,
+      103
+    ],
+    "freeRaces": [],
+    "gameId": 109301,
+    "name": "ksmiracle",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      33,
+      35,
+      39,
+      40,
+      41,
+      43,
+      45,
+      53,
+      58,
+      65
+    ],
+    "star": 5
+  },
+  "109801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      10,
+      0,
+      20
+    ],
+    "fiveStatusInitial": [
+      114,
+      107,
+      113,
+      106,
+      110
+    ],
+    "freeRaces": [],
+    "gameId": 109801,
+    "name": "copano-rickey",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      46,
+      51,
+      56,
+      59,
+      66,
+      68,
+      71
+    ],
+    "star": 5
+  },
+  "109901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      111,
+      118,
+      97,
+      105,
+      119
+    ],
+    "freeRaces": [],
+    "gameId": 109901,
+    "name": "hokko-tarumae",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      38,
+      46,
+      50,
+      56,
+      59,
+      68,
+      70,
+      71
+    ],
+    "star": 5
+  },
+  "110001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      0,
+      15,
+      15
+    ],
+    "fiveStatusInitial": [
+      102,
+      100,
+      103,
+      123,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 110001,
+    "name": "wonder-acute",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      36,
+      41,
+      47,
+      50,
+      56,
+      59,
+      68,
+      70,
+      71
+    ],
+    "star": 5
+  },
+  "110401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      121,
+      105,
+      118,
+      112,
+      94
+    ],
+    "freeRaces": [],
+    "gameId": 110401,
+    "name": "katsuragi-ace",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      53,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "110501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      0,
+      0,
+      30
+    ],
+    "fiveStatusInitial": [
+      112,
+      102,
+      113,
+      96,
+      127
+    ],
+    "freeRaces": [],
+    "gameId": 110501,
+    "name": "neo-universe",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      35,
+      43,
+      45,
+      53,
+      55,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "110601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      7,
+      8,
+      7,
+      8,
+      0
+    ],
+    "fiveStatusInitial": [
+      110,
+      116,
+      113,
+      107,
+      104
+    ],
+    "freeRaces": [],
+    "gameId": 110601,
+    "name": "hishi-miracle",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      41,
+      43,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  }
+}

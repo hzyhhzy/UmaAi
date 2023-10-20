@@ -26,6 +26,7 @@ public:
   //void evaluate(const Game* games, const float* targetScores, int mode, int gameNum);//计算games中gameNum局游戏的输出。如果没有model，就使用手写逻辑计算policy，但不能计算非结束状态的value
   void evaluateSelf(int mode, float targetScore);//计算gameInput的输出。如果没有model，就使用手写逻辑计算policy，但不能计算非结束状态的value
   
+  Evaluator() {}
   Evaluator(Model* model, int maxBatchsize);
 
   static Action handWrittenStrategy(const Game& game);

@@ -421,7 +421,7 @@ class Umadb:
             type = self._get_support_card_type(card)
             effect_row_dict = self._get_effect_row_dict(effect_dict.get(card.id))
             unique_effect = self._get_unique_effect_row(unique_effect_dict.get(card.id))     
-            support_card = SupportCard(str(card.id), name, unique_effect_desc,rarity, type,
+            support_card = SupportCard(str(card.id), card.chara_id, name, unique_effect_desc,rarity, type,
                                        train_skill_list=hint_skill_dict[card.id],
                                        unique_effect=unique_effect,effect_row_dict=effect_row_dict)
             ret.append(support_card)

@@ -1,0 +1,567 @@
+{
+  "umaId": 4105101,
+  "turn": 12,
+  "vital": 79,
+  "maxVital": 100,
+  "isQieZhe": false,
+  "isAiJiao": true,
+  "failureRateBias": 0,
+  "fiveStatus": [
+    432,
+    164,
+    196,
+    130,
+    190
+  ],
+  "fiveStatusLimit": [
+    2160,
+    2032,
+    1800,
+    1800,
+    1400
+  ],
+  "skillPt": 571,
+  "motivation": 5,
+  "cardId": [
+    130160,
+    430101,
+    330107,
+    430161,
+    430134,
+    430153
+  ],
+  "cardJiBan": [
+    44,
+    79,
+    100,
+    92,
+    34,
+    60,
+    7,
+    15
+  ],
+  "trainLevelCount": [
+    18,
+    6,
+    6,
+    6,
+    18
+  ],
+  "zhongMaBlueCount": [
+    18,
+    18,
+    0,
+    18,
+    0
+  ],
+  "zhongMaExtraBonus": [
+    20,
+    0,
+    40,
+    0,
+    20,
+    150
+  ],
+  "isRacing": false,
+  "fans": 1520,
+  "friendCardFirstClick": false,
+  "friendCardUnlockOutgoing": false,
+  "friendCardOutgoingStage": 0,
+  "motDropCount": 0,
+  "larcData": {
+    "totalApproval": 25440,
+    "approvalRate": 150.0,
+    "lessonLevels": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "shixingPt": 150,
+    "rivals": [
+      {
+        "id": 1051,
+        "commandId": 0,
+        "atTrain": -1,
+        "boost": 0,
+        "chargeNum": 0,
+        "lv": 0,
+        "specialEffect": 0,
+        "nextThreeEffects": [
+          0,
+          0,
+          0
+        ],
+        "nextEffect": 0,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": false
+      },
+      {
+        "id": 1070,
+        "commandId": 1,
+        "atTrain": 2,
+        "boost": 0,
+        "chargeNum": 1,
+        "lv": 1,
+        "specialEffect": 6,
+        "nextThreeEffects": [
+          6,
+          11,
+          1
+        ],
+        "nextEffect": 6,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": true
+      },
+      {
+        "id": 1049,
+        "commandId": 0,
+        "atTrain": 2,
+        "boost": 1,
+        "chargeNum": 1,
+        "lv": 0,
+        "specialEffect": 12,
+        "nextThreeEffects": [
+          11,
+          1,
+          12
+        ],
+        "nextEffect": 11,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": true
+      },
+      {
+        "id": 1025,
+        "commandId": 2,
+        "atTrain": 1,
+        "boost": 0,
+        "chargeNum": 1,
+        "lv": 0,
+        "specialEffect": 4,
+        "nextThreeEffects": [
+          11,
+          1,
+          4
+        ],
+        "nextEffect": 11,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": true
+      },
+      {
+        "id": 1007,
+        "commandId": 0,
+        "atTrain": 3,
+        "boost": 0,
+        "chargeNum": 1,
+        "lv": 1,
+        "specialEffect": 0,
+        "nextThreeEffects": [
+          11,
+          1,
+          1
+        ],
+        "nextEffect": 11,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": true
+      },
+      {
+        "id": 1067,
+        "commandId": 3,
+        "atTrain": 2,
+        "boost": 3,
+        "chargeNum": 0,
+        "lv": 0,
+        "specialEffect": 5,
+        "nextThreeEffects": [
+          1,
+          11,
+          5
+        ],
+        "nextEffect": 1,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": true
+      },
+      {
+        "id": 1032,
+        "commandId": 2,
+        "atTrain": 0,
+        "boost": 0,
+        "chargeNum": 1,
+        "lv": 1,
+        "specialEffect": 12,
+        "nextThreeEffects": [
+          11,
+          12,
+          1
+        ],
+        "nextEffect": 11,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": true,
+        "isLink": false
+      },
+      {
+        "id": 1014,
+        "commandId": 4,
+        "atTrain": 3,
+        "boost": 3,
+        "chargeNum": 0,
+        "lv": 0,
+        "specialEffect": 7,
+        "nextThreeEffects": [
+          9,
+          1,
+          7
+        ],
+        "nextEffect": 9,
+        "hasAiJiao": false,
+        "hasTrain": true,
+        "isCard": true,
+        "isLink": true
+      },
+      {
+        "id": 1107,
+        "commandId": 1,
+        "atTrain": 0,
+        "boost": 1,
+        "chargeNum": 1,
+        "lv": 0,
+        "specialEffect": 5,
+        "nextThreeEffects": [
+          1,
+          5,
+          11
+        ],
+        "nextEffect": 1,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": true
+      },
+      {
+        "id": 1018,
+        "commandId": 0,
+        "atTrain": 0,
+        "boost": 0,
+        "chargeNum": 1,
+        "lv": 1,
+        "specialEffect": 0,
+        "nextThreeEffects": [
+          1,
+          11,
+          1
+        ],
+        "nextEffect": 1,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": false
+      },
+      {
+        "id": 1042,
+        "commandId": 3,
+        "atTrain": 3,
+        "boost": 0,
+        "chargeNum": 1,
+        "lv": 0,
+        "specialEffect": 3,
+        "nextThreeEffects": [
+          1,
+          11,
+          3
+        ],
+        "nextEffect": 1,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": false
+      },
+      {
+        "id": 1031,
+        "commandId": 4,
+        "atTrain": 4,
+        "boost": 2,
+        "chargeNum": 1,
+        "lv": 0,
+        "specialEffect": 6,
+        "nextThreeEffects": [
+          6,
+          1,
+          11
+        ],
+        "nextEffect": 6,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": false
+      },
+      {
+        "id": 1004,
+        "commandId": 3,
+        "atTrain": 3,
+        "boost": 0,
+        "chargeNum": 1,
+        "lv": 1,
+        "specialEffect": 0,
+        "nextThreeEffects": [
+          11,
+          1,
+          1
+        ],
+        "nextEffect": 11,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": true,
+        "isLink": false
+      },
+      {
+        "id": 1040,
+        "commandId": 1,
+        "atTrain": 4,
+        "boost": 2,
+        "chargeNum": 1,
+        "lv": 0,
+        "specialEffect": 7,
+        "nextThreeEffects": [
+          11,
+          1,
+          7
+        ],
+        "nextEffect": 11,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": false
+      },
+      {
+        "id": 1043,
+        "commandId": 2,
+        "atTrain": 4,
+        "boost": 1,
+        "chargeNum": 1,
+        "lv": 0,
+        "specialEffect": 12,
+        "nextThreeEffects": [
+          1,
+          12,
+          11
+        ],
+        "nextEffect": 1,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": false,
+        "isLink": false
+      },
+      {
+        "id": 1086,
+        "commandId": 4,
+        "atTrain": 2,
+        "boost": 1,
+        "chargeNum": 1,
+        "lv": 0,
+        "specialEffect": 7,
+        "nextThreeEffects": [
+          11,
+          7,
+          1
+        ],
+        "nextEffect": 11,
+        "hasAiJiao": false,
+        "hasTrain": false,
+        "isCard": true,
+        "isLink": false
+      }
+    ],
+    "ssApprovalRate": 1750,
+    "ssStatus": [
+      2,
+      2,
+      2,
+      6,
+      8,
+      10,
+      0
+    ],
+    "ssBonusStatus": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "isSpecialMatch": false,
+    "ssCount": 5,
+    "currentSSCount": 2,
+    "currentSSRivals": [
+      1067,
+      1014
+    ],
+    "contNonSSS": 1,
+    "shiningCount": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "friendAppear": [
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    "chargedNum": [
+      3,
+      1,
+      3,
+      3,
+      3
+    ],
+    "chargedFullNum": [
+      0,
+      0,
+      1,
+      1,
+      2
+    ],
+    "turn": 12,
+    "isAbroad": false,
+    "isBegin": false
+  },
+  "stageInTurn": 1,
+  "cardDistribution": [
+    [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true
+    ],
+    [
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true
+    ]
+  ],
+  "cardHint": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "trainValue": [
+    [
+      20,
+      0,
+      4,
+      0,
+      0,
+      12,
+      -22
+    ],
+    [
+      0,
+      16,
+      0,
+      8,
+      0,
+      11,
+      -15
+    ],
+    [
+      0,
+      11,
+      19,
+      0,
+      0,
+      11,
+      -20
+    ],
+    [
+      11,
+      0,
+      6,
+      23,
+      0,
+      13,
+      -21
+    ],
+    [
+      3,
+      0,
+      0,
+      0,
+      16,
+      9,
+      5
+    ]
+  ],
+  "failRate": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ]
+}

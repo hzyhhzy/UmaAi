@@ -1,0 +1,36 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        15,
+        0,
+        0,
+        15,
+        0
+    ],
+    "fiveStatusInitial": [
+        125,
+        88,
+        109,
+        125,
+        103
+    ],
+    "freeRaces": [],
+    "gameId": 109301,
+    "name": "ksmiracle",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        33,
+        35,
+        39,
+        40,
+        41,
+        43,
+        45,
+        53,
+        58,
+        65
+    ],
+    "star": 5
+}

@@ -1,0 +1,35 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        20,
+        10,
+        0,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        112,
+        124,
+        101,
+        112,
+        101
+    ],
+    "freeRaces": [],
+    "gameId": 107701,
+    "name": "narita-top-road",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        28,
+        30,
+        33,
+        43,
+        55,
+        59,
+        67,
+        69,
+        71
+    ],
+    "star": 5
+}

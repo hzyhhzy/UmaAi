@@ -22,10 +22,8 @@ const double radicalFactor = 3;//激进度
 const int searchN = handWrittenEvaluationTest ? 1 : 3072;
 const bool recordGame = false;
 
-
 const int totalGames = handWrittenEvaluationTest ? 1000000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
-
 
 int umaId = 108401;//谷水，30力加成
 int umaStars = 5;
@@ -59,7 +57,6 @@ void worker()
 
   for (int gamenum = 0; gamenum < gamesEveryThread; gamenum++)
   {
-
     Game game;
     game.newGame(rand, false, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
     for (int i = 0; i < 9; i++)
@@ -74,7 +71,8 @@ void worker()
         action = Evaluator::handWrittenStrategy(game);
       }
       else {
-        search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNumInner, radicalFactor);
+       // search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNumInner, radicalFactor);
+        search.runSearch(game, searchN, TOTAL_TURN, 27000);
         assert(false);
         //policy = search.extractPolicyFromSearchResults(1);
       }
@@ -118,7 +116,13 @@ void worker()
       if(!handWrittenEvaluationTest)
         game.printFinalStats();
       cout << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
-      cout
+      for (int i=0; i<400; ++i)
+          cout << i*100 << ",";
+      cout << endl;
+      for (int i=0; i<400; ++i)
+          cout << float(segmentStats[i]) / n << ",";
+      cout << endl;
+/*      cout
         << "UE7概率=" << float(segmentStats[327]) / n << ","
         << "UE8概率=" << float(segmentStats[332]) / n << ","
         << "UE9概率=" << float(segmentStats[338]) / n << ","
@@ -133,6 +137,7 @@ void worker()
         << "UD8概率=" << float(segmentStats[394]) / n << ","
         << "UD9概率=" << float(segmentStats[400]) / n << ","
         << "UC0概率=" << float(segmentStats[407]) / n << endl;
+        */
     }
   }
 

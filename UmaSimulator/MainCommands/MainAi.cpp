@@ -139,11 +139,12 @@ void main_ai()
     }
     lastTurn = game.turn;
     //if (game.venusIsWisdomActive)
+    /*
     {
       std::this_thread::sleep_for(std::chrono::milliseconds(300));
       continue;
     }
-
+    */
     if (game.turn == 0)//第一回合，或者重启ai的第一回合
     {
       scoreFirstTurn = 0;
@@ -169,7 +170,8 @@ void main_ai()
     //最后几回合降低激进度
     double modifiedRadicalFactor = GameConfig::radicalFactor * (1 - exp(-double(TOTAL_TURN - game.turn) / 10.0));
     
-    search.runSearch(game, evaluators.data(), GameConfig::searchN, TOTAL_TURN, 0, GameConfig::threadNum, modifiedRadicalFactor);
+    //search.runSearch(game, evaluators.data(), GameConfig::searchN, TOTAL_TURN, 0, GameConfig::threadNum, modifiedRadicalFactor);
+    search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0);
     //cout << endl << rpText["finish"] << endl;
     cout << endl << rpText["analyze"] << " >>" << endl;
     {

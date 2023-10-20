@@ -53,7 +53,8 @@ void main_benchmark()
   //game.print();
 
   const int64_t time0 = now_ms();
-  search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNum, radicalFactor);
+  //search.runSearch(game, evaluators.data(), searchN, TOTAL_TURN, 27000, threadNum, radicalFactor);
+  search.runSearch(game, searchN, TOTAL_TURN, 27000);
   const int64_t time1 = now_ms();
 
   int64_t timeUsedMs = time1 - time0;

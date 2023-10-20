@@ -203,6 +203,7 @@ class SupportCardEffect:
 @dataclass
 class SupportCard:
     id: str
+    chara_id: str
     name: str
     unique_effect_description:str
     rarity:SupportCardRarity

@@ -1,0 +1,35 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        8,
+        14,
+        0,
+        8,
+        0
+    ],
+    "fiveStatusInitial": [
+        111,
+        121,
+        102,
+        111,
+        105
+    ],
+    "freeRaces": [],
+    "gameId": 106703,
+    "name": "satono-diamond",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        30,
+        33,
+        43,
+        47,
+        53,
+        55,
+        66,
+        67,
+        71
+    ],
+    "star": 5
+}

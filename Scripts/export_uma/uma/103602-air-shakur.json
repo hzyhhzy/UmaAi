@@ -1,0 +1,35 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        14,
+        8,
+        0,
+        8
+    ],
+    "fiveStatusInitial": [
+        103,
+        113,
+        99,
+        109,
+        126
+    ],
+    "freeRaces": [],
+    "gameId": 103602,
+    "name": "air-shakur",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        23,
+        30,
+        33,
+        43,
+        45,
+        55,
+        59,
+        67,
+        71
+    ],
+    "star": 5
+}
