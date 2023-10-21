@@ -17,10 +17,6 @@ int mask_umaId(int umaId)
     return umaId % 1000000;
 }
 
-int mask_scId(int scId)
-{
-    return scId % 100000;
-}
 
 bool Game::loadGameFromJson(std::string jsonStr)
 {
@@ -28,137 +24,164 @@ bool Game::loadGameFromJson(std::string jsonStr)
   try
   {
     json j = json::parse(jsonStr, nullptr, true, true);
-    URAResponse resp = j.get<URAResponse>();
 
-    // 转换到Game对象中
-    umaId = mask_umaId(resp.umaId); // 暂时还是mask一下
-    turn = resp.turn;   // 从0开始
+    umaId = j["umaId"];
+    if (maskUmaId)
+      umaId = mask_umaId(umaId);
+    if (!GameDatabase::AllUmas.count(umaId))
+      throw string("未知马娘，需要更新ai");
+    for (int i = 0; i < 5; i++)
+      fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
+    
+
+    turn = j["turn"];
     if (turn >= TOTAL_TURN && turn < 0)
-        throw string("回合数不正确");
-    vital = resp.vital;
-    maxVital = resp.maxVital;
-    isQieZhe = resp.isQieZhe;
-    isAiJiao = resp.isAiJiao;
-    failureRateBias = resp.failureRateBias;
-    copy(resp.fiveStatus.begin(), resp.fiveStatus.end(), fiveStatus);
-    copy(resp.fiveStatusLimit.begin(), resp.fiveStatusLimit.end(), fiveStatusLimit);
-    skillPt = resp.skillPt;
-    motivation = resp.motivation;
-    normalCardCount = 5;    // 默认值
-    saihou = 0; // 默认值
-    // todo: 马娘，支援卡
-    //copy(resp.cardJiBan.begin(), resp.cardJiBan.end(), cardJiBan);
-    // 小黑板的训练等级要除以3
-    for (int i = 0; i < 5; ++i)
-        trainLevelCount[i] = resp.trainLevelCount[i] / 3;
-    copy(resp.zhongMaBlueCount.begin(), resp.zhongMaBlueCount.end(), zhongMaBlueCount);
-    copy(resp.zhongMaExtraBonus.begin(), resp.zhongMaExtraBonus.end(), zhongMaExtraBonus);
-    isRacing = resp.isRacing;
-    stageInTurn = resp.stageInTurn;
-    motivationDropCount = resp.motDropCount;
-    // 凯旋门相关
-    larc_isAbroad = resp.larcData.isAbroad;
-    larc_shixingPt = resp.larcData.shixingPt;
-    larc_supportPtAll = resp.larcData.totalApproval;
-    larc_isSSS = resp.larcData.isSpecialMatch;
-    larc_ssWin = resp.larcData.ssCount;
-    larc_ssWinSinceLastSSS = resp.larcData.contNonSSS * 5;
-    larc_ssPersonsCount = resp.larcData.currentSSCount;
-    larc_zuoyueFirstClick = resp.friendCardFirstClick;
-    larc_zuoyueOutgoingRefused = resp.friendCardUnlockOutgoing;
-    larc_zuoyueOutgoingUsed = resp.friendCardOutgoingStage;
+      throw string("回合数不正确");
+    isRacing = GameConstants::LArcIsRace[turn];
+    larc_isAbroad = (turn >= 36 && turn <= 42) || (turn >= 60 && turn <= 67);
 
-    // larc rivals/Persons 信息
-    if (!resp.larcData.isBegin) {
-        copy(resp.larcData.lessonLevels.begin(), resp.larcData.lessonLevels.end(), larc_levels); 
-        memset(larc_ssPersons, 0, sizeof(int16_t) * 5);
-        copy(resp.larcData.currentSSRivals.begin(), resp.larcData.currentSSRivals.end(), larc_ssPersons);
+    vital = j["vital"];
+    maxVital = j["maxVital"];
+    isQieZhe = j["isQieZhe"];
+    isAiJiao = j["isAiJiao"];
+    failureRateBias = j["failureRateBias"];
+    for (int i = 0; i < 5; i++)
+      fiveStatus[i] = j["fiveStatus"][i];
+    for (int i = 0; i < 5; i++)
+      fiveStatusLimit[i] = j["fiveStatusLimit"][i];
 
-        for (int i = 0; i < resp.larcData.rivals.size(); ++i)
-        {
-            auto rival = &resp.larcData.rivals[i];
-            if (rival->nextThreeEffects[0] > 0) // 排除自己
-            {
-                // 按顺序覆盖以前的Person[0..14]信息
-                persons[i].personType = rival->isCard ? 2 : 3; 
-                persons[i].larc_isLinkCard = rival->isLink;
-                // if 是支援卡
-                // cardIdInGame, isShining, friendship, isHint, cardRecord
-                persons[i].charaId = rival->id;
-                persons[i].larc_charge = rival->boost;
-                persons[i].larc_statusType = rival->commandId;  // 已经转成了01234
-                persons[i].larc_specialBuff = rival->specialEffect;
-                persons[i].larc_level = rival->lv;
-                copy(rival->nextThreeEffects.begin(), rival->nextThreeEffects.end(), persons[i].larc_nextThreeBuffs);
-            }
-        }
-    }
-    /*
-    venusLevelYellow = j["venusLevelYellow"];
-    venusLevelRed = j["venusLevelRed"];
-    venusLevelBlue = j["venusLevelBlue"];
-
-    for (int i = 0; i < 8; i++)
-      venusSpiritsBottom[i] = j["venusSpiritsBottom"][i];
-
-    for (int i = 0; i < 6; i++)
-      venusSpiritsUpper[i] = j["venusSpiritsUpper"][i];
-
-    venusAvailableWisdom = j["venusAvailableWisdom"];
-    venusIsWisdomActive = j["venusIsWisdomActive"];
-    venusCardFirstClick = j["venusCardFirstClick"];
-    venusCardUnlockOutgoing = j["venusCardUnlockOutgoing"];
-    venusCardIsQingRe = j["venusCardIsQingRe"];
-    venusCardQingReContinuousTurns = j["venusCardQingReContinuousTurns"];
+    skillPt = j["skillPt"];
+    skillScore = 0;
+    motivation = j["motivation"];
+    isPositiveThinking = j["isPositiveThinking"];
 
     for (int i = 0; i < 5; i++)
-      venusCardOutgoingUsed[i] = j["venusCardOutgoingUsed"][i];
+      trainLevelCount[i] = j["trainLevelCount"][i];
 
-    // std::cout << "VenusCard load finished\n";
-
-    stageInTurn = j["stageInTurn"];
     for (int i = 0; i < 5; i++)
-      for (int k = 0; k < 8; k++)
-      {
-        cardDistribution[i][k] = j["cardDistribution"][i][k];
-      }
+      zhongMaBlueCount[i] = j["zhongMaBlueCount"][i];
 
     for (int i = 0; i < 6; i++)
-      cardHint[i] = j["cardHint"][i];
+      zhongMaExtraBonus[i] = j["zhongMaExtraBonus"][i];
 
-    for (int i = 0; i < 8; i++)
-      spiritDistribution[i] = j["spiritDistribution"][i];
+    normalCardCount = j["normalCardCount"];
 
 
-    // 5号是友人或团队
-    if ( GameDatabase::AllCards[cardId[0]].cardType != 5)//1号位不是神团，交换卡组位置，把神团换到1号位
+    saihou = 0;
+    for (int i = 0; i < 6; i++)
     {
-      int s = -1;//神团原位置
-      for (int i = 1; i < 6; i++)
+      int cardId = j["cardId"][i];
+
+      if (!GameDatabase::AllCards.count(cardId))
+        throw string("未知支援卡，需要更新ai");
+
+      cardParam[i] = GameDatabase::AllCards[cardId];
+      SupportCard& cardP = cardParam[i];
+      saihou += cardP.saiHou;
+      int cardType = cardP.cardType;
+      if (cardType == 5 || cardType == 6)
       {
-        if (GameDatabase::AllCards[cardId[i]].cardType == 5)
+
+        int realCardId = cardId / 10;
+        if (realCardId == 30160 || realCardId == 10094)//佐岳卡
         {
-          s = i;
-          break;
+          if (realCardId == 30160)
+            larc_zuoyueType = 1;
+          else
+            larc_zuoyueType = 2;
+
+          int zuoyueLevel = cardId % 10;
+          if (larc_zuoyueType == 1)
+          {
+            larc_zuoyueVitalBonus = GameConstants::ZuoyueVitalBonusSSR[zuoyueLevel];
+            larc_zuoyueStatusBonus = GameConstants::ZuoyueStatusBonusSSR[zuoyueLevel];
+          }
+          else
+          {
+            larc_zuoyueVitalBonus = GameConstants::ZuoyueVitalBonusR[zuoyueLevel];
+            larc_zuoyueStatusBonus = GameConstants::ZuoyueStatusBonusR[zuoyueLevel];
+          }
+          larc_zuoyueVitalBonus += 1e-10;
+          larc_zuoyueStatusBonus += 1e-10;//加个小量，避免因为舍入误差而算错
+
+        }
+        else
+        {
+          throw string("不支持带佐岳以外的友人或团队卡");
         }
       }
-      if (s == -1)
-        throw string("没带神团");
-
-      std::swap(cardId[s], cardId[0]);
-      std::swap(cardData[s], cardData[0]);
-      std::swap(cardJiBan[s], cardJiBan[0]);
-
-      for (int i = 0; i < 5; i++)
-        std::swap(cardDistribution[i][s], cardDistribution[i][0]);
-
-      std::swap(cardHint[s], cardHint[0]);
     }
 
-    // std::cout << "Swap load finished\n";
+    for (int i = 0; i < 18; i++) //人头
+    {
+      auto p = j["persons"][i];
+      persons[i].personType = p["personType"];
+      if (persons[i].personType == 0)persons[i].personType = 3;
+      persons[i].charaId = p["charaId"];
+      persons[i].cardIdInGame = p["cardIdInGame"];
+      persons[i].friendship = p["friendship"];
+      persons[i].isHint = p["isHint"];
+      persons[i].cardRecord = p["cardRecord"];
+      persons[i].larc_charge = p["larc_charge"];
+      persons[i].larc_statusType = p["larc_statusType"];
+      persons[i].larc_specialBuff = p["larc_specialBuff"];
+      persons[i].larc_level = p["larc_level"];
+      persons[i].larc_buffLevel = p["larc_buffLevel"];
+      for (int k = 0; k < 3; k++)
+        persons[i].larc_nextThreeBuffs[k] = p["larc_nextThreeBuffs"][k];
+      if (persons[i].personType == 2)//速耐力根智卡
+      {
+        SupportCard& cardP = cardParam[persons[i].cardIdInGame];
+        persons[i].larc_isLinkCard = cardP.larc_isLink;
 
-    initRandomGenerators();
-    calculateVenusSpiritsBonus();
+        std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
+        probs[cardP.cardType] += cardP.deYiLv;
+        persons[i].distribution = std::discrete_distribution<>(probs.begin(), probs.end());
+      }
+      else
+      {
+        persons[i].larc_isLinkCard = false;
+        std::vector<int> probs = { 1,1,1,1,1,1 }; //基础概率，速耐力根智鸽
+        persons[i].distribution = std::discrete_distribution<>(probs.begin(), probs.end());
+      }
+    }
+
+    motivationDropCount = j["motivationDropCount"];
+
+
+    larc_supportPtAll = j["larc_supportPtAll"];
+    larc_shixingPt = j["larc_shixingPt"];
+    for (int i = 0; i < 10; i++)
+      larc_levels[i] = j["larc_levels"][i];
+
+
+    larc_isSSS = j["larc_isSSS"];
+    larc_ssWin = j["larc_ssWin"];
+    larc_ssWinSinceLastSSS = j["larc_ssWinSinceLastSSS"];
+    for (int i = 0; i < 9; i++)
+      larc_allowedDebuffsFirstLarc[i] = false;
+    larc_allowedDebuffsFirstLarc[4] = true; //todo 用户自定义
+
+    larc_zuoyueFirstClick = j["larc_zuoyueFirstClick"];
+    larc_zuoyueOutgoingUnlocked = j["larc_zuoyueOutgoingUnlocked"];
+    larc_zuoyueOutgoingRefused = j["larc_zuoyueOutgoingRefused"];
+    larc_zuoyueOutgoingUsed = j["larc_zuoyueOutgoingUsed"];
+
+    stageInTurn = 1;
+
+
+    for (int i = 0; i < 5; i++)
+      for (int k = 0; k < 5; k++)
+      {
+        personDistribution[i][k] = j["personDistribution"][i][k];
+      }
+
+    larc_ssPersonsCount = j["larc_ssPersonsCount"];
+    for (int i = 0; i < 5; i++)
+      larc_ssPersons[i] = j["larc_ssPersons"][i];
+    larc_ssPersonsCountLastTurn = larc_ssPersonsCount;
+
+    calculateTrainingValue(); //补全一些没填的信息
 
     for (int i = 0; i < 5; i++)
       for (int k = 0; k < 7; k++)
@@ -168,10 +191,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
 
     for (int i = 0; i < 5; i++)
       failRate[i] = j["failRate"][i];
-    
-    */
-    memset(trainValue, 0, sizeof(int16_t) * 5 * 7);
-    memset(larc_ssValue, 0, sizeof(int16_t) * 5);
+
     calculateTrainingValue();
   }
   catch (string e)

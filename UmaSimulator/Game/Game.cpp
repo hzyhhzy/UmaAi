@@ -113,7 +113,6 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   larc_isSSS = false;
   larc_ssWin = 0;
   larc_ssWinSinceLastSSS = 0;
-  larc_isFirstLarcWin = false;
   for (int i = 0; i < 9; i++)
     larc_allowedDebuffsFirstLarc[i] = false;
 
@@ -944,9 +943,12 @@ void Game::calculateTrainingValueSingle(int trainType)
     if (larc_isAbroad && larc_levels[6] >= 3)//体力-20%
     vitalChange *= 0.8;
   }
+  int vitalChangeInt = round(vitalChange);
+  if (vitalChangeInt > maxVital - vital)vitalChangeInt = maxVital - vital;
+  if (vitalChangeInt < - vital)vitalChangeInt = - vital;
 
 
-  trainValue[trainType][6] = round(vitalChange);
+  trainValue[trainType][6] = vitalChangeInt;
 }
 void Game::calculateSS()
 {
@@ -1643,12 +1645,20 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
       skillPt += 5;
     }
 
-    if (persons[17].friendship < 60)  //有待考证，分界线不一定是60
-      addAllStatus(20);
-    else
-      addAllStatus(30);
+
+    addAllStatus(20);
     skillPt += 60;
-    skillPt += 40;//技能等效
+    skillPt += 10;//技能等效
+    if (larc_levels[9] >= 1)
+    {
+      addAllStatus(5);
+      skillPt += 12;//技能等效
+    }
+    if (willWin)
+    {
+      addAllStatus(5);
+      skillPt += 18;//技能等效
+    }
 
     printEvents("游戏结束");
   }

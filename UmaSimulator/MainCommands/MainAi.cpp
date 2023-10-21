@@ -78,7 +78,6 @@ void main_ai()
   //激进度为k，模拟n局时，标准差约为sqrt(1+k^2/(2k+1))*1200/(sqrt(n))
   //标准差大于30时会严重影响判断准确度
 
-  Search search(NULL, 128, GameConfig::threadNum);
 
   random_device rd;
   auto rand = mt19937_64(rd());
@@ -102,8 +101,10 @@ void main_ai()
   loadRole();   // roleplay
 
   //string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/packets/currentGS.json";
-  string currentGameStagePath = "packets/thisTurn.json";
+  string currentGameStagePath = "./gameData/thisTurn.json";
 
+
+  Search search(NULL, 32, GameConfig::threadNum);
 
   while (true)
   {
@@ -152,7 +153,7 @@ void main_ai()
     }
     game.print();
     cout << endl;
-    cout << rpText["name"] << rpText["calc"];
+    cout << rpText["name"] << rpText["calc"] << endl;
 
     auto printPolicy = [](float p)
     {
@@ -169,7 +170,72 @@ void main_ai()
     
     //最后几回合降低激进度
     double modifiedRadicalFactor = GameConfig::radicalFactor * (1 - exp(-double(TOTAL_TURN - game.turn) / 10.0));
-    search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand); 
+    //search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
+    if (game.turn < TOTAL_TURN - 1 && !game.isRacing)
+    {
+      int targetScore = 32000;
+      /*
+      Action handWrittenStrategy = Evaluator::handWrittenStrategy(game);
+      string strategyText[10] =
+      {
+        "速",
+        "耐",
+        "力",
+        "根",
+        "智",
+        "SS",
+        "休息",
+        "友人外出",
+        "普通外出",
+        "比赛"
+      };
+      cout << "手写逻辑：" << strategyText[handWrittenStrategy.train];
+      if (game.larc_isAbroad)
+      {
+        cout << "   ";
+        if (!handWrittenStrategy.buy50p)
+          cout << "不";
+        cout << "购买+50%";
+      }
+      cout << endl;*/
+
+      game.playerPrint = false;
+      search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
+      game.playerPrint = true;
+      for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
+      {
+        if (Search::buyBuffChoiceNum(game.turn) > 1 && i == 0)
+          cout << "不买:              ";
+        if (i == 1)
+          cout << "买+50%:            ";
+        if (i == 2 && game.turn < 50)
+          cout << "买pt+10:           ";
+        if (i == 2 && game.turn >= 50)
+          cout << "买体力-20%:        ";
+        if (i == 3 && game.turn < 50)
+          cout << "买+50%与pt+10:     ";
+        if (i == 3 && game.turn >= 50)
+          cout << "买+50%与体力-20%:  ";
+        cout << "速耐力根智: ";
+        for (int j = 0; j < 10; j++)
+        {
+          double score = search.allChoicesValue[i][j].scoreMean;
+          if (score > -20000)
+            cout
+            //<< fixed << setprecision(1) << search.allChoicesValue[i][j].winrate * 100 << "%:" 
+            << fixed << setprecision(0) << score - targetScore << " ";
+          else
+            cout << "-- ";
+          if (j == 4)cout << " | SS:";
+          if (j == 5)cout << " | 休息:";
+          if (j == 6)cout << " 友人外出:";
+          if (j == 7)cout << " 普通外出:";
+          if (j == 8)cout << " 比赛:";
+        }
+        cout << endl;
+      }
+    }
+    /*
     //cout << endl << rpText["finish"] << endl;
     cout << endl << rpText["analyze"] << " >>" << endl;
     {
@@ -258,7 +324,7 @@ void main_ai()
           cout << rpText["career"] << endl;
       }
     } // 输出结果Block
-
+    */
   } // while
 
 }

@@ -20,7 +20,6 @@ struct Game
   bool isAiJiao;//爱娇
   int16_t failureRateBias;//失败率改变量。练习上手=2，练习下手=-2
   int16_t fiveStatus[5];//五维属性，1200以上不减半
-  //int fiveStatusUmaBonus[5];//马娘自身加成
   int16_t fiveStatusLimit[5];//五维属性上限，1200以上不减半
   int16_t skillPt;//技能点
   int16_t skillScore;//已买技能的分数
@@ -29,7 +28,6 @@ struct Game
   int16_t trainLevelCount[5];//五个训练的等级的计数，实际训练等级=min(5,t/4+1)
   int16_t zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
   int16_t zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
-  //bool raceTurns[TOTAL_TURN];//哪些回合是比赛 //用umaId替代，在GameDatabase::AllUmas里找
   int normalCardCount;//速耐力根智卡的数量
   SupportCard cardParam[6];//六张卡的参数，拷贝到Game类里，一整局内不变，顺序任意。这样做的目的是训练ai时可能要随机改变卡的参数提高鲁棒性，所以每个game的卡的参数可能不一样
   int16_t saihou;//赛后加成
@@ -48,7 +46,6 @@ struct Game
   bool larc_isSSS;//是否为sss
   int16_t larc_ssWin;//一共多少人头的ss
   int16_t larc_ssWinSinceLastSSS;//从上次sss到现在win过几次ss（决定了下一个是sss的概率）
-  bool larc_isFirstLarcWin;// 第一场凯旋门赢没赢
   bool larc_allowedDebuffsFirstLarc[9];//第一次凯旋门可以不消哪些debuff。玩家可以设置，满足则认为可以赢凯旋门
 
   int16_t larc_zuoyueType;//没带佐岳卡=0，带的SSR卡=1，带的R卡=2
@@ -77,11 +74,9 @@ struct Game
   int16_t larc_shixingPtGainAbroad[5];//海外训练适性pt收益
   int16_t larc_trainBonus;//期待度训练加成
   int16_t larc_ssValue[5];//ss的速耐力根智（不包括上层的属性）
-  //int16_t larc_ssSpecialEffects[13];//ss的特殊buff
-  //int16_t larc_ssSupportPtGain;//ss的支援pt总共加多少（自己+其他人头）
   int16_t larc_ssFailRate;//ss的失败率
 
-  //游戏流程:
+  //游戏流程:（改过了，下面是过时的）
   //newGame();
   //for (int t = 0; t < TOTAL_TURN; t++)
   //{
