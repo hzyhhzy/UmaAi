@@ -1,0 +1,35 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        0,
+        10,
+        0,
+        20
+    ],
+    "fiveStatusInitial": [
+        103,
+        107,
+        116,
+        104,
+        120
+    ],
+    "freeRaces": [],
+    "gameId": 107001,
+    "name": "sirius-symboli",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        18,
+        30,
+        33,
+        43,
+        47,
+        53,
+        59,
+        69,
+        71
+    ],
+    "star": 5
+}

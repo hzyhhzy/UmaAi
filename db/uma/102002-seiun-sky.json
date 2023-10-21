@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        8,
+        0,
+        8,
+        14,
+        0
+    ],
+    "fiveStatusInitial": [
+        123,
+        109,
+        103,
+        108,
+        107
+    ],
+    "freeRaces": [],
+    "gameId": 102002,
+    "name": "seiun-sky",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        30,
+        33,
+        43,
+        47,
+        55,
+        59,
+        67,
+        71
+    ],
+    "star": 5
+}

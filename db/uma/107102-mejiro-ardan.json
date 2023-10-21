@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        8,
+        8,
+        0,
+        0,
+        14
+    ],
+    "fiveStatusInitial": [
+        116,
+        116,
+        94,
+        103,
+        121
+    ],
+    "freeRaces": [],
+    "gameId": 107102,
+    "name": "mejiro-ardan",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        31,
+        33,
+        43,
+        53,
+        59,
+        66,
+        67
+    ],
+    "star": 5
+}

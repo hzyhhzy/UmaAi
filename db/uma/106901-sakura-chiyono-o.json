@@ -1,0 +1,33 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        0,
+        0,
+        10,
+        10
+    ],
+    "fiveStatusInitial": [
+        114,
+        117,
+        95,
+        114,
+        110
+    ],
+    "freeRaces": [],
+    "gameId": 106901,
+    "name": "sakura-chiyono-o",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        22,
+        30,
+        33,
+        43,
+        58,
+        67,
+        69
+    ],
+    "star": 5
+}

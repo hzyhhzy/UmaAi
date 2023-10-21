@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        0,
+        20,
+        0,
+        10
+    ],
+    "fiveStatusInitial": [
+        121,
+        82,
+        132,
+        101,
+        114
+    ],
+    "freeRaces": [],
+    "gameId": 108501,
+    "name": "daiichi-ruby",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        28,
+        30,
+        33,
+        40,
+        53,
+        58,
+        65,
+        69
+    ],
+    "star": 5
+}

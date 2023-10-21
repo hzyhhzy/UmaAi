@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        0,
+        0,
+        10,
+        0,
+        20
+    ],
+    "fiveStatusInitial": [
+        114,
+        107,
+        113,
+        106,
+        110
+    ],
+    "freeRaces": [],
+    "gameId": 109801,
+    "name": "copano-rickey",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        30,
+        46,
+        51,
+        56,
+        59,
+        66,
+        68,
+        71
+    ],
+    "star": 5
+}

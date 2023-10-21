@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        0,
+        0,
+        0,
+        20
+    ],
+    "fiveStatusInitial": [
+        114,
+        98,
+        110,
+        108,
+        120
+    ],
+    "freeRaces": [],
+    "gameId": 105102,
+    "name": "nishino-flower",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        22,
+        30,
+        33,
+        41,
+        53,
+        55,
+        58,
+        65
+    ],
+    "star": 5
+}

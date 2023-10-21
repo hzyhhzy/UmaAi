@@ -1,0 +1,32 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        14,
+        0,
+        8,
+        8,
+        0
+    ],
+    "fiveStatusInitial": [
+        134,
+        79,
+        133,
+        102,
+        102
+    ],
+    "freeRaces": [],
+    "gameId": 105302,
+    "name": "bamboo-memory",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        43,
+        53,
+        58,
+        59,
+        65,
+        69
+    ],
+    "star": 5
+}

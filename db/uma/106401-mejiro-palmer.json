@@ -1,0 +1,32 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        10,
+        10,
+        0,
+        10,
+        0
+    ],
+    "fiveStatusInitial": [
+        112,
+        126,
+        93,
+        111,
+        108
+    ],
+    "freeRaces": [],
+    "gameId": 106401,
+    "name": "mejiro-palmer",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        36,
+        48,
+        55,
+        59,
+        67,
+        71
+    ],
+    "star": 5
+}

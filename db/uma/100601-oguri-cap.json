@@ -1,0 +1,31 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        20,
+        0,
+        10,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        124,
+        81,
+        130,
+        103,
+        112
+    ],
+    "freeRaces": [],
+    "gameId": 100601,
+    "name": "oguri-cap",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        32,
+        45,
+        47,
+        67,
+        71
+    ],
+    "star": 5
+}
