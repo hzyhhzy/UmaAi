@@ -71,18 +71,32 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 6; i++)
     {
       int cardId = j["cardId"][i];
+      int realCardId = cardId / 10;
+      int cardLevel = cardId % 10;
 
-      if (!GameDatabase::AllCards.count(cardId))
-        throw string("未知支援卡，需要更新ai");
+      //如果没找到卡，找一下这个卡的高破在不在数据库中
+      if (!GameDatabase::AllCards.count(cardId) || GameDatabase::AllCards[cardId].filled == false)
+      {
+        while (cardLevel < 5)
+        {
+          cardLevel += 1;
+          int cardId1 = realCardId * 10 + cardLevel;
+          if (GameDatabase::AllCards.count(cardId1) && GameDatabase::AllCards[cardId1].filled == true)
+            break;
+          if (cardLevel == 4)
+            throw string("未知支援卡，需要更新ai");
+        }
+      }
 
-      cardParam[i] = GameDatabase::AllCards[cardId];
+
+      cardParam[i] = GameDatabase::AllCards[realCardId * 10 + cardLevel];
+      cardParam[i].cardID = cardId;
       SupportCard& cardP = cardParam[i];
       saihou += cardP.saiHou;
       int cardType = cardP.cardType;
       if (cardType == 5 || cardType == 6)
       {
 
-        int realCardId = cardId / 10;
         if (realCardId == 30160 || realCardId == 10094)//佐岳卡
         {
           if (realCardId == 30160)
