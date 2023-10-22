@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        15,
+        0,
+        0,
+        0,
+        15
+    ],
+    "fiveStatusInitial": [
+        119,
+        107,
+        109,
+        102,
+        113
+    ],
+    "freeRaces": [],
+    "gameId": 108601,
+    "name": "mejiro-ramonu",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        22,
+        30,
+        33,
+        43,
+        56,
+        59,
+        68,
+        69
+    ],
+    "star": 5
+}

@@ -1,0 +1,34 @@
+{
+    "bonusData": [],
+    "fiveStatusBonus": [
+        8,
+        14,
+        8,
+        0,
+        0
+    ],
+    "fiveStatusInitial": [
+        108,
+        123,
+        114,
+        102,
+        103
+    ],
+    "freeRaces": [],
+    "gameId": 100703,
+    "name": "gold-ship",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+        11,
+        23,
+        30,
+        43,
+        47,
+        55,
+        59,
+        67,
+        71
+    ],
+    "star": 5
+}
