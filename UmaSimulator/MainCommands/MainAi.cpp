@@ -51,9 +51,9 @@ void loadRole()
 void print_luck(int luck)
 {
     int u = 0;//新版平均运气大约500，但为了照顾种马比较一般和卡没满破的人（这两种情况ai打分会偏高），就设成0了
-    int sigma = 1200;
+    int sigma = 1500;
     string color = "";
-    if (luck > 20000) u = 28500;//好点的卡平均值约为uf9
+    if (luck > 20000) u = 32000;//好点的卡平均值约为ue6
 
     if (!GameConfig::noColor)
     {
@@ -250,7 +250,21 @@ void main_ai()
         restScore = evalf(search.allChoicesValue[0][8]);
 
 
-      cout << "期望分数：\033[1;32m" << int(maxMean) << "\033[0m" << endl;
+      if (game.turn == 0 || scoreFirstTurn == 0)
+      {
+        cout << "期望分数 \033[1;32m" << int(maxMean) << "\033[0m  " << endl;
+        scoreFirstTurn = maxMean;
+      }
+      else
+      {
+        cout << rpText["luck"] << " | 本局：";
+        print_luck(maxMean - scoreFirstTurn);
+        cout << " | 本回合：" << maxMean - scoreLastTurn
+          << " | 评分预测: \033[1;32m" << maxMean << "\033[0m " << endl;
+
+      }
+      cout.flush();
+      scoreLastTurn = maxMean;
 
       for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
       {
