@@ -185,7 +185,6 @@
     <ClInclude Include="NeuralNet\Model.h" />
     <ClInclude Include="NeuralNet\NNInput.h" />
     <ClInclude Include="Search\Search.h" />
-    <ClInclude Include="SupportCard\CardEffect.h" />
     <ClInclude Include="SupportCard\SupportCard.h" />
     <ClInclude Include="Tests\tests.h" />
   </ItemGroup>

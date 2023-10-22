@@ -16986,8 +16986,8 @@
     "uniqueEffect": {
       "summary": "スキルポイントボーナス(1),初期賢さアップ(20)",
       "effect": {
-        "SkillPointBonus": 1,
-        "InitialWizUp": 20
+        "30": 1,
+        "13": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -17184,8 +17184,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),initialJiBan(15)",
       "effect": {
-        "MotivationUp": 15,
-        "InitalEvaluationUp": 15
+        "2": 15,
+        "14": 15
       },
       "unlockLevel": 25,
       "type": null,
@@ -17371,8 +17371,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),saiHou(5)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "RaceStatusUp": 5
+        "1": 10,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -17569,8 +17569,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),saiHou(5)",
       "effect": {
-        "MotivationUp": 15,
-        "RaceStatusUp": 5
+        "2": 15,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -17762,8 +17762,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),初期パワーアップ(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitialPowerUp": 20
+        "1": 10,
+        "11": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -17959,8 +17959,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),hintProbIncrease(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "SkillTipsEventRateUp": 20
+        "8": 5,
+        "18": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -18147,8 +18147,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),deYiLv(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "GoodTrainingRateUp": 20
+        "1": 10,
+        "19": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -18340,8 +18340,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),deYiLv(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "GoodTrainingRateUp": 20
+        "8": 5,
+        "19": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -18526,8 +18526,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),hintProbIncrease(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "SkillTipsEventRateUp": 20
+        "1": 10,
+        "18": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -18717,8 +18717,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),saiHou(5)",
       "effect": {
-        "MotivationUp": 15,
-        "RaceStatusUp": 5
+        "2": 15,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -18908,8 +18908,8 @@
     "uniqueEffect": {
       "summary": "根性ボーナス(1),初期根性アップ(20)",
       "effect": {
-        "TrainingGutsUp": 1,
-        "InitialGutsUp": 20
+        "6": 1,
+        "12": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -19104,8 +19104,8 @@
     "uniqueEffect": {
       "summary": "スキルポイントボーナス(1),hintProbIncrease(20)",
       "effect": {
-        "SkillPointBonus": 1,
-        "SkillTipsEventRateUp": 20
+        "30": 1,
+        "18": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -19296,8 +19296,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),saiHou(5)",
       "effect": {
-        "MotivationUp": 15,
-        "RaceStatusUp": 5
+        "2": 15,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -19490,8 +19490,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),deYiLv(20)",
       "effect": {
-        "MotivationUp": 15,
-        "GoodTrainingRateUp": 20
+        "2": 15,
+        "19": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -19687,8 +19687,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),初期賢さアップ(20)",
       "effect": {
-        "MotivationUp": 15,
-        "InitialWizUp": 20
+        "2": 15,
+        "13": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -19886,8 +19886,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),initialJiBan(15)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitalEvaluationUp": 15
+        "1": 10,
+        "14": 15
       },
       "unlockLevel": 25,
       "type": null,
@@ -20075,8 +20075,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),hintProbIncrease(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "SkillTipsEventRateUp": 20
+        "8": 5,
+        "18": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -20272,8 +20272,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期賢さアップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialWizUp": 20
+        "8": 5,
+        "13": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -20467,8 +20467,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),初期根性アップ(20)",
       "effect": {
-        "MotivationUp": 15,
-        "InitialGutsUp": 20
+        "2": 15,
+        "12": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -20660,8 +20660,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),初期速度アップ(20)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "InitialSpeedUp": 20
+        "3": 1,
+        "9": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -20836,8 +20836,8 @@
     "uniqueEffect": {
       "summary": "failRateDrop(10),vitalCostDrop(5)",
       "effect": {
-        "TrainingFailureRateDown": 10,
-        "TrainingHPConsumptionDown": 5
+        "27": 10,
+        "28": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -21025,8 +21025,8 @@
     "uniqueEffect": {
       "summary": "スキルポイントボーナス(1),初期根性アップ(20)",
       "effect": {
-        "SkillPointBonus": 1,
-        "InitialGutsUp": 20
+        "30": 1,
+        "12": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -21219,8 +21219,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),hintProbIncrease(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "SkillTipsEventRateUp": 20
+        "8": 5,
+        "18": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -21413,8 +21413,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),deYiLv(20)",
       "effect": {
-        "MotivationUp": 15,
-        "GoodTrainingRateUp": 20
+        "2": 15,
+        "19": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -21600,8 +21600,8 @@
     "uniqueEffect": {
       "summary": "賢さボーナス(1),deYiLv(20)",
       "effect": {
-        "TrainingWizUp": 1,
-        "GoodTrainingRateUp": 20
+        "7": 1,
+        "19": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -21795,8 +21795,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期賢さアップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialWizUp": 20
+        "8": 5,
+        "13": 20
       },
       "unlockLevel": 35,
       "type": null,
@@ -21987,8 +21987,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),saiHou(5)",
       "effect": {
-        "MotivationUp": 15,
-        "RaceStatusUp": 5
+        "2": 15,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -22182,8 +22182,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),初期持久力アップ(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitalStaminaUp": 20
+        "1": 10,
+        "10": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -22375,8 +22375,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),initialJiBan(15)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitalEvaluationUp": 15
+        "1": 10,
+        "14": 15
       },
       "unlockLevel": 25,
       "type": null,
@@ -22567,8 +22567,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),saiHou(5)",
       "effect": {
-        "MotivationUp": 15,
-        "RaceStatusUp": 5
+        "2": 15,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -22753,8 +22753,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),initialJiBan(15)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitalEvaluationUp": 15
+        "1": 10,
+        "14": 15
       },
       "unlockLevel": 25,
       "type": null,
@@ -22943,8 +22943,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),持久力ボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "TrainingStaminaUp": 1
+        "1": 10,
+        "4": 1
       },
       "unlockLevel": 25,
       "type": null,
@@ -23135,8 +23135,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),deYiLv(20)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "GoodTrainingRateUp": 20
+        "3": 1,
+        "19": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -23332,8 +23332,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),hintProbIncrease(20)",
       "effect": {
-        "MotivationUp": 15,
-        "SkillTipsEventRateUp": 20
+        "2": 15,
+        "18": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -23520,8 +23520,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),saiHou(5)",
       "effect": {
-        "MotivationUp": 15,
-        "RaceStatusUp": 5
+        "2": 15,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -23707,8 +23707,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),initialJiBan(15)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "InitalEvaluationUp": 15
+        "5": 1,
+        "14": 15
       },
       "unlockLevel": 25,
       "type": null,
@@ -23893,8 +23893,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期速度アップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialSpeedUp": 20
+        "8": 5,
+        "9": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -24089,8 +24089,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),hintProbIncrease(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "SkillTipsEventRateUp": 20
+        "8": 5,
+        "18": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -24274,8 +24274,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),根性ボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "TrainingGutsUp": 1
+        "1": 10,
+        "6": 1
       },
       "unlockLevel": 25,
       "type": null,
@@ -24461,8 +24461,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),saiHou(5)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "RaceStatusUp": 5
+        "3": 1,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -24651,8 +24651,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),deYiLv(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "GoodTrainingRateUp": 20
+        "1": 10,
+        "19": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -24835,8 +24835,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期パワーアップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialPowerUp": 20
+        "8": 5,
+        "11": 20
       },
       "unlockLevel": 35,
       "type": null,
@@ -25022,8 +25022,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),saiHou(5)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "RaceStatusUp": 5
+        "1": 10,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -25206,8 +25206,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期パワーアップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialPowerUp": 20
+        "8": 5,
+        "11": 20
       },
       "unlockLevel": 35,
       "type": null,
@@ -25400,8 +25400,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期賢さアップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialWizUp": 20
+        "8": 5,
+        "13": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -25588,8 +25588,8 @@
     "uniqueEffect": {
       "summary": "初期持久力アップ(20),初期根性アップ(20)",
       "effect": {
-        "InitalStaminaUp": 20,
-        "InitialGutsUp": 20
+        "10": 20,
+        "12": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -25783,8 +25783,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),saiHou(5)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "RaceStatusUp": 5
+        "5": 1,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -25970,8 +25970,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),初期賢さアップ(20)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "InitialWizUp": 20
+        "3": 1,
+        "13": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -26168,8 +26168,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -26351,8 +26351,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),スキルポイントボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "SkillPointBonus": 1
+        "1": 10,
+        "30": 1
       },
       "unlockLevel": 25,
       "type": null,
@@ -26538,8 +26538,8 @@
     "uniqueEffect": {
       "summary": "根性ボーナス(1),xunLian(5)",
       "effect": {
-        "TrainingGutsUp": 1,
-        "TrainingEffectUp": 5
+        "6": 1,
+        "8": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -26725,8 +26725,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),saiHou(5)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "RaceStatusUp": 5
+        "1": 10,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -26911,8 +26911,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),持久力ボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "TrainingStaminaUp": 1
+        "1": 10,
+        "4": 1
       },
       "unlockLevel": 25,
       "type": null,
@@ -27100,8 +27100,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),速度ボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "TrainingSpeedUp": 1
+        "1": 10,
+        "3": 1
       },
       "unlockLevel": 25,
       "type": null,
@@ -27294,8 +27294,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),スキルポイントボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "SkillPointBonus": 1
+        "1": 10,
+        "30": 1
       },
       "unlockLevel": 25,
       "type": null,
@@ -27487,8 +27487,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -27682,8 +27682,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),持久力ボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "TrainingStaminaUp": 1
+        "1": 10,
+        "4": 1
       },
       "unlockLevel": 25,
       "type": null,
@@ -27873,8 +27873,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),initialJiBan(15)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "InitalEvaluationUp": 15
+        "5": 1,
+        "14": 15
       },
       "unlockLevel": 25,
       "type": null,
@@ -28062,8 +28062,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),スキルポイントボーナス(1)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "SkillPointBonus": 1
+        "8": 5,
+        "30": 1
       },
       "unlockLevel": 25,
       "type": null,
@@ -28268,8 +28268,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -28462,8 +28462,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),初期賢さアップ(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitialWizUp": 20
+        "1": 10,
+        "13": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -28657,8 +28657,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),initialJiBan(15)",
       "effect": {
-        "MotivationUp": 15,
-        "InitalEvaluationUp": 15
+        "2": 15,
+        "14": 15
       },
       "unlockLevel": 25,
       "type": null,
@@ -28852,8 +28852,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),hintProbIncrease(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "SkillTipsEventRateUp": 20
+        "8": 5,
+        "18": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -29040,8 +29040,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 25,
       "type": null,
@@ -29234,8 +29234,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期根性アップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialGutsUp": 20
+        "8": 5,
+        "12": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -29431,8 +29431,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),deYiLv(20)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "GoodTrainingRateUp": 20
+        "3": 1,
+        "19": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -29624,8 +29624,8 @@
     "uniqueEffect": {
       "summary": "持久力ボーナス(1),deYiLv(20)",
       "effect": {
-        "TrainingStaminaUp": 1,
-        "GoodTrainingRateUp": 20
+        "4": 1,
+        "19": 20
       },
       "unlockLevel": 25,
       "type": null,
@@ -29818,8 +29818,8 @@
     "uniqueEffect": {
       "summary": "根性ボーナス(1),初期根性アップ(20)",
       "effect": {
-        "TrainingGutsUp": 1,
-        "InitialGutsUp": 20
+        "6": 1,
+        "12": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -30009,8 +30009,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),hintProbIncrease(20)",
       "effect": {
-        "MotivationUp": 15,
-        "SkillTipsEventRateUp": 20
+        "2": 15,
+        "18": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -30202,8 +30202,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),初期速度アップ(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitialSpeedUp": 20
+        "1": 10,
+        "9": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -30398,8 +30398,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),initialJiBan(15)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitalEvaluationUp": 15
+        "8": 5,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -30594,8 +30594,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),deYiLv(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "GoodTrainingRateUp": 20
+        "1": 10,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -30784,8 +30784,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),initialJiBan(15)",
       "effect": {
-        "MotivationUp": 15,
-        "InitalEvaluationUp": 15
+        "2": 15,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -30978,8 +30978,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),deYiLv(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "GoodTrainingRateUp": 20
+        "1": 10,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -31171,8 +31171,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),deYiLv(20)",
       "effect": {
-        "MotivationUp": 15,
-        "GoodTrainingRateUp": 20
+        "2": 15,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -31365,8 +31365,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期持久力アップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitalStaminaUp": 20
+        "8": 5,
+        "10": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -31557,8 +31557,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),initialJiBan(15)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitalEvaluationUp": 15
+        "1": 10,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -31754,8 +31754,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期根性アップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialGutsUp": 20
+        "8": 5,
+        "12": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -31946,8 +31946,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),hintProbIncrease(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "SkillTipsEventRateUp": 20
+        "1": 10,
+        "18": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -32136,8 +32136,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),initialJiBan(15)",
       "effect": {
-        "MotivationUp": 15,
-        "InitalEvaluationUp": 15
+        "2": 15,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -32326,8 +32326,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),初期速度アップ(20)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "InitialSpeedUp": 20
+        "3": 1,
+        "9": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -32521,8 +32521,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),initialJiBan(15)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitalEvaluationUp": 15
+        "1": 10,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -32708,8 +32708,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),deYiLv(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "GoodTrainingRateUp": 20
+        "1": 10,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -32903,8 +32903,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),初期パワーアップ(20)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "InitialPowerUp": 20
+        "5": 1,
+        "11": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -33095,8 +33095,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),initialJiBan(15)",
       "effect": {
-        "MotivationUp": 15,
-        "InitalEvaluationUp": 15
+        "2": 15,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -33276,8 +33276,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),saiHou(5)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "RaceStatusUp": 5
+        "1": 10,
+        "15": 5
       },
       "unlockLevel": 40,
       "type": null,
@@ -33465,8 +33465,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),deYiLv(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "GoodTrainingRateUp": 20
+        "8": 5,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -33641,8 +33641,8 @@
     "uniqueEffect": {
       "summary": "failRateDrop(10),vitalCostDrop(5)",
       "effect": {
-        "TrainingFailureRateDown": 10,
-        "TrainingHPConsumptionDown": 5
+        "27": 10,
+        "28": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -33838,8 +33838,8 @@
     "uniqueEffect": {
       "summary": "持久力ボーナス(1),初期持久力アップ(20)",
       "effect": {
-        "TrainingStaminaUp": 1,
-        "InitalStaminaUp": 20
+        "4": 1,
+        "10": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -34034,8 +34034,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),hintProbIncrease(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "SkillTipsEventRateUp": 20
+        "1": 10,
+        "18": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -34231,8 +34231,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),初期パワーアップ(20)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "InitialPowerUp": 20
+        "5": 1,
+        "11": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -34420,8 +34420,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 40,
       "type": null,
@@ -34613,8 +34613,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),saiHou(5)",
       "effect": {
-        "MotivationUp": 15,
-        "RaceStatusUp": 5
+        "2": 15,
+        "15": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -34807,8 +34807,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期根性アップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialGutsUp": 20
+        "8": 5,
+        "12": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -35007,8 +35007,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),deYiLv(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "GoodTrainingRateUp": 20
+        "8": 5,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -35201,8 +35201,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),initialJiBan(15)",
       "effect": {
-        "MotivationUp": 15,
-        "InitalEvaluationUp": 15
+        "2": 15,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -35388,8 +35388,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),初期根性アップ(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitialGutsUp": 20
+        "1": 10,
+        "12": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -35579,8 +35579,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -35771,8 +35771,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),deYiLv(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "GoodTrainingRateUp": 20
+        "8": 5,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -35963,8 +35963,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),initialJiBan(15)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitalEvaluationUp": 15
+        "1": 10,
+        "14": 15
       },
       "unlockLevel": 40,
       "type": null,
@@ -36159,8 +36159,8 @@
     "uniqueEffect": {
       "summary": "持久力ボーナス(1),xunLian(5)",
       "effect": {
-        "TrainingStaminaUp": 1,
-        "TrainingEffectUp": 5
+        "4": 1,
+        "8": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -36340,8 +36340,8 @@
     "uniqueEffect": {
       "summary": "failRateDrop(10),vitalCostDrop(5)",
       "effect": {
-        "TrainingFailureRateDown": 10,
-        "TrainingHPConsumptionDown": 5
+        "27": 10,
+        "28": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -36539,7 +36539,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时速度ボーナス(2)",
       "effect": {
-        "TrainingSpeedUp": 2
+        "3": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -36736,8 +36736,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -36922,8 +36922,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),初期速度アップ(20)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "InitialSpeedUp": 20
+        "3": 1,
+        "9": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -37115,8 +37115,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),deYiLv(20)",
       "effect": {
-        "MotivationUp": 15,
-        "GoodTrainingRateUp": 20
+        "2": 15,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -37307,8 +37307,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 40,
       "type": null,
@@ -37495,8 +37495,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),初期パワーアップ(20)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "InitialPowerUp": 20
+        "5": 1,
+        "11": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -37691,8 +37691,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),根性ボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "TrainingGutsUp": 1
+        "1": 10,
+        "6": 1
       },
       "unlockLevel": 30,
       "type": null,
@@ -37881,8 +37881,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),初期速度アップ(20)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "InitialSpeedUp": 20
+        "3": 1,
+        "9": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -38065,8 +38065,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),速度ボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "TrainingSpeedUp": 1
+        "1": 10,
+        "3": 1
       },
       "unlockLevel": 30,
       "type": null,
@@ -38252,8 +38252,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),持久力ボーナス(1)",
       "effect": {
-        "MotivationUp": 15,
-        "TrainingStaminaUp": 1
+        "2": 15,
+        "4": 1
       },
       "unlockLevel": 30,
       "type": null,
@@ -38440,8 +38440,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期パワーアップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialPowerUp": 20
+        "8": 5,
+        "11": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -38631,8 +38631,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),スキルポイントボーナス(1)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "SkillPointBonus": 1
+        "5": 1,
+        "30": 1
       },
       "unlockLevel": 30,
       "type": null,
@@ -38812,7 +38812,7 @@
     "uniqueEffect": {
       "summary": "参加友情训练时，vitalCostDrop(30)",
       "effect": {
-        "TrainingHPConsumptionDown": 30
+        "28": 30
       },
       "unlockLevel": 30,
       "type": 113,
@@ -39011,8 +39011,8 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时速度ボーナス(1)スキルポイントボーナス(1)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "SkillPointBonus": 1
+        "3": 1,
+        "30": 1
       },
       "unlockLevel": 30,
       "type": 101,
@@ -39218,8 +39218,8 @@
     "uniqueEffect": {
       "summary": "賢さボーナス(1),saiHou(5)",
       "effect": {
-        "TrainingWizUp": 1,
-        "RaceStatusUp": 5
+        "7": 1,
+        "15": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -39411,8 +39411,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),初期賢さアップ(20)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "InitialWizUp": 20
+        "3": 1,
+        "13": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -39599,8 +39599,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),deYiLv(20)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "GoodTrainingRateUp": 20
+        "1": 10,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -39795,8 +39795,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),hintProbIncrease(20)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "SkillTipsEventRateUp": 20
+        "5": 1,
+        "18": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -39983,8 +39983,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),初期パワーアップ(20)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "InitialPowerUp": 20
+        "5": 1,
+        "11": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -40169,8 +40169,8 @@
     "uniqueEffect": {
       "summary": "持久力ボーナス(1),hintProbIncrease(20)",
       "effect": {
-        "TrainingStaminaUp": 1,
-        "SkillTipsEventRateUp": 20
+        "4": 1,
+        "18": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -40357,8 +40357,8 @@
     "uniqueEffect": {
       "summary": "根性ボーナス(1),saiHou(5)",
       "effect": {
-        "TrainingGutsUp": 1,
-        "RaceStatusUp": 5
+        "6": 1,
+        "15": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -40554,8 +40554,8 @@
     "uniqueEffect": {
       "summary": "賢さボーナス(1),initialJiBan(15)",
       "effect": {
-        "TrainingWizUp": 1,
-        "InitalEvaluationUp": 15
+        "7": 1,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -40745,8 +40745,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期持久力アップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitalStaminaUp": 20
+        "8": 5,
+        "10": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -40937,8 +40937,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -41126,8 +41126,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),initialJiBan(15)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitalEvaluationUp": 15
+        "1": 10,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -41321,8 +41321,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),xunLian(5)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "TrainingEffectUp": 5
+        "1": 10,
+        "8": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -41512,8 +41512,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),初期速度アップ(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "InitialSpeedUp": 20
+        "8": 5,
+        "9": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -41693,7 +41693,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时スキルポイントボーナス(2)",
       "effect": {
-        "SkillPointBonus": 2
+        "30": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -41896,8 +41896,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),saiHou(5)",
       "effect": {
-        "MotivationUp": 15,
-        "RaceStatusUp": 5
+        "2": 15,
+        "15": 5
       },
       "unlockLevel": 30,
       "type": null,
@@ -42096,8 +42096,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),deYiLv(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "GoodTrainingRateUp": 20
+        "8": 5,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -42282,8 +42282,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),initialJiBan(15)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "InitalEvaluationUp": 15
+        "1": 10,
+        "14": 15
       },
       "unlockLevel": 40,
       "type": null,
@@ -42476,8 +42476,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),initialJiBan(15)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "InitalEvaluationUp": 15
+        "5": 1,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -42669,8 +42669,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),initialJiBan(15)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "InitalEvaluationUp": 15
+        "5": 1,
+        "14": 15
       },
       "unlockLevel": 30,
       "type": null,
@@ -42858,8 +42858,8 @@
     "uniqueEffect": {
       "summary": "速度ボーナス(1),deYiLv(20)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "GoodTrainingRateUp": 20
+        "3": 1,
+        "19": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -43035,8 +43035,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),saiHou(5)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "RaceStatusUp": 5
+        "1": 10,
+        "15": 5
       },
       "unlockLevel": 40,
       "type": null,
@@ -43223,8 +43223,8 @@
     "uniqueEffect": {
       "summary": "youQing(10),持久力ボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "TrainingStaminaUp": 1
+        "1": 10,
+        "4": 1
       },
       "unlockLevel": 30,
       "type": null,
@@ -43414,8 +43414,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),saiHou(5)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "RaceStatusUp": 5
+        "8": 5,
+        "15": 5
       },
       "unlockLevel": 40,
       "type": null,
@@ -43606,8 +43606,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),hintProbIncrease(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "SkillTipsEventRateUp": 20
+        "8": 5,
+        "18": 20
       },
       "unlockLevel": 30,
       "type": null,
@@ -43800,8 +43800,8 @@
     "uniqueEffect": {
       "summary": "ganJing(15),failRateDrop(10)",
       "effect": {
-        "MotivationUp": 15,
-        "TrainingFailureRateDown": 10
+        "2": 15,
+        "27": 10
       },
       "unlockLevel": 30,
       "type": null,
@@ -43989,8 +43989,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),hintProbIncrease(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "SkillTipsEventRateUp": 20
+        "8": 5,
+        "18": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -44333,7 +44333,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -44531,7 +44531,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时賢さボーナス(3)",
       "effect": {
-        "TrainingWizUp": 3
+        "7": 3
       },
       "unlockLevel": 30,
       "type": 101,
@@ -44727,7 +44727,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80且不是擅长训练时，训练效果提高(20)",
       "effect": {
-        "TrainingEffectUp": 20
+        "8": 20
       },
       "unlockLevel": 30,
       "type": 102,
@@ -44921,8 +44921,8 @@
     "uniqueEffect": {
       "summary": "xunLian(5),hintProbIncrease(20)",
       "effect": {
-        "TrainingEffectUp": 5,
-        "SkillTipsEventRateUp": 20
+        "8": 5,
+        "18": 20
       },
       "unlockLevel": 40,
       "type": null,
@@ -45114,7 +45114,7 @@
     "uniqueEffect": {
       "summary": "编入支援卡种类>=5时，训练效果提高 (15)",
       "effect": {
-        "TrainingEffectUp": 15
+        "8": 15
       },
       "unlockLevel": 30,
       "type": 103,
@@ -45309,7 +45309,7 @@
     "uniqueEffect": {
       "summary": "最大200000人/每10000粉丝，训练效果+1%(总共+(20))",
       "effect": {
-        "TrainingEffectUp": 20
+        "8": 20
       },
       "unlockLevel": 30,
       "type": 104,
@@ -45497,7 +45497,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时持久力ボーナス(2)",
       "effect": {
-        "TrainingStaminaUp": 2
+        "4": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -45696,7 +45696,7 @@
     "uniqueEffect": {
       "summary": "编入支援卡种类>=4时，训练效果提高 (10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 103,
@@ -45889,7 +45889,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时ganJing(60)",
       "effect": {
-        "MotivationUp": 60
+        "2": 60
       },
       "unlockLevel": 30,
       "type": 101,
@@ -46487,7 +46487,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时速度ボーナス(2)",
       "effect": {
-        "TrainingSpeedUp": 2
+        "3": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -46675,7 +46675,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时パワーボーナス(2)",
       "effect": {
-        "TrainingPowerUp": 2
+        "5": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -47249,8 +47249,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),saiHou(5)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "RaceStatusUp": 5
+        "5": 1,
+        "15": 5
       },
       "unlockLevel": 40,
       "type": null,
@@ -47453,8 +47453,8 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时賢さボーナス(1)スキルポイントボーナス(1)",
       "effect": {
-        "TrainingWizUp": 1,
-        "SkillPointBonus": 1
+        "7": 1,
+        "30": 1
       },
       "unlockLevel": 30,
       "type": 101,
@@ -47646,7 +47646,7 @@
     "uniqueEffect": {
       "summary": "スキルポイントボーナス(1)",
       "effect": {
-        "SkillPointBonus": 1
+        "30": 1
       },
       "unlockLevel": 30,
       "type": null,
@@ -48031,7 +48031,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -48227,7 +48227,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时youQing(20)",
       "effect": {
-        "SpecialTagEffectUp": 20
+        "1": 20
       },
       "unlockLevel": 30,
       "type": 101,
@@ -48614,7 +48614,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时wizVitalBonus(5)",
       "effect": {
-        "WizRecoverUp": 5
+        "31": 5
       },
       "unlockLevel": 30,
       "type": 101,
@@ -48808,7 +48808,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -49012,8 +49012,8 @@
     "uniqueEffect": {
       "summary": "パワーボーナス(1),initialJiBan(15)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "InitalEvaluationUp": 15
+        "5": 1,
+        "14": 15
       },
       "unlockLevel": 40,
       "type": null,
@@ -49200,8 +49200,8 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时パワーボーナス(1)スキルポイントボーナス(1)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "SkillPointBonus": 1
+        "5": 1,
+        "30": 1
       },
       "unlockLevel": 30,
       "type": 101,
@@ -49404,7 +49404,7 @@
     "uniqueEffect": {
       "summary": "参与训练的设施等级越高，xunLian效果越高 (5%/每级)パワーボーナス(0)",
       "effect": {
-        "TrainingPowerUp": 0
+        "5": 0
       },
       "unlockLevel": 30,
       "type": 111,
@@ -49797,7 +49797,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -49997,7 +49997,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时持久力ボーナス(2)",
       "effect": {
-        "TrainingStaminaUp": 2
+        "4": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -50583,7 +50583,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -50777,7 +50777,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时パワーボーナス(2)",
       "effect": {
-        "TrainingPowerUp": 2
+        "5": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -51353,7 +51353,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -51559,7 +51559,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时根性ボーナス(2)",
       "effect": {
-        "TrainingGutsUp": 2
+        "6": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -51752,7 +51752,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时パワーボーナス(2)",
       "effect": {
-        "TrainingPowerUp": 2
+        "5": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -51947,7 +51947,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时根性ボーナス(3)",
       "effect": {
-        "TrainingGutsUp": 3
+        "6": 3
       },
       "unlockLevel": 30,
       "type": 101,
@@ -52136,7 +52136,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -52331,8 +52331,8 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时パワーボーナス(1)スキルポイントボーナス(1)",
       "effect": {
-        "TrainingPowerUp": 1,
-        "SkillPointBonus": 1
+        "5": 1,
+        "30": 1
       },
       "unlockLevel": 30,
       "type": 101,
@@ -52530,7 +52530,7 @@
     "uniqueEffect": {
       "summary": "参与训练的设施等级越高，xunLian效果越高 (5%/每级)パワーボーナス(0)",
       "effect": {
-        "TrainingPowerUp": 0
+        "5": 0
       },
       "unlockLevel": 30,
       "type": 111,
@@ -52736,8 +52736,8 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时速度ボーナス(1)スキルポイントボーナス(1)",
       "effect": {
-        "TrainingSpeedUp": 1,
-        "SkillPointBonus": 1
+        "3": 1,
+        "30": 1
       },
       "unlockLevel": 30,
       "type": 101,
@@ -52934,7 +52934,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时持久力ボーナス(2)",
       "effect": {
-        "TrainingStaminaUp": 2
+        "4": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -53136,7 +53136,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时スキルポイントボーナス(2)",
       "effect": {
-        "SkillPointBonus": 2
+        "30": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -53339,7 +53339,7 @@
     "uniqueEffect": {
       "summary": "参加友情训练时，ganJing(60)",
       "effect": {
-        "MotivationUp": 60
+        "2": 60
       },
       "unlockLevel": 30,
       "type": 113,
@@ -53545,7 +53545,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时deYiLv(40)",
       "effect": {
-        "GoodTrainingRateUp": 40
+        "19": 40
       },
       "unlockLevel": 30,
       "type": 101,
@@ -53738,7 +53738,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -53937,7 +53937,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时パワーボーナス(2)",
       "effect": {
-        "TrainingPowerUp": 2
+        "5": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -54138,7 +54138,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时xunLian(15)",
       "effect": {
-        "TrainingEffectUp": 15
+        "8": 15
       },
       "unlockLevel": 30,
       "type": 101,
@@ -54530,7 +54530,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时賢さボーナス(2)",
       "effect": {
-        "TrainingWizUp": 2
+        "7": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -54732,7 +54732,7 @@
     "uniqueEffect": {
       "summary": "根据速度技能个数，提高xunLian效果(每个+4, 最大5个)",
       "effect": {
-        "TrainingEffectUp": 20
+        "8": 20
       },
       "unlockLevel": 30,
       "type": 116,
@@ -54934,7 +54934,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时速度ボーナス(2)",
       "effect": {
-        "TrainingSpeedUp": 2
+        "3": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -55128,7 +55128,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时根性ボーナス(2)",
       "effect": {
-        "TrainingGutsUp": 2
+        "6": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -55310,9 +55310,9 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时youQing(10)ganJing(15),羁绊>=100时スキルポイントボーナス(1)",
       "effect": {
-        "SpecialTagEffectUp": 10,
-        "MotivationUp": 15,
-        "SkillPointBonus": 1
+        "1": 10,
+        "2": 15,
+        "30": 1
       },
       "unlockLevel": 30,
       "type": 101,
@@ -55513,7 +55513,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时パワーボーナス(3)",
       "effect": {
-        "TrainingPowerUp": 3
+        "5": 3
       },
       "unlockLevel": 30,
       "type": 101,
@@ -55710,7 +55710,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时持久力ボーナス(3)",
       "effect": {
-        "TrainingStaminaUp": 3
+        "4": 3
       },
       "unlockLevel": 30,
       "type": 101,
@@ -55900,7 +55900,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -56306,7 +56306,7 @@
     "uniqueEffect": {
       "summary": "根据体力回复技能个数，提高持久力ボーナス效果(每个+1, 最大3个)",
       "effect": {
-        "TrainingStaminaUp": 3
+        "4": 3
       },
       "unlockLevel": 30,
       "type": 116,
@@ -56499,7 +56499,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时持久力ボーナス(2)",
       "effect": {
-        "TrainingStaminaUp": 2
+        "4": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -56693,7 +56693,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时パワーボーナス(2)",
       "effect": {
-        "TrainingPowerUp": 2
+        "5": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -57101,7 +57101,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时速度ボーナス(3)",
       "effect": {
-        "TrainingSpeedUp": 3
+        "3": 3
       },
       "unlockLevel": 30,
       "type": 101,
@@ -57502,7 +57502,7 @@
     "uniqueEffect": {
       "summary": "参加友情训练时，ganJing(60)",
       "effect": {
-        "MotivationUp": 60
+        "2": 60
       },
       "unlockLevel": 30,
       "type": 113,
@@ -57701,7 +57701,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -57901,7 +57901,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 30,
       "type": 101,
@@ -58113,7 +58113,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时賢さボーナス(2)",
       "effect": {
-        "TrainingWizUp": 2
+        "7": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -58318,7 +58318,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时根性ボーナス(3)",
       "effect": {
-        "TrainingGutsUp": 3
+        "6": 3
       },
       "unlockLevel": 30,
       "type": 101,
@@ -58521,7 +58521,7 @@
     "uniqueEffect": {
       "summary": "根据体力回复技能个数，提高速度ボーナス效果(每个+1, 最大3个)",
       "effect": {
-        "TrainingSpeedUp": 3
+        "3": 3
       },
       "unlockLevel": 30,
       "type": 116,
@@ -58732,7 +58732,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时deYiLv(40)",
       "effect": {
-        "GoodTrainingRateUp": 40
+        "19": 40
       },
       "unlockLevel": 40,
       "type": 101,
@@ -58939,7 +58939,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时パワーボーナス(2)",
       "effect": {
-        "TrainingPowerUp": 2
+        "5": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -59149,8 +59149,8 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时賢さボーナス(2)スキルポイントボーナス(1)",
       "effect": {
-        "TrainingWizUp": 2,
-        "SkillPointBonus": 1
+        "7": 2,
+        "30": 1
       },
       "unlockLevel": 30,
       "type": 101,
@@ -59347,7 +59347,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时youQing(20)",
       "effect": {
-        "SpecialTagEffectUp": 20
+        "1": 20
       },
       "unlockLevel": 30,
       "type": 101,
@@ -59547,7 +59547,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -59938,7 +59938,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=100时スキルポイントボーナス(1)全属性Bonus(1)",
       "effect": {
-        "SkillPointBonus": 1,
+        "30": 1,
         "AllStatusBonus": 1
       },
       "unlockLevel": 30,
@@ -60132,7 +60132,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时持久力ボーナス(2)",
       "effect": {
-        "TrainingStaminaUp": 2
+        "4": 2
       },
       "unlockLevel": 40,
       "type": 101,
@@ -60326,7 +60326,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 30,
       "type": 101,
@@ -60530,7 +60530,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时スキルポイントボーナス(2)",
       "effect": {
-        "SkillPointBonus": 2
+        "30": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -60736,7 +60736,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时根性ボーナス(2)",
       "effect": {
-        "TrainingGutsUp": 2
+        "6": 2
       },
       "unlockLevel": 30,
       "type": 101,
@@ -60929,7 +60929,7 @@
     "uniqueEffect": {
       "summary": "根据速度技能个数，提高xunLian效果(每个+5, 最大3个)",
       "effect": {
-        "TrainingEffectUp": 15
+        "8": 15
       },
       "unlockLevel": 30,
       "type": 116,
@@ -61123,7 +61123,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingEffectUp": 10
+        "8": 10
       },
       "unlockLevel": 40,
       "type": 101,
@@ -61320,7 +61320,7 @@
     "uniqueEffect": {
       "summary": "羁绊>=80时速度ボーナス(2)",
       "effect": {
-        "TrainingSpeedUp": 2
+        "3": 2
       },
       "unlockLevel": 30,
       "type": 101,

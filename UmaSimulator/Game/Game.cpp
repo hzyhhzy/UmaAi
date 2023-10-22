@@ -52,7 +52,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     int cardId = newCards[i];
     cardParam[i] = GameDatabase::AllCards[cardId];
     SupportCard& cardP = cardParam[i];
-    saihou += cardP.saiHou;
+    saihou += cardP.getCardEffect(*this).saiHou;  // 考虑固有初始效果
     int cardType = cardP.cardType;
     if (cardType == 5 || cardType == 6)
     {
@@ -98,7 +98,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
       p.larc_isLinkCard = cardP.larc_isLink;
 
       std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-      probs[cardP.cardType] += cardP.deYiLv;
+      probs[cardP.cardType] += cardP.getCardEffect(*this).deYiLv;  // 考虑固有初始效果
       p.distribution = std::discrete_distribution<>(probs.begin(), probs.end());
     }
   }
@@ -145,8 +145,8 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   for (int i = 0; i < 6; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
-      addStatus(j, cardParam[i].initialBonus[j]);
-    skillPt += cardParam[i].initialBonus[5];
+      addStatus(j, cardParam[i].getCardEffect(*this).initialBonus[j]);
+    skillPt += cardParam[i].getCardEffect(*this).initialBonus[5];
   }
   for (int i = 0; i < 5; i++)
     addStatus(i, zhongMaBlueCount[i] * 7); //种马

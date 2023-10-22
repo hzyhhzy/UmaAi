@@ -141,7 +141,7 @@ def _effectTypeExHandler(params:list[int], offset)->tuple[list[SupportCardEffect
             effect = summary.generateEffect()
             ef = {}
             if effect and isinstance(effect, SupportCardEffect):
-                ef[effect.type] = effect.value
+                ef[int(effect.type)] = effect.value
             effect = ef
             return effect, length, summary
     return None,0,None

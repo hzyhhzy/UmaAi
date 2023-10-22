@@ -1,6 +1,5 @@
 #pragma once
 #include "../GameDatabase/GameConstants.h"
-#include "../SupportCard/CardEffect.h"
 #include "../External/json.hpp"
 #include "../External/utils.h"
 #include <vector>
@@ -10,16 +9,16 @@
 using json = nlohmann::json;
 
 class Game;
+class CardTrainingEffect;
 
-struct SkillList {
-	int skillNum;
-	std::vector<int> skillIdList; // 卡片拥有的技能编号
-};
 struct SupportCard
 {
-	int cardID;//支援卡id，部分卡具有比较复杂的固有，根据id来辨别
+	bool isDBCard;	// 用来标记是老版本手写的还是新版本自动的
+	int cardID;//支援卡id
+	int charaId;	// 角色ID
 	int cardType;//支援卡类型，0速1耐2力3根4智5团队6友人
 	std::string cardName; //卡片名称
+	//std::vector<int> cardSkill;	// 技能列表
 
 	bool filled;
 	double youQingBasic;//友情加成
@@ -28,30 +27,96 @@ struct SupportCard
 	double bonusBasic[6];//速耐力根智pt的加成
 	int wizVitalBonusBasic;//智力彩圈体力回复量
 	int initialBonus[6];//初期速耐力根智pt的提升
-	int initialJiBan;//初始羁绊
-	double saiHou;//赛后
+	int initialJiBan;//初始羁绊，***实际生效的是cardEffect中的
+	double saiHou;//赛后，***实际生效的是cardEffect中的
 	int hintBonus[6];//为了简化，把红点的技能等效成多少属性。综合考虑技能有效率（例如高峰90%有效，除了集中力），平均性价比与折扣，种马重复给技能（假设30%）
 	double hintProbIncrease;//启发发生率提升
-	double deYiLv;//得意率
+	double deYiLv;//得意率，***实际生效的是cardEffect中的
 	double failRateDrop; //失败率降低
 	double vitalCostDrop; //体力消费下降
 	// 方便调用，根据卡片的等级在游戏初始阶段赋值
 
-	int uniqueEffectType; //支援卡固有触发条件（编号待定）
-	int uniqueEffectParam[10]; //支援卡固有效果，速耐力根智pt 友 训 干劲 。。。（编号待定）
-
+	int uniqueEffectType; //支援卡固有类型
+	std::vector<int> uniqueEffectParam; //支援卡固有特殊参数
+	std::unordered_map<int, int> uniqueEffectValues;	// 支援卡固有面板（不在参数里的面板值）
 
 	bool larc_isLink;//是否为link卡
 	int larc_linkSpecialEffect;//link效果
 
-	//SkillList cardSkill;
-	//卡片拥有的技能列表
-
-	//std::string uniqueText;
-	CardTrainingEffect getCardEffect(const Game& game, int atTrain, int jiBan, int effectFactor) const;//根据游戏状态计算支援卡的“固有”
+	// 根据游戏状态计算支援卡的“固有”
+    // 大部分固有都可以在默认参数下计算
+	CardTrainingEffect getCardEffect(const Game& game, int atTrain=-1, int jiBan=0, int effectFactor=0) const;
 
 	void getNNInputV1(float* buf) const;//神经网络输入，size=NNINPUT_CHANNELS_CARD_V1
 
 	void write_to_json(json& j, const std::string cdname, const int id) const;
 	void load_from_json(json& j, int x);
+};
+
+// 马娘数据库中的固有词条类型Enum
+enum class UniqueEffectType {
+    None = 0,
+    SpecialTagEffectUp = 1,
+    MotivationUp = 2,
+    TrainingSpeedUp = 3,
+    TrainingStaminaUp = 4,
+    TrainingPowerUp = 5,
+    TrainingGutsUp = 6,
+    TrainingWizUp = 7,
+    TrainingEffectUp = 8,
+    InitialSpeedUp = 9,
+    InitialStaminaUp = 10,
+    InitialPowerUp = 11,
+    InitialGutsUp = 12,
+    InitialWizUp = 13,
+    InitalEvaluationUp = 14,
+    RaceStatusUp = 15,
+    RaceFanUp = 16,
+    SkillTipsLvUp = 17,
+    SkillTipsEventRateUp = 18,
+    GoodTrainingRateUp = 19,
+    SpeedLimitUp = 20,
+    StaminaLimitUp = 21,
+    PowerLimitUp = 22,
+    GutzLimitUp = 23,
+    WizLimitUp = 24,
+    EventRecoveryAmountUp = 25,
+    EventEffetcUp = 26,
+    TrainingFailureRateDown = 27,
+    TrainingHPConsumptionDown = 28,
+    MinigameEffectUP = 29,
+    SkillPointBonus = 30,
+    WizRecoverUp = 31,
+    AllStatusBonus = 99 // 速神鹰手动添加
+};
+
+//支援卡的训练效果
+//先把卡分配到对应训练里，然后才计算CardTrainingEffect
+// 因为需要互相引用所以都放在一个头文件里
+class CardTrainingEffect
+{
+public:
+    bool isFixed = false; // 为True时表示不再对本对象的固有属性进行更新
+    double youQing;//友情加成，没闪彩就是0
+    double ganJing;//干劲加成
+    double xunLian;//训练加成
+    double bonus[6];//速耐力根智pt的加成
+    int vitalBonus;//体力回复量（主要是智彩圈）
+    double failRateDrop; //失败率降低
+    double vitalCostDrop; //体力消费下降
+
+    int initialBonus[6];//初期速耐力根智pt的提升
+    int initialJiBan;//初始羁绊
+    double saiHou;//赛后
+    //int hintBonus[6];//为了简化，把红点的技能等效成多少属性
+    //double hintProbIncrease;//启发发生率提升
+    double deYiLv;//得意率
+
+public:
+    CardTrainingEffect() {}
+    CardTrainingEffect(const SupportCard* sc);
+
+    // 固有词条通用处理函数
+    // key 对应 enum class UniqueEffectType
+    CardTrainingEffect& applyUniqueEffectLine(int key, int value);
 };

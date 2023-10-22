@@ -146,9 +146,6 @@
     <ClInclude Include="Game\Game.h">
       <Filter>头文件\Game</Filter>
     </ClInclude>
-    <ClInclude Include="SupportCard\CardEffect.h">
-      <Filter>头文件\SupportCard</Filter>
-    </ClInclude>
     <ClInclude Include="SupportCard\SupportCard.h">
       <Filter>头文件\SupportCard</Filter>
     </ClInclude>
@@ -189,9 +186,6 @@
       <Filter>头文件\External</Filter>
     </ClInclude>
     <ClInclude Include="GameDatabase\GameConfig.h">
-      <Filter>头文件\GameDatabase</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDatabase\CardData.h">
       <Filter>头文件\GameDatabase</Filter>
     </ClInclude>
     <ClInclude Include="GameDatabase\SkillData.h">

@@ -97,7 +97,7 @@ class SkillRarity(Enum):
     Unique = 3
     Upgrade = 4
 
-class SupportCardEffectType(Enum):
+class SupportCardEffectType(IntEnum):
     NONE = 0
     SpecialTagEffectUp = 1
     MotivationUp = 2

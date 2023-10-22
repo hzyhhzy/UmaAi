@@ -94,6 +94,7 @@ void main_ai()
   //std::cout << "当前工作目录：" << filesystem::current_path() << endl;
   cout << "当前程序目录：" << exeDir << endl;
   GameConfig::load("./aiConfig.json");
+  GameDatabase::loadTranslation("./db/text_data.json");
   GameDatabase::loadUmas("./db/uma");
   GameDatabase::loadCards("./db/card");
   if(GameConfig::extraCardData == true)

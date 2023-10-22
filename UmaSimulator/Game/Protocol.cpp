@@ -17,10 +17,8 @@ int mask_umaId(int umaId)
     return umaId % 1000000;
 }
 
-
 bool Game::loadGameFromJson(std::string jsonStr)
 {
-  
   try
   {
     json j = json::parse(jsonStr, nullptr, true, true);
@@ -32,7 +30,6 @@ bool Game::loadGameFromJson(std::string jsonStr)
       throw string("未知马娘，需要更新ai");
     for (int i = 0; i < 5; i++)
       fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
-    
 
     turn = j["turn"];
     if (turn >= TOTAL_TURN && turn < 0)
@@ -149,7 +146,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         persons[i].larc_isLinkCard = cardP.larc_isLink;
 
         std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-        probs[cardP.cardType] += cardP.deYiLv;
+        probs[cardP.cardType] += cardP.getCardEffect(*this, 0, persons[i].friendship, 0).deYiLv;  // 考虑当前固有
         persons[i].distribution = std::discrete_distribution<>(probs.begin(), probs.end());
       }
       else

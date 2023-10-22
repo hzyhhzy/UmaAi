@@ -36,8 +36,8 @@ void SupportCard::write_to_json(json& j, const std::string cdname, const int id)
 		j["cardValue"][x]["vitalCostDrop"] = vitalCostDrop;
 	}
 
-	j["cardSkill"]["skillNum"] = 0;
-	j["cardSkill"]["SkillList"] = NULL;
+	//j["cardSkill"]["skillNum"] = 0;
+	//j["cardSkill"]["SkillList"] = NULL;
 
 }
 
@@ -49,6 +49,19 @@ void SupportCard::load_from_json(json& j, int x) {
 	std::string st;
 	j.at("cardName").get_to(st);
 	cardName = UTF8_To_string(st);
+	//j.at("cardSkill").get_to(cardSkill);	// 不载入技能，因为格式不同
+	if (j.contains("charaId"))
+		j.at("charaId").get_to(charaId);
+	if (j.contains("uniqueEffect") && !j["uniqueEffect"].is_null() && j["uniqueEffect"].contains("type"))
+	{
+		j["uniqueEffect"]["type"].get_to(uniqueEffectType);
+		j["uniqueEffect"]["uniqueParams"].get_to(uniqueEffectParam);
+		for (auto& it : j["uniqueEffect"]["effect"].items()) {
+			int v;
+			it.value().get_to(v);
+			uniqueEffectValues[atoi(it.key().c_str())] = v;
+		}
+	}
 
 	j["cardValue"][x].at("filled").get_to(filled);
 	if (filled == true) {
@@ -77,26 +90,12 @@ void SupportCard::load_from_json(json& j, int x) {
 		larc_linkSpecialEffect = j["larc_linkSpecialEffect"];
 	else
 		larc_linkSpecialEffect = 0;
-
-	//cardSkill.skillNum = j["cardSkill"]["skillNum"];
-
-	//cardSkill.skillIdList.resize(cardSkill.skillNum);
-	//for (int i = 0; i < cardSkill.skillNum; ++i) {
-	//	cardSkill.skillIdList[i] = j["cardSkill"]["skillList"][i];
-	//}
-	/*
-	if (j["uniqueEffect"].is_array()) {
-		j["uniqueEffect"].at(0).get_to(uniqueText);
-		uniqueText = UTF8_To_string(uniqueText);
-	}
-	*/
 	return;
 }
 
 void SupportCard::getNNInputV1(float* buf) const
 {
 	//每张卡的初始属性加成、初始羁绊、赛后加成不需要告诉神经网络，只告诉总赛后
-
 	for (int ch = 0; ch < NNINPUT_CHANNELS_CARD_V1; ch++)
 		buf[ch] = 0;
 
