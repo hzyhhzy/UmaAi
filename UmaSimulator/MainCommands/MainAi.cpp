@@ -167,13 +167,32 @@ void main_ai()
       cout << p * 100 << "% ";
       if (!GameConfig::noColor)cout << "\033[0m";
     };
+
+    auto printValue = [](double p, double ref)
+    {
+      if (p < -50000)
+      {
+        cout << "-- ";
+        return;
+      }
+      cout << fixed << setprecision(0);
+      if (!GameConfig::noColor)
+      {
+        if (ref - p < 20) cout << "\033[41m\033[1;36m";
+        else if (ref - p < 100) cout << "\033[1;32m";
+        else cout << "\033[33m";
+      }
+      cout << p;
+      if (!GameConfig::noColor)cout << "\033[0m";
+      cout << " ";
+    };
     
     //最后几回合降低激进度
-    double modifiedRadicalFactor = GameConfig::radicalFactor * (1 - exp(-double(TOTAL_TURN - game.turn) / 10.0));
+    double modifiedRadicalFactor = GameConfig::radicalFactor * (1 - exp(-double(TOTAL_TURN - game.turn) / 5.0));
     //search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
     if (game.turn < TOTAL_TURN - 1 && !game.isRacing)
     {
-      int targetScore = 32000;
+      int targetScore = 32000;//暂时无用
       /*
       Action handWrittenStrategy = Evaluator::handWrittenStrategy(game);
       string strategyText[10] =
@@ -202,6 +221,37 @@ void main_ai()
       game.playerPrint = false;
       search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
       game.playerPrint = true;
+
+      auto evalf = [targetScore, modifiedRadicalFactor](ModelOutputValueV1 v) {
+        return v.scoreMean + v.scoreStdev * modifiedRadicalFactor;
+      };
+
+
+      double maxMean = -1e7;
+      double maxScore = -1e7;
+      for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
+        for (int j = 0; j < 10; j++)
+      {
+          auto v = search.allChoicesValue[i][j];
+          double s = evalf(v);
+          if (s > maxScore)
+          {
+            maxScore = s;
+          }
+          if (v.scoreMean > maxMean)
+            maxMean = v.scoreMean;
+      }
+
+      //休息和外出里面分最高的那个。这个数字作为显示参考
+      double restScore = evalf(search.allChoicesValue[0][6]);
+      if (evalf(search.allChoicesValue[0][7]) > restScore)
+        restScore = evalf(search.allChoicesValue[0][7]);
+      if (evalf(search.allChoicesValue[0][8]) > restScore)
+        restScore = evalf(search.allChoicesValue[0][8]);
+
+
+      cout << "期望分数：\033[1;32m" << int(maxMean) << "\033[0m" << endl;
+
       for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
       {
         if (Search::buyBuffChoiceNum(game.turn) > 1 && i == 0)
@@ -219,13 +269,9 @@ void main_ai()
         cout << "速耐力根智: ";
         for (int j = 0; j < 10; j++)
         {
-          double score = search.allChoicesValue[i][j].scoreMean;
-          if (score > -20000)
-            cout
-            //<< fixed << setprecision(1) << search.allChoicesValue[i][j].winrate * 100 << "%:" 
-            << fixed << setprecision(0) << score - targetScore << " ";
-          else
-            cout << "-- ";
+          double score = evalf(search.allChoicesValue[i][j]);
+          printValue(score - restScore, maxScore - restScore);
+
           if (j == 4)cout << " | SS:";
           if (j == 5)cout << " | 休息:";
           if (j == 6)cout << " 友人外出:";
@@ -234,6 +280,40 @@ void main_ai()
         }
         cout << endl;
       }
+
+      //提示购买友情+20%和pt+10
+
+      if (game.turn >= 41)
+      {
+        if (game.larc_levels[7] >= 1 && game.larc_levels[7] < 3)
+        {
+          int cost = game.larc_levels[7] == 2 ? 300 : 500;
+          if (game.larc_shixingPt >= cost)
+          {
+            if (game.turn == 41)
+            {
+              cout << "\033[31m请自己计算是否可以购买友情+20%！ \033[0m" << endl;
+            }
+            else
+              cout << "\033[31m请购买友情+20%！ \033[0m" << endl;
+          }
+
+        }
+        else if (game.larc_levels[5] >= 1 && game.larc_levels[5] < 3)
+        {
+          int cost = game.larc_levels[5] == 2 ? 200 : 300;
+          if (game.larc_shixingPt >= cost)
+          {
+            if (game.turn == 41)
+            {
+              cout << "\033[31m请自己计算是否可以购买pt+10！ \033[0m" << endl;
+            }
+            else
+              cout << "\033[31m请购买pt+10！ \033[0m" << endl;
+          }
+        }
+      }
+
     }
     /*
     //cout << endl << rpText["finish"] << endl;

@@ -4,9 +4,9 @@ using namespace std;
 using json = nlohmann::json;
 
 bool GameConfig::noColor = false;
-double GameConfig::radicalFactor = 5;
+double GameConfig::radicalFactor = 1;
 int GameConfig::threadNum = 12;
-int GameConfig::searchN = 6144;
+int GameConfig::searchN = 12288;
 bool GameConfig::debugPrint = false;
 bool GameConfig::extraCardData = false;
 string GameConfig::role = "default";
