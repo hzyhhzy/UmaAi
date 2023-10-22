@@ -23,14 +23,14 @@ const double targetScore = 0;
 const int searchN = handWrittenEvaluationTest ? 1 : 2048;
 const bool recordGame = false;
 
-const int totalGames = handWrittenEvaluationTest ? 100000 : 10000000;
+const int totalGames = handWrittenEvaluationTest ? 500000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
 
 int umaId = 108401;//谷水，30力加成
 int umaStars = 5;
 int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
 int zhongmaBlue[5] = { 18,0,0,0,0 };
-int zhongmaBonus[6] = { 20,0,40,0,20,150 };
+int zhongmaBonus[6] = { 10,10,30,0,10,70 };
 bool allowedDebuffs[9] = { false, false, false, false, true, false, false, false, false };//第二年可以不消第几个debuff。第五个是智力，第七个是强心脏
 
 

@@ -345,14 +345,14 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
     if (game.turn < 50)// 第二年
     {
-      int buy50pCount = 0;
-      for (int i = 0; i < 5; i++)
+      int buy50pCount = 0; //把pt+10也算上，花费都是200
+      for (int i = 0; i < 6; i++)
       {
         if (game.larc_levels[i] == 3)
           buy50pCount += 1;
       }
       //速耐力根买一个+50%，智不买
-      if (buy50pCount == 0 &&
+      if (buy50pCount < 2 &&
         action.train < 4 &&
         bestValue>100 &&
         game.larc_shixingPt >= cost50p)
