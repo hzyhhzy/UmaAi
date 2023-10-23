@@ -401,6 +401,8 @@ void Game::runSS(std::mt19937_64& rand)
     {
       ssWinNum += 1;
       int buff = p.larc_nextThreeBuffs[0];
+      if (isAiJiao && buff == 8) //重复爱娇会变成属性
+        buff = 11;
       if (buff == 1)//技能
       {
         int equalPt = 6;//等效pt。路人人头随机给的1级技能大概率没用，所以分给低点
@@ -841,8 +843,6 @@ void Game::calculateTrainingValueSingle(int trainType)
       
   }
 
-  //
-
   trainShiningNum[trainType] = 0;
   double failRateMultiply = 1;
   for (int i = 0; i < effects.size(); ++i) {
@@ -1196,11 +1196,27 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
     if (turn == 41)//第二次凯旋门前的那一个回合，如果买了+20%友情（和pt+10）后训练成功后还能消完预定的debuff就买
     {
       int shixingPtAssumeSuccess = larc_shixingPt + larc_shixingPtGainAbroad[action.train];
+      //这两种情况，算起来比较麻烦，直接假设不会发生这种情况
+      assert(!larc_allowedDebuffsFirstLarc[7] && "不会有人允许不消除友情+20%上面那个debuff吧");
+      assert(!larc_allowedDebuffsFirstLarc[5] && "不会有人允许不消除pt+10上面那个debuff吧");
       int removeDebuffCost = removeDebuffsFirstNCost(8);
       int remainPt = shixingPtAssumeSuccess - removeDebuffCost;
-      assert(larc_levels[7] < 3);
-      bool buy20p = remainPt >= 300;
-      bool buy10pt = remainPt >= 500 && failRate[action.train] < 5 && larc_levels[5] < 3;
+      int remainPtAssumeFail = larc_shixingPt - removeDebuffCost;
+
+      bool buy20p = false;
+      if (larc_levels[7] < 3)
+      {
+        if (remainPtAssumeFail >= 300 || (remainPt >= 300 && failRate[action.train] < 90))
+          buy20p = true;
+      }
+
+      if (buy20p)
+      {
+        remainPt -= 300;
+        remainPtAssumeFail -= 300;
+      }
+
+      bool buy10pt = remainPt >= 200 && failRate[action.train] < 5 && larc_levels[5] < 3;
       
 
 
@@ -1214,7 +1230,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
           anyUpgrade = true;
         }
       }
-      if (buy10pt)
+      if (buy10pt && larc_levels[7] == 3)
       {
         bool suc = tryBuyUpgrade(5, 3);
         if (suc)
