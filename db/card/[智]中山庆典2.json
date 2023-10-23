@@ -1,20 +1,18 @@
-﻿
-{
-    "cardId": 30157,
-    "charaId": 1025,
-    "cardName": "[智]曼城茶座",
-    "fullName": "[与你共见的泡沫]曼城茶座",
+﻿{
+    "cardId": 30163,
+    "charaId": 1049,
+    "cardName": "[智]中山庆典",
+    "fullName": "[傲放于赌场的堇色兰]中山庆典",
     "larc_isLink": true,
-    "larc_linkSpecialEffect": 4,
+    "larc_linkSpecialEffect": 12,
     "rarity": 3,
     "cardSkill": [
-      200742,
-      201172,
-      202072,
-      202422,
-      202522,
-      202562,
-      202592
+      200462,
+      200512,
+      201641,
+      202442,
+      202652,
+      202732
     ],
     "cardType": 4,
     "cardValue": [
@@ -26,7 +24,7 @@
           0,
           0,
           0,
-          0
+          1
         ],
         "initialBonus": [
           0,
@@ -45,12 +43,9 @@
           5
         ],
         "youQing": 20,
-        "ganJing": 0,
-        "xunLian": 10,
-        "initialJiBan": 0,
-        "saiHou": 5,
-        "hintProbIncrease": 20,
-        "deYiLv": 35,
+        "ganJing": 40,
+        "initialJiBan": 15,
+        "deYiLv": 50,
         "wizVitalBonus": 3
       },
       {
@@ -61,14 +56,14 @@
           0,
           0,
           0,
-          0
+          1
         ],
         "initialBonus": [
           0,
           0,
           0,
           0,
-          0,
+          10,
           0
         ],
         "hintBonus": [
@@ -80,12 +75,9 @@
           5
         ],
         "youQing": 21,
-        "ganJing": 20,
-        "xunLian": 11,
-        "initialJiBan": 0,
-        "saiHou": 6,
-        "hintProbIncrease": 20,
-        "deYiLv": 40,
+        "ganJing": 45,
+        "initialJiBan": 16,
+        "deYiLv": 57,
         "wizVitalBonus": 3
       },
       {
@@ -96,14 +88,14 @@
           0,
           0,
           0,
-          0
+          1
         ],
         "initialBonus": [
           0,
           0,
           0,
           0,
-          0,
+          25,
           0
         ],
         "hintBonus": [
@@ -115,12 +107,9 @@
           5
         ],
         "youQing": 23,
-        "ganJing": 40,
-        "xunLian": 12,
-        "initialJiBan": 0,
-        "saiHou": 7,
-        "hintProbIncrease": 20,
-        "deYiLv": 45,
+        "ganJing": 50,
+        "initialJiBan": 18,
+        "deYiLv": 65,
         "wizVitalBonus": 4
       },
       {
@@ -130,15 +119,15 @@
           0,
           0,
           0,
-          0,
-          0
+          1,
+          1
         ],
         "initialBonus": [
           0,
           0,
           0,
           0,
-          0,
+          25,
           0
         ],
         "hintBonus": [
@@ -150,12 +139,9 @@
           5
         ],
         "youQing": 25,
-        "ganJing": 40,
-        "xunLian": 13,
-        "initialJiBan": 15,
-        "saiHou": 8,
-        "hintProbIncrease": 20,
-        "deYiLv": 50,
+        "ganJing": 55,
+        "initialJiBan": 20,
+        "deYiLv": 72,
         "wizVitalBonus": 4
       },
       {
@@ -165,15 +151,15 @@
           0,
           0,
           0,
-          0,
-          0
+          2,
+          1
         ],
         "initialBonus": [
           0,
           0,
           0,
           0,
-          0,
+          25,
           0
         ],
         "hintBonus": [
@@ -185,30 +171,26 @@
           5
         ],
         "youQing": 25,
-        "ganJing": 40,
-        "xunLian": 15,
-        "initialJiBan": 30,
-        "saiHou": 10,
-        "hintProbIncrease": 20,
-        "deYiLv": 50,
+        "ganJing": 60,
+        "initialJiBan": 20,
+        "deYiLv": 80,
         "wizVitalBonus": 5
       }
     ],
     "uniqueEffect": {
-      "summary": "羁绊>=100时賢さボーナス(2)スキルポイントボーナス(1)",
+      "summary": "羁绊>=80时xunLian(10)",
       "effect": {
-        "TrainingWizUp": 2,
-        "SkillPointBonus": 1
+        "TrainingEffectUp": 10
       },
       "unlockLevel": 30,
       "type": 101,
       "uniqueParams": [
         101,
-        100,
-        7,
-        2,
-        30,
-        1
+        80,
+        8,
+        10,
+        0,
+        0
       ]
     }
   }

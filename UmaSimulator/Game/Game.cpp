@@ -814,6 +814,9 @@ void Game::calculateTrainingValueSingle(int trainType)
 
   double vitalCostDrop = 1;
 
+  //[智]真弓快车(id:30149)的固有是闪彩的训练60干劲加成，但是在把五个人头检查一遍之前并不知道闪没闪彩，因此检查完五个人头之后还需要额外对这张卡的参数进行处理
+  int card30149place = -1;
+
   for (int i = 0; i < 5; i++)
   {
     int p = personDistribution[trainType][i];
@@ -828,6 +831,8 @@ void Game::calculateTrainingValueSingle(int trainType)
       {
         persons[p].isShining = true;
       }
+      if (cardParam[persons[p].cardIdInGame].cardID / 10 == 30149)
+        card30149place = effects.size() - 1;
     }
     else if (personType == 3)//npc
     {
@@ -836,12 +841,20 @@ void Game::calculateTrainingValueSingle(int trainType)
       
   }
 
+  //
+
   trainShiningNum[trainType] = 0;
   double failRateMultiply = 1;
   for (int i = 0; i < effects.size(); ++i) {
     failRateMultiply *= (1 - 0.01 * effects[i].failRateDrop);//失败率下降
     vitalCostDrop *= (1 - 0.01 * effects[i].vitalCostDrop);//体力消耗下降
     if (effects[i].youQing > 0)trainShiningNum[trainType] += 1;//统计彩圈数
+  }
+
+  //[智]真弓快车(id:30149)的固有是闪彩的训练60干劲加成，但是在把五个人头检查一遍之前并不知道闪没闪彩，因此检查完五个人头之后还需要额外对这张卡的参数进行处理
+  if (card30149place >= 0 && trainShiningNum[trainType] == 0)
+  {
+    effects[card30149place].ganJing -= 60;
   }
 
   failRate[trainType] = calculateFailureRate(trainType,failRateMultiply);

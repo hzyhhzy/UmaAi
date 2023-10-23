@@ -1,22 +1,18 @@
-﻿
-{
-    "cardId": 30157,
-    "charaId": 1025,
-    "cardName": "[智]曼城茶座",
-    "fullName": "[与你共见的泡沫]曼城茶座",
+﻿{
+    "cardId": 30166,
+    "charaId": 1107,
+    "cardName": "[根]跳舞城",
+    "fullName": "[高昂地YO-HO!]跳舞城",
     "larc_isLink": true,
-    "larc_linkSpecialEffect": 4,
-    "rarity": 3,
+    "larc_linkSpecialEffect": 5,  "rarity": 3,
     "cardSkill": [
-      200742,
-      201172,
-      202072,
-      202422,
-      202522,
-      202562,
-      202592
+      200252,
+      200532,
+      200542,
+      200552,
+      201252
     ],
-    "cardType": 4,
+    "cardType": 3,
     "cardValue": [
       {
         "filled": true,
@@ -32,7 +28,7 @@
           0,
           0,
           0,
-          0,
+          25,
           0,
           0
         ],
@@ -45,13 +41,10 @@
           5
         ],
         "youQing": 20,
-        "ganJing": 0,
-        "xunLian": 10,
+        "ganJing": 20,
         "initialJiBan": 0,
-        "saiHou": 5,
-        "hintProbIncrease": 20,
-        "deYiLv": 35,
-        "wizVitalBonus": 3
+        "saiHou": 1,
+        "deYiLv": 35
       },
       {
         "filled": true,
@@ -61,13 +54,13 @@
           0,
           0,
           0,
-          0
+          1
         ],
         "initialBonus": [
           0,
           0,
           0,
-          0,
+          27,
           0,
           0
         ],
@@ -80,13 +73,10 @@
           5
         ],
         "youQing": 21,
-        "ganJing": 20,
-        "xunLian": 11,
+        "ganJing": 23,
         "initialJiBan": 0,
-        "saiHou": 6,
-        "hintProbIncrease": 20,
-        "deYiLv": 40,
-        "wizVitalBonus": 3
+        "saiHou": 2,
+        "deYiLv": 40
       },
       {
         "filled": true,
@@ -96,13 +86,13 @@
           0,
           0,
           0,
-          0
+          1
         ],
         "initialBonus": [
           0,
           0,
           0,
-          0,
+          30,
           0,
           0
         ],
@@ -115,13 +105,10 @@
           5
         ],
         "youQing": 23,
-        "ganJing": 40,
-        "xunLian": 12,
+        "ganJing": 26,
         "initialJiBan": 0,
-        "saiHou": 7,
-        "hintProbIncrease": 20,
-        "deYiLv": 45,
-        "wizVitalBonus": 4
+        "saiHou": 3,
+        "deYiLv": 45
       },
       {
         "filled": true,
@@ -131,13 +118,13 @@
           0,
           0,
           0,
-          0
+          1
         ],
         "initialBonus": [
           0,
           0,
           0,
-          0,
+          32,
           0,
           0
         ],
@@ -150,13 +137,10 @@
           5
         ],
         "youQing": 25,
-        "ganJing": 40,
-        "xunLian": 13,
+        "ganJing": 30,
         "initialJiBan": 15,
-        "saiHou": 8,
-        "hintProbIncrease": 20,
-        "deYiLv": 50,
-        "wizVitalBonus": 4
+        "saiHou": 5,
+        "deYiLv": 50
       },
       {
         "filled": true,
@@ -166,13 +150,13 @@
           0,
           0,
           0,
-          0
+          1
         ],
         "initialBonus": [
           0,
           0,
           0,
-          0,
+          35,
           0,
           0
         ],
@@ -185,30 +169,26 @@
           5
         ],
         "youQing": 25,
-        "ganJing": 40,
-        "xunLian": 15,
+        "ganJing": 30,
         "initialJiBan": 30,
-        "saiHou": 10,
-        "hintProbIncrease": 20,
-        "deYiLv": 50,
-        "wizVitalBonus": 5
+        "saiHou": 5,
+        "deYiLv": 50
       }
     ],
     "uniqueEffect": {
-      "summary": "羁绊>=100时賢さボーナス(2)スキルポイントボーナス(1)",
+      "summary": "根据速度技能个数，提高xunLian效果(每个+5, 最大3个)",
       "effect": {
-        "TrainingWizUp": 2,
-        "SkillPointBonus": 1
+        "TrainingEffectUp": 15
       },
       "unlockLevel": 30,
-      "type": 101,
+      "type": 116,
       "uniqueParams": [
-        101,
-        100,
-        7,
-        2,
-        30,
-        1
+        116,
+        1,
+        8,
+        5,
+        3,
+        0
       ]
     }
   }

@@ -366,14 +366,6 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         effect.failRateDrop += 7;
         effect.vitalCostDrop += 4;
     }
-    // 智茶座
-    else if (cardSpecialEffectId == 30157) {
-      if (jiBan < 100)
-      {
-        effect.bonus[4] = 0;
-        effect.bonus[5] = 0;
-      }
-    }
     // 力奶奶
     else if (cardSpecialEffectId == 30156) {
       if (jiBan < 80)
@@ -396,10 +388,96 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
           effect.bonus[i] -= 1;
       }
     }
+    //速黄金船
+    else if (cardSpecialEffectId == 30168)
+    {
+      if (jiBan < 80)
+      {
+        effect.bonus[0] -= 1;
+      }
+    }
+    else if (cardSpecialEffectId == 30154)
+    {
+      if (game.turn < 24)
+        effect.bonus[0] = 1;
+      else if (game.turn < 48)
+        effect.bonus[0] = 2;
+      else
+        effect.bonus[0] = 3;
+    }
+    else if (cardSpecialEffectId == 30165)
+    {
+      if (jiBan >= 80)
+      {
+        effect.bonus[3] += 2;
+      }
+    }
+    else if (cardSpecialEffectId == 30139)
+    {
+      if (jiBan >= 100)
+      {
+        effect.bonus[1] += 3;
+      }
+    }
+    else if (cardSpecialEffectId == 30164)
+    {
+      if (jiBan >= 80)
+      {
+        effect.bonus[5] += 2;
+      }
+    }
+    else if (cardSpecialEffectId == 30166)
+    {
+      if (game.turn < 12)
+        effect.xunLian += 5.0 + (10.0 / 12) * game.turn;
+      else
+        effect.xunLian += 15;
+    }
+    else if (cardSpecialEffectId == 30158)
+    {
+      if (jiBan >= 100)
+      {
+        effect.youQing += (100 + effect.youQing) * 0.2;
+      }
+    }
+    else if (cardSpecialEffectId == 30148)
+    {
+      int t = 0;
+      for (int i = 0; i < 5; i++)
+        t += game.getTrainingLevel(atTrain);
+      int y = 5 + t;
+      if (y > 20)y = 20;
+      effect.xunLian += y;
+    }
+    else if (cardSpecialEffectId == 30163)
+    {
+      if (jiBan >= 80)
+      {
+        effect.xunLian += 10;
+      }
+    }
+    // 智茶座
+    else if (cardSpecialEffectId == 30157) {
+      if (jiBan >= 100)
+      {
+        effect.bonus[4] = 2;
+        effect.bonus[5] = 1;
+      }
+    }
+    //[智]真弓快车(id:30149)的固有是闪彩的训练60干劲加成，但是在把五个人头检查一遍之前并不知道闪没闪彩，因此检查完五个人头之后还需要额外对这张卡的参数进行处理
+    //后续处理写在Game类里了，虽然很丑陋，但没想到什么好办法
+    else if (cardSpecialEffectId == 30149)
+    {
+      //参与友情训练时，干劲加成60
+      //固有常开比高峰低150多分
+      //实际比固有常开低100多分
+      effect.ganJing += 60;
+    }
     else
     {
       //  std::cout << "未知卡";
     }
-
+    if (!isShining)
+      effect.youQing = 0;
     return effect;
 }
