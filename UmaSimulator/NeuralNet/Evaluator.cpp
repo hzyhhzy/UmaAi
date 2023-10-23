@@ -272,6 +272,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       //不仅要考虑属性加多少，还要考虑是否溢出
       float gain = game.trainValue[item][i];
       float remain = game.fiveStatusLimit[i] - game.fiveStatus[i] - finalBonus;
+      if (remain < 0)remain = 0;
       if (gain > remain)gain = remain;
       float turnReserve = game.turn >= 60 ?
         remainStatusFactorEachTurnAbroad * (TOTAL_TURN - game.turn - 2) :
@@ -303,6 +304,11 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     //value += vitalValue * game.trainValue[item][6];
 
     int vitalAfterTrain = std::min(int(game.maxVital), game.trainValue[item][6] + game.vital);
+    if (game.turn == 65)vitalAfterTrain = game.vital;//最后一回合
+    else if (game.turn == 63)vitalAfterTrain = std::min(50, vitalAfterTrain);//倒数第二回合
+    else if (game.turn == 62)vitalAfterTrain = std::min(65, vitalAfterTrain);//倒数第三回合
+    else if (game.turn == 61)vitalAfterTrain = std::min(80, vitalAfterTrain);//倒数第四回合
+    else if (game.turn == 60)vitalAfterTrain = std::min(95, vitalAfterTrain);//倒数第五回合
     value += vitalFactor * (vitalEvaluation(vitalAfterTrain, game.maxVital) - vitalEvaluation(game.vital, game.maxVital));
         
 
