@@ -253,7 +253,8 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     else if (cardSpecialEffectId == 30101) {
         if (jiBan < 100)
         {
-            effect.youQing = 22;
+          if (effect.youQing > 0)
+            effect.youQing = 20;
         }
     }
     //22£¬ÄÍ¹ð¹Ú
