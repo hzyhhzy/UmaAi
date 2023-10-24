@@ -280,134 +280,135 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         else if (cardSpecialEffectId == 30107)
         {
 
-            int traininglevel = game.getTrainingLevel(atTrain);
-            effect.xunLian = 5 + traininglevel * 5;
-            if (effect.xunLian > 25)effect.xunLian = 25;
-        }
-        //7.根凯斯
-        else if (cardSpecialEffectId == 30130)
+        int traininglevel = game.getTrainingLevel(atTrain);
+        effect.xunLian = 5 + traininglevel * 5;
+        if (effect.xunLian > 25)effect.xunLian = 25;
+    }
+    //7.根凯斯
+    else if (cardSpecialEffectId == 30130)
+    {
+        if (jiBan < 80)
         {
-            if (jiBan < 80)
-            {
-                effect.bonus[2] = 0;
-            }
+            effect.bonus[2] = 0;
         }
-        //8.根皇帝
-        else if (cardSpecialEffectId == 30037)
+    }
+    //8.根皇帝
+    else if (cardSpecialEffectId == 30037)
+    {
+        if (jiBan < 80)
         {
-            if (jiBan < 80)
-            {
-                effect.bonus[0] = 0;
-            }
+            effect.bonus[0] = 0;
         }
-        //9.根善信
-        else if (cardSpecialEffectId == 30027)
+    }
+    //9.根善信
+    else if (cardSpecialEffectId == 30027)
+    {
+        //啥都没有
+    }
+    //10.速宝穴
+    else if (cardSpecialEffectId == 30147)
+    {
+        if (jiBan < 100)
         {
-            //啥都没有
+            effect.bonus[0] = 0;
         }
-        //10.速宝穴
-        else if (cardSpecialEffectId == 30147)
+    }
+    //11.耐海湾
+    else if (cardSpecialEffectId == 30016)
+    {
+        //啥都没有
+    }
+    //12.智好歌剧
+    else if (cardSpecialEffectId == 30152)
+    {
+        if (jiBan < 80)
         {
-            if (jiBan < 100)
-            {
-                effect.bonus[0] = 0;
-            }
+            effect.bonus[0] = 0;
         }
-        //11.耐海湾
-        else if (cardSpecialEffectId == 30016)
+    }
+    //13.根黄金城
+    else if (cardSpecialEffectId == 30153)
+    {
+        if (jiBan < 100)
         {
-            //啥都没有
+            effect.bonus[3] = 0;
         }
-        //12.智好歌剧
-        else if (cardSpecialEffectId == 30152)
+    }
+    //14.智波旁
+    else if (cardSpecialEffectId == 30141)
+    {
+        //啥都没有
+    }
+    //15.耐狄杜斯
+    else if (cardSpecialEffectId == 30099)
+    {
+        int totalJiBan = 0;
+        for (int i = 0; i < game.normalCardCount; i++)
+            totalJiBan += game.persons[i].friendship;
+        if(game.larc_zuoyueType!=0)
+          totalJiBan += game.persons[17].friendship;
+        effect.xunLian = totalJiBan / 30;
+    }
+    //速子
+    else if (cardSpecialEffectId == 30101) {
+        if (jiBan < 100)
         {
-            if (jiBan < 80)
-            {
-                effect.bonus[0] = 0;
-            }
+          if (effect.youQing > 0)
+            effect.youQing = 20;
         }
-        //13.根黄金城
-        else if (cardSpecialEffectId == 30153)
+    }
+    //22，耐桂冠
+    else if (cardSpecialEffectId == 30142)
+    {
+      if (game.turn < 24)
+        effect.bonus[1] = 1;
+      else if (game.turn < 48)
+        effect.bonus[1] = 2;
+      else
+        effect.bonus[1] = 3;
+    }
+    //23力白仁
+    else if (cardSpecialEffectId == 30123)
+    {
+      int traininglevel = game.getTrainingLevel(atTrain);
+      effect.xunLian = 5 + traininglevel * 5;
+      if (effect.xunLian > 25)effect.xunLian = 25;
+    }
+    //24力重炮
+    else if (cardSpecialEffectId == 30151)
+    {
+        if (jiBan < 100)
         {
-            if (jiBan < 100)
-            {
-                effect.bonus[3] = 0;
-            }
+            effect.xunLian = 0;
         }
-        //14.智波旁
-        else if (cardSpecialEffectId == 30141)
-        {
-            //啥都没有
-        }
-        //15.耐狄杜斯
-        else if (cardSpecialEffectId == 30099)
-        {
-            int totalJiBan = 0;
-            for (int i = 0; i < game.normalCardCount; i++)
-                totalJiBan += game.persons[i].friendship;
-            if (game.larc_zuoyueType != 0)
-                totalJiBan += game.persons[17].friendship;
-            effect.xunLian = totalJiBan / 30;
-        }
-        //速子
-        else if (cardSpecialEffectId == 30101) {
-            if (jiBan < 100)
-            {
-                effect.youQing = 22;
-            }
-        }
-        //22，耐桂冠
-        else if (cardSpecialEffectId == 30142)
-        {
-            if (game.turn < 24)
-                effect.bonus[1] = 1;
-            else if (game.turn < 48)
-                effect.bonus[1] = 2;
-            else
-                effect.bonus[1] = 3;
-        }
-        //23力白仁
-        else if (cardSpecialEffectId == 30123)
-        {
-            int traininglevel = game.getTrainingLevel(atTrain);
-            effect.xunLian = 5 + traininglevel * 5;
-            if (effect.xunLian > 25)effect.xunLian = 25;
-        }
-        //24力重炮
-        else if (cardSpecialEffectId == 30151)
-        {
-            if (jiBan < 100)
-            {
-                effect.xunLian = 0;
-            }
-        }
-        //25力内恰
-        else if (cardSpecialEffectId == 30138)
-        {
-            if (jiBan < 100)
-            {
-                effect.bonus[2] = 0;
-            }
-        }
-        //28根涡轮
-        else if (cardSpecialEffectId == 30112)
-        {
-            //以后再想办法
-        }
-        //29根进王
-        else if (cardSpecialEffectId == 30083)
-        {
-            if (jiBan < 80 || atTrain == 3)
-                effect.xunLian = 0;
-        }
-        //30根青竹
-        else if (cardSpecialEffectId == 30094)
-        {
-            if (effect.youQing > 0)
-            {
-                float extraBonus = 5 + (100 - game.vital) / 7.0;
-                if (extraBonus > 15)extraBonus = 15;
-                if (extraBonus < 5)extraBonus = 5; // std::cout << effect.youQing << " ";
+    }
+    //25力内恰
+    else if (cardSpecialEffectId == 30138)
+    {
+      if (jiBan < 100)
+      {
+        effect.bonus[2] = 0;
+      }
+    }
+    //28根涡轮
+    else if (cardSpecialEffectId == 30112)
+    {
+      //以后再想办法
+    }
+    //29根进王
+    else if (cardSpecialEffectId == 30083)
+    {
+      if (jiBan < 80 || atTrain == 3)
+        effect.xunLian = 0;
+    }
+    //30根青竹
+    else if (cardSpecialEffectId == 30094)
+    {
+      if (effect.youQing > 0)
+      {
+        float extraBonus = 5 + (100 - game.vital) / 7.0;
+        if (extraBonus > 15)extraBonus = 15;
+        if (extraBonus < 5)extraBonus = 5; // std::cout << effect.youQing << " ";
 
                 effect.youQing = 120 * (1 + 0.01 * extraBonus) - 100;
 
@@ -450,56 +451,133 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             if (jiBan < 80)
                 effect.bonus[5] = 0;
 
-        }
-        // 红宝
-        else if (cardSpecialEffectId == 30114) {
-            if (jiBan < 80)
-                effect.bonus[2] = 0;
-        }
-        // 福来
-        else if (cardSpecialEffectId == 30078) {
-            effect.failRateDrop += 10;
-        }
-        // 绿帽
-        else if (cardSpecialEffectId == 30021) {
-            effect.failRateDrop += 7;
-            effect.vitalCostDrop += 4;
-        }
-        // 智茶座
-        else if (cardSpecialEffectId == 30157) {
-            if (jiBan < 100)
-            {
-                effect.bonus[4] = 0;
-                effect.bonus[5] = 0;
-            }
-        }
-        // 力奶奶
-        else if (cardSpecialEffectId == 30156) {
-            if (jiBan < 80)
-            {
-                effect.bonus[2] = 0;
-            }
-        }
-        // 力飞驹
-        else if (cardSpecialEffectId == 30132) {
-            int guyouLevel = (game.maxVital - 100) / 4;
-            if (guyouLevel > 5)guyouLevel = 5;
-            effect.xunLian = 5 + 3 * guyouLevel;
-        }
-        //速神鹰
-        else if (cardSpecialEffectId == 30161)
-        {
-            if (jiBan < 100)
-            {
-                for (int i = 0; i < 5; i++)
-                    effect.bonus[i] -= 1;
-            }
-        }
-        else
-        {
-            //  std::cout << "未知卡";
-        }
     }
-
+    // 红宝
+    else if (cardSpecialEffectId == 30114) {
+        if (jiBan < 80)
+            effect.bonus[2] = 0;
+    }
+    // 福来
+    else if (cardSpecialEffectId == 30078) {
+        effect.failRateDrop += 10;
+    }
+    // 绿帽
+    else if (cardSpecialEffectId == 30021) {
+        effect.failRateDrop += 7;
+        effect.vitalCostDrop += 4;
+    }
+    // 力奶奶
+    else if (cardSpecialEffectId == 30156) {
+      if (jiBan < 80)
+      {
+        effect.bonus[2] = 0;
+      }
+    }
+    // 力飞驹
+    else if (cardSpecialEffectId == 30132) {
+      int guyouLevel = (game.maxVital - 100) / 4;
+      if (guyouLevel > 5)guyouLevel = 5;
+      effect.xunLian = 5 + 3 * guyouLevel;
+    }
+    //速神鹰
+    else if (cardSpecialEffectId == 30161)
+    {
+      if (jiBan < 100)
+      {
+        for (int i = 0; i < 5; i++)
+          effect.bonus[i] -= 1;
+      }
+    }
+    //速黄金船
+    else if (cardSpecialEffectId == 30168)
+    {
+      if (jiBan < 80)
+      {
+        effect.bonus[0] -= 1;
+      }
+    }
+    else if (cardSpecialEffectId == 30154)
+    {
+      if (game.turn < 24)
+        effect.bonus[0] = 1;
+      else if (game.turn < 48)
+        effect.bonus[0] = 2;
+      else
+        effect.bonus[0] = 3;
+    }
+    else if (cardSpecialEffectId == 30165)
+    {
+      if (jiBan >= 80)
+      {
+        effect.bonus[3] += 2;
+      }
+    }
+    else if (cardSpecialEffectId == 30139)
+    {
+      if (jiBan >= 100)
+      {
+        effect.bonus[1] += 3;
+      }
+    }
+    else if (cardSpecialEffectId == 30164)
+    {
+      if (jiBan >= 80)
+      {
+        effect.bonus[5] += 2;
+      }
+    }
+    else if (cardSpecialEffectId == 30166)
+    {
+      if (game.turn < 12)
+        effect.xunLian += 5.0 + (10.0 / 12) * game.turn;
+      else
+        effect.xunLian += 15;
+    }
+    else if (cardSpecialEffectId == 30158)
+    {
+      if (jiBan >= 100)
+      {
+        effect.youQing += (100 + effect.youQing) * 0.2;
+      }
+    }
+    else if (cardSpecialEffectId == 30148)
+    {
+      int t = 0;
+      for (int i = 0; i < 5; i++)
+        t += game.getTrainingLevel(atTrain);
+      int y = 5 + t;
+      if (y > 20)y = 20;
+      effect.xunLian += y;
+    }
+    else if (cardSpecialEffectId == 30163)
+    {
+      if (jiBan >= 80)
+      {
+        effect.xunLian += 10;
+      }
+    }
+    // 智茶座
+    else if (cardSpecialEffectId == 30157) {
+      if (jiBan >= 100)
+      {
+        effect.bonus[4] = 2;
+        effect.bonus[5] = 1;
+      }
+    }
+    //[智]真弓快车(id:30149)的固有是闪彩的训练60干劲加成，但是在把五个人头检查一遍之前并不知道闪没闪彩，因此检查完五个人头之后还需要额外对这张卡的参数进行处理
+    //后续处理写在Game类里了，虽然很丑陋，但没想到什么好办法
+    else if (cardSpecialEffectId == 30149)
+    {
+      //参与友情训练时，干劲加成60
+      //固有常开比高峰低150多分
+      //实际比固有常开低100多分
+      effect.ganJing += 60;
+    }
+    else
+    {
+      //  std::cout << "未知卡";
+    }
+    if (!isShining)
+      effect.youQing = 0;
     return effect;
 }
