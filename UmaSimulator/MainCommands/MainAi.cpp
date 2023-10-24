@@ -104,7 +104,9 @@ void main_ai()
   string currentGameStagePath = "./gameData/thisTurn.json";
 
 
-  Search search(NULL, 32, GameConfig::threadNum);
+  SearchParam searchParam = { GameConfig::searchN,TOTAL_TURN,GameConfig::radicalFactor };
+
+  Search search(NULL, 32, GameConfig::threadNum, searchParam);
 
   while (true)
   {
@@ -187,12 +189,9 @@ void main_ai()
       cout << " ";
     };
     
-    //最后几回合降低激进度
-    double modifiedRadicalFactor = GameConfig::radicalFactor * (1 - exp(-double(TOTAL_TURN - game.turn) / 5.0));
     //search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
     if (game.turn < TOTAL_TURN - 1 && !game.isRacing)
     {
-      int targetScore = 32000;//暂时无用
       /*
       Action handWrittenStrategy = Evaluator::handWrittenStrategy(game);
       string strategyText[10] =
@@ -219,40 +218,33 @@ void main_ai()
       cout << endl;*/
 
       game.playerPrint = false;
-      search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
+      search.runSearch(game, rand);
       game.playerPrint = true;
-
-      auto evalf = [targetScore, modifiedRadicalFactor](ModelOutputValueV1 v) {
-        return v.scoreMean + v.scoreStdev * modifiedRadicalFactor;
-      };
 
 
       double maxMean = -1e7;
-      double maxScore = -1e7;
+      double maxValue = -1e7;
       for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
         for (int j = 0; j < 10; j++)
       {
           auto v = search.allChoicesValue[i][j];
-          double s = evalf(v);
-          if (s > maxScore)
-          {
-            maxScore = s;
-          }
+          if (v.value > maxValue)
+            maxValue = v.value;
           if (v.scoreMean > maxMean)
             maxMean = v.scoreMean;
       }
 
       //休息和外出里面分最高的那个。这个数字作为显示参考
-      double restScore = evalf(search.allChoicesValue[0][6]);
-      if (evalf(search.allChoicesValue[0][7]) > restScore)
-        restScore = evalf(search.allChoicesValue[0][7]);
-      if (evalf(search.allChoicesValue[0][8]) > restScore)
-        restScore = evalf(search.allChoicesValue[0][8]);
+      double restValue = search.allChoicesValue[0][6].value;
+      if (search.allChoicesValue[0][7].value > restValue)
+        restValue = search.allChoicesValue[0][7].value;
+      if (search.allChoicesValue[0][8].value > restValue)
+        restValue = search.allChoicesValue[0][8].value;
 
 
       if (game.turn == 0 || scoreFirstTurn == 0)
       {
-        cout << "期望分数 \033[1;32m" << int(maxMean) << "\033[0m  " << endl;
+        cout << "评分均值预测: \033[1;32m" << int(maxMean) << "\033[0m" << "（乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m）" << endl;
         scoreFirstTurn = maxMean;
       }
       else
@@ -260,7 +252,8 @@ void main_ai()
         cout << rpText["luck"] << " | 本局：";
         print_luck(maxMean - scoreFirstTurn);
         cout << " | 本回合：" << maxMean - scoreLastTurn
-          << " | 评分预测: \033[1;32m" << maxMean << "\033[0m " << endl;
+          << " | 评分预测: \033[1;32m" << maxMean << "\033[0m"
+          << "（乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m）"<< endl;
 
       }
       cout.flush();
@@ -283,8 +276,8 @@ void main_ai()
         cout << "速耐力根智: ";
         for (int j = 0; j < 10; j++)
         {
-          double score = evalf(search.allChoicesValue[i][j]);
-          printValue(score - restScore, maxScore - restScore);
+          double value = search.allChoicesValue[i][j].value;
+          printValue(value - restValue, maxValue - restValue);
 
           if (j == 4)cout << " | SS:";
           if (j == 5)cout << " | 休息:";

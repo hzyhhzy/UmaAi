@@ -19,7 +19,9 @@ void main_playerPlay()
 
   const int threadNum = 8;
   const int searchN = 8192;
-  const double targetScore = 31800;
+  const double radicalFactor = 5;
+  SearchParam param = { searchN,TOTAL_TURN,radicalFactor };
+
 
   cout << termcolor::cyan << "赛马娘凯旋门剧本育成模拟器 v0.1" << termcolor::reset << endl;
   cout << termcolor::cyan << "作者 Sigmoid，QQ: 2658628026" << termcolor::reset << endl;
@@ -39,7 +41,7 @@ void main_playerPlay()
   int zhongmaBonus[6] = { 20,0,40,0,20,150 };
   for (int gamenum = 0; gamenum < 100000; gamenum++)
   {
-    Search search(NULL, 128, threadNum);
+    Search search(NULL, 128, threadNum, param);
     Game game;
     game.newGame(rand, true, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
     game.larc_allowedDebuffsFirstLarc[4] = true;//允许不消除智力debuff
@@ -91,7 +93,7 @@ void main_playerPlay()
         cout << endl;
 
         game.playerPrint = false;
-        search.runSearch(game, searchN, TOTAL_TURN, targetScore, rand);
+        search.runSearch(game, rand);
         game.playerPrint = true;
         for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
         {
@@ -114,7 +116,7 @@ void main_playerPlay()
             if (score > -20000)
               cout
               //<< fixed << setprecision(1) << search.allChoicesValue[i][j].winrate * 100 << "%:" 
-              << fixed << setprecision(0) << score - targetScore << " ";
+              << fixed << setprecision(0) << score << " ";
             else
               cout << "-- ";
             if (j == 4)cout << " | SS:";

@@ -2,15 +2,21 @@
 //
 
 #include <iostream>
+#include "config.h"
 #include "Tests/tests.h"
 #include "MainCommands/MainCommands.h"
 
 int main()
 {
-  //main_playerPlay(); 
-  //main_testAiScore();
+#if defined UMAAI_TESTSCORE
+  main_testAiScore();
+#elif defined UMAAI_SIMULATOR
+  main_playerPlay(); 
+#elif defined UMAAI_MAINAI
   main_ai();
-  //main_test_json();
+#else
+  //write your own test code
+#endif
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

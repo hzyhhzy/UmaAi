@@ -5,9 +5,10 @@
 #include <thread>
 #include <atomic>
 #include <future>
+#include <iostream>
 #include "Search.h"
 #include "../GameDatabase/GameConfig.h"
-#include <iostream>
+#include "../External/mathFunctions.h"
 using namespace std;
 
 static void softmax(float* f, int n)
@@ -64,11 +65,25 @@ Action Search::buyBuffAction(int idx, int turn)
   return action;
 }
 
-Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame(threadNumInGame), batchSize(batchSize)
+Search::Search(Model* model, int batchSize, int threadNumInGame, SearchParam param):threadNumInGame(threadNumInGame), batchSize(batchSize), param(param)
 {
   evaluators.resize(threadNumInGame);
   for (int i = 0; i < threadNumInGame; i++)
     evaluators[i] = Evaluator(model, batchSize);
+
+  //正态分布累积分布函数的反函数在0~1上均匀取点
+  for (int i = 0; i < NormDistributionSampling; i++)
+  {
+    double x = (i + 0.5) / NormDistributionSampling;
+    normDistributionCdfInv[i] = normalCDFInverse(x);
+  }
+
+  //让param.samplingNum是整batch
+  int batchEveryThread = (param.samplingNum - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
+  if (batchEveryThread <= 0)batchEveryThread = 1;
+  int samplingNumEveryThread = batchSize * batchEveryThread;
+  param.samplingNum = threadNumInGame * samplingNumEveryThread;
+  NNresultBuf.resize(param.samplingNum);
   
 }
 
@@ -76,17 +91,14 @@ Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame
 
 
 Action Search::runSearch(const Game& game,
-  int samplingNum, int maxDepth, int targetScore,
   std::mt19937_64& rand)
 {
 
   ModelOutputValueV1 illegalValue;
   {
     illegalValue.scoreMean = -1e5;
-    illegalValue.scoreOverTargetMean = -1e5;
-    illegalValue.winRate = 0;
     illegalValue.scoreStdev = 0;
-    illegalValue.scoreOverTargetStdev = 0;
+    illegalValue.value = -1e5;
   }
 
   for (int i = 0; i < 4; i++)
@@ -94,7 +106,6 @@ Action Search::runSearch(const Game& game,
     {
       allChoicesValue[i][j] = illegalValue;
     }
-
 
 
   for (int buyBuffChoice = 0; buyBuffChoice < buyBuffChoiceNum(game.turn); buyBuffChoice++)
@@ -108,7 +119,7 @@ Action Search::runSearch(const Game& game,
     {
       Action action = action0;
       action.train = t;
-      allChoicesValue[buyBuffChoice][t] = evaluateSingleAction(game, samplingNum, maxDepth, targetScore, rand, action);
+      allChoicesValue[buyBuffChoice][t] = evaluateSingleAction(game, rand, action);
     }
 
   }
@@ -118,7 +129,7 @@ Action Search::runSearch(const Game& game,
   for (int i = 0; i < 4; i++)
     for (int j = 0; j < 10; j++)
     {
-      double v = allChoicesValue[i][j].scoreOverTargetMean;
+      double v = allChoicesValue[i][j].value;
       if (v > bestValue)
       {
         bestValue = v;
@@ -130,31 +141,24 @@ Action Search::runSearch(const Game& game,
 }
 
 
-ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, int samplingNum, int maxDepth, int targetScore, std::mt19937_64& rand, Action action)
+ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, std::mt19937_64& rand, Action action)
 {
   //先检查action是否合法
   Game game1 = game;
   bool isLegal = game1.applyTraining(rand, action);
   if (!isLegal)
   {
-    ModelOutputValueV1 v;
-    v.scoreMean = -1e5;
-    v.scoreOverTargetMean = -1e5;
-    v.winRate = 0;
-    v.scoreStdev = 0;
-    v.scoreOverTargetStdev = 0;
-    return v;
+    ModelOutputValueV1 illegalValue;
+    illegalValue.scoreMean = -1e5;
+    illegalValue.scoreStdev = 0;
+    illegalValue.value = -1e5;
+    return illegalValue;
   }
 
 
-  int batchEveryThread = (samplingNum - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
-  if (batchEveryThread <= 0)batchEveryThread = 1;
-  int samplingNumEveryThread = batchSize * batchEveryThread;
-  samplingNum = threadNumInGame * samplingNumEveryThread;
-  resultBuf.resize(samplingNum);
-
-
-
+  assert(param.samplingNum % (threadNumInGame * batchSize) == 0);//相当于向上取整
+  assert(NNresultBuf.size() == param.samplingNum);
+  int samplingNumEveryThread = param.samplingNum / threadNumInGame;
 
   if (threadNumInGame > 1)
   {
@@ -166,14 +170,12 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, int samplingNu
     for (int i = 0; i < threadNumInGame; ++i) {
       threads.push_back(std::thread(
 
-        [this, i, samplingNumEveryThread, &game, maxDepth, targetScore, &rands, action]() {
+        [this, i, samplingNumEveryThread, &game, &rands, action]() {
           evaluateSingleActionThread(
             i,
-            resultBuf.data() + samplingNumEveryThread * i,
+            NNresultBuf.data() + samplingNumEveryThread * i,
             game,
             samplingNumEveryThread,
-            maxDepth,
-            targetScore,
             rands[i],
             action
           );
@@ -190,44 +192,56 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, int samplingNu
   {
     evaluateSingleActionThread(
       0,
-      resultBuf.data(),
+      NNresultBuf.data(),
       game,
       samplingNumEveryThread,
-      maxDepth,
-      targetScore,
       rand,
       action
     );
   }
 
+  //计算该取的激进度
+  double remainTurns = game.turn >= 65 ? 1 : 65 - game.turn;
+  double rf = param.maxRadicalFactor * (1 - exp(-remainTurns / 4.0));
 
   //整合所有结果
+  for (int i = 0; i < MAX_SCORE; i++)
+    finalScoreDistribution[i] = 0;
+  for (int i = 0; i < param.samplingNum; i++)
+  {
+    addNormDistribution(NNresultBuf[i].scoreMean, NNresultBuf[i].scoreStdev);
+  }
+
+  double N = 0;//总样本量
   double scoreTotal = 0;//score的和
   double scoreSqrTotal = 0;//score的平方和
-  double winNum = 0;//score>=target的次数期望
-  double scoreOverTargetTotal = 0;//max(target,score)的和
-  double scoreOverTargetSqrTotal = 0;//max(target,score)的平方和
-  for (int i = 0; i < samplingNum; i++)
+  //double winNum = 0;//score>=target的次数期望
+
+  double valueWeightTotal = 0;//sum(n^p*x[n]),x[n] from small to big
+  double valueTotal = 0;//sum(n^p)
+  double totalNinv = 1.0 / (param.samplingNum * NormDistributionSampling);
+  for (int s = 0; s < MAX_SCORE; s++)
   {
-    ModelOutputValueV1 v = resultBuf[i];
-    scoreTotal += v.scoreMean;
-    scoreSqrTotal += double(v.scoreMean) * v.scoreMean + double(v.scoreStdev) * v.scoreStdev;
-    scoreOverTargetTotal += v.scoreOverTargetMean;
-    //cout << v.scoreMean << " ";
-    scoreOverTargetSqrTotal += double(v.scoreOverTargetMean) * v.scoreOverTargetMean + double(v.scoreOverTargetStdev) * v.scoreOverTargetStdev;
-    winNum += v.winRate;
+    double n = finalScoreDistribution[s]; //当前分数的次数
+    double r = (N + 0.5 * n) * totalNinv; //当前分数的排名比例
+    N += n;
+    scoreTotal += n * s;
+    scoreSqrTotal += n * s * s;
+
+    //按排名加权平均
+    double w = pow(r, rf);
+    valueWeightTotal += w * n;
+    valueTotal += w * n * s;
   }
 
   ModelOutputValueV1 v;
-  v.scoreMean = scoreTotal / samplingNum;
-  v.scoreStdev = sqrt(scoreSqrTotal * samplingNum - scoreTotal * scoreTotal) / samplingNum;
-  v.scoreOverTargetMean = scoreOverTargetTotal / samplingNum;
-  v.scoreOverTargetStdev = sqrt(scoreOverTargetSqrTotal * samplingNum - scoreOverTargetTotal * scoreOverTargetTotal) / samplingNum;
-  v.winRate = winNum / samplingNum;
+  v.scoreMean = scoreTotal / N;
+  v.scoreStdev = sqrt(scoreSqrTotal * N - scoreTotal * scoreTotal) / N;
+  v.value = valueTotal / valueWeightTotal;
   return v;
 }
 
-void Search::evaluateSingleActionThread(int threadIdx, ModelOutputValueV1* resultBuf, const Game& game, int samplingNum, int maxDepth, int targetScore, std::mt19937_64& rand, Action action)
+void Search::evaluateSingleActionThread(int threadIdx, ModelOutputValueV1* resultBuf, const Game& game, int samplingNum, std::mt19937_64& rand, Action action)
 {
   Evaluator& eva = evaluators[threadIdx];
   assert(eva.maxBatchsize == batchSize);
@@ -246,9 +260,9 @@ void Search::evaluateSingleActionThread(int threadIdx, ModelOutputValueV1* resul
       eva.gameInput[i].applyTrainingAndNextTurn(rand, action);
     }
 
-    for (int depth = 0; depth < maxDepth; depth++)
+    for (int depth = 0; depth < param.maxDepth; depth++)
     {
-      eva.evaluateSelf(1, targetScore);//计算policy
+      eva.evaluateSelf(1, param);//计算policy
       //bool distributeCards = (depth != maxDepth - 1);//最后一层就不分配卡组了，直接调用神经网络估值
 
 
@@ -262,12 +276,23 @@ void Search::evaluateSingleActionThread(int threadIdx, ModelOutputValueV1* resul
       }
       if (allFinished)break;
     }
-    eva.evaluateSelf(0, targetScore);//计算value
+    eva.evaluateSelf(0, param);//计算value
     for (int i = 0; i < batchSize; i++)
     {
       resultBuf[batch * batchSize + i] = eva.valueResults[i];
     }
 
+  }
+}
+
+void Search::addNormDistribution(double mean, double stdev)
+{
+  for (int i = 0; i < NormDistributionSampling; i++)
+  {
+    int y = int(mean + stdev * normDistributionCdfInv[i] + 0.5);
+    if (y < 0)y = 0;
+    if (y >= MAX_SCORE)y = MAX_SCORE - 1;
+    finalScoreDistribution[y] += 1;
   }
 }
 
@@ -285,7 +310,7 @@ ModelOutputPolicyV1 Search::extractPolicyFromSearchResults(int mode, float delta
   assert(false);
   //训练8选1
   for (int i = 0; i < 8; i++)
-    policy.trainingPolicy[i] = deltaInv * allChoicesValue[0][i].extract(mode);
+    policy.trainingPolicy[i] = deltaInv * allChoicesValue[0][i].value;
   softmax(policy.trainingPolicy, 8);
 
   return policy;

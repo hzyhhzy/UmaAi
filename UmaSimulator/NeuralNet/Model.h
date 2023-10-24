@@ -20,10 +20,9 @@ struct ModelOutputValueV1
 {
   float scoreMean;//score的平均值
   float scoreStdev;//score的标准差
-  float winRate;//score>=target的概率
-  float scoreOverTargetMean;//max(target,score)的平均值
-  float scoreOverTargetStdev;//max(target,score)的标准差
-  float extract(int i);
+  //float winRate;//score>=target的概率
+  float value;//考虑激进度之后的打分
+  //float extract(int i);
 };
 static_assert(sizeof(ModelOutputValueV1) == sizeof(float) * NNOUTPUT_CHANNELS_VALUE_V1, "NNOUTPUT_CHANNELS_VALUE_V1错误");
 

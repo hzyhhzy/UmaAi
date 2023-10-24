@@ -113,6 +113,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +131,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="External\mathFunctions.cpp" />
     <ClCompile Include="External\utils.cpp" />
     <ClCompile Include="GameDatabase\GameConfig.cpp" />
     <ClCompile Include="GameDatabase\GameConstants.cpp" />
@@ -158,6 +161,7 @@
     <ClCompile Include="NeuralNet\Model.cpp" />
     <ClCompile Include="NeuralNet\NNInput.cpp" />
     <ClCompile Include="Search\Search.cpp" />
+    <ClCompile Include="Search\SearchParam.cpp" />
     <ClCompile Include="SupportCard\CardEffect.cpp" />
     <ClCompile Include="SupportCard\SupportCard.cpp" />
     <ClCompile Include="Tests\test1.cpp" />
@@ -168,6 +172,8 @@
     <ClCompile Include="UmaSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="config.h" />
+    <ClInclude Include="External\mathFunctions.h" />
     <ClInclude Include="External\rang.hpp" />
     <ClInclude Include="External\termcolor.hpp" />
     <ClInclude Include="External\utils.h" />
@@ -185,6 +191,7 @@
     <ClInclude Include="NeuralNet\Model.h" />
     <ClInclude Include="NeuralNet\NNInput.h" />
     <ClInclude Include="Search\Search.h" />
+    <ClInclude Include="Search\SearchParam.h" />
     <ClInclude Include="SupportCard\CardEffect.h" />
     <ClInclude Include="SupportCard\SupportCard.h" />
     <ClInclude Include="Tests\tests.h" />
