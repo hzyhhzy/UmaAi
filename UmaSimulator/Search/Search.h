@@ -39,7 +39,7 @@ public:
   // 3.如果要跑很多局（例如跑谱），会同时跑threadGame局，总线程数为threadGame*threadNumInGame。若eachSamplingNum较小batchsize较大，可以让threadNumInGame=1
   // 嵌套结构：Search(threadGame个)->Evaluator(threadGame*threadNumInGame个)->Model(1个)
   
-  Search(Model* model, int batchSize, int threadNumInGame, SearchParam param);
+  Search(Model* model, int batchSize, int threadNumInGame, SearchParam param0);
 
 
 

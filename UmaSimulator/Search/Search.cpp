@@ -65,7 +65,7 @@ Action Search::buyBuffAction(int idx, int turn)
   return action;
 }
 
-Search::Search(Model* model, int batchSize, int threadNumInGame, SearchParam param):threadNumInGame(threadNumInGame), batchSize(batchSize), param(param)
+Search::Search(Model* model, int batchSize, int threadNumInGame, SearchParam param0):threadNumInGame(threadNumInGame), batchSize(batchSize), param(param0)
 {
   evaluators.resize(threadNumInGame);
   for (int i = 0; i < threadNumInGame; i++)
@@ -156,7 +156,7 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, std::mt19937_6
   }
 
 
-  assert(param.samplingNum % (threadNumInGame * batchSize) == 0);//相当于向上取整
+  assert(param.samplingNum % (threadNumInGame * batchSize) == 0);
   assert(NNresultBuf.size() == param.samplingNum);
   int samplingNumEveryThread = param.samplingNum / threadNumInGame;
 
