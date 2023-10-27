@@ -23,7 +23,7 @@ inline int64_t now_ms()
 //benchmark
 void main_benchmark()
 {
-  GameDatabase::loadUmas("../db/uma");
+  GameDatabase::loadUmas("../db/umaDB.json");
   GameDatabase::loadCards("../db/card");
 
   const int threadNum = 1;

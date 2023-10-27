@@ -13,7 +13,7 @@ public:
   static std::unordered_map<int, SupportCard> DBCards;
   static std::unordered_map<int, std::unordered_map<int, std::string> > TLGTranslation;
 
-  static void loadUmas(const std::string& dir);
+  static void loadUmas(const std::string& pathname);
   static void loadCards(const std::string& dir);
   static void loadDBCards(const std::string& pathname);
   static void loadTranslation(const std::string& pathname);  

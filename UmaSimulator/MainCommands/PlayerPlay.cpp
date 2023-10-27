@@ -13,7 +13,7 @@ using namespace std;
 
 void main_playerPlay()
 {
-  GameDatabase::loadUmas("../db/uma");
+  GameDatabase::loadUmas("../db/umaDB.json");
   GameDatabase::loadCards("../db/card");
   GameDatabase::loadDBCards("../db/cardDB.json");
 

@@ -12,11 +12,11 @@ using namespace std;
 unordered_map<int, UmaData> GameDatabase::AllUmas;
 unordered_map<int, unordered_map<int, string> > GameDatabase::TLGTranslation;
 
-void GameDatabase::loadUmas(const string& dir) 
+void GameDatabase::loadUmas(const string& pathname)
 {
     try
     {
-        ifstream ifs("db/umaDB.json");
+        ifstream ifs(pathname);
         stringstream ss;
         ss << ifs.rdbuf();
         ifs.close();
