@@ -10,6 +10,10 @@ ShortType = ['', '速', '耐', '力', '根', '智', '友', '团']
 DirectKeys = ['deYiLv', 'failRateDrop', 'ganJing', 'hintProbIncrease',
               'saiHou', 'vitalCostDrop', 'wizVitalBonus', 'xunLian',
               'youQing', 'initialJiBan']
+
+# 特判直接合并面板的卡（目前只有智太阳神）
+DirectMergeCards = [ 30155 ]
+
 HintValues = [
     [6, 0, 2, 0, 0, 0],
     [0, 6, 0, 2, 0, 0],
@@ -51,7 +55,7 @@ def mergeCardEffect(cardValue, effect):
 
     for i in range(0, int(len(effect)/2)):
         key, value = effect[i*2], effect[i*2+1]
-        if key == 99: # 神鹰特判
+        if key == 41: # 神鹰特判
             for j in range(0, 5):
                 ret["bonus"][j] = cardValue["bonus"][j] + 1
         elif key == 1:  # 友情
@@ -95,8 +99,8 @@ def mergeCardEffect(cardValue, effect):
 def prepareUniqueEffect(card, ueffect):
     utype = 0
     useParam = False
-    if not ueffect["type"]:
-        # 默认固有，直接合并面板值
+    if (not ueffect["type"]) or (card["cardId"] in DirectMergeCards):
+         # 默认固有或者特判直接合并的卡（智太阳神）
         utype = 0
         for which in range(0, 5):
             card["cardValue"][which] = mergeCardEffect(card["cardValue"][which], ueffect["effect"])

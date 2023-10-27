@@ -77,8 +77,10 @@ void Game::printEvents(string s) const
 #endif
 }
 
+// 只在调用该函数时会重新计算一次当前的面板并显示
 void Game::printCardEffect()
 {
+    cout << "-- 支援卡面板计算 --" << endl;
     for (int trainType = 0; trainType < 5; ++trainType)
         for (int i = 0; i < 5; i++)
         {
@@ -89,7 +91,13 @@ void Game::printCardEffect()
             {
                 CardTrainingEffect eff = cardParam[persons[p].cardIdInGame].getCardEffect(*this, trainType, persons[p].friendship, persons[p].cardRecord);
                 cout << cardParam[persons[p].cardIdInGame].cardName << ": " << eff.explain()
-                     << " DB=" << (cardParam[persons[p].cardIdInGame].isDBCard ? "True" : "False") << endl;
+                     << " 算法：" << (cardParam[persons[p].cardIdInGame].isDBCard ? "自动" : "手动") << endl;
+                if (!cardParam[persons[p].cardIdInGame].isDBCard) // 验算，调试用
+                {
+                    CardTrainingEffect eff2 = cardParam[persons[p].cardIdInGame].getCardEffect(*this, trainType, persons[p].friendship, -1);
+                    cout << cardParam[persons[p].cardIdInGame].cardName << ": " << eff2.explain()
+                        << " 算法：自动(验算)" << endl;
+                }
             }
         }
 }

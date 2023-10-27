@@ -43,7 +43,7 @@ void SupportCard::write_to_json(json& j, const std::string cdname, const int id)
 
 void SupportCard::load_from_json(json& j, int x) {
 
-	cardID = j.value("cardID", 0);
+	cardID = j.value("cardId", 0);
 	cardID = cardID * 10 + x;
 	cardType = j.value("cardType", -1);
 	cardName = UTF8_To_string(j.value<std::string>("cardName", ""));

@@ -221,7 +221,7 @@ def parseUniqueEffectRow(row:UniqueEffectRow)->tuple[str, list[SupportCardEffect
                 # 仅速神鹰有该附言，特判一下
                 ret_str += summary.summary
                 #effects["AllStatusBonus"] = 1
-                effects.append(99)
+                effects.append(41)
                 effects.append(1)
             index += length
             if start_index == index:

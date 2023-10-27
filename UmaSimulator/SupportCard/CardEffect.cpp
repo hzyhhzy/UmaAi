@@ -34,12 +34,12 @@ CardTrainingEffect& CardTrainingEffect::apply(int key, int value)
             ganJing += value; break;
         case 8:    // 训练-加算
             xunLian += value; break;
-    //  case 19:  // 得意率-乘算
-    //     deYiLv = (100 + deYiLv) * (100 + value) / 100 - 100;
-    //     break;
-    //  case 15:    // 赛后-加算
-    //    saiHou += value;
-    //    break;
+        case 19:  // 得意率-不处理
+    //       deYiLv = (100 + deYiLv) * (100 + value) / 100 - 100;
+             break;
+        case 15:    // 赛后-不处理
+    //       saiHou += value;
+             break;
         case 27: // 失败率-减乘
             failRateDrop = 100 - (100 - failRateDrop) * (100 - value) / 100;
             break;
@@ -78,7 +78,7 @@ CardTrainingEffect& CardTrainingEffect::apply(int key, int value)
         case 18:    // Hint率：不处理
             break;
         // 神鹰特判
-        case 99:  // 速神鹰
+        case 41:  // 速神鹰
             for (int i = 0; i < 5; ++i)
                 bonus[i] += 1;
             break;
@@ -89,7 +89,7 @@ CardTrainingEffect& CardTrainingEffect::apply(int key, int value)
     return *this;
 }
 
-const string& CardTrainingEffect::explain() {
+const string CardTrainingEffect::explain() {
     stringstream ss;
     ss << std::setprecision(4);
     if (youQing > 0)

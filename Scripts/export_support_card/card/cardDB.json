@@ -54550,7 +54550,7 @@
         "initialJiBan": 20,
         "saiHou": 5,
         "hintProbIncrease": 0,
-        "deYiLv": 20,
+        "deYiLv": 68.0,
         "wizVitalBonus": 3
       },
       {
@@ -54585,7 +54585,7 @@
         "initialJiBan": 21,
         "saiHou": 5,
         "hintProbIncrease": 0,
-        "deYiLv": 25,
+        "deYiLv": 75.0,
         "wizVitalBonus": 3
       },
       {
@@ -54620,7 +54620,7 @@
         "initialJiBan": 23,
         "saiHou": 5,
         "hintProbIncrease": 0,
-        "deYiLv": 30,
+        "deYiLv": 82.0,
         "wizVitalBonus": 4
       },
       {
@@ -54655,7 +54655,7 @@
         "initialJiBan": 25,
         "saiHou": 5,
         "hintProbIncrease": 30,
-        "deYiLv": 35,
+        "deYiLv": 89.0,
         "wizVitalBonus": 4
       },
       {
@@ -54690,20 +54690,12 @@
         "initialJiBan": 25,
         "saiHou": 5,
         "hintProbIncrease": 40,
-        "deYiLv": 35,
+        "deYiLv": 89.0,
         "wizVitalBonus": 5
       }
     ],
-    "uniqueEffectType": 1,
-    "uniqueEffectSummary": "羁绊>=80时deYiLv(40)",
-    "uniqueEffectParam": [
-      101,
-      80,
-      19,
-      40,
-      0,
-      0
-    ]
+    "uniqueEffectType": 0,
+    "uniqueEffectSummary": "羁绊>=80时deYiLv(40)"
   },
   "30156": {
     "cardId": 30156,

@@ -77,10 +77,11 @@ void GameDatabase::loadDBCards(const string& pathname)
             for (int x = 0; x < 5; ++x) {
                 SupportCard jdata;
                 jdata.load_from_json(it.value(),x);
-                if (GameDatabase::AllCards.count(jdata.cardID) > 0) continue;
                 jdata.isDBCard = true;
-
-                GameDatabase::AllCards[jdata.cardID] = jdata;
+                if (GameDatabase::AllCards.count(jdata.cardID) > 0) // 如果已经被loadCards载入（有手动数据）
+                    GameDatabase::DBCards[jdata.cardID] = jdata;    // 仍然把数据暂存在DBCards里（现在没使用这个表），用于验算
+                else
+                    GameDatabase::AllCards[jdata.cardID] = jdata;   // 没有手动数据则用自动数据
             }
         }
         cout << "共载入 " << GameDatabase::AllCards.size() << " 支援卡元数据" << endl;
@@ -106,7 +107,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
     if (cardType < 5 && jiBan >= 80 && cardType == atTrain)
         isShining = true;
 
-    if (isDBCard)
+    if (isDBCard || effectFactor==-1)  // 暂时使用effectFactor=-1表示验算模式
     {
         // 新的固有处理代码
         // 由于不能维护isFixed状态，每次都要重新计算
@@ -114,7 +115,18 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
         int count, totalJiBan;
         double expectedVital;
         auto args = uniqueEffectParam;
-        switch (uniqueEffectType)
+        int type = uniqueEffectType;
+
+        if (effectFactor == -1)
+        {
+            // 让手写卡也使用新代码/新数据计算，用来比对计算结果
+            // 重新用新卡数据初始化自己
+            effect = CardTrainingEffect(&GameDatabase::DBCards[cardID]);
+            type = GameDatabase::DBCards[cardID].uniqueEffectType;
+            args = GameDatabase::DBCards[cardID].uniqueEffectParam;
+        }
+
+        switch (type)
         {
             case 0:
                 break;
@@ -215,7 +227,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                     count += min(5, 1+game.getTrainingLevel(i));
                 effect.xunLian += (count / 25.0) * args[3];
                 break;
-            case 118:   // 佐岳
+            case 18:   // 佐岳
                 break;
             default:   // type == 0
                 if (uniqueEffectType != 0) {

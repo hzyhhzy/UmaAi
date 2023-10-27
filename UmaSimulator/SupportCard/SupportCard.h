@@ -83,5 +83,5 @@ public:
     // key ∂‘”¶ enum class UniqueEffectType
     CardTrainingEffect& apply(int key, int value);
 
-    const std::string& explain();
+    const std::string explain();
 };

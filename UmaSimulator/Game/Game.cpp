@@ -98,7 +98,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
       p.larc_isLinkCard = cardP.larc_isLink;
 
       std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-      probs[cardP.cardType] += cardP.deYiLv;  // 固有改变得意率的需要在这里特判
+      probs[cardP.cardType] += cardP.deYiLv;  
       p.distribution = std::discrete_distribution<>(probs.begin(), probs.end());
     }
   }
@@ -1828,8 +1828,8 @@ void Game::applyTrainingAndNextTurn(std::mt19937_64& rand, Action action)
 
   assert(!isRacing && "比赛回合都在checkEventAfterTrain里跳过了");
 
+  // 如果要支持在游戏中改变得意率，需要在这里更新得意率的值
   randomDistributeCards(rand);
-
 }
 
 // 根据PersonDistribution cardType和Person.friendship确定某个卡是否闪彩

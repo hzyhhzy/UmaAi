@@ -145,7 +145,9 @@ bool Game::loadGameFromJson(std::string jsonStr)
         persons[i].larc_isLinkCard = cardP.larc_isLink;
 
         std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-        probs[cardP.cardType] += cardP.deYiLv;  // 得意率固有需要在这里特判
+        // 得意率固有需要在这里特判
+        double deYiLv = cardP.deYiLv;
+        probs[cardP.cardType] += deYiLv;  
         persons[i].distribution = std::discrete_distribution<>(probs.begin(), probs.end());
       }
       else
