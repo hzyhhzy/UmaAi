@@ -27,9 +27,9 @@ void GameDatabase::loadUmas(const string& dir)
             UmaData uma;
             int id = atoi(it.key().c_str());
             it.value().get_to(uma);
-            AllUmas[id] = uma;
             if (TLGTranslation[4].contains(id % 1000000))
                 uma.name = TLGTranslation[4][id % 1000000];
+            AllUmas[id] = uma;
            //cout << uma.name << endl;
         }
         cout << "共载入 " << AllUmas.size() << " 个育成马娘数据" << endl;        

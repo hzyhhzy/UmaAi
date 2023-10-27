@@ -37,7 +37,6 @@ struct Game
   int motivationDropCount;//掉过几次心情了，不包括剧本事件（已知同一个掉心情不会出现多次，一共3个掉心情事件，所以之前掉过越多，之后掉的概率越低）
 
   //凯旋门相关
-
   bool larc_isAbroad;//这个回合是否在海外
   //int32_t larc_supportPt;//自己的支援pt
   int32_t larc_supportPtAll;//所有人（自己+其他人）的支援pt之和，每1700支援pt对应1%期待度
@@ -101,8 +100,6 @@ struct Game
   //finalScore();
   //
 
-
-
   void newGame(std::mt19937_64& rand,
     bool enablePlayerPrint,
     int newUmaId, 
@@ -114,7 +111,6 @@ struct Game
   void initNPCsTurn3(std::mt19937_64& rand);//第三回合初始化npc人头
 
   bool loadGameFromJson(std::string jsonStr);
-
 
   void randomDistributeCards(std::mt19937_64& rand);//随机分配卡组和npc
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率
@@ -145,6 +141,8 @@ struct Game
   //辅助函数
   double sssProb(int ssWinSinceLastSSS) const;//出sss的概率
   int getTrainingLevel(int item) const;//计算训练等级。从0开始，游戏里的k级在这里是k-1级，远征是5级
+  bool cardIsShining(int which) const;    // 判断指定卡是否闪彩
+  bool trainShiningCount(int train) const;    // 判断指定训练彩圈数
   //void runTestGame();
 
   void getNNInputV1(float* buf, float targetScore, int mode) const;//神经网络输入，mode=0是value，1是policy
@@ -180,6 +178,7 @@ struct Game
 
   //显示事件
   void printEvents(std::string s) const;//用绿色字体显示事件
+  void printCardEffect();
 
 };
 

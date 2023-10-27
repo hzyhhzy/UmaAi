@@ -96,18 +96,18 @@ void main_ai()
   GameConfig::load("./aiConfig.json");
   GameDatabase::loadTranslation("./db/text_data.json");
   GameDatabase::loadUmas("./db/uma");
-  GameDatabase::loadCards("./db/card");
-  if(GameConfig::extraCardData == true)
-    GameDatabase::loadDBCards("./db/cardDB.json");
+  //GameDatabase::loadCards("./db/card");
+  //if(GameConfig::extraCardData == true)
+  GameDatabase::loadDBCards("./db/cardDB.json");
   loadRole();   // roleplay
 
   //string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/packets/currentGS.json";
   string currentGameStagePath = "./gameData/thisTurn.json";
 
-
   SearchParam searchParam = { GameConfig::searchN,TOTAL_TURN,GameConfig::radicalFactor };
 
   Search search(NULL, 32, GameConfig::threadNum, searchParam);
+
 
   while (true)
   {
@@ -222,6 +222,12 @@ void main_ai()
       search.runSearch(game, rand);
       game.playerPrint = true;
 
+      game.printCardEffect();
+/*
+      auto evalf = [targetScore, modifiedRadicalFactor](ModelOutputValueV1 v) {
+        return v.scoreMean + v.scoreStdev * modifiedRadicalFactor;
+      };
+      */
 
       double maxMean = -1e7;
       double maxValue = -1e7;

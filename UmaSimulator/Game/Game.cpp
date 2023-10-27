@@ -52,7 +52,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     int cardId = newCards[i];
     cardParam[i] = GameDatabase::AllCards[cardId];
     SupportCard& cardP = cardParam[i];
-    saihou += cardP.getCardEffect(*this).saiHou;  // 考虑固有初始效果
+    saihou += cardP.saiHou;
     int cardType = cardP.cardType;
     if (cardType == 5 || cardType == 6)
     {
@@ -98,7 +98,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
       p.larc_isLinkCard = cardP.larc_isLink;
 
       std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-      probs[cardP.cardType] += cardP.getCardEffect(*this).deYiLv;  // 考虑固有初始效果
+      probs[cardP.cardType] += cardP.deYiLv;  // 固有改变得意率的需要在这里特判
       p.distribution = std::discrete_distribution<>(probs.begin(), probs.end());
     }
   }
@@ -123,7 +123,6 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   larc_zuoyueOutgoingRefused = false;
   larc_zuoyueOutgoingUsed = 0;
 
-
   for (int i = 0; i < 5; i++)
     zhongMaBlueCount[i] = newZhongMaBlueCount[i];
   for (int i = 0; i < 6; i++)
@@ -145,8 +144,8 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   for (int i = 0; i < 6; i++)//支援卡初始加成
   {
     for (int j = 0; j < 5; j++)
-      addStatus(j, cardParam[i].getCardEffect(*this).initialBonus[j]);
-    skillPt += cardParam[i].getCardEffect(*this).initialBonus[5];
+      addStatus(j, cardParam[i].initialBonus[j]);
+    skillPt += cardParam[i].initialBonus[5];
   }
   for (int i = 0; i < 5; i++)
     addStatus(i, zhongMaBlueCount[i] * 7); //种马
@@ -840,7 +839,6 @@ void Game::calculateTrainingValueSingle(int trainType)
     {
       personCount += 1;
     }
-      
   }
 
   trainShiningNum[trainType] = 0;
@@ -852,10 +850,11 @@ void Game::calculateTrainingValueSingle(int trainType)
   }
 
   //[智]真弓快车(id:30149)的固有是闪彩的训练60干劲加成，但是在把五个人头检查一遍之前并不知道闪没闪彩，因此检查完五个人头之后还需要额外对这张卡的参数进行处理
+  /*
   if (card30149place >= 0 && trainShiningNum[trainType] == 0)
   {
     effects[card30149place].ganJing -= 60;
-  }
+  }*/
 
   failRate[trainType] = calculateFailureRate(trainType,failRateMultiply);
 
@@ -1035,7 +1034,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
   {
     if (turn <= 12 || larc_isAbroad)
     {
-      printEvents("前13回合和远征中无法比赛");
+      printEvents("Cannot race now.");    // 避免编码错误
       return false;
     }
     addAllStatus(1);//武者振
@@ -1831,4 +1830,38 @@ void Game::applyTrainingAndNextTurn(std::mt19937_64& rand, Action action)
 
   randomDistributeCards(rand);
 
+}
+
+// 根据PersonDistribution cardType和Person.friendship确定某个卡是否闪彩
+// 因为相关数据分散在各处，所以不在getCardEffect函数中时，只能在Game里以较大的开销判定
+bool Game::cardIsShining(int which) const
+{
+    // 团队卡暂且不管。普通卡先满足这些
+    if (which > 0 && which <= 5 && cardParam[which].cardType < 5 && persons[which].friendship >= 80)
+    {
+        // 再来判断是否擅长训练
+        for (int i=0; i<5; ++i)
+            for (int j=0; j<5; ++j)
+                if (personDistribution[i][j] == which)
+                    return (i == cardParam[which].cardType);
+    }
+    return false;
+}
+
+// 根据PersonDistribution cardType和Person.friendship确定训练彩圈数量
+// 因为相关数据分散在各处，所以不在getCardEffect函数中时，只能在Game里以较大的开销判定
+// 不能使用由getCardEffect维护的trainShiningNum成员，因为getCardEffect自己需要调用该方法。
+bool Game::trainShiningCount(int train) const
+{
+    int count = 0;
+    if (train > 0 && train <= 5)
+    {
+        for (int i = 0; i < 5; ++i)
+        { 
+            int which = personDistribution[train][i];
+            if (which >= 0 && which <= 5 && cardParam[which].cardType == train && persons[which].friendship >= 80)
+                ++count;
+        }
+    }
+    return count;
 }

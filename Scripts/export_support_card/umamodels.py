@@ -124,7 +124,7 @@ class SupportCardEffectType(IntEnum):
     GutzLimitUp = 23
     WizLimitUp = 24
     EventRecoveryAmountUp = 25
-    EventEffetcUp = 26
+    EventEffectUp = 26
     TrainingFailureRateDown = 27
     TrainingHPConsumptionDown = 28
     MinigameEffectUP = 29

@@ -77,6 +77,23 @@ void Game::printEvents(string s) const
 #endif
 }
 
+void Game::printCardEffect()
+{
+    for (int trainType = 0; trainType < 5; ++trainType)
+        for (int i = 0; i < 5; i++)
+        {
+            int p = personDistribution[trainType][i];
+            if (p < 0)break;//没人
+            int personType = persons[p].personType;
+            if (personType == 1 || personType == 2)//卡
+            {
+                CardTrainingEffect eff = cardParam[persons[p].cardIdInGame].getCardEffect(*this, trainType, persons[p].friendship, persons[p].cardRecord);
+                cout << cardParam[persons[p].cardIdInGame].cardName << ": " << eff.explain()
+                     << " DB=" << (cardParam[persons[p].cardIdInGame].isDBCard ? "True" : "False") << endl;
+            }
+        }
+}
+
 static void printTableRow(string strs[5])
 {
   const int width = 17;
@@ -138,7 +155,6 @@ void Game::print() const
       cout << termcolor::bright_yellow << "有爱娇" << termcolor::reset << endl;
   }
   {
-
     cout << endl;
   }
 
@@ -356,8 +372,7 @@ void Game::print() const
       oneRow[i] = "适性pt:\033[32m" + to_string(larc_shixingPtGainAbroad[i]) + "\033[0m";
     }
     printTableRow(oneRow);
-  }
-  
+  } 
 
   cout << divLine;
   //人头
@@ -442,7 +457,7 @@ void Game::print() const
     
     }
     if (larc_ssPersonsCount < 5)
-      cout << "SS Match" << endl;
+      cout << "SS人数未满" << endl;
     else if (!larc_isSSS)
       cout << "\033[1;32mSS Match\033[0m" << endl;
     else
@@ -470,7 +485,6 @@ void Game::print() const
     }
 
   }
-
   cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
 }
 

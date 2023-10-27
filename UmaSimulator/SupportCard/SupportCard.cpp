@@ -43,42 +43,32 @@ void SupportCard::write_to_json(json& j, const std::string cdname, const int id)
 
 void SupportCard::load_from_json(json& j, int x) {
 
-	j.at("cardId").get_to(cardID);
+	cardID = j.value("cardID", 0);
 	cardID = cardID * 10 + x;
-	j.at("cardType").get_to(cardType);
-	std::string st;
-	j.at("cardName").get_to(st);
-	cardName = UTF8_To_string(st);
+	cardType = j.value("cardType", -1);
+	cardName = UTF8_To_string(j.value<std::string>("cardName", ""));
 	//j.at("cardSkill").get_to(cardSkill);	// 不载入技能，因为格式不同
-	if (j.contains("charaId"))
-		j.at("charaId").get_to(charaId);
-	if (j.contains("uniqueEffect") && !j["uniqueEffect"].is_null() && j["uniqueEffect"].contains("type"))
-	{
-		j["uniqueEffect"]["type"].get_to(uniqueEffectType);
-		j["uniqueEffect"]["uniqueParams"].get_to(uniqueEffectParam);
-		for (auto& it : j["uniqueEffect"]["effect"].items()) {
-			int v;
-			it.value().get_to(v);
-			uniqueEffectValues[atoi(it.key().c_str())] = v;
-		}
-	}
+	charaId = j.value("charaId", -1);
+	// 载入固有。没有该key时用默认值
+	uniqueEffectType = j.value("uniqueEffectType", 0);
+	uniqueEffectParam = j.value("uniqueEffectParam", vector<int>());
 
-	j["cardValue"][x].at("filled").get_to(filled);
-	if (filled == true) {
-
-		youQingBasic = j["cardValue"][x].value<double>("youQing", 0);
+	filled = j["cardValue"][x].value("filled", false);
+	if (filled) {
+        youQingBasic = j["cardValue"][x].value<double>("youQing", 0);
 		ganJingBasic = j["cardValue"][x].value<double>("ganJing", 0);
 		xunLianBasic = j["cardValue"][x].value<double>("xunLian", 0);
-		j["cardValue"][x].at("bonus").get_to(bonusBasic);
 		wizVitalBonusBasic = j["cardValue"][x].value("wizVitalBonus", 0);
-		j["cardValue"][x].at("initialBonus").get_to(initialBonus);
 		initialJiBan = j["cardValue"][x].value("initialJiBan", 0);
 		saiHou = j["cardValue"][x].value<double>("saiHou", 0);
-		j["cardValue"][x].at("hintBonus").get_to(hintBonus);
 		hintProbIncrease = j["cardValue"][x].value<double>("hintProbIncrease", 0);
 		deYiLv = j["cardValue"][x].value<double>("deYiLv", 0);
 		failRateDrop = j["cardValue"][x].value<double>("failRateDrop", 0);
 		vitalCostDrop = j["cardValue"][x].value<double>("vitalCostDrop", 0);
+
+		j["cardValue"][x].at("bonus").get_to(bonusBasic);
+		j["cardValue"][x].at("initialBonus").get_to(initialBonus);
+		j["cardValue"][x].at("hintBonus").get_to(hintBonus);		
 	}
 
 	if (j.contains("larc_isLink"))
@@ -120,8 +110,6 @@ void SupportCard::getNNInputV1(float* buf) const
 	if (larc_linkSpecialEffect != 0)//范围3~12
 		buf[28 + (larc_linkSpecialEffect - 3)] = 1.0;
 
-
 	assert(false && "todo固有词条");
 	buf[38] = 0.0;
-
 }

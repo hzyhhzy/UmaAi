@@ -93,7 +93,6 @@ bool Game::loadGameFromJson(std::string jsonStr)
       int cardType = cardP.cardType;
       if (cardType == 5 || cardType == 6)
       {
-
         if (realCardId == 30160 || realCardId == 10094)//佐岳卡
         {
           if (realCardId == 30160)
@@ -146,7 +145,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         persons[i].larc_isLinkCard = cardP.larc_isLink;
 
         std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-        probs[cardP.cardType] += cardP.getCardEffect(*this, 0, persons[i].friendship, 0).deYiLv;  // 考虑当前固有
+        probs[cardP.cardType] += cardP.deYiLv;  // 得意率固有需要在这里特判
         persons[i].distribution = std::discrete_distribution<>(probs.begin(), probs.end());
       }
       else
