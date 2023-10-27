@@ -4,6 +4,118 @@
 #include "../Game/Game.h"
 using namespace std;
 
+
+void SupportCard::getNNInputV1(float* buf) const
+{
+  //每张卡的初始属性加成、初始羁绊、赛后加成不需要告诉神经网络，只告诉总赛后
+
+  for (int ch = 0; ch < NNINPUT_CHANNELS_CARD_V1; ch++)
+    buf[ch] = 0;
+
+  //0~6 cardtype
+  buf[cardType] = 1.0;
+
+  //大致映射到0~1范围
+  buf[7] = youQingBasic * 0.04;
+  buf[8] = ganJingBasic * 0.02;
+  buf[9] = xunLianBasic * 0.05;
+  for (int i = 0; i < 6; i++)
+    buf[10 + i] = bonusBasic[i] * 0.5;
+  buf[16] = wizVitalBonusBasic * 0.2;
+  for (int i = 0; i < 6; i++)
+    buf[17 + i] = hintBonus[i] * 0.05;
+  buf[23] = hintProbIncrease * 0.02;
+  buf[24] = deYiLv * 0.02;
+  buf[25] = failRateDrop * 0.04;
+  buf[26] = vitalCostDrop * 0.05;
+
+
+  //是否link，link的固定buff，在Person::getNNInputV1中写
+
+  //buf[27] = larc_isLink ? 1.0 : 0.0;
+  //if (larc_linkSpecialEffect != 0)//范围3~12
+  //  buf[28 + (larc_linkSpecialEffect - 3)] = 1.0;
+
+
+  assert(false && "todo固有词条");
+  buf[27] = 0.0;
+
+}
+
+
+void Person::getNNInputV1(float* buf, const Game& game, int index) const
+{
+
+  for (int ch = 0; ch < NNINPUT_CHANNELS_PERSON_V1; ch++)
+    buf[ch] = 0;
+
+
+  //PersonType不用写，放在固定位置就行
+  //charaId不用写
+  //cardIdInGame不用写，和卡组参数放在同一个位置就行
+  buf[0] = double(friendship) / 100.0;
+  buf[1] = friendship >= 80 ? 1.0 : 0.0;
+  buf[2] = friendship >= 100 ? 1.0 : 0.0;
+  buf[3] = isShining ? 1.0 : 0.0;
+  buf[4] = isHint ? 1.0 : 0.0;
+  buf[5] = 0.0;//预留cardRecord
+  buf[6] = 0.0;//预留cardRecord
+  
+  //在哪个训练
+  for (int tr = 0; tr < 5; tr++)
+  {
+    for (int i = 0; i < 5; i++)
+    {
+      if (game.personDistribution[tr][i] == index)
+        buf[7 + tr] = 1.0;
+    }
+  }
+
+  //是否在ss
+  for (int i = 0; i < 5; i++)
+    if(game.larc_ssPersons[i]==index)
+      buf[12] = 1.0;
+
+
+  if (game.turn >= 2 && index < 15)
+  {
+    buf[13] = larc_isLinkCard ? 1.0 : 0.0;
+    buf[14 + larc_charge] = 1.0;
+    buf[17 + larc_statusType] = 1.0;
+    assert(larc_specialBuff >= 3 && larc_specialBuff <= 12);
+    buf[22 + larc_specialBuff - 3] = 1.0;
+    //larc_level完全无用
+    buf[32 + (larc_buffLevel % 3)] = 1.0;
+    buf[35 + larc_nextThreeBuffs[0]] = 1.0;
+    buf[48 + larc_nextThreeBuffs[1]] = 1.0;
+    buf[61 + larc_nextThreeBuffs[2]] = 1.0;
+  }
+  else
+  {
+    if (personType == 2)
+    {
+      bool islink = game.cardParam[cardIdInGame].larc_isLink;
+      if (islink)
+      {
+        buf[13] = 1.0;
+        int specialBuff = game.cardParam[cardIdInGame].larc_linkSpecialEffect;
+        assert(specialBuff >= 3 && specialBuff <= 12);
+        buf[22 + specialBuff - 3] = 1.0;
+
+      }
+    }
+  }
+
+  //total 74
+
+}
+
+
+
+
+
+
+
 void Game::getNNInputV1(float* buf, float targetScore, int mode) const
 {
   /*

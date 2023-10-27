@@ -92,37 +92,3 @@ void SupportCard::load_from_json(json& j, int x) {
 	*/
 	return;
 }
-
-void SupportCard::getNNInputV1(float* buf) const
-{
-	//每张卡的初始属性加成、初始羁绊、赛后加成不需要告诉神经网络，只告诉总赛后
-
-	for (int ch = 0; ch < NNINPUT_CHANNELS_CARD_V1; ch++)
-		buf[ch] = 0;
-
-	//0~6 cardtype
-	buf[cardType] = 1.0;
-
-	//大致映射到0~1范围
-	buf[7] = youQingBasic * 0.04;
-	buf[8] = ganJingBasic * 0.02;
-	buf[9] = xunLianBasic * 0.05;
-	for (int i = 0; i < 6; i++)
-		buf[10 + i] = bonusBasic[i] * 0.5;
-	buf[16] = wizVitalBonusBasic * 0.2;
-	for (int i = 0; i < 6; i++)
-		buf[17 + i] = hintBonus[i] * 0.05;
-	buf[23] = hintProbIncrease * 0.02;
-	buf[24] = deYiLv * 0.02;
-	buf[25] = failRateDrop * 0.04;
-	buf[26] = vitalCostDrop * 0.05;
-
-	buf[27] = larc_isLink ? 1.0 : 0.0;
-	if (larc_linkSpecialEffect != 0)//范围3~12
-		buf[28 + (larc_linkSpecialEffect - 3)] = 1.0;
-
-
-	assert(false && "todo固有词条");
-	buf[38] = 0.0;
-
-}
