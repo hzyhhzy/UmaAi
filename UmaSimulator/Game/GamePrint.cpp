@@ -71,8 +71,10 @@ std::string Person::getPersonStrColored(const Game& game) const
 
 void Game::printEvents(string s) const
 {
-  if (playerPrint)
+#ifdef PRINT_GAME_EVENT
+  if (playerPrint) //这个不删是因为模拟器里可能也要进行ai计算
     cout << "\033[32m" + s + "\033[0m" << endl;
+#endif
 }
 
 static void printTableRow(string strs[5])

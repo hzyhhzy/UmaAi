@@ -203,7 +203,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 5; i++)
       failRate[i] = j["failRate"][i];
 
-    //calculateTrainingValue();
+    calculateTrainingValue();
   }
   catch (string e)
   {

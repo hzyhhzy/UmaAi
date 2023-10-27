@@ -7,7 +7,7 @@
 //  assert(false);
 //}
 
-void Evaluator::evaluateSelf(int mode, float targetScore)
+void Evaluator::evaluateSelf(int mode, const SearchParam& param)
 {
   if (model == NULL)//没神经网络，手写逻辑
   {
@@ -21,13 +21,8 @@ void Evaluator::evaluateSelf(int mode, float targetScore)
 
         auto& v = valueResults[i];
         v.scoreMean = score;
-        v.scoreOverTargetMean = score > targetScore ? score : targetScore;
         v.scoreStdev = 0; //单个已终局的样本，方差必为0
-        v.scoreOverTargetStdev = 0;
-        if (score >= targetScore)
-          v.winRate = 1.0;
-        else
-          v.winRate = 0.0;
+        v.value = score;
       }
     }
     else if (mode == 1)//policy，手写逻辑，最优的选择是1，其他的是0

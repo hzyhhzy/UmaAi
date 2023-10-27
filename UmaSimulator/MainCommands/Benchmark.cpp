@@ -30,9 +30,9 @@ void main_benchmark()
   //const double radicalFactor = 5;//¼¤½ø¶È
   const int searchN = 2048;
   const double targetScore = 33000;
+  SearchParam param = { searchN,TOTAL_TURN,0 };
 
-
-  Search search(NULL,128,threadNum);
+  Search search(NULL, 128, threadNum, param);
 
 
 
@@ -51,7 +51,7 @@ void main_benchmark()
   //game.print();
 
   const int64_t time0 = now_ms();
-  search.runSearch(game, searchN, TOTAL_TURN, targetScore, rand);
+  search.runSearch(game, rand);
   const int64_t time1 = now_ms();
 
   int64_t timeUsedMs = time1 - time0;

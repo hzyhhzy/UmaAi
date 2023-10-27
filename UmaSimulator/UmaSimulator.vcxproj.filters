@@ -58,6 +58,9 @@
     <Filter Include="源文件\Search">
       <UniqueIdentifier>{490cc3d4-0d2b-4435-87c1-ab2aa0a1c4e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\External">
+      <UniqueIdentifier>{025f384a-5332-41d0-825f-5a37d521bc25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UmaSimulator.cpp">
@@ -120,12 +123,6 @@
     <ClCompile Include="Tests\test_json.cpp">
       <Filter>源文件\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="External\utils.cpp">
-      <Filter>头文件\External</Filter>
-    </ClCompile>
-    <ClCompile Include="GameDatabase\GameConfig.cpp">
-      <Filter>头文件\GameDatabase</Filter>
-    </ClCompile>
     <ClCompile Include="MainCommands\Benchmark.cpp">
       <Filter>源文件\MainCommands</Filter>
     </ClCompile>
@@ -139,6 +136,18 @@
       <Filter>源文件\Game</Filter>
     </ClCompile>
     <ClCompile Include="Game\Person.cpp">
+      <Filter>源文件\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Search\SearchParam.cpp">
+      <Filter>源文件\Search</Filter>
+    </ClCompile>
+    <ClCompile Include="External\mathFunctions.cpp">
+      <Filter>源文件\External</Filter>
+    </ClCompile>
+    <ClCompile Include="External\utils.cpp">
+      <Filter>源文件\External</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDatabase\GameConfig.cpp">
       <Filter>源文件\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -199,6 +208,15 @@
     </ClInclude>
     <ClInclude Include="Game\Protocol.h">
       <Filter>头文件\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Search\SearchParam.h">
+      <Filter>头文件\Search</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="External\mathFunctions.h">
+      <Filter>头文件\External</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

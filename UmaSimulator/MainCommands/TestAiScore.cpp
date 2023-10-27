@@ -18,17 +18,19 @@ using namespace std;
 const bool handWrittenEvaluationTest = true;
 const int threadNum = 8;
 const int threadNumInner = 1;
-const double targetScore = 0;
-//const double radicalFactor = 3;//激进度
+const double radicalFactor = 5;//激进度
 const int searchN = handWrittenEvaluationTest ? 1 : 2048;
+SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
 const bool recordGame = false;
 
 const int totalGames = handWrittenEvaluationTest ? 500000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
 
-int umaId = 108401;//谷水，30力加成
+//int umaId = 108401;//谷水，30力加成
+int umaId = 106501;//太阳神，15速15力加成
 int umaStars = 5;
-int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
+//int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
+int cards[6] = { 301604,301414,301614,300194,300114,300374 };//友人，波旁，神鹰，乌拉拉，风神，根皇帝
 int zhongmaBlue[5] = { 18,0,0,0,0 };
 int zhongmaBonus[6] = { 10,10,30,0,10,70 };
 bool allowedDebuffs[9] = { false, false, false, false, true, false, false, false, false };//第二年可以不消第几个debuff。第五个是智力，第七个是强心脏
@@ -47,7 +49,7 @@ void worker()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  Search search(NULL, 16, threadNumInner);
+  Search search(NULL, 16, threadNumInner, searchParam);
 
   vector<Game> gameHistory;
   if (recordGame)
@@ -70,7 +72,7 @@ void worker()
       }
       else {
 
-        action = search.runSearch(game, searchN, TOTAL_TURN, targetScore, rand);
+        action = search.runSearch(game, rand);
       }
       game.applyTrainingAndNextTurn(rand, action);
     }

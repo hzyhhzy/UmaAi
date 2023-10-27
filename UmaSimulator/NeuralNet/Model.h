@@ -7,11 +7,14 @@
 struct ModelOutputPolicyV1
 {
   float trainingPolicy[10];
-  float buy50p;//买不买对应训练的+50%
+  float buy50pPolicy[5];//在已确定训练的条件下，买对应训练的+50%的概率
   float buyPt10;//买不买pt+10
-  float buyFriend20;//买不买友情+20%
   float buyVital20;//买不买体力消耗-20%
-  float expectShixingPtCost;//适性pt消耗的期望值。加这个的目的是避免只能买一个但不能买两个的情况下，两个buy都恰好大于50%
+
+  //同时买两个升级的概率。
+  //加这个的目的是，假如买50%和买pt+10的分数差不多，但同时买会导致无法消除debuff过不去凯旋门，这时神经网络输出的两个值应该在50%附近，如果恰好都大于50%，则容易误判为同时买两个。
+  //因此加入此项来辨别是否应该买两个
+  float buyTwoUpgrades;
 };
 static_assert(sizeof(ModelOutputPolicyV1) == sizeof(float) * NNOUTPUT_CHANNELS_POLICY_V1, "NNOUTPUT_CHANNELS_POLICY_V1错误");
 
@@ -20,10 +23,9 @@ struct ModelOutputValueV1
 {
   float scoreMean;//score的平均值
   float scoreStdev;//score的标准差
-  float winRate;//score>=target的概率
-  float scoreOverTargetMean;//max(target,score)的平均值
-  float scoreOverTargetStdev;//max(target,score)的标准差
-  float extract(int i);
+  //float winRate;//score>=target的概率
+  float value;//考虑激进度之后的打分
+  //float extract(int i);
 };
 static_assert(sizeof(ModelOutputValueV1) == sizeof(float) * NNOUTPUT_CHANNELS_VALUE_V1, "NNOUTPUT_CHANNELS_VALUE_V1错误");
 

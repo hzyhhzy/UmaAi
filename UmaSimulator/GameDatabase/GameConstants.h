@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+#include "../config.h"
 
 const int TOTAL_TURN = 67;
 static const int SHENTUAN_ID = 1;//ÉñÍÅ¿¨µÄid
