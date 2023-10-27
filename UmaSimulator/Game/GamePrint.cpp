@@ -77,6 +77,31 @@ void Game::printEvents(string s) const
 #endif
 }
 
+// 只在调用该函数时会重新计算一次当前的面板并显示
+void Game::printCardEffect()
+{
+    cout << "-- 支援卡面板计算 --" << endl;
+    for (int trainType = 0; trainType < 5; ++trainType)
+        for (int i = 0; i < 5; i++)
+        {
+            int p = personDistribution[trainType][i];
+            if (p < 0)break;//没人
+            int personType = persons[p].personType;
+            if (personType == 1 || personType == 2)//卡
+            {
+                CardTrainingEffect eff = cardParam[persons[p].cardIdInGame].getCardEffect(*this, trainType, persons[p].friendship, persons[p].cardRecord);
+                cout << cardParam[persons[p].cardIdInGame].cardName << ": " << eff.explain()
+                     << " 算法：" << (cardParam[persons[p].cardIdInGame].isDBCard ? "自动" : "手动") << endl;
+                if (!cardParam[persons[p].cardIdInGame].isDBCard) // 验算，调试用
+                {
+                    CardTrainingEffect eff2 = cardParam[persons[p].cardIdInGame].getCardEffect(*this, trainType, persons[p].friendship, -1);
+                    cout << cardParam[persons[p].cardIdInGame].cardName << ": " << eff2.explain()
+                        << " 算法：自动(验算)" << endl;
+                }
+            }
+        }
+}
+
 static void printTableRow(string strs[5])
 {
   const int width = 17;
@@ -138,7 +163,6 @@ void Game::print() const
       cout << termcolor::bright_yellow << "有爱娇" << termcolor::reset << endl;
   }
   {
-
     cout << endl;
   }
 
@@ -356,8 +380,7 @@ void Game::print() const
       oneRow[i] = "适性pt:\033[32m" + to_string(larc_shixingPtGainAbroad[i]) + "\033[0m";
     }
     printTableRow(oneRow);
-  }
-  
+  } 
 
   cout << divLine;
   //人头
@@ -442,7 +465,7 @@ void Game::print() const
     
     }
     if (larc_ssPersonsCount < 5)
-      cout << "SS Match" << endl;
+      cout << "SS人数未满" << endl;
     else if (!larc_isSSS)
       cout << "\033[1;32mSS Match\033[0m" << endl;
     else
@@ -470,7 +493,6 @@ void Game::print() const
     }
 
   }
-
   cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
 }
 

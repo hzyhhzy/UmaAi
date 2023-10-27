@@ -68,14 +68,14 @@ _support_card_effect_name_mapping = {
     SupportCardEffectType.WizLimitUp.value : "賢さ上限アップ",
     SupportCardEffectType.EventRecoveryAmountUp.value : "イベント回復量アップ",
     SupportCardEffectType.TrainingFailureRateDown.value : "failRateDrop",
-    SupportCardEffectType.EventEffetcUp.value : "イベント効果アップ",
+    SupportCardEffectType.EventEffectUp.value : "イベント効果アップ",
     SupportCardEffectType.TrainingHPConsumptionDown.value : "vitalCostDrop",
     SupportCardEffectType.MinigameEffectUP.value : "ミニゲーム効果アップ",
     SupportCardEffectType.SkillPointBonus.value : "スキルポイントボーナス",
     SupportCardEffectType.WizRecoverUp.value : "wizVitalBonus",
     SupportCardEffectType.RaceStatusUp.value : "saiHou",
     SupportCardEffectType.RaceFanUp.value : "レースファンアップ",
-    SupportCardEffectType.SkillTipsLvUp.value : "スキルチップレベルアップ",
+    SupportCardEffectType.SkillTipsLvUp.value : "hintLvUp",
     SupportCardEffectType.SkillTipsEventRateUp.value : "hintProbIncrease",
     SupportCardEffectType.GoodTrainingRateUp.value : "deYiLv",
     41: "全属性Bonus"
@@ -141,7 +141,7 @@ def _effectTypeExHandler(params:list[int], offset)->tuple[list[SupportCardEffect
             effect = summary.generateEffect()
             ef = {}
             if effect and isinstance(effect, SupportCardEffect):
-                ef[effect.type] = effect.value
+                ef[int(effect.type)] = effect.value
             effect = ef
             return effect, length, summary
     return None,0,None
@@ -182,7 +182,7 @@ def parseEffectRow(row: EffectRow)->list[int]:
 def parseUniqueEffectRow(row:UniqueEffectRow)->tuple[str, list[SupportCardEffect], int]:
     level = row.lv
     row = list(row)[1:]
-    effects = {}
+    effects = []
     ret_str = ""
     uniqueType = None
     uniqueParams = None
@@ -201,7 +201,9 @@ def parseUniqueEffectRow(row:UniqueEffectRow)->tuple[str, list[SupportCardEffect
             # 解析固有词条
             effect_list, length, summary = _effectTypeExHandler(params, index)
             if effect_list:
-                effects.update(effect_list)
+                for k, v in effect_list.items():
+                    effects.append(int(k))
+                    effects.append(v)
             if params[0] >= 100:    # 记录固有参数
                 uniqueType = params[0]
                 uniqueParams = params
@@ -211,12 +213,16 @@ def parseUniqueEffectRow(row:UniqueEffectRow)->tuple[str, list[SupportCardEffect
             # 解析固有词条中的基础面板属性
             effect, length, summary = _effectTypeHandler(params, index)
             if effect:
-                effects[effect.type] = effect.value
+                #effects[effect.type] = effect.value
+                effects.append(int(effect.type))
+                effects.append(effect.value)
                 ret_str += supportCardEffectToStr(effect)
             elif summary:
                 # 仅速神鹰有该附言，特判一下
                 ret_str += summary.summary
-                effects["AllStatusBonus"] = 1
+                #effects["AllStatusBonus"] = 1
+                effects.append(41)
+                effects.append(1)
             index += length
             if start_index == index:
                 print(f"↑未知固有效果: {params} {start_index} {index} (skipped), maybe encounter new effect type?")
