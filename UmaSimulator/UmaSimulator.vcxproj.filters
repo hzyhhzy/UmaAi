@@ -155,9 +155,6 @@
     <ClInclude Include="Game\Game.h">
       <Filter>头文件\Game</Filter>
     </ClInclude>
-    <ClInclude Include="SupportCard\CardEffect.h">
-      <Filter>头文件\SupportCard</Filter>
-    </ClInclude>
     <ClInclude Include="SupportCard\SupportCard.h">
       <Filter>头文件\SupportCard</Filter>
     </ClInclude>

@@ -97,7 +97,7 @@ class SkillRarity(Enum):
     Unique = 3
     Upgrade = 4
 
-class SupportCardEffectType(Enum):
+class SupportCardEffectType(IntEnum):
     NONE = 0
     SpecialTagEffectUp = 1
     MotivationUp = 2
@@ -124,7 +124,7 @@ class SupportCardEffectType(Enum):
     GutzLimitUp = 23
     WizLimitUp = 24
     EventRecoveryAmountUp = 25
-    EventEffetcUp = 26
+    EventEffectUp = 26
     TrainingFailureRateDown = 27
     TrainingHPConsumptionDown = 28
     MinigameEffectUP = 29

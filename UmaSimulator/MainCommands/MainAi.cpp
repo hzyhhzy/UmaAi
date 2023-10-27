@@ -94,19 +94,19 @@ void main_ai()
   //std::cout << "当前工作目录：" << filesystem::current_path() << endl;
   cout << "当前程序目录：" << exeDir << endl;
   GameConfig::load("./aiConfig.json");
+  GameDatabase::loadTranslation("./db/text_data.json");
   GameDatabase::loadUmas("./db/uma");
-  GameDatabase::loadCards("./db/card");
-  if(GameConfig::extraCardData == true)
-    GameDatabase::loadDBCards("./db/cardDB.json");
+  GameDatabase::loadCards("./db/card"); // 载入并优先使用手动支援卡数据
+  GameDatabase::loadDBCards("./db/cardDB.json");
   loadRole();   // roleplay
 
   //string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/packets/currentGS.json";
   string currentGameStagePath = "./gameData/thisTurn.json";
 
-
   SearchParam searchParam = { GameConfig::searchN,TOTAL_TURN,GameConfig::radicalFactor };
 
   Search search(NULL, 32, GameConfig::threadNum, searchParam);
+
 
   while (true)
   {
@@ -170,21 +170,22 @@ void main_ai()
       if (!GameConfig::noColor)cout << "\033[0m";
     };
 
-    auto printValue = [](double p, double ref)
+    auto printValue = [](int which, double p, double ref)
     {
+      string prefix[] = { "速:", "耐:", "力:", "根:", "智:", "| SS: ", "| 休息: ", "友人: ", "普通外出: ", "比赛: "};
       if (p < -50000)
       {
-        cout << "-- ";
+        cout << prefix[which] << "--- ";
         return;
       }
       cout << fixed << setprecision(0);
       if (!GameConfig::noColor)
       {
-        if (ref - p < 20) cout << "\033[41m\033[1;36m";
+        if (ref - p < 20) cout << "\033[41m\033[1;33m*";
         else if (ref - p < 100) cout << "\033[1;32m";
         else cout << "\033[33m";
       }
-      cout << p;
+      cout << prefix[which] << setw(3) << p;
       if (!GameConfig::noColor)cout << "\033[0m";
       cout << " ";
     };
@@ -221,6 +222,12 @@ void main_ai()
       search.runSearch(game, rand);
       game.playerPrint = true;
 
+      if (GameConfig::debugPrint) game.printCardEffect();
+/*
+      auto evalf = [targetScore, modifiedRadicalFactor](ModelOutputValueV1 v) {
+        return v.scoreMean + v.scoreStdev * modifiedRadicalFactor;
+      };
+      */
 
       double maxMean = -1e7;
       double maxValue = -1e7;
@@ -244,7 +251,7 @@ void main_ai()
 
       if (game.turn == 0 || scoreFirstTurn == 0)
       {
-        cout << "评分均值预测: \033[1;32m" << int(maxMean) << "\033[0m" << "（乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m）" << endl;
+        cout << "评分预测: 平均\033[1;32m" << int(maxMean) << "\033[0m" << "，乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m" << endl;
         scoreFirstTurn = maxMean;
       }
       else
@@ -273,17 +280,11 @@ void main_ai()
           cout << "买+50%与pt+10:     ";
         if (i == 3 && game.turn >= 50)
           cout << "买+50%与体力-20%:  ";
-        cout << "速耐力根智: ";
+        //cout << "训练: ";
         for (int j = 0; j < 10; j++)
         {
           double value = search.allChoicesValue[i][j].value;
-          printValue(value - restValue, maxValue - restValue);
-
-          if (j == 4)cout << " | SS:";
-          if (j == 5)cout << " | 休息:";
-          if (j == 6)cout << " 友人外出:";
-          if (j == 7)cout << " 普通外出:";
-          if (j == 8)cout << " 比赛:";
+          printValue(j, value - restValue, maxValue - restValue);
         }
         cout << endl;
       }
@@ -318,6 +319,11 @@ void main_ai()
             else
               cout << "\033[31m请购买pt+10！ \033[0m" << endl;
           }
+        }
+
+        if (game.turn == 45)
+        {
+            cout << "\033[1;36m日本杯！大逃不要忘了打！ \033[0m" << endl;
         }
       }
 
