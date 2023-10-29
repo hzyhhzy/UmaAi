@@ -126,6 +126,15 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             args = GameDatabase::DBCards[cardID].uniqueEffectParam;
         }
 
+
+        //已知的问题
+        // 1.智高峰等（根据xx技能个数），按回合数近似
+        // 2.根双涡轮等（友情训练次数），视为全开
+        // 3.智太阳神等（某条件提升得意率），视为全开
+        // 4.速成田路（粉丝数），按回合数估计
+        // 5.智波旁、智小栗帽等（初始状态相关），暂时没写
+        // 6.旧智中山（随机让失败率变成0），暂时没写
+        // 不确定还有没有其他的
         switch (type)
         {
             case 0:
@@ -149,16 +158,21 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                     effect.xunLian += 20;
                 break;
             case 4:   // 成田路。没有粉丝数，用回合数估算
-                effect.xunLian += clamp((double)game.turn*2*args[2] / TOTAL_TURN, 0.0, (double)args[2]);
+              rate = game.turn <= 33 ? 0 :
+                game.turn <= 40 ? 0.2 :
+                game.turn <= 42 ? 0.25 :
+                game.turn <= 58 ? 0.7 :
+                1.0;
+                effect.xunLian += rate * (double)args[2];
                 break;
             case 5:   // 根据编成支援卡类型的初始属性加成(对应属性+10，友人/团队卡全属性+2), 暂不处理
                 break;
             case 6:   // 天狼星，需要用到effectFactor
-                effect.apply(1, min(args[1], effectFactor) * args[3]);
-            break;
+                effect.apply(1, max(0, min(args[1], 5 - effectFactor)) * args[3]);
+                break;
             case 7:   // 青竹，等
                 // 需要计算训练后的体力，暂时以-20估算
-                expectedVital = game.vital - 20;
+                expectedVital = atTrain == 4 ? game.vital + 8 : game.vital - 20;
                 rate = clamp(expectedVital / game.maxVital, 0.3, 1.0);
                 // (0.3, 1) --> (1, 0)
                 effect.apply(1, args[5] + args[2] * (1 - rate) / 0.7);
@@ -168,16 +182,23 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                 break;
             case 9:   // 地堡，需要计算总羁绊
                 totalJiBan = 0;
-                for (int i = 0; i < 6; ++i)
+                assert(game.normalCardCount >= 5);
+                for (int i = 0; i < game.normalCardCount; ++i)
                     totalJiBan += game.persons[i].friendship;
-                rate = totalJiBan / 600;
+                if (game.larc_zuoyueType != 0)
+                  totalJiBan += game.persons[17].friendship;
+                rate = double(totalJiBan) / 600;
                 effect.xunLian += rate * 20;
                 break;
             case 10:   // 根神鹰，需要计算同时训练的卡数量
                 count = 0;
                 for (int i = 0; i < 5; ++i)
-                    if (game.personDistribution[atTrain][i] > 0 && game.personDistribution[atTrain][i] < 15)
+                {
+                    int pid = game.personDistribution[atTrain][i];
+                    bool isCard = pid < game.normalCardCount || (game.larc_zuoyueType != 0 && pid == 17);
+                    if(isCard)
                         ++count;
+                }
                 effect.xunLian += args[2] * min(5, count);
                 break;
             case 11:   // 水司机，需要当前训练等级
@@ -187,7 +208,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                 break;
             case 13:   // B95，麻酱
                 if (game.trainShiningCount(atTrain) >= 1)
-                    effect.apply(args[2], args[3]);
+                    effect.apply(args[1], args[2]);
                 break;
             case 14:   // 耐善信, 暂时按训练前体力算
                 rate = clamp((double)game.vital / 100, 0.0, 1.0);    // >100也是满训练
