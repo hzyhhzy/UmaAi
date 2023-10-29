@@ -5,19 +5,26 @@
 #include "config.h"
 #include "Tests/tests.h"
 #include "MainCommands/MainCommands.h"
+#include "websocket.h"
 
 int main()
 {
 #if defined UMAAI_TESTCARDSSINGLE
-  main_testCardsSingle();
+	main_testCardsSingle();
 #elif defined UMAAI_TESTSCORE
-  main_testAiScore();
+	main_testAiScore();
 #elif defined UMAAI_SIMULATOR
-  main_playerPlay(); 
+	main_playerPlay();
 #elif defined UMAAI_MAINAI
-  main_ai();
+	websocket ws("http://127.0.0.1:4693");
+	do {
+		Sleep(10);
+		std::cout << ws.get_status() << std::endl;
+	} while (ws.get_status() != "Open");
+	ws.send("[test]");
+	main_ai();
 #else
-  //write your own test code
+	//write your own test code
 #endif
 }
 
