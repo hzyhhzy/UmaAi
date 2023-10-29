@@ -11,6 +11,7 @@
 #include "../GameDatabase/GameConfig.h"
 #include "../Search/Search.h"
 #include "../External/utils.h"
+#include "../websocket.h"
 
 #include "windows.h"
 #include <filesystem>
@@ -110,25 +111,8 @@ void main_ai()
 
   while (true)
   {
-    while (!filesystem::exists(currentGameStagePath))
-    {
-      std::cout << "找不到" + currentGameStagePath + "，可能是育成未开始或小黑板未正常工作" << endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
-    }
-    ifstream fs(currentGameStagePath);
-    if (!fs.good())
-    {
-      cout << "读取文件错误" << endl;
-      std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
-      continue;
-    }
-    ostringstream tmp;
-    tmp << fs.rdbuf();
-    fs.close();
-
-    string jsonStr = tmp.str();
     Game game;
-    bool suc = game.loadGameFromJson(jsonStr);
+    bool suc = game.loadGameFromJson(lastFromWs);
     if (!suc)
     {
       cout << "出现错误" << endl;
