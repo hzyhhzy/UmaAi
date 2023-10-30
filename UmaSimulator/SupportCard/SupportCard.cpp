@@ -71,14 +71,22 @@ void SupportCard::load_from_json(json& j, int x) {
 		j["cardValue"][x].at("hintBonus").get_to(hintBonus);		
 	}
 
+	// 直接使用charaID判断是否为链接卡
+	larc_isLink = false;
+	larc_linkSpecialEffect = 0;
+	for (int i = 0; i < 7; ++i)
+		if (charaId == GameConstants::LArcLinkCharas[i]) {
+			larc_isLink = true;
+			larc_linkSpecialEffect = GameConstants::LArcLinkEffect[i];
+			break;
+		}
+	/*
 	if (j.contains("larc_isLink"))
 		larc_isLink = j["larc_isLink"];
-	else
-		larc_isLink = false;
-
 	if (j.contains("larc_linkSpecialEffect"))
 		larc_linkSpecialEffect = j["larc_linkSpecialEffect"];
 	else
 		larc_linkSpecialEffect = 0;
+		*/
 	return;
 }

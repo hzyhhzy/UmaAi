@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <unordered_map>
 #include "../config.h"
 
 const int TOTAL_TURN = 67;
@@ -23,6 +24,8 @@ public:
   static const double ZuoyueVitalBonusR[5];//佐岳R卡的回复量倍数
   static const double ZuoyueStatusBonusSSR[5];//佐岳SSR卡的事件效果倍数（满破1.2）
   static const double ZuoyueStatusBonusR[5];//佐岳R卡的事件效果倍数
+  static const int LArcLinkCharas[7];// Link角色
+  static const int LArcLinkEffect[7]; // 对应的特殊Buff
   
 
   //剧本相关

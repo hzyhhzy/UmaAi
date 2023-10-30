@@ -2,9 +2,12 @@
 #include <iostream>
 #include <random>
 #include <sstream>
+#include <string>
 #include <cassert>
 #include <thread>
 #include <atomic>
+#include <mutex>
+#include <cmath>
 #include "../Game/Game.h"
 #include "../NeuralNet/Evaluator.h"
 #include "../Search/Search.h"
@@ -18,12 +21,12 @@ using namespace std;
 const bool handWrittenEvaluationTest = true;
 const int threadNum = 8;
 const int threadNumInner = 1;
-const double radicalFactor = 5;//激进度
-const int searchN = handWrittenEvaluationTest ? 1 : 2048;
+const double radicalFactor = 1;//激进度
+const int searchN = handWrittenEvaluationTest ? 1 : 256;
 SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
 const bool recordGame = false;
 
-const int totalGames = handWrittenEvaluationTest ? 500000 : 10000000;
+const int totalGames = handWrittenEvaluationTest ? 100000 : 24;
 const int gamesEveryThread = totalGames / threadNum;
 
 //int umaId = 108401;//谷水，30力加成
@@ -35,14 +38,26 @@ int zhongmaBlue[5] = { 18,0,0,0,0 };
 int zhongmaBonus[6] = { 10,10,30,0,10,70 };
 bool allowedDebuffs[9] = { false, false, false, false, true, false, false, false, false };//第二年可以不消第几个debuff。第五个是智力，第七个是强心脏
 
-
 std::atomic<double> totalScore = 0;
 std::atomic<double> totalScoreSqr = 0;
 
 std::atomic<int> bestScore = 0;
 std::atomic<int> n = 0;
+std::mutex printLock;
 vector<atomic<int>> segmentStats= vector<atomic<int>>(700);//100分一段，700段
 
+void printProgress(int value, int maxValue, int width)
+{
+    stringstream buf;
+    double rate = (double)value / maxValue;
+    int n = rate * width;
+    n = clamp(n, 0, maxValue);
+    buf << "[" << string(n, '=') << ">" << string(width - n, ' ') << "] " << setprecision(3) << rate * 100 << "% ";
+
+    std::lock_guard<std::mutex> lock(printLock);    // 返回时自动释放cout锁
+    cout << buf.str() << "\033[0F" << endl;
+    cout.flush();
+}
 
 void worker()
 {
@@ -87,6 +102,7 @@ void worker()
       game.printFinalStats();
     }
     n += 1;
+    printProgress(n, totalGames, 70);
     totalScore += score;
     totalScoreSqr += score * score;
     for (int i = 0; i < 700; i++)
@@ -107,7 +123,7 @@ void worker()
 
 
     //game.print();
-    if (!handWrittenEvaluationTest || n == totalGames)
+    if (n == totalGames)
     {
       if(!handWrittenEvaluationTest)
         game.printFinalStats();
@@ -141,8 +157,6 @@ void worker()
 
 void main_testAiScore()
 {
-
-
     // 检查工作目录
     GameDatabase::loadUmas("../db/umaDB.json");
     GameDatabase::loadCards("../db/card");
