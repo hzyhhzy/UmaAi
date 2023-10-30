@@ -21,12 +21,12 @@ using namespace std;
 const bool handWrittenEvaluationTest = true;
 const int threadNum = 8;
 const int threadNumInner = 1;
-const double radicalFactor = 1;//激进度
-const int searchN = handWrittenEvaluationTest ? 1 : 256;
+const double radicalFactor = 5;//激进度
+const int searchN = handWrittenEvaluationTest ? 1 : 2048;
 SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
 const bool recordGame = false;
 
-const int totalGames = handWrittenEvaluationTest ? 100000 : 24;
+const int totalGames = handWrittenEvaluationTest ? 500000 : 10000000;
 const int gamesEveryThread = totalGames / threadNum;
 
 //int umaId = 108401;//谷水，30力加成
@@ -102,7 +102,7 @@ void worker()
       game.printFinalStats();
     }
     n += 1;
-    printProgress(n, totalGames, 70);
+    //printProgress(n, totalGames, 70);
     totalScore += score;
     totalScoreSqr += score * score;
     for (int i = 0; i < 700; i++)
@@ -123,7 +123,7 @@ void worker()
 
 
     //game.print();
-    if (n == totalGames)
+    if (!handWrittenEvaluationTest || n == totalGames)
     {
       if(!handWrittenEvaluationTest)
         game.printFinalStats();
@@ -149,7 +149,7 @@ void worker()
         << "UD8概率=" << float(segmentStats[394]) / n << ","
         << "UD9概率=" << float(segmentStats[400]) / n << ","
         << "UC0概率=" << float(segmentStats[407]) / n << endl;
-        
+
     }
   }
 
@@ -157,10 +157,10 @@ void worker()
 
 void main_testAiScore()
 {
-    // 检查工作目录
-    GameDatabase::loadUmas("../db/umaDB.json");
-    GameDatabase::loadCards("../db/card");
-    GameDatabase::loadDBCards("../db/cardDB.json");
+  // 检查工作目录
+  GameDatabase::loadUmas("../db/umaDB.json");
+  //GameDatabase::loadCards("../db/card");
+  GameDatabase::loadDBCards("../db/cardDB.json");
 
 
   for (int i = 0; i < 200; i++)segmentStats[i] = 0;
