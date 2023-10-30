@@ -34,11 +34,6 @@ void main_benchmark()
 
   Search search(NULL, 128, threadNum, param);
 
-
-
-
-
-
   int umaId = 101101;//草上飞
   int cards[6] = { 301374,301344,300104,300194,300114,301074 };//神团，高峰，美妙，乌拉拉，风神，司机
 

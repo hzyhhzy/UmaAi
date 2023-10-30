@@ -225,7 +225,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                     count = 1;
                 effect.apply(args[2], args[3] * count);
                 break;
-            case 19: // 跳舞城: 按初始1层，出道战满计算
+            case 19: // 跳舞城，黑楼: 按初始1层，出道战满计算
                 if (game.turn >= 12)
                     count = 3;
                 else
@@ -233,7 +233,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                 effect.apply(args[2], args[3] * count);
                 break;
             case 20:
-            case 21:    // 善信/桂冠：按初始1层，年底2层，继承后满计算
+                // 善信/桂冠：按初始1层，年底2层，继承后满计算
                 if (game.turn >= 30)
                     count = 3;
                 else if (game.turn >= 24)

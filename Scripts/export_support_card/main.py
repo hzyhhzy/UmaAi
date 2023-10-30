@@ -11,8 +11,9 @@ DirectKeys = ['deYiLv', 'failRateDrop', 'ganJing', 'hintProbIncrease',
               'saiHou', 'vitalCostDrop', 'wizVitalBonus', 'xunLian',
               'youQing', 'initialJiBan']
 
-# 特判直接合并面板的卡（目前只有智太阳神）
-DirectMergeCards = [ 30155 ]
+# 特判直接合并面板（得意率）的卡
+# 智太阳神，活动力乌拉拉
+DirectMergeCards = [ 30155, 30171 ]
 
 HintValues = [
     [6, 0, 2, 0, 0, 0],
@@ -117,9 +118,10 @@ def prepareUniqueEffect(card, ueffect):
     elif ueffect["type"] == 116:
         typeMapping = {
             30134: 16,
-            30142: 21,
+            30142: 20,  # 合并
             30154: 20,
-            30166: 19
+            30166: 19,
+            30170: 19
         }
         utype = typeMapping[card["cardId"]]
         useParam = True
