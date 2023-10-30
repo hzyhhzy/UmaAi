@@ -157,6 +157,7 @@
     <ClCompile Include="MainCommands\MainAi.cpp" />
     <ClCompile Include="MainCommands\PlayerPlay.cpp" />
     <ClCompile Include="MainCommands\TestAiScore.cpp" />
+    <ClCompile Include="MainCommands\TestCardsSingle.cpp" />
     <ClCompile Include="NeuralNet\Evaluator.cpp" />
     <ClCompile Include="NeuralNet\Model.cpp" />
     <ClCompile Include="NeuralNet\NNInput.cpp" />

@@ -8,7 +8,9 @@
 
 int main()
 {
-#if defined UMAAI_TESTSCORE
+#if defined UMAAI_TESTCARDSSINGLE
+  main_testCardsSingle();
+#elif defined UMAAI_TESTSCORE
   main_testAiScore();
 #elif defined UMAAI_SIMULATOR
   main_playerPlay(); 
