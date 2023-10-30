@@ -96,8 +96,8 @@ void main_ai()
   GameConfig::load("./aiConfig.json");
   GameDatabase::loadTranslation("./db/text_data.json");
   GameDatabase::loadUmas("./db/umaDB.json");
-  GameDatabase::loadCards("./db/card"); // 载入并优先使用手动支援卡数据
-  GameDatabase::loadDBCards("./db/cardDB.json");
+  //GameDatabase::loadCards("./db/card"); // 载入并优先使用手动支援卡数据
+  GameDatabase::loadDBCards("./db/cardDB.json"); //cardDB数据已经很完善了
   loadRole();   // roleplay
 
   //string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/packets/currentGS.json";
