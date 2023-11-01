@@ -23,6 +23,7 @@ int main()
 	} while (ws.get_status() != "Open");
 	ws.send("[test]");
 	main_ai();
+	main_ai();
 #else
 	//write your own test code
 #endif
