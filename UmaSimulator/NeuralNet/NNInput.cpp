@@ -29,16 +29,194 @@ void SupportCard::getNNInputV1(float* buf) const
   buf[25] = failRateDrop * 0.04;
   buf[26] = vitalCostDrop * 0.05;
 
+  buf[27] = 0.0; //reserve
+  buf[28] = 0.0;
 
   //是否link，link的固定buff，在Person::getNNInputV1中写
 
-  //buf[27] = larc_isLink ? 1.0 : 0.0;
-  //if (larc_linkSpecialEffect != 0)//范围3~12
-  //  buf[28 + (larc_linkSpecialEffect - 3)] = 1.0;
+
+  //固有
+  assert(isDBCard);
+  const int BasicC = 29;
+  const int UniqueTypeC = 25;
+  const int UniqueEffectC = 13;
+  static_assert(BasicC + UniqueTypeC + UniqueEffectC == NNINPUT_CHANNELS_CARD_V1);
+  float* bufUniqueType = buf + BasicC;
+  float* bufUniqueValue = bufUniqueType + UniqueTypeC;
+
+  auto writeUniqueEffect = [&](int key, double value)
+  {
+    //依次是：0~4速耐力根智，5pt，6友情，7干劲，8训练，9失败率，10体力花费减少，11智力彩圈体力
+    if (key <= 0)
+      return;
+    else if (key == 1)
+    {
+      bufUniqueValue[6] = 0.04 * value;
+    }
+    else if (key == 2)
+    {
+      bufUniqueValue[7] = 0.02 * value;
+    }
+    else if (key == 8)
+    {
+      bufUniqueValue[8] = 0.05 * value;
+    }
+    else if (key == 19)
+    {
+    }
+    else if (key == 15)
+    {
+    }
+    else if (key == 27)
+    {
+      bufUniqueValue[9] = 0.04 * value;
+    }
+    else if (key == 28)
+    {
+      bufUniqueValue[10] = 0.05 * value;
+    }
+    else if (key == 31)
+    {
+      bufUniqueValue[11] = 0.2 * value;
+    }
+    else if (key == 3)
+    {
+      bufUniqueValue[0] = 0.5 * value;
+    }
+    else if (key == 4)
+    {
+      bufUniqueValue[1] = 0.5 * value;
+    }
+    else if (key == 5)
+    {
+      bufUniqueValue[2] = 0.5 * value;
+    }
+    else if (key == 6)
+    {
+      bufUniqueValue[3] = 0.5 * value;
+    }
+    else if (key == 7)
+    {
+      bufUniqueValue[4] = 0.5 * value;
+    }
+    else if (key == 30)
+    {
+      bufUniqueValue[5] = 0.5 * value;
+    }
+    else if (key == 41)
+    {
+      for (int i = 0; i < 5; i++)
+        bufUniqueValue[i] = 0.5;
+    }
+    else
+    {
+      assert(false);
+    }
+  };
+
+  if (uniqueEffectType == 0)
+  {
+    bufUniqueType[0] = 1.0;
+  }
+  else if (uniqueEffectType == 1 || uniqueEffectType == 2)
+  {
+    if (uniqueEffectParam[1] == 80)
+      bufUniqueType[1] = 1.0;
+    else if (uniqueEffectParam[1] == 100)
+      bufUniqueType[2] = 1.0;
+    else
+      assert(false);
+
+    writeUniqueEffect(uniqueEffectParam[2], uniqueEffectParam[3]);
+    writeUniqueEffect(uniqueEffectParam[4], uniqueEffectParam[5]);
+    if (cardID / 10 == 30137)
+    {
+      writeUniqueEffect(1, 10);
+      writeUniqueEffect(2, 15);
+    }
+  }
+  else if (uniqueEffectType == 3)
+  {
+    bufUniqueType[3] = 1.0;
+  }
+  else if (uniqueEffectType == 4)
+  {
+    bufUniqueType[4] = 1.0;
+  }
+  else if (uniqueEffectType == 5)
+  {
+    
+  }
+  else if (uniqueEffectType == 6)
+  {
+    bufUniqueType[6] = 1.0;
+    writeUniqueEffect(1, uniqueEffectParam[1] * uniqueEffectParam[3]);
+  }
+  else if (uniqueEffectType == 7)
+  {
+    bufUniqueType[7] = 1.0;
+  }
+  else if (uniqueEffectType == 8)
+  {
+    bufUniqueType[8] = 1.0;
+  }
+  else if (uniqueEffectType == 9)
+  {
+    bufUniqueType[9] = 1.0;
+  }
+  else if (uniqueEffectType == 10)
+  {
+    bufUniqueType[10] = 1.0;
+  }
+  else if (uniqueEffectType == 11)
+  {
+    bufUniqueType[11] = 1.0;
+  }
+  else if (uniqueEffectType == 12)
+  {
+    bufUniqueType[12] = 1.0;
+  }
+  else if (uniqueEffectType == 13)
+  {
+    bufUniqueType[13] = 1.0;
+  }
+  else if (uniqueEffectType == 14)
+  {
+    bufUniqueType[14] = 1.0;
+  }
+  else if (uniqueEffectType == 15)
+  {
+  }
+  else if (uniqueEffectType == 16)
+  {
+    bufUniqueType[16] = 1.0;
+    writeUniqueEffect(uniqueEffectParam[2], 5 * uniqueEffectParam[3]);
+  }
+  else if (uniqueEffectType == 19)
+  {
+    bufUniqueType[19] = 1.0;
+    writeUniqueEffect(uniqueEffectParam[2], 3 * uniqueEffectParam[3]);
+  }
+  else if (uniqueEffectType == 20)
+  {
+    bufUniqueType[20] = 1.0;
+    writeUniqueEffect(uniqueEffectParam[2], 3 * uniqueEffectParam[3]);
+  }
+  else if (uniqueEffectType == 17)
+  {
+    bufUniqueType[17] = 1.0;
+    writeUniqueEffect(8, uniqueEffectParam[3]);
+  }
+  else if (uniqueEffectType == 18)
+  {
+    bufUniqueType[18] = 1.0;
+  }
+  else
+  {
+    assert(false);
+  }
 
 
-  assert(false && "todo固有词条");
-  buf[27] = 0.0;
 
 }
 
@@ -116,8 +294,127 @@ void Person::getNNInputV1(float* buf, const Game& game, int index) const
 
 
 
-void Game::getNNInputV1(float* buf, float targetScore, int mode) const
+void Game::getNNInputV1(float* buf, const SearchParam& param) const
 {
+  for (int i = 0; i < NNINPUT_CHANNELS_V1; i++)
+    buf[i] = 0.0;
+  int c = 0;
+
+  for (int i = 0; i < 5; i++)
+  {
+    buf[c + i] = fiveStatusBonus[i] * 0.05;
+  }
+  c += 5;
+
+  assert(turn < TOTAL_TURN);
+  buf[c + turn] = 1.0;
+  c += TOTAL_TURN;
+
+  buf[c] = (vital - 50) * 0.01;
+  c++;
+  buf[c] = (maxVital - 100) * 0.1;
+  c++;
+  if (isQieZhe)
+    buf[c] = 1.0;
+  c++;
+  if (isAiJiao)
+    buf[c] = 1.0;
+  c++;
+
+  buf[c] = failureRateBias * 0.5;
+  c++;
+
+  for (int i = 0; i < 5; i++)
+    buf[c + i] = fiveStatus[i] * 0.001;
+  c += 5;
+  for (int i = 0; i < 5; i++)
+    buf[c + i] = (fiveStatusLimit[i] - GameConstants::BasicFiveStatusLimit[i]) * 0.01;
+  c += 5;
+
+  buf[c] = getSkillScore() * 0.0002;
+  c++;
+
+  assert(motivation >= 1 && motivation <= 5);
+  buf[c + motivation - 1] = 1.0;
+  c += 5;
+
+  if (isPositiveThinking)
+    buf[c] = 1.0;
+  c++;
+
+  for (int i = 0; i < 5; i++)
+    buf[c + i] = (fiveStatusLimit[i] - GameConstants::BasicFiveStatusLimit[i]) * 0.01;
+  c += 5;
+
+
+  for (int i = 0; i < 5; i++)
+  {
+    assert(trainLevelCount[i] <= 16);
+    int a = trainLevelCount[i] / 4;
+    int b = trainLevelCount[i] % 4;
+    buf[c + a] = 1.0;
+    buf[c + b + 4] = 1.0;
+    c += 8;
+  }
+
+  for (int i = 0; i < 5; i++)
+  {
+    buf[c + i] = zhongMaBlueCount[i] * 0.1;
+  }
+  c += 5;
+
+  for (int i = 0; i < 5; i++)
+  {
+    buf[c + i] = zhongMaExtraBonus[i] * 0.03;
+  }
+  c += 5;
+  buf[c] = zhongMaExtraBonus[5] * 0.01;
+  c++;
+
+  buf[c + normalCardCount] = 1.0;
+  c += 7;
+
+  buf[c] = saihou * 0.03;
+  c++;
+
+  assert(!isRacing);
+  assert(motivationDropCount == 0);//not used
+
+  if (larc_isAbroad)
+    buf[c] = 1.0;
+  c++;
+
+  buf[c] = larc_supportPtAll / 170000.0;
+  c++;
+
+  int larc_trainBonusLevel = (larc_supportPtAll + 85) / 8500;
+  if (larc_trainBonusLevel > 40)larc_trainBonusLevel = 40;
+  double larc_trainBonus = GameConstants::LArcTrainBonusEvery5Percent[larc_trainBonusLevel];
+  buf[c] = larc_trainBonus * 0.05;
+  c++;
+
+  int trainBonusLevel20p = larc_trainBonusLevel / 4;
+  if (trainBonusLevel20p > 5)trainBonusLevel20p = 5;
+  buf[c + trainBonusLevel20p] = 1.0;
+  c += 6;
+
+  buf[c] = larc_shixingPt * 0.002;
+  c++;
+
+
+  for (int i = 0; i < 10; i++)
+  {
+    int lv = larc_levels[i];
+    assert(lv <= 3);
+    if (lv > 0)
+      buf[c + lv - 1] = 1.0;
+    c += 3;
+  }
+
+  if (larc_isSSS)
+    buf[c] = 1.0;
+  c++;
+
   /*
   for (int i = 0; i < NNINPUT_CHANNELS_V1; i++)buf[i] = 0.0;
   if (isEnd())return;

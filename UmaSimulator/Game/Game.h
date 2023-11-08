@@ -5,6 +5,8 @@
 #include "Person.h"
 #include "Action.h"
 
+struct SearchParam;
+
 struct Game
 {
   //显示相关
@@ -34,7 +36,7 @@ struct Game
   Person persons[18];//如果不带其他友人团队卡，最多18个头。依次是15个可充电人头（先是支援卡（顺序随意）：0~4或5，再是npc：5或6~14），理事长15，记者16，佐岳17（带没带卡都是17）
   bool isRacing;//这个回合是否在比赛
 
-  int motivationDropCount;//掉过几次心情了，不包括剧本事件（已知同一个掉心情不会出现多次，一共3个掉心情事件，所以之前掉过越多，之后掉的概率越低）
+  int motivationDropCount;//掉过几次心情了，不包括剧本事件（已知同一个掉心情不会出现多次，一共5个掉心情事件，所以之前掉过越多，之后掉的概率不知道会不会越来越低（或许不会））
 
   //凯旋门相关
   bool larc_isAbroad;//这个回合是否在海外
@@ -145,7 +147,7 @@ struct Game
   bool trainShiningCount(int train) const;    // 判断指定训练彩圈数
   //void runTestGame();
 
-  void getNNInputV1(float* buf, float targetScore, int mode) const;//神经网络输入，mode=0是value，1是policy
+  void getNNInputV1(float* buf, const SearchParam& param) const;//神经网络输入
   void print() const;//用彩色字体显示游戏内容
   float getSkillScore() const;//技能分，输入神经网络之前也可能提前减去
   void printFinalStats() const;//显示最终结果

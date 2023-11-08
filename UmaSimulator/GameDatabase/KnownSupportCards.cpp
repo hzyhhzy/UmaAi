@@ -147,7 +147,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                         effect.apply(args[2], args[3]);
                     if (args[4] > 0)
                         effect.apply(args[4], args[5]);
-                    if (cardID == 30137)    // 神团额外词条特判
+                    if (cardID / 10 == 30137)    // 神团额外词条特判
                     {
                         effect.apply(1, 10).apply(2, 15);
                     }
@@ -168,7 +168,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
             case 5:   // 根据编成支援卡类型的初始属性加成(对应属性+10，友人/团队卡全属性+2), 暂不处理
                 break;
             case 6:   // 天狼星，需要用到effectFactor
-                effect.apply(1, max(0, min(args[1], 5 - effectFactor)) * args[3]);
+                effect.apply(1, max(0, min(args[1], args[1] - effectFactor)) * args[3]);
                 break;
             case 7:   // 青竹，等
                 // 需要计算训练后的体力，暂时以-20估算
