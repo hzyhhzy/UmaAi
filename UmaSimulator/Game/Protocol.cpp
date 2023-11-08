@@ -19,6 +19,11 @@ int mask_umaId(int umaId)
 
 bool Game::loadGameFromJson(std::string jsonStr)
 {
+  if (jsonStr == "[test]")
+  {
+      std::cout << "已成功与URA建立连接，但暂未接收到回合信息" << std::endl;
+      return false;
+  }
   try
   {
     json j = json::parse(jsonStr, nullptr, true, true);
