@@ -8,7 +8,7 @@ double GameConfig::radicalFactor = 1;
 int GameConfig::threadNum = 12;
 int GameConfig::searchN = 12288;
 bool GameConfig::debugPrint = false;
-bool GameConfig::extraCardData = false;
+bool GameConfig::useWebsocket = false;
 string GameConfig::role = "default";
 
 void GameConfig::load(const string& path)
@@ -25,7 +25,7 @@ void GameConfig::load(const string& path)
         {"threadNum", GameConfig::threadNum},
         {"searchN", GameConfig::searchN},
         {"debugPrint", GameConfig::debugPrint},
-        {"extraCardData", GameConfig::extraCardData},
+        {"useWebsocket", GameConfig::useWebsocket},
         {"role", GameConfig::role}
         };
       // 写入
@@ -47,7 +47,7 @@ void GameConfig::load(const string& path)
 		j.at("threadNum").get_to(GameConfig::threadNum);
 		j.at("searchN").get_to(GameConfig::searchN);
 		j.at("debugPrint").get_to(GameConfig::debugPrint);
-		j.at("extraCardData").get_to(GameConfig::extraCardData);
+		j.at("useWebsocket").get_to(GameConfig::useWebsocket);
 		GameConfig::role = j.value("role", "default");
 
 		cout << GameConfig::radicalFactor << endl;

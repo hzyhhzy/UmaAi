@@ -4,6 +4,8 @@ websocket::websocket(std::string uri)
 	: m_status("Connecting")
 	, m_uri(uri)
 {
+	if (uri == "")
+		return;
 	m_endpoint.clear_access_channels(websocketpp::log::alevel::all);
 	m_endpoint.clear_error_channels(websocketpp::log::elevel::all);
 	m_endpoint.init_asio();
@@ -13,6 +15,8 @@ websocket::websocket(std::string uri)
 	connect();
 }
 websocket::~websocket() {
+	if (m_uri == "")
+		return;
 	m_endpoint.stop_perpetual();
 
 	websocketpp::lib::error_code ec;

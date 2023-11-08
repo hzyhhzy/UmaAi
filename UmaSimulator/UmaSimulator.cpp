@@ -16,13 +16,6 @@ int main()
 #elif defined UMAAI_SIMULATOR
 	main_playerPlay();
 #elif defined UMAAI_MAINAI
-	websocket ws("http://127.0.0.1:4693");
-	do {
-		Sleep(10);
-		std::cout << ws.get_status() << std::endl;
-	} while (ws.get_status() != "Open");
-	ws.send("[test]");
-	main_ai();
 	main_ai();
 #else
 	//write your own test code

@@ -108,11 +108,48 @@ void main_ai()
 
   Search search(NULL, 32, GameConfig::threadNum, searchParam);
 
+  websocket ws(GameConfig::useWebsocket ? "http://127.0.0.1:4693" : "");
+  if (GameConfig::useWebsocket)
+  {
+    do {
+      Sleep(10);
+      std::cout << ws.get_status() << std::endl;
+    } while (ws.get_status() != "Open");
+    ws.send("[test]");
+  }
 
   while (true)
   {
     Game game;
-    bool suc = game.loadGameFromJson(lastFromWs);
+    string jsonStr;
+    if (GameConfig::useWebsocket)
+    {
+      jsonStr = lastFromWs;
+    }
+    else
+    {
+
+      while (!filesystem::exists(currentGameStagePath))
+      {
+        std::cout << "找不到" + currentGameStagePath + "，可能是育成未开始或小黑板未正常工作" << endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
+      }
+      ifstream fs(currentGameStagePath);
+      if (!fs.good())
+      {
+        cout << "读取文件错误" << endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
+        continue;
+      }
+      ostringstream tmp;
+      tmp << fs.rdbuf();
+      fs.close();
+
+      jsonStr = tmp.str();
+    }
+
+    bool suc = game.loadGameFromJson(jsonStr);
+
     if (!suc)
     {
       cout << "出现错误" << endl;
