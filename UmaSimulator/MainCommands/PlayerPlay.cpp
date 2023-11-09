@@ -14,7 +14,7 @@ using namespace std;
 void main_playerPlay()
 {
   GameDatabase::loadUmas("../db/umaDB.json");
-  GameDatabase::loadCards("../db/card");
+  //GameDatabase::loadCards("../db/card");
   GameDatabase::loadDBCards("../db/cardDB.json");
 
   const int threadNum = 8;
@@ -65,6 +65,8 @@ void main_playerPlay()
       std::this_thread::sleep_for(std::chrono::seconds(1));//等几秒让人看清楚
       //assert(turn == game.turn && "回合数不正确");
       game.print();
+      vector<float> nninputBuf(NNINPUT_CHANNELS_V1);
+      game.getNNInputV1(nninputBuf.data(), param);
 
       if (game.turn < TOTAL_TURN - 1)
       {

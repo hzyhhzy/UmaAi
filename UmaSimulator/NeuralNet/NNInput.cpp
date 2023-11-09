@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
-#include"NNInput.h"
+#include "NNInput.h"
+#include "../Search/SearchParam.h"
 #include "../Game/Game.h"
 using namespace std;
 
@@ -300,6 +301,22 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     buf[i] = 0.0;
   int c = 0;
 
+
+  buf[c] = 0.0 * log(param.maxDepth + 1.0);
+  c++;
+  buf[c] = 1.0 * log(param.maxRadicalFactor + 1.0);
+  c++;
+  buf[c] = 0.3 * (log(param.samplingNum + 1.0) - 7.0);
+  c++;
+
+  assert(c == NNINPUT_CHANNELS_SEARCHPARAM_V1);
+
+
+
+
+
+
+
   for (int i = 0; i < 5; i++)
   {
     buf[c + i] = fiveStatusBonus[i] * 0.05;
@@ -310,7 +327,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   buf[c + turn] = 1.0;
   c += TOTAL_TURN;
 
-  buf[c] = (vital - 50) * 0.01;
+  buf[c] = (vital - 50) * 0.02;
   c++;
   buf[c] = (maxVital - 100) * 0.1;
   c++;
@@ -325,7 +342,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   c++;
 
   for (int i = 0; i < 5; i++)
-    buf[c + i] = fiveStatus[i] * 0.001;
+    buf[c + i] = fiveStatus[i] * 0.003;
   c += 5;
   for (int i = 0; i < 5; i++)
     buf[c + i] = (fiveStatusLimit[i] - GameConstants::BasicFiveStatusLimit[i]) * 0.01;
@@ -342,9 +359,6 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     buf[c] = 1.0;
   c++;
 
-  for (int i = 0; i < 5; i++)
-    buf[c + i] = (fiveStatusLimit[i] - GameConstants::BasicFiveStatusLimit[i]) * 0.01;
-  c += 5;
 
 
   for (int i = 0; i < 5; i++)
@@ -353,8 +367,8 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     int a = trainLevelCount[i] / 4;
     int b = trainLevelCount[i] % 4;
     buf[c + a] = 1.0;
-    buf[c + b + 4] = 1.0;
-    c += 8;
+    buf[c + b + 5] = 1.0;
+    c += 9;
   }
 
   for (int i = 0; i < 5; i++)
@@ -415,235 +429,149 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     buf[c] = 1.0;
   c++;
 
-  /*
-  for (int i = 0; i < NNINPUT_CHANNELS_V1; i++)buf[i] = 0.0;
-  if (isEnd())return;
-  //stageInTurn=0是还没分配卡组，让神经网络估计一下达标概率（value）。stageInTurn=1是分配了卡组等待玩家选择，让神经网络估计每个选项是最优解的概率（policy）
-  assert((stageInTurn == 0 && mode == 0) || (stageInTurn == 1 && mode == 1));
-  
-  //0~77 回合数
-  assert(turn >= 0 && turn < TOTAL_TURN);
-  buf[turn] = 1.0;
+  buf[c] = larc_ssWin * 0.03;
+  c++;
 
-  //78 体力
-  buf[78] = (vital-50.0) / 30.0;
 
-  //79 体力上限
-  buf[79] = (maxVital-100.0) / 10.0;
+  int ssWinSinceLastSSS = larc_ssWinSinceLastSSS;
+  if (ssWinSinceLastSSS > 8)ssWinSinceLastSSS = 8;
+  buf[c + ssWinSinceLastSSS] = 1.0;
+  c += 9;
 
-  //80 切者
-  buf[80] = isQieZhe;
 
-  //81 爱娇
-  buf[81] = isAiJiao;
-
-  //82~83 练习上手和练习下手
-  if (failureRateBias > 0)
-    buf[82] = failureRateBias / 2.0;
-  else if (failureRateBias < 0)
-    buf[83] = - failureRateBias / 2.0;
-
-  //84~88 五维属性
-  for (int i = 0; i < 5; i++)
-    buf[84 + i] = fiveStatus[i] / 1000.0;
-
-  //89~93 五维属性上限
-  for (int i = 0; i < 5; i++)
-    buf[89 + i] = (fiveStatusLimit[i]-GameConstants::BasicFiveStatusLimit[i]) / 200.0;
-
-  //94 技能点
-  // 直接换算到目标分数里了，所以不需要输入了。
-  //buf[94] = skillPt / 2000.0;
-
-  //95~99 干劲
-  buf[95 - 1 + motivation] = 1.0;
-
-  //v1版本，cardId不作为输入
-
-  //100~105 羁绊
-  for (int i = 0; i < 6; i++)
-    buf[100 + i] = cardJiBan[i] / 100.0;
-
-  //106~111 羁绊是否不低于80
-  for (int i = 0; i < 6; i++)
-    buf[106 + i] = cardJiBan[i] >= 80;
-
-  //112~116 训练等级计数
-  for (int i = 0; i < 5; i++)
-    buf[112 + i] = trainLevelCount[i] / 48.0;
-
-  //117~146 训练等级（5x6）
-  for (int i = 0; i < 5; i++)
-    buf[117 + i * 6 + getTrainingLevel(i)] = 1.0;
-
-  //147~151 种马蓝因子
-  for (int i = 0; i < 5; i++)
-    buf[147 + i] = zhongMaBlueCount[i] / 9.0;
-
-  //152~157 种马单次继承收益
-  for (int i = 0; i < 5; i++)
-    buf[152 + i] = zhongMaExtraBonus[i] / 30.0;
-  buf[157] = zhongMaExtraBonus[5] / 200.0;
-
-  //158 是否为比赛
-  if (isRacing)
-    buf[158] = 1.0;
-
-  //159~176 女神等级
-  buf[159 + venusLevelRed] = 1.0;
-  buf[165 + venusLevelBlue] = 1.0;
-  buf[171 + venusLevelYellow] = 1.0;
-
-  //177~302 已有碎片
-  //碎片：每个碎片用6通道表示属性，3通道表示颜色
-  //一共(8+4+2)*9=126通道
-
-  //177~248 底层碎片
-  for (int i = 0; i < 8; i++)
+  for (int i = 0; i < 9; i++)
   {
-    int s = venusSpiritsBottom[i];
-    if (s == 0)continue;
-    int channel0 = 177 + i * 9;
-    int type = s % 8 - 1;
-    assert(type >= 0 && type < 6);
-    int color = s / 8;
-    assert(color >= 0 && color < 3);
-
-    buf[channel0 + type] = 1.0;
-    buf[channel0 + 6 + color] = 1.0;
+    if (larc_allowedDebuffsFirstLarc[i])
+      buf[c] = 1.0;
+    c++;
   }
 
-  //249~302 上层碎片
-  for (int i = 0; i < 6; i++)
-  {
-    int s = venusSpiritsUpper[i];
-    if (s == 0)continue;
-    int channel0 = 249 + i * 9;
-    int type = s % 8 - 1;
-    assert(type >= 0 && type < 6);
-    int color = s / 8;
-    assert(color >= 0 && color < 3);
+  assert(larc_zuoyueType >= 0 && larc_zuoyueType <= 2);
+  buf[c + larc_zuoyueType] = 1.0;
+  c += 3;
 
-    buf[channel0 + type] = 1.0;
-    buf[channel0 + 6 + color] = 1.0;
-  }
 
-  //303~305 可用的女神睿智
-  if (venusAvailableWisdom != 0)
-    buf[303 - 1 + venusAvailableWisdom] = 1.0;
+  buf[c] = larc_zuoyueVitalBonus - 1.0;
+  c++;
+  buf[c] = larc_zuoyueStatusBonus - 1.0;
+  c++;
 
-  //306 女神睿智是否开启
-  buf[306] = venusIsWisdomActive;
 
-  //307 是否点击过神团
-  buf[307] = venusCardFirstClick;
+  if (larc_zuoyueFirstClick)
+    buf[c] = 1.0;
+  c++;
+  if (larc_zuoyueOutgoingUnlocked)
+    buf[c] = 1.0;
+  c++;
+  if (larc_zuoyueOutgoingRefused)
+    buf[c] = 1.0;
+  c++;
 
-  //308 神团是否解锁外出
-  buf[308] = venusCardUnlockOutgoing;
+  assert(larc_zuoyueOutgoingUsed <= 5 && larc_zuoyueOutgoingUsed >= 0);
+  buf[c + larc_zuoyueOutgoingUsed] = 1.0;
+  c += 6;
 
-  //309 神团是否情热
-  buf[309] = venusCardIsQingRe;
+  // stageInTurn
+  // personDistribution
+  assert(larc_ssPersonsCount <= 5 && larc_ssPersonsCount >= 0);
+  buf[c + larc_ssPersonsCount] = 1.0;
+  c += 6;
+  //larc_ssPersons
+  //larc_ssPersonsCountLastTurn
 
-  //310~320 神团情热了几个回合
-  buf[310 + venusCardQingReContinuousTurns] = 1.0;
-
-  //321~325 女神外出用了哪几个
   for (int i = 0; i < 5; i++)
-    buf[321 + i] = venusCardOutgoingUsed[i];
-
-  //326~330 stageInTurn(暂时无用)
-  assert(stageInTurn >= 0 && stageInTurn < 5);
-  buf[326 + stageInTurn] = 1.0;
-
-  if (mode == 1)
   {
-    //331~370 支援卡分布
-    for (int i = 0; i < 5; i++)
-      for (int j = 0; j < 8; j++)
-        buf[331 + 8 * i + j] = cardDistribution[i][j];
-
-    //371~376 支援卡红点
-    for (int i = 0; i < 6; i++)
-      buf[371 + i] = cardHint[i];
+    for (int j = 0; j < 6; j++)
+    {
+      buf[c] = trainValue[i][j] * 0.02;
+      c++;
+    }
+    buf[c] = trainValue[i][6] * 0.05;
+    c++;
   }
-
-  //377~456 训练碎片
-  //每个碎片用6通道表示属性，3通道表示颜色，1通道表示是否双倍
-  //一共8*10=80通道
-  for (int i = 0; i < 8; i++)
+  for (int i = 0; i < 5; i++)
   {
-    int s = venusSpiritsUpper[i];
-    if (s == 0)continue;
-    bool doubled = s >= 32;
-    s = s % 32;
-    int channel0 = 377 + i * 10;
-    int type = s % 8 - 1;
-    assert(type >= 0 && type < 6);
-    int color = s / 8;
-    assert(color >= 0 && color < 3);
-
-    buf[channel0 + type] = 1.0;
-    buf[channel0 + 6 + color] = 1.0;
-    buf[channel0 + 9] = doubled;
+    buf[c] = failRate[i] * 0.02;
+    c++;
   }
-
-  //457~462 碎片加成
-  for (int i = 0; i < 6; i++)
-    buf[457 + i] = spiritBonus[i] / 10.0;
-
-  if (mode == 1)
+  for (int i = 0; i < 5; i++)
   {
-    //463~492 训练属性
-    for (int i = 0; i < 5; i++)
-      for (int j = 0; j < 6; j++)
-        buf[463 + 6 * i + j] = trainValue[i][j] / 50.0;
-
-    //493~497 训练体力
-    for (int i = 0; i < 5; i++)
-      buf[493 + i] = trainValue[i][6] / 20.0;
-
-    //498~502 训练失败率
-    for (int i = 0; i < 5; i++)
-      buf[498 + i] = failRate[i] / 30.0;
-
-    //503~507 训练失败率>0
-    for (int i = 0; i < 5; i++)
-      buf[503 + i] = failRate[i] > 0;
-
-    //508~512 训练失败率>=20
-    for (int i = 0; i < 5; i++)
-      buf[508 + i] = failRate[i] >= 20;
+    int t = trainShiningNum[i];
+    if (t > 2)t = 2; //双彩以上都是直接充满
+    buf[c + t] = 1.0;
+    c += 3;
   }
+  //larc_staticBonus
+  for (int i = 0; i < 5; i++)
+  {
+    buf[c] = larc_shixingPtGainAbroad[i] * 0.01;
+    c++;
+  }
+  //larc_trainBonus
+  //larc_ssValue
+  //larc_ssFailRate
 
-  //513~599 马娘id
-  //static_assert(GameDatabase::ALL_UMA_NUM <= 599 - 513, "超过v1版神经网络支持马娘数上限");
-  assert(umaId >= 0 && umaId + 513 <= 599);
-  buf[513 + umaId] = 1.0;
+  c += 10;//reserve
 
-  //600~899 支援卡id，若i号位的支援卡为j，则buf[600+j*6+i]=1
-  //assert(GameDatabase::ALL_SUPPORTCARD_NUM <= 50, "超过v1版神经网络支持支援卡数上限");
-  for (int i = 0; i < 6; i++)
-    buf[600 + cardId[i] * 6 + i] = 1.0;
-  
-  //900 目标分数
-  float remainScoreExceptPt = targetScore - getSkillScore();
-  buf[900] = (remainScoreExceptPt - 25000) / 2000.0;
+  assert(c == NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1);
 
-  //901~902 模式
-  assert(901 + mode < NNINPUT_CHANNELS_V1);
-  buf[901 + mode] = 1.0;
+  float* cardBuf = buf + NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1;
+  float* headBuf = buf + NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1 + 7 * NNINPUT_CHANNELS_CARD_V1;
 
 
-
-  */
-
-
-
-
-
-
-
-
-
+  //(全局信息)(支援卡1参数)...(支援卡6参数)(佐岳卡参数)(支援卡人头1)...(支援卡人头6)(npc1)...(npc10)(理事长)(记者)(有卡佐岳)(无卡佐岳)
+  //如果带了佐岳，则 支援卡6、支援卡人头6 为空
+  //如果没带佐岳，则 佐岳卡参数、npc10为空
+  if (larc_zuoyueType == 0)
+  {
+    assert(normalCardCount == 6);
+    //支援卡
+    for (int i = 0; i < normalCardCount; i++)
+    {
+      const Person& p = persons[i];
+      cardParam[p.cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * i);
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * i, *this, i);
+    }
+    //npc
+    for (int i = 0; i < 9; i++)
+    {
+      const Person& p = persons[6 + i];
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (6 + i), *this, 6 + i);
+    }
+    //理事长记者
+    for (int i = 0; i < 2; i++)
+    {
+      const Person& p = persons[15 + i];
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (16 + i), *this, 15 + i);
+    }
+    //佐岳
+    persons[17].getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * 19, *this, 17);
+  }
+  else 
+  {
+    assert(normalCardCount == 5);
+    //支援卡
+    for (int i = 0; i < normalCardCount; i++)
+    {
+      const Person& p = persons[i];
+      cardParam[p.cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * i);
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * i, *this, i);
+    }
+    //npc
+    for (int i = 0; i < 10; i++)
+    {
+      const Person& p = persons[5 + i];
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (6 + i), *this, 5 + i);
+    }
+    //理事长记者
+    for (int i = 0; i < 2; i++)
+    {
+      const Person& p = persons[15 + i];
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (16 + i), *this, 15 + i);
+    }
+    //佐岳
+    cardParam[persons[17].cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * 6);
+    persons[17].getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * 18, *this, 17);
+  }
 
 }
