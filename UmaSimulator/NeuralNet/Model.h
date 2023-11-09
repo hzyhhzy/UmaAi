@@ -3,7 +3,7 @@
 #include "NNInput.h"
 #include "../Game/Game.h"
 
-
+//用-1e7表示不合法操作，在神经网络训练时直接忽略掉这些值
 struct ModelOutputPolicyV1
 {
   float trainingPolicy[10];

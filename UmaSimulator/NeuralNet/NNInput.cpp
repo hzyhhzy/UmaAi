@@ -312,6 +312,57 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   assert(c == NNINPUT_CHANNELS_SEARCHPARAM_V1);
 
 
+  //isLegal
+  Action action = { 0,false, false, false, false };
+  for (int i = 0; i < 10; i++)
+  {
+    action.train = i;
+    if (isLegal(action))
+      buf[c] = 1.0;
+    c++;
+  }
+
+  for (int j = 0; j < 5; j++)
+  {
+    if (j == 0)
+    {
+      action.buy50p = true;
+      action.buyPt10 = false;
+      action.buyVital20 = false;
+    }
+    else if (j == 1)
+    {
+      action.buy50p = false;
+      action.buyPt10 = true;
+      action.buyVital20 = false;
+    }
+    else if (j == 2)
+    {
+      action.buy50p = true;
+      action.buyPt10 = true;
+      action.buyVital20 = false;
+    }
+    else if (j == 3)
+    {
+      action.buy50p = true;
+      action.buyPt10 = false;
+      action.buyVital20 = true;
+    }
+    else if (j == 4)
+    {
+      action.buy50p = false;
+      action.buyPt10 = false;
+      action.buyVital20 = true;
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+      action.train = i;
+      if (isLegal(action))
+        buf[c] = 1.0;
+      c++;
+    }
+  }
 
 
 
@@ -414,6 +465,11 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 
   buf[c] = larc_shixingPt * 0.002;
   c++;
+
+  int shixingPt100 = larc_shixingPt / 100;
+  if (shixingPt100 > 10)shixingPt100 = 10;
+  buf[c + shixingPt100] = 1.0;
+  c += 11;
 
 
   for (int i = 0; i < 10; i++)

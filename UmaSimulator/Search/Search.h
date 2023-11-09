@@ -3,6 +3,7 @@
 #include "SearchParam.h"
 #include "../Game/Game.h"
 #include "../NeuralNet/Evaluator.h"
+#include "../NeuralNet/TrainingSample.h"
 //一局游戏是一个search
 class Search
 {
@@ -15,6 +16,7 @@ class Search
   static const int NormDistributionSampling = 128;//统计分数分布时，每个正态分布拆成多少个样本
 
 public:
+  Game gameLastSearch;//上次搜索的是哪个局面
   int threadNumInGame;//一个search里面几个线程
   int batchSize;
   SearchParam param;
@@ -55,7 +57,10 @@ public:
 
   //根据搜索结果选出最佳选择，policy也做一定的软化
   //mode=0是根据胜率，=1是根据平均分
-  ModelOutputPolicyV1 extractPolicyFromSearchResults(int mode, float delta = 0);
+  //ModelOutputPolicyV1 extractPolicyFromSearchResults(int mode, float delta = 0);
+
+  //导出上次搜索的数据作为训练样本
+  TrainingSample exportTrainingSample(float policyDelta = 50);//policyDelta是policy的软化系数
 
 private:
   std::vector<Evaluator> evaluators;

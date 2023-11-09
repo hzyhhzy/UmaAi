@@ -137,6 +137,8 @@ struct Game
     std::mt19937_64& rand,
     Action action);//一直往后进行，直到下一次需要玩家决策
 
+  bool isLegal(Action action) const;//这个操作是否允许
+
   int finalScore() const;//最终总分
   bool isEnd() const;//
 
@@ -160,6 +162,7 @@ struct Game
   void addTrainingLevelCount(int item, int value);//增加训练等级计数（每4为1级，训练+1，期待度达到某几个等级+4）
   void charge(int idx, int value);//充电
   void unlockUpgrade(int idx);//解锁某个升级
+  int buyUpgradeCost(int idx, int level) const;//购买某个升级的花费，如果没解锁则返回-1
   bool tryBuyUpgrade(int idx, int level);//购买某个升级，如果买不起则返回false
   int removeDebuffsFirstNCost(int n) const;//计算消除前n个debuff的花费
   bool tryRemoveDebuffsFirstN(int n);//计算是否可以消除前n个debuff，若可以消除则消除且返回true，否则什么都不买且返回false

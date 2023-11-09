@@ -556,12 +556,12 @@ void Game::unlockUpgrade(int idx)
     larc_levels[idx] = 1;
   //只会在回合结束时调用这个，所以不需要重新计算训练值
 }
-bool Game::tryBuyUpgrade(int idx, int level)
+int Game::buyUpgradeCost(int idx, int level) const
 {
   int cost = 0;
 
   if (larc_levels[idx] == 0)
-    return false;//没解锁
+    return -1;//没解锁
   else if (larc_levels[idx] == 1)
   {
     if (level == 2)
@@ -569,7 +569,7 @@ bool Game::tryBuyUpgrade(int idx, int level)
     else if (level == 3)
       cost = GameConstants::LArcUpgradesCostLv3[idx] + GameConstants::LArcUpgradesCostLv2[idx];
     else
-      return false;
+      return -1;
   }
   else if (larc_levels[idx] == 2)
   {
@@ -578,13 +578,22 @@ bool Game::tryBuyUpgrade(int idx, int level)
     else if (level == 3)
       cost = GameConstants::LArcUpgradesCostLv3[idx];
     else
-      return false;
+      return -1;
   }
   else if (larc_levels[idx] == 3)
   {
-    return true;
+    return -1;
   }
+
+  return cost;
+}
+bool Game::tryBuyUpgrade(int idx, int level)
+{
+  int cost = buyUpgradeCost(idx, level);
+
   if (cost > larc_shixingPt)return false;
+  if (cost < 0)return false;//未解锁
+  if (cost == 0)return true;//已购买
   larc_shixingPt -= cost;
   larc_levels[idx] = level;
   
@@ -1374,6 +1383,115 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
   return true;
 }
 
+
+bool Game::isLegal(Action action) const
+{
+  if (isRacing)
+  {
+    assert(false && "凯旋门所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
+    return false;//凯旋门所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
+  }
+
+  if (action.buy50p || action.buyFriend20 || action.buyPt10 || action.buyVital20)
+  {
+    if (!(action.train <= 4 && action.train >= 0 && larc_isAbroad))
+      return false;
+  }
+
+  if (action.train == 6)//休息
+  {
+    return true;
+  }
+  else if (action.train == 9)//比赛
+  {
+    if (turn <= 12 || larc_isAbroad)
+    {
+      return false;
+    }
+    return true;
+  }
+  else if (action.train == 8)//普通外出
+  {
+    if (larc_isAbroad)
+    {
+      return false;
+    }
+    return true;
+  }
+  else if (action.train == 7)//友人外出
+  {
+    if (larc_isAbroad)
+    {
+      return false;
+    }
+    if (!larc_zuoyueOutgoingUnlocked || larc_zuoyueOutgoingUsed == 5)
+    {
+      return false;
+    }
+    return true;
+  }
+  else if (action.train == 5)//ss match
+  {
+    if (larc_isAbroad)
+    {
+      return false;
+    }
+    if (larc_ssPersonsCount == 0)
+    {
+      return false;
+    }
+    return true;
+  }
+  else if (action.train <= 4 && action.train >= 0)//常规训练
+  {
+    //先用适性pt买加成
+    if (larc_isAbroad)
+    {
+      int remainPt = larc_shixingPt;
+      if (action.buy50p)
+      {
+        int upgradeIdx = GameConstants::UpgradeId50pEachTrain[action.train];
+        int cost = buyUpgradeCost(upgradeIdx, 3);
+        if (cost <= 0)return false;
+        if (cost > remainPt)return false;
+        remainPt -= cost;
+      }
+      if (action.buyFriend20)
+      {
+        assert(false && "买友情20%已经改成全自动的了");
+        return false;
+      }
+      if (action.buyPt10)
+      {
+        if (turn >= 41)
+          return false;
+        int cost = buyUpgradeCost(5, 3);
+        if (cost <= 0)return false;
+        if (cost > remainPt)return false;
+        remainPt -= cost;
+      }
+      if (action.buyVital20)
+      {
+        if (turn <= 59)
+          return false;
+        int cost = buyUpgradeCost(6, 3);
+        if (cost <= 0)return false;
+        if (cost > remainPt)return false;
+        remainPt -= cost;
+      }
+    }
+    return true;
+  }
+  else
+  {
+    assert(false && "未知的训练项目");
+    return false;
+  }
+  return false;
+}
+
+
+
 float Game::getSkillScore() const
 {
   float scorePtRate = isQieZhe ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate;
@@ -1468,7 +1586,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   else if (turn == 23)//第一年年底
   {
     tryRemoveDebuffsFirstN(2);
-    tryRemoveDebuffsFirstN(4);
+    //tryRemoveDebuffsFirstN(4);
     //达成育成目标
     addAllStatus(3);
     skillPt += 20;

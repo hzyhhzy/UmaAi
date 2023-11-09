@@ -93,7 +93,7 @@ Search::Search(Model* model, int batchSize, int threadNumInGame, SearchParam par
 Action Search::runSearch(const Game& game,
   std::mt19937_64& rand)
 {
-
+  gameLastSearch = game;
   ModelOutputValueV1 illegalValue;
   {
     illegalValue.scoreMean = -1e5;
@@ -120,6 +120,7 @@ Action Search::runSearch(const Game& game,
       Action action = action0;
       action.train = t;
       allChoicesValue[buyBuffChoice][t] = evaluateSingleAction(game, rand, action);
+      assert(game.isLegal(action) == (allChoicesValue[buyBuffChoice][t].scoreMean > -1e4));//检查isLegal写的对不对
     }
 
   }
@@ -294,24 +295,4 @@ void Search::addNormDistribution(double mean, double stdev)
     if (y >= MAX_SCORE)y = MAX_SCORE - 1;
     finalScoreDistribution[y] += 1;
   }
-}
-
-ModelOutputPolicyV1 Search::extractPolicyFromSearchResults(int mode, float delta)
-{
-  ModelOutputPolicyV1 policy;
-  if (delta == 0)
-  {
-    if (mode == 0)delta = 0.02;
-    else delta = 30;
-  }
-  float deltaInv = 1 / delta;
-
-
-  assert(false);
-  //训练8选1
-  for (int i = 0; i < 8; i++)
-    policy.trainingPolicy[i] = deltaInv * allChoicesValue[0][i].value;
-  softmax(policy.trainingPolicy, 8);
-
-  return policy;
 }

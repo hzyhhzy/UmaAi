@@ -8,6 +8,7 @@
 #include "../External/termcolor.hpp"
 #include "../Game/Game.h"
 #include "../Search/Search.h"
+#include "../NeuralNet/TrainingSample.h"
 using namespace std;
 
 
@@ -44,6 +45,13 @@ void main_playerPlay()
     Search search(NULL, 128, threadNum, param);
     Game game;
     game.newGame(rand, true, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
+    //for (int i = 0; i < 36; i++)
+    //{
+    //  Action act = { 4,false, false, false, false };
+    //  if (game.larc_ssPersonsCount >= 5)
+    //    act.train = 5;
+    //  game.applyTrainingAndNextTurn(rand, act);
+    //}
     game.larc_allowedDebuffsFirstLarc[4] = true;//允许不消除智力debuff
 
 
@@ -65,8 +73,6 @@ void main_playerPlay()
       std::this_thread::sleep_for(std::chrono::seconds(1));//等几秒让人看清楚
       //assert(turn == game.turn && "回合数不正确");
       game.print();
-      vector<float> nninputBuf(NNINPUT_CHANNELS_V1);
-      game.getNNInputV1(nninputBuf.data(), param);
 
       if (game.turn < TOTAL_TURN - 1)
       {
@@ -96,6 +102,7 @@ void main_playerPlay()
 
         game.playerPrint = false;
         search.runSearch(game, rand);
+
         game.playerPrint = true;
         for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
         {
@@ -114,7 +121,7 @@ void main_playerPlay()
           cout << "速耐力根智: ";
           for (int j = 0; j < 10; j++)
           {
-            double score = search.allChoicesValue[i][j].scoreMean;
+            double score = search.allChoicesValue[i][j].value;
             if (score > -20000)
               cout
               //<< fixed << setprecision(1) << search.allChoicesValue[i][j].winrate * 100 << "%:" 
@@ -147,6 +154,8 @@ void main_playerPlay()
         cout << endl;
       }
       */
+
+      auto tdata = search.exportTrainingSample();
 
       if (game.isRacing)//比赛回合
       {

@@ -165,6 +165,7 @@
     <ClCompile Include="NeuralNet\Evaluator.cpp" />
     <ClCompile Include="NeuralNet\Model.cpp" />
     <ClCompile Include="NeuralNet\NNInput.cpp" />
+    <ClCompile Include="NeuralNet\TrainingSample.cpp" />
     <ClCompile Include="Search\Search.cpp" />
     <ClCompile Include="Search\SearchParam.cpp" />
     <ClCompile Include="SupportCard\CardEffect.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="NeuralNet\Evaluator.h" />
     <ClInclude Include="NeuralNet\Model.h" />
     <ClInclude Include="NeuralNet\NNInput.h" />
+    <ClInclude Include="NeuralNet\TrainingSample.h" />
     <ClInclude Include="Search\Search.h" />
     <ClInclude Include="Search\SearchParam.h" />
     <ClInclude Include="SupportCard\CardEffect.h" />

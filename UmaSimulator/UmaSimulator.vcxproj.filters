@@ -159,6 +159,9 @@
     <ClCompile Include="MainCommands\TestCardsSingle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="NeuralNet\TrainingSample.cpp">
+      <Filter>源文件\NeuralNet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
@@ -232,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="websocket.h">
       <Filter>源文件\Websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="NeuralNet\TrainingSample.h">
+      <Filter>头文件\NeuralNet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
