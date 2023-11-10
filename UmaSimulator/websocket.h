@@ -22,7 +22,7 @@ public:
 	void on_open(wsclient* c, websocketpp::connection_hdl hdl);
 	void on_message(websocketpp::connection_hdl, wsclient::message_ptr msg);
 	void on_disconnect(wsclient* c, websocketpp::connection_hdl hdl);
-	void send(std::string message);
+	void send(std::wstring message);
 	std::string get_status() const;
 private:
 	void connect();
