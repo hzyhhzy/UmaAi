@@ -1,4 +1,6 @@
+#include <codecvt>
 #include "websocket.h"
+
 std::string lastFromWs;
 websocket::websocket(std::string uri)
 	: m_status("Connecting")
@@ -85,12 +87,14 @@ void websocket::connect() {
 
 	m_endpoint.connect(con);
 }
-void websocket::send(std::string message) {
+void websocket::send(std::wstring message) {
 	websocketpp::lib::error_code ec;
+	static std::wstring_convert<std::codecvt_utf8<wchar_t> > conv;
+	std::string s = conv.to_bytes(message);
 
-	m_endpoint.send(m_hdl, message, websocketpp::frame::opcode::text, ec);
+	m_endpoint.send(m_hdl, s, websocketpp::frame::opcode::text, ec);
 	if (ec) {
-		std::cout << "> Error sending message: " << ec.message() << std::endl;
+		std::cout << "> Error sending websocket message: " << ec.message() << std::endl;
 		return;
 	}
 }
