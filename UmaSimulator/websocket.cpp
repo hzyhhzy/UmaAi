@@ -31,6 +31,7 @@ websocket::~websocket() {
 }
 void websocket::on_open(wsclient* c, websocketpp::connection_hdl hdl) {
 	m_status = "Open";
+	init_ura();
 }
 void websocket::on_message(websocketpp::connection_hdl, wsclient::message_ptr msg) {
 	if (msg->get_opcode() == websocketpp::frame::opcode::text) {
@@ -97,6 +98,12 @@ void websocket::send(std::wstring message) {
 		std::cout << "> Error sending websocket message: " << ec.message() << std::endl;
 		return;
 	}
+}
+void websocket::init_ura() {
+	// 订阅AI需要的信息，取消订阅是把CommandType改成3
+	send(L"{\"CommandType\":2,\"Command\":\"SubscribeAiInfo\",\"Parameters\":[]}");
+	// 在URA上打印信息
+	send(L"{\"CommandType\":1,\"Command\":\"PrintText\",\"Parameters\":[\"[green]UmaAi已建立连接[/]\"]}");
 }
 std::string websocket::get_status() const {
 	return m_status;
