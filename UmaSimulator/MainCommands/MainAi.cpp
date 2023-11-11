@@ -115,10 +115,6 @@ void main_ai()
 			Sleep(10);
 			std::cout << ws.get_status() << std::endl;
 		} while (ws.get_status() != "Open");
-		// 订阅AI需要的信息，取消订阅是把CommandType改成3
-		ws.send(L"{\"CommandType\":2,\"Command\":\"SubscribeAiInfo\",\"Parameters\":[]}");
-		// 在URA上打印信息
-		ws.send(L"{\"CommandType\":1,\"Command\":\"PrintText\",\"Parameters\":[\"[green]UmaAi已建立连接[/]\"]}");
 	}
 
 	while (true)
