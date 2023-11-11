@@ -27803,6 +27803,183 @@
     "uniqueEffectType": 0,
     "uniqueEffectSummary": "持久力ボーナス(1),deYiLv(20)"
   },
+  "20069": {
+    "cardId": 20069,
+    "charaId": 1062,
+    "cardName": "[速]マチカネタンホイザ",
+    "fullName": "[あくもー退散！？]マチカネタンホイザ",
+    "rarity": 2,
+    "cardType": 0,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 15,
+        "ganJing": 15,
+        "initialJiBan": 20,
+        "saiHou": 1,
+        "hintProbIncrease": 20,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 16,
+        "ganJing": 25,
+        "initialJiBan": 21,
+        "saiHou": 2,
+        "hintProbIncrease": 23,
+        "deYiLv": 53
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 18,
+        "ganJing": 30,
+        "initialJiBan": 22,
+        "saiHou": 3,
+        "hintProbIncrease": 26,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 20,
+        "ganJing": 35,
+        "initialJiBan": 23,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 61
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 20,
+        "ganJing": 35,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 65
+      }
+    ],
+    "uniqueEffectType": 0,
+    "uniqueEffectSummary": "パワーボーナス(1),ganJing(15)"
+  },
   "30001": {
     "cardId": 30001,
     "charaId": 1001,
@@ -57100,8 +57277,8 @@
   "30169": {
     "cardId": 30169,
     "charaId": 1073,
-    "cardName": "[力]ツルマルツヨシ",
-    "fullName": "[天より遣われし微笑み]ツルマルツヨシ",
+    "cardName": "[力]鹤丸刚志",
+    "fullName": "[天赐之笑]鹤丸刚志",
     "rarity": 3,
     "cardType": 2,
     "cardValue": [
@@ -57280,8 +57457,8 @@
   "30170": {
     "cardId": 30170,
     "charaId": 1061,
-    "cardName": "[根]キングヘイロー",
-    "fullName": "[我が舞、巡りて]キングヘイロー",
+    "cardName": "[根]圣王光环",
+    "fullName": "[吾之舞，巡回往复]圣王光环",
     "rarity": 3,
     "cardType": 3,
     "cardValue": [
@@ -57465,8 +57642,8 @@
   "30171": {
     "cardId": 30171,
     "charaId": 1052,
-    "cardName": "[力]ハルウララ",
-    "fullName": "[ああ、楽しや、楽しや！]ハルウララ",
+    "cardName": "[力]春丽",
+    "fullName": "[哈哈，好开心，好开心！]春丽",
     "rarity": 3,
     "cardType": 2,
     "cardValue": [
@@ -57633,5 +57810,200 @@
     ],
     "uniqueEffectType": 0,
     "uniqueEffectSummary": "羁绊>=80时deYiLv(40)"
+  },
+  "30172": {
+    "cardId": 30172,
+    "charaId": 1013,
+    "cardName": "[智]メジロマックイーン",
+    "fullName": "[かっとばせー！ですわ！？]メジロマックイーン",
+    "rarity": 3,
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 40,
+        "xunLian": 5,
+        "initialJiBan": 25,
+        "saiHou": 1,
+        "hintProbIncrease": 0,
+        "deYiLv": 50,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 26,
+        "ganJing": 45,
+        "xunLian": 5,
+        "initialJiBan": 26,
+        "saiHou": 2,
+        "hintProbIncrease": 0,
+        "deYiLv": 57,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 27,
+        "ganJing": 50,
+        "xunLian": 5,
+        "initialJiBan": 27,
+        "saiHou": 3,
+        "hintProbIncrease": 0,
+        "deYiLv": 65,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 28,
+        "ganJing": 55,
+        "xunLian": 5,
+        "initialJiBan": 28,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 72,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "youQing": 30,
+        "ganJing": 60,
+        "xunLian": 5,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 80,
+        "wizVitalBonus": 5
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时賢さボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      7,
+      2,
+      0,
+      0
+    ]
   }
 }
