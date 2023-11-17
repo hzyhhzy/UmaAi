@@ -112,8 +112,8 @@ void main_ai()
 	if (GameConfig::useWebsocket)
 	{
 		do {
-			Sleep(10);
-			std::cout << ws.get_status() << std::endl;
+			Sleep(500);
+			std::cout << "等待URA连接" << std::endl;
 		} while (ws.get_status() != "Open");
 	}
 
@@ -176,7 +176,6 @@ void main_ai()
 		game.print();
 		cout << endl;
 		cout << rpText["name"] << rpText["calc"] << endl;
-
 		auto printPolicy = [](float p)
 		{
 			cout << fixed << setprecision(1);
@@ -190,7 +189,7 @@ void main_ai()
 			if (!GameConfig::noColor)cout << "\033[0m";
 		};
 
-		auto printValue = [](int which, double p, double ref)
+		auto printValue = [&ws](int which, double p, double ref)
 		{
 			string prefix[] = { "速:", "耐:", "力:", "根:", "智:", "| SS: ", "| 休息: ", "友人: ", "普通外出: ", "比赛: " };
 			if (p < -50000)
@@ -269,6 +268,8 @@ void main_ai()
 				restValue = search.allChoicesValue[0][8].value;
 
 
+			wstring strToSendURA = L"larc";
+			strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
 			if (game.turn == 0 || scoreFirstTurn == 0)
 			{
 				cout << "评分预测: 平均\033[1;32m" << int(maxMean) << "\033[0m" << "，乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m" << endl;
@@ -304,9 +305,16 @@ void main_ai()
 				for (int j = 0; j < 10; j++)
 				{
 					double value = search.allChoicesValue[i][j].value;
+					strToSendURA += L" " + to_wstring(value);
 					printValue(j, value - restValue, maxValue - restValue);
 				}
 				cout << endl;
+			}
+			//strToSendURA = L"0.1234567 5.4321";
+			if (GameConfig::useWebsocket)
+			{
+				wstring s = L"{\"CommandType\":1,\"Command\":\"PrintUmaAiResult\",\"Parameters\":[\"" + strToSendURA + L"\"]}";
+				ws.send(s);
 			}
 
 			//提示购买友情+20%和pt+10
