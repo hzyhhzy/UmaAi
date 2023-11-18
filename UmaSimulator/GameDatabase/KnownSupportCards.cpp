@@ -49,7 +49,7 @@ void GameDatabase::loadCards(const string& dir)
                 }
             }
         }
-        cout << "共载入 " << GameDatabase::AllCards.size() << " 个支援卡数据" << endl;
+        cout << "共载入 " << GameDatabase::AllCards.size() << " 支援卡" << endl;
     }
     catch (exception& e)
     {
@@ -84,7 +84,7 @@ void GameDatabase::loadDBCards(const string& pathname)
                     GameDatabase::AllCards[jdata.cardID] = jdata;   // 没有手动数据则用自动数据
             }
         }
-        cout << "共载入 " << GameDatabase::AllCards.size() << " 支援卡元数据" << endl;
+        cout << "共载入 " << GameDatabase::AllCards.size()/5 << " 支援卡" << endl;
     }
     catch (exception& e)
     {

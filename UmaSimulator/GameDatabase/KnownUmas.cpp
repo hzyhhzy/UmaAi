@@ -32,7 +32,7 @@ void GameDatabase::loadUmas(const string& pathname)
             AllUmas[id] = uma;
            //cout << uma.name << endl;
         }
-        cout << "共载入 " << AllUmas.size() << " 个育成马娘数据" << endl;        
+        cout << "共载入 " << AllUmas.size() << " 育成马娘" << endl;        
     }
     catch (exception& e)
     {
@@ -44,11 +44,11 @@ void GameDatabase::loadUmas(const string& pathname)
     }
 }
 
-void GameDatabase::loadTranslation(const string& dir)
+void GameDatabase::loadTranslation(const string& filename)
 {
     try
     {
-        ifstream ifs("db/text_data.json");
+        ifstream ifs(filename);
         stringstream ss;
         ss << ifs.rdbuf();
         ifs.close();
