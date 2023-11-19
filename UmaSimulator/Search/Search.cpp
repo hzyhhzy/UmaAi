@@ -29,6 +29,15 @@ static void softmax(float* f, int n)
     f[i] *= totalInv;
 }
 
+//根据回合数调整激进度
+static double adjustRadicalFactor(double maxRf, int turn)
+{
+  //计算该取的激进度
+  double remainTurns = turn >= 65 ? 1 : 65 - turn;
+  double factor = (remainTurns <= 5 ? 5 * remainTurns : remainTurns + 20) / (67.0 + 20);//分段折线
+  return factor * maxRf;
+}
+
 int Search::buyBuffChoiceNum(int turn)
 {
   return
@@ -201,9 +210,8 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, std::mt19937_6
     );
   }
 
-  //计算该取的激进度
-  double remainTurns = game.turn >= 65 ? 1 : 65 - game.turn;
-  double rf = param.maxRadicalFactor * (1 - exp(-remainTurns / 4.0));
+
+  double rf = adjustRadicalFactor(param.maxRadicalFactor, game.turn);
 
   //整合所有结果
   for (int i = 0; i < MAX_SCORE; i++)

@@ -61,7 +61,7 @@ public:
 
   //导出上次搜索的数据作为训练样本
   TrainingSample exportTrainingSample(float policyDelta = 50);//policyDelta是policy的软化系数
-
+  
 private:
   std::vector<Evaluator> evaluators;
   std::vector<ModelOutputValueV1> NNresultBuf;
@@ -82,6 +82,6 @@ private:
     Action action
   );
 
-  void addNormDistribution(double mean, double stdev);//在finalScoreDistribution中加上平均值为mean，标准差为stdev的正态分布，总权重为
+  void addNormDistribution(double mean, double stdev);//在finalScoreDistribution中加上平均值为mean，标准差为stdev的正态分布，总权重为NormDistributionSampling
 
 };

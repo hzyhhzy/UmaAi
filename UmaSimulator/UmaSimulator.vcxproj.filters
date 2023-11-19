@@ -64,6 +64,12 @@
     <Filter Include="源文件\Websocket">
       <UniqueIdentifier>{2797fd96-0611-4d0e-930a-cb6aed3aed74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Selfplay">
+      <UniqueIdentifier>{387e0e4b-e90b-4196-b957-4473795ea8a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Selfplay">
+      <UniqueIdentifier>{50aeaeb1-f63a-469d-83a2-3ffdfbfe14a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UmaSimulator.cpp">
@@ -162,6 +168,18 @@
     <ClCompile Include="NeuralNet\TrainingSample.cpp">
       <Filter>源文件\NeuralNet</Filter>
     </ClCompile>
+    <ClCompile Include="Selfplay\GameGenerator.cpp">
+      <Filter>源文件\Selfplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Selfplay\SelfplayParam.cpp">
+      <Filter>源文件\Selfplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Selfplay\SelfplayThread.cpp">
+      <Filter>源文件\Selfplay</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCommands\Selfplay.cpp">
+      <Filter>源文件\MainCommands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
@@ -238,6 +256,15 @@
     </ClInclude>
     <ClInclude Include="NeuralNet\TrainingSample.h">
       <Filter>头文件\NeuralNet</Filter>
+    </ClInclude>
+    <ClInclude Include="Selfplay\GameGenerator.h">
+      <Filter>头文件\Selfplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Selfplay\SelfplayParam.h">
+      <Filter>头文件\Selfplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Selfplay\SelfplayThread.h">
+      <Filter>头文件\Selfplay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
