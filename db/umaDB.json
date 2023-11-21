@@ -4907,5 +4907,36 @@
       71
     ],
     "star": 5
+  },
+  "110701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      108,
+      107,
+      117,
+      96
+    ],
+    "freeRaces": [],
+    "gameId": 110701,
+    "name": "tap-dance-city",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      46,
+      52,
+      59,
+      69,
+      71
+    ],
+    "star": 5
   }
 }
