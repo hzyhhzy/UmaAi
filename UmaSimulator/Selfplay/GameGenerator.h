@@ -14,7 +14,7 @@ class GameGenerator
   int nextGamePointer;
 
   Game randomOpening();
-  Game randomizeBeforeOutput(const Game& game);
+  Game randomizeBeforeOutput(const Game& game0);
   void newGameBatch();
   bool isVaildGame(const Game& game);
 public:

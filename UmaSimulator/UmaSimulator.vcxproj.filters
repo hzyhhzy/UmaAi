@@ -162,9 +162,6 @@
     <ClCompile Include="websocket.cpp">
       <Filter>源文件\Websocket</Filter>
     </ClCompile>
-    <ClCompile Include="MainCommands\TestCardsSingle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="NeuralNet\TrainingSample.cpp">
       <Filter>源文件\NeuralNet</Filter>
     </ClCompile>
@@ -178,6 +175,9 @@
       <Filter>源文件\Selfplay</Filter>
     </ClCompile>
     <ClCompile Include="MainCommands\Selfplay.cpp">
+      <Filter>源文件\MainCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCommands\TestCardsSingle.cpp">
       <Filter>源文件\MainCommands</Filter>
     </ClCompile>
   </ItemGroup>
