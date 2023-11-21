@@ -9,7 +9,7 @@ const int LATEST_NNINPUT_VERSION = 1;
 //如果没带佐岳，则 佐岳卡参数、npc10为空
 const int NNINPUT_CHANNELS_SEARCHPARAM_V1 = 3; //搜索参数占多少个通道
 const int NNINPUT_CHANNELS_GAMEGLOBAL_V1 = 354;//Game里除了卡和人头的通道数
-const int NNINPUT_CHANNELS_CARD_V1 = 67; //每个支援卡参数占多少通道，不包括这个人头的羁绊之类的
+const int NNINPUT_CHANNELS_CARD_V1 = 72; //每个支援卡参数占多少通道，不包括这个人头的羁绊之类的
 const int NNINPUT_CHANNELS_PERSON_V1 = 74; //每个人头多少通道，不包括支援卡参数
 const int NNINPUT_CHANNELS_V1 = NNINPUT_CHANNELS_SEARCHPARAM_V1 +
                                 NNINPUT_CHANNELS_GAMEGLOBAL_V1 +
