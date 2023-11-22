@@ -8,6 +8,7 @@ struct SelfplayParam
   int maxSampleNum = 100 * 1024 * 16;
   int batchsize = 128;
   std::string modelPath = "";
+  std::string exportDataDir = "./selfplay/0/";
   int sampleNumEachFile = 1024;
 
   //log(searchN)~ÕýÌ¬·Ö²¼(searchN_logmean,searchN_logstdev)

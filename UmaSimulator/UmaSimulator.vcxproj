@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="External\cnpy\cnpy.cpp" />
     <ClCompile Include="External\mathFunctions.cpp" />
     <ClCompile Include="External\utils.cpp" />
     <ClCompile Include="GameDatabase\GameConfig.cpp" />
@@ -184,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
+    <ClInclude Include="External\cnpy\cnpy.h" />
     <ClInclude Include="External\mathFunctions.h" />
     <ClInclude Include="External\rang.hpp" />
     <ClInclude Include="External\termcolor.hpp" />

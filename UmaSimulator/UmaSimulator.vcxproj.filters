@@ -180,6 +180,9 @@
     <ClCompile Include="MainCommands\TestCardsSingle.cpp">
       <Filter>源文件\MainCommands</Filter>
     </ClCompile>
+    <ClCompile Include="External\cnpy\cnpy.cpp">
+      <Filter>源文件\External</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Selfplay\SelfplayThread.h">
       <Filter>头文件\Selfplay</Filter>
+    </ClInclude>
+    <ClInclude Include="External\cnpy\cnpy.h">
+      <Filter>头文件\External</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
