@@ -86,7 +86,7 @@ void SelfplayThread::writeDataToFile()
   {
     memcpy(nnInputBuf.data() + i * NNINPUT_CHANNELS_V1, sampleData[i].nnInputVector, sizeof(float) * NNINPUT_CHANNELS_V1);
     memcpy(nnOutputBuf.data() + i * NNOUTPUT_CHANNELS_V1, &sampleData[i].policyTarget, sizeof(ModelOutputPolicyV1));
-    memcpy(nnOutputBuf.data() + i * NNOUTPUT_CHANNELS_V1 + sizeof(ModelOutputPolicyV1), &sampleData[i].valueTarget , sizeof(ModelOutputValueV1));
+    memcpy(nnOutputBuf.data() + i * NNOUTPUT_CHANNELS_V1 + NNOUTPUT_CHANNELS_POLICY_V1, &sampleData[i].valueTarget, sizeof(ModelOutputValueV1));
   }
 
   string outputPath = param.exportDataDir;
