@@ -42662,8 +42662,7 @@
         "initialJiBan": 20,
         "saiHou": 1,
         "hintProbIncrease": 40,
-        "deYiLv": 20,
-        "xunLian": 15
+        "deYiLv": 20
       },
       {
         "filled": true,
@@ -42696,8 +42695,7 @@
         "initialJiBan": 21,
         "saiHou": 2,
         "hintProbIncrease": 42,
-        "deYiLv": 25,
-        "xunLian": 15
+        "deYiLv": 25
       },
       {
         "filled": true,
@@ -42730,8 +42728,7 @@
         "initialJiBan": 23,
         "saiHou": 3,
         "hintProbIncrease": 45,
-        "deYiLv": 30,
-        "xunLian": 15
+        "deYiLv": 30
       },
       {
         "filled": true,
@@ -42764,8 +42761,7 @@
         "initialJiBan": 25,
         "saiHou": 5,
         "hintProbIncrease": 47,
-        "deYiLv": 35,
-        "xunLian": 15
+        "deYiLv": 35
       },
       {
         "filled": true,
@@ -42798,12 +42794,19 @@
         "initialJiBan": 25,
         "saiHou": 5,
         "hintProbIncrease": 50,
-        "deYiLv": 35,
-        "xunLian": 15
+        "deYiLv": 35
       }
     ],
-    "uniqueEffectType": 0,
-    "uniqueEffectSummary": "编入支援卡种类>=5时，训练效果提高 (15)"
+    "uniqueEffectType": 21,
+    "uniqueEffectSummary": "编入支援卡种类>=5时，训练效果提高 (15)",
+    "uniqueEffectParam": [
+      103,
+      5,
+      8,
+      15,
+      0,
+      0
+    ]
   },
   "30086": {
     "cardId": 30086,
@@ -43199,8 +43202,7 @@
         "saiHou": 1,
         "hintProbIncrease": 20,
         "deYiLv": 10,
-        "wizVitalBonus": 3,
-        "xunLian": 10
+        "wizVitalBonus": 3
       },
       {
         "filled": true,
@@ -43233,8 +43235,7 @@
         "saiHou": 2,
         "hintProbIncrease": 20,
         "deYiLv": 12,
-        "wizVitalBonus": 3,
-        "xunLian": 10
+        "wizVitalBonus": 3
       },
       {
         "filled": true,
@@ -43267,8 +43268,7 @@
         "saiHou": 3,
         "hintProbIncrease": 20,
         "deYiLv": 15,
-        "wizVitalBonus": 4,
-        "xunLian": 10
+        "wizVitalBonus": 4
       },
       {
         "filled": true,
@@ -43301,8 +43301,7 @@
         "saiHou": 5,
         "hintProbIncrease": 20,
         "deYiLv": 17,
-        "wizVitalBonus": 4,
-        "xunLian": 10
+        "wizVitalBonus": 4
       },
       {
         "filled": true,
@@ -43335,12 +43334,19 @@
         "saiHou": 5,
         "hintProbIncrease": 20,
         "deYiLv": 20,
-        "wizVitalBonus": 5,
-        "xunLian": 10
+        "wizVitalBonus": 5
       }
     ],
-    "uniqueEffectType": 0,
-    "uniqueEffectSummary": "编入支援卡种类>=4时，训练效果提高 (10)"
+    "uniqueEffectType": 21,
+    "uniqueEffectSummary": "编入支援卡种类>=4时，训练效果提高 (10)",
+    "uniqueEffectParam": [
+      103,
+      4,
+      8,
+      10,
+      0,
+      0
+    ]
   },
   "30089": {
     "cardId": 30089,
@@ -58553,7 +58559,7 @@
         ],
         "youQing": 25,
         "ganJing": 0,
-        "xunLian": 15,
+        "xunLian": 5,
         "initialJiBan": 0,
         "saiHou": 5,
         "hintProbIncrease": 20,
@@ -58587,7 +58593,7 @@
         ],
         "youQing": 26,
         "ganJing": 20,
-        "xunLian": 15,
+        "xunLian": 5,
         "initialJiBan": 0,
         "saiHou": 6,
         "hintProbIncrease": 20,
@@ -58621,7 +58627,7 @@
         ],
         "youQing": 27,
         "ganJing": 40,
-        "xunLian": 15,
+        "xunLian": 5,
         "initialJiBan": 0,
         "saiHou": 7,
         "hintProbIncrease": 20,
@@ -58655,7 +58661,7 @@
         ],
         "youQing": 28,
         "ganJing": 40,
-        "xunLian": 15,
+        "xunLian": 5,
         "initialJiBan": 15,
         "saiHou": 8,
         "hintProbIncrease": 20,
@@ -58689,14 +58695,22 @@
         ],
         "youQing": 30,
         "ganJing": 40,
-        "xunLian": 15,
+        "xunLian": 5,
         "initialJiBan": 30,
         "saiHou": 10,
         "hintProbIncrease": 20,
         "deYiLv": 65
       }
     ],
-    "uniqueEffectType": 0,
-    "uniqueEffectSummary": "编入支援卡种类>=4时，训练效果提高 (10)"
+    "uniqueEffectType": 21,
+    "uniqueEffectSummary": "编入支援卡种类>=4时，训练效果提高 (10)",
+    "uniqueEffectParam": [
+      103,
+      4,
+      8,
+      10,
+      0,
+      0
+    ]
   }
 }

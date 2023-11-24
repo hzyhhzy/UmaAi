@@ -1,9 +1,18 @@
 {
-  "noColor":false, //是否关闭颜色，若出现乱码则可以设成true
-	"radicalFactor":5,//激进度，平时0~5比较合适，冲刺高分可以设5~10
-	"threadNum":12,//线程数
-	"searchN":12288,//越大越准确但是越慢，建议不要低于3000，电脑配置较好可以15000
-	"useWebsocket":false,//是否使用websocket与小黑板通信，否则使用文件通信
-	"debugPrint":false,
-	"role":"default" //ai的提示词。"default"为经典版，"greencap"为绿帽，"aoi"为桐生院
+    "noColor": false,
+    "radicalFactor": 5,
+    "threadNum": 12,
+    "searchN": 12288,
+    "debugPrint": false,
+    "role": "default",
+    "extraCardData": true,
+    "testAiScore": {
+        "umaId": 106501,
+        "umaStars": 5,
+        "cards": [ 301604,301724,301614,300194,300114,300374 ],
+        "zhongmaBlue": [ 18, 0, 0, 0, 0 ],
+        "zhongmaBonus": [ 10, 10, 30, 0, 10, 70 ],
+        "allowedDebuffs": [ false, false, false, false, true, false, false, false, false ],
+        "totalGames": 50000
+    }
 }

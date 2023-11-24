@@ -225,6 +225,39 @@
     ],
     "star": 5
   },
+  "100303": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      110,
+      128,
+      94,
+      98,
+      120
+    ],
+    "freeRaces": [],
+    "gameId": 100303,
+    "name": "tokai-teio",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      25,
+      30,
+      33,
+      43,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "100401": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -2540,6 +2573,39 @@
     ],
     "star": 5
   },
+  "103902": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      8,
+      8,
+      14,
+      0
+    ],
+    "fiveStatusInitial": [
+      106,
+      93,
+      138,
+      112,
+      101
+    ],
+    "freeRaces": [],
+    "gameId": 103902,
+    "name": "kawakami-princess",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      33,
+      43,
+      44,
+      52,
+      56,
+      59,
+      68
+    ],
+    "star": 5
+  },
   "104001": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -4837,6 +4903,37 @@
       55,
       59,
       67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "110701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      108,
+      107,
+      117,
+      96
+    ],
+    "freeRaces": [],
+    "gameId": 110701,
+    "name": "tap-dance-city",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      46,
+      52,
+      59,
       69,
       71
     ],
