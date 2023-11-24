@@ -36,7 +36,8 @@ TestConfig test;
 int umaId = 106501;//太阳神，15速15力加成
 int umaStars = 5;
 //int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
-int cards[6] = { 301604,301524,301704,301344,300114,300374 };//友人，波旁，神鹰，乌拉拉，风神，根皇帝
+int cards[6] = { 301604,301724,301614,301304,300114,300374 };//友人，智麦昆，速神鹰，根凯斯，根风神，根皇帝
+  
 int zhongmaBlue[5] = { 18,0,0,0,0 };
 int zhongmaBonus[6] = { 10,10,30,0,10,70 };
 bool allowedDebuffs[9] = { false, false, false, false, false, false, true, false, false };//第二年可以不消第几个debuff。第五个是智力，第七个是强心脏
@@ -197,5 +198,6 @@ void main_testAiScore()
   }
 
   cout << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
+  system("pause");
 
 }

@@ -20,7 +20,7 @@ struct Game
   int16_t maxVital;//体力上限
   bool isQieZhe;//切者
   bool isAiJiao;//爱娇
-  int16_t failureRateBias;//失败率改变量。练习上手=2，练习下手=-2
+  int16_t failureRateBias;//失败率改变量。练习上手=-2，练习下手=2
   int16_t fiveStatus[5];//五维属性，1200以上不减半
   int16_t fiveStatusLimit[5];//五维属性上限，1200以上不减半
   int16_t skillPt;//技能点

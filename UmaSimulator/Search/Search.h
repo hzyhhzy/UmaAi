@@ -40,8 +40,11 @@ public:
   // 2.对于evaluateSingleAction，把eachSamplingNum局游戏拆成threadNumInGame组，每组一个线程(Evaluator)。每个线程分成eachSamplingNum/(threadNumInGame*batchsize)小组，每小组batchsize局游戏，依次计算每个小组的分数，都计算完毕之后整合起来
   // 3.如果要跑很多局（例如跑谱），会同时跑threadGame局，总线程数为threadGame*threadNumInGame。若eachSamplingNum较小batchsize较大，可以让threadNumInGame=1
   // 嵌套结构：Search(threadGame个)->Evaluator(threadGame*threadNumInGame个)->Model(1个)
-  
+
+  Search(Model* model, int batchSize, int threadNumInGame);
   Search(Model* model, int batchSize, int threadNumInGame, SearchParam param0);
+
+  void setParam(SearchParam param0);
 
 
 
@@ -61,7 +64,7 @@ public:
 
   //导出上次搜索的数据作为训练样本
   TrainingSample exportTrainingSample(float policyDelta = 50);//policyDelta是policy的软化系数
-
+  
 private:
   std::vector<Evaluator> evaluators;
   std::vector<ModelOutputValueV1> NNresultBuf;
@@ -82,6 +85,6 @@ private:
     Action action
   );
 
-  void addNormDistribution(double mean, double stdev);//在finalScoreDistribution中加上平均值为mean，标准差为stdev的正态分布，总权重为
+  void addNormDistribution(double mean, double stdev);//在finalScoreDistribution中加上平均值为mean，标准差为stdev的正态分布，总权重为NormDistributionSampling
 
 };

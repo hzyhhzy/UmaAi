@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="External\cnpy\cnpy.cpp" />
     <ClCompile Include="External\mathFunctions.cpp" />
     <ClCompile Include="External\utils.cpp" />
     <ClCompile Include="GameDatabase\GameConfig.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="MainCommands\Benchmark.cpp" />
     <ClCompile Include="MainCommands\MainAi.cpp" />
     <ClCompile Include="MainCommands\PlayerPlay.cpp" />
+    <ClCompile Include="MainCommands\Selfplay.cpp" />
     <ClCompile Include="MainCommands\TestAiScore.cpp" />
     <ClCompile Include="MainCommands\TestCardsSingle.cpp" />
     <ClCompile Include="NeuralNet\Evaluator.cpp" />
@@ -172,6 +174,9 @@
     <ClCompile Include="NeuralNet\TrainingSample.cpp" />
     <ClCompile Include="Search\Search.cpp" />
     <ClCompile Include="Search\SearchParam.cpp" />
+    <ClCompile Include="Selfplay\GameGenerator.cpp" />
+    <ClCompile Include="Selfplay\SelfplayParam.cpp" />
+    <ClCompile Include="Selfplay\SelfplayThread.cpp" />
     <ClCompile Include="SupportCard\CardEffect.cpp" />
     <ClCompile Include="SupportCard\SupportCard.cpp" />
     <ClCompile Include="Tests\test1.cpp" />
@@ -184,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
+    <ClInclude Include="External\cnpy\cnpy.h" />
     <ClInclude Include="External\mathFunctions.h" />
     <ClInclude Include="External\rang.hpp" />
     <ClInclude Include="External\termcolor.hpp" />
@@ -204,6 +210,10 @@
     <ClInclude Include="NeuralNet\TrainingSample.h" />
     <ClInclude Include="Search\Search.h" />
     <ClInclude Include="Search\SearchParam.h" />
+    <ClInclude Include="Selfplay\GameGenerator.h" />
+    <ClInclude Include="Selfplay\SelfplayParam.h" />
+    <ClInclude Include="Selfplay\SelfplayThread.h" />
+    <ClInclude Include="SupportCard\CardEffect.h" />
     <ClInclude Include="SupportCard\SupportCard.h" />
     <ClInclude Include="Tests\TestConfig.h" />
     <ClInclude Include="Tests\tests.h" />

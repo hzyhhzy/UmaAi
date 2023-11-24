@@ -6,7 +6,7 @@
 using namespace std;
 
 
-void SupportCard::getNNInputV1(float* buf) const
+void SupportCard::getNNInputV1(float* buf, const Game& game) const
 {
   //每张卡的初始属性加成、初始羁绊、赛后加成不需要告诉神经网络，只告诉总赛后
 
@@ -39,7 +39,7 @@ void SupportCard::getNNInputV1(float* buf) const
   //固有
   assert(isDBCard);
   const int BasicC = 29;
-  const int UniqueTypeC = 25;
+  const int UniqueTypeC = 30;
   const int UniqueEffectC = 13;
   static_assert(BasicC + UniqueTypeC + UniqueEffectC == NNINPUT_CHANNELS_CARD_V1);
   float* bufUniqueType = buf + BasicC;
@@ -211,6 +211,25 @@ void SupportCard::getNNInputV1(float* buf) const
   else if (uniqueEffectType == 18)
   {
     bufUniqueType[18] = 1.0;
+  }
+  else if (uniqueEffectType == 21)
+  {
+    int cardTypeCount[7] = { 0,0,0,0,0,0,0 };
+    for (int i = 0; i < 6; i++)
+    {
+      int t = game.cardParam[i].cardType;
+      assert(t <= 6 && t >= 0);
+      cardTypeCount[t]++;
+    }
+    int cardTypes = 0;
+    for (int i = 0; i < 7; i++)
+      if (cardTypeCount[i] > 0)
+        cardTypes++;
+    if (cardTypes >= uniqueEffectParam[1])
+    {
+      bufUniqueType[21] = 1.0;
+      writeUniqueEffect(uniqueEffectParam[2], uniqueEffectParam[3]);
+    }
   }
   else
   {
@@ -585,7 +604,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     for (int i = 0; i < normalCardCount; i++)
     {
       const Person& p = persons[i];
-      cardParam[p.cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * i);
+      cardParam[p.cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * i, *this);
       p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * i, *this, i);
     }
     //npc
@@ -610,7 +629,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     for (int i = 0; i < normalCardCount; i++)
     {
       const Person& p = persons[i];
-      cardParam[p.cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * i);
+      cardParam[p.cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * i, *this);
       p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * i, *this, i);
     }
     //npc
@@ -626,7 +645,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
       p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (16 + i), *this, 15 + i);
     }
     //佐岳
-    cardParam[persons[17].cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * 6);
+    cardParam[persons[17].cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * 6, *this);
     persons[17].getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * 18, *this, 17);
   }
 

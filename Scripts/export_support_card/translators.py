@@ -87,7 +87,7 @@ class TrainersLegendTranslator(Translator):
     def _ensure_translate_mapping(self):
         if self.translate_mapping:
             return
-        target_file = f"output/trainer_legend_translate_{self.locale}.json"
+        target_file = f"output/text_data.json"
         self.translate_mapping = get_json_from_github_file(
             self.p, target_file, 'MinamiChiwa', 'Trainers-Legend-G-TRANS', 'master', f'localized_data/text_data.json')
     

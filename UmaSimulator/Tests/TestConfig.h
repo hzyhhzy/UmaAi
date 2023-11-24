@@ -87,6 +87,6 @@ public:
         return ss.str();
     }
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(TestConfig, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus, allowedDebuffs)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(TestConfig, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus, allowedDebuffs, totalGames);
 };
 

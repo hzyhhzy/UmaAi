@@ -9,7 +9,9 @@
 
 int main()
 {
-#if defined UMAAI_TESTCARDSSINGLE
+#if defined UMAAI_SELFPLAY
+	main_selfplay();
+#elif defined UMAAI_TESTCARDSSINGLE
 	main_testCardsSingle();
 #elif defined UMAAI_TESTSCORE
 	main_testAiScore();

@@ -107,3 +107,4 @@ TrainingSample Search::exportTrainingSample(float policyDelta)
   gameLastSearch.getNNInputV1(tdata.nnInputVector,param);
   return tdata;
 }
+

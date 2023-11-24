@@ -250,6 +250,23 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                 break;
             case 18:   // 佐岳
                 break;
+            case 21:   // 耐万籁，编入4种支援卡时+10训练
+              {
+                int cardTypeCount[7] = { 0,0,0,0,0,0,0 };
+                for (int i = 0; i < 6; i++)
+                {
+                  int t = game.cardParam[i].cardType;
+                  assert(t <= 6 && t >= 0);
+                  cardTypeCount[t]++;
+                }
+                int cardTypes = 0;
+                for (int i = 0; i < 7; i++)
+                  if (cardTypeCount[i] > 0)
+                    cardTypes++;
+                if (cardTypes >= args[1])
+                  effect.apply(args[2], args[3]);
+              }
+              break;
             default:   // type == 0
                 if (uniqueEffectType != 0) {
                     cout << "未知固有 #" << uniqueEffectType << endl;
