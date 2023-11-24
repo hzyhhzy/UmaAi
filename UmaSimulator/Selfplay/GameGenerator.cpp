@@ -13,16 +13,128 @@ GameGenerator::GameGenerator(SelfplayParam param, Model* model) :param(param)
 
 Game GameGenerator::randomOpening()
 {
-  //先固定一个卡组，以后再加其他卡和马
+  std::exponential_distribution<double> expDistr(1.0);
+  std::normal_distribution<double> normDistr(0.0, 1.0);
+  std::uniform_real_distribution<double> uniDistr(0.0, 1.0);
+
   Game game;
   int umaId = 101101;//草上飞
   int umaStars = 5;
   int cards[6] = { 301604,301724,301614,301304,300114,300374 };//友人，智麦昆，速神鹰，根凯斯，根风神，根皇帝
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 10,10,30,0,10,70 };
+
+  if (param.cardRandType == 0)
+  {
+  }
+  else if (param.cardRandType == 1)
+  {
+    //随机马
+    umaId = -1;
+    while (!GameDatabase::AllUmas.count(umaId))
+      umaId = 100000 + (rand() % 200) * 100 + rand() % 2 + 1;
+
+    //随机友人卡等级
+    if (rand() % 2 == 0)
+      cards[0] = 301600 + rand() % 5;
+    else
+      cards[0] = 301604;
+
+    //随机找5张别的SSR卡
+    for (int c = 1; c < 6; c++)
+    {
+      int cardId = -1;
+      while (true)
+      {
+        cardId = 30000 + rand() % 300;
+        int cardIdLv50 = cardId * 10 + 4;
+        if (!GameDatabase::AllCards.count(cardIdLv50))
+        {
+          continue;
+        }
+        if (GameDatabase::AllCards[cardIdLv50].cardType >= 5)
+        {
+          continue;
+        }
+        //检查是否有重复的larc link
+        if (GameDatabase::AllCards[cardIdLv50].larc_isLink)
+        {
+          bool repeatedLink = false;
+          for (int i = 0; i < c; i++)
+          {
+            if (GameDatabase::AllCards[cards[i]].larc_linkSpecialEffect == GameDatabase::AllCards[cardIdLv50].larc_linkSpecialEffect)
+            {
+              repeatedLink = true;
+              break;
+            }
+          }
+          if (repeatedLink)
+            continue;
+        }
+        break;
+      }
+      if (rand() % 8 == 0)
+        cardId = cardId * 10 + rand() % 5;
+      else
+        cardId = cardId * 10 + 4;
+      cards[c] = cardId;
+    }
+
+    //随机蓝因子和剧本因子
+    {
+      vector<int> blueStarProb = { 1,1,2,15 };
+      vector<int> blueTypeProb = { 15,1,3,1,1 };
+      std::discrete_distribution<> blueStarProbDis(blueStarProb.begin(), blueStarProb.end());
+      std::discrete_distribution<> blueTypeProbDis(blueTypeProb.begin(), blueTypeProb.end());
+      for (int i = 0; i < 5; i++)
+        zhongmaBlue[i] = 0;
+      for (int i = 0; i < 6; i++)
+      {
+        zhongmaBlue[blueTypeProbDis(rand)] += blueStarProbDis(rand);
+      }
+
+      vector<int> scenarioStarProb = { 1,2,5,15 };
+      vector<int> scenarioTypeProb = { 1,1,1 };//青春杯 大师杯 凯旋门
+      std::discrete_distribution<> scenarioStarProbDis(scenarioStarProb.begin(), scenarioStarProb.end());
+      std::discrete_distribution<> scenarioTypeProbDis(scenarioTypeProb.begin(), scenarioTypeProb.end());
+      for (int i = 0; i < 5; i++)
+        zhongmaBonus[i] = 0;
+      for (int i = 0; i < 6; i++)
+      {
+        int type = scenarioTypeProbDis(rand);
+        int star = scenarioStarProbDis(rand);
+        int bonus = star == 3 ? 8 :
+          star == 2 ? 4 :
+          star == 1 ? 2 :
+          0;
+        if (type == 0)
+        {
+          zhongmaBonus[2] += bonus;
+          zhongmaBonus[4] += bonus;
+        }
+        else if (type == 1)
+        {
+          zhongmaBonus[0] += bonus;
+          zhongmaBonus[2] += bonus;
+        }
+        else if (type == 2)
+        {
+          zhongmaBonus[1] += bonus;
+          zhongmaBonus[2] += bonus;
+        }
+        else assert(false);
+      }
+      zhongmaBonus[5] = expDistr(rand) * 70.0;
+      if (zhongmaBonus[5] > 300)zhongmaBonus[5] = 300;
+    }
+  }
+
+
+
+
+
   
   game.newGame(rand, false, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
-  std::exponential_distribution<double> expDistr(1.0);
 
   //给属性加随机
   int r = rand() % 100;

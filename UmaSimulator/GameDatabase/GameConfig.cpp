@@ -8,7 +8,7 @@ double GameConfig::radicalFactor = 1;
 int GameConfig::threadNum = 12;
 int GameConfig::searchN = 12288;
 bool GameConfig::debugPrint = false;
-bool GameConfig::useWebsocket = false;
+bool GameConfig::useWebsocket = true;
 string GameConfig::role = "default";
 
 void GameConfig::load(const string& path)
