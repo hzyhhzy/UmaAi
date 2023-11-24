@@ -129,11 +129,15 @@ def prepareUniqueEffect(card, ueffect):
         # 其他固有，只复制参数和映射ID
         if ueffect["type"] == 102:
             utype = 3
+            useParam = True
         elif ueffect["type"] == 103:
-            utype = 0   # 不处理103
+            utype = 21   # 改为21号固有，参见文档
+            ueffect["uniqueParams"][3] = ueffect["uniqueParams"][2]
+            ueffect["uniqueParams"][2] = 8  # 调整参数顺序，方便AI处理
+            useParam = True
         else:
             utype = ueffect["type"] - 100    # 直接映射
-        useParam = True
+            useParam = True        
 
     card["uniqueEffectType"] = utype
     card["uniqueEffectSummary"] = ueffect["summary"]

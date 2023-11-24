@@ -73,9 +73,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <ExternalIncludePath>D:\boost_1_83_0;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>D:\boost_1_83_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <ExternalIncludePath>D:\boost_1_83_0;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>D:\boost_1_83_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -211,6 +215,7 @@
     <ClInclude Include="Selfplay\SelfplayThread.h" />
     <ClInclude Include="SupportCard\CardEffect.h" />
     <ClInclude Include="SupportCard\SupportCard.h" />
+    <ClInclude Include="Tests\TestConfig.h" />
     <ClInclude Include="Tests\tests.h" />
     <ClInclude Include="websocket.h" />
   </ItemGroup>

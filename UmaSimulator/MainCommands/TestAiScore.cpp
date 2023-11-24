@@ -15,6 +15,7 @@
 
 #include "../GameDatabase/GameDatabase.h"
 #include "../GameDatabase/GameConfig.h"
+#include "../Tests/TestConfig.h"
 
 using namespace std;
 
@@ -26,9 +27,11 @@ const int searchN = handWrittenEvaluationTest ? 1 : 2048;
 SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
 const bool recordGame = false;
 
-const int totalGames = handWrittenEvaluationTest ? 500000 : 10000000;
-const int gamesEveryThread = totalGames / threadNum;
+int totalGames = handWrittenEvaluationTest ? 50000 : 10000000;
+int gamesEveryThread = totalGames / threadNum;
 
+TestConfig test;
+/*
 //int umaId = 108401;//¹ÈË®£¬30Á¦¼Ó³É
 int umaId = 106501;//Ì«ÑôÉñ£¬15ËÙ15Á¦¼Ó³É
 int umaStars = 5;
@@ -37,8 +40,8 @@ int cards[6] = { 301604,301724,301614,301304,300114,300374 };//ÓÑÈË£¬ÖÇÂóÀ¥£¬ËÙÉ
   
 int zhongmaBlue[5] = { 18,0,0,0,0 };
 int zhongmaBonus[6] = { 10,10,30,0,10,70 };
-bool allowedDebuffs[9] = { false, false, false, false, true, false, false, false, false };//µÚ¶şÄê¿ÉÒÔ²»ÏûµÚ¼¸¸ödebuff¡£µÚÎå¸öÊÇÖÇÁ¦£¬µÚÆß¸öÊÇÇ¿ĞÄÔà
-
+bool allowedDebuffs[9] = { false, false, false, false, false, false, true, false, false };//µÚ¶şÄê¿ÉÒÔ²»ÏûµÚ¼¸¸ödebuff¡£µÚÎå¸öÊÇÖÇÁ¦£¬µÚÆß¸öÊÇÇ¿ĞÄÔà
+*/
 std::atomic<double> totalScore = 0;
 std::atomic<double> totalScoreSqr = 0;
 
@@ -46,6 +49,7 @@ std::atomic<int> bestScore = 0;
 std::atomic<int> n = 0;
 std::mutex printLock;
 vector<atomic<int>> segmentStats= vector<atomic<int>>(700);//100·ÖÒ»¶Î£¬700¶Î
+std::atomic<int> printThreshold = 2187;
 
 void printProgress(int value, int maxValue, int width)
 {
@@ -53,7 +57,7 @@ void printProgress(int value, int maxValue, int width)
     double rate = (double)value / maxValue;
     int n = rate * width;
     n = clamp(n, 0, maxValue);
-    buf << "[" << string(n, '=') << ">" << string(width - n, ' ') << "] " << setprecision(3) << rate * 100 << "% ";
+    buf << "[" << string(n, '=') << ">" << string(width - n, ' ') << "] " << setprecision((int)(2+rate)) << rate * 100 << "% ";
 
     std::lock_guard<std::mutex> lock(printLock);    // ·µ»ØÊ±×Ô¶¯ÊÍ·ÅcoutËø
     cout << buf.str() << "\033[0F" << endl;
@@ -68,15 +72,16 @@ void worker()
   Search search(NULL, 16, threadNumInner, searchParam);
 
   vector<Game> gameHistory;
+
   if (recordGame)
     gameHistory.resize(TOTAL_TURN);
 
   for (int gamenum = 0; gamenum < gamesEveryThread; gamenum++)
   {
     Game game;
-    game.newGame(rand, false, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
+    game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
     for (int i = 0; i < 9; i++)
-      game.larc_allowedDebuffsFirstLarc[i] = allowedDebuffs[i];
+      game.larc_allowedDebuffsFirstLarc[i] = test.allowedDebuffs[i];
 
     while(!game.isEnd())
     {
@@ -103,7 +108,7 @@ void worker()
       game.printFinalStats();
     }
     n += 1;
-    //printProgress(n, totalGames, 70);
+    printProgress(n, totalGames, 70);
     totalScore += score;
     totalScoreSqr += score * score;
     for (int i = 0; i < 700; i++)
@@ -116,6 +121,18 @@ void worker()
     }
 
     int bestScoreOld = bestScore;
+    if (score > bestScore + printThreshold)
+    {
+        if (printThreshold < 100)
+        {
+            std::lock_guard<std::mutex> lock(printLock);
+            game.printFinalStats();
+            //cout << printThreshold << endl;
+            cout.flush();
+        }
+        printThreshold = printThreshold / 3;
+    }
+
     while (score > bestScoreOld && !bestScore.compare_exchange_weak(bestScoreOld, score)) {
       // Èç¹ûval´óÓÚold_max£¬²¢ÇÒmax_valµÄÖµ»¹ÊÇold_max£¬ÄÇÃ´¾Í½«max_valµÄÖµ¸üĞÂÎªval
       // Èç¹ûmax_valµÄÖµÒÑ¾­±»ÆäËûÏß³Ì¸üĞÂ£¬ÄÇÃ´¾Í²»×öÈÎºÎÊÂÇé£¬²¢ÇÒold_max»á±»ÉèÖÃÎªmax_valµÄĞÂÖµ
@@ -128,7 +145,7 @@ void worker()
     {
       if(!handWrittenEvaluationTest)
         game.printFinalStats();
-      cout << n << "¾Ö£¬ËÑË÷Á¿=" << searchN << "£¬Æ½¾ù·Ö" << totalScore / n << "£¬±ê×¼²î" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "£¬×î¸ß·Ö" << bestScore << endl;
+      cout << endl << n << "¾Ö£¬ËÑË÷Á¿=" << searchN << "£¬Æ½¾ù·Ö" << totalScore / n << "£¬±ê×¼²î" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "£¬×î¸ß·Ö" << bestScore << endl;
       //for (int i=0; i<400; ++i)
       //    cout << i*100 << ",";
       //cout << endl;
@@ -159,13 +176,18 @@ void worker()
 void main_testAiScore()
 {
   // ¼ì²é¹¤×÷Ä¿Â¼
-  GameDatabase::loadUmas("../db/umaDB.json");
-  //GameDatabase::loadCards("../db/card");
-  GameDatabase::loadDBCards("../db/cardDB.json");
+  GameDatabase::loadTranslation("db/text_data.json");
+  GameDatabase::loadUmas("db/umaDB.json");
+  GameDatabase::loadDBCards("db/cardDB.json");
 
+  test = TestConfig::loadFile("aiConfig.json");  
+  cout << test.explain() << endl;
+  totalGames = test.totalGames;
+  gamesEveryThread = totalGames / threadNum;
 
   for (int i = 0; i < 200; i++)segmentStats[i] = 0;
 
+  cout << "ÕıÔÚ²âÊÔ¡­¡­\033[?25l" << endl;
 
   std::vector<std::thread> threads;
   for (int i = 0; i < threadNum; ++i) {
@@ -176,5 +198,6 @@ void main_testAiScore()
   }
 
   cout << n << "¾Ö£¬ËÑË÷Á¿=" << searchN << "£¬Æ½¾ù·Ö" << totalScore / n << "£¬±ê×¼²î" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "£¬×î¸ß·Ö" << bestScore << endl;
+  system("pause");
 
 }

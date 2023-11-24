@@ -251,15 +251,14 @@
     <ClInclude Include="External\mathFunctions.h">
       <Filter>头文件\External</Filter>
     </ClInclude>
-    <ClInclude Include="SupportCard\CardEffect.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="websocket.h">
       <Filter>源文件\Websocket</Filter>
     </ClInclude>
     <ClInclude Include="NeuralNet\TrainingSample.h">
       <Filter>头文件\NeuralNet</Filter>
     </ClInclude>
+    <ClInclude Include="Tests\TestConfig.h">
+      <Filter>头文件\Tests</Filter>
     <ClInclude Include="Selfplay\GameGenerator.h">
       <Filter>头文件\Selfplay</Filter>
     </ClInclude>
