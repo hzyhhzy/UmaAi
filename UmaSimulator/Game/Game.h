@@ -178,7 +178,7 @@ struct Game
   void addVitalZuoyue(int value);//佐岳卡事件，增加体力，考虑回复量加成
   void handleFriendUnlock(std::mt19937_64& rand);//友人外出解锁
   void handleFriendOutgoing();//友人外出
-  void handleFriendClickEvent(std::mt19937_64& rand);//友人事件（お疲れ様）
+  void handleFriendClickEvent(std::mt19937_64& rand, int atTrain);//友人事件（お疲れ様）
   void handleFriendFixedEvent();//友人固定事件，拜年+结算
 
   //显示事件

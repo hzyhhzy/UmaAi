@@ -18,7 +18,8 @@ public:
   static const int NormalRacePtBonus;//常规比赛pt加成
 
   //剧本卡相关
-  static const double FriendUnlockOutgoingProbEveryTurn;//每回合解锁外出的概率
+  static const double FriendUnlockOutgoingProbEveryTurnLowFriendship;//每回合解锁外出的概率，羁绊小于60
+  static const double FriendUnlockOutgoingProbEveryTurnHighFriendship;//每回合解锁外出的概率，羁绊大于等于60
   //static const double FriendEventProb;//友人事件概率//常数0.4写死在对应函数里了
   static const double ZuoyueVitalBonusSSR[5];//佐岳SSR卡的回复量倍数（满破1.8）
   static const double ZuoyueVitalBonusR[5];//佐岳R卡的回复量倍数

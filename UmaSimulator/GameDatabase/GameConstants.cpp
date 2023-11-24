@@ -14,7 +14,8 @@ const int GameConstants::LArcTrainBonusEvery5Percent[41] = { 0, 5, 8, 10, 13, 15
 const int GameConstants::LArcLinkCharas[7] = { 1007, 1014, 1025, 1049, 1067, 1070, 1107 }; // 船，神鹰，茶座，庆典，光钻，天狼星，跳舞城
 const int GameConstants::LArcLinkEffect[7] = { 8, 9, 4, 12, 5, 6, 5 }; // 爱娇（属性），练习（适性），体力+上限，pt，心情，充电，心情
 
-const double GameConstants::FriendUnlockOutgoingProbEveryTurn = 0.1;
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.07;
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.14;
 
 const double GameConstants::ZuoyueVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//佐岳SSR卡的回复量倍数（满破1.8）
 const double GameConstants::ZuoyueVitalBonusR[5] = { 1.3,1.32,1.35,1.37,1.4 };//佐岳R卡的回复量倍数
