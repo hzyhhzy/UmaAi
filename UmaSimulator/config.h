@@ -1,8 +1,8 @@
 #pragma once
 
-//#define UMAAI_MAINAI   //使用ai
+#define UMAAI_MAINAI   //使用ai
 //#define UMAAI_TESTSCORE   //测试ai分数
-#define UMAAI_TESTCARDSSINGLE   //测卡，控制五张卡不变只改变一张
+//#define UMAAI_TESTCARDSSINGLE   //测卡，控制五张卡不变只改变一张
 //#define UMAAI_SIMULATOR   //养马模拟器
 //#define UMAAI_SELFPLAY   //跑数据（用于神经网络训练）
 

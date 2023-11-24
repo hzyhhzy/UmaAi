@@ -1,11 +1,4 @@
 {
-    "noColor": false,
-    "radicalFactor": 5,
-    "threadNum": 12,
-    "searchN": 12288,
-    "debugPrint": false,
-    "role": "default",
-    "extraCardData": true,
     "testAiScore": {
         "umaId": 106501,
         "umaStars": 5,
