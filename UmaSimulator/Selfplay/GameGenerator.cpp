@@ -99,6 +99,9 @@ Game GameGenerator::randomOpening()
   if (param.cardRandType == 2)
     randomizeUmaCardParam(game);
 
+  game.eventStrength += int(normDistr(rand) * 5.0 + 0.5);
+  if (game.eventStrength < 0)game.eventStrength = 0;
+
   //给属性加随机
   int r = rand() % 100;
   if (r < 10)//随机扣属性

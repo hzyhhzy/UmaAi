@@ -148,6 +148,7 @@ void main_ai()
 		}
 
 		bool suc = game.loadGameFromJson(jsonStr);
+		game.eventStrength = GameConfig::eventStrength;
 
 		if (!suc)
 		{
@@ -173,6 +174,7 @@ void main_ai()
 			scoreFirstTurn = 0;
 			scoreLastTurn = 0;
 		}
+
 		game.print();
 		cout << endl;
 		cout << rpText["name"] << rpText["calc"] << endl;

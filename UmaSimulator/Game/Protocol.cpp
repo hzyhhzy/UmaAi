@@ -49,6 +49,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     failureRateBias = j["failureRateBias"];
     for (int i = 0; i < 5; i++)
       fiveStatus[i] = j["fiveStatus"][i];
+    eventStrength = GameConstants::EventStrengthDefault;
     for (int i = 0; i < 5; i++)
       fiveStatusLimit[i] = j["fiveStatusLimit"][i];
 

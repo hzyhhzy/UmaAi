@@ -9,7 +9,7 @@ void GameGenerator::loadCardRankFile()
   for (int cardtype = 0; cardtype < 5; cardtype++)
   {
     assert(cardRank[cardtype].size() == 0);
-    string path = "../db/cardtest/testcard_" + to_string(cardtype) + ".txt";
+    string path = "./db/cardtest/testcard_" + to_string(cardtype) + ".txt";
     ifstream fs(path);
     int N;
     fs >> N;

@@ -16,6 +16,7 @@ public:
   //各种游戏参数
   static const int NormalRaceFiveStatusBonus;//常规比赛属性加成=3
   static const int NormalRacePtBonus;//常规比赛pt加成
+  static const int EventStrengthDefault;//每回合有40%概率随机一个属性以及pt +EventStrengthDefault，模拟支援卡事件
 
   //剧本卡相关
   static const double FriendUnlockOutgoingProbEveryTurnLowFriendship;//每回合解锁外出的概率，羁绊小于60

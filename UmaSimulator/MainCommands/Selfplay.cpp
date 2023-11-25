@@ -19,7 +19,7 @@ void main_selfplay()
   GameDatabase::loadDBCards("./db/cardDB.json");
   SelfplayParam param;
   //param.sampleNumEachFile = 16;
-  param.threadNum = 12;
+  param.threadNum = 16;
   std::filesystem::create_directories(param.exportDataDir);
 
   Model* modelPtr;

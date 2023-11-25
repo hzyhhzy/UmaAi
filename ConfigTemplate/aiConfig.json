@@ -1,6 +1,7 @@
 {
   "noColor":false, //是否关闭颜色，若出现乱码则可以设成true
 	"radicalFactor":5,//激进度，平时0~5比较合适，冲刺高分可以设5~10
+	"eventStrength":20,//支援卡事件强度，默认20，一般不用调。调高会提高估分且更倾向于控属性
 	"threadNum":12,//线程数
 	"searchN":12288,//越大越准确但是越慢，建议不要低于3000，电脑配置较好可以15000
 	"useWebsocket":false,//是否使用websocket与小黑板通信，否则使用文件通信

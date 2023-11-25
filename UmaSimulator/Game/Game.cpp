@@ -14,6 +14,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   umaId = newUmaId;
   for (int i = 0; i < 5; i++)
     fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
+  eventStrength = GameConstants::EventStrengthDefault;
   turn = 0;
   vital = 100;
   maxVital = 100;
@@ -1922,9 +1923,10 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   {
     int card = rand() % normalCardCount;
     addJiBan(card, 5);
-    addAllStatus(4);
-    skillPt += 5;
-    printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，全属性+4，pt+20");
+    //addAllStatus(4);
+    addStatus(rand() % 5, eventStrength);
+    skillPt += eventStrength;
+    printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，pt和随机属性+" + to_string(eventStrength));
 
     if (randBool(rand, 0.2))
     {

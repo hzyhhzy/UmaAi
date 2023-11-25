@@ -99,7 +99,7 @@ void worker()
     }
     //cout << termcolor::red << "Óý³É½áÊø£¡" << termcolor::reset << endl;
     int score = game.finalScore();
-    if (score > 39200)
+    if (score > 42000)
     {
       if (recordGame)
         for (int i = 0; i < TOTAL_TURN; i++)

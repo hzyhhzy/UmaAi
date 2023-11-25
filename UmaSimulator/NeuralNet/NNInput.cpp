@@ -393,6 +393,9 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   }
   c += 5;
 
+  buf[c] = (eventStrength - 20) * 0.2;
+  c++;
+
   assert(turn < TOTAL_TURN);
   buf[c + turn] = 1.0;
   c += TOTAL_TURN;
@@ -586,7 +589,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   //larc_ssValue
   //larc_ssFailRate
 
-  c += 10;//reserve
+  c += 9;//reserve
 
   assert(c == NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1);
 

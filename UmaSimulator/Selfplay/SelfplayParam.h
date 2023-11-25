@@ -9,11 +9,11 @@ struct SelfplayParam
   int batchsize = 128;
   std::string modelPath = "";
   std::string exportDataDir = "./selfplay/0/";
-  int sampleNumEachFile = 1024;
+  int sampleNumEachFile = 2048;
 
   //log(searchN)~ÕýÌ¬·Ö²¼(searchN_logmean,searchN_logstdev)
-  double searchN_logmean = 6.93;//1024
-  double searchN_logstdev = 0.5;
+  double searchN_logmean = 6.9;//1024
+  double searchN_logstdev = 0.0;
   int searchN_min = 128;
   int searchN_max = 65536;
 
