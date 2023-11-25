@@ -60,7 +60,7 @@ TrainingSample SelfplayThread::generateSingleSample()
 
   sp.samplingNum = int(exp(param.searchN_logmean + normDistr(rand) * param.searchN_logstdev) + 0.5);
   if (sp.samplingNum > param.searchN_max)sp.samplingNum = param.searchN_max;
-  if (sp.samplingNum < 1)sp.samplingNum = 1;
+  if (sp.samplingNum < param.searchN_min)sp.samplingNum = param.searchN_min;
   //让param.samplingNum是整batch
   {
     int batchEveryThread = (sp.samplingNum - 1) / (param.threadNumInner * param.batchsize) + 1;//相当于向上取整

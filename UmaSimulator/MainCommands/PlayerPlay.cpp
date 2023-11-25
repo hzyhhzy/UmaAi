@@ -9,6 +9,7 @@
 #include "../Game/Game.h"
 #include "../Search/Search.h"
 #include "../NeuralNet/TrainingSample.h"
+#include "../Selfplay/GameGenerator.h"
 using namespace std;
 
 
@@ -40,11 +41,14 @@ void main_playerPlay()
   int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,150 };
+
+  //GameGenerator gameGenerator(SelfplayParam(), NULL);
   for (int gamenum = 0; gamenum < 100000; gamenum++)
   {
     Search search(NULL, 128, threadNum, param);
     Game game;
     game.newGame(rand, true, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
+    //game = gameGenerator.get();
     //for (int i = 0; i < 36; i++)
     //{
     //  Action act = { 4,false, false, false, false };

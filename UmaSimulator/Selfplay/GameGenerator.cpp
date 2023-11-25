@@ -1,3 +1,4 @@
+#include <fstream>
 #include "GameGenerator.h"
 #include "../Search/SearchParam.h"
 using namespace std;
@@ -9,6 +10,8 @@ GameGenerator::GameGenerator(SelfplayParam param, Model* model) :param(param)
   rand = std::mt19937_64(rd());
   gameBuf.resize(param.batchsize);
   nextGamePointer = param.batchsize;
+  if (param.cardRandType == 1 || param.cardRandType == 2)
+    loadCardRankFile();
 }
 
 Game GameGenerator::randomOpening()
@@ -27,63 +30,20 @@ Game GameGenerator::randomOpening()
   if (param.cardRandType == 0)
   {
   }
-  else if (param.cardRandType == 1)
+  else if (param.cardRandType == 1 || param.cardRandType == 2)
   {
     //随机马
     umaId = -1;
     while (!GameDatabase::AllUmas.count(umaId))
       umaId = 100000 + (rand() % 200) * 100 + rand() % 2 + 1;
 
-    //随机友人卡等级
-    if (rand() % 2 == 0)
-      cards[0] = 301600 + rand() % 5;
-    else
-      cards[0] = 301604;
-
-    //随机找5张别的SSR卡
-    for (int c = 1; c < 6; c++)
-    {
-      int cardId = -1;
-      while (true)
-      {
-        cardId = 30000 + rand() % 300;
-        int cardIdLv50 = cardId * 10 + 4;
-        if (!GameDatabase::AllCards.count(cardIdLv50))
-        {
-          continue;
-        }
-        if (GameDatabase::AllCards[cardIdLv50].cardType >= 5)
-        {
-          continue;
-        }
-        //检查是否有重复的larc link
-        if (GameDatabase::AllCards[cardIdLv50].larc_isLink)
-        {
-          bool repeatedLink = false;
-          for (int i = 0; i < c; i++)
-          {
-            if (GameDatabase::AllCards[cards[i]].larc_linkSpecialEffect == GameDatabase::AllCards[cardIdLv50].larc_linkSpecialEffect)
-            {
-              repeatedLink = true;
-              break;
-            }
-          }
-          if (repeatedLink)
-            continue;
-        }
-        break;
-      }
-      if (rand() % 8 == 0)
-        cardId = cardId * 10 + rand() % 5;
-      else
-        cardId = cardId * 10 + 4;
-      cards[c] = cardId;
-    }
+    auto cards1 = getRandomCardset(param.cardRandType == 1);
+    for (int i = 0; i < 6; i++)cards[i] = cards1[i];
 
     //随机蓝因子和剧本因子
     {
-      vector<int> blueStarProb = { 1,1,2,15 };
-      vector<int> blueTypeProb = { 15,1,3,1,1 };
+      vector<int> blueStarProb = { 1,1,5,100 };
+      vector<int> blueTypeProb = { 20,1,3,1,1 };
       std::discrete_distribution<> blueStarProbDis(blueStarProb.begin(), blueStarProb.end());
       std::discrete_distribution<> blueTypeProbDis(blueTypeProb.begin(), blueTypeProb.end());
       for (int i = 0; i < 5; i++)
@@ -135,19 +95,22 @@ Game GameGenerator::randomOpening()
 
   
   game.newGame(rand, false, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
+  
+  if (param.cardRandType == 2)
+    randomizeUmaCardParam(game);
 
   //给属性加随机
   int r = rand() % 100;
   if (r < 10)//随机扣属性
   {
-    double mean = -expDistr(rand) * 20;
+    double mean = -expDistr(rand) * 30;
     for (int i = 0; i < 5; i++)
       game.addStatus(i, int(expDistr(rand) * mean));
     game.skillPt += int(2 * expDistr(rand) * mean);
   }
   else if (r < 80)//随机加属性，模拟胡局
   {
-    double mean = expDistr(rand) * 30;
+    double mean = expDistr(rand) * 50;
     for (int i = 0; i < 5; i++)
       game.addStatus(i, int(expDistr(rand) * mean));
     game.skillPt += int(2 * expDistr(rand) * mean);
@@ -214,14 +177,14 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
   int type0 = rand() % 100;
   if (type0 < 30)//随机扣属性
   {
-    double mean = -expDistr(rand) * 30;
+    double mean = -expDistr(rand) * 50;
     for (int i = 0; i < 5; i++)
       game.addStatus(i, int(expDistr(rand) * mean));
     game.skillPt += int(2 * expDistr(rand) * mean);
   }
   else if (type0 < 80)//随机加属性，模拟胡局
   {
-    double mean = expDistr(rand) * 50;
+    double mean = expDistr(rand) * 80;
     for (int i = 0; i < 5; i++)
       game.addStatus(i, int(expDistr(rand) * mean));
     game.skillPt += int(2 * expDistr(rand) * mean);
@@ -245,26 +208,29 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
 
 void GameGenerator::newGameBatch()
 {
+  const int maxTurn = TOTAL_TURN - 8;//7个比赛回合，因此最多训练TOTAL_TURN - 7次
+  vector<int> turnsEveryGame(param.batchsize);
   evaluator.gameInput.resize(param.batchsize);
   for (int i = 0; i < param.batchsize; i++)
   {
     evaluator.gameInput[i] = randomOpening();
+    turnsEveryGame[i] = rand() % maxTurn;
   }
   //往后进行一些回合
-  //std::normal_distribution<double> norm(0.0, 1.0);
-  int maxTurn = TOTAL_TURN - 8;//7个比赛回合，因此最多训练TOTAL_TURN - 7次
-  int gameTurn = rand() % maxTurn;
   SearchParam defaultSearchParam = { 1024,TOTAL_TURN,5.0 };//这个参数随意取，只用于生成开局时输入神经网络
-  for (int depth = 0; depth < gameTurn; depth++)
+  for (int depth = 0; depth < maxTurn; depth++)
   {
     evaluator.evaluateSelf(1, defaultSearchParam);//计算policy
 
 
     for (int i = 0; i < param.batchsize; i++)
     {
-      assert(!evaluator.gameInput[i].isEnd());//以后的剧本如果难以保证这个，可以删掉这个assert
-      evaluator.gameInput[i].applyTrainingAndNextTurn(rand, evaluator.actionResults[i]);
-      assert(isVaildGame(evaluator.gameInput[i]));//以后的剧本如果难以保证这个，可以删掉这个assert
+      if (turnsEveryGame[i] > depth)
+      {
+        assert(!evaluator.gameInput[i].isEnd());//以后的剧本如果难以保证这个，可以删掉这个assert
+        evaluator.gameInput[i].applyTrainingAndNextTurn(rand, evaluator.actionResults[i]);
+        assert(isVaildGame(evaluator.gameInput[i]));//以后的剧本如果难以保证这个，可以删掉这个assert
+      }
     }
   }
   for (int i = 0; i < param.batchsize; i++)

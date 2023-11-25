@@ -183,6 +183,9 @@
     <ClCompile Include="External\cnpy\cnpy.cpp">
       <Filter>源文件\External</Filter>
     </ClCompile>
+    <ClCompile Include="Selfplay\RandomCardsetHelper.cpp">
+      <Filter>源文件\Selfplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">

@@ -36,25 +36,29 @@ void main_testCardsSingle()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  //一速三根一智，测根卡
-  //int umaId = 101101;//草上飞，20速10力加成
-  //int cards[6] = { 301604,301524,301474,300194,300114,0};//友人，智好歌剧，速宝穴，根乌拉拉，根风神，-   控制变量的五张卡都不要用link
+  int toTestCardType = 4;//速耐力根智
 
+  //一速三根一智，测速卡
+  //int umaId = 101101;//草上飞，20速10力加成
+  //int cards[6] = { 301604,300374,300194,300114,301534,0};//友人，根皇帝，根乌拉拉，根风神，智好歌剧，-   控制变量的五张卡都不要用link
+  
   //二速二耐一智，测耐卡
-  int umaId = 102402;//花炮，10速10耐10智加成
-  int cards[6] = { 301604,301524,301474,301614,301654,0 };//友人，智好歌剧，速宝穴，速神鹰，耐谷水，-   控制变量的五张卡都不要用link，但耐卡没神鹰
+  //int umaId = 102402;//花炮，10速10耐10智加成
+  //int cards[6] = { 301604,301524,301474,301614,301654,0 };//友人，智好歌剧，速宝穴，速神鹰，耐谷水，-   控制变量的五张卡都不要用link，但耐卡没神鹰
 
   //二速二力一智，测力卡
   //int umaId = 102402;//花炮，10速10耐10智加成
   //int cards[6] = { 301604,301524,301474,301074,301564,0 };//友人，智好歌剧，速宝穴，速司机，力奇锐骏，-   控制变量的五张卡都不要用link
+   
+  //一速三根一智，测根卡
+  //int umaId = 101101;//草上飞，20速10力加成
+  //int cards[6] = { 301604,301524,301474,300194,300114,0};//友人，智好歌剧，速宝穴，根乌拉拉，根风神，-   控制变量的五张卡都不要用link
+
 
   //一速三根一智，测智卡
-  //int umaId = 101101;//草上飞，20速10力加成
-  //int cards[6] = { 301604,300374,300194,300114,301474,0};//友人，根皇帝，根乌拉拉，根风神，速宝穴，-   控制变量的五张卡都不要用link
+  int umaId = 101101;//草上飞，20速10力加成
+  int cards[6] = { 301604,300374,300194,300114,301474,0};//友人，根皇帝，根乌拉拉，根风神，速宝穴，-   控制变量的五张卡都不要用link
   
-  //一速三根一智，测速卡
-  //int umaId = 101101;//草上飞，20速10力加成
-  //int cards[6] = { 301604,300374,300194,300114,301534,0};//友人，根皇帝，根乌拉拉，根风神，智好歌剧，-   控制变量的五张卡都不要用link
 
   int umaStars = 5;
   int zhongmaBlue[5] = { 18,0,0,0,0 };
@@ -63,11 +67,10 @@ void main_testCardsSingle()
   
 
   double radicalFactor = 10;//激进度
-  int searchN = 50000;
+  int searchN = 100000;
   int threadNum = 12;
   //int initialStatusBonus = 40;//考虑到手写逻辑比实际ai分低，所以增加初始属性
   //但是手写逻辑不会控属性，还是不加了
-  int toTestCardType = 1;//速耐力根智
 
 
   SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
@@ -150,6 +153,16 @@ void main_testCardsSingle()
     cout << "胡局分数=\033[1;32m" << int(tr.result.value) << "\033[0m  平均分数=\033[1;32m" << int(tr.result.scoreMean) << "\033[0m" << endl;
 
   }
+  //保存结果，主要是用于selfplay随机选卡
+  string resultname = "testcard_" + to_string(toTestCardType) + ".txt";
+  ofstream fs(resultname);
+  fs << allResult.size() << endl;
+  for (int i = 0; i < allResult.size(); i++)
+  {
+    auto tr = allResult[i];
+    fs << tr.cardId << " " << tr.result.value << " " << tr.result.scoreMean << endl;
+  }
+  fs.close();
 
 
   cout << endl;
