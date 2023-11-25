@@ -82,8 +82,10 @@ if __name__ == '__main__':
                         default=0, help='which gpu, -1 means cpu')
     parser.add_argument('--batchsize', type=int,
                         default=1024, help='batch size')
-    parser.add_argument('--lr', type=float, default=5e-4, help='learning rate')
-    parser.add_argument('--weightdecay', type=float, default=2e-4, help='weight decay')
+    parser.add_argument('--lr', type=float, default=2e-3, help='learning rate')
+    parser.add_argument('--wd', type=float, default=2e-6, help='weight decay')
+    parser.add_argument('--lrhead', type=float, default=3e-4, help='learning rate of input head')
+    parser.add_argument('--wdhead', type=float, default=1e-4, help='weight decay of input head')
     parser.add_argument('--rollbackthreshold', type=float, default=1e10, help='if loss increased this value, roll back 2*infostep steps')
     args = parser.parse_args()
 
@@ -158,16 +160,14 @@ if __name__ == '__main__':
     if model_type == 'res' or model_type == 'tl':
         # lowl2param是一些密集型神经网络参数(mlp,cnn等)，对lr和weightdecay更敏感，使用float32计算，几乎不需要weightdecay
         # otherparam需要高的weightdecay
-        lowl2param = list(map(id, model.inputhead.parameters()))
-        otherparam = list(filter(lambda p: id(p) not in lowl2param, model.parameters()))
-        lowl2param = list(filter(lambda p: id(p) in lowl2param, model.parameters()))
-        if (args.weightdecay == -1):
-            args.weightdecay = 1e-6
+        headparam = list(map(id, model.inputhead.parameters()))
+        otherparam = list(filter(lambda p: id(p) not in headparam, model.parameters()))
+        headparam = list(filter(lambda p: id(p) in headparam, model.parameters()))
         optimizer = optim.Adam([{'params': otherparam},
-                                {'params': lowl2param, 'lr': args.lr, 'weight_decay': 1e-7}],
-                               lr=args.lr, weight_decay=args.weightdecay)
+                                {'params': headparam, 'lr': args.lrhead, 'weight_decay': args.wd}],
+                               lr=args.lr, weight_decay=args.wd)
     else:
-        optimizer = optim.Adam(model.parameters(),lr=args.lr,weight_decay=args.weightdecay)
+        optimizer = optim.Adam(model.parameters(),lr=args.lr,weight_decay=args.wd)
     model.train()
 
     #for rollbacking if loss explodes
