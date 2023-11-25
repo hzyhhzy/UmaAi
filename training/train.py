@@ -164,7 +164,7 @@ if __name__ == '__main__':
         otherparam = list(filter(lambda p: id(p) not in headparam, model.parameters()))
         headparam = list(filter(lambda p: id(p) in headparam, model.parameters()))
         optimizer = optim.Adam([{'params': otherparam},
-                                {'params': headparam, 'lr': args.lrhead, 'weight_decay': args.wd}],
+                                {'params': headparam, 'lr': args.lrhead, 'weight_decay': args.wdhead}],
                                lr=args.lr, weight_decay=args.wd)
     else:
         optimizer = optim.Adam(model.parameters(),lr=args.lr,weight_decay=args.wd)
