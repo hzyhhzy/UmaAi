@@ -99,7 +99,7 @@ void worker()
     }
     //cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
     int score = game.finalScore();
-    if (score > 39200)
+    if (score > 42000)
     {
       if (recordGame)
         for (int i = 0; i < TOTAL_TURN; i++)
@@ -176,11 +176,11 @@ void worker()
 void main_testAiScore()
 {
   // 检查工作目录
-  GameDatabase::loadTranslation("db/text_data.json");
-  GameDatabase::loadUmas("db/umaDB.json");
-  GameDatabase::loadDBCards("db/cardDB.json");
+  GameDatabase::loadTranslation("../db/text_data.json");
+  GameDatabase::loadUmas("../db/umaDB.json");
+  GameDatabase::loadDBCards("../db/cardDB.json");
 
-  test = TestConfig::loadFile("aiConfig.json");  
+  test = TestConfig::loadFile("../ConfigTemplate/testConfig.json");  
   cout << test.explain() << endl;
   totalGames = test.totalGames;
   gamesEveryThread = totalGames / threadNum;

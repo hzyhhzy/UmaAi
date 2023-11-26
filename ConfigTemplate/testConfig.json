@@ -1,11 +1,4 @@
 {
-    "noColor": false,
-    "radicalFactor": 5,
-    "threadNum": 12,
-    "searchN": 12288,
-    "debugPrint": false,
-    "role": "default",
-    "extraCardData": true,
     "testAiScore": {
         "umaId": 106501,
         "umaStars": 5,
@@ -13,6 +6,6 @@
         "zhongmaBlue": [ 18, 0, 0, 0, 0 ],
         "zhongmaBonus": [ 10, 10, 30, 0, 10, 70 ],
         "allowedDebuffs": [ false, false, false, false, true, false, false, false, false ],
-        "totalGames": 50000
+        "totalGames": 500000
     }
 }

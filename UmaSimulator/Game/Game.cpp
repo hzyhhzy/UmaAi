@@ -14,6 +14,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   umaId = newUmaId;
   for (int i = 0; i < 5; i++)
     fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
+  eventStrength = GameConstants::EventStrengthDefault;
   turn = 0;
   vital = 100;
   maxVital = 100;
@@ -748,7 +749,7 @@ void Game::handleFriendUnlock(std::mt19937_64& rand)
     addJiBan(17, 5);
   }
 }
-void Game::handleFriendClickEvent(std::mt19937_64& rand)
+void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
 {
   if (!larc_zuoyueFirstClick)
   {
@@ -776,23 +777,67 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand)
     if (!larc_isAbroad)
     {
       printEvents("触发友人充电");
-      //从电量没满的人里面随机挑五个
-      int toChargePersons[5] = { -1,-1,-1,-1,-1 };
-      int count = 0;
+      //先在当前训练里面找人，然后从电量没满的人里面随机挑五个
+      bool isNotFullCharge[15];
+
       for (int i = 0; i < 15; i++)
       {
         if (persons[i].larc_charge < 3)
         {
-          count += 1;
-          if (count <= 5)
-            toChargePersons[count - 1] = i;
-          else
+          isNotFullCharge[i] = true;
+        }
+        else
+          isNotFullCharge[i] = false;
+      }
+
+
+      int toChargePersons[5] = { -1,-1,-1,-1,-1 };
+      int count = 0;
+
+
+
+      for (int i = 0; i < 5; i++)
+      {
+        int p = personDistribution[atTrain][i];
+        if (p < 0)break;//没人
+        int personType = persons[p].personType;
+
+        if (personType == 2 || personType == 3)//可充电人头
+        {
+          if (persons[p].larc_charge < 3)
           {
-            int y = rand() % count;
-            if (y < 5)toChargePersons[y] = i;
+            toChargePersons[count] = p;
+            count++;
+            isNotFullCharge[p] = false;
           }
         }
       }
+      int fixedcount = count;//在当前训练，必充
+
+      vector<int> randomChargePersons;//不在当前训练的非满格人头
+      for (int i = 0; i < 15; i++)
+      {
+        if (isNotFullCharge[i])
+        {
+          randomChargePersons.push_back(i);
+        }
+      }
+      if (randomChargePersons.size() >= 2)
+      {
+        std::shuffle(randomChargePersons.begin(), randomChargePersons.end(), rand);
+      }
+      int requiredRandomPersons = 5 - fixedcount;
+      if (requiredRandomPersons > randomChargePersons.size())
+        requiredRandomPersons = randomChargePersons.size();
+
+      for (int i = 0; i < requiredRandomPersons; i++)
+      {
+        toChargePersons[count] = randomChargePersons[i];
+        assert(count < 5);
+        count += 1;
+      }
+
+
       for (int i = 0; i < 5; i++)
       {
         if (toChargePersons[i] != -1)
@@ -1366,7 +1411,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
       }
 
       if (clickZuoyue)
-        handleFriendClickEvent(rand);
+        handleFriendClickEvent(rand, action.train);
       
       if (larc_isAbroad)
         larc_shixingPt += larc_shixingPtGainAbroad[action.train];
@@ -1860,7 +1905,10 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   //友人会不会解锁出行
   if (larc_zuoyueFirstClick && (!larc_zuoyueOutgoingRefused) && (!larc_zuoyueOutgoingUnlocked))
   {
-    if (randBool(rand, GameConstants::FriendUnlockOutgoingProbEveryTurn))//启动
+    double unlockOutgoingProb = persons[17].friendship >= 60 ?
+      GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship :
+      GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship;
+    if (randBool(rand, unlockOutgoingProb))//启动
     {
       handleFriendUnlock(rand);
     }
@@ -1875,9 +1923,10 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   {
     int card = rand() % normalCardCount;
     addJiBan(card, 5);
-    addAllStatus(4);
-    skillPt += 5;
-    printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，全属性+4，pt+20");
+    //addAllStatus(4);
+    addStatus(rand() % 5, eventStrength);
+    skillPt += eventStrength;
+    printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，pt和随机属性+" + to_string(eventStrength));
 
     if (randBool(rand, 0.2))
     {

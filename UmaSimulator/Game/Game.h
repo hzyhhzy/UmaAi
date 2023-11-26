@@ -15,6 +15,7 @@ struct Game
   //基本状态，不包括当前回合的训练信息
   int32_t umaId;//马娘编号，见KnownUmas.cpp
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
+  int16_t eventStrength;//每回合有40%概率加这么多属性，模拟支援卡事件
   int16_t turn;//回合数，从0开始，到77结束
   int16_t vital;//体力，叫做“vital”是因为游戏里就这样叫的
   int16_t maxVital;//体力上限
@@ -178,7 +179,7 @@ struct Game
   void addVitalZuoyue(int value);//佐岳卡事件，增加体力，考虑回复量加成
   void handleFriendUnlock(std::mt19937_64& rand);//友人外出解锁
   void handleFriendOutgoing();//友人外出
-  void handleFriendClickEvent(std::mt19937_64& rand);//友人事件（お疲れ様）
+  void handleFriendClickEvent(std::mt19937_64& rand, int atTrain);//友人事件（お疲れ様）
   void handleFriendFixedEvent();//友人固定事件，拜年+结算
 
   //显示事件

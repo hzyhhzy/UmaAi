@@ -60,7 +60,7 @@ TrainingSample SelfplayThread::generateSingleSample()
 
   sp.samplingNum = int(exp(param.searchN_logmean + normDistr(rand) * param.searchN_logstdev) + 0.5);
   if (sp.samplingNum > param.searchN_max)sp.samplingNum = param.searchN_max;
-  if (sp.samplingNum < 1)sp.samplingNum = 1;
+  if (sp.samplingNum < param.searchN_min)sp.samplingNum = param.searchN_min;
   //让param.samplingNum是整batch
   {
     int batchEveryThread = (sp.samplingNum - 1) / (param.threadNumInner * param.batchsize) + 1;//相当于向上取整
@@ -86,7 +86,7 @@ void SelfplayThread::writeDataToFile()
   {
     memcpy(nnInputBuf.data() + i * NNINPUT_CHANNELS_V1, sampleData[i].nnInputVector, sizeof(float) * NNINPUT_CHANNELS_V1);
     memcpy(nnOutputBuf.data() + i * NNOUTPUT_CHANNELS_V1, &sampleData[i].policyTarget, sizeof(ModelOutputPolicyV1));
-    memcpy(nnOutputBuf.data() + i * NNOUTPUT_CHANNELS_V1 + sizeof(ModelOutputPolicyV1), &sampleData[i].valueTarget , sizeof(ModelOutputValueV1));
+    memcpy(nnOutputBuf.data() + i * NNOUTPUT_CHANNELS_V1 + NNOUTPUT_CHANNELS_POLICY_V1, &sampleData[i].valueTarget, sizeof(ModelOutputValueV1));
   }
 
   string outputPath = param.exportDataDir;

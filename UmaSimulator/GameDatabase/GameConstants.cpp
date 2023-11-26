@@ -8,13 +8,15 @@ const int GameConstants::BasicFiveStatusLimit[5] = { 2000,2000,1800,1800,1400 };
 
 const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3
 const int GameConstants::NormalRacePtBonus = 45;//常规比赛pt加成,G1=45
+const int GameConstants::EventStrengthDefault = 20;
 
 const int GameConstants::UpgradeId50pEachTrain[5] = { 3,1,2,0,4 };
 const int GameConstants::LArcTrainBonusEvery5Percent[41] = { 0, 5, 8, 10, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 30, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37, 38, 38, 39, 39, 40 };
 const int GameConstants::LArcLinkCharas[7] = { 1007, 1014, 1025, 1049, 1067, 1070, 1107 }; // 船，神鹰，茶座，庆典，光钻，天狼星，跳舞城
 const int GameConstants::LArcLinkEffect[7] = { 8, 9, 4, 12, 5, 6, 5 }; // 爱娇（属性），练习（适性），体力+上限，pt，心情，充电，心情
 
-const double GameConstants::FriendUnlockOutgoingProbEveryTurn = 0.1;
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.07;
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.14;
 
 const double GameConstants::ZuoyueVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//佐岳SSR卡的回复量倍数（满破1.8）
 const double GameConstants::ZuoyueVitalBonusR[5] = { 1.3,1.32,1.35,1.37,1.4 };//佐岳R卡的回复量倍数

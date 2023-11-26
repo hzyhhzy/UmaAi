@@ -1,14 +1,16 @@
 ﻿#include "GameConfig.h"
+#include "../GameDatabase/GameConstants.h"
 
 using namespace std;
 using json = nlohmann::json;
 
 bool GameConfig::noColor = false;
 double GameConfig::radicalFactor = 1;
+int GameConfig::eventStrength = 20;
 int GameConfig::threadNum = 12;
 int GameConfig::searchN = 12288;
 bool GameConfig::debugPrint = false;
-bool GameConfig::useWebsocket = false;
+bool GameConfig::useWebsocket = true;
 string GameConfig::role = "default";
 
 void GameConfig::load(const string& path)
@@ -21,7 +23,8 @@ void GameConfig::load(const string& path)
       // 创建默认配置JSON
       json j = {
         {"noColor", GameConfig::noColor},
-        {"radicalFactor", GameConfig::radicalFactor},
+				{"radicalFactor", GameConfig::radicalFactor},
+				{"eventStrength", GameConfig::eventStrength},
         {"threadNum", GameConfig::threadNum},
         {"searchN", GameConfig::searchN},
         {"debugPrint", GameConfig::debugPrint},
@@ -44,6 +47,7 @@ void GameConfig::load(const string& path)
 
 		j.at("noColor").get_to(GameConfig::noColor);
 		j.at("radicalFactor").get_to(GameConfig::radicalFactor);
+		j.at("eventStrength").get_to(GameConfig::eventStrength);
 		j.at("threadNum").get_to(GameConfig::threadNum);
 		j.at("searchN").get_to(GameConfig::searchN);
 		j.at("debugPrint").get_to(GameConfig::debugPrint);

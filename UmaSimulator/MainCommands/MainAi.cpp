@@ -101,8 +101,8 @@ void main_ai()
 	GameDatabase::loadDBCards("./db/cardDB.json"); //cardDB数据已经很完善了
 	loadRole();   // roleplay
 
-	//string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/packets/currentGS.json";
-	string currentGameStagePath = "./gameData/thisTurn.json";
+	string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/GameData/thisTurn.json";
+	//string currentGameStagePath = "./gameData/thisTurn.json";
 
 	SearchParam searchParam = { GameConfig::searchN,TOTAL_TURN,GameConfig::radicalFactor };
 
@@ -148,6 +148,7 @@ void main_ai()
 		}
 
 		bool suc = game.loadGameFromJson(jsonStr);
+		game.eventStrength = GameConfig::eventStrength;
 
 		if (!suc)
 		{
@@ -173,6 +174,7 @@ void main_ai()
 			scoreFirstTurn = 0;
 			scoreLastTurn = 0;
 		}
+
 		game.print();
 		cout << endl;
 		cout << rpText["name"] << rpText["calc"] << endl;

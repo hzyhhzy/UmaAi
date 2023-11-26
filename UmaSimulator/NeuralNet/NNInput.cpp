@@ -325,7 +325,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   c++;
   buf[c] = 1.0 * log(param.maxRadicalFactor + 1.0);
   c++;
-  buf[c] = 0.3 * (log(param.samplingNum + 1.0) - 7.0);
+  buf[c] = 0.0 * (log(param.samplingNum + 1.0) - 7.0);
   c++;
 
   assert(c == NNINPUT_CHANNELS_SEARCHPARAM_V1);
@@ -392,6 +392,9 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     buf[c + i] = fiveStatusBonus[i] * 0.05;
   }
   c += 5;
+
+  buf[c] = (eventStrength - 20) * 0.2;
+  c++;
 
   assert(turn < TOTAL_TURN);
   buf[c + turn] = 1.0;
@@ -586,7 +589,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   //larc_ssValue
   //larc_ssFailRate
 
-  c += 10;//reserve
+  c += 9;//reserve
 
   assert(c == NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1);
 
