@@ -46,7 +46,7 @@ public:
             ss << ifs.rdbuf();
             ifs.close();
             json j = json::parse(ss.str(), nullptr, true, true);
-            TestConfig ret = j["testAiScore"];
+            TestConfig ret = j;
             return ret;
         }
         catch (exception& e)
@@ -88,5 +88,30 @@ public:
     }
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(TestConfig, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus, allowedDebuffs, totalGames);
+};
+
+class GameResult
+{
+public:
+    int fiveStatus[5] = { 0, 0, 0, 0, 0 };
+    int fiveStatusScore = 0;
+    int finalScore = 0; // = fiveStatusScore + skillScore
+    int skillPt = 0;
+
+public:
+    int skillScore() { return finalScore - fiveStatusScore; }
+    const string explain() {
+        stringstream ss;
+        for (int i = 0; i < 5; ++i) {
+            int value = fiveStatus[i];
+            if (value > 1200)
+                value = 600 + value / 2;    // >1200时减半（去括号）
+            ss << AttrNames[i] << "=" << value << " ";
+        }
+        ss << "Pt=" << skillPt << " ";
+        ss << "总分 " << fiveStatusScore << "+" << skillScore() << "=" << finalScore;
+        return ss.str();
+    }
+
 };
 

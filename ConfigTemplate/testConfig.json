@@ -1,11 +1,9 @@
 {
-    "testAiScore": {
-        "umaId": 106501,
-        "umaStars": 5,
-        "cards": [ 301604,301724,301614,300194,300114,300374 ],
-        "zhongmaBlue": [ 18, 0, 0, 0, 0 ],
-        "zhongmaBonus": [ 10, 10, 30, 0, 10, 70 ],
-        "allowedDebuffs": [ false, false, false, false, true, false, false, false, false ],
-        "totalGames": 500000
-    }
+    "umaId": 106501,
+    "umaStars": 5,
+    "cards": [ 301604,301724,301614,300194,300114,300374 ],
+    "zhongmaBlue": [ 18, 0, 0, 0, 0 ],
+    "zhongmaBonus": [ 10, 10, 30, 0, 10, 70 ],
+    "allowedDebuffs": [ false, false, false, false, true, false, false, false, false ],
+    "totalGames": 50000
 }

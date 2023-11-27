@@ -8,6 +8,7 @@
 #include <atomic>
 #include <mutex>
 #include <cmath>
+#include <map>
 #include "../Game/Game.h"
 #include "../NeuralNet/Evaluator.h"
 #include "../Search/Search.h"
@@ -31,6 +32,18 @@ int totalGames = handWrittenEvaluationTest ? 50000 : 10000000;
 int gamesEveryThread = totalGames / threadNum;
 
 TestConfig test;
+
+const int nRanks = 25;
+const int ranks[] = { 273, 278, 283, 288, 294,
+                299, 304, 310, 315, 321,
+                327, 332, 338, 344, 350,
+                356, 362, 368, 375, 381,
+                387, 394, 400, 407, 413 };
+const string rankNames[] = { "UF7", "UF8", "UF9", "UE", "UE1",
+                       "UE2", "UE3", "UE4", "UE5", "UE6",
+                       "UE7", "UE8", "UE9", "UD", "UD1",
+                       "UD2", "UD3", "UD4", "UD5", "UD6",
+                       "UD7", "UD8", "UD9", "UC", "UC1" };
 /*
 //int umaId = 108401;//谷水，30力加成
 int umaId = 106501;//太阳神，15速15力加成
@@ -50,6 +63,20 @@ std::atomic<int> n = 0;
 std::mutex printLock;
 vector<atomic<int>> segmentStats= vector<atomic<int>>(700);//100分一段，700段
 std::atomic<int> printThreshold = 2187;
+map<int, GameResult> segmentSample;
+
+GameResult getResult(const Game& game)
+{
+    GameResult ret;
+    for (int i = 0; i < 5; ++i)
+        ret.fiveStatus[i] = (int)game.fiveStatus[i];
+    ret.finalScore = game.finalScore();
+    ret.fiveStatusScore = 0;
+    ret.skillPt = game.skillPt;
+    for (int i = 0; i < 5; ++i)
+        ret.fiveStatusScore += GameConstants::FiveStatusFinalScore[min(game.fiveStatus[i], game.fiveStatusLimit[i])];
+    return ret;
+}
 
 void printProgress(int value, int maxValue, int width)
 {
@@ -98,7 +125,8 @@ void worker()
       game.applyTrainingAndNextTurn(rand, action);
     }
     //cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
-    int score = game.finalScore();
+    GameResult result = getResult(game);
+    int score = result.finalScore;
     if (score > 42000)
     {
       if (recordGame)
@@ -118,27 +146,16 @@ void worker()
       {
         segmentStats[i] += 1;
       }
+      if (score >= refScore && score < refScore + 100 && segmentSample.count(refScore) == 0)
+          segmentSample[i] = result;    // 每隔100分记录一局属性
     }
 
     int bestScoreOld = bestScore;
-    if (score > bestScore + printThreshold)
-    {
-        if (printThreshold < 100)
-        {
-            std::lock_guard<std::mutex> lock(printLock);
-            game.printFinalStats();
-            //cout << printThreshold << endl;
-            cout.flush();
-        }
-        printThreshold = printThreshold / 3;
-    }
-
     while (score > bestScoreOld && !bestScore.compare_exchange_weak(bestScoreOld, score)) {
       // 如果val大于old_max，并且max_val的值还是old_max，那么就将max_val的值更新为val
       // 如果max_val的值已经被其他线程更新，那么就不做任何事情，并且old_max会被设置为max_val的新值
       // 然后我们再次进行比较和交换操作，直到成功为止
     }
-
 
     //game.print();
     if (!handWrittenEvaluationTest || n == totalGames)
@@ -146,28 +163,15 @@ void worker()
       if(!handWrittenEvaluationTest)
         game.printFinalStats();
       cout << endl << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
-      //for (int i=0; i<400; ++i)
-      //    cout << i*100 << ",";
-      //cout << endl;
-      //for (int i=0; i<400; ++i)
-      //    cout << float(segmentStats[i]) / n << ",";
-      //cout << endl;
-      cout
-        << "UE7概率=" << float(segmentStats[327]) / n << ","
-        << "UE8概率=" << float(segmentStats[332]) / n << ","
-        << "UE9概率=" << float(segmentStats[338]) / n << ","
-        << "UD0概率=" << float(segmentStats[344]) / n << ","
-        << "UD1概率=" << float(segmentStats[350]) / n << ","
-        << "UD2概率=" << float(segmentStats[356]) / n << ","
-        << "UD3概率=" << float(segmentStats[362]) / n << ","
-        << "UD4概率=" << float(segmentStats[368]) / n << ","
-        << "UD5概率=" << float(segmentStats[375]) / n << ","
-        << "UD6概率=" << float(segmentStats[381]) / n << ","
-        << "UD7概率=" << float(segmentStats[387]) / n << ","
-        << "UD8概率=" << float(segmentStats[394]) / n << ","
-        << "UD9概率=" << float(segmentStats[400]) / n << ","
-        << "UC0概率=" << float(segmentStats[407]) / n << endl;
-
+      
+      for (int j=0; j<nRanks; ++j)
+          if (ranks[j]*100+800 > totalScore/n && segmentStats[ranks[j]] > 0) {
+              int k = 0;
+              while (k < 6 && segmentSample.count(ranks[j]+k) == 0) k++;
+              cout << "--------" << endl;
+              cout << termcolor::bright_cyan << rankNames[j] << "概率: " << float(segmentStats[ranks[j]]) / n * 100 << "%"
+                   << termcolor::reset << " | 参考属性: " << segmentSample[ranks[j]+k].explain() << endl;      
+          }
     }
   }
 
@@ -179,9 +183,16 @@ void main_testAiScore()
   GameDatabase::loadTranslation("../db/text_data.json");
   GameDatabase::loadUmas("../db/umaDB.json");
   GameDatabase::loadDBCards("../db/cardDB.json");
-
   test = TestConfig::loadFile("../ConfigTemplate/testConfig.json");  
+
+  // 独立测卡工具直接使用当前目录
+  //GameDatabase::loadTranslation("db/text_data.json");
+  //GameDatabase::loadUmas("db/umaDB.json");
+  //GameDatabase::loadDBCards("db/cardDB.json");
+  //test = TestConfig::loadFile("testConfig.json");  
+  
   cout << test.explain() << endl;
+  
   totalGames = test.totalGames;
   gamesEveryThread = totalGames / threadNum;
 
@@ -196,8 +207,6 @@ void main_testAiScore()
   for (auto& thread : threads) {
     thread.join();
   }
-
-  cout << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
+  
   system("pause");
-
 }
