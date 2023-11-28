@@ -9,7 +9,9 @@
 
 int main()
 {
-#if defined UMAAI_SELFPLAY
+#if defined UMAAI_TESTLIBTORCH
+	main_testLibtorch();
+#elif defined UMAAI_SELFPLAY
 	main_selfplay();
 #elif defined UMAAI_TESTCARDSSINGLE
 	main_testCardsSingle();

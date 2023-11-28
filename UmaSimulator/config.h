@@ -5,6 +5,7 @@
 //#define UMAAI_TESTCARDSSINGLE   //测卡，控制五张卡不变只改变一张
 //#define UMAAI_SIMULATOR   //养马模拟器
 //#define UMAAI_SELFPLAY   //跑数据（用于神经网络训练）
+//#define UMAAI_TESTLIBTORCH   //测试c++版torch
 
 #if defined UMAAI_TESTSCORE || defined UMAAI_SIMULATOR 
 #define PRINT_GAME_EVENT
