@@ -1,19 +1,6 @@
 #include "tests.h"
 #ifdef UMAAI_TESTLIBTORCH
 //if you switch debug/release. you should also change PATH and restart visual studio
-#ifdef _DEBUG 
-#pragma comment(lib, "C:/local/libtorch_debug/lib/torch.lib")
-#pragma comment(lib, "C:/local/libtorch_debug/lib/c10.lib")
-#pragma comment(lib, "C:/local/libtorch_debug/lib/torch_cuda.lib")
-#pragma comment(lib, "C:/local/libtorch_debug/lib/torch_cpu.lib")
-#pragma comment(lib, "C:/local/libtorch_debug/lib/c10_cuda.lib")
-#else
-#pragma comment(lib, "C:/local/libtorch/lib/torch.lib")
-#pragma comment(lib, "C:/local/libtorch/lib/c10.lib")
-#pragma comment(lib, "C:/local/libtorch/lib/torch_cuda.lib")
-#pragma comment(lib, "C:/local/libtorch/lib/torch_cpu.lib")
-#pragma comment(lib, "C:/local/libtorch/lib/c10_cuda.lib")
-#endif
 #include <torch/script.h>
 #include <torch/torch.h>
 #include <iostream>
@@ -76,13 +63,12 @@ void main_testLibtorch() {
     }
     std::cout << std::endl;
   }
-
-  std::vector<int> toTestBatchsize = { 1,32,64,128,256,512,1024,2048,4096,8192,16384,32768};
+  std::cout << "Benchmark:" << std::endl;
+  std::vector<int> toTestBatchsize = { 1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768 };
   for (int bsi = 0; bsi < toTestBatchsize.size(); bsi++)
   {
     int batchSize = toTestBatchsize[bsi];
     int epoches = 100;
-    std::cout << "Benchmark:" << std::endl;
     auto start = std::chrono::high_resolution_clock::now();
     for (int epoch = 0; epoch < epoches; epoch++)
     {

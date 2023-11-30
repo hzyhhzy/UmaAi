@@ -164,8 +164,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
       }
     }
 
-    motivationDropCount = j["motivationDropCount"];
-
+    //motivationDropCount = j["motivationDropCount"];
+    motivationDropCount = 0;
 
     larc_supportPtAll = j["larc_supportPtAll"];
     larc_shixingPt = j["larc_shixingPt"];

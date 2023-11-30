@@ -31,4 +31,6 @@ public:
   Evaluator(Model* model, int maxBatchsize);
 
   static Action handWrittenStrategy(const Game& game);
+  static ModelOutputValueV1 extractValueFromNNOutputBuf(float* buf);//神经网络计算完之后，把神经网络的输出转化成ModelOutputValueV1和Action
+  static Action extractActionFromNNOutputBuf(float* buf, const Game& game);//神经网络计算完之后，把神经网络的输出转化成ModelOutputValueV1和Action
 };

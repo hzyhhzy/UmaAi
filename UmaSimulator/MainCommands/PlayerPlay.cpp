@@ -42,10 +42,14 @@ void main_playerPlay()
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,150 };
 
+  int batchsize = 512;
+  //Model model("../training/example/model_traced.pt", batchsize);
+  //Model* modelptr = &model;
+  Model* modelptr = NULL;
   //GameGenerator gameGenerator(SelfplayParam(), NULL);
   for (int gamenum = 0; gamenum < 100000; gamenum++)
   {
-    Search search(NULL, 128, threadNum, param);
+    Search search(modelptr, batchsize, threadNum, param);
     Game game;
     game.newGame(rand, true, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
     //game = gameGenerator.get();
