@@ -186,6 +186,9 @@
     <ClCompile Include="Selfplay\RandomCardsetHelper.cpp">
       <Filter>源文件\Selfplay</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\testLibtorch.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">

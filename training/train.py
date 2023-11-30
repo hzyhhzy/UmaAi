@@ -41,7 +41,7 @@ def calculateLoss(output,label):
 
     huberloss=nn.HuberLoss(reduction='mean',delta=1.0)
     vloss1 = huberloss(output_value[:,0],(label_value[:,0]-30000)/200)
-    vloss2 = huberloss(output_value[:,1],(label_value[:,1]-0)/50)
+    vloss2 = huberloss(output_value[:,1],(label_value[:,1]-0)/100)
     vloss3 = huberloss(output_value[:,2],(label_value[:,2]-30000)/200)
     vloss=vloss1+vloss2+vloss3
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     #data settings
     parser.add_argument('--tdatadir', type=str, default='../selfplay3/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
-    parser.add_argument('--vdatadir', type=str, default='../selfplay3/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--vdatadir', type=str, default='../selfplay3/selfplay/val2.npz', help='validation dataset path: dir include dataset files or single dataset file')
     parser.add_argument('--maxvalsamp', type=int, default=1000000, help='validation sample num')
     parser.add_argument('--maxstep', type=int, default=5000000000, help='max step to train')
     parser.add_argument('--savestep', type=int, default=2000, help='step to save and validation')
@@ -70,9 +70,9 @@ if __name__ == '__main__':
     parser.add_argument('--valuesampling', type=float, default=1, help='value sampling rate(to avoid overfitting)')
 
     #model parameters
-    parser.add_argument('--modeltype', type=str, default='res',help='model type defined in model.py')
+    parser.add_argument('--modeltype', type=str, default='em',help='model type defined in model.py')
     parser.add_argument('--modelparam', nargs='+',type=int,
-                        default=(5,256), help='model size')
+                        default=(1,128,128,3,256,256), help='model size')
 
     parser.add_argument('--savename', type=str ,default='auto', help='model save pth, ""null"" means does not save, ""auto"" means modeltype+modelparam')
     parser.add_argument('--new', action='store_true', default=False, help='whether to retrain')
@@ -82,11 +82,12 @@ if __name__ == '__main__':
                         default=0, help='which gpu, -1 means cpu')
     parser.add_argument('--batchsize', type=int,
                         default=1024, help='batch size')
-    parser.add_argument('--lr', type=float, default=2e-3, help='learning rate')
-    parser.add_argument('--wd', type=float, default=2e-6, help='weight decay')
-    parser.add_argument('--lrhead', type=float, default=3e-4, help='learning rate of input head')
-    parser.add_argument('--wdhead', type=float, default=1e-4, help='weight decay of input head')
-    parser.add_argument('--rollbackthreshold', type=float, default=1e10, help='if loss increased this value, roll back 2*infostep steps')
+    #parser.add_argument('--lr', type=float, default=2e-3, help='learning rate')
+    parser.add_argument('--lrscale', type=float, default=1.0, help='learning rate scale')
+    parser.add_argument('--wdscale', type=float, default=1.0, help='weight decay')
+    #parser.add_argument('--lrhead', type=float, default=3e-4, help='learning rate of input head')
+    parser.add_argument('--wdhead', type=float, default=2e-4, help='weight decay of input head')
+    parser.add_argument('--rollbackthreshold', type=float, default=0.05, help='if loss increased this value, roll back 2*infostep steps')
     args = parser.parse_args()
 
     if(args.gpu==-1):
@@ -158,16 +159,44 @@ if __name__ == '__main__':
 
     startstep=totalstep
     if model_type == 'res' or model_type == 'tl':
+
+        lr = 1e-3
+        lrhead = 3e-4
+        wd = 2e-4
+        wdhead = 2e-4
         # lowl2param是一些密集型神经网络参数(mlp,cnn等)，对lr和weightdecay更敏感，使用float32计算，几乎不需要weightdecay
         # otherparam需要高的weightdecay
         headparam = list(map(id, model.inputhead.parameters()))
         otherparam = list(filter(lambda p: id(p) not in headparam, model.parameters()))
         headparam = list(filter(lambda p: id(p) in headparam, model.parameters()))
         optimizer = optim.Adam([{'params': otherparam},
-                                {'params': headparam, 'lr': args.lrhead, 'weight_decay': args.wdhead}],
-                               lr=args.lr, weight_decay=args.wd)
+                                {'params': headparam, 'lr': lrhead*args.lrscale, 'weight_decay': wdhead*args.wdscale}],
+                               lr=lr*args.lrscale, weight_decay=wd*args.wdscale)
+    elif model_type == 'tf' or model_type == 'tf2' or model_type == 'tfmlp':
+
+        lr = 3e-4
+        lrhead = 3e-4
+        lrtf = 3e-4
+        wd = 2e-5
+        wdhead = 2e-5
+        headparam = list(map(id, model.inputhead.parameters()))
+        transformerparam=list(map(id, model.transformer_encoder.parameters()))
+        otherparam = list(filter(lambda p: id(p) not in headparam and id(p) not in transformerparam, model.parameters()))
+        headparam = list(filter(lambda p: id(p) in headparam, model.parameters()))
+        transformerparam = list(filter(lambda p: id(p) in transformerparam, model.parameters()))
+        optimizer = optim.Adam([{'params': otherparam},
+                                {'params': headparam, 'lr': lrhead*args.lrscale, 'weight_decay': wdhead*args.wdscale},
+                                {'params': transformerparam, 'lr': lrtf*args.lrscale, 'weight_decay': wd*args.wdscale}],
+                               lr=lr*args.lrscale, weight_decay=wd*args.wdscale)
+
+    elif model_type == 'em':
+        lr = 5e-4
+        wd = 2e-5
+        optimizer = optim.Adam(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)
     else:
-        optimizer = optim.Adam(model.parameters(),lr=args.lr,weight_decay=args.wd)
+        lr = 1e-3
+        wd = 2e-5
+        optimizer = optim.Adam(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)
     model.train()
 
     #for rollbacking if loss explodes
