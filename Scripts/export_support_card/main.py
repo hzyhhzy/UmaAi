@@ -115,16 +115,17 @@ def prepareUniqueEffect(card, ueffect):
         else:
             print(f"新的羁绊型固有: {card['cardName']} - {jiBan}")
         useParam = True
-    elif ueffect["type"] == 116:
-        typeMapping = {
-            30134: 16,
-            30142: 20,  # 合并
-            30154: 20,
-            30166: 19,
-            30170: 19
-        }
-        utype = typeMapping[card["cardId"]]
-        useParam = True
+   # elif ueffect["type"] == 116:
+   #     typeMapping = {
+   #         30134: 16,
+   #         30142: 20,  # 合并
+   #         30154: 20,
+   #         30166: 19,
+   #         30170: 19,
+   #         30175: 22
+   #     }
+   #     utype = typeMapping[card["cardId"]]
+   #     useParam = True
     else:
         # 其他固有，只复制参数和映射ID
         if ueffect["type"] == 102:

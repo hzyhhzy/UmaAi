@@ -84,6 +84,7 @@ _support_card_effect_name_mapping = {
 # 高峰/速善信的技能类型
 _support_card_ex_name_mapping = {
     1 : "速度",
+    2 : "加速度",
     3 : "体力回复"
 }
 
