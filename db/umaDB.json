@@ -3888,6 +3888,38 @@
     ],
     "star": 5
   },
+  "106402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      20,
+      0,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      126,
+      85,
+      123,
+      94
+    ],
+    "freeRaces": [],
+    "gameId": 106402,
+    "name": "mejiro-palmer",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      36,
+      48,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "106501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -4347,6 +4379,40 @@
     ],
     "freeRaces": [],
     "gameId": 107401,
+    "name": "mejiro-bright",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      46,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "107402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      103,
+      144,
+      103,
+      92,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 107402,
     "name": "mejiro-bright",
     "preferRaces": [],
     "preferReds": [],

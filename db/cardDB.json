@@ -53148,7 +53148,7 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffectType": 20,
+    "uniqueEffectType": 16,
     "uniqueEffectSummary": "根据体力回复技能个数，提高持久力ボーナス效果(每个+1, 最大3个)",
     "uniqueEffectParam": [
       116,
@@ -55193,7 +55193,7 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffectType": 20,
+    "uniqueEffectType": 16,
     "uniqueEffectSummary": "根据体力回复技能个数，提高速度ボーナス效果(每个+1, 最大3个)",
     "uniqueEffectParam": [
       116,
@@ -57420,7 +57420,7 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffectType": 19,
+    "uniqueEffectType": 16,
     "uniqueEffectSummary": "根据速度技能个数，提高xunLian效果(每个+5, 最大3个)",
     "uniqueEffectParam": [
       116,
@@ -58145,7 +58145,7 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffectType": 19,
+    "uniqueEffectType": 16,
     "uniqueEffectSummary": "根据速度技能个数，提高速度ボーナス效果(每个+1, 最大3个)",
     "uniqueEffectParam": [
       116,
@@ -59077,8 +59077,8 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffectType": 22,
-    "uniqueEffectSummary": "根据未知技能个数，提高パワーボーナス效果(每个+1, 最大3个)",
+    "uniqueEffectType": 16,
+    "uniqueEffectSummary": "根据加速度技能个数，提高パワーボーナス效果(每个+1, 最大3个)",
     "uniqueEffectParam": [
       116,
       2,

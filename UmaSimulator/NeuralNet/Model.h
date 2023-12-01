@@ -47,10 +47,9 @@ class Model
   torch::jit::script::Module model;
 #endif
 
-
 public:
   //static lock;//所有的evaluator共用一个lock
   Model(std::string path, int batchsize);
   void evaluate(float* inputBuf, float* outputBuf, int gameNum);//计算gamesBuf中gameNum局游戏的输出，输出到outputBuf
-
+  static void detect(Model* md);
 };

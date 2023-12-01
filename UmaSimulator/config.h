@@ -27,10 +27,11 @@ const int LIBTORCH_USE_GPU = true;// «∑Ò π”√GPU
 #pragma comment(lib, "C:/local/libtorch_debug/lib/torch_cpu.lib")
 #pragma comment(lib, "C:/local/libtorch_debug/lib/c10_cuda.lib")
 #else
-#pragma comment(lib, "C:/local/libtorch/lib/torch.lib")
-#pragma comment(lib, "C:/local/libtorch/lib/c10.lib")
-#pragma comment(lib, "C:/local/libtorch/lib/torch_cuda.lib")
-#pragma comment(lib, "C:/local/libtorch/lib/torch_cpu.lib")
-#pragma comment(lib, "C:/local/libtorch/lib/c10_cuda.lib")
+#define TORCH_LIBROOT "G:/libtorch/lib/"
+#pragma comment(lib, TORCH_LIBROOT "torch.lib")
+#pragma comment(lib, TORCH_LIBROOT "c10.lib")
+#pragma comment(lib, TORCH_LIBROOT "torch_cuda.lib")
+#pragma comment(lib, TORCH_LIBROOT "torch_cpu.lib")
+#pragma comment(lib, TORCH_LIBROOT "c10_cuda.lib")
 #endif
 #endif
