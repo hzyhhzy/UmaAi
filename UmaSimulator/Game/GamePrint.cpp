@@ -2,6 +2,7 @@
 #include <cassert>
 #include <vector>
 #include <iomanip>  // for std::setw
+#include <algorithm>
 #include "../External/termcolor.hpp"
 #include "Game.h"
 using std::cout;
@@ -360,7 +361,7 @@ void Game::print() const
         }
         else if (personType == 2|| personType == 3)//普通卡,npc
         {
-          totalCharge += min(chargeN, 3 - persons[p].larc_charge);
+          totalCharge += std::min(chargeN, 3 - persons[p].larc_charge);
           if (persons[p].larc_charge < 3 && persons[p].larc_charge + chargeN >= 3)
             totalChargeFull += 1;
         }
@@ -506,7 +507,7 @@ void Game::printFinalStats() const
 {
   int fiveStatusScore = 0;
   for (int i = 0; i < 5; i++)
-    fiveStatusScore += GameConstants::FiveStatusFinalScore[min(fiveStatus[i], fiveStatusLimit[i])];
+    fiveStatusScore += GameConstants::FiveStatusFinalScore[std::min(fiveStatus[i], fiveStatusLimit[i])];
   int skillScore = getSkillScore();
 
   cout << termcolor::bright_red << "你的得分是：" << termcolor::bright_green << finalScore() << termcolor::reset << endl;

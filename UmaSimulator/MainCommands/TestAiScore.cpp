@@ -96,7 +96,12 @@ void worker()
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  Search search(NULL, 16, threadNumInner, searchParam);
+  int batchsize = 256;
+  //Model model("../training/example/model_traced.pt", batchsize);
+  //Model* modelptr = &model;
+  Model* modelptr = NULL;
+
+  Search search(modelptr, batchsize, threadNumInner, searchParam);
 
   vector<Game> gameHistory;
 

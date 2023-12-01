@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 #include "Evaluator.h"
+#include "../Search/Search.h"
 
 //void Evaluator::evaluate(const Game* games, const float* targetScores, int mode, int gameNum)
 //{
@@ -35,8 +36,108 @@ void Evaluator::evaluateSelf(int mode, const SearchParam& param)
   }
   else
   {
-    assert(false && "还没写");
+    for (int i = 0; i < maxBatchsize; i++)
+    {
+      const Game& game = gameInput[i];
+      if(!game.isEnd())
+        game.getNNInputV1(inputBuf.data() + i * NNINPUT_CHANNELS_V1, param);
+    }
+    model->evaluate(inputBuf.data(), outputBuf.data(), maxBatchsize);
+    if (mode == 0)//value
+    {
+      for (int i = 0; i < maxBatchsize; i++)
+      {
+        const Game& game = gameInput[i];
+        if (game.isEnd())
+        {
+          int score = game.finalScore();
+
+          auto& v = valueResults[i];
+          v.scoreMean = score;
+          v.scoreStdev = 0; //单个已终局的样本，方差必为0
+          v.value = score;
+        }
+        else
+        {
+          valueResults[i] = extractValueFromNNOutputBuf(outputBuf.data() + NNOUTPUT_CHANNELS_V1 * i);
+        }
+      }
+    }
+    else if (mode == 1)//policy
+    {
+      for (int i = 0; i < maxBatchsize; i++)
+      {
+        const Game& game = gameInput[i];
+        if (game.isEnd())
+        {
+        }
+        else
+        {
+          actionResults[i] = extractActionFromNNOutputBuf(outputBuf.data() + NNOUTPUT_CHANNELS_V1 * i, game);
+        }
+      }
+    }
+    else assert(false);
   }
+}
+
+ModelOutputValueV1 Evaluator::extractValueFromNNOutputBuf(float* buf)
+{
+  ModelOutputValueV1 v;
+  v.scoreMean = 30000 + 200 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 0];
+  v.scoreStdev = 100 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 1]; 
+  v.value = 30000 + 200 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 2];
+  return v;
+}
+
+Action Evaluator::extractActionFromNNOutputBuf(float* buf, const Game& game)
+{
+  Action action;
+  action.train = -1;
+  action.buy50p = false;
+  action.buyFriend20 = false;
+  action.buyPt10 = false;
+  action.buyVital20 = false;
+  float bestPolicy = -1e20;
+  for (int i = 0; i < 10; i++)
+  {
+    if (buf[i] > bestPolicy)
+    {
+      Action action1 = action;
+      action1.train = i;
+      if (game.isLegal(action1))
+      {
+        action.train = i;
+        bestPolicy = buf[i];
+      }
+    }
+  }
+  if (action.train < 5)
+  {
+    float bestBuyPolicy = -1e20;
+    for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
+    {
+      Action action1 = Search::buyBuffAction(i, game.turn);
+      action1.train = action.train;
+      if (!game.isLegal(action1))
+        continue;
+      float p = 0;
+      if (action1.buy50p)
+        p += buf[10 + action1.train];
+      if (action1.buyPt10)
+        p += buf[15];
+      if (action1.buyVital20)
+        p += buf[16];
+      if (action1.buy50p && (action1.buyPt10 || action1.buyVital20))
+        p += buf[17];
+      if (p > bestBuyPolicy)
+      {
+        bestBuyPolicy = p;
+        action = action1;
+      }
+    }
+  }
+  return action;
 }
 
 Evaluator::Evaluator()
@@ -375,3 +476,4 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   }
   return action;
 }
+

@@ -106,7 +106,12 @@ void main_ai()
 
 	SearchParam searchParam = { GameConfig::searchN,TOTAL_TURN,GameConfig::radicalFactor };
 
-	Search search(NULL, 32, GameConfig::threadNum, searchParam);
+	int batchsize = 256;
+	//Model model("./model_traced.pt", batchsize);
+	//Model* modelptr = &model;
+	Model* modelptr = NULL;
+
+	Search search(modelptr, batchsize, GameConfig::threadNum, searchParam);
 
 	websocket ws(GameConfig::useWebsocket ? "http://127.0.0.1:4693" : "");
 	if (GameConfig::useWebsocket)

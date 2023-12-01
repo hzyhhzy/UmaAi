@@ -1,7 +1,12 @@
 #pragma once
-#include <vector>
 #include "NNInput.h"
-#include "../Game/Game.h"
+#include "../config.h"
+
+#ifdef USE_BACKEND_LIBTORCH
+#include <torch/torch.h>
+#include <torch/script.h>
+#endif
+
 
 //用-1e7表示不合法操作，在神经网络训练时直接忽略掉这些值
 struct ModelOutputPolicyV1
@@ -38,8 +43,14 @@ static_assert(sizeof(ModelOutputV1) == sizeof(float) * NNOUTPUT_CHANNELS_V1,"NNO
 
 class Model
 {
-  //Model* model;
+#ifdef USE_BACKEND_LIBTORCH
+  torch::jit::script::Module model;
+#endif
+
+
+public:
   //static lock;//所有的evaluator共用一个lock
-  //void evaluate(const Game* gamesBuf, const float* otherInputsBuf, int gameNum);//计算gamesBuf中gameNum局游戏的输出，输出到outputBuf
+  Model(std::string path, int batchsize);
+  void evaluate(float* inputBuf, float* outputBuf, int gameNum);//计算gamesBuf中gameNum局游戏的输出，输出到outputBuf
 
 };
