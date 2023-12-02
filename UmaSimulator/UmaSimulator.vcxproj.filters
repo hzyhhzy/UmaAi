@@ -269,6 +269,9 @@
     <ClInclude Include="NeuralNet\TrainingSample.h">
       <Filter>头文件\NeuralNet</Filter>
     </ClInclude>
+    <ClInclude Include="Tests\TestConfig.h">
+      <Filter>头文件\Tests</Filter>
+    </ClInclude>
     <ClInclude Include="Selfplay\GameGenerator.h">
       <Filter>头文件\Selfplay</Filter>
     </ClInclude>

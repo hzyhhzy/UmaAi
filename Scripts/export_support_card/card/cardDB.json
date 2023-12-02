@@ -53148,7 +53148,7 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffectType": 20,
+    "uniqueEffectType": 16,
     "uniqueEffectSummary": "根据体力回复技能个数，提高持久力ボーナス效果(每个+1, 最大3个)",
     "uniqueEffectParam": [
       116,
@@ -55193,7 +55193,7 @@
         "deYiLv": 80
       }
     ],
-    "uniqueEffectType": 20,
+    "uniqueEffectType": 16,
     "uniqueEffectSummary": "根据体力回复技能个数，提高速度ボーナス效果(每个+1, 最大3个)",
     "uniqueEffectParam": [
       116,
@@ -57420,7 +57420,7 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffectType": 19,
+    "uniqueEffectType": 16,
     "uniqueEffectSummary": "根据速度技能个数，提高xunLian效果(每个+5, 最大3个)",
     "uniqueEffectParam": [
       116,
@@ -58145,7 +58145,7 @@
         "deYiLv": 50
       }
     ],
-    "uniqueEffectType": 19,
+    "uniqueEffectType": 16,
     "uniqueEffectSummary": "根据速度技能个数，提高速度ボーナス效果(每个+1, 最大3个)",
     "uniqueEffectParam": [
       116,
@@ -58707,6 +58707,556 @@
     "uniqueEffectParam": [
       103,
       4,
+      8,
+      10,
+      0,
+      0
+    ]
+  },
+  "30174": {
+    "cardId": 30174,
+    "charaId": 1059,
+    "cardName": "[速]メジロドーベル",
+    "fullName": "[聖夜、変わるために]メジロドーベル",
+    "rarity": 3,
+    "cardType": 0,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 25,
+        "ganJing": 30,
+        "xunLian": 5,
+        "initialJiBan": 20,
+        "saiHou": 5,
+        "hintProbIncrease": 0,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          10,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 26,
+        "ganJing": 33,
+        "xunLian": 5,
+        "initialJiBan": 21,
+        "saiHou": 5,
+        "hintProbIncrease": 0,
+        "deYiLv": 53
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 27,
+        "ganJing": 36,
+        "xunLian": 5,
+        "initialJiBan": 23,
+        "saiHou": 5,
+        "hintProbIncrease": 0,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 28,
+        "ganJing": 40,
+        "xunLian": 5,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 61
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "youQing": 30,
+        "ganJing": 40,
+        "xunLian": 5,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 65
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时パワーボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      5,
+      2,
+      0,
+      0
+    ]
+  },
+  "30175": {
+    "cardId": 30175,
+    "charaId": 1086,
+    "cardName": "[力]メジロラモーヌ",
+    "fullName": "[冬溶かす熾火]メジロラモーヌ",
+    "rarity": 3,
+    "cardType": 2,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 15,
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 15,
+        "hintProbIncrease": 40,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          27,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 16,
+        "ganJing": 23,
+        "xunLian": 6,
+        "initialJiBan": 16,
+        "hintProbIncrease": 45,
+        "deYiLv": 40
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          30,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "youQing": 18,
+        "ganJing": 26,
+        "xunLian": 8,
+        "initialJiBan": 18,
+        "hintProbIncrease": 50,
+        "deYiLv": 45
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          32,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "youQing": 20,
+        "ganJing": 30,
+        "xunLian": 10,
+        "initialJiBan": 20,
+        "hintProbIncrease": 55,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          2
+        ],
+        "initialBonus": [
+          0,
+          35,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          25
+        ],
+        "youQing": 20,
+        "ganJing": 30,
+        "xunLian": 10,
+        "initialJiBan": 20,
+        "hintProbIncrease": 60,
+        "deYiLv": 50
+      }
+    ],
+    "uniqueEffectType": 16,
+    "uniqueEffectSummary": "根据加速度技能个数，提高パワーボーナス效果(每个+1, 最大3个)",
+    "uniqueEffectParam": [
+      116,
+      2,
+      5,
+      1,
+      3,
+      0
+    ]
+  },
+  "30176": {
+    "cardId": 30176,
+    "charaId": 1027,
+    "cardName": "[根]メジロライアン",
+    "fullName": "[選んで選んで、想いを込めて]メジロライアン",
+    "rarity": 3,
+    "cardType": 3,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 15,
+        "ganJing": 30,
+        "initialJiBan": 0,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          10,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 16,
+        "ganJing": 33,
+        "initialJiBan": 0,
+        "deYiLv": 40
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          25,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 18,
+        "ganJing": 36,
+        "initialJiBan": 0,
+        "deYiLv": 45
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          25,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "initialJiBan": 15,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          25,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "initialJiBan": 30,
+        "deYiLv": 50
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时xunLian(10)",
+    "uniqueEffectParam": [
+      101,
+      80,
       8,
       10,
       0,
