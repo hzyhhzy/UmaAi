@@ -211,6 +211,9 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
       game.larc_shixingPt = 0;
   }
 
+  if (rand() % 2 == 0)
+    game.tryBuyUpgrade(6, 3);//³¢ÊÔ¹ºÂòÌåÁ¦-20%
+
   return game;
 }
 
