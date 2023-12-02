@@ -190,18 +190,27 @@ void SupportCard::getNNInputV1(float* buf, const Game& game) const
   }
   else if (uniqueEffectType == 16)
   {
-    bufUniqueType[16] = 1.0;
-    writeUniqueEffect(uniqueEffectParam[2], 5 * uniqueEffectParam[3]);
-  }
-  else if (uniqueEffectType == 19)
-  {
-    bufUniqueType[19] = 1.0;
-    writeUniqueEffect(uniqueEffectParam[2], 3 * uniqueEffectParam[3]);
-  }
-  else if (uniqueEffectType == 20)
-  {
-    bufUniqueType[20] = 1.0;
-    writeUniqueEffect(uniqueEffectParam[2], 3 * uniqueEffectParam[3]);
+    writeUniqueEffect(uniqueEffectParam[2], uniqueEffectParam[4] * uniqueEffectParam[3]);
+    if (uniqueEffectParam[1] == 1 && uniqueEffectParam[4] == 5)//5个速度技能
+    {
+      bufUniqueType[16] = 1.0;
+    }
+    else if (uniqueEffectParam[1] == 1 && uniqueEffectParam[4] == 3)//3个速度技能
+    {
+      bufUniqueType[19] = 1.0;
+    }
+    else if (uniqueEffectParam[1] == 2 && uniqueEffectParam[4] == 3)//3个加速度技能
+    {
+      bufUniqueType[22] = 1.0;
+    }
+    else if (uniqueEffectParam[1] == 3 && uniqueEffectParam[4] == 3)//3个回体技能
+    {
+      bufUniqueType[20] = 1.0;
+    }
+    else
+    {
+      assert(false && "nninput: 未知的购买技能型支援卡固有");
+    }
   }
   else if (uniqueEffectType == 17)
   {

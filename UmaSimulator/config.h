@@ -11,7 +11,7 @@
 #define PRINT_GAME_EVENT
 #endif
 
-#define USE_BACKEND_LIBTORCH //使用libtorch计算神经网络
+//#define USE_BACKEND_LIBTORCH //使用libtorch计算神经网络
 
 
 const int MAX_SCORE = 200000;//最大允许的分数，70000在larc剧本肯定很够用了，但不排除selfplay随机出来的开局存在一些极端情况
@@ -27,7 +27,7 @@ const int LIBTORCH_USE_GPU = true;//是否使用GPU
 #pragma comment(lib, "C:/local/libtorch_debug/lib/torch_cpu.lib")
 #pragma comment(lib, "C:/local/libtorch_debug/lib/c10_cuda.lib")
 #else
-#define TORCH_LIBROOT "G:/libtorch/lib/"
+#define TORCH_LIBROOT "C:/local/libtorch/lib/"
 #pragma comment(lib, TORCH_LIBROOT "torch.lib")
 #pragma comment(lib, TORCH_LIBROOT "c10.lib")
 #pragma comment(lib, TORCH_LIBROOT "torch_cuda.lib")

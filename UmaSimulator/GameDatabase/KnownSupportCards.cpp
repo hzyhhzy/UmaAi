@@ -216,30 +216,26 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                 break;
             case 15:   // 智帽，暂时不计
                 break;
-            case 16:   // 高峰: 按初始1层，出道战3层，年底满计算
-                if (game.turn >= 24)
-                    count = 5;
-                else if (game.turn >= 12)
-                    count = 3;
+            case 16:   // x个xxx类型技能，获得xxx加成（例如智高峰）
+                if (args[1] == 1)//速度技能
+                {
+                  count = 1 + game.turn / 6;
+                }
+                else if (args[1] == 2)//加速度技能
+                {
+                  count = 0.7 + game.turn / 12.0;
+                }
+                else if (args[1] == 3)//回体技能
+                {
+                  count = 0.4 + game.turn / 15.0;
+                }
                 else
-                    count = 1;
-                effect.apply(args[2], args[3] * count);
-                break;
-            case 19: // 跳舞城，黑楼: 按初始1层，出道战满计算
-                if (game.turn >= 12)
-                    count = 3;
-                else
-                    count = 1;
-                effect.apply(args[2], args[3] * count);
-                break;
-            case 20:
-                // 善信/桂冠：按初始1层，年底2层，继承后满计算
-                if (game.turn >= 30)
-                    count = 3;
-                else if (game.turn >= 24)
-                    count = 2;
-                else
-                    count = 1;
+                {
+                  count = 0;
+                  assert(false && "未知的购买技能型支援卡固有");
+                }
+                if (count > args[4])
+                  count = args[4];
                 effect.apply(args[2], args[3] * count);
                 break;
             case 17:   // 根大和

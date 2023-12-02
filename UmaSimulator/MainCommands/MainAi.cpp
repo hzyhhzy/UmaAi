@@ -107,9 +107,9 @@ void main_ai()
 	SearchParam searchParam = { GameConfig::searchN,TOTAL_TURN,GameConfig::radicalFactor };
 
 	int batchsize = 256;
-	Model model("db/model_traced.pt", batchsize);
-	Model* modelptr = &model;
-	//Model* modelptr = NULL;
+	//Model model("db/model_traced.pt", batchsize);
+	//Model* modelptr = &model;
+	Model* modelptr = NULL;
 
 	Model::detect(modelptr);
 
