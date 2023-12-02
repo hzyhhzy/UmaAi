@@ -6,6 +6,7 @@
 //#define UMAAI_SIMULATOR   //养马模拟器
 //#define UMAAI_SELFPLAY   //跑数据（用于神经网络训练）
 //#define UMAAI_TESTLIBTORCH   //测试c++版torch
+//#define UMAAI_MODELBENCHMARK   //测试神经网络速度
 
 #if defined UMAAI_TESTSCORE || defined UMAAI_SIMULATOR 
 #define PRINT_GAME_EVENT

@@ -167,6 +167,7 @@
     <ClCompile Include="Game\Protocol.cpp" />
     <ClCompile Include="MainCommands\Benchmark.cpp" />
     <ClCompile Include="MainCommands\MainAi.cpp" />
+    <ClCompile Include="MainCommands\ModelBenchmark.cpp" />
     <ClCompile Include="MainCommands\PlayerPlay.cpp" />
     <ClCompile Include="MainCommands\Selfplay.cpp" />
     <ClCompile Include="MainCommands\TestAiScore.cpp" />

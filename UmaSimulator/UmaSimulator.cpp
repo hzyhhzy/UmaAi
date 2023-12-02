@@ -9,7 +9,9 @@
 
 int main()
 {
-#if defined UMAAI_TESTLIBTORCH
+#if defined UMAAI_MODELBENCHMARK
+	main_modelBenchmark();
+#elif defined UMAAI_TESTLIBTORCH
 	main_testLibtorch();
 #elif defined UMAAI_SELFPLAY
 	main_selfplay();

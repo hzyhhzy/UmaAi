@@ -198,6 +198,9 @@
     <ClCompile Include="Tests\TestScoreSearch.cpp">
       <Filter>源文件\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="MainCommands\ModelBenchmark.cpp">
+      <Filter>源文件\MainCommands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">

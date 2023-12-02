@@ -75,7 +75,11 @@ void main_testCardsSingle()
 
   SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
 
-  Search search(NULL, 32, threadNum, searchParam);
+  int batchsize = 256;
+  //Model model("../training/example/model_traced.pt", batchsize);
+  //Model* modelptr = &model;
+  Model* modelptr = NULL;
+  Search search(modelptr, batchsize, threadNum, searchParam);
 
   vector<testResult> allResult;
   for (int cardId = 39999; cardId >= 0; cardId--)
