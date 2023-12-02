@@ -1,6 +1,7 @@
 #pragma once
 #include "NNInput.h"
 #include "../config.h"
+#include <string>
 
 #ifdef USE_BACKEND_LIBTORCH
 #include <torch/torch.h>
