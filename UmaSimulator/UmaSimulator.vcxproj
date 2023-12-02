@@ -113,7 +113,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -187,7 +187,10 @@
     <ClCompile Include="Tests\test2.cpp" />
     <ClCompile Include="Tests\test3.cpp" />
     <ClCompile Include="Tests\test4.cpp" />
+    <ClCompile Include="Tests\testDemoGame.cpp" />
     <ClCompile Include="Tests\testLibtorch.cpp" />
+    <ClCompile Include="Tests\TestScoreNoSearch.cpp" />
+    <ClCompile Include="Tests\TestScoreSearch.cpp" />
     <ClCompile Include="Tests\test_json.cpp" />
     <ClCompile Include="UmaSimulator.cpp" />
     <ClCompile Include="websocket.cpp" />

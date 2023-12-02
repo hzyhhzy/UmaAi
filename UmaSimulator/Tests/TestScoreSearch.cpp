@@ -1,4 +1,3 @@
-//测试训练属性值算法
 #include <iostream>
 #include <random>
 #include <sstream>
@@ -18,17 +17,20 @@
 #include "../Tests/TestConfig.h"
 
 using namespace std;
-namespace TestAiScore
+
+namespace TestScoreSearch
 {
-  const bool handWrittenEvaluationTest = true;
+
+  const string modelpath = "../training/example/model_traced.pt";
   const int threadNum = 8;
   const int threadNumInner = 1;
-  const double radicalFactor = 5;//激进度
-  const int searchN = handWrittenEvaluationTest ? 1 : 2048;
-  SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
+  const double radicalFactor = 0;//激进度
+  const int searchDepth = TOTAL_TURN;
+  const int searchN = 1024;
+  SearchParam searchParam = { searchN,searchDepth,radicalFactor };
   const bool recordGame = false;
 
-  int totalGames = handWrittenEvaluationTest ? 50000 : 10000000;
+  int totalGames = 100000;
   int gamesEveryThread = totalGames / threadNum;
 
   TestConfig test;
@@ -52,28 +54,18 @@ namespace TestAiScore
   vector<atomic<int>> segmentStats = vector<atomic<int>>(700);//100分一段，700段
   std::atomic<int> printThreshold = 2187;
 
-  void printProgress(int value, int maxValue, int width)
-  {
-    stringstream buf;
-    double rate = (double)value / maxValue;
-    int n = rate * width;
-    n = clamp(n, 0, maxValue);
-    buf << "[" << string(n, '=') << ">" << string(width - n, ' ') << "] " << setprecision((int)(2 + rate)) << rate * 100 << "% ";
-
-    std::lock_guard<std::mutex> lock(printLock);    // 返回时自动释放cout锁
-    cout << buf.str() << "\033[0F" << endl;
-    cout.flush();
-  }
-
   void worker()
   {
     random_device rd;
     auto rand = mt19937_64(rd());
 
-    int batchsize = 256;
-    //Model model("../training/example/model_traced.pt", batchsize);
-    //Model* modelptr = &model;
+    int batchsize = 512;
     Model* modelptr = NULL;
+    Model model(modelpath, batchsize);
+    if (modelpath != "")
+    {
+      modelptr = &model;
+    }
 
     Search search(modelptr, batchsize, threadNumInner, searchParam);
 
@@ -89,18 +81,19 @@ namespace TestAiScore
       for (int i = 0; i < 9; i++)
         game.larc_allowedDebuffsFirstLarc[i] = test.allowedDebuffs[i];
 
+      //noSearch的测试，为了避免大改代码，第一回合强制外出
+      //有search的测试，公平起见，第一回合也强制外出
+      Action action0 = { 8,false,false,false,false };//无条件外出，这样就无视第一回合的人头分布了
+      game.applyTrainingAndNextTurn(rand, action0);
+
+
+
       while (!game.isEnd())
       {
         if (recordGame)
           gameHistory[game.turn] = game;
         Action action;
-        if (handWrittenEvaluationTest) {
-          action = Evaluator::handWrittenStrategy(game);
-        }
-        else {
-
-          action = search.runSearch(game, rand);
-        }
+        action = search.runSearch(game, rand);
         game.applyTrainingAndNextTurn(rand, action);
       }
       //cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
@@ -114,7 +107,6 @@ namespace TestAiScore
         game.printFinalStats();
       }
       n += 1;
-      printProgress(n, totalGames, 70);
       totalScore += score;
       totalScoreSqr += score * score;
       for (int i = 0; i < 700; i++)
@@ -147,40 +139,39 @@ namespace TestAiScore
 
 
       //game.print();
-      if (!handWrittenEvaluationTest || n == totalGames)
-      {
-        if (!handWrittenEvaluationTest)
-          game.printFinalStats();
-        cout << endl << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
-        //for (int i=0; i<400; ++i)
-        //    cout << i*100 << ",";
-        //cout << endl;
-        //for (int i=0; i<400; ++i)
-        //    cout << float(segmentStats[i]) / n << ",";
-        //cout << endl;
-        cout
-          << "UE7概率=" << float(segmentStats[327]) / n << ","
-          << "UE8概率=" << float(segmentStats[332]) / n << ","
-          << "UE9概率=" << float(segmentStats[338]) / n << ","
-          << "UD0概率=" << float(segmentStats[344]) / n << ","
-          << "UD1概率=" << float(segmentStats[350]) / n << ","
-          << "UD2概率=" << float(segmentStats[356]) / n << ","
-          << "UD3概率=" << float(segmentStats[362]) / n << ","
-          << "UD4概率=" << float(segmentStats[368]) / n << ","
-          << "UD5概率=" << float(segmentStats[375]) / n << ","
-          << "UD6概率=" << float(segmentStats[381]) / n << ","
-          << "UD7概率=" << float(segmentStats[387]) / n << ","
-          << "UD8概率=" << float(segmentStats[394]) / n << ","
-          << "UD9概率=" << float(segmentStats[400]) / n << ","
-          << "UC0概率=" << float(segmentStats[407]) / n << endl;
+      game.printFinalStats();
+      cout << endl << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
+      //for (int i=0; i<400; ++i)
+      //    cout << i*100 << ",";
+      //cout << endl;
+      //for (int i=0; i<400; ++i)
+      //    cout << float(segmentStats[i]) / n << ",";
+      //cout << endl;
+      cout
+        << "UE7概率=" << float(segmentStats[327]) / n << ","
+        << "UE8概率=" << float(segmentStats[332]) / n << ","
+        << "UE9概率=" << float(segmentStats[338]) / n << ","
+        << "UD0概率=" << float(segmentStats[344]) / n << ","
+        << "UD1概率=" << float(segmentStats[350]) / n << ","
+        << "UD2概率=" << float(segmentStats[356]) / n << ","
+        << "UD3概率=" << float(segmentStats[362]) / n << ","
+        << "UD4概率=" << float(segmentStats[368]) / n << ","
+        << "UD5概率=" << float(segmentStats[375]) / n << ","
+        << "UD6概率=" << float(segmentStats[381]) / n << ","
+        << "UD7概率=" << float(segmentStats[387]) / n << ","
+        << "UD8概率=" << float(segmentStats[394]) / n << ","
+        << "UD9概率=" << float(segmentStats[400]) / n << ","
+        << "UC0概率=" << float(segmentStats[407]) / n << endl;
 
-      }
+
     }
 
+
   }
+
 }
-using namespace TestAiScore;
-void main_testAiScore()
+using namespace TestScoreSearch;
+void main_testScoreSearch()
 {
   // 检查工作目录
   GameDatabase::loadTranslation("../db/text_data.json");

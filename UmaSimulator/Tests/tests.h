@@ -6,3 +6,6 @@ void main_test3();//测试训练属性值算法
 void main_test4();//测试不同人头数的概率
 void main_test_json();
 void main_testLibtorch();
+void main_testDemoGame();
+void main_testScoreSearch();
+void main_testScoreNoSearch();

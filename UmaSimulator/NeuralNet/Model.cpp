@@ -1,7 +1,10 @@
+#include <cassert>
 #include "Model.h"
 
 Model::Model(std::string path, int batchsize)
 {
+  if (path == "")
+    return;
 #ifdef USE_BACKEND_LIBTORCH
   model = torch::jit::load(path);
   
