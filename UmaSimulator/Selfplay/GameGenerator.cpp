@@ -194,6 +194,11 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
   }
   if (game.skillPt < 0)game.skillPt = 0;
 
+  if (rand() % 8 == 0)
+    game.vital = rand() % (game.maxVital + 1);
+  if (rand() % 4 == 0)
+    game.larc_ssWinSinceLastSSS = rand() % 9;
+
   if (rand() % 2 == 0)
   {
     int delta= expDistr(rand) * 10;
@@ -211,7 +216,7 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
 
 void GameGenerator::newGameBatch()
 {
-  const int maxTurn = TOTAL_TURN - 8;//7个比赛回合，因此最多训练TOTAL_TURN - 7次
+  const int maxTurn = TOTAL_TURN - 7;//7个比赛回合，因此最多训练TOTAL_TURN - 7次
   vector<int> turnsEveryGame(param.batchsize);
   evaluator.gameInput.resize(param.batchsize);
   for (int i = 0; i < param.batchsize; i++)
