@@ -27,7 +27,9 @@ struct testResult
 
 void main_testCardsSingle()
 {
-  // 检查工作目录
+  //string modelPath = "db/model_traced.pt";
+  string modelPath = "";
+
   GameDatabase::loadUmas("../db/umaDB.json");
   //GameDatabase::loadCards("../db/card");
   GameDatabase::loadDBCards("../db/cardDB.json");
@@ -75,10 +77,16 @@ void main_testCardsSingle()
 
   SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
 
-  int batchsize = 256;
-  //Model model("../training/example/model_traced.pt", batchsize);
-  //Model* modelptr = &model;
+  int batchsize = 1024;
   Model* modelptr = NULL;
+  Model model(modelPath, batchsize);
+  if (modelPath != "")
+  {
+    modelptr = &model;
+  }
+
+  Model::detect(modelptr);
+
   Search search(modelptr, batchsize, threadNum, searchParam);
 
   vector<testResult> allResult;

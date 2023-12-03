@@ -9,6 +9,9 @@
 
 int main()
 {
+	//main_testScoreNoSearch();
+	//return 0;
+
 #if defined UMAAI_MODELBENCHMARK
 	main_modelBenchmark();
 #elif defined UMAAI_TESTLIBTORCH
