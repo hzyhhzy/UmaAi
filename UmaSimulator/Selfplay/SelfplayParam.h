@@ -3,13 +3,13 @@
 #include <string>
 struct SelfplayParam
 {
-  int threadNum = 16;
+  int threadNum = 8;
   int threadNumInner = 1;
-  int maxSampleNum = 100 * 1024 * 16;
-  int batchsize = 128;
-  std::string modelPath = "";
+  int maxSampleNum = 1000 * 1024 * 16;
+  int batchsize = 1024;
+  std::string modelPath = "model_traced.pt";
   std::string exportDataDir = "./selfplay/0/";
-  int sampleNumEachFile = 2048;
+  int sampleNumEachFile = 1024;
 
   //log(searchN)~ÕýÌ¬·Ö²¼(searchN_logmean,searchN_logstdev)
   double searchN_logmean = 6.9;//1024

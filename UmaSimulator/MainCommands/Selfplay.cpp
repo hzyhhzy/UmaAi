@@ -18,22 +18,24 @@ void main_selfplay()
   GameDatabase::loadUmas("./db/umaDB.json");
   GameDatabase::loadDBCards("./db/cardDB.json");
   SelfplayParam param;
-  //param.sampleNumEachFile = 16;
-  param.threadNum = 16;
   std::filesystem::create_directories(param.exportDataDir);
 
-  Model* modelPtr;
-  if (param.modelPath == "")
-    modelPtr = NULL;
-  else
-    assert(false);
+  Model* modelptr = NULL;
+  Model model(param.modelPath, param.batchsize);
+  if (param.modelPath != "")
+  {
+    modelptr = &model;
+  }
+  std::cout << "神经网络模型路径：" << param.modelPath << std::endl;
+  Model::detect(modelptr);
+
 
 
   std::vector<SelfplayThread> spThreads;
   std::vector<std::thread> threads;
 
   for (int i = 0; i < param.threadNum; i++)
-    spThreads.emplace_back(param, modelPtr);
+    spThreads.emplace_back(param, modelptr);
 
   //spThreads[0].run();
   for (auto& spt : spThreads) {
