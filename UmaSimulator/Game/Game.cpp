@@ -1637,7 +1637,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     skillPt += 20;
 
     //larc1
-    runRace(5, 20);
+    runRace(3, 10);
     larc_shixingPt += 50;
 
     //ÓÑÈË¿¨°ÝÄê
