@@ -7,14 +7,15 @@
 #include <vector>
 #include <chrono>
 #include "MainCommands.h"
+#include "../NeuralNet/NNInput.h"
 using namespace std;
 void main_modelBenchmark() {
 
 
-  std::string modelpath = "../training/example/model_traced1.pt";
+  std::string modelpath = "../training/example/model_traced.pt";
   const int threadNum = 4;
   const int batchSize = 1024;
-  int64_t N = 1000000;
+  int64_t N = 3000000;
 
   int batchNumEveryThread = 1 + (N - 1) / (batchSize * threadNum);
   N = (batchSize * threadNum) * batchNumEveryThread;
@@ -47,7 +48,7 @@ void main_modelBenchmark() {
 
   auto modelthread = [&model](int batchNumEveryThread)
     {
-      int nc = 357 + 20 * (72 + 74);
+      int nc = NNINPUT_CHANNELS_V1;
       vector<float> data(batchSize * nc);
       for (int b = 0; b < batchNumEveryThread; b++)
       {
@@ -58,9 +59,7 @@ void main_modelBenchmark() {
         }
 
         // 运行模型
-        std::vector<torch::jit::IValue> inputs;
-        inputs.push_back(input);
-        at::Tensor output = model.forward(inputs).toTensor().to(at::kCPU);
+        at::Tensor output = model.forward({ input }).toTensor().to(at::kCPU);
 
         // 转换输出为浮点数数组
         float* output_data = output.data_ptr<float>();

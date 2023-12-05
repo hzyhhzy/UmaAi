@@ -104,10 +104,10 @@ void main_ai()
 	string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/GameData/thisTurn.json";
 	//string currentGameStagePath = "./gameData/thisTurn.json";
 
-	SearchParam searchParam = { GameConfig::searchN,TOTAL_TURN,GameConfig::radicalFactor };
+	SearchParam searchParam = { GameConfig::searchN,10,GameConfig::radicalFactor };
 
-	//string modelPath = "db/model_traced.pt";
-	string modelPath = "";
+	string modelPath = "db/model_traced.pt";
+	//string modelPath = "";
 
 	int batchsize = 256;
 	Model* modelptr = NULL;

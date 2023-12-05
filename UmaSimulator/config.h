@@ -12,7 +12,7 @@
 #define PRINT_GAME_EVENT
 #endif
 
-//#define USE_BACKEND_LIBTORCH //使用libtorch计算神经网络
+#define USE_BACKEND_LIBTORCH //使用libtorch计算神经网络
 
 
 const int MAX_SCORE = 200000;//最大允许的分数，70000在larc剧本肯定很够用了，但不排除selfplay随机出来的开局存在一些极端情况
