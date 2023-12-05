@@ -20,6 +20,7 @@
 
 using namespace std;
 
+// 仅测试手动分数，不进行NN测试
 namespace TestAiScore
 {
   const bool handWrittenEvaluationTest = true;
@@ -30,7 +31,7 @@ namespace TestAiScore
   SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
   const bool recordGame = false;
 
-  int totalGames = handWrittenEvaluationTest ? 50000 : 10000000;
+  int totalGames = 100000;
   int gamesEveryThread = totalGames / threadNum;
 
   TestConfig test;
@@ -59,12 +60,10 @@ namespace TestAiScore
   */
   std::atomic<double> totalScore = 0;
   std::atomic<double> totalScoreSqr = 0;
-
   std::atomic<int> bestScore = 0;
   std::atomic<int> n = 0;
   std::mutex printLock;
   vector<atomic<int>> segmentStats = vector<atomic<int>>(700);//100分一段，700段
-  std::atomic<int> printThreshold = 2187;
   map<int, GameResult> segmentSample;
 
   GameResult getResult(const Game& game)
@@ -114,6 +113,7 @@ namespace TestAiScore
     {
       Game game;
       game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
+      game.eventStrength = test.eventStrength;
       for (int i = 0; i < 9; i++)
         game.larc_allowedDebuffsFirstLarc[i] = test.allowedDebuffs[i];
 
@@ -126,7 +126,6 @@ namespace TestAiScore
           action = Evaluator::handWrittenStrategy(game);
         }
         else {
-
           action = search.runSearch(game, rand);
         }
         game.applyTrainingAndNextTurn(rand, action);
@@ -188,17 +187,18 @@ using namespace TestAiScore;
 
 void main_testAiScore()
 {
-  // 检查工作目录
+  /* // 检查工作目录
   GameDatabase::loadTranslation("../db/text_data.json");
   GameDatabase::loadUmas("../db/umaDB.json");
   GameDatabase::loadDBCards("../db/cardDB.json");
   test = TestConfig::loadFile("../ConfigTemplate/testConfig.json");  
-
+  */
   // 独立测卡工具直接使用当前目录
-  //GameDatabase::loadTranslation("db/text_data.json");
-  //GameDatabase::loadUmas("db/umaDB.json");
-  //GameDatabase::loadDBCards("db/cardDB.json");
-  //test = TestConfig::loadFile("testConfig.json");  
+  GameDatabase::loadTranslation("db/text_data.json");
+  GameDatabase::loadUmas("db/umaDB.json");
+  GameDatabase::loadDBCards("db/cardDB.json");
+  test = TestConfig::loadFile("testConfig.json");  
+  Model::detect(nullptr);
   
   cout << test.explain() << endl;
   

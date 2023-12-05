@@ -20,17 +20,11 @@ using namespace std;
 
 void main_testScoreNoSearch()
 {
-
   const string modelpath = "../training/example/model_traced.pt";
   //const string modelpath = "";
   const int threadNum = 8;
   const double radicalFactor = 5;//激进度
-
-
   TestConfig test;
-
-
-
 
   // 检查工作目录
   GameDatabase::loadTranslation("../db/text_data.json");
@@ -45,9 +39,6 @@ void main_testScoreNoSearch()
   cout << "神经网络文件：" << modelpath << "   局数：" << test.totalGames << endl;
 
   cout << "正在测试……\033[?25l" << endl;
-
-
-
   random_device rd;
   auto rand = mt19937_64(rd());
 
@@ -61,7 +52,6 @@ void main_testScoreNoSearch()
 
   Search search(modelptr, batchsize, threadNum, searchParam);
 
-
   Game game;
   game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
   for (int i = 0; i < 9; i++)
@@ -72,5 +62,4 @@ void main_testScoreNoSearch()
   cout << "平均分数=\033[1;32m" << int(value.scoreMean) << " \033[0m" << "胡局分数=\033[1;32m" << int(value.value) << "\033[0m " << "标准差=\033[1;32m" << int(value.scoreStdev) << "\033[0m  " << endl;
 
   system("pause");
-
 }

@@ -268,8 +268,6 @@ void Search::evaluateSingleActionThread(int threadIdx, ModelOutputValueV1* resul
   assert(samplingNum % batchSize == 0);
   int batchNum = samplingNum / batchSize;
 
-
-
   for (int batch = 0; batch < batchNum; batch++)
   {
     eva.gameInput.assign(batchSize, game);

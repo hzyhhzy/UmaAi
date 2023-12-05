@@ -20,7 +20,6 @@ using namespace std;
 
 namespace TestScoreSearch
 {
-
   const string modelpath = "../training/example/model_traced.pt";
   const int threadNum = 8;
   const int threadNumInner = 1;
@@ -86,8 +85,6 @@ namespace TestScoreSearch
       Action action0 = { 8,false,false,false,false };//无条件外出，这样就无视第一回合的人头分布了
       game.applyTrainingAndNextTurn(rand, action0);
 
-
-
       while (!game.isEnd())
       {
         if (recordGame)
@@ -137,7 +134,6 @@ namespace TestScoreSearch
         // 然后我们再次进行比较和交换操作，直到成功为止
       }
 
-
       //game.print();
       game.printFinalStats();
       cout << endl << n << "局，搜索量=" << searchN << "，平均分" << totalScore / n << "，标准差" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "，最高分" << bestScore << endl;
@@ -162,10 +158,7 @@ namespace TestScoreSearch
         << "UD8概率=" << float(segmentStats[394]) / n << ","
         << "UD9概率=" << float(segmentStats[400]) / n << ","
         << "UC0概率=" << float(segmentStats[407]) / n << endl;
-
-
     }
-
 
   }
 
