@@ -214,6 +214,29 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
   if (rand() % 2 == 0)
     game.tryBuyUpgrade(6, 3);//尝试购买体力-20%
 
+  //随机更改一些larc一级二级，模拟消debuff与ai预想的不一致的情况
+  if (rand() % 4 == 0)
+  {
+    for (int i = 0; i < 10; i++)
+    {
+      if (rand() % 8 == 0)
+      {
+        if (game.larc_levels[i] == 1)
+        {
+          game.larc_levels[i] = 2;
+          game.larc_shixingPt -= GameConstants::LArcUpgradesCostLv2[i];
+        }
+        else if(game.larc_levels[i] == 2)
+        {
+          game.larc_levels[i] = 1;
+          game.larc_shixingPt += GameConstants::LArcUpgradesCostLv2[i];
+        }
+      }
+    }
+    if (game.larc_shixingPt < 0)game.larc_shixingPt = 0;
+  }
+
+
   return game;
 }
 
