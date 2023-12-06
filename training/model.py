@@ -28,6 +28,24 @@ class EncoderLayer(nn.Module):
         y = y + x
         return y
 
+class EncoderLayerSimple(nn.Module):
+    def __init__(self, inout_c, global_c):
+        super().__init__()
+        self.inout_c = inout_c
+        self.lin_Q = nn.Linear(inout_c, inout_c, bias=False)
+        self.lin_V = nn.Linear(inout_c, inout_c, bias=False)
+        self.lin_global = nn.Linear(global_c, inout_c)
+
+    def forward(self, x, gf):
+        y=x.view(x.shape[0]*x.shape[1],x.shape[2])
+        q=self.lin_Q(y).view(x.shape[0],x.shape[1],self.inout_c)
+        v=self.lin_V(y).view(x.shape[0],x.shape[1],self.inout_c)
+        att=torch.relu(torch.bmm(x,q.transpose(1,2)))*0.05
+        y=torch.bmm(att,v)
+        y=torch.relu(y+self.lin_global(gf).view(x.shape[0],1,self.inout_c))
+
+        y = y + x
+        return y
 class ResnetLayer(nn.Module):
     def __init__(self, inout_c, mid_c):
         super().__init__()
@@ -321,6 +339,85 @@ class Model_EncoderMlp(nn.Module): #简易版transformer+mlp
 
         return self.outputhead(h)
 
+class Model_EncoderMlpSimple(nn.Module): #简易版transformer+mlp
+
+    def __init__(self,encoderB,encoderF,mlpB,mlpF,globalF):
+        super().__init__()
+        self.model_type = "ems"
+        self.model_param=(encoderB,encoderF,mlpB,mlpF,globalF)
+        self.encoderF=encoderF
+        self.gC=357
+        self.pC=72+74
+        self.inputhead1=nn.Linear(self.gC, globalF)
+        self.inputhead2=nn.Linear(self.gC, encoderF)
+        self.inputhead3=nn.Linear(self.pC, encoderF)
+
+        self.encoderTrunk=nn.ModuleList()
+        for i in range(encoderB):
+            self.encoderTrunk.append(EncoderLayerSimple(inout_c=encoderF,global_c=globalF))
+
+        self.linBeforeMLP1=nn.Linear(globalF,mlpF)
+        self.linBeforeMLP2=nn.Linear(encoderF,mlpF)
+
+        self.mlpTrunk=nn.ModuleList()
+        for i in range(mlpB):
+            self.mlpTrunk.append(ResnetLayer(mlpF,mlpF))
+
+        self.outputhead=nn.Linear(mlpF, Game_Output_C)
+
+    def prepareInput(self,x):
+        batch_size=x.shape[0]
+        A = 357 #全局信息的通道数
+        B = 72 #支援卡参数的通道数
+        C = 74 #larc人头的通道数
+        assert(A+7*B+20*C==x.shape[1])
+
+        # 分割张量
+        x_A = x[:, :A]
+        x_B = x[:, A:A + 7 * B].view(batch_size, 7, B)
+        x_C = x[:, A + 7 * B:].view(batch_size, 20, C)
+
+        # 配对B和C
+        paired_BCs = []
+        # 前6对
+        for i in range(6):
+            paired_BCs.append(torch.cat((x_B[:, i], x_C[:, i]), dim=1))
+        # 第7对
+        paired_BCs.append(torch.cat((x_B[:, 6], x_C[:, 18]), dim=1))
+        # 剩余的C与零填充的B配对
+        #zero_B = torch.zeros(batch_size, B, device=x.device)
+        zero_B = 0.0*x[:,:B]
+        for i in range(6, 20):
+            if i != 18:  # 跳过已经配对的第19个C
+                paired_BCs.append(torch.cat((zero_B, x_C[:, i]), dim=1))
+
+        # 合并A
+        result = torch.stack(paired_BCs, dim=1)
+        return x_A, result
+
+    def forward(self, x):
+        gf, h=self.prepareInput(x)
+        assert(h.shape[1]==20)
+        h=h.view(-1,self.pC)
+        h=self.inputhead3(h)
+        h=h.view(x.shape[0],20,self.encoderF)
+        h=h+self.inputhead2(gf).view(x.shape[0],1,self.encoderF)
+        h=torch.relu(h)
+
+        gf=torch.relu(self.inputhead1(gf))
+        for block in self.encoderTrunk:
+            h=block(h,gf)
+
+        h=h.mean(dim=1)
+
+        h=self.linBeforeMLP2(h)+self.linBeforeMLP1(gf)
+        h=torch.relu(h)
+
+        for block in self.mlpTrunk:
+            h=block(h)
+
+        return self.outputhead(h)
+
 class Model_ResNetDP(nn.Module):
 
     def __init__(self,b,f,dptype,dprate):
@@ -390,4 +487,5 @@ ModelDic = {
     "tl": Model_twolayer, #2 layer mlp
     "lin": Model_linear, #linear
     "em": Model_EncoderMlp, #手写极简版transformer+mlp
+    "ems": Model_EncoderMlpSimple, #手写极简版transformer+mlp
 }
