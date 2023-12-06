@@ -312,8 +312,9 @@ void Person::getNNInputV1(float* buf, const Game& game, int index) const
       }
     }
   }
-
-  //total 74
+  assert(personType >= 1 && personType <= 6);
+  buf[74 + personType] = 1.0;
+  //total 81
 
 }
 
@@ -606,7 +607,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   float* headBuf = buf + NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1 + 7 * NNINPUT_CHANNELS_CARD_V1;
 
 
-  //(全局信息)(支援卡1参数)...(支援卡6参数)(佐岳卡参数)(支援卡人头1)...(支援卡人头6)(npc1)...(npc10)(理事长)(记者)(有卡佐岳)(无卡佐岳)
+  //(全局信息)(支援卡1参数)...(支援卡6参数)(佐岳卡参数)(支援卡人头1)...(支援卡人头6)(有卡佐岳)(npc1)...(npc10)(理事长)(记者)(无卡佐岳)
   //如果带了佐岳，则 支援卡6、支援卡人头6 为空
   //如果没带佐岳，则 佐岳卡参数、npc10为空
   if (larc_zuoyueType == 0)
@@ -623,13 +624,13 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     for (int i = 0; i < 9; i++)
     {
       const Person& p = persons[6 + i];
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (6 + i), *this, 6 + i);
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (7 + i), *this, 6 + i);
     }
     //理事长记者
     for (int i = 0; i < 2; i++)
     {
       const Person& p = persons[15 + i];
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (16 + i), *this, 15 + i);
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (17 + i), *this, 15 + i);
     }
     //佐岳
     persons[17].getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * 19, *this, 17);
@@ -648,17 +649,17 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     for (int i = 0; i < 10; i++)
     {
       const Person& p = persons[5 + i];
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (6 + i), *this, 5 + i);
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (7 + i), *this, 5 + i);
     }
     //理事长记者
     for (int i = 0; i < 2; i++)
     {
       const Person& p = persons[15 + i];
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (16 + i), *this, 15 + i);
+      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (17 + i), *this, 15 + i);
     }
     //佐岳
     cardParam[persons[17].cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * 6, *this);
-    persons[17].getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * 18, *this, 17);
+    persons[17].getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * 6, *this, 17);
   }
 
 }

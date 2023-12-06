@@ -6,7 +6,7 @@ struct SupportCard;
 struct Game;
 struct Person //任何一个可能出现在训练里的人头
 {
-  int8_t personType;//0代表未加载（例如前两个回合的npc），1代表佐岳支援卡（R或SSR都行），2代表普通支援卡，3代表npc人头，4理事长，5记者，6不带卡的佐岳。暂不支持其他友人/团队卡
+  int8_t personType;//0代表未知，1代表佐岳支援卡（R或SSR都行），2代表普通支援卡，3代表npc人头，4理事长，5记者，6不带卡的佐岳。暂不支持其他友人/团队卡
   //int16_t cardId;//支援卡id，不是支援卡就0
   int16_t charaId;//npc人头的马娘id，不是npc就0，懒得写也可以一律0（只用于获得npc的名字）
 
