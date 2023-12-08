@@ -59,8 +59,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     #data settings
-    parser.add_argument('--tdatadir', type=str, default='../selfplay5/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
-    parser.add_argument('--vdatadir', type=str, default='../selfplay5/selfplay/val2.npz', help='validation dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--tdatadir', type=str, default='../selfplay345/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--vdatadir', type=str, default='../selfplay345/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
     parser.add_argument('--maxvalsamp', type=int, default=1000000, help='validation sample num')
     parser.add_argument('--maxstep', type=int, default=5000000000, help='max step to train')
     parser.add_argument('--savestep', type=int, default=2000, help='step to save and validation')
@@ -189,7 +189,7 @@ if __name__ == '__main__':
                                 {'params': transformerparam, 'lr': lrtf*args.lrscale, 'weight_decay': wd*args.wdscale}],
                                lr=lr*args.lrscale, weight_decay=wd*args.wdscale)
 
-    elif model_type == 'em':
+    elif model_type == 'em' or model_type == 'ems':
         lr = 5e-4
         wd = 2e-5
         optimizer = optim.Adam(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)

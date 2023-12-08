@@ -104,22 +104,23 @@ void main_ai()
 	string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/GameData/thisTurn.json";
 	//string currentGameStagePath = "./gameData/thisTurn.json";
 
-	SearchParam searchParam = { GameConfig::searchN,TOTAL_TURN,GameConfig::radicalFactor };
 
-	//string modelPath = "db/model_traced.pt";
-	string modelPath = "";
 
-	int batchsize = 256;
 	Model* modelptr = NULL;
-	Model model(modelPath, batchsize);
-	if (modelPath != "")
+	Model model(GameConfig::modelPath, GameConfig::batchSize);
+	if (GameConfig::modelPath != "")
 	{
 		modelptr = &model;
+	}
+	else
+	{
+		GameConfig::searchDepth = TOTAL_TURN;
 	}
 
 	Model::detect(modelptr);
 
-	Search search(modelptr, batchsize, GameConfig::threadNum, searchParam);
+	SearchParam searchParam = { GameConfig::searchN,GameConfig::searchDepth,GameConfig::radicalFactor };
+	Search search(modelptr, GameConfig::batchSize, GameConfig::threadNum, searchParam);
 
 	websocket ws(GameConfig::useWebsocket ? "http://127.0.0.1:4693" : "");
 	if (GameConfig::useWebsocket)
@@ -162,6 +163,8 @@ void main_ai()
 
 		bool suc = game.loadGameFromJson(jsonStr);
 		game.eventStrength = GameConfig::eventStrength;
+		game.larc_allowedDebuffsFirstLarc[4] = !GameConfig::removeDebuff5;
+		game.larc_allowedDebuffsFirstLarc[6] = !GameConfig::removeDebuff7;
 
 		if (!suc)
 		{
