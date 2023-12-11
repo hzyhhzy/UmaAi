@@ -3,6 +3,8 @@
 #include "../config.h"
 #include <string>
 #include <vector>
+#include <mutex>
+
 
 const int NN_Game_Card_Num = 7;//7张卡（每次有且仅有一个位置为空）
 const int NN_Game_Person_Num = 20;//20个人头（每次有且仅有二个位置为空）
@@ -161,6 +163,7 @@ private:
 #if USE_BACKEND != BACKEND_NONE && USE_BACKEND != BACKEND_LIBTORCH 
   const int batchSize;
   ModelWeight modelWeight;
+  std::mutex mtx; // 互斥锁
 #endif
 
 #if USE_BACKEND == BACKEND_CUDA

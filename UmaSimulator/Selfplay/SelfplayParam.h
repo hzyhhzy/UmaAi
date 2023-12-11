@@ -8,7 +8,8 @@ struct SelfplayParam
   int maxSampleNum = 1000 * 1024 * 16;
   int batchsize = 4;
   //std::string modelPath = "model_traced.pt";
-  std::string modelPath = "";
+  std::string modelPath = "model.txt";
+  //std::string modelPath = "";
   std::string exportDataDir = "./selfplay/0/";
   int sampleNumEachFile = 1024;
 

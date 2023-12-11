@@ -87,7 +87,7 @@ void main_modelBenchmark() {
 
 #if USE_BACKEND == BACKEND_CUDA
   static_assert(threadNum == 1);
-  const string modelpath = "C:\\UmaAi\\saved_models\\ems1\\model.txt";
+  const string modelpath = "../training/example/model.txt";
   Model model(modelpath, batchSize);
 
   std::vector<float> data(batchSize * NNINPUT_CHANNELS_V1), output(batchSize * NNOUTPUT_CHANNELS_V1);
@@ -109,6 +109,7 @@ void main_modelBenchmark() {
   // 输出持续时间
   std::cout << "Time: " << duration_s << " s, speed=" << N / duration_s << std::endl;
 #endif
-
+  cout << "按任意键继续" << endl;
+  cin.get();
   return;
 }

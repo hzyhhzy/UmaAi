@@ -21,7 +21,8 @@ using namespace std;
 void main_testScoreNoSearch()
 {
 
-  const string modelpath = "../training/example/model_traced.pt";
+  //const string modelpath = "../training/example/model_traced.pt";
+  const string modelpath = "../training/example/model.txt";
   //const string modelpath = "";
   const int threadNum = 8;
   const double radicalFactor = 5;//¼¤½ø¶È

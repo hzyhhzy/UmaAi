@@ -13,11 +13,11 @@ using namespace std;
 #pragma comment(lib, CUDA_LIBROOT "cuda.lib")
 #pragma comment(lib, CUDA_LIBROOT "cudart_static.lib")
 #ifdef _DEBUG
-#pragma comment(lib, "C:/Users/hzy/source/repos/UmaSimulator/x64/Debug/CudaBackendKernel_debug.lib")
-//#pragma comment(lib, "./NeuralNet/CudaBackendKernel_debug.lib")
+//#pragma comment(lib, "C:/Users/hzy/source/repos/UmaSimulator/x64/Debug/CudaBackendKernel_debug.lib")
+#pragma comment(lib, "./NeuralNet/CudaBackendKernel_debug.lib")
 #else
-#pragma comment(lib, "C:/Users/hzy/source/repos/UmaSimulator/x64/Release/CudaBackendKernel.lib")
-//#pragma comment(lib, "./NeuralNet/CudaBackendKernel.lib")
+//#pragma comment(lib, "C:/Users/hzy/source/repos/UmaSimulator/x64/Release/CudaBackendKernel.lib")
+#pragma comment(lib, "./NeuralNet/CudaBackendKernel.lib")
 #endif
 
 //copy from KataGo
@@ -80,7 +80,6 @@ static void mallocAndCopyToDevice(const string& name, const vector<float>& weigh
 
 void ModelCudaBuf::init(const ModelWeight& weight, int batchSize)
 {
-  assert(batchSize <= MAX_BATCHSIZE_CUDA);
   CUBLAS_ERR("CudaHandles", cublasCreate(&cublas));
 
   //复制权重到GPU
@@ -223,6 +222,7 @@ void ModelWeight::load(std::string path)
 
 void Model::evaluate(float* inputBuf, float* outputBuf, int gameNum)
 {
+  std::lock_guard<std::mutex> lock(mtx);
   //内存中是batchsize*NNInputC矩阵，行优先
   CUDA_ERR("", cudaMemcpy(cb.input, inputBuf, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1, cudaMemcpyHostToDevice)); //batchsize*NNInputC矩阵
 

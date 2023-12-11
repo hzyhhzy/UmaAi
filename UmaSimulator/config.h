@@ -4,7 +4,7 @@
 //#define UMAAI_TESTSCORE   //测试ai分数
 //#define UMAAI_TESTCARDSSINGLE   //测卡，控制五张卡不变只改变一张
 //#define UMAAI_SIMULATOR   //养马模拟器
-#define UMAAI_SELFPLAY   //跑数据（用于神经网络训练）
+//#define UMAAI_SELFPLAY   //跑数据（用于神经网络训练）
 //#define UMAAI_TESTLIBTORCH   //测试c++版torch
 //#define UMAAI_MODELBENCHMARK   //测试神经网络速度
 
@@ -35,6 +35,5 @@ const int LIBTORCH_USE_GPU = true;//是否使用GPU
 #if USE_BACKEND == BACKEND_CUDA
 
 #define CUDA_LIBROOT "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/"
-const int MAX_BATCHSIZE_CUDA = 32768;
 
 #endif

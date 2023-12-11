@@ -9,9 +9,9 @@
 
 int main()
 {
-	main_modelBenchmark();
+	//main_modelBenchmark();
 	//main_testScoreNoSearch();
-	return 0;
+	//return 0;
 
 #if defined UMAAI_MODELBENCHMARK
 	main_modelBenchmark();

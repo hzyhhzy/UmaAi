@@ -86,7 +86,8 @@ void main_testDemoGame()
 	SearchParam searchParam = { searchN,searchDepth,radicalFactor };
 
 	int batchsize = 128;
-	Model model("./model_traced.pt", batchsize);
+	Model model("./model.txt", batchsize);
+	//Model model("./model_traced.pt", batchsize);
 	Model* modelptr = &model;
 	//Model* modelptr = NULL;
 

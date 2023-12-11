@@ -21,10 +21,10 @@ using namespace std;
 namespace TestScoreSearch
 {
 
-  const string modelpath = "../training/example/model_traced.pt";
+  const string modelpath = "../training/example/model.txt";
   const int threadNum = 8;
   const int threadNumInner = 1;
-  const double radicalFactor = 0;//激进度
+  const double radicalFactor = 5;//激进度
   const int searchDepth = TOTAL_TURN;
   const int searchN = 1024;
   SearchParam searchParam = { searchN,searchDepth,radicalFactor };

@@ -34,11 +34,11 @@ void printMatrix(const float* matrix, int m, int n) {
 void main_testCuda()
 {
   const int bs = 8;
-  const string modelpath = "C:\\UmaAi\\saved_models\\ems1\\model.txt";
+  const string modelpath = "../training/example/model.txt";
   Model* model =new Model(modelpath, bs);
 
   // 准备输入数据
-  std::string filename = "C:\\UmaAi\\train\\example_data.npz";
+  std::string filename = "../training/example/example_data.npz";
   cnpy::npz_t my_npz = cnpy::npz_load(filename);
   cnpy::NpyArray arr = my_npz["x"];
 
