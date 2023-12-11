@@ -27,7 +27,7 @@ void main_selfplay()
     modelptr = &model;
   }
   std::cout << "神经网络模型路径：" << param.modelPath << std::endl;
-  Model::detect(modelptr);
+  Model::printBackendInfo();
 
 
 

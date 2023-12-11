@@ -116,7 +116,7 @@ void main_testCardsSingle()
       modelptr = &model;
     }
 
-    Model::detect(modelptr);
+    Model::printBackendInfo();
 
     Search search(modelptr, batchsize, threadNum, searchParam);
 
