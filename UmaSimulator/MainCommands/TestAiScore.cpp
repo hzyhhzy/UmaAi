@@ -99,9 +99,21 @@ namespace TestAiScore
     auto rand = mt19937_64(rd());
 
     int batchsize = 256;
-    //Model model("../training/example/model_traced.pt", batchsize);
-    //Model* modelptr = &model;
+
+#if USE_BACKEND == BACKEND_LIBTORCH
+    const string modelpath = "../training/example/model_traced.pt";
+#elif USE_BACKEND == BACKEND_NONE
+    const string modelpath = "";
+#else
+    const string modelpath = "../training/example/model.txt";
+#endif
+
     Model* modelptr = NULL;
+    Model model(modelpath, batchsize);
+    if (modelpath != "")
+    {
+      modelptr = &model;
+    }
 
     Search search(modelptr, batchsize, threadNumInner, searchParam);
 

@@ -9,7 +9,7 @@ int GameConfig::eventStrength = 20;
 bool GameConfig::removeDebuff5 = true;
 bool GameConfig::removeDebuff7 = true;
 
-string GameConfig::modelPath = "db/model_traced.pt";
+string GameConfig::modelPath = "db/model.txt";
 int GameConfig::threadNum = 4;
 int GameConfig::batchSize = 256;
 int GameConfig::searchN = 2000;
@@ -67,7 +67,7 @@ void GameConfig::load(const string& path)
 		j.at("removeDebuff7").get_to(GameConfig::removeDebuff7);
 
 
-		GameConfig::modelPath = j.value("modelPath", "db/model_traced.pt");
+		GameConfig::modelPath = j.value("modelPath", "db/model.txt");
 		j.at("threadNum").get_to(GameConfig::threadNum);
 		j.at("batchSize").get_to(GameConfig::batchSize);
 		j.at("searchN").get_to(GameConfig::searchN);

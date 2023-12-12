@@ -1928,7 +1928,8 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
     skillPt += eventStrength;
     printEvents("模拟支援卡随机事件：" + cardParam[persons[card].cardIdInGame].cardName + " 的羁绊+5，pt和随机属性+" + to_string(eventStrength));
 
-    if (randBool(rand, 0.2))
+    //支援卡一般是前几个事件加心情
+    if (randBool(rand, 0.2 * (1.0 - turn * 1.0 / TOTAL_TURN)))
     {
       addMotivation(1);
       printEvents("模拟支援卡随机事件：心情+1");
@@ -1953,28 +1954,28 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   }
 
   //加体力
-  if (randBool(rand, 0.15))
+  if (randBool(rand, 0.10))
   {
     addVital(5);
     printEvents("模拟随机事件：体力+5");
   }
 
   //加30体力（吃饭事件）
-  if (randBool(rand, 0.03))
+  if (randBool(rand, 0.02))
   {
     addVital(30);
     printEvents("模拟随机事件：体力+30");
   }
 
   //加心情
-  if (randBool(rand, 0.01))
+  if (randBool(rand, 0.02))
   {
     addMotivation(1);
     printEvents("模拟随机事件：心情+1");
   }
 
   //掉心情
-  if (randBool(rand, 0.03))
+  if (randBool(rand, 0.04))
   {
     addMotivation(-1);
     printEvents("模拟随机事件：\033[0m\033[33m心情-1\033[0m\033[32m");

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UmaSimulator", "UmaSimulator\UmaSimulator.vcxproj", "{F553A90B-CFB6-475F-8926-7B8ABB96760B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UmaAi", "UmaSimulator\UmaSimulator.vcxproj", "{F553A90B-CFB6-475F-8926-7B8ABB96760B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CudaBackendKernel", "CudaBackendKernel\CudaBackendKernel.vcxproj", "{895EE068-BF69-40BF-8C0A-1376EB1C8E91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,14 @@ Global
 		{F553A90B-CFB6-475F-8926-7B8ABB96760B}.Release|x64.Build.0 = Release|x64
 		{F553A90B-CFB6-475F-8926-7B8ABB96760B}.Release|x86.ActiveCfg = Release|Win32
 		{F553A90B-CFB6-475F-8926-7B8ABB96760B}.Release|x86.Build.0 = Release|Win32
+		{895EE068-BF69-40BF-8C0A-1376EB1C8E91}.Debug|x64.ActiveCfg = Debug|x64
+		{895EE068-BF69-40BF-8C0A-1376EB1C8E91}.Debug|x64.Build.0 = Debug|x64
+		{895EE068-BF69-40BF-8C0A-1376EB1C8E91}.Debug|x86.ActiveCfg = Debug|x64
+		{895EE068-BF69-40BF-8C0A-1376EB1C8E91}.Debug|x86.Build.0 = Debug|x64
+		{895EE068-BF69-40BF-8C0A-1376EB1C8E91}.Release|x64.ActiveCfg = Release|x64
+		{895EE068-BF69-40BF-8C0A-1376EB1C8E91}.Release|x64.Build.0 = Release|x64
+		{895EE068-BF69-40BF-8C0A-1376EB1C8E91}.Release|x86.ActiveCfg = Release|x64
+		{895EE068-BF69-40BF-8C0A-1376EB1C8E91}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

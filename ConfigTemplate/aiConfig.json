@@ -4,11 +4,11 @@
 	"removeDebuff5":false,//第二次凯旋门前是否需要消除智力debuff
 	"removeDebuff7":true,//第二次凯旋门前是否需要消除强心脏debuff
 	
-	"modelPath":"db/model_traced.pt", //神经网络文件的目录，留空("modelPath":"")是不使用神经网络
+	"modelPath":"db/model.txt", //神经网络文件的目录，留空("modelPath":"")是不使用神经网络
 	"threadNum":4,//线程数，不使用神经网络设成自己的CPU线程数减2，使用神经网络建议设成4
-	"batchSize":256,//不建议更改
+	"batchSize":512,//好显卡可以调高点，但是searchN如果小于线程数*batchSize会自动变成线程数*batchSize
 	"searchN":2000,//蒙特卡洛模拟量，越大越准确但是越慢，不使用神经网络建议8000，使用神经网络如果深度为10建议设成2000
-	"searchDepth":10,//蒙特卡洛深度，神经网络默认是10（不建议增大），非神经网络必须直接搜到游戏结束(设成游戏回合数)
+	"searchDepth":6,//蒙特卡洛深度，神经网络默认是6（不建议增大），非神经网络必须直接搜到游戏结束(设成游戏回合数)
 	
 	"useWebsocket":true,//是否使用websocket与小黑板通信，否则使用文件通信
 	"role":"default", //ai的提示词。"default"为经典版，"greencap"为绿帽，"aoi"为桐生院

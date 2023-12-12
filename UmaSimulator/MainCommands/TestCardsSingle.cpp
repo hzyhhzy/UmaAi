@@ -32,7 +32,7 @@ void main_testCardsSingle()
   int searchN = 100000;
   int threadNum = 4;
 
-  string modelPath = "../training/example/model_traced.pt";
+  string modelPath = "../training/example/model.txt";
   //string modelPath = "";
 
   GameDatabase::loadUmas("../db/umaDB.json");
@@ -116,7 +116,7 @@ void main_testCardsSingle()
       modelptr = &model;
     }
 
-    Model::detect(modelptr);
+    Model::printBackendInfo();
 
     Search search(modelptr, batchsize, threadNum, searchParam);
 
