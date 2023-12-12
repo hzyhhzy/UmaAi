@@ -25,11 +25,12 @@ public:
     vector<bool> allowedDebuffs; // 9
 
     int totalGames = 50000;
+    int eventStrength = 20;
 
 public:
     TestConfig() {}
-    TestConfig(int umaId, int umaStars, const int *cards, const int* zhongmaBlue, const int* zhongmaBonus, const bool *allowedDebuffs, const int totalGames)
-        : umaId(umaId), umaStars(umaStars), totalGames(totalGames)
+    TestConfig(int umaId, int umaStars, const int *cards, const int* zhongmaBlue, const int* zhongmaBonus, const bool *allowedDebuffs, const int totalGames, const int eventStrength)
+        : umaId(umaId), umaStars(umaStars), totalGames(totalGames), eventStrength(eventStrength)
     {
         this->cards = vector<int>(cards, cards + 6);
         this->zhongmaBlue = vector<int>(zhongmaBlue, zhongmaBlue + 5);
@@ -83,11 +84,12 @@ public:
         for (i = 0; i < 9; ++i)
             if (allowedDebuffs[i])
                 ss << LessonNames[i] << " ";
-        ss << "\033[0m";
+        ss << ", 局数：" << totalGames << ", 事件强度：" << eventStrength << "属性/Pt"
+           << "\033[0m" << endl;
         return ss.str();
     }
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(TestConfig, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus, allowedDebuffs, totalGames);
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(TestConfig, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus, allowedDebuffs, totalGames, eventStrength);
 };
 
 class GameResult

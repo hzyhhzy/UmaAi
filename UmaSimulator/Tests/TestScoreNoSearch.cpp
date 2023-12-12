@@ -30,15 +30,10 @@ void main_testScoreNoSearch()
 
   const int threadNum = 8;
   int batchsize = 2048;
-  const double radicalFactor = 5;//¼¤½ø¶È
-
-
+  const double radicalFactor = 5;//æ¿€è¿›åº¦
   TestConfig test;
 
-
-
-
-  // ¼ì²é¹¤×÷Ä¿Â¼
+  // æ£€æŸ¥å·¥ä½œç›®å½•
   GameDatabase::loadTranslation("../db/text_data.json");
   GameDatabase::loadUmas("../db/umaDB.json");
   GameDatabase::loadDBCards("../db/cardDB.json");
@@ -49,13 +44,10 @@ void main_testScoreNoSearch()
   test.totalGames = ((test.totalGames - 1) / (threadNum * batchsize) + 1) * threadNum * batchsize;
   SearchParam searchParam = { test.totalGames,TOTAL_TURN,radicalFactor };
 
-  cout << "Ïß³ÌÊý£º" << threadNum << "   batchsize£º" << batchsize << endl;
-  cout << "Éñ¾­ÍøÂçÎÄ¼þ£º" << modelpath << "   ¾ÖÊý£º" << test.totalGames << "£¨ÒÑ¶Ôbatchsize*Ïß³ÌÊýÈ¡Õû£©" << endl;
+  cout << "çº¿ç¨‹æ•°ï¼š" << threadNum << "   batchsizeï¼š" << batchsize << endl;
+  cout << "ç¥žç»ç½‘ç»œæ–‡ä»¶ï¼š" << modelpath << "   å±€æ•°ï¼š" << test.totalGames << "ï¼ˆå·²å¯¹batchsize*çº¿ç¨‹æ•°å–æ•´ï¼‰" << endl;
 
-  cout << "ÕýÔÚ²âÊÔ¡­¡­\033[?25l" << endl;
-
-
-
+  cout << "æ­£åœ¨æµ‹è¯•â€¦â€¦\033[?25l" << endl;
   random_device rd;
   auto rand = mt19937_64(rd());
 
@@ -68,25 +60,23 @@ void main_testScoreNoSearch()
 
   Search search(modelptr, batchsize, threadNum, searchParam);
 
-
   Game game;
   game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
   for (int i = 0; i < 9; i++)
     game.larc_allowedDebuffsFirstLarc[i] = test.allowedDebuffs[i];
-  Action action = { 8,false,false,false,false };//ÎÞÌõ¼þÍâ³ö£¬ÕâÑù¾ÍÎÞÊÓµÚÒ»»ØºÏµÄÈËÍ··Ö²¼ÁË
+  Action action = { 8,false,false,false,false };//æ— æ¡ä»¶å¤–å‡ºï¼Œè¿™æ ·å°±æ— è§†ç¬¬ä¸€å›žåˆçš„äººå¤´åˆ†å¸ƒäº†
 
   auto start = std::chrono::high_resolution_clock::now();
   auto value = search.evaluateSingleAction(game, rand, action);
   auto stop = std::chrono::high_resolution_clock::now();
 
-  cout << "Æ½¾ù·ÖÊý=\033[1;32m" << int(value.scoreMean) << " \033[0m" << "ºú¾Ö·ÖÊý=\033[1;32m" << int(value.value) << "\033[0m " << "±ê×¼²î=\033[1;32m" << int(value.scoreStdev) << "\033[0m  " << endl;
+  cout << "å¹³å‡åˆ†æ•°=\033[1;32m" << int(value.scoreMean) << " \033[0m" << "èƒ¡å±€åˆ†æ•°=\033[1;32m" << int(value.value) << "\033[0m " << "æ ‡å‡†å·®=\033[1;32m" << int(value.scoreStdev) << "\033[0m  " << endl;
 
-  // ¼ÆËã³ÖÐøÊ±¼ä
+  // è®¡ç®—æŒç»­æ—¶é—´
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
   double duration_s = 0.000001 * duration.count();
-  // Êä³ö³ÖÐøÊ±¼ä
-  std::cout << "ÓÃÊ±: " << duration_s << " s, Ã¿Ãë " << test.totalGames / duration_s << " ¾Ö" << std::endl;
+  // è¾“å‡ºæŒç»­æ—¶é—´
+  std::cout << "ç”¨æ—¶: " << duration_s << " s, æ¯ç§’ " << test.totalGames / duration_s << " å±€" << std::endl;
 
   system("pause");
-
 }
