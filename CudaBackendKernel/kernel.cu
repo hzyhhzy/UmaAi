@@ -222,3 +222,38 @@ cudaError_t sparseToDense(uint32_t* idx, float* value, float* output, int m) {
   cudaDeviceSynchronize();
   return cudaGetLastError();
 }
+
+const int NNINPUT_MAX_FLOAT = 128; //nninput里面最多有多少个非0非1的数
+const int NNINPUT_MAX_ONES = 272; //nninput里面最多有多少个1
+__global__ void decompressNNInputKernel(uint16_t* onesIdx, uint16_t* floatIdx, float* floatValue, float* output, int m, int nninputSize) {
+  int index = blockIdx.x * blockDim.x + threadIdx.x;
+  if (index < m) {
+    for (int i = 0; i < NNINPUT_MAX_FLOAT; ++i) {
+      int fIdx = NNINPUT_MAX_FLOAT * index + i;
+      int cIdx = floatIdx[fIdx];
+      if (cIdx < nninputSize)
+        output[nninputSize * index + cIdx] = floatValue[fIdx];
+    }
+    for (int i = 0; i < NNINPUT_MAX_ONES; ++i) {
+      int cIdx = onesIdx[NNINPUT_MAX_ONES * index + i];
+      if (cIdx < nninputSize)
+        output[nninputSize * index + cIdx] = 1.0;
+    }
+  }
+}
+
+cudaError_t decompressNNInput(uint16_t* onesIdx, uint16_t* floatIdx, float* floatValue, float* output, int m, int nninputSize) {
+  // 假设output已经分配并初始化为0
+
+  // 设置线程块和网格大小
+  int threadsPerBlock = 512;
+  int blocksPerGrid = (m + threadsPerBlock - 1) / threadsPerBlock;
+
+  cudaMemset(output, 0, sizeof(float) * m * nninputSize);
+  // 调用核函数
+  decompressNNInputKernel << <blocksPerGrid, threadsPerBlock >> > (onesIdx, floatIdx, floatValue, output, m, nninputSize);
+
+  // 等待GPU完成
+  cudaDeviceSynchronize();
+  return cudaGetLastError();
+}

@@ -12,4 +12,5 @@ cudaError_t broadcastDim1Add(float* target, float* x, int batchsize, int N_Perso
 cudaError_t addInPlace(float* A, const float* B, int numElements);
 cudaError_t sumDim1(float* output, float* input, int batchSize, int dim1Size, int channel); 
 cudaError_t sparseToDense(uint32_t* idx, float* value, float* output, int m);
+cudaError_t decompressNNInput(uint16_t* onesIdx, uint16_t* floatIdx, float* floatValue, float* output, int m, int nninputSize);
 #endif

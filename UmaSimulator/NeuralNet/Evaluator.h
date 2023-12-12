@@ -21,8 +21,9 @@ public:
 
 #if USE_BACKEND == BACKEND_CUDA
   //把输入向量转化为稀疏形式，以节省pcie带宽
-  std::vector<uint32_t> inputBufSparseIdx;
-  std::vector<float> inputBufSparseValue;
+  std::vector<uint16_t> inputBufOnesIdx;
+  std::vector<uint16_t> inputBufFloatIdx;
+  std::vector<float> inputBufFloatValue;
 #endif
 
   std::vector<ModelOutputValueV1> valueResults;

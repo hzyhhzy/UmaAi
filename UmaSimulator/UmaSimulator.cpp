@@ -9,6 +9,8 @@
 
 int main()
 {
+	//main_testCuda();
+	//return 0;
 
 #if defined UMAAI_TESTSCORENOSEARCH
 	main_testScoreNoSearch();

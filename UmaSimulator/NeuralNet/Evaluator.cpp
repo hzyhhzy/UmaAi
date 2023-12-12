@@ -154,8 +154,9 @@ Evaluator::Evaluator(Model* model, int maxBatchsize):model(model), maxBatchsize(
   actionResults.resize(maxBatchsize);
 
 #if USE_BACKEND == BACKEND_CUDA
-  inputBufSparseIdx.reserve(maxBatchsize * NNINPUT_CHANNELS_V1);
-  inputBufSparseValue.reserve(maxBatchsize * NNINPUT_CHANNELS_V1);
+  inputBufOnesIdx.resize(NNINPUT_MAX_ONES * maxBatchsize);
+  inputBufFloatIdx.resize(NNINPUT_MAX_FLOAT * maxBatchsize);
+  inputBufFloatValue.resize(NNINPUT_MAX_FLOAT * maxBatchsize);
 #endif
 }
 

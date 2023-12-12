@@ -1,4 +1,5 @@
 #pragma once
+#include "../config.h"
 const int LATEST_NNINPUT_VERSION = 1;
 
 
@@ -16,6 +17,12 @@ const int NNINPUT_CHANNELS_V1 = NNINPUT_CHANNELS_SEARCHPARAM_V1 +
                                 NNINPUT_CHANNELS_CARD_V1 * 7 +
                                 NNINPUT_CHANNELS_PERSON_V1 * 20;//总通道数
 
+#if USE_BACKEND == BACKEND_CUDA
+//改以下数字，kernel.cu也要改
+const int NNINPUT_MAX_FLOAT = 128; //nninput里面最多有多少个非0非1的数
+const int NNINPUT_MAX_ONES = 272; //nninput里面最多有多少个1
+static_assert(NNINPUT_CHANNELS_V1 < 32767);//int16
+#endif
 
 
 

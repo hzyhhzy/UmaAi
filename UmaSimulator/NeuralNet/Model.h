@@ -111,8 +111,10 @@ struct ModelCudaBuf
   float* outputhead_b;
 
   //中间变量
-  uint32_t* inputSparseIdx;
-  float* inputSparseValue;
+  uint16_t* inputOnesIdx;
+  uint16_t* inputFloatIdx;
+  float* inputFloatValue;
+
   float* input;
   float* inputGlobal;
   float* inputCard;

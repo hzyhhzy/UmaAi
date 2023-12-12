@@ -106,8 +106,9 @@ void ModelCudaBuf::init(const ModelWeight& weight, int batchSize)
   mallocAndCopyToDevice("outputhead_w", weight.outputhead_w, outputhead_w);
   mallocAndCopyToDevice("outputhead_b", weight.outputhead_b, outputhead_b);
 
-  CUDA_ERR("inputSparseIdx", cudaMalloc(&inputSparseIdx, sizeof(uint32_t) * batchSize * NNINPUT_CHANNELS_V1));
-  mallocOnDevice("inputSparseValue", batchSize * NNINPUT_CHANNELS_V1, inputSparseValue);
+  CUDA_ERR("inputOnesIdx", cudaMalloc(&inputOnesIdx, sizeof(uint16_t) * batchSize * NNINPUT_MAX_ONES));
+  CUDA_ERR("inputFloatIdx", cudaMalloc(&inputFloatIdx, sizeof(uint16_t) * batchSize * NNINPUT_MAX_FLOAT));
+  mallocOnDevice("inputFloatValue", batchSize * NNINPUT_MAX_FLOAT, inputFloatValue);
   mallocOnDevice("input", batchSize * NNINPUT_CHANNELS_V1, input);
   mallocOnDevice("inputGlobal", batchSize * NNINPUT_CHANNELS_V1, inputGlobal);
   mallocOnDevice("inputCard", batchSize * NNINPUT_CHANNELS_V1, inputCard);
@@ -226,21 +227,36 @@ void ModelWeight::load(std::string path)
 void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int gameNum)
 {
   assert(eva != NULL);
-  assert(batchSize * NNINPUT_CHANNELS_V1 < (1 << 30));
-  vector<uint32_t>& sparseIdx = eva->inputBufSparseIdx;
-  vector<float>& sparseValue = eva->inputBufSparseValue;
-  sparseIdx.clear();
-  sparseValue.clear();
-  for (int i = 0; i < batchSize * NNINPUT_CHANNELS_V1; i++)
-  {
-    float v = inputBuf[i];
-    if (v != 0)
-    {
-      sparseIdx.push_back(i);
-      sparseValue.push_back(v);
-    }
-  }
 
+
+  //压缩nninput以节省pcie带宽
+  vector<uint16_t>& onesIdx = eva->inputBufOnesIdx;
+  vector<uint16_t>& floatIdx = eva->inputBufFloatIdx;
+  vector<float>& floatValue = eva->inputBufFloatValue;
+  std::fill_n(onesIdx.data(), NNINPUT_MAX_ONES * batchSize, 32767);
+  std::fill_n(floatIdx.data(), NNINPUT_MAX_FLOAT * batchSize, 32767);
+
+  for (int i = 0; i < batchSize; i++)
+  {
+    int countFloat = 0, countOne = 0;
+    for (int j = 0; j < NNINPUT_CHANNELS_V1; j++)
+    {
+      float v = inputBuf[i * NNINPUT_CHANNELS_V1 + j];
+      if (v == 1.0)
+      {
+        onesIdx[i * NNINPUT_MAX_ONES + countOne] = j;
+        countOne++;
+      }
+      else if (v != 0)
+      {
+        floatIdx[i * NNINPUT_MAX_FLOAT + countFloat] = j;
+        floatValue[i * NNINPUT_MAX_FLOAT + countFloat] = v;
+        countFloat++;
+      }
+    }
+    assert(countOne <= NNINPUT_MAX_ONES);
+    assert(countFloat <= NNINPUT_MAX_FLOAT);
+  }
 
 
 
@@ -249,14 +265,16 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
   std::lock_guard<std::mutex> lock(mtx);
   //内存中是batchsize*NNInputC矩阵，行优先
-  CUDA_ERR("", cudaMemcpy(cb.inputSparseIdx, sparseIdx.data(), sizeof(uint32_t) * sparseIdx.size(), cudaMemcpyHostToDevice));
-  CUDA_ERR("", cudaMemcpy(cb.inputSparseValue, sparseValue.data(), sizeof(float) * sparseValue.size(), cudaMemcpyHostToDevice));
-  CUDA_ERR("", cudaMemset(cb.input, 0, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1));
-  CUDA_ERR("", sparseToDense(cb.inputSparseIdx, cb.inputSparseValue, cb.input, sparseIdx.size()));
+  CUDA_ERR("", cudaMemcpy(cb.inputOnesIdx, onesIdx.data(), sizeof(uint16_t) * onesIdx.size(), cudaMemcpyHostToDevice));
+  CUDA_ERR("", cudaMemcpy(cb.inputFloatIdx, floatIdx.data(), sizeof(uint16_t) * floatIdx.size(), cudaMemcpyHostToDevice));
+  CUDA_ERR("", cudaMemcpy(cb.inputFloatValue, floatValue.data(), sizeof(float) * floatValue.size(), cudaMemcpyHostToDevice));
+
+  CUDA_ERR("", decompressNNInput(cb.inputOnesIdx, cb.inputFloatIdx, cb.inputFloatValue, cb.input, batchSize, NNINPUT_CHANNELS_V1));
 
   //vector<float> f(batchSize * NNINPUT_CHANNELS_V1);
   //CUDA_ERR("", cudaMemcpy(f.data(), cb.input, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1, cudaMemcpyDeviceToHost)); //batchsize*NNInputC矩阵
-  //for (int i = 0; i < batchSize * NNINPUT_CHANNELS_V1; i++)cout << f[i] - inputBuf[i] << endl;
+  //for (int i = 0; i < batchSize * NNINPUT_CHANNELS_V1; i++)if (f[i] != inputBuf[i])cout << f[i] - inputBuf[i] << endl;
+
   const int sliceIdx1 = NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1;
   const int sliceIdx2 = sliceIdx1 + NN_Game_Card_Num * NNINPUT_CHANNELS_CARD_V1;
   const int sliceIdx3 = sliceIdx2 + NN_Game_Person_Num * NNINPUT_CHANNELS_PERSON_V1;
