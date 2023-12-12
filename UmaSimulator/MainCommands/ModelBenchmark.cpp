@@ -8,6 +8,7 @@
 #include <chrono>
 #include "MainCommands.h"
 #include "../NeuralNet/Model.h"
+#include "../NeuralNet/Evaluator.h"
 using namespace std;
 void main_modelBenchmark() {
 
@@ -95,9 +96,11 @@ void main_modelBenchmark() {
   std::cout << "Benchmark:" << std::endl;
   auto start = std::chrono::high_resolution_clock::now();
 
+  Evaluator evaBuf(&model, batchSize);//只用于提供一些缓存区
+
   for (int b = 0; b < batchNumEveryThread; b++)
   {
-    model.evaluate(data.data(), output.data(), batchSize);
+    model.evaluate(&evaBuf, data.data(), output.data(), batchSize);
   }
 
 

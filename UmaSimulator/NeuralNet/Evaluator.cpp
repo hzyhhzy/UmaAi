@@ -42,7 +42,7 @@ void Evaluator::evaluateSelf(int mode, const SearchParam& param)
       if(!game.isEnd())
         game.getNNInputV1(inputBuf.data() + i * NNINPUT_CHANNELS_V1, param);
     }
-    model->evaluate(inputBuf.data(), outputBuf.data(), maxBatchsize);
+    model->evaluate(this, inputBuf.data(), outputBuf.data(), maxBatchsize);
     if (mode == 0)//value
     {
       for (int i = 0; i < maxBatchsize; i++)
@@ -152,7 +152,11 @@ Evaluator::Evaluator(Model* model, int maxBatchsize):model(model), maxBatchsize(
   valueResults.resize(maxBatchsize);
   //policyResults.resize(maxBatchsize);
   actionResults.resize(maxBatchsize);
-  
+
+#if USE_BACKEND == BACKEND_CUDA
+  inputBufSparseIdx.reserve(maxBatchsize * NNINPUT_CHANNELS_V1);
+  inputBufSparseValue.reserve(maxBatchsize * NNINPUT_CHANNELS_V1);
+#endif
 }
 
 

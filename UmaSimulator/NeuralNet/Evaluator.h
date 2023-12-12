@@ -19,6 +19,12 @@ public:
   std::vector<float> inputBuf;
   std::vector<float> outputBuf;
 
+#if USE_BACKEND == BACKEND_CUDA
+  //把输入向量转化为稀疏形式，以节省pcie带宽
+  std::vector<uint32_t> inputBufSparseIdx;
+  std::vector<float> inputBufSparseValue;
+#endif
+
   std::vector<ModelOutputValueV1> valueResults;
   //std::vector<ModelOutputPolicyV1> policyResults;
   std::vector<Action> actionResults;

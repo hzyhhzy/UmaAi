@@ -35,7 +35,7 @@ Model::Model(std::string path, int batchsize)
   }
 }
 
-void Model::evaluate(float* inputBuf, float* outputBuf, int gameNum)
+void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int gameNum)
 {
   torch::Tensor input = torch::from_blob(inputBuf, { gameNum, NNINPUT_CHANNELS_V1 });
   if (LIBTORCH_USE_GPU) {

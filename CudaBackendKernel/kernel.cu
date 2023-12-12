@@ -1,5 +1,6 @@
 ﻿#include "cuda_runtime.h"
 #include <stdio.h>
+#include <cstdint>
 
 // 非原位ReLU核函数
 __global__ void reluOutOfPlaceKernel(const float* input, float* output, int n) {
@@ -196,5 +197,28 @@ cudaError_t sumDim1(float* output, float* input, int batchSize, int dim1Size, in
   sumDim1Kernel << <gridDim, blockDim >> > (output, input, batchSize, dim1Size, channel);
 
   // 检查是否有任何错误发生
+  cudaDeviceSynchronize();
+  return cudaGetLastError();
+}
+
+__global__ void sparseToDenseKernel(uint32_t* idx, float* value, float* output, int m) {
+  int index = blockIdx.x * blockDim.x + threadIdx.x;
+  if (index < m) {
+    output[idx[index]] = value[index];
+  }
+}
+
+cudaError_t sparseToDense(uint32_t* idx, float* value, float* output, int m) {
+  // 假设output已经分配并初始化为0
+
+  // 设置线程块和网格大小
+  int threadsPerBlock = 512;
+  int blocksPerGrid = (m + threadsPerBlock - 1) / threadsPerBlock;
+
+  // 调用核函数
+  sparseToDenseKernel << <blocksPerGrid, threadsPerBlock >> > (idx, value, output, m);
+
+  // 等待GPU完成
+  cudaDeviceSynchronize();
   return cudaGetLastError();
 }

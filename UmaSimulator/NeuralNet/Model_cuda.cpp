@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include "Model.h"
+#include "Evaluator.h"
 #include "../NeuralNet/CudaBackendKernel.h"
 
 using namespace std;
@@ -105,6 +106,8 @@ void ModelCudaBuf::init(const ModelWeight& weight, int batchSize)
   mallocAndCopyToDevice("outputhead_w", weight.outputhead_w, outputhead_w);
   mallocAndCopyToDevice("outputhead_b", weight.outputhead_b, outputhead_b);
 
+  CUDA_ERR("inputSparseIdx", cudaMalloc(&inputSparseIdx, sizeof(uint32_t) * batchSize * NNINPUT_CHANNELS_V1));
+  mallocOnDevice("inputSparseValue", batchSize * NNINPUT_CHANNELS_V1, inputSparseValue);
   mallocOnDevice("input", batchSize * NNINPUT_CHANNELS_V1, input);
   mallocOnDevice("inputGlobal", batchSize * NNINPUT_CHANNELS_V1, inputGlobal);
   mallocOnDevice("inputCard", batchSize * NNINPUT_CHANNELS_V1, inputCard);
@@ -220,12 +223,40 @@ void ModelWeight::load(std::string path)
   loadWeight("outputhead_b", fs, outputhead_b);
 }
 
-void Model::evaluate(float* inputBuf, float* outputBuf, int gameNum)
+void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int gameNum)
 {
+  assert(eva != NULL);
+  assert(batchSize * NNINPUT_CHANNELS_V1 < (1 << 30));
+  vector<uint32_t>& sparseIdx = eva->inputBufSparseIdx;
+  vector<float>& sparseValue = eva->inputBufSparseValue;
+  sparseIdx.clear();
+  sparseValue.clear();
+  for (int i = 0; i < batchSize * NNINPUT_CHANNELS_V1; i++)
+  {
+    float v = inputBuf[i];
+    if (v != 0)
+    {
+      sparseIdx.push_back(i);
+      sparseValue.push_back(v);
+    }
+  }
+
+
+
+
+
+
+
   std::lock_guard<std::mutex> lock(mtx);
   //内存中是batchsize*NNInputC矩阵，行优先
-  CUDA_ERR("", cudaMemcpy(cb.input, inputBuf, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1, cudaMemcpyHostToDevice)); //batchsize*NNInputC矩阵
+  CUDA_ERR("", cudaMemcpy(cb.inputSparseIdx, sparseIdx.data(), sizeof(uint32_t) * sparseIdx.size(), cudaMemcpyHostToDevice));
+  CUDA_ERR("", cudaMemcpy(cb.inputSparseValue, sparseValue.data(), sizeof(float) * sparseValue.size(), cudaMemcpyHostToDevice));
+  CUDA_ERR("", cudaMemset(cb.input, 0, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1));
+  CUDA_ERR("", sparseToDense(cb.inputSparseIdx, cb.inputSparseValue, cb.input, sparseIdx.size()));
 
+  //vector<float> f(batchSize * NNINPUT_CHANNELS_V1);
+  //CUDA_ERR("", cudaMemcpy(f.data(), cb.input, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1, cudaMemcpyDeviceToHost)); //batchsize*NNInputC矩阵
+  //for (int i = 0; i < batchSize * NNINPUT_CHANNELS_V1; i++)cout << f[i] - inputBuf[i] << endl;
   const int sliceIdx1 = NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1;
   const int sliceIdx2 = sliceIdx1 + NN_Game_Card_Num * NNINPUT_CHANNELS_CARD_V1;
   const int sliceIdx3 = sliceIdx2 + NN_Game_Person_Num * NNINPUT_CHANNELS_PERSON_V1;

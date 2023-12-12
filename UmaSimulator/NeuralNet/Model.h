@@ -111,6 +111,8 @@ struct ModelCudaBuf
   float* outputhead_b;
 
   //中间变量
+  uint32_t* inputSparseIdx;
+  float* inputSparseValue;
   float* input;
   float* inputGlobal;
   float* inputCard;
@@ -141,7 +143,7 @@ struct ModelCudaBuf
 #endif
 
 
-
+class Evaluator;
 
 
 
@@ -150,7 +152,7 @@ class Model
 public:
   //static lock;//所有的evaluator共用一个lock
   Model(std::string path, int batchsize);
-  void evaluate(float* inputBuf, float* outputBuf, int gameNum);//计算gamesBuf中gameNum局游戏的输出，输出到outputBuf
+  void evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int gameNum);//计算gamesBuf中gameNum局游戏的输出，输出到outputBuf
   static void printBackendInfo();
 
 

@@ -12,7 +12,7 @@ Model::Model(std::string path, int batchsize)
   assert(false);
 }
 
-void Model::evaluate(float* inputBuf, float* outputBuf, int gameNum)
+void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int gameNum)
 {
   assert(false);
 }

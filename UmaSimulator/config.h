@@ -7,6 +7,7 @@
 //#define UMAAI_SELFPLAY   //跑数据（用于神经网络训练）
 //#define UMAAI_TESTLIBTORCH   //测试c++版torch
 //#define UMAAI_MODELBENCHMARK   //测试神经网络速度
+//#define UMAAI_TESTSCORENOSEARCH //测试神经网络policy强度
 
 #if defined UMAAI_TESTSCORE || defined UMAAI_SIMULATOR 
 #define PRINT_GAME_EVENT
@@ -34,6 +35,7 @@ const int LIBTORCH_USE_GPU = true;//是否使用GPU
 
 #if USE_BACKEND == BACKEND_CUDA
 
+//修改以下目录的同时，附加包含目录也需要修改
 #define CUDA_LIBROOT "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/"
 
 #endif

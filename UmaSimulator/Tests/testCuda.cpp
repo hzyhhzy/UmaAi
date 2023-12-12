@@ -33,9 +33,9 @@ void printMatrix(const float* matrix, int m, int n) {
 }
 void main_testCuda()
 {
-  const int bs = 8;
+  const int bs = 32;
   const string modelpath = "../training/example/model.txt";
-  Model* model =new Model(modelpath, bs);
+  Model model(modelpath, bs);
 
   // 准备输入数据
   std::string filename = "../training/example/example_data.npz";
@@ -55,6 +55,7 @@ void main_testCuda()
     }
   }
 
-  model->evaluate(data.data(), output.data(), bs);
+  Evaluator evaBuf(&model, bs);//只用于提供一些缓存区
+  model.evaluate(&evaBuf, data.data(), output.data(), bs);
 
 }

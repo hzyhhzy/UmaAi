@@ -10,5 +10,6 @@ cudaError_t cropMatrixRowsCUDA(float* d_out, const float* d_in, int batchSize, i
 cudaError_t addThreeFeatures(float* A, float* B, float* C, int batchsize, int N_Person, int N_Card, int encoderC);
 cudaError_t broadcastDim1Add(float* target, float* x, int batchsize, int N_Person, int encoderC);
 cudaError_t addInPlace(float* A, const float* B, int numElements);
-cudaError_t sumDim1(float* output, float* input, int batchSize, int dim1Size, int channel);
+cudaError_t sumDim1(float* output, float* input, int batchSize, int dim1Size, int channel); 
+cudaError_t sparseToDense(uint32_t* idx, float* value, float* output, int m);
 #endif

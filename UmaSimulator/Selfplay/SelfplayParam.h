@@ -7,9 +7,15 @@ struct SelfplayParam
   int threadNumInner = 1;
   int maxSampleNum = 1000 * 1024 * 16;
   int batchsize = 4;
-  //std::string modelPath = "model_traced.pt";
+
+#if USE_BACKEND == BACKEND_LIBTORCH
+  std::string modelPath = "model_traced.pt";
+#elif USE_BACKEND == BACKEND_NONE
+  std::string modelPath = "";
+#else
   std::string modelPath = "model.txt";
-  //std::string modelPath = "";
+#endif
+
   std::string exportDataDir = "./selfplay/0/";
   int sampleNumEachFile = 1024;
 
