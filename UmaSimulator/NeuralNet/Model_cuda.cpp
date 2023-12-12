@@ -385,6 +385,6 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
 void Model::printBackendInfo()
 {
-  cout << "AI版本：神经网络，后端：CUDA";
+  cout << "AI版本：神经网络，后端：CUDA" << endl;
 }
 #endif

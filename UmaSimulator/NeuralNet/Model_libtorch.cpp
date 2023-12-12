@@ -51,7 +51,7 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
 void Model::printBackendInfo()
 {
-    cout << "AI版本：神经网络，后端：Libtorch " << (LIBTORCH_USE_GPU ? "GPU版" : "CPU版");
+    cout << "AI版本：神经网络，后端：Libtorch " << (LIBTORCH_USE_GPU ? "GPU版" : "CPU版") << endl;
 }
 
 #endif
