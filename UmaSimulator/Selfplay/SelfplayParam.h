@@ -1,19 +1,20 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "../config.h"
 struct SelfplayParam
 {
-  int threadNum = 24;
+  int threadNum = 4;
   int threadNumInner = 1;
   int maxSampleNum = 1000 * 1024 * 16;
-  int batchsize = 4;
+  int batchsize = 1024;
 
 #if USE_BACKEND == BACKEND_LIBTORCH
-  std::string modelPath = "model_traced.pt";
+  std::string modelPath = "./model_traced.pt";
 #elif USE_BACKEND == BACKEND_NONE
   std::string modelPath = "";
 #else
-  std::string modelPath = "model.txt";
+  std::string modelPath = "./model.txt";
 #endif
 
   std::string exportDataDir = "./selfplay/0/";

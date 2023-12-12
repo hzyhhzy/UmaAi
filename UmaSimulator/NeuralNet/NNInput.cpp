@@ -421,7 +421,10 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     buf[c] = 1.0;
   c++;
 
-  buf[c] = failureRateBias * 0.5;
+  //练习上手
+  if (failureRateBias < 0)
+    buf[c] = failureRateBias * 0.5;
+  //练习下手放在输入通道的最后了
   c++;
 
   for (int i = 0; i < 5; i++)
@@ -599,7 +602,13 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   //larc_ssValue
   //larc_ssFailRate
 
-  c += 9;//reserve
+  //练习下手
+  if (failureRateBias > 0)
+    buf[c] = failureRateBias * 0.5;
+  //练习下手放在输入通道的最后了
+  c++;
+
+  c += 8;//reserve
 
   assert(c == NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1);
 
