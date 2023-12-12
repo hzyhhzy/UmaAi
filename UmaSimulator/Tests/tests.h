@@ -9,3 +9,4 @@ void main_testLibtorch();
 void main_testDemoGame();
 void main_testScoreSearch();
 void main_testScoreNoSearch();
+void main_testCuda();

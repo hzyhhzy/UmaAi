@@ -59,8 +59,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     #data settings
-    parser.add_argument('--tdatadir', type=str, default='../selfplay345/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
-    parser.add_argument('--vdatadir', type=str, default='../selfplay345/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--tdatadir', type=str, default='../selfplay7/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--vdatadir', type=str, default='../selfplay7/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
     parser.add_argument('--maxvalsamp', type=int, default=1000000, help='validation sample num')
     parser.add_argument('--maxstep', type=int, default=5000000000, help='max step to train')
     parser.add_argument('--savestep', type=int, default=2000, help='step to save and validation')
@@ -85,8 +85,6 @@ if __name__ == '__main__':
     #parser.add_argument('--lr', type=float, default=2e-3, help='learning rate')
     parser.add_argument('--lrscale', type=float, default=1.0, help='learning rate scale')
     parser.add_argument('--wdscale', type=float, default=1.0, help='weight decay')
-    #parser.add_argument('--lrhead', type=float, default=3e-4, help='learning rate of input head')
-    parser.add_argument('--wdhead', type=float, default=2e-4, help='weight decay of input head')
     parser.add_argument('--rollbackthreshold', type=float, default=0.05, help='if loss increased this value, roll back 2*infostep steps')
     args = parser.parse_args()
 

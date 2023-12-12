@@ -1,6 +1,7 @@
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import numpy as np
 from config import *
 
@@ -14,7 +15,7 @@ class EncoderLayer(nn.Module):
         self.lin_Q = nn.Linear(inout_c, mid_c, bias=False)
         self.lin_K = nn.Linear(inout_c, mid_c, bias=False)
         self.lin_V = nn.Linear(inout_c, inout_c, bias=False)
-        self.lin_global = nn.Linear(global_c, inout_c)
+        self.lin_global = nn.Linear(global_c, inout_c, bias=False)
 
     def forward(self, x, gf):
         y=x.view(x.shape[0]*x.shape[1],x.shape[2])
@@ -34,7 +35,7 @@ class EncoderLayerSimple(nn.Module):
         self.inout_c = inout_c
         self.lin_Q = nn.Linear(inout_c, inout_c, bias=False)
         self.lin_V = nn.Linear(inout_c, inout_c, bias=False)
-        self.lin_global = nn.Linear(global_c, inout_c)
+        self.lin_global = nn.Linear(global_c, inout_c, bias=False)
 
     def forward(self, x, gf):
         y=x.view(x.shape[0]*x.shape[1],x.shape[2])
@@ -49,8 +50,8 @@ class EncoderLayerSimple(nn.Module):
 class ResnetLayer(nn.Module):
     def __init__(self, inout_c, mid_c):
         super().__init__()
-        self.lin1 = nn.Linear(inout_c, mid_c)
-        self.lin2 = nn.Linear(mid_c, inout_c)
+        self.lin1 = nn.Linear(inout_c, mid_c, bias=False)
+        self.lin2 = nn.Linear(mid_c, inout_c, bias=False)
 
     def forward(self, x):
         y = self.lin1(x)
@@ -215,9 +216,9 @@ class Model_TransformerMlp(nn.Module): #输出加一个relu
 
     def prepareInput(self,x):
         batch_size=x.shape[0]
-        A = 357 #全局信息的通道数
-        B = 72 #支援卡参数的通道数
-        C = 74 #larc人头的通道数
+        A = Game_Input_C_Global #全局信息的通道数
+        B = Game_Input_C_Card #支援卡参数的通道数
+        C = Game_Input_C_Person #larc人头的通道数
         assert(A+7*B+20*C==x.shape[1])
 
         # 分割张量
@@ -228,15 +229,12 @@ class Model_TransformerMlp(nn.Module): #输出加一个relu
         # 配对B和C
         paired_BCs = []
         # 前6对
-        for i in range(6):
+        for i in range(7):
             paired_BCs.append(torch.cat((x_B[:, i], x_C[:, i]), dim=1))
-        # 第7对
-        paired_BCs.append(torch.cat((x_B[:, 6], x_C[:, 18]), dim=1))
         # 剩余的C与零填充的B配对
         zero_B = 0.0*x[:,:B]
-        for i in range(6, 20):
-            if i != 18:  # 跳过已经配对的第19个C
-                paired_BCs.append(torch.cat((zero_B, x_C[:, i]), dim=1))
+        for i in range(7, 20):
+            paired_BCs.append(torch.cat((zero_B, x_C[:, i]), dim=1))
 
         # 合并A
         result = [torch.cat((x_A, paired_BC), dim=1) for paired_BC in paired_BCs]
@@ -260,85 +258,6 @@ class Model_TransformerMlp(nn.Module): #输出加一个relu
 
         return self.outputhead(h)
 
-class Model_EncoderMlp(nn.Module): #简易版transformer+mlp
-
-    def __init__(self,encoderB,encoderF,attC,mlpB,mlpF,globalF):
-        super().__init__()
-        self.model_type = "em"
-        self.model_param=(encoderB,encoderF,attC,mlpB,mlpF,globalF)
-        self.encoderF=encoderF
-        self.gC=357
-        self.pC=72+74
-        self.inputhead1=nn.Linear(self.gC, globalF)
-        self.inputhead2=nn.Linear(self.gC, encoderF)
-        self.inputhead3=nn.Linear(self.pC, encoderF)
-
-        self.encoderTrunk=nn.ModuleList()
-        for i in range(encoderB):
-            self.encoderTrunk.append(EncoderLayer(inout_c=encoderF,mid_c=attC,global_c=globalF))
-
-        self.linBeforeMLP1=nn.Linear(globalF,mlpF)
-        self.linBeforeMLP2=nn.Linear(encoderF,mlpF)
-
-        self.mlpTrunk=nn.ModuleList()
-        for i in range(mlpB):
-            self.mlpTrunk.append(ResnetLayer(mlpF,mlpF))
-
-        self.outputhead=nn.Linear(mlpF, Game_Output_C)
-
-    def prepareInput(self,x):
-        batch_size=x.shape[0]
-        A = 357 #全局信息的通道数
-        B = 72 #支援卡参数的通道数
-        C = 74 #larc人头的通道数
-        assert(A+7*B+20*C==x.shape[1])
-
-        # 分割张量
-        x_A = x[:, :A]
-        x_B = x[:, A:A + 7 * B].view(batch_size, 7, B)
-        x_C = x[:, A + 7 * B:].view(batch_size, 20, C)
-
-        # 配对B和C
-        paired_BCs = []
-        # 前6对
-        for i in range(6):
-            paired_BCs.append(torch.cat((x_B[:, i], x_C[:, i]), dim=1))
-        # 第7对
-        paired_BCs.append(torch.cat((x_B[:, 6], x_C[:, 18]), dim=1))
-        # 剩余的C与零填充的B配对
-        #zero_B = torch.zeros(batch_size, B, device=x.device)
-        zero_B = 0.0*x[:,:B]
-        for i in range(6, 20):
-            if i != 18:  # 跳过已经配对的第19个C
-                paired_BCs.append(torch.cat((zero_B, x_C[:, i]), dim=1))
-
-        # 合并A
-        result = torch.stack(paired_BCs, dim=1)
-        return x_A, result
-
-    def forward(self, x):
-        gf, h=self.prepareInput(x)
-        assert(h.shape[1]==20)
-        h=h.view(-1,self.pC)
-        h=self.inputhead3(h)
-        h=h.view(x.shape[0],20,self.encoderF)
-        h=h+self.inputhead2(gf).view(x.shape[0],1,self.encoderF)
-        h=torch.relu(h)
-
-        gf=torch.relu(self.inputhead1(gf))
-        for block in self.encoderTrunk:
-            h=block(h,gf)
-
-        h=h.mean(dim=1)
-
-        h=self.linBeforeMLP2(h)+self.linBeforeMLP1(gf)
-        h=torch.relu(h)
-
-        for block in self.mlpTrunk:
-            h=block(h)
-
-        return self.outputhead(h)
-
 class Model_EncoderMlpSimple(nn.Module): #简易版transformer+mlp
 
     def __init__(self,encoderB,encoderF,mlpB,mlpF,globalF):
@@ -346,18 +265,17 @@ class Model_EncoderMlpSimple(nn.Module): #简易版transformer+mlp
         self.model_type = "ems"
         self.model_param=(encoderB,encoderF,mlpB,mlpF,globalF)
         self.encoderF=encoderF
-        self.gC=357
-        self.pC=72+74
-        self.inputhead1=nn.Linear(self.gC, globalF)
-        self.inputhead2=nn.Linear(self.gC, encoderF)
-        self.inputhead3=nn.Linear(self.pC, encoderF)
+        self.inputheadGlobal1=nn.Linear(Game_Input_C_Global, globalF, bias=False)
+        self.inputheadGlobal2=nn.Linear(globalF, encoderF, bias=False)
+        self.inputheadCard=nn.Linear(Game_Input_C_Card, encoderF, bias=False)
+        self.inputheadPerson=nn.Linear(Game_Input_C_Person, encoderF, bias=False)
 
         self.encoderTrunk=nn.ModuleList()
         for i in range(encoderB):
             self.encoderTrunk.append(EncoderLayerSimple(inout_c=encoderF,global_c=globalF))
 
-        self.linBeforeMLP1=nn.Linear(globalF,mlpF)
-        self.linBeforeMLP2=nn.Linear(encoderF,mlpF)
+        self.linBeforeMLP1=nn.Linear(globalF,mlpF, bias=False)
+        self.linBeforeMLP2=nn.Linear(encoderF,mlpF, bias=False)
 
         self.mlpTrunk=nn.ModuleList()
         for i in range(mlpB):
@@ -365,46 +283,18 @@ class Model_EncoderMlpSimple(nn.Module): #简易版transformer+mlp
 
         self.outputhead=nn.Linear(mlpF, Game_Output_C)
 
-    def prepareInput(self,x):
-        batch_size=x.shape[0]
-        A = 357 #全局信息的通道数
-        B = 72 #支援卡参数的通道数
-        C = 74 #larc人头的通道数
-        assert(A+7*B+20*C==x.shape[1])
-
-        # 分割张量
-        x_A = x[:, :A]
-        x_B = x[:, A:A + 7 * B].view(batch_size, 7, B)
-        x_C = x[:, A + 7 * B:].view(batch_size, 20, C)
-
-        # 配对B和C
-        paired_BCs = []
-        # 前6对
-        for i in range(6):
-            paired_BCs.append(torch.cat((x_B[:, i], x_C[:, i]), dim=1))
-        # 第7对
-        paired_BCs.append(torch.cat((x_B[:, 6], x_C[:, 18]), dim=1))
-        # 剩余的C与零填充的B配对
-        #zero_B = torch.zeros(batch_size, B, device=x.device)
-        zero_B = 0.0*x[:,:B]
-        for i in range(6, 20):
-            if i != 18:  # 跳过已经配对的第19个C
-                paired_BCs.append(torch.cat((zero_B, x_C[:, i]), dim=1))
-
-        # 合并A
-        result = torch.stack(paired_BCs, dim=1)
-        return x_A, result
-
     def forward(self, x):
-        gf, h=self.prepareInput(x)
-        assert(h.shape[1]==20)
-        h=h.view(-1,self.pC)
-        h=self.inputhead3(h)
-        h=h.view(x.shape[0],20,self.encoderF)
-        h=h+self.inputhead2(gf).view(x.shape[0],1,self.encoderF)
+        x1=x[:,:Game_Input_C_Global]
+        x2=x[:,Game_Input_C_Global:Game_Input_C_Global+Game_Card_Num*Game_Input_C_Card].reshape(-1,Game_Input_C_Card)
+        x3=x[:,Game_Input_C_Global+Game_Card_Num*Game_Input_C_Card:].reshape(-1,Game_Input_C_Person)
+
+        gf=torch.relu(self.inputheadGlobal1(x1))
+        h=self.inputheadGlobal2(gf).view(-1,1,self.encoderF)+\
+          F.pad(self.inputheadCard(x2).view(-1,Game_Card_Num,self.encoderF),(0,0,0,Game_Head_Num-Game_Card_Num,0,0))+\
+          self.inputheadPerson(x3).view(-1,Game_Head_Num,self.encoderF)
+
         h=torch.relu(h)
 
-        gf=torch.relu(self.inputhead1(gf))
         for block in self.encoderTrunk:
             h=block(h,gf)
 
@@ -418,34 +308,6 @@ class Model_EncoderMlpSimple(nn.Module): #简易版transformer+mlp
 
         return self.outputhead(h)
 
-class Model_ResNetDP(nn.Module):
-
-    def __init__(self,b,f,dptype,dprate):
-        super().__init__()
-        self.model_type = "resdp"
-        self.model_param=(b,f,dptype,dprate)
-
-        self.inputhead=nn.Linear(Game_Input_C, f)
-        self.dropout=nn.Dropout(p=dprate*0.01)
-        self.dropoutType=dptype
-        self.trunk=nn.ModuleList()
-        for i in range(b):
-            self.trunk.append(ResnetLayer(f,f))
-        self.outputhead=nn.Linear(f, Game_Output_C)
-
-    def forward(self, x):
-        if(self.dropoutType==0):
-            x=self.dropout(x)
-        h=self.inputhead(x)
-
-        h=torch.relu(h)
-        if(self.dropoutType==1):
-            h=self.dropout(h)
-
-        for block in self.trunk:
-            h=block(h)
-
-        return self.outputhead(h)
 class Model_twolayer(nn.Module):
     #
     def __init__(self, mid_c):  # 1d卷积通道，policy通道，胜负和通道
@@ -480,12 +342,10 @@ class Model_linear(nn.Module):
 
 ModelDic = {
     "res": Model_ResNet, #带”res“的mlp
-    "tf": Model_Transformer, #transformer
-    "tf2": Model_Transformer2, #多加了一个relu
-    "tfmlp": Model_TransformerMlp, #transformer后接mlp
-    "resdp": Model_ResNetDP, #ResMLP+dropout
+    #"tf": Model_Transformer, #transformer
+    #"tf2": Model_Transformer2, #多加了一个relu
+    "tf": Model_TransformerMlp, #transformer后接mlp
     "tl": Model_twolayer, #2 layer mlp
     "lin": Model_linear, #linear
-    "em": Model_EncoderMlp, #手写极简版transformer+mlp
     "ems": Model_EncoderMlpSimple, #手写极简版transformer+mlp
 }

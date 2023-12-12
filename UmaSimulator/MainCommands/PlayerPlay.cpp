@@ -43,10 +43,24 @@ void main_playerPlay()
   int zhongmaBonus[6] = { 20,0,40,0,20,150 };
 
   int batchsize = 512;
-  //Model model("../training/example/model_traced.pt", batchsize);
-  //Model* modelptr = &model;
+
+
+#if USE_BACKEND == BACKEND_LIBTORCH
+  const string modelpath = "../training/example/model_traced.pt";
+#elif USE_BACKEND == BACKEND_NONE
+  const string modelpath = "";
+#else
+  const string modelpath = "../training/example/model.txt";
+#endif
+
   Model* modelptr = NULL;
-  //GameGenerator gameGenerator(SelfplayParam(), NULL);
+  Model model(modelpath, batchsize);
+  if (modelpath != "")
+  {
+    modelptr = &model;
+  }
+
+
   for (int gamenum = 0; gamenum < 100000; gamenum++)
   {
     Search search(modelptr, batchsize, threadNum, param);

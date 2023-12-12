@@ -18,15 +18,15 @@ import copy
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--vdata', type=str, default='../selfplay3/selfplay/256.npz', help='validation dataset file')
+    parser.add_argument('--vdata', type=str, default='./example/example_data.npz', help='validation dataset file')
 
-    parser.add_argument('--savename', type=str ,default='auto', help='model save pth')
+    parser.add_argument('--savename', type=str ,default='ems_1_128_3_256_256', help='model save pth')
 
     #training parameters
     parser.add_argument('--gpu', type=int,
                         default=-1, help='which gpu, -1 means cpu')
     parser.add_argument('--batchsize', type=int,
-                        default=32, help='batch size')
+                        default=8, help='batch size')
 
     args = parser.parse_args()
 

@@ -117,7 +117,7 @@ void main_ai()
 		GameConfig::searchDepth = TOTAL_TURN;
 	}
 
-	Model::detect(modelptr);
+	Model::printBackendInfo();
 
 	SearchParam searchParam = { GameConfig::searchN,GameConfig::searchDepth,GameConfig::radicalFactor };
 	Search search(modelptr, GameConfig::batchSize, GameConfig::threadNum, searchParam);

@@ -236,6 +236,9 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
     if (game.larc_shixingPt < 0)game.larc_shixingPt = 0;
   }
 
+  //Á·Ï°ÏÂÊÖ
+  if (rand() % 512 == 0)
+    game.failureRateBias = 2;
 
   return game;
 }

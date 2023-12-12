@@ -1,37 +1,41 @@
 #pragma once
 
-#define UMAAI_MAINAI   //Ê¹ÓÃai
-#define UMAAI_TESTSCORE   //²âÊÔai·ÖÊı
-//#define UMAAI_TESTCARDSSINGLE   //²â¿¨£¬¿ØÖÆÎåÕÅ¿¨²»±äÖ»¸Ä±äÒ»ÕÅ
-//#define UMAAI_SIMULATOR   //ÑøÂíÄ£ÄâÆ÷
-//#define UMAAI_SELFPLAY   //ÅÜÊı¾İ£¨ÓÃÓÚÉñ¾­ÍøÂçÑµÁ·£©
-//#define UMAAI_TESTLIBTORCH   //²âÊÔc++°ætorch
-//#define UMAAI_MODELBENCHMARK   //²âÊÔÉñ¾­ÍøÂçËÙ¶È
+#define UMAAI_MAINAI   //ä½¿ç”¨ai
+//#define UMAAI_TESTSCORE   //æµ‹è¯•aiåˆ†æ•°
+//#define UMAAI_TESTCARDSSINGLE   //æµ‹å¡ï¼Œæ§åˆ¶äº”å¼ å¡ä¸å˜åªæ”¹å˜ä¸€å¼ 
+//#define UMAAI_SIMULATOR   //å…»é©¬æ¨¡æ‹Ÿå™¨
+//#define UMAAI_SELFPLAY   //è·‘æ•°æ®ï¼ˆç”¨äºç¥ç»ç½‘ç»œè®­ç»ƒï¼‰
+//#define UMAAI_TESTLIBTORCH   //æµ‹è¯•c++ç‰ˆtorch
+//#define UMAAI_MODELBENCHMARK   //æµ‹è¯•ç¥ç»ç½‘ç»œé€Ÿåº¦
+//#define UMAAI_TESTSCORENOSEARCH //æµ‹è¯•ç¥ç»ç½‘ç»œpolicyå¼ºåº¦
 
 #if defined UMAAI_TESTSCORE || defined UMAAI_SIMULATOR 
 #define PRINT_GAME_EVENT
 #endif
 
-#define USE_BACKEND_LIBTORCH //Ê¹ÓÃlibtorch¼ÆËãÉñ¾­ÍøÂç
+#define BACKEND_NONE 0//ä¸ä½¿ç”¨ç¥ç»ç½‘ç»œ
+#define BACKEND_LIBTORCH 1//ä½¿ç”¨libtorch(GPUæˆ–CPU)è®¡ç®—ç¥ç»ç½‘ç»œ
+#define BACKEND_CUDA 2//ä½¿ç”¨cuda(GPU)è®¡ç®—ç¥ç»ç½‘ç»œ
+#define BACKEND_EIGEN 3//ä½¿ç”¨Eigenåº“(CPU)è®¡ç®—ç¥ç»ç½‘ç»œ
 
-const int MAX_SCORE = 200000;//×î´óÔÊĞíµÄ·ÖÊı£¬70000ÔÚlarc¾ç±¾¿Ï¶¨ºÜ¹»ÓÃÁË£¬µ«²»ÅÅ³ıselfplayËæ»ú³öÀ´µÄ¿ª¾Ö´æÔÚÒ»Ğ©¼«¶ËÇé¿ö
+#define USE_BACKEND BACKEND_CUDA
 
-#if defined USE_BACKEND_LIBTORCH || defined UMAAI_TESTLIBTORCH
+const int MAX_SCORE = 200000;//æœ€å¤§å…è®¸çš„åˆ†æ•°ï¼Œ70000åœ¨larcå‰§æœ¬è‚¯å®šå¾ˆå¤Ÿç”¨äº†ï¼Œä½†ä¸æ’é™¤selfplayéšæœºå‡ºæ¥çš„å¼€å±€å­˜åœ¨ä¸€äº›æç«¯æƒ…å†µ
 
-const int LIBTORCH_USE_GPU = true;//ÊÇ·ñÊ¹ÓÃGPU
+#if USE_BACKEND == BACKEND_LIBTORCH || defined UMAAI_TESTLIBTORCH
 
-#ifdef _DEBUG 
-#pragma comment(lib, "C:/local/libtorch_debug/lib/torch.lib")
-#pragma comment(lib, "C:/local/libtorch_debug/lib/c10.lib")
-#pragma comment(lib, "C:/local/libtorch_debug/lib/torch_cuda.lib")
-#pragma comment(lib, "C:/local/libtorch_debug/lib/torch_cpu.lib")
-#pragma comment(lib, "C:/local/libtorch_debug/lib/c10_cuda.lib")
-#else
+const int LIBTORCH_USE_GPU = true;//æ˜¯å¦ä½¿ç”¨GPU
+
+//ä¿®æ”¹ä»¥ä¸‹ä¸¤ä¸ªç›®å½•çš„åŒæ—¶ï¼Œé™„åŠ åŒ…å«ç›®å½•ä¹Ÿéœ€è¦ä¿®æ”¹
 #define TORCH_LIBROOT "C:/local/libtorch/lib/"
-#pragma comment(lib, TORCH_LIBROOT "torch.lib")
-#pragma comment(lib, TORCH_LIBROOT "c10.lib")
-#pragma comment(lib, TORCH_LIBROOT "torch_cuda.lib")
-#pragma comment(lib, TORCH_LIBROOT "torch_cpu.lib")
-#pragma comment(lib, TORCH_LIBROOT "c10_cuda.lib")
+#define TORCH_LIBROOT_DEBUG "C:/local/libtorch_debug/lib/"
+
 #endif
+
+
+#if USE_BACKEND == BACKEND_CUDA
+
+//ä¿®æ”¹ä»¥ä¸‹ç›®å½•çš„åŒæ—¶ï¼Œé™„åŠ åŒ…å«ç›®å½•ä¹Ÿéœ€è¦ä¿®æ”¹
+#define CUDA_LIBROOT "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/"
+
 #endif

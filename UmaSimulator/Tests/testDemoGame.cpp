@@ -86,9 +86,20 @@ void main_testDemoGame()
 	SearchParam searchParam = { searchN,searchDepth,radicalFactor };
 
 	int batchsize = 128;
-	Model model("./model_traced.pt", batchsize);
-	Model* modelptr = &model;
-	//Model* modelptr = NULL;
+#if USE_BACKEND == BACKEND_LIBTORCH
+	const string modelpath = "../training/example/model_traced.pt";
+#elif USE_BACKEND == BACKEND_NONE
+	const string modelpath = "";
+#else
+	const string modelpath = "../training/example/model.txt";
+#endif
+
+	Model* modelptr = NULL;
+	Model model(modelpath, batchsize);
+	if (modelpath != "")
+	{
+		modelptr = &model;
+	}
 
 	Search search(modelptr, batchsize, threadNum, searchParam);
 

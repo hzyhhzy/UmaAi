@@ -123,9 +123,6 @@
     <ClCompile Include="Search\Search.cpp">
       <Filter>源文件\Search</Filter>
     </ClCompile>
-    <ClCompile Include="NeuralNet\Model.cpp">
-      <Filter>源文件\NeuralNet</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Protocol.cpp">
       <Filter>源文件\Game</Filter>
     </ClCompile>
@@ -200,6 +197,21 @@
     </ClCompile>
     <ClCompile Include="MainCommands\ModelBenchmark.cpp">
       <Filter>源文件\MainCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="NeuralNet\Model_cuda.cpp">
+      <Filter>源文件\NeuralNet</Filter>
+    </ClCompile>
+    <ClCompile Include="NeuralNet\Model_libtorch.cpp">
+      <Filter>源文件\NeuralNet</Filter>
+    </ClCompile>
+    <ClCompile Include="NeuralNet\Model_noNN.cpp">
+      <Filter>源文件\NeuralNet</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\testCuda.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="NeuralNet\Model.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="GameDatabase\GameConfig.h">
       <Filter>头文件\MainCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="NeuralNet\CudaBackendKernel.h">
+      <Filter>头文件\NeuralNet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
