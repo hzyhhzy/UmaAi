@@ -214,6 +214,8 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
   if (rand() % 2 == 0)
     game.tryBuyUpgrade(6, 3);//尝试购买体力-20%
 
+  //***这里必须涵盖所有可能的情况，否则ai肯定抽风***
+
   //随机更改一些larc一级二级，模拟消debuff与ai预想的不一致的情况
   if (rand() % 4 == 0)
   {
@@ -234,6 +236,50 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
       }
     }
     if (game.larc_shixingPt < 0)game.larc_shixingPt = 0;
+  }
+  //偶尔提前购买三级
+  if (rand() % 16 == 0)
+  {
+    for (int i = 0; i < 10; i++)
+    {
+      if (rand() % 8 == 0)
+      {
+        if (game.larc_levels[i] == 2)
+        {
+          game.larc_levels[i] = 3;
+          game.larc_shixingPt -= GameConstants::LArcUpgradesCostLv3[i];
+        }
+      }
+    }
+    //远征购买智3级
+    if (rand() % 2 == 0 && game.turn >= 36)
+    {
+      game.larc_shixingPt += 1000;
+      game.tryBuyUpgrade(4, 3);
+      game.larc_shixingPt -= 1000;
+    }
+    if (game.larc_shixingPt < 0)game.larc_shixingPt = 0;
+  }
+
+  //输第二年凯旋门
+  if (rand() % 32 == 0)
+  {
+    game.larc_levels[9] = 0;
+  }
+
+  //输德比没解锁友情20%
+  if (rand() % 128 == 0 && game.turn >= 41)
+  {
+    game.larc_levels[7] = 0;
+    game.larc_shixingPt += 400;
+  }
+
+  //没凑够40次ss，没解锁“厄运”
+  if (rand() % 128 == 0 && game.turn >= 60)
+  {
+    game.larc_ssWin -= 30;
+    if (game.larc_ssWin < 20)game.larc_ssWin = 20;
+    game.larc_levels[8] = 0;
   }
 
   //练习下手
