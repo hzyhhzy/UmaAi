@@ -4,7 +4,7 @@
 #include "../config.h"
 struct SelfplayParam
 {
-  int threadNum = 4;
+  int threadNum = 8;
   int threadNumInner = 1;
   int maxSampleNum = 1000 * 1024 * 16;
   int batchsize = 1024;

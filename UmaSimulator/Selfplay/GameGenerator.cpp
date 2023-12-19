@@ -297,7 +297,12 @@ void GameGenerator::newGameBatch()
   for (int i = 0; i < param.batchsize; i++)
   {
     evaluator.gameInput[i] = randomOpening();
-    turnsEveryGame[i] = rand() % maxTurn;
+    int randTurn = rand() % maxTurn;
+    if (rand() % 3 == 0)//提高第二年远征的比例，因为神经网络在第二年远征的loss最高
+    {
+      randTurn = 36 - 2 + rand() % 5;
+    }
+    turnsEveryGame[i] = randTurn;
   }
   //往后进行一些回合
   SearchParam defaultSearchParam = { 1024,TOTAL_TURN,5.0 };//这个参数随意取，只用于生成开局时输入神经网络
