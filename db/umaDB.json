@@ -4768,6 +4768,37 @@
     ],
     "star": 5
   },
+  "108901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      107,
+      127,
+      99,
+      110,
+      107
+    ],
+    "freeRaces": [],
+    "gameId": 108901,
+    "name": "cheval-grand",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      53,
+      55,
+      59,
+      66,
+      69
+    ],
+    "star": 5
+  },
   "109301": {
     "bonusData": [],
     "fiveStatusBonus": [

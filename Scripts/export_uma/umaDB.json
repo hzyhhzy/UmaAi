@@ -4733,6 +4733,72 @@
     ],
     "star": 5
   },
+  "108801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      15,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      103,
+      129,
+      101,
+      102
+    ],
+    "freeRaces": [],
+    "gameId": 108801,
+    "name": "satono-crown",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      21,
+      28,
+      30,
+      33,
+      50,
+      53,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "108901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      107,
+      127,
+      99,
+      110,
+      107
+    ],
+    "freeRaces": [],
+    "gameId": 108901,
+    "name": "cheval-grand",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      53,
+      55,
+      59,
+      66,
+      69
+    ],
+    "star": 5
+  },
   "109301": {
     "bonusData": [],
     "fiveStatusBonus": [
