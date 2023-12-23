@@ -94,7 +94,12 @@ void main_ai()
 	filesystem::current_path(exeDir);
 	//std::cout << "当前工作目录：" << filesystem::current_path() << endl;
 	cout << "当前程序目录：" << exeDir << endl;
+
+#if USE_BACKEND == BACKEND_NONE
+	GameConfig::load("./aiConfig_cpu.json");
+#else
 	GameConfig::load("./aiConfig.json");
+#endif
 	GameDatabase::loadTranslation("./db/text_data.json");
 	GameDatabase::loadUmas("./db/umaDB.json");
 	//GameDatabase::loadCards("./db/card"); // 载入并优先使用手动支援卡数据
