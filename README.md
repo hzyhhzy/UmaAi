@@ -1,6 +1,14 @@
 # UmaAi使用说明
 
 更新时间 2023-12-23
+目录：
+- 简介
+- 特别声明
+- 项目贡献者
+- 安装与配置
+- 使用
+- 算法说明
+- 参与开发
    
 # 1.简介
 
@@ -12,30 +20,20 @@
 
 目前只支持**简体中文环境**，在其他语言环境下可能会出乱码
 
-源代码：[https://github.com/hzyhhzy/UmaAi](https://github.com/hzyhhzy/UmaAi)
-
-配套修改版小黑板插件：[https://github.com/hzyhhzy/UmaAiConnector](https://github.com/hzyhhzy/UmaAiConnector)
-
-（基于[https://github.com/UmamusumeResponseAnalyzer/UmamusumeResponseAnalyzer](https://github.com/UmamusumeResponseAnalyzer/UmamusumeResponseAnalyzer)）
-
 QQ群： ![](Document/src/image1.png) **751367941** ，最新版的程序基本上都在QQ群里直接上传，github的release更新较为缓慢。入群问题：哪个训练不消耗体力？（我觉得这个问题应该够简单了，就不在这里写答案了）
-
-作者QQ： ![](Document/src/image2.jpeg)**2658628026 (Sigmoid)**
-
-**If it's inconvenient for you to join the QQ group, you can**![](Document/src/image3.png) **.**
-
 
 # 2.特别声明
 
 - **UmaAI（下称为：本插件）仅对育成选择进行提示，计算结果仅供玩家参考。最终的游戏结果完全取决于玩家自己的操作。**
-- **本插件使用UmamusumeResponseAnalyzer（下称为：小黑板）获取游戏数据。该工具获取的游戏数据，仅用于更直观、准确地展示育成中的训练数值和事件效果。不会修改任何游戏数据或者进行任何自动操作。**
-- **本插件属于游戏的第三方插件，使用本插件可能会违反游戏的使用协议，导致的一切后果，包括但不限于账号被警告、封禁等，由用户自行承担。**
+- **本插件使用UmamusumeResponseAnalyzer（小黑板）获取游戏数据。该工具获取的游戏数据，仅用于更直观、准确地展示育成中的训练数值和事件效果。不会修改任何游戏数据或者进行任何自动操作。**
+- **使用外部工具本身为违反游戏使用条款的行为。若使用本插件后账号被警告/封禁，造成的后果由用户自行担责。**
 - **不得在视频或直播中出现本工具的界面画面或者截图。这会显著增加您的账号或者本工具被封禁的风险。**
-- **使用本插件完全免费；本插件仅供用户交流学习与研究使用，用户本人下载后不能用作商业或非法用途，严禁转售、转卖。**
+- **使用本插件完全免费；本插件仅供用户交流学习与研究使用，用户本人下载后不能用作商业或非法用途，严禁转售、转卖，否则后果均由用户承担。**
 - **软件是“按原样”提供的。在任何情况下，作者或版权持有人均不对因软件的使用而产生的纠纷承担任何责任。The Software is provided “as is”, without warranty of any kind. In no event shall the authors or copyright holders be liable for any claim, out of or in connection with the software.**
 - **复制本插件需要附带本声明文本。**
 
     Additional Notes:
+
     本ツールは、PC(DMM)版ウマ娘にのみ対応しています。スマートフォン版ではご利用いただけません。
 
     本ツールは、情報の視認性を高めることでより快適なゲーム体験を提供し、トレーナーがウマ娘をより楽しんで遊べることを目的に開発されました。
@@ -172,7 +170,7 @@ QQ群： ![](Document/src/image1.png) **751367941** ，最新版的程序基本�
 ![](Document/src/image24.png)
 
 
-# 8.算法
+# 6.算法
 
 在育成模拟器里通过蒙特卡洛法估测出来每个选项的平均最终分数。
 
@@ -217,3 +215,25 @@ ai在育成模拟器中还原当前游戏状态。在模拟器里模拟点击某
 ## 存在的问题
 
 ai做出的决策，当前回合是通过蒙特卡洛法决定的，但是下一个回合之后都是手写逻辑。手写逻辑不能考虑较复杂的策略（比如过几个回合吃红女神回体之类的），因此目前这个ai并不能思考2回合以上的策略。下个剧本如果需要较复杂的思考，会加入神经网络代替手写逻辑。
+
+# 7. 参与开发
+
+## 依赖项
+- VS2022（VC2022）
+- .Net 8.0（仅小黑板）
+- CUDA 12.3
+- libtorch 2.1.2
+
+## 参与开发
+
+源代码：[https://github.com/hzyhhzy/UmaAi](https://github.com/hzyhhzy/UmaAi)
+
+配套修改版小黑板插件：[https://github.com/hzyhhzy/UmaAiConnector](https://github.com/hzyhhzy/UmaAiConnector)
+
+（基于[https://github.com/UmamusumeResponseAnalyzer/UmamusumeResponseAnalyzer](https://github.com/UmamusumeResponseAnalyzer/UmamusumeResponseAnalyzer)）
+
+QQ群： ![](Document/src/image1.png) **751367941** ，最新版的程序基本上都在QQ群里直接上传，github的release更新较为缓慢。入群问题：哪个训练不消耗体力？（我觉得这个问题应该够简单了，就不在这里写答案了）
+
+作者QQ： ![](Document/src/image2.jpeg)**2658628026 (Sigmoid)**
+
+**If it's inconvenient for you to join the QQ group, you can**![](Document/src/image3.png) **.**
