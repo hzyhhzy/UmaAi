@@ -59,8 +59,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     #data settings
-    parser.add_argument('--tdatadir', type=str, default='../selfplay7/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
-    parser.add_argument('--vdatadir', type=str, default='../selfplay7/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--tdatadir', type=str, default='../sp11/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--vdatadir', type=str, default='../sp11/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
     parser.add_argument('--maxvalsamp', type=int, default=1000000, help='validation sample num')
     parser.add_argument('--maxstep', type=int, default=5000000000, help='max step to train')
     parser.add_argument('--savestep', type=int, default=2000, help='step to save and validation')
@@ -70,9 +70,9 @@ if __name__ == '__main__':
     parser.add_argument('--valuesampling', type=float, default=1, help='value sampling rate(to avoid overfitting)')
 
     #model parameters
-    parser.add_argument('--modeltype', type=str, default='em',help='model type defined in model.py')
+    parser.add_argument('--modeltype', type=str, default='ems',help='model type defined in model.py')
     parser.add_argument('--modelparam', nargs='+',type=int,
-                        default=(1,128,128,3,256,256), help='model size')
+                        default=(1,128,3,256,256), help='model size')
 
     parser.add_argument('--savename', type=str ,default='auto', help='model save pth, ""null"" means does not save, ""auto"" means modeltype+modelparam')
     parser.add_argument('--new', action='store_true', default=False, help='whether to retrain')
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     parser.add_argument('--wdscale', type=float, default=1.0, help='weight decay')
     parser.add_argument('--rollbackthreshold', type=float, default=0.05, help='if loss increased this value, roll back 2*infostep steps')
     args = parser.parse_args()
-
+    #print("用的旧版数据，别忘了改回来")
     if(args.gpu==-1):
         device=torch.device('cpu')
     else:
@@ -187,7 +187,7 @@ if __name__ == '__main__':
                                 {'params': transformerparam, 'lr': lrtf*args.lrscale, 'weight_decay': wd*args.wdscale}],
                                lr=lr*args.lrscale, weight_decay=wd*args.wdscale)
 
-    elif model_type == 'em' or model_type == 'ems':
+    elif model_type == 'em' or model_type == 'ems' or model_type == 'emsb':
         lr = 5e-4
         wd = 2e-5
         optimizer = optim.Adam(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)
