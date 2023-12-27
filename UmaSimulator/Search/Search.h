@@ -58,12 +58,13 @@ public:
 
   //导出上次搜索的数据作为训练样本
   TrainingSample exportTrainingSample(float policyDelta = 50);//policyDelta是policy的软化系数
-  
+
+  int32_t finalScoreDistribution[MAX_SCORE];//某个action的最终分数分布预测
+
 private:
 
   std::vector<ModelOutputValueV1> NNresultBuf;
 
-  int32_t finalScoreDistribution[MAX_SCORE];//某个action的最终分数分布预测
   double normDistributionCdfInv[NormDistributionSampling];//正态分布累积分布函数的反函数在0~1上均匀取点
 
   //计算单个action的数值，单个线程

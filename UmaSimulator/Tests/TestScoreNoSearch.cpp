@@ -72,6 +72,42 @@ void main_testScoreNoSearch()
 
   cout << "平均分数=\033[1;32m" << int(value.scoreMean) << " \033[0m" << "胡局分数=\033[1;32m" << int(value.value) << "\033[0m " << "标准差=\033[1;32m" << int(value.scoreStdev) << "\033[0m  " << endl;
 
+
+  const int nRanks = 25;
+  const int ranks[] = { 273, 278, 283, 288, 294,
+                  299, 304, 310, 315, 321,
+                  327, 332, 338, 344, 350,
+                  356, 362, 368, 375, 381,
+                  387, 394, 400, 407, 413 };
+  const string rankNames[] = { "UF7", "UF8", "UF9", "UE", "UE1",
+                         "UE2", "UE3", "UE4", "UE5", "UE6",
+                         "UE7", "UE8", "UE9", "UD", "UD1",
+                         "UD2", "UD3", "UD4", "UD5", "UD6",
+                         "UD7", "UD8", "UD9", "UC", "UC1" };
+
+  vector<int> scoreGameCount(MAX_SCORE);
+  int c = 0;
+  for (int s = MAX_SCORE - 1; s >= 0; s--)
+  {
+    c += search.finalScoreDistribution[s];
+    scoreGameCount[s] = c;
+  }
+  //assert(c == test.totalGames * Search::NormDistributionSampling);
+
+  for (int j = 0; j < nRanks; ++j)
+  {  
+    cout << termcolor::bright_cyan << rankNames[j] << "概率: " << float(scoreGameCount[ranks[j] * 100]) / c * 100 << "%"
+      << termcolor::reset << endl;
+  }
+
+
+
+
+
+
+
+
+
   // 计算持续时间
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
   double duration_s = 0.000001 * duration.count();
