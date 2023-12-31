@@ -4160,6 +4160,41 @@
     ],
     "star": 5
   },
+  "106803": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      128,
+      92,
+      112,
+      103
+    ],
+    "freeRaces": [],
+    "gameId": 106803,
+    "name": "kitasan-black",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      41,
+      43,
+      47,
+      53,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "106901": {
     "bonusData": [],
     "fiveStatusBonus": [
