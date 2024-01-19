@@ -71,6 +71,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
 
 
     saihou = 0;
+    larc_zuoyueType = 0;
     for (int i = 0; i < 6; i++)
     {
       int cardId = j["cardId"][i];
