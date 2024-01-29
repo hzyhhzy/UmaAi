@@ -3720,6 +3720,40 @@
     ],
     "star": 5
   },
+  "106003": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      0,
+      8,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      115,
+      101,
+      111,
+      101,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 106003,
+    "name": "nice-nature",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      25,
+      38,
+      43,
+      47,
+      59,
+      67,
+      70,
+      71
+    ],
+    "star": 5
+  },
   "106101": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -4143,6 +4177,41 @@
     ],
     "freeRaces": [],
     "gameId": 106802,
+    "name": "kitasan-black",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      41,
+      43,
+      47,
+      53,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "106803": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      128,
+      92,
+      112,
+      103
+    ],
+    "freeRaces": [],
+    "gameId": 106803,
     "name": "kitasan-black",
     "preferRaces": [],
     "preferReds": [],
@@ -4795,6 +4864,40 @@
       55,
       59,
       66,
+      69
+    ],
+    "star": 5
+  },
+  "109101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      120,
+      102,
+      123,
+      99,
+      106
+    ],
+    "freeRaces": [],
+    "gameId": 109101,
+    "name": "vivlos",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      40,
+      43,
+      51,
+      56,
+      59,
       69
     ],
     "star": 5
