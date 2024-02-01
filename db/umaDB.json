@@ -1761,6 +1761,40 @@
     ],
     "star": 5
   },
+  "102502": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      101,
+      120,
+      121,
+      99,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 102502,
+    "name": "manhattan-cafe",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      41,
+      43,
+      47,
+      55,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "102601": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -1948,6 +1982,41 @@
     ],
     "freeRaces": [],
     "gameId": 102901,
+    "name": "yukino-bijin",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      37,
+      43,
+      53,
+      56,
+      68,
+      69
+    ],
+    "star": 5
+  },
+  "102902": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      0,
+      8,
+      14,
+      0
+    ],
+    "fiveStatusInitial": [
+      117,
+      102,
+      109,
+      117,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 102902,
     "name": "yukino-bijin",
     "preferRaces": [],
     "preferReds": [],
