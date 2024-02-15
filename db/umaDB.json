@@ -3454,6 +3454,41 @@
     ],
     "star": 5
   },
+  "105401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      136,
+      73,
+      136,
+      109,
+      96
+    ],
+    "freeRaces": [],
+    "gameId": 105401,
+    "name": "biko-pegasus",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      41,
+      45,
+      51,
+      53,
+      58,
+      64,
+      65,
+      69
+    ],
+    "star": 5
+  },
   "105501": {
     "bonusData": [],
     "fiveStatusBonus": [
