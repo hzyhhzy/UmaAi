@@ -75,7 +75,7 @@ void SupportCard::load_from_json(json& j, int x) {
 		// 直接使用charaID判断是否为链接卡
 		larc_isLink = false;
 		larc_linkSpecialEffect = 0;
-		for (int i = 0; i < 7; ++i)
+		for (int i = 0; i < 8; ++i)
 			if (charaId == GameConstants::LArcLinkCharas[i]) {
 				larc_isLink = true;
 				larc_linkSpecialEffect = GameConstants::LArcLinkEffect[i];

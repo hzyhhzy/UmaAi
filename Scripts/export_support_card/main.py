@@ -12,8 +12,8 @@ DirectKeys = ['deYiLv', 'failRateDrop', 'ganJing', 'hintProbIncrease',
               'youQing', 'initialJiBan']
 
 # 特判直接合并面板（得意率）的卡
-# 智太阳神，活动力乌拉拉
-DirectMergeCards = [ 30155, 30171 ]
+# 智太阳神，活动力乌拉拉，东商
+DirectMergeCards = [ 30155, 30171, 30128 ]
 
 HintValues = [
     [6, 0, 2, 0, 0, 0],

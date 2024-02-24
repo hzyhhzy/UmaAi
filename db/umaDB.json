@@ -3994,6 +3994,45 @@
     ],
     "star": 5
   },
+  "106301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      0,
+      20,
+      10
+    ],
+    "fiveStatusInitial": [
+      110,
+      100,
+      110,
+      130,
+      100
+    ],
+    "freeRaces": [],
+    "gameId": 106301,
+    "name": "ikuno-dictus",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      31,
+      33,
+      43,
+      53,
+      55,
+      58,
+      59,
+      65,
+      68,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "106401": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -5275,6 +5314,41 @@
       59,
       69,
       71
+    ],
+    "star": 5
+  },
+  "110801": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      118,
+      108,
+      116,
+      104,
+      104
+    ],
+    "freeRaces": [],
+    "gameId": 110801,
+    "name": "duramente",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      26,
+      30,
+      33,
+      43,
+      51,
+      53,
+      59,
+      67,
+      69
     ],
     "star": 5
   }
