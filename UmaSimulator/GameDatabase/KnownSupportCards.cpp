@@ -246,6 +246,25 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, int atTrain, int
                 break;
             case 18:   // 佐岳
                 break;
+            case 19:    // 凉花
+                break;
+            case 20:    // 巨匠
+                {
+                    int cardTypeCount[7] = { 0,0,0,0,0,0,0 };
+                    for (int i = 0; i < 6; i++)
+                    {
+                        int t = game.cardParam[i].cardType;
+                        assert(t <= 6 && t >= 0);
+                        cardTypeCount[t]++;
+                    }
+                    cardTypeCount[5] += cardTypeCount[6];
+                    for (int i = 0; i < 4; i++)
+                        if (cardTypeCount[i] > 0)
+                            effect.apply(i + 3, cardTypeCount[i]);  // 速耐力根智 = 0-4 = CardEffect词条3-7
+                    if (cardTypeCount[5] > 0)
+                        effect.apply(30, cardTypeCount[5]); // pt = 30
+                }
+            break;
             case 21:   // 耐万籁，编入4种支援卡时+10训练
               {
                 int cardTypeCount[7] = { 0,0,0,0,0,0,0 };

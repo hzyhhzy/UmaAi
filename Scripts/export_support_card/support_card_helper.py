@@ -121,6 +121,9 @@ _effectTypeExHandlers:dict[int,tuple[int,EffectSummary]] = {
     116: (5, MultiyEffectSummary("根据{}技能个数，提高{}效果(每个+{}, 最大{}个)",2,3,4,params_formatter = lambda params, summary: summary.format(_getExEffectName(params[1]), _getEffectName(params[2]), params[3], params[4]))),
     117: (4, EffectSummary("总训练设施等级越高，{}越高(最高+{})", lambda params, summary: summary.format(_getEffectName(params[1]), params[3]) )),
     118: (3, EffectSummary("羁绊>={}时，可以出现在2个位置", lambda params, summary: summary.format(params[2]) )),
+    119: (4, EffectSummary("羁绊>={}时，编成支援卡更容易出现在训练中", lambda params, summary: summary.format(params[3]))),
+    120: (5, EffectSummary("羁绊>={}时，根据编成支援卡类型提升副属性(对应属性+{}，友人/团队卡PT+{}，最多+{})",
+                                lambda params, summary: summary.format(params[2], params[3], params[3], params[4]) ))    
 }
 
 def _effectTypeHandler(params:list[int], offset)->tuple[SupportCardEffect, int, EffectSummary]:

@@ -162,7 +162,8 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
 void Game::initNPCsTurn3(std::mt19937_64& rand)
 {
-  int allSpecialBuffsNum[13] = {0,0,0,1,1,2,2,4,1,1,0,0,3};
+  //int allSpecialBuffsNum[13] = {0,0,0,1,1,2,2,4,1,1,0,0,3};   // 对应巨匠前版本则需要用这个数据
+  int allSpecialBuffsNum[13] = { 0,0,0,0,2,2,2,4,1,1,0,0,3 };   // 2.24 巨匠加入后更新 普通回体变成回体加上限
   int specialBuffEveryPerson[15];
   for (int i = 0; i < 15; i++)specialBuffEveryPerson[i] = 0;
 
