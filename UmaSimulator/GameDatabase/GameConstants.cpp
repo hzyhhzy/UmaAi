@@ -24,48 +24,6 @@ const double GameConstants::ZuoyueStatusBonusSSR[5] = { 1.15,1.16,1.18,1.2,1.2 }
 const double GameConstants::ZuoyueStatusBonusR[5] = { 1.05,1.06,1.08,1.1,1.1 };//佐岳R卡的事件效果倍数
 
 
-const bool GameConstants::LArcIsRace[TOTAL_TURN] = {//是否为占用回合的赛程
-  false,false,false,false,false,false,false,false,false,false,false,true,
-  false,false,false,false,false,false,false,false,false,false,false,false,
-  false,false,false,false,false,false,false,false,false,true ,false,false,
-  false,false,false,false,true ,false,true ,false,false,false,false,false,
-  false,false,false,false,false,false,false,false,false,false,false,true,
-  false,false,false,false,true ,false,true
-};
-const int GameConstants::LArcSupportPtGainEveryTurn[TOTAL_TURN] = {//每回合固定的supportPt增长，几个larc代表赛不是固定的，取决于成员的排名。此处粗略估计一下平均值
-  0,12400,800,800,800,800,800,800,800,800,800,800,
-  800,800,800,800,800,800,800,800,800,800,800,5600,
-  2000,2000,2000,2000,2000,2000,2000,2000,2000,4750,2000,2700,
-     0,   0,   0,   0,2700,   0,5000,2000,2000,2000,2000,2000,
-  2400,2400,2400,2400,2400,4000,2400,2400,2400,2400,2400,4500,
-     0,   0,   0,   0,2400,   0,   0
-};
-const int GameConstants::LArcUpgradesCostLv2[10] = {//lv2要多少适性pt
-  50,50,100,100,100,
-  100,200,200,200,150
-};
-const int GameConstants::LArcUpgradesCostLv3[8] = { //lv3要多少适性pt
-  200,200,200,200,200,
-  200,300,300
-};
-
-const std::string GameConstants::LArcSSBuffNames[13] = {
-  "空",
-  "技",
-  "?2",
-  "\033[32m体\033[0m",
-  "\033[36m体\033[0m",
-  "\033[32m心\033[0m",
-  "\033[35m充\033[0m",
-  "适",
-  "\033[33m娇\033[0m",
-  "练",
-  "?10",
-  "属",
-  "pt"
-};
-
-
 const int GameConstants::TrainingBasicValue[5][6][7] =
 {
   //速

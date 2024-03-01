@@ -39,8 +39,7 @@ struct SupportCard
 	int uniqueEffectType = 0; //支援卡固有类型
 	std::vector<int> uniqueEffectParam; //支援卡固有特殊参数
 
-	bool larc_isLink = false;//是否为link卡
-	int larc_linkSpecialEffect = 0;//link效果
+	bool isLink = false;//是否为link卡
 
 	// 根据游戏状态计算支援卡的“固有”
     // 大部分固有都可以在默认参数下计算
