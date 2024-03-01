@@ -8,14 +8,14 @@ const int TOTAL_TURN = 78;
 class GameConstants
 {
 public:
-  //游戏初始化
   static const int TrainingBasicValue[3][5][5][7]; //TrainingBasicValue[颜色][第几种训练][LV几][速耐力根智pt体力]
   static const int BasicFiveStatusLimit[5];//初始上限，1200以上翻倍
 
   //各种游戏参数
   static const int NormalRaceFiveStatusBonus;//常规比赛属性加成=3，特殊马娘特殊处理（狄杜斯等）
   static const int NormalRacePtBonus;//常规比赛pt加成
-  static const int EventStrengthDefault;//每回合有40%概率随机一个属性以及pt +EventStrengthDefault，模拟支援卡事件
+  static const double EventProb;//每回合有EventProb概率随机一个属性以及pt +EventStrengthDefault，模拟支援卡事件
+  static const int EventStrengthDefault;
 
   //剧本卡相关
   static const double FriendUnlockOutgoingProbEveryTurnLowFriendship;//每回合解锁外出的概率，羁绊小于60
@@ -25,11 +25,16 @@ public:
   static const double FriendVitalBonusR[5];//友人R卡的回复量倍数
   static const double FriendStatusBonusSSR[5];//友人SSR卡的事件效果倍数（满破1.25）
   static const double FriendStatusBonusR[5];//友人R卡的事件效果倍数
-  static const int LinkCharas[8];// Link角色
   
 
   //剧本相关
-  稍后再填
+  static const int UAF_LinkCharas[6];// Link角色
+  static const int UAF_WinNumTrainingBonus[26];//每种颜色win多少次有多少训练加成
+  static const int UAF_RedBuffBonus[6];//红buff在同色训练为012345时的训练加成，0无意义只用来避免每次调用都要-1，下同
+  //static const int UAF_BlueBuffBonus
+  static const int UAF_LinkNumBonus[6];//无buff时link训练在同色训练为012345时的训练加成
+  static const int UAF_LinkNumBonusXiahesu[6];//无buff时夏合宿期间link训练在同色训练为012345时的训练加成
+  static const int UAF_LinkVitalCostGain[6];//link训练在同色训练为012345时的体力消耗增加
 
 
   //评分

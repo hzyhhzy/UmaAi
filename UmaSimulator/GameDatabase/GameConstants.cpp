@@ -2,74 +2,161 @@
 #include "UmaData.h"
 
 //常数或者比较短的列表放在最前面
-const double GameConstants::ScorePtRate = 1.9;
-const double GameConstants::ScorePtRateQieZhe = 2.1;
-const int GameConstants::BasicFiveStatusLimit[5] = { 2000,2000,1800,1800,1400 }; //游戏里原来是1600 1600 1500 1500 1300，模拟器中1200以上翻倍
+const double GameConstants::ScorePtRate = 2.1;
+const double GameConstants::ScorePtRateQieZhe = 2.3;
+const int GameConstants::BasicFiveStatusLimit[5] = { 2200,1800,1800,1800,1400 }; //游戏里原来是1700 1500 1500 1500 1300，模拟器中1200以上翻倍
 
 const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3
 const int GameConstants::NormalRacePtBonus = 45;//常规比赛pt加成,G1=45
+const double GameConstants::EventProb = 0.3;
 const int GameConstants::EventStrengthDefault = 20;
 
-const int GameConstants::UpgradeId50pEachTrain[5] = { 3,1,2,0,4 };
-const int GameConstants::LArcTrainBonusEvery5Percent[41] = { 0, 5, 8, 10, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 30, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37, 38, 38, 39, 39, 40 };
-const int GameConstants::LArcLinkCharas[8] = { 1007, 1014, 1025, 1049, 1067, 1070, 1107, 1115 }; // 船，神鹰，茶座，庆典，光钻，天狼星，跳舞城，巨匠
-const int GameConstants::LArcLinkEffect[8] = { 8, 9, 4, 12, 5, 6, 5, 4 }; // 爱娇（属性），练习（适性），体力+上限，pt，心情，充电，心情，体力+上限
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.05;
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.10;
 
-const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.07;
-const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.14;
+const double GameConstants::FriendVitalBonusSSR[5] = { 1.4,1.45,1.5,1.55,1.6 };//佐岳SSR卡的回复量倍数（满破1.6）
+const double GameConstants::FriendVitalBonusR[5] = { 1.2,1.23,1.26,1.3,1.3 };//佐岳R卡的回复量倍数
+const double GameConstants::FriendStatusBonusSSR[5] = { 1.2,1.21,1.23,1.25,1.25 };//佐岳SSR卡的事件效果倍数（满破1.25）
+const double GameConstants::FriendStatusBonusR[5] = { 1.1,1.11,1.13,1.15,1.15 };//佐岳R卡的事件效果倍数
 
-const double GameConstants::ZuoyueVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//佐岳SSR卡的回复量倍数（满破1.8）
-const double GameConstants::ZuoyueVitalBonusR[5] = { 1.3,1.32,1.35,1.37,1.4 };//佐岳R卡的回复量倍数
-const double GameConstants::ZuoyueStatusBonusSSR[5] = { 1.15,1.16,1.18,1.2,1.2 };//佐岳SSR卡的事件效果倍数（满破1.2）
-const double GameConstants::ZuoyueStatusBonusR[5] = { 1.05,1.06,1.08,1.1,1.1 };//佐岳R卡的事件效果倍数
+const int GameConstants::UAF_LinkCharas[6] = { 9044,1027,1035,1048,1072,1077 };
+const int GameConstants::UAF_WinNumTrainingBonus[26] = { 0,1,1,1,1,3,3,3,3,3,7,7,7,7,7,12,12,12,12,12,17,17,17,17,17,17 };
+const int GameConstants::UAF_RedBuffBonus[6] = { -1000,0,30,45,54,60 };
+const int GameConstants::UAF_LinkNumBonus[6] = { -1000,0,10,20,25,30 };
+const int GameConstants::UAF_LinkNumBonusXiahesu[6] = { -1000,0,20,30,35,40 };
+const int GameConstants::UAF_LinkVitalCostGain[6] = { -1000,0,1,2,3,4 };
 
 
-const int GameConstants::TrainingBasicValue[5][6][7] =
+const int GameConstants::TrainingBasicValue[3][5][5][7] =
 {
-  //速
+  //蓝
   {
-    { 10, 0, 3, 0, 0, 6, -21},
-    { 11, 0, 3, 0, 0, 6, -22},
-    { 12, 0, 3, 0, 0, 6, -23},
-    { 13, 0, 4, 0, 0, 6, -25},
-    { 14, 0, 5, 0, 0, 6, -27},
-    { 16, 0, 5, 0, 0, 6, -21},
+    //速
+    {
+      { 12, 0, 1, 0, 0, 6, -15},
+      { 13, 0, 1, 0, 0, 6, -15},
+      { 14, 0, 1, 0, 0, 6, -15},
+      { 15, 0, 1, 0, 0, 6, -15},
+      { 16, 0, 2, 0, 0, 6, -15},
+    },
+    //耐
+    {
+      { 0, 11, 0, 2, 0, 6, -15},
+      { 0, 12, 0, 2, 0, 6, -15},
+      { 0, 13, 0, 2, 0, 6, -15},
+      { 0, 14, 0, 2, 0, 6, -15},
+      { 0, 15, 0, 3, 0, 6, -15},
+    },
+    //力
+    {
+      { 0, 2, 11, 0, 6, -15},
+      { 0, 2, 12, 0, 6, -15},
+      { 0, 2, 13, 0, 6, -15},
+      { 0, 2, 14, 0, 6, -15},
+      { 0, 3, 15, 0, 6, -15},
+    },
+    //根
+    {
+      { 1, 0, 1, 12, 0, 6, -15},
+      { 1, 0, 1, 13, 0, 6, -15},
+      { 1, 0, 1, 14, 0, 6, -15},
+      { 1, 0, 1, 15, 0, 6, -15},
+      { 2, 0, 1, 16, 0, 6, -15},
+    },
+    //智
+    {
+      { 2, 0, 0, 0, 11, 6, -15},
+      { 2, 0, 0, 0, 12, 6, -15},
+      { 2, 0, 0, 0, 13, 6, -15},
+      { 2, 0, 0, 0, 14, 6, -15},
+      { 3, 0, 0, 0, 15, 6, -15},
+    },
   },
-  //耐
+  //红
   {
-    { 0, 9, 0, 4, 0, 6, -19},
-    { 0, 10, 0, 4, 0, 6, -20},
-    { 0, 11, 0, 4, 0, 6, -21},
-    { 0, 12, 0, 5, 0, 6, -23},
-    { 0, 13, 0, 6, 0, 6, -25},
-    { 0, 15, 0, 7, 0, 6, -19},
+    //速
+    {
+      { 8, 0, 1, 0, 0, 10, -15},
+      { 9, 0, 1, 0, 0, 10, -15},
+      { 10, 0, 1, 0, 0, 10, -15},
+      { 11, 0, 1, 0, 0, 10, -15},
+      { 12, 0, 2, 0, 0, 10, -15},
+    },
+    //耐
+    {
+      { 0, 7, 0, 2, 0, 10, -15},
+      { 0, 8, 0, 2, 0, 10, -15},
+      { 0, 9, 0, 2, 0, 10, -15},
+      { 0, 10, 0, 2, 0, 10, -15},
+      { 0, 11, 0, 3, 0, 10, -15},
+    },
+    //力
+    {
+      { 0, 2, 7, 0, 0, 10, -15},
+      { 0, 2, 8, 0, 0, 10, -15},
+      { 0, 2, 9, 0, 0, 10, -15},
+      { 0, 2, 10, 0, 0, 10, -15},
+      { 0, 3, 11, 0, 0, 10, -15},
+    },
+    //根
+    {
+      { 1, 0, 1, 8, 0, 10, -15},
+      { 1, 0, 1, 9, 0, 10, -15},
+      { 1, 0, 1, 10, 0, 10, -15},
+      { 1, 0, 1, 11, 0, 10, -15},
+      { 2, 0, 1, 12, 0, 10, -15},
+    },
+    //智
+    {
+      { 2, 0, 0, 0, 7, 10, -15},
+      { 2, 0, 0, 0, 8, 10, -15},
+      { 2, 0, 0, 0, 9, 10, -15},
+      { 2, 0, 0, 0, 10, 10, -15},
+      { 3, 0, 0, 0, 11, 10, -15},
+    },
   },
-  //力
+  //黄
   {
-    { 0, 5, 11, 0, 0, 6, -20},
-    { 0, 5, 12, 0, 0, 6, -21},
-    { 0, 5, 13, 0, 0, 6, -22},
-    { 0, 6, 14, 0, 0, 6, -24},
-    { 0, 7, 15, 0, 0, 6, -26},
-    { 0, 9, 17, 0, 0, 6, -20},
-  },
-  //根
-  {
-    { 3, 0, 2, 10, 0, 6, -21},
-    { 3, 0, 2, 11, 0, 6, -22},
-    { 3, 0, 2, 12, 0, 6, -23},
-    { 4, 0, 2, 13, 0, 6, -25},
-    { 4, 0, 3, 14, 0, 6, -27},
-    { 6, 0, 5, 16, 0, 6, -21},
-  },
-  //智
-  {
-    { 2, 0, 0, 0, 9, 6, 5},
-    { 2, 0, 0, 0, 10, 6, 5},
-    { 2, 0, 0, 0, 11, 6, 5},
-    { 3, 0, 0, 0, 12, 6, 5},
-    { 4, 0, 0, 0, 13, 6, 5},
-    { 5, 0, 0, 0, 14, 6, 6},
+    //速
+    {
+      { 14, 0, 1, 0, 0, 4, -15},
+      { 15, 0, 1, 0, 0, 4, -15},
+      { 16, 0, 1, 0, 0, 4, -15},
+      { 17, 0, 1, 0, 0, 4, -15},
+      { 18, 0, 2, 0, 0, 4, -15},
+    },
+    //耐
+    {
+      { 1, 10, 0, 2, 0, 6, -15},
+      { 1, 11, 0, 2, 0, 6, -15},
+      { 1, 12, 0, 2, 0, 6, -15},
+      { 1, 13, 0, 2, 0, 6, -15},
+      { 2, 14, 0, 2, 0, 6, -15},
+    },
+    //力
+    {
+      { 1, 2, 10, 0, 0, 6, -15},
+      { 1, 2, 11, 0, 0, 6, -15},
+      { 1, 2, 12, 0, 0, 6, -15},
+      { 1, 2, 13, 0, 0, 6, -15},
+      { 2, 2, 14, 0, 0, 6, -15},
+    },
+    //根
+    {
+      { 2, 0, 1, 12, 0, 5, -15},
+      { 2, 0, 1, 13, 0, 5, -15},
+      { 2, 0, 1, 14, 0, 5, -15},
+      { 2, 0, 1, 15, 0, 5, -15},
+      { 3, 0, 1, 16, 0, 5, -15},
+    },
+    //智
+    {
+      { 4, 0, 0, 0, 10, 5, -15},
+      { 4, 0, 0, 0, 11, 5, -15},
+      { 4, 0, 0, 0, 12, 5, -15},
+      { 4, 0, 0, 0, 13, 5, -15},
+      { 5, 0, 0, 0, 14, 5, -15},
+    },
   },
 };
 
