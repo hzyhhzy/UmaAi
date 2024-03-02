@@ -63,6 +63,8 @@ struct Game
   double lianghua_vitalBonus;//凉花卡的回复量倍数（满破1.60）
   double lianghua_statusBonus;//凉花卡的事件效果倍数（满破1.25）
 
+  bool lianghua_guyouEffective;//凉花固有是否生效，每次randomDistributeCards的时候检查这个，如果ssr凉花羁绊大于等于60且lianghua_guyouEffective=false，则设为true并重置Person.distribution
+
 
   //可以通过上面的信息计算获得的非独立的信息，每回合或者隔几个回合（每半年大会）更新一次
 
@@ -72,12 +74,15 @@ struct Game
   int16_t uaf_trainingBonus;//剧本训练加成（取决于三种颜色的win数），每半年更新一次
 
   //每回合更新
-  int16_t trainValue[5][7];//第一个数是第几个训练，第二个数依次是速耐力根智pt体力
+  int16_t trainValue[5][6];//训练数值的总数（下层+上层），第一个数是第几个训练，第二个数依次是速耐力根智pt
+  int16_t trainVitalChange[5];//训练后的体力变化（负的体力消耗）
   int16_t failRate[5];//训练失败率
-  int16_t uaf_trainLevelGain[5];//五个训练分别加多少训练等级（不是总数，只看当前训练头顶的数字）
+  int16_t uaf_trainLevelGain[5];//五个训练分别加多少训练等级（不是总数，只看当前训练头顶的数字）,不考虑100级溢出
   int16_t trainShiningNum[5];//每个训练有几个彩圈
 
-
+  //训练数值计算的中间变量，存下来方便手写逻辑对相谈后属性进行估计
+  int16_t trainValueLower[5][6];//训练数值的下层，第一个数是第几个训练，第二个数依次是速耐力根智pt体力
+  double trainValueCardMultiplier[5];//支援卡乘区=(1+总训练加成)(1+干劲系数*(1+总干劲加成))(1+0.05*总卡数)(1+友情1)(1+友情2)...
 
 
 
@@ -136,6 +141,14 @@ private:
 
   //各种辅助函数与接口，可以根据需要增加或者删减-------------------------------------------------------------------------------
 public:
+  static inline int convertTrainingLevel(int x) //转换后的训练等级从0开始，0是lv1，4是lv5
+  {
+    return x < 20 ? 0 : x < 30 ? 1 : x < 40 ? 2 : x < 50 ? 3 : 4;
+  }
+  inline bool isXiahesu() //是否为夏合宿
+  {
+    return (turn >= 36 && turn <= 39) || (turn >= 60 && turn <= 63);
+  }
   bool isXiangtanLegal(int xiangtanType);//此相谈是否合法
   void xiangtanAndRecalculate(int xiangtanType);//相谈，并重新计算属性值
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
@@ -154,7 +167,7 @@ public:
 
   float getSkillScore() const;//技能分，输入神经网络之前也可能提前减去
   int getTrainingLevel(int trainIdx) const;//计算训练等级，1~19,20~21,...50~100
-  bool cardIsShining(int personIdx) const;    // 判断指定卡是否闪彩。普通卡看羁绊与所在训练，团队卡看friendOrGroupCardStage
+  bool isCardShining(int personIdx, int trainIdx) const;    // 判断指定卡是否闪彩。普通卡看羁绊与所在训练，团队卡看friendOrGroupCardStage
   //bool trainShiningCount(int trainIdx) const;    // 指定训练彩圈数 //uaf不一定有用
   int calculateFailureRate(int trainType, double failRateMultiply) const;//计算训练失败率，failRateMultiply是训练失败率乘数=(1-支援卡1的失败率下降)*(1-支援卡2的失败率下降)*...
   //void calculateTrainingValueSingle(int trainType);//计算每个训练加多少   uaf剧本可能五个训练一起算比较方便
@@ -165,6 +178,7 @@ public:
   void handleFriendOutgoing();//友人外出
   void handleFriendClickEvent(std::mt19937_64& rand, int atTrain);//友人事件（お疲れ様）
   void handleFriendFixedEvent();//友人固定事件，拜年+结算
+  void checkLianghuaGuyou();//读入json或每次randomDistributeCards的时候检查这个，如果ssr凉花羁绊大于等于60且lianghua_guyouEffective=false，则设为true并重新构造Person.distribution使得凉花固有生效
 
   //显示事件
   void printEvents(std::string s) const;//用绿色字体显示事件

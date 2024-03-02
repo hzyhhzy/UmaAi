@@ -24,9 +24,9 @@ const int GameConstants::UAF_WinNumTrainingBonus[26] = { 0,1,1,1,1,3,3,3,3,3,7,7
 const int GameConstants::UAF_RedBuffBonus[6] = { -1000,0,30,45,54,60 };
 const int GameConstants::UAF_LinkNumBonus[6] = { -1000,0,10,20,25,30 };
 const int GameConstants::UAF_LinkNumBonusXiahesu[6] = { -1000,0,20,30,35,40 };
-const int GameConstants::UAF_LinkVitalCostGain[6] = { -1000,0,1,2,3,4 };
 
 
+const int GameConstants::FailRateBasic = 504;
 const int GameConstants::TrainingBasicValue[3][5][5][7] =
 {
   //À¶

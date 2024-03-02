@@ -43,7 +43,7 @@ struct SupportCard
 
 	// 根据游戏状态计算支援卡的“固有”
     // 大部分固有都可以在默认参数下计算
-	CardTrainingEffect getCardEffect(const Game& game, int atTrain=-1, int jiBan=0, int effectFactor=0) const;
+	CardTrainingEffect getCardEffect(const Game& game, bool isShining, int atTrain, int jiBan, int effectFactor, int trainingCardNum, int trainingShiningNum) const;
 
 	void getNNInputV1(float* buf, const Game& game) const;//神经网络输入，size=NNINPUT_CHANNELS_CARD_V1
 

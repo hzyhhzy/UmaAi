@@ -327,42 +327,249 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   calculateTrainingValue();
 }
 
+//小写为一个数，大写为向量（6项，速耐力根智pt）
+//k = 人头 * 训练 * 干劲 * 友情    //支援卡倍率
+//B = 训练基础值 + 支援卡加成  //基础值
+//C = link基础值加成，lv12345是当前属性加11223，pt均为加1
+//G = 马娘成长率
+
+//L = k * B * G //下层，先不取整
+//P1 = L + k * C
+//P2 = P1 * (1 + 红buff倍率)，红buff倍率只乘在当前训练的主属性上
+//P3 = P2 + 蓝buff（具体公式未知）
+//总数T = P3 * (1 + link数加成 + 大会优胜数加成)
+//上层U = T - L
+
 void Game::calculateTrainingValue()
 {
-  //先计算适性等级加成
-  for (int i = 0; i < 6; i++)
-    larc_staticBonus[i] = 0;
-  for (int i = 0; i < 5; i++)
-    if (larc_levels[GameConstants::UpgradeId50pEachTrain[i]] >= 1)
-      larc_staticBonus[i] += 3;
 
-  if (larc_levels[5] >= 1)
-    larc_staticBonus[5] += 10;
-  if (larc_levels[5] >= 3)
-    larc_staticBonus[5] += 10;
-  if (larc_levels[6] >= 1)
-    larc_staticBonus[1] += 3;
-  if (larc_levels[7] >= 1)
-    larc_staticBonus[3] += 3;
 
-  int larc_trainBonusLevel = (larc_supportPtAll + 85) / 8500;
-  if (larc_trainBonusLevel > 40)larc_trainBonusLevel = 40;
-  larc_trainBonus = GameConstants::LArcTrainBonusEvery5Percent[larc_trainBonusLevel];
-
-  for (int i = 0; i < 6; i++)
+  //剧本训练加成
+  uaf_trainingBonus = 0;
+  for (int color = 0; color < 3; color++)
   {
-    persons[i].isShining = false;
-  }
-  
-  // TODO: 卡组同步之前以下方法无法执行
-  for (int trainType = 0; trainType < 5; trainType++)
-  {
-    calculateTrainingValueSingle(trainType);
+    int levelTotal = 0;
+    int winCount = 0;
+    for (int i = 0; i < 5; i++)
+      levelTotal += uaf_trainingLevel[color][i];
+
+    for (int i = 0; i < 5; i++)
+      for (int j = 0; j < 5; j++)
+        winCount += uaf_winHistory[i][color][j];
+
+    uaf_trainLevelColorTotal[color] = levelTotal;
+    uaf_colorWinCount[color] = winCount;
+    uaf_trainingBonus += GameConstants::UAF_WinNumTrainingBonus[winCount];
   }
 
-  if(!larc_isAbroad)
-    calculateSS();
+  //训练等级增加量与卡数的关系
+  static const int cardNumLevelBonus[6] = { 0,1,2,2,3,3 };
+
+  //把闪彩的卡按persons的编号记下来
+  bool isCardShining_record[6] = { false,false,false,false,false,false };
+  int cardNum_record[5];
+
+  //计算等级增加量
+  for (int tra = 0; tra < 5; tra++)
+  {
+    int cardNum = 0;
+    int shiningNum = 0;
+    int linkNum = 0;
+    for (int h = 0; h < 5; h++)
+    {
+      int pIdx = personDistribution[tra][h];
+      if (pIdx < 0)break;
+      const Person& p = persons[pIdx];
+      if (pIdx >= 6)continue;//不是支援卡
+      assert(p.personType == PersonType_card || p.personType == PersonType_lianghuaCard || p.personType == PersonType_otherFriend || p.personType == PersonType_groupCard);
       
+      cardNum += 1;
+      if (isCardShining(pIdx, tra))
+      {
+        shiningNum += 1;
+        isCardShining_record[pIdx] = true;
+      }
+      if (p.cardParam.isLink)
+      {
+        linkNum += 1;
+      }
+
+    }
+    cardNum_record[tra] = cardNum;
+    trainShiningNum[tra] = shiningNum;
+
+    int levelGain = 3 + cardNumLevelBonus[cardNum];
+    if (shiningNum > 0)
+      levelGain *= 2;
+    levelGain += linkNum;
+    if (uaf_lastTurnNotTrain)
+      levelGain += 3;
+    uaf_trainLevelGain[tra] = levelGain;
+  }
+
+
+  //link统计与加成
+  int trainingColorNum[3];//三种颜色的训练个数
+  int levelGainColorTotal[3];//三种颜色的训练等级提升总数
+  int linkBasicValueBonus[3][6];//三种颜色的基础值增加量
+
+  for (int color = 0; color < 3; color++)
+  {
+    trainingColorNum[color] = 0;
+    levelGainColorTotal[color] = 0;
+    for (int i = 0; i < 6; i++)
+      linkBasicValueBonus[color][i] = 0;
+
+    for (int t = 0; t < 5; t++)
+    {
+      if (uaf_trainingColor[t] != color)
+        continue;
+      trainingColorNum[color] += 1;
+      levelGainColorTotal[color] += uaf_trainLevelGain[t];
+      int splevel = uaf_trainingLevel[color][t];
+      int gain = splevel < 30 ? 1 : splevel < 50 ? 2 : 3;
+      linkBasicValueBonus[color][t] += gain;
+    }
+    linkBasicValueBonus[color][5] = trainingColorNum[color];
+    if (trainingColorNum[color] <= 1)
+    {
+      for (int t = 0; t < 5; t++)
+        linkBasicValueBonus[color][t] = 0;//一个link都没有吃不到加成
+    }
+  }
+
+  //计算五个训练的各种数值
+  for (int t = 0; t < 5; t++)
+  {
+    int basicValueLower[6];//训练的下层基础值，=原基础值+支援卡加成
+    double valueLowerDouble[6];//训练的下层值，先不取整
+    double valueDouble[6];//训练的总数，先不取整
+    //int basicValue[6];//训练的基础值，= basicValueLower + linkBasicValueBonus
+    int cardNum = 0;//几张卡，理事长记者不算
+    int totalXunlian = 0;//训练1+训练2+...
+    int totalGanjing = 0;//干劲1+干劲2+...
+    double totalYouqingMultiplier = 1.0;//(1+友情1)*(1+友情2)*...
+    int vitalCostBasic;//体力消耗基础量，=ReLU(基础体力消耗+link体力消耗增加-智彩体力消耗减少)
+    double vitalCostMultiplier = 1.0;//(1-体力消耗减少率1)*(1-体力消耗减少率2)*...
+    double failRateMultiplier = 1.0;//(1-失败率下降率1)*(1-失败率下降率2)*...
+
+    int color = uaf_trainingColor[t]; 
+    int colorNum = trainingColorNum[color];
+    int splevel = uaf_trainingLevel[color][t];
+    int tlevel = convertTrainingLevel(splevel);
+    for (int i = 0; i < 6; i++)
+      basicValueLower[i] = GameConstants::TrainingBasicValue[color][t][tlevel][i];
+    vitalCostBasic = GameConstants::TrainingBasicValue[color][t][tlevel][6];
+    vitalCostBasic += colorNum - 1;//link越多体力消耗越多
+
+    for (int a = 0; a < 5; a++)
+    {
+      int pid = personDistribution[t][a];
+      if (pid < 0)break;//没人
+      if (pid >= 6)continue;//不是卡
+      cardNum += 1;
+      const Person& p = persons[pid];
+      bool isThisCardShining = isCardShining_record[pid];//这张卡闪没闪
+      bool isThisTrainingShining = trainShiningNum[t];//这个训练闪没闪
+      CardTrainingEffect eff = p.cardParam.getCardEffect(*this, isThisCardShining, t, p.friendship, p.cardRecord, cardNum_record[t], trainShiningNum[t]);
+        
+      for (int i = 0; i < 6; i++)//基础值bonus
+      {
+        if (basicValueLower[i] > 0)
+          basicValueLower[i] += eff.bonus[i];
+      }
+      if (isCardShining_record[pid])//闪彩，友情加成和智彩回复
+      {
+        totalYouqingMultiplier *= (1 + 0.01 * eff.youQing);
+        if (t == TRA_wiz)
+          vitalCostBasic -= eff.vitalBonus;
+      }
+      totalXunlian += eff.xunLian;
+      totalGanjing += eff.ganJing;
+      vitalCostMultiplier *= (1 - 0.01 * eff.vitalCostDrop);
+      failRateMultiplier *= (1 - 0.01 * eff.failRateDrop);
+
+    }
+
+    //体力，失败率
+
+    if (vitalCostBasic < 0)//uaf训练不会加体力，即使是很多智彩
+      vitalCostBasic = 0;
+    int vitalChangeInt = -int(vitalCostBasic * vitalCostMultiplier);
+    if (vitalChangeInt > maxVital - vital)vitalChangeInt = maxVital - vital;
+    if (vitalChangeInt < -vital)vitalChangeInt = -vital;
+    trainVitalChange[t] = vitalChangeInt;
+    failRate[t] = calculateFailureRate(t, failRateMultiplier);
+
+
+    //k = 人头 * 训练 * 干劲 * 友情    //支援卡倍率
+    double cardMultiplier = (1 + 0.05 * cardNum) * (1 + 0.01 * totalXunlian) * (1 + 0.1 * (motivation - 3) * (1 + 0.01 * totalGanjing)) * totalYouqingMultiplier;
+    trainValueCardMultiplier[t] = cardMultiplier;
+
+    //下层可以开始算了
+    for (int i = 0; i < 6; i++)
+    {
+      if (basicValueLower[i] == 0)
+        trainValueLower[t][i] = 0;
+      else
+      {
+        double umaBonus = i < 5 ? 1 + 0.01 * fiveStatusBonus[i] : 1;
+        double v = basicValueLower[i] * cardMultiplier * umaBonus;
+        if (v < 1)v = 1;
+        if (v > 100)v = 100;
+
+        //L = k * B * G //下层，先不取整
+        valueLowerDouble[i] = v;
+        trainValueLower[t][i] = int(v);
+      }
+    }
+    
+    //然后算总数
+
+    //P1 = L + k * C
+    for (int i = 0; i < 6; i++)//link基础值bonus
+      valueDouble[i] = valueLowerDouble[i] + linkBasicValueBonus[color][i] * cardMultiplier;
+
+    //P2 = P1 * (1 + 红buff倍率)，红buff倍率只乘在当前训练的主属性上
+    if (uaf_buffNum[0] > 0)
+    {
+      double redBuffMultiplier = 1 + 0.01 * GameConstants::UAF_RedBuffBonus[colorNum];
+      valueDouble[t] *= redBuffMultiplier;
+    }
+
+    //P3 = P2 * (1 + link数加成 + 大会优胜数加成)
+    int linkNumTrainingRate = isXiahesu() ? GameConstants::UAF_LinkNumBonusXiahesu[colorNum] : GameConstants::UAF_LinkNumBonus[colorNum];
+    double scenarioTrainingMultiplier = 1.0 + 0.01 * (linkNumTrainingRate + uaf_trainingBonus);
+
+    for (int i = 0; i < 6; i++)
+      valueDouble[i] *= scenarioTrainingMultiplier;
+    
+
+    //总数T = P3 + 蓝buff
+    if (uaf_buffNum[1] > 0)
+    {
+      for (int i = 0; i < 5; i++)
+      {
+        int levelGain = uaf_trainLevelGain[i];
+        int maxLevelGain = 100 - uaf_trainingLevel[uaf_trainingColor[i]][i];
+        if (levelGain > 100 - maxLevelGain)levelGain = maxLevelGain;
+        valueDouble[i] += int(levelGain / 2) + 1;
+      }
+      valueDouble[5] += 20;
+    }
+
+
+    //上层U = T - L
+
+    for (int i = 0; i < 6; i++)
+    {
+      int upper = valueDouble[i] - trainValueLower[t][i];
+      if (upper > 100)upper = 100;
+      trainValue[t][i] = upper + trainValueLower[t][i];
+    }
+
+
+  }
 }
 void Game::addStatus(int idx, int value)
 {
@@ -646,15 +853,18 @@ void Game::addAllStatus(int value)
 }
 int Game::calculateFailureRate(int trainType, double failRateMultiply) const
 {
-  //粗略拟合的训练失败率，二次函数 A*x^2 + B*x + C + 0.5 * trainLevel
+  //粗略拟合的训练失败率，二次函数 A*(x0-x)^2+B*(x0-x)
   //误差应该在2%以内
-  static const double A = 0.0245;
-  static const double B[5] = { -3.77,-3.74,-3.76,-3.81333,-3.286 };
-  static const double C[5] = { 130,127,129,133.5,80.2 };
-
-  double f = A * vital * vital + B[trainType] * vital + C[trainType] + 0.5 * getTrainingLevel(trainType);
-  //int fr = round(f);
-  if (vital > 60)f = 0;//由于是二次函数，体力超过103时算出来的fr大于0，所以需要手动修正
+  static const double A = 0.025;
+  static const double B = 1.25;
+  double x0 = 0.1 * GameConstants::FailRateBasic;
+  
+  double f = 0;
+  double dif = x0 - vital;
+  if (dif<0)
+  {
+    double f = A * dif * dif + B * dif;
+  }
   if (f < 0)f = 0;
   if (f > 99)f = 99;//无练习下手，失败率最高99%
   f *= failRateMultiply;//支援卡的训练失败率下降词条
@@ -2001,20 +2211,18 @@ void Game::applyTrainingAndNextTurn(std::mt19937_64& rand, Action action)
   randomDistributeCards(rand);
 }
 
-// 根据PersonDistribution cardType和Person.friendship确定某个卡是否闪彩
-// 因为相关数据分散在各处，所以不在getCardEffect函数中时，只能在Game里以较大的开销判定
-bool Game::cardIsShining(int which) const
+bool Game::isCardShining(int personIdx, int trainIdx) const
 {
-    // 团队卡暂且不管。普通卡先满足这些
-    if (which > 0 && which <= 5 && cardParam[which].cardType < 5 && persons[which].friendship >= 80)
-    {
-        // 再来判断是否擅长训练
-        for (int i=0; i<5; ++i)
-            for (int j=0; j<5; ++j)
-                if (personDistribution[i][j] == which)
-                    return (i == cardParam[which].cardType);
-    }
-    return false;
+  const Person& p = persons[personIdx];
+  if(p.personType==PersonType_card)
+  { 
+    return p.friendship >= 80 && trainIdx == p.cardParam.cardType;
+  }
+  else if (p.personType == PersonType_groupCard)
+  {
+    return p.friendOrGroupCardStage == 3;
+  }
+  return false;
 }
 
 // 根据PersonDistribution cardType和Person.friendship确定训练彩圈数量

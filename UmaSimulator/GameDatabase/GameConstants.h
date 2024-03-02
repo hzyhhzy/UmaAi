@@ -9,6 +9,7 @@ class GameConstants
 {
 public:
   static const int TrainingBasicValue[3][5][5][7]; //TrainingBasicValue[颜色][第几种训练][LV几][速耐力根智pt体力]
+  static const int FailRateBasic;//[3][5][5]; //uaf剧本全是504，所以不用列表，其他剧本要列一个TrainingBasicValue一样大的表格
   static const int BasicFiveStatusLimit[5];//初始上限，1200以上翻倍
 
   //各种游戏参数
@@ -34,8 +35,7 @@ public:
   //static const int UAF_BlueBuffBonus
   static const int UAF_LinkNumBonus[6];//无buff时link训练在同色训练为012345时的训练加成
   static const int UAF_LinkNumBonusXiahesu[6];//无buff时夏合宿期间link训练在同色训练为012345时的训练加成
-  static const int UAF_LinkVitalCostGain[6];//link训练在同色训练为012345时的体力消耗增加
-
+  
 
   //评分
   static const int FiveStatusFinalScore[1200+800*2+1];//不同属性对应的评分

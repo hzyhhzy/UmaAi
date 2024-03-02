@@ -4,11 +4,26 @@
 #include <string>
 struct SupportCard;
 struct Game;
+
+
+enum PersonTypeEnum :int8_t
+{
+  PersonType_unknown = 0,
+  PersonType_lianghuaCard,
+  PersonType_card,
+  PersonType_npc,
+  PersonType_lishizhang,
+  PersonType_jizhe,
+  PersonType_lianghuaNonCard,
+  PersonType_otherFriend,
+  PersonType_groupCard
+};
+
 struct Person //任何一个可能出现在训练里的人头
 {
   bool isCard;//是否为支援卡，否则为理事长记者或者不带卡的凉花
   SupportCard cardParam;//支援卡参数
-  int8_t personType;//0代表未知，1代表凉花支援卡（R或SSR都行），2代表普通支援卡，4理事长，5记者，6不带卡的凉花，7其他友人卡，8其他团队卡。
+  int8_t personType;//0代表未知，1代表凉花支援卡（R或SSR都行），2代表普通支援卡，3代表npc(uaf剧本没有)，4理事长，5记者，6不带卡的凉花，7其他友人卡，8其他团队卡。
   int16_t charaId;//人头对应的马娘id，懒得写可以一律0（只用于获得名字）
 
   int8_t friendship;//羁绊
