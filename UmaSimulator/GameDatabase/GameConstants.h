@@ -13,8 +13,8 @@ public:
   static const int BasicFiveStatusLimit[5];//初始上限，1200以上翻倍
 
   //各种游戏参数
-  static const int NormalRaceFiveStatusBonus;//常规比赛属性加成=3，特殊马娘特殊处理（狄杜斯等）
-  static const int NormalRacePtBonus;//常规比赛pt加成
+  //static const int NormalRaceFiveStatusBonus;//常规比赛属性加成=3，特殊马娘特殊处理（狄杜斯等）
+  //static const int NormalRacePtBonus;//常规比赛pt加成
   static const double EventProb;//每回合有EventProb概率随机一个属性以及pt +EventStrengthDefault，模拟支援卡事件
   static const int EventStrengthDefault;
 

@@ -14,6 +14,7 @@ struct Game
 
   //基本状态，不包括当前回合的训练信息
   int32_t umaId;//马娘编号，见KnownUmas.cpp
+  bool isLinkUma;//是否为link马
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
   int16_t eventStrength;//每回合有（待测）概率加这么多属性，模拟支援卡事件
 
@@ -164,6 +165,7 @@ public:
   void addVitalFriend(int value);//友人卡事件，增加体力，考虑回复量加成
 
   void uaf_checkNewBuffAfterLevelGain();//训练或者友人出行后，检查是否有新的蓝红黄buff
+  void uaf_runCompetition(int n);//第n次uaf大会
 
   float getSkillScore() const;//技能分，输入神经网络之前也可能提前减去
   int getTrainingLevel(int trainIdx) const;//计算训练等级，1~19,20~21,...50~100

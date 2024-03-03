@@ -515,12 +515,15 @@ void Game::calculateTrainingValue()
       {
         double umaBonus = i < 5 ? 1 + 0.01 * fiveStatusBonus[i] : 1;
         double v = basicValueLower[i] * cardMultiplier * umaBonus;
-        if (v < 1)v = 1;
-        if (v > 100)v = 100;
+
+        //经过后续实验验证，100上限在这里还没算
+        //if (v < 1)v = 1;
+        //if (v > 100)v = 100;
 
         //L = k * B * G //下层，先不取整
         valueLowerDouble[i] = v;
-        trainValueLower[t][i] = int(v);
+
+        trainValueLower[t][i] = std::min(int(v),100);
       }
     }
     
@@ -563,6 +566,8 @@ void Game::calculateTrainingValue()
 
     for (int i = 0; i < 6; i++)
     {
+      //这里还要研究一下，upper是总数减去考虑100上限的下层，还是减去没考虑上限的浮点数下层
+      //之前有一个样例，为智高峰固有买了技能之后，下层+1，上层反而-1，因此应该是前者
       int upper = valueDouble[i] - trainValueLower[t][i];
       if (upper > 100)upper = 100;
       trainValue[t][i] = upper + trainValueLower[t][i];
@@ -1403,17 +1408,23 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
         }
         else if (personType == PersonType_lishizhang)//理事长
         {
-          skillPt += 2;
+          int jiban = persons[p].friendship;
+          int g = jiban < 40 ? 2 : jiban < 60 ? 3 : jiban < 80 ? 4 : 5;
+          skillPt += g;
           addJiBan(p, 7);
         }
         else if (personType == PersonType_jizhe)//记者
         {
-          addStatus(action.train, 2);
-          addJiBan(p, 7);
+          int jiban = persons[p].friendship;
+          int g = jiban < 40 ? 2 : jiban < 60 ? 3 : jiban < 80 ? 4 : 5;
+          addStatus(action.train, g);
+          addJiBan(p, 9);
         }
         else if (personType == PersonType_lianghuaNonCard)//无卡友人
         {
-          skillPt += 2;
+          int jiban = persons[p].friendship;
+          int g = jiban < 40 ? 2 : jiban < 60 ? 3 : jiban < 80 ? 4 : 5;
+          skillPt += g;
           addJiBan(p, 7);
         }
         else
@@ -1460,8 +1471,6 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
           if (uaf_trainingLevel[thisColor][i] > 100)uaf_trainingLevel[thisColor][i] = 100;
         }
       }
-
-      uaf_checkNewBuffAfterLevelGain();
 
     }
   }
@@ -1653,53 +1662,52 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   }
 
 }
+void Game::uaf_runCompetition(int n)//第n次uaf大会
+{
+  uaf_xiangtanRemain = 3;
 
+  if (入赏 突破)// <12win
+  {
+    //依次是3，5，10，15，20
+    int statusGain = n * 5;
+    if (statusGain == 0)statusGain = 3;
+    if (isLinkUma)statusGain += 3;
+    addAllStatus(statusGain);
+    skillPt += 30 + 10 * n;
+  }
+  else if (yousheng)// >=12win
+  {
+    addJiBan(6, 5);//理事长羁绊
+    int statusGain = 5 + n * 5;
+    if (isLinkUma)statusGain += 3;
+    addAllStatus(statusGain);
+    skillPt += 40 + 10 * n;
+  }
+  if (allwin)
+  {
+    addMotivation(1);
+    addVital(15);
+  }
+}
 void Game::checkFixedEvents(std::mt19937_64& rand)
 {
   //处理各种固定事件
-  int oldSupportPt = larc_supportPtAll;
-  larc_supportPtAll += GameConstants::LArcSupportPtGainEveryTurn[turn];
-  checkSupportPtEvents(oldSupportPt, larc_supportPtAll);//期待度上升事件
+  uaf_checkNewBuffAfterLevelGain();
+  if (isRacing)//生涯比赛
+  {
+    runRace(3, 45);
+    addJiBan(6, 4);
+  }
 
-  if (turn == 1)//加载npc
+  if (turn == 11)//相谈刷新
   {
-    initNPCsTurn3(rand);
-  }
-  else if (turn == 11)//出道战
-  {
-    runRace(3, 30);
-  }
-  else if (turn == 18)
-  {
-    larc_shixingPt += 100;
+    uaf_xiangtanRemain = 3;
   }
   else if (turn == 23)//第一年年底
   {
-    tryRemoveDebuffsFirstN(2);
-    //tryRemoveDebuffsFirstN(4);
-    //达成育成目标
-    addAllStatus(3);
-    skillPt += 20;
-
-    //larc1
-    runRace(3, 10);
-    larc_shixingPt += 50;
-
-    //友人卡拜年
-    if (larc_zuoyueOutgoingUnlocked)
-    {
-      addMotivation(1);
-      addStatusZuoyue(3, 15);
-      skillPt += 10;//技能等效
-    }
-
-    printEvents("larc1结束");
-
-  }
-  else if (turn == 28)
-  {
-    addMotivation(1);
-    addAllStatus(2);
+    uaf_runCompetition(0);
+    年底事件
+    printEvents("uaf大会1结束");
   }
   else if (turn == 29)//第二年继承
   {
@@ -1720,74 +1728,28 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
 
     printEvents("第二年继承");
   }
-  else if (turn == 33)//日本德比
+  else if (turn == 35)//uaf2
   {
-    runRace(5, 45);
-
-    for (int i = 0; i < 3; i++)
-      charge(rand() % 15, 1);//随机给三个人充电。不排除被充的人已经满格
-    printEvents("日本德比结束");
-
+    uaf_runCompetition(1);
+    printEvents("uaf大会2结束");
   }
-  else if (turn == 35)//larc2
-  {
-    runRace(5, 20);
-    larc_shixingPt += 50;
-    unlockUpgrade(4);
-    unlockUpgrade(5);
-    skillScore += 170;//固有技能等级+1
 
-    printEvents("larc2结束，准备远征");
-
-  }
-  else if (turn == 40)//尼尔赏
-  {
-    runRace(5, 40);
-    larc_shixingPt += 50;
-    unlockUpgrade(6);
-    unlockUpgrade(7);
-
-    printEvents("尼尔赏结束");
-
-  }
-  else if (turn == 42)//凯旋门1
-  {
-    bool willWin = tryRemoveDebuffsFirstN(8);//能成功消除所有设定的debuff，模拟器就假设可以获胜，否则认为不能获胜
-    if (willWin)
-    {
-      runRace(7, 50);
-      larc_shixingPt += 80;
-      skillPt += 15;//技能等效
-      unlockUpgrade(9);
-      printEvents("第二年凯旋门结束，你消除了所有设定的debuff，ai假设可以获胜");
-    }
-    else
-    {
-      runRace(5, 50);
-      larc_shixingPt += 50;
-
-      printEvents("第二年凯旋门结束，你没有消除所有设定的debuff，ai假设不可以获胜");
-    }
-
-  }
-  else if (turn == 43)//固定掉心情
-  {
-    addMotivation(-2);
-  }
-  else if (turn == 44)//固定回心情
-  {
-    addMotivation(3);
-    larc_shixingPt += 30;
-  }
   else if (turn == 47)//第二年年底
   {
-    addVital(30);
+    uaf_runCompetition(2);
+    年底事件
+      printEvents("uaf大会3结束");
+  }
+  else if (turn == 48)//抽奖
+  {
+    todo;
+  }
+  else if (turn == 49)
+  {
+    固有+1
   }
   else if (turn == 53)//第三年继承&larc3
   {
-    //达成育成目标
-    addAllStatus(7);
-    skillPt += 50;
     runRace(7, 30);
     larc_shixingPt += 80;
     skillScore += 170;//固有技能等级+1
@@ -1807,63 +1769,39 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
       fiveStatusLimit[i] += rand() % 8; //属性上限--后两次继承随机增加
 
     printEvents("第三年继承");
-  }
-  else if (turn == 59)//宝冢纪念&larc4
-  {
-    runRace(5, 45);
-    runRace(10, 40);
-    larc_shixingPt += 100;
 
-    addAllStatus(10);
-    addMotivation(1);
-    skillPt += 20;//技能等效
-    skillScore += 170;//固有技能等级+1
-
-    if(larc_ssWin>=40)
-      unlockUpgrade(8);
-
-  }
-  else if (turn == 64)//富瓦赏
-  {
-    runRace(7, 40);
-    larc_shixingPt += 100;
-
-    printEvents("富瓦赏结束");
-
-  }
-  else if (turn == 66)//凯旋门2，游戏结束
-  {
-
-    tryBuyUpgrade(9, 2);//“凯旋门属性提升”比消debuff更值钱
-    bool willWin = tryRemoveDebuffsFirstN(9);//能成功消除所有设定的debuff，模拟器就假设可以获胜，否则认为不能获胜
-    if (larc_levels[9] >= 2)//买了最后一个升级了
-    {
-      if (willWin)
-        runRace(30, 140);
-      else
-        runRace(25, 120);
-    }
+    if(理事长羁绊60)
+      固有+1，心情+1
     else
-    {
-      if (willWin)
-        runRace(10, 60);
-      else
-        runRace(5, 40);
-    }
-
-    //友人卡事件
-    if (larc_zuoyueOutgoingUsed==5)//出行走完了
-    {
-      addStatusZuoyue(2, 15);
-      addStatusZuoyue(3, 25);
-      addStatusZuoyue(5, 30);
-    }
-    else if(larc_zuoyueOutgoingUnlocked)
-    {
-      addStatusZuoyue(2, 15);
-      addStatusZuoyue(3, 18);
-      addStatusZuoyue(5, 20);
-    }
+      体力-5，pt+25
+  }
+  else if (turn == 59)//uaf4
+  {
+    uaf_runCompetition(3);
+    printEvents("uaf大会4结束");
+  }
+  else if (turn == 70)
+  {
+    固有 + 1;
+  }
+  else if (turn == 71)//uaf5
+  {
+    uaf_runCompetition(4);
+    printEvents("uaf大会5结束");
+  }
+  else if (turn == 73)//ura1
+  {
+    runRace(10, 40);
+    printEvents("ura1结束");
+  }
+  else if (turn == 75)//ura2
+  {
+    runRace(10, 60);
+    printEvents("ura2结束");
+  }
+  else if (turn == 77)//ura3，游戏结束
+  {
+    runRace(10, 80);
 
     //记者
     if (persons[16].friendship >= 100)
@@ -1881,22 +1819,51 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
       skillPt += 5;
     }
 
-
-    addAllStatus(20);
-    skillPt += 60;
-    skillPt += 10;//技能等效
-    if (larc_levels[9] >= 1)
+    if (75win)
     {
-      addAllStatus(5);
-      skillPt += 12;//技能等效
+      addAllStatus(55);
+      skillPt += 140;
     }
-    if (willWin)
+    else if (有一场没win)
     {
-      addAllStatus(5);
-      skillPt += 18;//技能等效
+      addAllStatus(30);
+      skillPt += ？
+    }
+    else if (有一场没总和优胜)
+    {
+      addAllStatus(20);
+      skillPt += 70;
     }
 
-    printEvents("游戏结束");
+    if (level合计 >= 1200)
+    {
+      skillPt += 60;//三折金上位
+    }
+    else
+    {
+      skillPt += 20;//一折金上位
+    }
+
+
+    //友人卡事件
+    if (larc_zuoyueOutgoingUsed == 5)//出行走完了
+    {
+      addStatusZuoyue(2, 15);
+      addStatusZuoyue(3, 25);
+      addStatusZuoyue(5, 30);
+    }
+    else if (larc_zuoyueOutgoingUnlocked)
+    {
+      addStatusZuoyue(2, 15);
+      addStatusZuoyue(3, 18);
+      addStatusZuoyue(5, 20);
+    }
+  
+
+    addAllStatus(5);
+    skillPt += 30;
+
+    printEvents("ura3结束，游戏结算");
   }
 }
 
