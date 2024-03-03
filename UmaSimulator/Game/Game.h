@@ -163,7 +163,7 @@ public:
   void addStatusFriend(int idx, int value);//友人卡事件，增加属性值或者pt（idx=5），考虑事件加成
   void addVitalFriend(int value);//友人卡事件，增加体力，考虑回复量加成
 
-
+  void uaf_checkNewBuffAfterLevelGain();//训练或者友人出行后，检查是否有新的蓝红黄buff
 
   float getSkillScore() const;//技能分，输入神经网络之前也可能提前减去
   int getTrainingLevel(int trainIdx) const;//计算训练等级，1~19,20~21,...50~100

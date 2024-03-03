@@ -10,6 +10,7 @@ enum TrainActionTypeEnum :int16_t
   TRA_power,
   TRA_guts,
   TRA_wiz,
+  TRA_rest,
   TRA_outgoing,
   TRA_race
 };

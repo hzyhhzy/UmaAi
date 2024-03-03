@@ -1268,20 +1268,18 @@ void Game::calculateSS()
 }
 bool Game::applyTraining(std::mt19937_64& rand, Action action)
 {
-  assert(stageInTurn == 1);
-  stageInTurn = 2;
+  uaf_lastTurnNotTrain = false;
   if (isRacing)
   {
-    assert(false && "凯旋门所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
-    return false;//凯旋门所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
+    assert(false && "所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
+    return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
   }
-  if (action.train == 6)//休息
+  if (action.train == TRA_rest)//休息
   {
-    if (larc_isAbroad)
+    if (isXiahesu())
     {
-      addVital(50);
+      addVital(40);
       addMotivation(1);
-      larc_shixingPt += 100;
     }
     else
     {
@@ -1293,13 +1291,13 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
       else
         addVital(30);
     }
-
+    uaf_lastTurnNotTrain = true;
   }
-  else if (action.train == 9)//比赛
+  else if (action.train == TRA_race)//比赛
   {
-    if (turn <= 12 || larc_isAbroad)
+    if (turn <= 12 || turn >= 72)
     {
-      printEvents("Cannot race now.");    // 避免编码错误
+      printEvents("Cannot race now."); 
       return false;
     }
     addAllStatus(1);//武者振
@@ -1309,228 +1307,41 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
     addVital(-15);
     if (rand() % 10 == 0)
       addMotivation(1);
-
-    //随机给两个头充电
-    for (int i = 0; i < 2; i++)
-      charge(rand() % 15, 1);
+    uaf_lastTurnNotTrain = true;
   }
-  else if (action.train == 8)//普通外出
+  else if (action.train == TRA_outgoing)//外出
   {
-    if (larc_isAbroad)
+    if (isXiahesu())
     {
-      printEvents("海外只能休息，不能外出");
+      printEvents("夏合宿只能休息，不能外出");
       return false;
-    }
-    //懒得查概率了，就50%加2心情，50%加1心情10体力
-    if (rand() % 2)
-      addMotivation(2);
-    else
-    {
-      addMotivation(1);
-      addVital(10);
     }
 
-  }
-  else if (action.train == 7)//友人外出
-  {
-    if (larc_isAbroad)
+    //凉花出行
+    if (lianghua_type != 0 &&  //带了凉花卡
+      persons[lianghua_personId].friendOrGroupCardStage >= 2 &&  //已解锁外出
+      lianghua_outgoingUsed < 5  //外出没走完
+      )
     {
-      printEvents("海外只能休息，不能友人外出");
-      return false;
+      handleFriendOutgoing();
     }
-    if (!larc_zuoyueOutgoingUnlocked || larc_zuoyueOutgoingUsed == 5)
+    else //普通出行
     {
-      printEvents("友人出行未解锁或者已走完");
-      return false;
+      //懒得查概率了，就50%加2心情，50%加1心情10体力
+      if (rand() % 2)
+        addMotivation(2);
+      else
+      {
+        addMotivation(1);
+        addVital(10);
+      }
     }
-    handleFriendOutgoing();
-  }
-  else if (action.train == 5)//ss match
-  {
-    if (larc_isAbroad)
-    {
-      printEvents("海外不能SS");
-      return false;
-    }
-    if (larc_ssPersonsCount == 0)
-    {
-      printEvents("没有满格人头不能SS");
-      return false;
-    }
-    runSS(rand);
-    if (larc_ssWin >= 5)
-    {
-      unlockUpgrade(0);
-      unlockUpgrade(1);
-    }
-    if (larc_ssWin >= 10)
-    {
-      unlockUpgrade(2);
-      unlockUpgrade(3);
-    }
+    uaf_lastTurnNotTrain = true;
   }
   else if (action.train <= 4 && action.train >= 0)//常规训练
   {
-    //先用适性pt买加成
-    if (larc_isAbroad)
-    {
-      bool anyUpgrade = false;
-      if (action.buy50p)
-      {
-        int upgradeIdx = GameConstants::UpgradeId50pEachTrain[action.train];
-        if (larc_levels[upgradeIdx] < 3)
-        {
-          bool suc = tryBuyUpgrade(upgradeIdx, 3);
-          if (suc)
-            anyUpgrade = true;
-          else
-          {
-            printEvents("买不起+50%");
-            return false;
-          }
-        }
-        else
-        {
-          printEvents("不要重复购买+50%");
-          return false;
-        }
-      }
-      if (action.buyFriend20)
-      {
-        assert(false && "买友情20%已经改成全自动的了");
-        if (larc_levels[7] < 3)
-        {
-          bool suc = tryBuyUpgrade(7, 3);
-          if (suc)
-            anyUpgrade = true;
-          else
-          {
-            printEvents("买不起+20%");
-            return false;
-          }
-        }
-        else
-        {
-          printEvents("不要重复购买友情+20%");
-          return false;
-        }
-      }
-      if (action.buyPt10)
-      {
-        if (larc_levels[5] < 3)
-        {
-          bool suc = tryBuyUpgrade(5, 3);
-          if (suc)
-            anyUpgrade = true;
-          else
-          {
-            printEvents("买不起pt+10");
-            return false;
-          }
-        }
-        else
-        {
-          printEvents("不要重复购买pt+10");
-          return false;
-        }
-      }
-      if (action.buyVital20)
-      {
-        if (larc_levels[6] < 3)
-        {
-          bool suc = tryBuyUpgrade(6, 3);
-          if (suc)
-            anyUpgrade = true;
-          else
-          {
-            printEvents("买不起体力-20%");
-            return false;
-          }
-        }
-        else
-        {
-          printEvents("不要重复购买体力-20%");
-          return false;
-        }
-      }
-      if (anyUpgrade)
-        calculateTrainingValue();
-    }
-
-    if (turn == 41)//第二次凯旋门前的那一个回合，如果买了+20%友情（和pt+10）后训练成功后还能消完预定的debuff就买
-    {
-      int shixingPtAssumeSuccess = larc_shixingPt + larc_shixingPtGainAbroad[action.train];
-      //这两种情况，算起来比较麻烦，直接假设不会发生这种情况
-      assert(!larc_allowedDebuffsFirstLarc[7] && "不会有人允许不消除友情+20%上面那个debuff吧");
-      assert(!larc_allowedDebuffsFirstLarc[5] && "不会有人允许不消除pt+10上面那个debuff吧");
-      int removeDebuffCost = removeDebuffsFirstNCost(8);
-      int remainPt = shixingPtAssumeSuccess - removeDebuffCost;
-      int remainPtAssumeFail = larc_shixingPt - removeDebuffCost;
-
-      bool buy20p = false;
-      if (larc_levels[7] < 3)
-      {
-        if (remainPtAssumeFail >= 300 || (remainPt >= 300 && failRate[action.train] < 90))
-          buy20p = true;
-      }
-
-      if (buy20p)
-      {
-        remainPt -= 300;
-        remainPtAssumeFail -= 300;
-      }
-
-      bool buy10pt = remainPt >= 200 && failRate[action.train] < 5 && larc_levels[5] < 3;
-      
-
-
-      bool anyUpgrade = false;
-      if (buy20p)
-      {
-        bool suc = tryBuyUpgrade(7, 3);
-        if (suc)
-        {
-          printEvents("ai替你买友情+20%了");
-          anyUpgrade = true;
-        }
-      }
-      if (buy10pt && larc_levels[7] == 3)
-      {
-        bool suc = tryBuyUpgrade(5, 3);
-        if (suc)
-        {
-          printEvents("ai替你买pt+10了");
-          anyUpgrade = true;
-        }
-      }
-      if (anyUpgrade)
-        calculateTrainingValue();
-    }
-
-    if (turn >= 43)//第二次凯旋门后，如果买得起+20%友情就立刻买，然后如果买得起pt+10就立刻买
-    {
-      bool anyUpgrade = false;
-      if (larc_levels[7] < 3)
-      {
-        bool suc = tryBuyUpgrade(7, 3);
-        if (suc)
-        {
-          printEvents("ai替你买友情+20%了");
-          anyUpgrade = true;
-        }
-      }
-      if (larc_levels[5] < 3 && larc_levels[7] == 3)
-      {
-        bool suc = tryBuyUpgrade(5, 3);
-        if (suc)
-        {
-          printEvents("ai替你买pt+10了");
-          anyUpgrade = true;
-        }
-      }
-      if (anyUpgrade)
-        calculateTrainingValue();
-    }
+    if (action.xiangtanType != XT_none)
+      xiangtanAndRecalculate(action.xiangtanType);
 
     if (rand() % 100 < failRate[action.train])//训练失败
     {
@@ -1565,48 +1376,50 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
       for (int i = 0; i < 5; i++)
         addStatus(i, trainValue[action.train][i]);
       skillPt += trainValue[action.train][5];
-      addVital(trainValue[action.train][6]);
+      addVital(trainVitalChange[action.train]);
 
-      int chargeNum = trainShiningNum[action.train] + 1;//充几格电
-      if (turn < 2 || larc_isAbroad)chargeNum = 0;//前两回合与远征无法充电
       vector<int> hintCards;//有哪几个卡出红感叹号了
-      bool clickZuoyue = false;//这个训练有没有佐岳
+      bool clickFriend = false;//这个训练有没有友人
       for (int i = 0; i < 5; i++)
       {
         int p = personDistribution[action.train][i];
         if (p < 0)break;//没人
         int personType = persons[p].personType;
 
-        if (personType == 1)//佐岳卡
+        if (personType == PersonType_lianghuaCard)//友人卡
         {
           addJiBan(p, 4);
-          clickZuoyue = true;
+          clickFriend = true;
         }
-        else if (personType==2)//普通卡
+        else if (personType== PersonType_card)//普通卡
         {
           addJiBan(p, 7);
-          if (!larc_isAbroad)charge(p, chargeNum);
           if(persons[p].isHint)
             hintCards.push_back(p);
         }
-        else if (personType == 3)//npc
+        else if (personType == PersonType_npc)//npc
         {
-          if (!larc_isAbroad)charge(p, chargeNum);
+          assert(false);
         }
-        else if (personType == 4)//理事长
+        else if (personType == PersonType_lishizhang)//理事长
         {
           skillPt += 2;
           addJiBan(p, 7);
         }
-        else if (personType == 5)//记者
+        else if (personType == PersonType_jizhe)//记者
         {
           addStatus(action.train, 2);
           addJiBan(p, 7);
         }
-        else if (personType == 6)//无卡佐岳
+        else if (personType == PersonType_lianghuaNonCard)//无卡友人
         {
           skillPt += 2;
           addJiBan(p, 7);
+        }
+        else
+        {
+          //其他友人/团卡暂不支持
+          assert(false);
         }
       }
 
@@ -1615,19 +1428,40 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
         int hintCard = hintCards[rand() % hintCards.size()];//随机一张卡出hint
 
         addJiBan(hintCard, 5);
-        auto& hintBonus = cardParam[persons[hintCard].cardIdInGame].hintBonus;
+        auto& hintBonus = persons[hintCard].cardParam.hintBonus;
         for (int i = 0; i < 5; i++)
           addStatus(i, hintBonus[i]);
         skillPt += hintBonus[5];
+        //黄buff，双倍
+        if (uaf_buffNum[2] > 0)
+        {
+          for (int i = 0; i < 5; i++)
+            addStatus(i, hintBonus[i]);
+          skillPt += hintBonus[5];
+        }
       }
 
-      if (clickZuoyue)
+      if (clickFriend)
         handleFriendClickEvent(rand, action.train);
       
-      if (larc_isAbroad)
-        larc_shixingPt += larc_shixingPtGainAbroad[action.train];
-      else
-        addTrainingLevelCount(action.train, 1);
+      //buff次数-1
+      for (int color = 0; color < 3; color++)
+      {
+        if (uaf_buffNum[color] > 0)uaf_buffNum[color] -= 1;
+      }
+
+      //训练等级提升
+      int thisColor = uaf_trainingColor[action.train];
+      for (int i = 0; i < 5; i++)
+      {
+        if (uaf_trainingColor[i] == thisColor)
+        {
+          uaf_trainingLevel[thisColor][i] += uaf_trainLevelGain[i];
+          if (uaf_trainingLevel[thisColor][i] > 100)uaf_trainingLevel[thisColor][i] = 100;
+        }
+      }
+
+      uaf_checkNewBuffAfterLevelGain();
 
     }
   }
