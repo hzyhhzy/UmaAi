@@ -160,67 +160,8 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   randomDistributeCards(rand); 
 }
 
-void Game::initNPCsTurn3(std::mt19937_64& rand)
-{
-  //int allSpecialBuffsNum[13] = {0,0,0,1,1,2,2,4,1,1,0,0,3};   // 对应巨匠前版本则需要用这个数据
-  int allSpecialBuffsNum[13] = { 0,0,0,0,2,2,2,4,1,1,0,0,3 };   // 2.24 巨匠加入后更新 普通回体变成回体加上限
-  int specialBuffEveryPerson[15];
-  for (int i = 0; i < 15; i++)specialBuffEveryPerson[i] = 0;
-
-  //查找这张卡固定的特殊buff
-  for (int i = 0; i < normalCardCount; i++)
-  {
-    assert(persons[i].personType == 2);
-    int s = cardParam[persons[i].cardIdInGame].larc_linkSpecialEffect;
-    if (s != 0)
-    {
-      specialBuffEveryPerson[i] = s;
-      allSpecialBuffsNum[s] -= 1;
-      assert(allSpecialBuffsNum[s] >= 0);
-    }
-    
-  }
-
-  //没固定特殊buff的就随机分配特殊buff
-  vector<int> specialBuffNotAssigned;
-  for (int i = 0; i < 13; i++)
-  {
-    int n = allSpecialBuffsNum[i];
-    if (n >= 0)
-    {
-      for (int j = 0; j < n; j++)
-        specialBuffNotAssigned.push_back(i);
-    }
-  }
-  std::shuffle(specialBuffNotAssigned.begin(), specialBuffNotAssigned.end(), rand);
-  int c = 0;
-  for (int i = 0; i < 15; i++)
-  {
-    if (specialBuffEveryPerson[i] == 0)
-    {
-      specialBuffEveryPerson[i] = specialBuffNotAssigned[c];
-      c += 1;
-    }
-  }
-
-  //人头属性
-  vector<int> s = { 0,0,0,1,1,1,2,2,2,3,3,3,4,4,4 };
-  assert(s.size() == 15);
-  std::shuffle(s.begin(), s.end(), rand);
-
-  //初始化
-  for (int i = 0; i < 15; i++)
-  {
-    persons[i].initAtTurn3(rand, specialBuffEveryPerson[i], s[i]);
-  }
-
-
-}
-
 void Game::randomDistributeCards(std::mt19937_64& rand)
 {
-  //assert(stageInTurn == 0 || turn == 0);
-  stageInTurn = 1;
 
   //比赛回合的人头分配和比赛/远征回合的ss，不需要置零，因为不输入神经网络
   if (isRacing)
@@ -336,8 +277,8 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
 //L = k * B * G //下层，先不取整
 //P1 = L + k * C
 //P2 = P1 * (1 + 红buff倍率)，红buff倍率只乘在当前训练的主属性上
-//P3 = P2 + 蓝buff（具体公式未知）
-//总数T = P3 * (1 + link数加成 + 大会优胜数加成)
+//P3 = P2 * (1 + link数加成 + 大会优胜数加成)
+//总数T = P3 + 蓝buff（具体公式未知）
 //上层U = T - L
 
 void Game::calculateTrainingValue()
@@ -605,130 +546,6 @@ void Game::addVital(int value)
   if (vital < 0)
     vital = 0;
 }
-void Game::runSS(std::mt19937_64& rand)
-{
-  //ss失败的没有特殊buff，特殊buff也不会滚动，自己的支援者pt少一半，对手的没有少。除此以外（加属性，羁绊，适性pt等）完全相同
-  //sss必胜
-
-  int ssWinNum = 0;
-
-  //体力和爱娇最后加，因为先加体力上限再加体力，先加羁绊再爱娇
-  int vitalGain = 0;
-  bool newAiJiao = false;
-
-  for (int i = 0; i < larc_ssPersonsCount; i++)
-  {
-    int id = larc_ssPersons[i];
-    Person& p = persons[id];
-    p.larc_charge = 0;
-    p.larc_level += 1;
-    bool suc = larc_ssFailRate > 0 ? randBool(rand, 0.01 * (100 - larc_ssFailRate)) : true;
-    if (suc)//特殊buff生效
-    {
-      ssWinNum += 1;
-      int buff = p.larc_nextThreeBuffs[0];
-      if (isAiJiao && buff == 8) //重复爱娇会变成属性
-        buff = 11;
-      if (buff == 1)//技能
-      {
-        int equalPt = 6;//等效pt。路人人头随机给的1级技能大概率没用，所以分给低点
-        if (p.personType == 2)//支援卡
-        {
-          equalPt = cardParam[p.cardIdInGame].hintBonus[5];
-          if (equalPt == 0)equalPt = 6;//乌拉拉之类的没技能
-        }
-        skillPt += equalPt;
-      }
-      else if (buff == 3)//体力
-      {
-        vitalGain += 20;
-      }
-      else if (buff == 4)//体力与上限
-      {
-        maxVital += 4;
-        vitalGain += 20;
-      }
-      else if (buff == 5)//体力与干劲
-      {
-        addMotivation(1);
-        vitalGain += 20;
-      }
-      else if (buff == 6)//充电
-      {
-        p.larc_charge = 3;
-      }
-      else if (buff == 7)//适性pt
-      {
-        larc_shixingPt += 50;
-      }
-      else if (buff == 8)//爱娇
-      {
-        assert(!isAiJiao && "不会重复出爱娇");
-        newAiJiao = true;
-      }
-      else if (buff == 9)//练习上手
-      {
-        failureRateBias = -2;
-      }
-      else if (buff == 11)//属性
-      {
-        if(p.larc_isLinkCard)
-          addAllStatus(3);//随机一个属性+15，为了方便直接平摊
-        else
-          addAllStatus(2);//随机一个属性+10，为了方便直接平摊
-      }
-      else if (buff == 12)//技能点
-      {
-        skillPt += 20;
-      }
-      else
-      {
-        assert(false && "未知的ss buff");
-      }
-
-
-      p.larc_nextBuff(rand);
-    }
-
-    if (p.personType == 2)//支援卡，加羁绊
-    {
-      addJiBan(id, 7);
-    }
-  
-  }
-  if (newAiJiao)isAiJiao = true;
-  addVital(vitalGain);
-
-
-  for (int i = 0; i < 5; i++)
-    addStatus(i, larc_ssValue[i]);
-  skillPt += 5 * larc_ssPersonsCount;
-  if (larc_isSSS)skillPt += 25;
-  larc_shixingPt += 10 * larc_ssPersonsCount;
-
-  int supportPtFactor = larc_ssPersonsCount + ssWinNum;//输了的约等于半个人头
-  int supportPtEveryHalfHead = larc_isSSS ? 1000 + rand() % 64 : 580 + rand() % 64;//半个人头的supportPt的增加量，和这几个人头在所有人中的排名有关系，非常复杂，为了省事就取了个平均再加一些随机
-
-  int oldSupportPt = larc_supportPtAll;
-  larc_supportPtAll += supportPtFactor * supportPtEveryHalfHead;
-  checkSupportPtEvents(oldSupportPt, larc_supportPtAll);//期待度上升事件
-
-  larc_ssWin += ssWinNum;
-
-  if (larc_isSSS)
-    larc_ssWinSinceLastSSS = 0;
-  else
-    larc_ssWinSinceLastSSS += ssWinNum;
-
-
-  //清理
-  larc_ssPersonsCount = 0;
-  larc_ssPersonsCountLastTurn = 0;
-
-  for (int i = 0; i < 5; i++)larc_ssPersons[i] = -1;
-  larc_isSSS = false;
-
-}
 void Game::addMotivation(int value)
 {
   if (value < 0)
@@ -764,106 +581,6 @@ void Game::addJiBan(int idx, int value)
     value = 0;
   p.friendship += value;
   if (p.friendship > 100)p.friendship = 100;
-}
-void Game::addTrainingLevelCount(int item, int value)
-{
-  assert(item >= 0 && item < 5 && "addTrainingLevelCount不合法训练");
-  trainLevelCount[item] += value;
-  if (trainLevelCount[item] > 4 * 4)trainLevelCount[item] = 4 * 4;
-}
-void Game::charge(int idx, int value)
-{
-  if (value == 0)return;
-  persons[idx].larc_charge += value;
-  if (persons[idx].larc_charge > 3)persons[idx].larc_charge = 3;
-}
-void Game::unlockUpgrade(int idx)
-{
-  if (larc_levels[idx] == 0)
-    larc_levels[idx] = 1;
-  //只会在回合结束时调用这个，所以不需要重新计算训练值
-}
-int Game::buyUpgradeCost(int idx, int level) const
-{
-  int cost = 0;
-
-  if (larc_levels[idx] == 0)
-    return -1;//没解锁
-  else if (larc_levels[idx] == 1)
-  {
-    if (level == 2)
-      cost = GameConstants::LArcUpgradesCostLv2[idx];
-    else if (level == 3)
-      cost = GameConstants::LArcUpgradesCostLv3[idx] + GameConstants::LArcUpgradesCostLv2[idx];
-    else
-      return -1;
-  }
-  else if (larc_levels[idx] == 2)
-  {
-    if (level == 2)
-      cost = 0;
-    else if (level == 3)
-      cost = GameConstants::LArcUpgradesCostLv3[idx];
-    else
-      return -1;
-  }
-  else if (larc_levels[idx] == 3)
-  {
-    return -1;
-  }
-
-  return cost;
-}
-bool Game::tryBuyUpgrade(int idx, int level)
-{
-  int cost = buyUpgradeCost(idx, level);
-
-  if (cost > larc_shixingPt)return false;
-  if (cost < 0)return false;//未解锁
-  if (cost == 0)return true;//已购买
-  larc_shixingPt -= cost;
-  larc_levels[idx] = level;
-  
-  if (level == 3)//需要重新计算训练值
-    calculateTrainingValue();
-
-  return true;
-}
-int Game::removeDebuffsFirstNCost(int n) const
-{
-  int totalCost = 0;
-
-  for (int i = 0; i < n; i++)
-  {
-    if (larc_allowedDebuffsFirstLarc[i])
-      continue;
-    if (larc_levels[i] == 0)
-      return 10000;
-    else if (larc_levels[i] == 1)
-      totalCost += GameConstants::LArcUpgradesCostLv2[i];
-  }
-
-  return totalCost;
-}
-
-bool Game::tryRemoveDebuffsFirstN(int n)
-{
-
-  if (larc_shixingPt < removeDebuffsFirstNCost(n))
-    return false;
-
-  for (int i = 0; i < n; i++)
-  {
-    if (larc_allowedDebuffsFirstLarc[i])
-      continue;
-    else if (larc_levels[i] == 1)
-    {
-      bool suc = tryBuyUpgrade(i, 2);
-      assert(suc);
-    }
-  }
-  return true;
-
 }
 void Game::addAllStatus(int value)
 {
@@ -1271,99 +988,12 @@ bool Game::isLegal(Action action) const
 {
   if (isRacing)
   {
-    assert(false && "凯旋门所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
-    return false;//凯旋门所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
+    assert(false && "所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
+    return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
   }
-
-  if (action.buy50p || action.buyFriend20 || action.buyPt10 || action.buyVital20)
+  assert(false && "TODO");
+  if(false)
   {
-    if (!(action.train <= 4 && action.train >= 0 && larc_isAbroad))
-      return false;
-  }
-
-  if (action.train == 6)//休息
-  {
-    return true;
-  }
-  else if (action.train == 9)//比赛
-  {
-    if (turn <= 12 || larc_isAbroad)
-    {
-      return false;
-    }
-    return true;
-  }
-  else if (action.train == 8)//普通外出
-  {
-    if (larc_isAbroad)
-    {
-      return false;
-    }
-    return true;
-  }
-  else if (action.train == 7)//友人外出
-  {
-    if (larc_isAbroad)
-    {
-      return false;
-    }
-    if (!larc_zuoyueOutgoingUnlocked || larc_zuoyueOutgoingUsed == 5)
-    {
-      return false;
-    }
-    return true;
-  }
-  else if (action.train == 5)//ss match
-  {
-    if (larc_isAbroad)
-    {
-      return false;
-    }
-    if (larc_ssPersonsCount == 0)
-    {
-      return false;
-    }
-    return true;
-  }
-  else if (action.train <= 4 && action.train >= 0)//常规训练
-  {
-    //先用适性pt买加成
-    if (larc_isAbroad)
-    {
-      int remainPt = larc_shixingPt;
-      if (action.buy50p)
-      {
-        int upgradeIdx = GameConstants::UpgradeId50pEachTrain[action.train];
-        int cost = buyUpgradeCost(upgradeIdx, 3);
-        if (cost <= 0)return false;
-        if (cost > remainPt)return false;
-        remainPt -= cost;
-      }
-      if (action.buyFriend20)
-      {
-        assert(false && "买友情20%已经改成全自动的了");
-        return false;
-      }
-      if (action.buyPt10)
-      {
-        if (turn >= 41)
-          return false;
-        int cost = buyUpgradeCost(5, 3);
-        if (cost <= 0)return false;
-        if (cost > remainPt)return false;
-        remainPt -= cost;
-      }
-      if (action.buyVital20)
-      {
-        if (turn <= 59)
-          return false;
-        int cost = buyUpgradeCost(6, 3);
-        if (cost <= 0)return false;
-        if (cost > remainPt)return false;
-        remainPt -= cost;
-      }
-    }
-    return true;
   }
   else
   {
@@ -1397,24 +1027,9 @@ bool Game::isEnd() const
 
 int Game::getTrainingLevel(int item) const
 {
-  int level ;
-  if(larc_isAbroad)
-    level = 5;
-  else
-  {
-    assert(trainLevelCount[item] <= 16, "训练等级计数超过16");
-    level = trainLevelCount[item] / 4;
-    if (level > 4)level = 4;
-  }
-  return level;
+  int splevel = uaf_trainingLevel[uaf_trainingColor[item]][item];
+  return convertTrainingLevel(splevel);
 }
-
-double Game::sssProb(int ssWinSinceLastSSS) const
-{
-  return ssWinSinceLastSSS >= 8 ? 1.0 : 0.12 + 0.056 * ssWinSinceLastSSS;
-}
-
-
 
 
 void Game::checkEventAfterTrain(std::mt19937_64& rand)
@@ -1838,20 +1453,3 @@ bool Game::isCardShining(int personIdx, int trainIdx) const
   return false;
 }
 
-// 根据PersonDistribution cardType和Person.friendship确定训练彩圈数量
-// 因为相关数据分散在各处，所以不在getCardEffect函数中时，只能在Game里以较大的开销判定
-// 不能使用由getCardEffect维护的trainShiningNum成员，因为getCardEffect自己需要调用该方法。
-bool Game::trainShiningCount(int train) const
-{
-    int count = 0;
-    if (train > 0 && train <= 5)
-    {
-        for (int i = 0; i < 5; ++i)
-        { 
-            int which = personDistribution[train][i];
-            if (which >= 0 && which <= 5 && cardParam[which].cardType == train && persons[which].friendship >= 80)
-                ++count;
-        }
-    }
-    return count;
-}
