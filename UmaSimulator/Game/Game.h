@@ -67,14 +67,12 @@ struct Game
   bool lianghua_guyouEffective;//凉花固有是否生效，每次randomDistributeCards的时候检查这个，如果ssr凉花羁绊大于等于60且lianghua_guyouEffective=false，则设为true并重置Person.distribution
 
 
-  //可以通过上面的信息计算获得的非独立的信息，每回合或者隔几个回合（每半年大会）更新一次
+  //可以通过上面的信息计算获得的非独立的信息，每回合更新一次，不需要录入
 
-  //半年更新
   int16_t uaf_trainLevelColorTotal[3];//三种颜色的等级总和
   int16_t uaf_colorWinCount[3];//三种颜色分别累计win过多少次
   int16_t uaf_trainingBonus;//剧本训练加成（取决于三种颜色的win数），每半年更新一次
 
-  //每回合更新
   int16_t trainValue[5][6];//训练数值的总数（下层+上层），第一个数是第几个训练，第二个数依次是速耐力根智pt
   int16_t trainVitalChange[5];//训练后的体力变化（负的体力消耗）
   int16_t failRate[5];//训练失败率
@@ -82,6 +80,8 @@ struct Game
   int16_t trainShiningNum[5];//每个训练有几个彩圈
 
   //训练数值计算的中间变量，存下来方便手写逻辑对相谈后属性进行估计
+  bool uaf_haveLose;//uaf大会是否已经输过（输过一次就不需要凑全win了，最后必定少全属性25）
+  bool uaf_haveLoseColor[3];//uaf大会每种颜色是否已经输过（输过一次这种颜色就不需要凑全win了，训练亏定了）
   int16_t trainValueLower[5][6];//训练数值的下层，第一个数是第几个训练，第二个数依次是速耐力根智pt体力
   double trainValueCardMultiplier[5];//支援卡乘区=(1+总训练加成)(1+干劲系数*(1+总干劲加成))(1+0.05*总卡数)(1+友情1)(1+友情2)...
 
@@ -118,7 +118,6 @@ public:
 
 
   //原则上这几个private就行，如果private在某些地方非常不方便那就改成public
-private:
   void randomDistributeCards(std::mt19937_64& rand);//随机分配人头
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率、训练等级提升等
   bool applyTraining(std::mt19937_64& rand, Action action);//处理 训练/出行/比赛 本身，包括友人点击事件，不包括固定事件和剧本事件。如果不合法，则返回false，且保证不做任何修改
@@ -141,15 +140,15 @@ private:
 
 
   //各种辅助函数与接口，可以根据需要增加或者删减-------------------------------------------------------------------------------
-public:
   static inline int convertTrainingLevel(int x) //转换后的训练等级从0开始，0是lv1，4是lv5
   {
     return x < 20 ? 0 : x < 30 ? 1 : x < 40 ? 2 : x < 50 ? 3 : 4;
   }
-  inline bool isXiahesu() //是否为夏合宿
+  inline bool isXiahesu() const //是否为夏合宿
   {
     return (turn >= 36 && turn <= 39) || (turn >= 60 && turn <= 63);
   }
+  int uaf_competitionFinishedNum() const;//已经几次uaf大会了
   bool isXiangtanLegal(int xiangtanType);//此相谈是否合法
   void xiangtanAndRecalculate(int xiangtanType);//相谈，并重新计算属性值
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
@@ -177,7 +176,7 @@ public:
 
   //友人卡相关事件
   void handleFriendUnlock(std::mt19937_64& rand);//友人外出解锁
-  void handleFriendOutgoing();//友人外出
+  void handleFriendOutgoing(std::mt19937_64& rand);//友人外出
   void handleFriendClickEvent(std::mt19937_64& rand, int atTrain);//友人事件（お疲れ様）
   void handleFriendFixedEvent();//友人固定事件，拜年+结算
   void checkLianghuaGuyou();//读入json或每次randomDistributeCards的时候检查这个，如果ssr凉花羁绊大于等于60且lianghua_guyouEffective=false，则设为true并重新构造Person.distribution使得凉花固有生效
