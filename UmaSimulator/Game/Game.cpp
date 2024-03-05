@@ -765,7 +765,9 @@ void Game::handleFriendFixedEvent()
   }
   else if (turn == 77)
   {
-    assert(false && "TODO:统计友人走完和没走完的结算事件");
+    addStatusFriend(0, 25);
+    addStatusFriend(4, 25);
+    addStatusFriend(5, 35);
   }
   else
   {
@@ -1229,6 +1231,11 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   {
     uaf_runCompetition(3);
     printEvents("uaf大会4结束");
+    }
+  else if (turn == 65)//心情+1，决死的觉悟hint+1
+  {
+    addMotivation(1);
+    skillPt += 5;//这个hint一般不点
   }
   else if (turn == 70)
   {
@@ -1296,8 +1303,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     {
       skillPt += 40;//全身全灵与进化
       addAllStatus(30);
-      skillPt += 100;
-      assert(false && "TODO:统计输过一场的结算pt");
+      skillPt += 90;
     }
     else
     {
