@@ -7,264 +7,257 @@ static bool randBool(mt19937_64& rand, double p)
   return rand() % 65536 < p * 65536;
 }
 
+//尽量与Game类的顺序一致
 void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int umaStars, int newCards[6], int newZhongMaBlueCount[5], int newZhongMaExtraBonus[6])
 {
   playerPrint = enablePlayerPrint;
 
   umaId = newUmaId;
+  isLinkUma = GameConstants::isLinkChara(umaId);
   for (int i = 0; i < 5; i++)
     fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
   eventStrength = GameConstants::EventStrengthDefault;
   turn = 0;
   vital = 100;
   maxVital = 100;
-  isQieZhe = false;
-  isAiJiao = false; 
-  failureRateBias = 0;
+  motivation = 3;
+
+  for (int i = 0; i < 5; i++)
+    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i] - 10 * (5 - umaStars); //赛马娘初始值
+  for (int i = 0; i < 5; i++)
+    fiveStatusLimit[i] = GameConstants::BasicFiveStatusLimit[i]; //原始属性上限
+
   skillPt = 120;
   skillScore = umaStars >= 3 ? 170 * (umaStars - 2) : 120 * (umaStars);//固有技能
-  motivation = 3;
+  ptScoreRate = GameConstants::ScorePtRate;
+
+  failureRateBias = 0;
+  isAiJiao = false;
   isPositiveThinking = false;
-  for (int i = 0; i < 5; i++)
-    trainLevelCount[i] = 0;
-  isRacing = false;
-
-  larc_zuoyueType = 0;
-  larc_zuoyueVitalBonus = 0;
-  larc_zuoyueStatusBonus = 0;
-  for (int i = 0; i < 18; i++)
-  {
-    persons[i] = Person();
-  }
-  persons[15].personType = 4;
-  persons[16].personType = 5;
-  persons[17].personType = 6;
-  for (int i = 0; i < 18; i++)
-  {
-    if (persons[i].personType == 0)
-      persons[i].personType = 3;
-  }
-
-
-  normalCardCount = 0;//速耐力根智卡的数量
-  saihou = 0;
-  for (int i = 0; i < 6; i++)
-  {
-    int cardId = newCards[i];
-    cardParam[i] = GameDatabase::AllCards[cardId];
-    SupportCard& cardP = cardParam[i];
-    saihou += cardP.saiHou;
-    int cardType = cardP.cardType;
-    if (cardType == 5 || cardType == 6)
-    {
-
-      int realCardId = cardId / 10;
-      if (realCardId == 30160 || realCardId == 10094)//佐岳卡
-      {
-        if (realCardId == 30160)
-          larc_zuoyueType = 1;
-        else 
-          larc_zuoyueType = 2;
-
-        int zuoyueLevel = cardId % 10;
-        if (larc_zuoyueType==1)
-        {
-          larc_zuoyueVitalBonus = GameConstants::ZuoyueVitalBonusSSR[zuoyueLevel];
-          larc_zuoyueStatusBonus = GameConstants::ZuoyueStatusBonusSSR[zuoyueLevel];
-        }
-        else
-        {
-          larc_zuoyueVitalBonus = GameConstants::ZuoyueVitalBonusR[zuoyueLevel];
-          larc_zuoyueStatusBonus = GameConstants::ZuoyueStatusBonusR[zuoyueLevel];
-        }
-        larc_zuoyueVitalBonus += 1e-10;
-        larc_zuoyueStatusBonus += 1e-10;//加个小量，避免因为舍入误差而算错
-
-        persons[17].personType = 1;
-        persons[17].cardIdInGame = i;
-        persons[17].friendship = cardP.initialJiBan;
-      }
-      else
-      {
-        throw string("不支持带佐岳以外的友人或团队卡");
-      }
-    }
-    else//速耐力根智卡
-    {
-      Person& p = persons[normalCardCount];
-      normalCardCount += 1;
-      p.personType = 2;
-      p.cardIdInGame = i;
-      p.friendship = cardP.initialJiBan;
-      p.larc_isLinkCard = cardP.larc_isLink;
-
-      std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-      probs[cardP.cardType] += cardP.deYiLv;  
-      p.distribution = std::discrete_distribution<>(probs.begin(), probs.end());
-    }
-  }
-
-
-  motivationDropCount = 0;
-
-  larc_isAbroad = false;
-  larc_supportPtAll = 0;
-  larc_shixingPt = 0;
-  for (int i = 0; i < 10; i++)larc_levels[i] = 0;
-  larc_isSSS = false;
-  larc_ssWin = 0;
-  larc_ssWinSinceLastSSS = 0;
-  for (int i = 0; i < 9; i++)
-    larc_allowedDebuffsFirstLarc[i] = false;
-
-  //larc_zuoyueType
-  //larc_zuoyueCardLevel
-  larc_zuoyueFirstClick = false;
-  larc_zuoyueOutgoingUnlocked = false; 
-  larc_zuoyueOutgoingRefused = false;
-  larc_zuoyueOutgoingUsed = 0;
 
   for (int i = 0; i < 5; i++)
     zhongMaBlueCount[i] = newZhongMaBlueCount[i];
   for (int i = 0; i < 6; i++)
     zhongMaExtraBonus[i] = newZhongMaExtraBonus[i];
 
-
-  for (int i = 0; i < 5; i++)
-    fiveStatusLimit[i] = GameConstants::BasicFiveStatusLimit[i]; //原始属性上限
   for (int i = 0; i < 5; i++)
     fiveStatusLimit[i] += int(zhongMaBlueCount[i] * 5.34 * 2); //属性上限--种马基础值
-
-  //后两次继承的事情，到时候再说
-  //for (int i = 0; i < 5; i++)
-   // fiveStatusLimit[i] += rand() % 20; //属性上限--后两次继承随机增加
-
-
-  for (int i = 0; i < 5; i++)
-    fiveStatus[i] = GameDatabase::AllUmas[umaId].fiveStatusInitial[i] - 10 * (5 - umaStars); //赛马娘初始值
-  for (int i = 0; i < 6; i++)//支援卡初始加成
-  {
-    for (int j = 0; j < 5; j++)
-      addStatus(j, cardParam[i].initialBonus[j]);
-    skillPt += cardParam[i].initialBonus[5];
-  }
   for (int i = 0; i < 5; i++)
     addStatus(i, zhongMaBlueCount[i] * 7); //种马
 
+  isRacing = false;
+
+  for (int i = 0; i < MAX_HEAD_NUM; i++)
+  {
+    persons[i] = Person();
+  }
+
+  saihou = 0;
+  lianghua_type = 0;
+  lianghua_personId = -1;
+  lianghua_outgoingUsed = 0;
+  lianghua_vitalBonus = 1.0;
+  lianghua_statusBonus = 1.0;
+  lianghua_guyouEffective = false;
+  for (int i = 0; i < 6; i++)
+  {
+    int cardId = newCards[i];
+    persons[i].setCard(cardId);
+    saihou += persons[i].cardParam.saiHou;
+
+    if (persons[i].personType == 1)
+    {
+      lianghua_personId = i;
+      bool isSSR = cardId > 300000;
+      if (isSSR)
+        lianghua_type = 1;
+      else
+        lianghua_type = 2;
+      int friendLevel = cardId % 10;
+      if (lianghua_type ==1)
+      {
+        lianghua_vitalBonus = GameConstants::FriendVitalBonusSSR[friendLevel];
+        lianghua_statusBonus = GameConstants::FriendStatusBonusSSR[friendLevel];
+      }
+      else
+      {
+        lianghua_vitalBonus = GameConstants::FriendVitalBonusR[friendLevel];
+        lianghua_statusBonus = GameConstants::FriendStatusBonusR[friendLevel];
+      }
+      lianghua_vitalBonus += 1e-10;
+      lianghua_statusBonus += 1e-10;//加个小量，避免因为舍入误差而算错
+    }
+  }
+
+  for (int i = 0; i < 6; i++)//支援卡初始加成
+  {
+    for (int j = 0; j < 5; j++)
+      addStatus(j, persons[i].cardParam.initialBonus[j]);
+    skillPt += persons[i].cardParam.initialBonus[5];
+  }
+
+  persons[6].setNonCard(PersonType_lishizhang);
+  persons[7].setNonCard(PersonType_jizhe);
+  if (lianghua_type == 0)
+    persons[8].setNonCard(PersonType_lianghuaNonCard);
+  else
+    persons[8].personType = 0;
 
 
-  //initRandomGenerators();
 
-  stageInTurn = 0;
-  larc_ssPersonsCountLastTurn = 0;
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 5; j++)
+      uaf_trainingLevel[i][j] = 1;
+
+  for (int k = 0; k < 5; k++)
+    for (int i = 0; i < 3; i++)
+      for (int j = 0; j < 5; j++)
+        uaf_winHistory[k][i][j] = false;
+
+  uaf_lastTurnNotTrain = false;
+  uaf_xiangtanRemain = 3;
+
+  for (int i = 0; i < 3; i++)
+    uaf_buffActivated[i] = 0;
+
+  for (int i = 0; i < 3; i++)
+    uaf_buffNum[i] = 0;
+
+
   randomDistributeCards(rand); 
 }
 
 void Game::randomDistributeCards(std::mt19937_64& rand)
 {
+  checkLianghuaGuyou();
 
-  //比赛回合的人头分配和比赛/远征回合的ss，不需要置零，因为不输入神经网络
+  //比赛回合的人头分配，不需要置零，因为不输入神经网络
   if (isRacing)
-    return;//比赛不用分配卡组，但要改stageInTurn
+    return;//比赛不用分配卡组
   
-  //先将6张卡分配到训练中
   for (int i = 0; i < 5; i++)
     for (int j = 0; j < 5; j++)
       personDistribution[i][j] = -1;
 
-  int headCountEveryTrain[5] = { 0,0,0,0,0 };//五个训练分别有多少人，超过5人也继续加
-
-  //把一个人头放在某个训练里，如果人数超过5则有概率随机踢掉一个
-  auto setHead = [&](int head, int whichTrain)
+  int headN[5] = { 0,0,0,0,0 };
+  vector<int8_t> buckets[5];
+  for (int i = 0; i < 5; i++)
+    buckets[i].clear();
+  //先放友人/理事长/记者
+  for (int i = 0; i < MAX_HEAD_NUM; i++)
   {
-    if (whichTrain >= 5)return;
-    int p = headCountEveryTrain[whichTrain];
-    if (p < 5)//还没5个头
-    {
-      personDistribution[whichTrain][p] = head;
-    }
-    else
-    {
-      // 纯瞎猜的公式，可以保证所有人头地位平等：5/(p+1)的概率替换掉其中一个头，(p-4)/(p+1)的概率鸽
-      int r = rand() % (p + 1);
-      if (r < 5)//随机换掉一个人
-        personDistribution[whichTrain][r] = head;
-    }
-    headCountEveryTrain[whichTrain] += 1;//无论是否留在这个训练里，计数都加一
-  };
-
-
-  for (int i = 0; i < 18; i++)
-  {
-    if (turn < 2 && persons[i].personType != 2)//前两回合没有佐岳和npc和理事长记者等
+    Person& p = persons[i];
+    if (p.personType == PersonType_jizhe && turn <= 12)//记者第13回合来
       continue;
-    if (larc_isAbroad && (i == 15 || i == 16 || (i == 17 && persons[i].personType != 1)))//远征时理事长记者不在，不带卡的佐岳也不在
-      continue;
-    if (turn < 10 && i == 16)//记者第10个回合来
-      continue;
-
-    if (i == 17 && larc_zuoyueType == 1 && persons[i].friendship >= 60)//ssr佐岳且羁绊60，会分身，因此单独处理
+    if (p.personType == PersonType_lianghuaCard ||
+      p.personType == PersonType_otherFriend ||
+      p.personType == PersonType_groupCard ||
+      p.personType == PersonType_lishizhang ||
+      p.personType == PersonType_jizhe ||
+      p.personType == PersonType_lianghuaNonCard)
     {
-      int whichTrain1 = rand() % 6;
-      setHead(i, whichTrain1);
-      if (whichTrain1 == 5)
+      int atTrain = p.distribution(rand);
+      if (atTrain < 5)
       {
-        int whichTrain2 = rand() % 6;
-        setHead(i, whichTrain2);
+        buckets[atTrain].push_back(i);
       }
-      else
-      {
-        //假设第二个位置和第一个不会撞车，这样与实测概率比较接近
-        int whichTrain2 = rand() % 5;
-        if (whichTrain2 >= whichTrain1)whichTrain2++;
-        setHead(i, whichTrain2);
-      }
-    }
-    else
-    {
-      int whichTrain = persons[i].distribution(rand);
-      setHead(i, whichTrain);
-    }
-
-    //是否有hint
-    if (persons[i].personType == 2)
-    {
-      double hintProb = 0.06 * (1 + 0.01 * cardParam[persons[i].cardIdInGame].hintProbIncrease);
-      bernoulli_distribution d(hintProb);
-      persons[i].isHint = d(rand);
     }
   }
-  
-  //分配ss人头
-  if (!larc_isAbroad)
+  for (int i = 0; i < 5; i++)
   {
-    int fullNum = 0;
-    for (int i = 0; i < 5; i++)
-      larc_ssPersons[i] = -1;
-    for (int i = 0; i < 15; i++)
+    if (buckets[i].size() == 1)
     {
-      if (persons[i].larc_charge == 3)
+      personDistribution[i][0] = buckets[i][0];
+      headN[i] += 1;
+    }
+    else if (buckets[i].size() > 1)//随机选一个人头
+    {
+      personDistribution[i][0] = buckets[i][rand() % buckets[i].size()];
+      headN[i] += 1;
+    }
+    buckets[i].clear();
+  }
+
+  //然后是普通支援卡/npc(如果有)
+  for (int i = 0; i < MAX_HEAD_NUM; i++)
+  {
+    Person& p = persons[i];
+    if (p.personType == PersonType_card ||
+      p.personType == PersonType_npc)
+    {
+      int atTrain = p.distribution(rand);
+      if (atTrain < 5)
       {
-        if (fullNum < 5)
-          larc_ssPersons[fullNum] = i;
+        buckets[atTrain].push_back(i);
+      }
+    }
+  }
+  for (int i = 0; i < 5; i++)
+  {
+    int maxHead = 5 - headN[i];
+    if (buckets[i].size() <= maxHead)
+    {
+      for (int j = 0; j < buckets[i].size(); j++)
+      {
+        personDistribution[i][headN[i]] = buckets[i][j];
+        headN[i] += 1;
+      }
+    }
+    else//总人数超过5了，随机选maxHead个
+    {
+      for (int j = 0; j < maxHead; j++)
+      {
+        int idx = rand() % (buckets[i].size() - j);
+
+        int count = 0;
+        for (int k = 0; k < buckets[i].size(); k++)
+        {
+          if (buckets[i][k] != -1)
+          {
+            if (idx == count)
+            {
+              personDistribution[i][headN[i]] = buckets[i][k];
+              buckets[i][k] = -1;
+              headN[i] += 1;
+              break;
+            }
+            else
+              count++;
+          }
+        }
+      }
+      assert(headN[i] == 5);
+    }
+  }
+
+  //是否有hint
+  for (int i = 0; i < 6; i++)
+    persons[i].isHint = false;
+
+  for (int t = 0; t < 5; t++)
+  {
+    for (int h = 0; h < 5; h++)
+    {
+      int pid = personDistribution[t][h];
+      if (pid < 0)break;
+
+      if (persons[pid].personType == PersonType_card)
+      {
+        if (uaf_buffNum[2] > 0)//黄buff
+          persons[pid].isHint = true;
         else
         {
-          int r = rand() % (fullNum + 1);
-          if (r < 5)//随机换掉一个人
-            larc_ssPersons[r] = i;
+          double hintProb = 0.06 * (1 + 0.01 * persons[pid].cardParam.hintProbIncrease);
+          persons[pid].isHint = randBool(rand, hintProb);
         }
-        fullNum += 1;
       }
     }
-    larc_ssPersonsCount = fullNum > 5 ? 5 : fullNum;
-
-    bool isNewFullSS = larc_ssPersonsCount >= 5 && larc_ssPersonsCountLastTurn < 5;//为了避免满10人连出两个ss时计算错误，使用ss的时候把这个置零
-    larc_ssPersonsCountLastTurn = larc_ssPersonsCount;
-    if (isNewFullSS)
-    {
-      larc_isSSS = randBool(rand, sssProb(larc_ssWinSinceLastSSS));
-    }
   }
+
+  //随机颜色
+  for (int i = 0; i < 5; i++)
+    uaf_trainingColor[i] = rand() % 3;
+
   calculateTrainingValue();
 }
 
@@ -278,7 +271,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
 //P1 = L + k * C
 //P2 = P1 * (1 + 红buff倍率)，红buff倍率只乘在当前训练的主属性上
 //P3 = P2 * (1 + link数加成 + 大会优胜数加成)
-//总数T = P3 + 蓝buff（具体公式未知）
+//总数T = P3 + 蓝buff
 //上层U = T - L
 
 void Game::calculateTrainingValue()
@@ -819,6 +812,23 @@ void Game::handleFriendFixedEvent()
   else
   {
     assert(false && "其他回合没有友人固定事件");
+  }
+}
+void Game::checkLianghuaGuyou()
+{
+  if (lianghua_type == 1)
+  {
+    if ((!lianghua_guyouEffective) && persons[lianghua_personId].friendship >= 60)
+    {
+      lianghua_guyouEffective = true;
+      for (int card = 0; card < 6; card++)
+      {
+        Person& p = persons[card];
+        auto probs = p.distribution.probabilities();
+        probs[5] /= 2;
+        p.distribution = std::discrete_distribution<>(probs.begin(), probs.end());
+      }
+    }
   }
 }
 bool Game::applyTraining(std::mt19937_64& rand, Action action)

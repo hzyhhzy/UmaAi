@@ -3,118 +3,80 @@
 using namespace std;
 Person::Person()
 {
+  cardParam = SupportCard();
   personType = 0; 
   //cardId = 0;
   charaId = 0;
 
-  cardIdInGame = -1;
   friendship = 0;
   //for (int i = 0; i < 5; i++)atTrain[i] = false;
   isHint = false;
   cardRecord = 0;
 
-  larc_isLinkCard = false;
-  larc_charge = 0;
-  larc_statusType = -1;
-  larc_specialBuff = 0;
-  larc_level = 0;
-  larc_buffLevel = 0;
-  for (int i = 0; i < 3; i++)larc_nextThreeBuffs[i] = 0;
-  //larc_assignedStatusTypeWhenFull = -1;
-
+  friendOrGroupCardStage = 0;
+  groupCardShiningContinuousTurns = 0;
 
   std::vector<int> probs = { 1,1,1,1,1,1 }; //速耐力根智鸽
   distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 }
 
-void Person::initAtTurn3(std::mt19937_64& rand, int specialBuff, int statusType)
+void Person::setCard(int cardId)
 {
-  larc_specialBuff = specialBuff;
-  larc_statusType = statusType;
-  larc_level = 1;
-  larc_buffLevel = 1;
+  cardParam = GameDatabase::AllCards[cardId];
 
 
-  //黄金船爱娇，神鹰练习上手，与其他的不一样
-  if (larc_specialBuff == 8)//爱娇
+  friendship = cardParam.initialJiBan;
+  isHint = false;
+  cardRecord = 0;
+  friendOrGroupCardStage = 0;
+  groupCardShiningContinuousTurns = 0;
+
+  int cardType = cardParam.cardType;
+  if (cardType == 5)//友人卡
   {
-    larc_nextThreeBuffs[0] = 8;//1级必为爱娇
-    if (rand() % 2)
+    int realCardId = cardId / 10;
+
+    std::vector<int> probs = { 100,100,100,100,100,100 }; //基础概率，速耐力根智鸽
+    distribution = std::discrete_distribution<>(probs.begin(), probs.end());
+
+    if (realCardId == 30188 || realCardId == 10104)//剧本友人卡
     {
-      larc_nextThreeBuffs[1] = 11;
-      larc_nextThreeBuffs[2] = 1;
+      personType = 1;
     }
     else
     {
-      larc_nextThreeBuffs[1] = 1;
-      larc_nextThreeBuffs[2] = 11 ;
+      throw string("不支持带剧本卡以外的友人或团队卡");
     }
   }
-  else //三个buff随机分配位置
+  else if (cardType == 6)//团队卡
   {
-    static const int shuffle3_list[6][3] =
-    {
-      {0,1,2},
-      {0,2,1},
-      {1,0,2},
-      {1,2,0},
-      {2,0,1},
-      {2,1,0}
-    };
-
-    int8_t threeBuffs[3] = { 1,11,larc_specialBuff };//前三级必为这三个
-    if (larc_specialBuff == 9)//神鹰的练习上手+适性pt
-      threeBuffs[1] = 7;
-
-    //三个buff随机分配位置
-    int order = rand() % 6;
-    for (int i = 0; i < 3; i++)
-      larc_nextThreeBuffs[i] = threeBuffs[shuffle3_list[order][i]];
+    std::vector<int> probs = { 100,100,100,100,100,100 }; //基础概率，速耐力根智鸽
+    distribution = std::discrete_distribution<>(probs.begin(), probs.end());
+    throw string("不支持带剧本卡以外的友人或团队卡");
   }
+  else if (cardType >= 0 && cardType <= 4)//速耐力根智卡
+  {
+    personType = 2;
+    std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
+    probs[cardType] += cardParam.deYiLv;
+    distribution = std::discrete_distribution<>(probs.begin(), probs.end());
+  }
+
 }
 
-void Person::larc_nextBuff(std::mt19937_64& rand)
+void Person::setNonCard(int pType)
 {
-  int newBuffLevel = larc_buffLevel + 3;
-  int levelLoop = newBuffLevel % 3;//buff每三级循环一次，
-
-  int nextBuff = 0;
-
-  if (levelLoop == 1)//必为技能
+  personType = pType;
+  if (personType != PersonType_lishizhang && personType != PersonType_jizhe && personType != PersonType_lianghuaNonCard)
   {
-    nextBuff = 1;
-  }
-  else if (levelLoop == 2)//一半概率特殊buff，一半概率属性
-  {
-    nextBuff = 11;
-    if (rand() % 2)
-      nextBuff = larc_specialBuff;
-    if (nextBuff == 8)
-      nextBuff = 11;//不会重复爱娇，会加属性
-    if (nextBuff == 9)
-      nextBuff = 7;//练习上手换成适性pt
-  }
-  else if (levelLoop == 0)//这一级和上一级，一个是特殊buff一个是属性
-  {
-    int lastBuff = larc_nextThreeBuffs[2];
-    if (lastBuff == 11)
-      nextBuff = larc_specialBuff;
-    else
-      nextBuff = 11;
-
-    if (nextBuff == 8)
-      nextBuff = 11;//不会重复爱娇，会加属性
-    if (nextBuff == 9)
-      nextBuff = 7;//练习上手换成适性pt
+    assert(false && "setNonCard只用于非支援卡人头的初始化");
   }
 
-
-
-
-  larc_buffLevel += 1;
-  larc_nextThreeBuffs[0] = larc_nextThreeBuffs[1];
-  larc_nextThreeBuffs[1] = larc_nextThreeBuffs[2];
-  larc_nextThreeBuffs[2] = nextBuff;
+  friendship = 0;
+  isHint = false;
+  cardRecord = 0;
+  friendOrGroupCardStage = 0;
+  groupCardShiningContinuousTurns = 0;
+  std::vector<int> probs = { 100,100,100,100,100,200 }; //基础概率，速耐力根智鸽
+  distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 }
-
-

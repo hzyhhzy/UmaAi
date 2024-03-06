@@ -41,7 +41,7 @@ struct Game
   int16_t saihou;//赛后加成
   bool isRacing;//这个回合是否在比赛
 
-  Person persons[9];//最多9个头。依次是6张卡，理事长6，记者7，没带卡的凉花8（带凉花卡了那就在前6个位置，8号位置就空下了）。
+  Person persons[MAX_HEAD_NUM];//最多9个头。依次是6张卡，理事长6，记者7，没带卡的凉花8（带凉花卡了那就在前6个位置，8号位置就空下了）。
   int16_t personDistribution[5][5];//每个训练有哪些人头id，personDistribution[哪个训练][第几个人头]，空位置为-1
   int lockedTrainingId;//是否锁训练，以及锁在了哪个训练。可以先不加，等ai做完了有时间再加。
 

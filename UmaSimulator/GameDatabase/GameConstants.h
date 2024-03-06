@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <unordered_map>
 #include "../config.h"
 
 const int TOTAL_TURN = 78;
+const int MAX_HEAD_NUM = 78;
 
 class GameConstants
 {
@@ -29,7 +31,7 @@ public:
   
 
   //剧本相关
-  static const int UAF_LinkCharas[6];// Link角色
+  static const std::vector<int> UAF_LinkCharas;// Link角色
   static const int UAF_WinNumTrainingBonus[26];//每种颜色win多少次有多少训练加成
   static const int UAF_RedBuffBonus[6];//红buff在同色训练为012345时的训练加成，0无意义只用来避免每次调用都要-1，下同
   //static const int UAF_BlueBuffBonus
@@ -42,5 +44,6 @@ public:
   static const double ScorePtRate;//为了方便，直接视为每1pt对应多少分。
   static const double ScorePtRateQieZhe;//为了方便，直接视为每1pt对应多少分。切者
 
+  static bool isLinkChara(int id);
 
 };

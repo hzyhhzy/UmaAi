@@ -19,7 +19,7 @@ const double GameConstants::FriendVitalBonusR[5] = { 1.2,1.23,1.26,1.3,1.3 };//×
 const double GameConstants::FriendStatusBonusSSR[5] = { 1.2,1.21,1.23,1.25,1.25 };//×ôÔÀSSR¿¨µÄÊÂ¼şĞ§¹û±¶Êı£¨ÂúÆÆ1.25£©
 const double GameConstants::FriendStatusBonusR[5] = { 1.1,1.11,1.13,1.15,1.15 };//×ôÔÀR¿¨µÄÊÂ¼şĞ§¹û±¶Êı
 
-const int GameConstants::UAF_LinkCharas[6] = { 9044,1027,1035,1048,1072,1077 };
+const std::vector<int> GameConstants::UAF_LinkCharas = { 9044,1027,1035,1048,1072,1077 };
 const int GameConstants::UAF_WinNumTrainingBonus[26] = { 0,1,1,1,1,3,3,3,3,3,7,7,7,7,7,12,12,12,12,12,17,17,17,17,17,17 };
 const int GameConstants::UAF_RedBuffBonus[6] = { -1000,0,30,45,54,60 };
 const int GameConstants::UAF_LinkNumBonus[6] = { -1000,0,10,20,25,30 };
@@ -27,6 +27,18 @@ const int GameConstants::UAF_LinkNumBonusXiahesu[6] = { -1000,0,20,30,35,40 };
 
 
 const int GameConstants::FailRateBasic = 504;
+
+
+bool GameConstants::isLinkChara(int id)
+{
+  for (int i = 0; i < UAF_LinkCharas.size(); i++)
+  {
+    if (UAF_LinkCharas[i] == id)
+      return true;
+  }
+  return false;
+}
+
 const int GameConstants::TrainingBasicValue[3][5][5][7] =
 {
   //À¶
