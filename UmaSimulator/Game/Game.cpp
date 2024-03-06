@@ -623,6 +623,43 @@ int Game::uaf_competitionFinishedNum() const
     return 4;
   return 5;
 }
+bool Game::isXiangtanLegal(int x) const
+{
+  if (x == XT_none)return true;
+  if (Action::XiangtanNumCost[x] > uaf_xiangtanRemain)return false;//相谈次数不够
+  bool haveColor[3] = { false,false,false };
+  for (int i = 0; i < 5; i++)
+    haveColor[uaf_trainingColor[i]] = true;
+  if (x <= 6)//一次相谈
+  {
+    if (!haveColor[Action::XiangtanFromColor[x]])
+      return false;
+    else return true;
+  }
+  else if (x == XT_b)
+    return haveColor[1] && haveColor[2];
+  else if (x == XT_r)
+    return haveColor[0] && haveColor[2];
+  else if (x == XT_y)
+    return haveColor[0] && haveColor[1];
+  else
+    assert(false);
+  return false;
+}
+void Game::xiangtanAndRecalculate(int x)
+{
+  if (x == 0)return;
+  int targetC = Action::XiangtanToColor[x];
+  int sourceC = Action::XiangtanToColor[x];
+  for (int i = 0; i < 5; i++)
+  {
+    if (sourceC == -1 || sourceC == uaf_trainingColor[i])
+      uaf_trainingColor[i] = targetC;
+  }
+  uaf_xiangtanRemain -= Action::XiangtanNumCost[x];
+  assert(uaf_xiangtanRemain >= 0);
+  calculateTrainingValue();
+}
 void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 {
   double raceMultiply = 1 + 0.01 * saihou;
@@ -765,9 +802,19 @@ void Game::handleFriendFixedEvent()
   }
   else if (turn == 77)
   {
-    addStatusFriend(0, 25);
-    addStatusFriend(4, 25);
-    addStatusFriend(5, 35);
+    if (lianghua_outgoingUsed >= 5)//走完出行
+    {
+      addStatusFriend(0, 30);
+      addStatusFriend(4, 30);
+      addStatusFriend(5, 45);
+    }
+    else
+    {
+      addStatusFriend(0, 25);
+      addStatusFriend(4, 25);
+      addStatusFriend(5, 35);
+    }
+
   }
   else
   {
@@ -958,11 +1005,6 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
       if (clickFriend)
         handleFriendClickEvent(rand, action.train);
       
-      //buff次数-1
-      for (int color = 0; color < 3; color++)
-      {
-        if (uaf_buffNum[color] > 0)uaf_buffNum[color] -= 1;
-      }
 
       //训练等级提升
       int thisColor = uaf_trainingColor[action.train];
@@ -975,6 +1017,12 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
         }
       }
 
+    }
+
+    //buff次数-1
+    for (int color = 0; color < 3; color++)
+    {
+      if (uaf_buffNum[color] > 0)uaf_buffNum[color] -= 1;
     }
   }
   else
@@ -993,9 +1041,41 @@ bool Game::isLegal(Action action) const
     assert(false && "所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
     return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
   }
-  assert(false && "TODO");
-  if(false)
+  if (action.xiangtanType != XT_none && (!(action.train >= 0 && action.train <= 4)))
+    return false;//相谈但不训练
+  if (action.train == TRA_rest)
   {
+    return true;
+  }
+  else if (action.train == TRA_outgoing)
+  {
+    if (isXiahesu())
+    {
+      return false;//我将夏合宿的外出称为休息
+    }
+    return true;
+  }
+  else if (action.train == TRA_race)
+  {
+    if (turn <= 12 || turn >= 72)
+    {
+      return false;
+    }
+    return true;
+  }
+  else if (action.train >= 0 && action.train <= 4)
+  {
+    if (!isXiangtanLegal(action.xiangtanType))
+      return false;
+    //检查相谈是否有意义
+    //大部分情况已经在isXiangtanLegal里排除，只剩下一种情况没排除：只相谈一种a改色b，而这个训练是c
+    if (action.xiangtanType >= 1 && action.xiangtanType <= 6)
+    {
+      int c = uaf_trainingColor[action.train];
+      if (c != Action::XiangtanFromColor[action.xiangtanType] && c != Action::XiangtanToColor[action.xiangtanType])
+        return false;
+    }
+    return true;
   }
   else
   {
@@ -1057,6 +1137,23 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   }
 
 }
+void Game::uaf_checkNewBuffAfterLevelGain()
+{
+  for (int color = 0; color < 3; color++)
+  {
+    int leveltotal = 0;
+    for (int i = 0; i < 5; i++)
+      leveltotal += uaf_trainingLevel[color][i];
+
+    int buffNumTotal = leveltotal / 50;
+    int buffNumUsed = uaf_buffActivated[color];
+    if (buffNumTotal > buffNumUsed)
+    {
+      uaf_buffNum[color] += 2 * (buffNumTotal - buffNumUsed);
+      uaf_buffActivated[color] = buffNumTotal;
+    }
+  }
+}
 void Game::uaf_runCompetition(int n)//第n次uaf大会
 {
   uaf_xiangtanRemain = 3;
@@ -1106,6 +1203,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   {
     runRace(3, 45);
     addJiBan(6, 4);
+    uaf_lastTurnNotTrain = true;
   }
 
   if (turn == 11)//相谈刷新

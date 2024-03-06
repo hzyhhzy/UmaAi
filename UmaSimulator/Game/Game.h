@@ -149,8 +149,8 @@ public:
     return (turn >= 36 && turn <= 39) || (turn >= 60 && turn <= 63);
   }
   int uaf_competitionFinishedNum() const;//已经几次uaf大会了
-  bool isXiangtanLegal(int xiangtanType);//此相谈是否合法
-  void xiangtanAndRecalculate(int xiangtanType);//相谈，并重新计算属性值
+  bool isXiangtanLegal(int x) const;//此相谈是否合法且有意义
+  void xiangtanAndRecalculate(int x);//相谈，并重新计算属性值
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
 
 

@@ -30,6 +30,10 @@ enum XiangtanTypeEnum :int16_t
 };
 struct Action //一个回合的操作
 {
+  static const int XiangtanFromColor[10];
+  static const int XiangtanToColor[10];
+  static const int XiangtanNumCost[10];
+
   int16_t train;//01234速耐力根智，5外出，6休息，7比赛 
   //注：外出是优先友人外出，没有再普通外出，不提供选项
   
