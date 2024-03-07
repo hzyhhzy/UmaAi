@@ -77,25 +77,23 @@ namespace TestScoreSearch
 
     vector<Game> gameHistory;
 
-    if (recordGame)
-      gameHistory.resize(TOTAL_TURN);
+    //if (recordGame)
+    //  gameHistory.resize(TOTAL_TURN);
 
     for (int gamenum = 0; gamenum < gamesEveryThread; gamenum++)
     {
       Game game;
       game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
-      for (int i = 0; i < 9; i++)
-        game.larc_allowedDebuffsFirstLarc[i] = test.allowedDebuffs[i];
 
       //noSearch的测试，为了避免大改代码，第一回合强制外出
       //有search的测试，公平起见，第一回合也强制外出
-      Action action0 = { 8,false,false,false,false };//无条件外出，这样就无视第一回合的人头分布了
+      Action action0 = { TRA_rest,XT_none };//无条件休息，这样就无视第一回合的人头分布了
       game.applyTrainingAndNextTurn(rand, action0);
 
       while (!game.isEnd())
       {
         if (recordGame)
-          gameHistory[game.turn] = game;
+          gameHistory.push_back(game);
         Action action;
         action = search.runSearch(game, rand);
         game.applyTrainingAndNextTurn(rand, action);
@@ -105,9 +103,8 @@ namespace TestScoreSearch
       if (score > 42000)
       {
         if (recordGame)
-          for (int i = 0; i < TOTAL_TURN; i++)
-            if (!GameConstants::LArcIsRace[i])
-              gameHistory[i].print();
+          for (int i = 0; i < gameHistory.size(); i++)
+            gameHistory[i].print();
         game.printFinalStats();
       }
       n += 1;

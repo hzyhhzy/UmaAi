@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <random>
 #include <string>
-struct SupportCard;
+#include "../SupportCard/SupportCard.h"
 struct Game;
 
 

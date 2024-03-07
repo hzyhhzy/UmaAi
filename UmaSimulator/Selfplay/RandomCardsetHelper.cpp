@@ -167,22 +167,6 @@ std::vector<int> GameGenerator::getRandomCardset(bool mustHaveZuoyue)
         if (t >= cardRank[ct].size() || t < 0)
           continue;
 
-        //检查是否有重复的larc link
-        cardId = cardRank[ct][t] * 10 + 4;
-        if (GameDatabase::AllCards[cardId].larc_isLink)
-        {
-          bool repeatedLink = false;
-          for (int i = 0; i < cardset.size(); i++)
-          {
-            if (GameDatabase::AllCards[cardset[i]].larc_linkSpecialEffect == GameDatabase::AllCards[cardId].larc_linkSpecialEffect)
-            {
-              repeatedLink = true;
-              break;
-            }
-          }
-          if (repeatedLink)
-            continue;
-        }
 
         break;
       }
@@ -222,9 +206,9 @@ void GameGenerator::randomizeUmaCardParam(Game& game)
 
   for (int i = 0; i < 6; i++)
   {
-    if (rand() % 8 == 0 && game.cardParam[i].cardType < 5)
+    if (rand() % 8 == 0 && game.persons[i].cardParam.cardType < 5)
     {
-      auto& p = game.cardParam[i];
+      auto& p = game.persons[i].cardParam;
       if (rand() % 4 == 0)
         p.bonusBasic[rand() % 6] += 1;
 

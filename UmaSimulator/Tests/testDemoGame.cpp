@@ -117,8 +117,6 @@ void main_testDemoGame()
 		Game game;
 
 		game.newGame(rand, false, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
-		for (int i = 0; i < 9; i++)
-			game.larc_allowedDebuffsFirstLarc[i] = allowedDebuffs[i];
 
 		while (!game.isEnd())
 		{
@@ -185,7 +183,6 @@ void main_testDemoGame()
 			Action bestAction = search.runSearch(game, rand);
 			game.playerPrint = true;
 
-			if (GameConfig::debugPrint) game.printCardEffect();
 
 			double maxMean = -1e7;
 			double maxValue = -1e7;
@@ -248,44 +245,6 @@ void main_testDemoGame()
 					printValue(j, value - restValue, maxValue - restValue);
 				}
 				cout << endl;
-			}
-
-			//提示购买友情+20%和pt+10
-
-			if (game.turn >= 41)
-			{
-				if (game.larc_levels[7] >= 1 && game.larc_levels[7] < 3)
-				{
-					int cost = game.larc_levels[7] == 2 ? 300 : 500;
-					if (game.larc_shixingPt >= cost)
-					{
-						if (game.turn == 41)
-						{
-							cout << "\033[31m请自己计算是否可以购买友情+20%！ \033[0m" << endl;
-						}
-						else
-							cout << "\033[31m请购买友情+20%！ \033[0m" << endl;
-					}
-
-				}
-				else if (game.larc_levels[5] >= 1 && game.larc_levels[5] < 3)
-				{
-					int cost = game.larc_levels[5] == 2 ? 200 : 300;
-					if (game.larc_shixingPt >= cost)
-					{
-						if (game.turn == 41)
-						{
-							cout << "\033[31m请自己计算是否可以购买pt+10！ \033[0m" << endl;
-						}
-						else
-							cout << "\033[31m请购买pt+10！ \033[0m" << endl;
-					}
-				}
-
-				if (game.turn == 45)
-				{
-					cout << "\033[1;36m日本杯！大逃不要忘了打！ \033[0m" << endl;
-				}
 			}
 
 

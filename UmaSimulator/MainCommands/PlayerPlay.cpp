@@ -74,7 +74,6 @@ void main_playerPlay()
     //    act.train = 5;
     //  game.applyTrainingAndNextTurn(rand, act);
     //}
-    game.larc_allowedDebuffsFirstLarc[4] = true;//允许不消除智力debuff
 
 
     cout << termcolor::bright_blue << "------------------------------------------------------------------------------------------------" << termcolor::reset << endl;
@@ -98,6 +97,8 @@ void main_playerPlay()
 
       if (game.turn < TOTAL_TURN - 1)
       {
+        assert(false && "todo");
+        /*
         Action handWrittenStrategy = Evaluator::handWrittenStrategy(game);
         string strategyText[10] =
         {
@@ -158,6 +159,7 @@ void main_playerPlay()
           }
           cout << endl;
         }
+      */
       }
       /*
 
@@ -187,19 +189,12 @@ void main_playerPlay()
       {
         Action action;
         action.train = -1;
-        action.buy50p = false;
-        action.buyFriend20 = false;
-        action.buyPt10 = false;
-        action.buyVital20 = false;
 
 
         string s;
 
         cout << termcolor::cyan << "请选择训练：1速，2耐，3力，4根，5智，S键SS对战，a友人出行，b普通出行，c休息，d额外比赛，remake重开，cheat作弊" << termcolor::reset << endl;
-        if (game.larc_isAbroad)
-        {
-          cout << termcolor::cyan << "输入b1购买速+50%，b2购买耐+50%，b3购买力+50%，b4购买根+50%，b5购买智+50%，b6购买pt+10，b7购买体力消费-20%，b8购买友情+20%" << termcolor::reset << endl;
-        }
+       
         cin >> s;
 
 
@@ -274,17 +269,6 @@ void main_playerPlay()
             s[1] == '7' ? 6:
             s[1] == '8' ? 7:
             -1;
-          bool suc = game.tryBuyUpgrade(buy_idx, 3);
-          if (!suc)
-          {
-            cout << termcolor::red << "购买失败！" << termcolor::reset << endl;
-            std::this_thread::sleep_for(std::chrono::seconds(1));//等几秒让人看清楚
-          }
-          else
-          {
-            cout << termcolor::cyan << "购买" << buy_idx + 1 << "号升级Lv3成功" << termcolor::reset << endl;
-            //game.print();
-          }
           continue;
         }
         else

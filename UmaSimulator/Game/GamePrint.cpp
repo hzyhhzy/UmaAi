@@ -13,10 +13,12 @@ using std::vector;
 
 std::string Person::getPersonStrColored(const Game& game) const
 {
+  assert(false && "Todo 这个函数要改的地方挺多的");
+  /*
   string s =
     personType == 0 ? "未加载" :
     personType == 1 ? "[友]佐岳" :
-    personType == 2 ? game.cardParam[cardIdInGame].cardName.substr(0, 8) :
+    personType == 2 ? cardParam.cardName.substr(0, 8) :
     personType == 3 ? "NPC" :
     personType == 4 ? "理事长" :
     personType == 5 ? "记者" :
@@ -33,17 +35,14 @@ std::string Person::getPersonStrColored(const Game& game) const
     s = "\033[32m" + s + "\033[0m"; // 友人
   else if (personType == 2)
   {
-    if(isShining)
+    if(game.isCardShining())
       s = "\033[1;36m" + s + "\033[0m"; //闪彩
     else if(friendship<80)
       s = "\033[33m" + s + "\033[0m"; //需要拉羁绊
   }
   else if (personType == 3)
   {
-    if (!game.larc_isAbroad && larc_charge < 3)
-      s = "\033[36m" + s + "\033[0m"; //可充电
-    else
-      s = "\033[34m" + s + "\033[0m"; //不可充电
+    assert(false && "UAF has no npc");
   }
   else if (personType == 4 || personType == 5 || personType == 6)
   {
@@ -56,18 +55,8 @@ std::string Person::getPersonStrColored(const Game& game) const
   if (personType == 2 && isHint)
     s = "\033[31m!\033[0m" + s;
 
-  //充电状态与ss buff
-  if ((personType == 2 || personType == 3) && !(game.turn < 2 || game.larc_isAbroad))
-  {
-    if (personType == 3)//npc把自己的特殊buff写在名字里
-      s = s + GameConstants::LArcSSBuffNames[larc_specialBuff];
-    s = s + ";";
-    if (larc_charge < 3)
-      s = s + "\033[1;31m" + to_string(larc_charge) + "\033[0m";
-    for (int i = 0; i < 1; i++)
-      s = s + GameConstants::LArcSSBuffNames[larc_nextThreeBuffs[i]];
-  }
-  return s;
+  return s;*/
+  
 }
 
 void Game::printEvents(string s) const
@@ -76,31 +65,6 @@ void Game::printEvents(string s) const
   if (playerPrint) //这个不删是因为模拟器里可能也要进行ai计算
     cout << "\033[32m" + s + "\033[0m" << endl;
 #endif
-}
-
-// 只在调用该函数时会重新计算一次当前的面板并显示
-void Game::printCardEffect()
-{
-    cout << "-- 支援卡面板计算 --" << endl;
-    for (int trainType = 0; trainType < 5; ++trainType)
-        for (int i = 0; i < 5; i++)
-        {
-            int p = personDistribution[trainType][i];
-            if (p < 0)break;//没人
-            int personType = persons[p].personType;
-            if (personType == 1 || personType == 2)//卡
-            {
-                CardTrainingEffect eff = cardParam[persons[p].cardIdInGame].getCardEffect(*this, trainType, persons[p].friendship, persons[p].cardRecord);
-                cout << cardParam[persons[p].cardIdInGame].cardName << ": " << eff.explain()
-                     << " 算法：" << (cardParam[persons[p].cardIdInGame].isDBCard ? "自动" : "手动") << endl;
-                if (!cardParam[persons[p].cardIdInGame].isDBCard) // 验算，调试用
-                {
-                    CardTrainingEffect eff2 = cardParam[persons[p].cardIdInGame].getCardEffect(*this, trainType, persons[p].friendship, -1);
-                    cout << cardParam[persons[p].cardIdInGame].cardName << ": " << eff2.explain()
-                        << " 算法：自动(验算)" << endl;
-                }
-            }
-        }
 }
 
 static void printTableRow(string strs[5])
@@ -158,7 +122,7 @@ void Game::print() const
     cout << termcolor::cyan << "总属性：" << totalStatus << "     pt：" << skillPt << termcolor::reset << endl;
   }
   {
-    if (isQieZhe)
+    if (ptScoreRate > (GameConstants::ScorePtRate + GameConstants::ScorePtRateQieZhe) * 0.5)
       cout << termcolor::bright_yellow << "有切者" << termcolor::reset << endl;
     if (isAiJiao)
       cout << termcolor::bright_yellow << "有爱娇" << termcolor::reset << endl;
@@ -166,7 +130,7 @@ void Game::print() const
   {
     cout << endl;
   }
-
+  /*
   //友人卡状态
   if (larc_zuoyueType == 1 || larc_zuoyueType == 2)
   {
@@ -494,6 +458,7 @@ void Game::print() const
     }
 
   }
+  */
   cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
 }
 
@@ -520,5 +485,5 @@ void Game::printFinalStats() const
     termcolor::bright_blue << "智=" << termcolor::bright_yellow << convertToHalfIfOver1200(fiveStatus[4]) << termcolor::reset << " " <<
     termcolor::bright_blue << "pt=" << termcolor::bright_yellow << skillPt << termcolor::reset << " " <<
     endl;
-  cout << termcolor::bright_red << "(直接按每pt " << (isQieZhe ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate) << "分计算)" << termcolor::reset << endl;
+  cout << termcolor::bright_red << "(直接按每pt " << ptScoreRate << "分计算)" << termcolor::reset << endl;
 }

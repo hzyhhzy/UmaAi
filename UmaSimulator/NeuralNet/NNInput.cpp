@@ -111,6 +111,7 @@ void SupportCard::getNNInputV1(float* buf, const Game& game) const
     }
     else
     {
+      assert(false && "todo");
       assert(false);
     }
   };
@@ -226,7 +227,7 @@ void SupportCard::getNNInputV1(float* buf, const Game& game) const
     int cardTypeCount[7] = { 0,0,0,0,0,0,0 };
     for (int i = 0; i < 6; i++)
     {
-      int t = game.cardParam[i].cardType;
+      int t = game.persons[i].cardParam.cardType;
       assert(t <= 6 && t >= 0);
       cardTypeCount[t]++;
     }
@@ -242,6 +243,7 @@ void SupportCard::getNNInputV1(float* buf, const Game& game) const
   }
   else
   {
+    assert(false && "todo");
     assert(false);
   }
 
@@ -263,7 +265,6 @@ void Person::getNNInputV1(float* buf, const Game& game, int index) const
   buf[0] = double(friendship) / 100.0;
   buf[1] = friendship >= 80 ? 1.0 : 0.0;
   buf[2] = friendship >= 100 ? 1.0 : 0.0;
-  buf[3] = isShining ? 1.0 : 0.0;
   buf[4] = isHint ? 1.0 : 0.0;
   buf[5] = 0.0;//预留cardRecord
   buf[6] = 0.0;//预留cardRecord
@@ -278,40 +279,7 @@ void Person::getNNInputV1(float* buf, const Game& game, int index) const
     }
   }
 
-  //是否在ss
-  for (int i = 0; i < 5; i++)
-    if(game.larc_ssPersons[i]==index)
-      buf[12] = 1.0;
-
-
-  if (game.turn >= 2 && index < 15)
-  {
-    buf[13] = larc_isLinkCard ? 1.0 : 0.0;
-    buf[14 + larc_charge] = 1.0;
-    buf[17 + larc_statusType] = 1.0;
-    assert(larc_specialBuff >= 3 && larc_specialBuff <= 12);
-    buf[22 + larc_specialBuff - 3] = 1.0;
-    //larc_level完全无用
-    buf[32 + (larc_buffLevel % 3)] = 1.0;
-    buf[35 + larc_nextThreeBuffs[0]] = 1.0;
-    buf[48 + larc_nextThreeBuffs[1]] = 1.0;
-    buf[61 + larc_nextThreeBuffs[2]] = 1.0;
-  }
-  else
-  {
-    if (personType == 2)
-    {
-      bool islink = game.cardParam[cardIdInGame].larc_isLink;
-      if (islink)
-      {
-        buf[13] = 1.0;
-        int specialBuff = game.cardParam[cardIdInGame].larc_linkSpecialEffect;
-        assert(specialBuff >= 3 && specialBuff <= 12);
-        buf[22 + specialBuff - 3] = 1.0;
-
-      }
-    }
-  }
+  assert(false && "todo");
   assert(personType >= 1 && personType <= 6);
   buf[74 + personType] = 1.0;
   //total 81
@@ -341,57 +309,9 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   assert(c == NNINPUT_CHANNELS_SEARCHPARAM_V1);
 
 
+  assert(false && "todo");
   //isLegal
-  Action action = { 0,false, false, false, false };
-  for (int i = 0; i < 10; i++)
-  {
-    action.train = i;
-    if (isLegal(action))
-      buf[c] = 1.0;
-    c++;
-  }
-
-  for (int j = 0; j < 5; j++)
-  {
-    if (j == 0)
-    {
-      action.buy50p = true;
-      action.buyPt10 = false;
-      action.buyVital20 = false;
-    }
-    else if (j == 1)
-    {
-      action.buy50p = false;
-      action.buyPt10 = true;
-      action.buyVital20 = false;
-    }
-    else if (j == 2)
-    {
-      action.buy50p = true;
-      action.buyPt10 = true;
-      action.buyVital20 = false;
-    }
-    else if (j == 3)
-    {
-      action.buy50p = true;
-      action.buyPt10 = false;
-      action.buyVital20 = true;
-    }
-    else if (j == 4)
-    {
-      action.buy50p = false;
-      action.buyPt10 = false;
-      action.buyVital20 = true;
-    }
-
-    for (int i = 0; i < 5; i++)
-    {
-      action.train = i;
-      if (isLegal(action))
-        buf[c] = 1.0;
-      c++;
-    }
-  }
+  assert(false && "todo");
 
 
 
@@ -414,8 +334,8 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   c++;
   buf[c] = (maxVital - 100) * 0.1;
   c++;
-  if (isQieZhe)
-    buf[c] = 1.0;
+  //if (isQieZhe)
+  //  buf[c] = 1.0;
   c++;
   if (isAiJiao)
     buf[c] = 1.0;
@@ -447,15 +367,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 
 
 
-  for (int i = 0; i < 5; i++)
-  {
-    assert(trainLevelCount[i] <= 16);
-    int a = trainLevelCount[i] / 4;
-    int b = trainLevelCount[i] % 4;
-    buf[c + a] = 1.0;
-    buf[c + b + 5] = 1.0;
-    c += 9;
-  }
+  assert(false && "todo  trainlevel");
 
   for (int i = 0; i < 5; i++)
   {
@@ -471,104 +383,11 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   buf[c] = zhongMaExtraBonus[5] * 0.01;
   c++;
 
-  buf[c + normalCardCount] = 1.0;
-  c += 7;
 
   buf[c] = saihou * 0.03;
   c++;
 
   assert(!isRacing);
-  assert(motivationDropCount == 0);//not used
-
-  if (larc_isAbroad)
-    buf[c] = 1.0;
-  c++;
-
-  buf[c] = larc_supportPtAll / 170000.0;
-  c++;
-
-  int larc_trainBonusLevel = (larc_supportPtAll + 85) / 8500;
-  if (larc_trainBonusLevel > 40)larc_trainBonusLevel = 40;
-  double larc_trainBonus = GameConstants::LArcTrainBonusEvery5Percent[larc_trainBonusLevel];
-  buf[c] = larc_trainBonus * 0.05;
-  c++;
-
-  int trainBonusLevel20p = larc_trainBonusLevel / 4;
-  if (trainBonusLevel20p > 5)trainBonusLevel20p = 5;
-  buf[c + trainBonusLevel20p] = 1.0;
-  c += 6;
-
-  buf[c] = larc_shixingPt * 0.002;
-  c++;
-
-  int shixingPt100 = larc_shixingPt / 100;
-  if (shixingPt100 > 10)shixingPt100 = 10;
-  buf[c + shixingPt100] = 1.0;
-  c += 11;
-
-
-  for (int i = 0; i < 10; i++)
-  {
-    int lv = larc_levels[i];
-    assert(lv <= 3);
-    if (lv > 0)
-      buf[c + lv - 1] = 1.0;
-    c += 3;
-  }
-
-  if (larc_isSSS)
-    buf[c] = 1.0;
-  c++;
-
-  buf[c] = larc_ssWin * 0.03;
-  c++;
-
-
-  int ssWinSinceLastSSS = larc_ssWinSinceLastSSS;
-  if (ssWinSinceLastSSS > 8)ssWinSinceLastSSS = 8;
-  buf[c + ssWinSinceLastSSS] = 1.0;
-  c += 9;
-
-
-  for (int i = 0; i < 9; i++)
-  {
-    if (larc_allowedDebuffsFirstLarc[i])
-      buf[c] = 1.0;
-    c++;
-  }
-
-  assert(larc_zuoyueType >= 0 && larc_zuoyueType <= 2);
-  buf[c + larc_zuoyueType] = 1.0;
-  c += 3;
-
-
-  buf[c] = larc_zuoyueVitalBonus - 1.0;
-  c++;
-  buf[c] = larc_zuoyueStatusBonus - 1.0;
-  c++;
-
-
-  if (larc_zuoyueFirstClick)
-    buf[c] = 1.0;
-  c++;
-  if (larc_zuoyueOutgoingUnlocked)
-    buf[c] = 1.0;
-  c++;
-  if (larc_zuoyueOutgoingRefused)
-    buf[c] = 1.0;
-  c++;
-
-  assert(larc_zuoyueOutgoingUsed <= 5 && larc_zuoyueOutgoingUsed >= 0);
-  buf[c + larc_zuoyueOutgoingUsed] = 1.0;
-  c += 6;
-
-  // stageInTurn
-  // personDistribution
-  assert(larc_ssPersonsCount <= 5 && larc_ssPersonsCount >= 0);
-  buf[c + larc_ssPersonsCount] = 1.0;
-  c += 6;
-  //larc_ssPersons
-  //larc_ssPersonsCountLastTurn
 
   for (int i = 0; i < 5; i++)
   {
@@ -592,15 +411,6 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     buf[c + t] = 1.0;
     c += 3;
   }
-  //larc_staticBonus
-  for (int i = 0; i < 5; i++)
-  {
-    buf[c] = larc_shixingPtGainAbroad[i] * 0.01;
-    c++;
-  }
-  //larc_trainBonus
-  //larc_ssValue
-  //larc_ssFailRate
 
   //练习下手
   if (failureRateBias > 0)
@@ -616,59 +426,5 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   float* headBuf = buf + NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1 + 7 * NNINPUT_CHANNELS_CARD_V1;
 
 
-  //(全局信息)(支援卡1参数)...(支援卡6参数)(佐岳卡参数)(支援卡人头1)...(支援卡人头6)(有卡佐岳)(npc1)...(npc10)(理事长)(记者)(无卡佐岳)
-  //如果带了佐岳，则 支援卡6、支援卡人头6 为空
-  //如果没带佐岳，则 佐岳卡参数、npc10为空
-  if (larc_zuoyueType == 0)
-  {
-    assert(normalCardCount == 6);
-    //支援卡
-    for (int i = 0; i < normalCardCount; i++)
-    {
-      const Person& p = persons[i];
-      cardParam[p.cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * i, *this);
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * i, *this, i);
-    }
-    //npc
-    for (int i = 0; i < 9; i++)
-    {
-      const Person& p = persons[6 + i];
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (7 + i), *this, 6 + i);
-    }
-    //理事长记者
-    for (int i = 0; i < 2; i++)
-    {
-      const Person& p = persons[15 + i];
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (17 + i), *this, 15 + i);
-    }
-    //佐岳
-    persons[17].getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * 19, *this, 17);
-  }
-  else 
-  {
-    assert(normalCardCount == 5);
-    //支援卡
-    for (int i = 0; i < normalCardCount; i++)
-    {
-      const Person& p = persons[i];
-      cardParam[p.cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * i, *this);
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * i, *this, i);
-    }
-    //npc
-    for (int i = 0; i < 10; i++)
-    {
-      const Person& p = persons[5 + i];
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (7 + i), *this, 5 + i);
-    }
-    //理事长记者
-    for (int i = 0; i < 2; i++)
-    {
-      const Person& p = persons[15 + i];
-      p.getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * (17 + i), *this, 15 + i);
-    }
-    //佐岳
-    cardParam[persons[17].cardIdInGame].getNNInputV1(cardBuf + NNINPUT_CHANNELS_CARD_V1 * 6, *this);
-    persons[17].getNNInputV1(headBuf + NNINPUT_CHANNELS_PERSON_V1 * 6, *this, 17);
-  }
 
 }

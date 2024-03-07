@@ -51,25 +51,8 @@ Action Search::buyBuffAction(int idx, int turn)
 {
   Action action;
   action.train = -1;
-  action.buy50p = false;
-  action.buyFriend20 = false;
-  action.buyPt10 = false;
-  action.buyVital20 = false;
 
-  if (36 <= turn && turn <= 39)
-  {
-    action.buy50p = idx % 2;
-    action.buyPt10 = idx / 2;
-  }
-  else if (turn >= 60)
-  {
-    action.buy50p = idx % 2;
-    action.buyVital20 = idx / 2;
-  }
-  else if (turn == 41)
-  {
-    action.buy50p = idx % 2;
-  }
+  assert(false && "todo");
 
   return action;
 }
@@ -126,8 +109,8 @@ Action Search::runSearch(const Game& game,
     {
       allChoicesValue[i][j] = illegalValue;
     }
-
-
+  assert(false && "todo");
+  /*
   for (int buyBuffChoice = 0; buyBuffChoice < buyBuffChoiceNum(game.turn); buyBuffChoice++)
   {
     Action action0=buyBuffAction(buyBuffChoice,game.turn);
@@ -144,7 +127,7 @@ Action Search::runSearch(const Game& game,
     }
 
   }
-
+  */
   Action action;
   double bestValue = -5e4;
   for (int i = 0; i < 4; i++)

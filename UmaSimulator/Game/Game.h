@@ -183,7 +183,6 @@ public:
 
   //显示事件
   void printEvents(std::string s) const;//用绿色字体显示事件
-  void printCardEffect();
 
 };
 
