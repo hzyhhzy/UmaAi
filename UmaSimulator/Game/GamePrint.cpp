@@ -13,7 +13,14 @@ using std::vector;
 
 std::string Person::getPersonStrColored(const Game& game) const
 {
-  assert(false && "Todo 这个函数要改的地方挺多的");
+    
+    if (personType == 0)
+        return "Unknown";
+    string personName = GameDatabase::AllCards[cardParam.cardID].cardName;
+
+    return  personName;
+
+  //assert(false && "Todo 这个函数要改的地方挺多的");
   /*
   string s =
     personType == 0 ? "未加载" :
@@ -130,87 +137,45 @@ void Game::print() const
   {
     cout << endl;
   }
-  /*
+  
   //友人卡状态
-  if (larc_zuoyueType == 1 || larc_zuoyueType == 2)
+  if (lianghua_type == 1 || lianghua_type == 2)
   {
-    if (!larc_zuoyueFirstClick)
+    if (persons[lianghua_personId].friendOrGroupCardStage == 0)
       cout << termcolor::cyan << "友人卡未点击" << termcolor::reset << endl;
-    else if (larc_zuoyueOutgoingRefused)
-      cout << termcolor::cyan << "友人出行已拒绝" << termcolor::reset << endl;
-    else if (!larc_zuoyueOutgoingUnlocked)
+    else if (persons[lianghua_personId].friendOrGroupCardStage == 1)
       cout << termcolor::cyan << "友人出行未解锁" << termcolor::reset << endl;
-    else if (larc_zuoyueOutgoingUsed < 5)
-      cout << termcolor::cyan << "友人出行已走" << termcolor::yellow << larc_zuoyueOutgoingUsed << termcolor::cyan << "段" << termcolor::reset << endl;
-    else if (larc_zuoyueOutgoingUsed == 5)
+    else if (lianghua_outgoingUsed < 5)
+      cout << termcolor::cyan << "友人出行已走" << termcolor::yellow << lianghua_outgoingUsed << termcolor::cyan << "段" << termcolor::reset << endl;
+    else if (lianghua_outgoingUsed == 5)
       cout << termcolor::cyan << "友人出行已走完" << termcolor::reset << endl;
   }
 
-  if (turn >= 2)
+  string color_command[3][2] = { {"\033[1;36m","\033[0m"},{"\033[1;31m","\033[0m"},{"\033[1;33m","\033[0m"} };
+  
+  
+
+  /*if (turn >= 0)
   {
-    cout << "第一次凯旋门允许的debuff：";
-    for (int i = 0; i < 8; i++)
-    {
-      if (larc_allowedDebuffsFirstLarc[i])
-        cout << "\033[1;32mO\033[0m";
-      else
-        cout << "\033[31mX\033[0m";
-      if (i == 4)cout << " ";
+    cout << "三种颜色五种训练的等级: \n";
+
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 5; ++j) {
+            if(i==0)
+                cout<< "\033[1;36m" << uaf_trainingLevel[i][j]<<" "<< "\033[0m"<<" ";
+            if(i==1)
+                cout << "\033[1;31m" << uaf_trainingLevel[i][j] << " " << "\033[0m" << " ";
+            if (i == 2)
+                cout << "\033[1;33m" << uaf_trainingLevel[i][j] << " " << "\033[0m" << " ";
+        }
+        cout << "\n";
+
     }
-    cout << endl;
-  }
+  }*/
 
-  if (turn >= 2)
-  {
-    cout << "适性等级: ";
-    for (int i = 0; i < 10; i++)
-    {
-      int lv = larc_levels[i];
-      if (lv == 0)
-        cout << "\033[31m0\033[0m";
-      else if (lv == 1)
-        cout << "\033[33m1\033[0m";
-      else if (lv == 2)
-        cout << "2";
-      else if (lv == 3)
-        cout << "\033[1;36m3\033[0m";
-      if (i == 4)
-        cout << " ";
-    }
-    cout << endl;
-  }
-  if (turn >= 2)
-  {
-    int qidaidu = (larc_supportPtAll + 85) / 170;
-    cout << "期待度:\033[1;36m" << qidaidu / 10 << "." << qidaidu % 10 << "%\033[0m"
-      << "(训练+\033[1;36m" << larc_trainBonus << "%\033[0m)   "
-      << "适性pt:\033[1;36m" << larc_shixingPt << "\033[0m" << endl;
+ 
 
-    int totalCharge = 0;
-    for (int i = 0; i < 15; i++)
-      totalCharge += (persons[i].larc_level - 1) * 3 + persons[i].larc_charge; // larc_level是从1开始的需要-1，如果和小黑板不一致请修改小黑板
-    cout << "总格数:\033[1;36m" << totalCharge << "\033[0m   "
-      << "总SS胜数:\033[1;36m" << larc_ssWin << "\033[0m   "
-      << "距离上次SSS的胜数:\033[1;36m" << larc_ssWinSinceLastSSS << "\033[0m" << endl;
-  }
-  {
-    string ganjingStr =
-      motivation == 1 ? "\033[31m绝不调\033[0m" :
-      motivation == 2 ? "\033[31m不调\033[0m" :
-      motivation == 3 ? "\033[31m普通\033[0m" :
-      motivation == 4 ? "\033[33m好调\033[0m" :
-      motivation == 5 ? "\033[32m绝好调\033[0m" :
-      "\033[36m未知\033[0m";
-
-
-    cout << "体力|" << termcolor::green;
-    for (int i = 0; i < vital / 2; i++)
-      cout << "#";
-    cout << termcolor::reset;
-    for (int i = 0; i < maxVital / 2 - vital / 2; i++)
-      cout << "-";
-    cout << "| " << termcolor::green << vital << termcolor::reset << "/" << maxVital << "  干劲" << ganjingStr << endl;
-  }
+  
 
   if (isRacing)
   {
@@ -262,7 +227,11 @@ void Game::print() const
     for (int i = 0; i < 5; i++)
     {
       int newVital = vital;
-      newVital += trainValue[i][6];
+      newVital += trainVitalChange[i];
+
+
+      //cout << " The vital dlt of training " << i << " is : " << trainVitalChange[i] << '\n';
+
       if (newVital > maxVital)
         newVital = maxVital;
       if (newVital < 0)
@@ -284,12 +253,14 @@ void Game::print() const
     string oneRow[5];//表格中一行要显示的内容
     for (int i = 0; i < 5; i++)
     {
-      oneRow[i] = "等级：" + to_string(getTrainingLevel(i) + 1);
-      if (getTrainingLevel(i) < 4)
-        oneRow[i] = oneRow[i] + " (" + to_string(trainLevelCount[i] % 4) + ")";
+      oneRow[i] = "等级：" + color_command[uaf_trainingColor[i]][0] + to_string(getTrainingLevel(i) + 1) + color_command[uaf_trainingColor[i]][1];
+      /*if (getTrainingLevel(i) < 4)
+        oneRow[i] = oneRow[i] + " (" + to_string(uaf_trainingLevel[uaf_trainingColor[i]][i] % 4) + ")";
+        */
     }
     printTableRow(oneRow);
   }
+  
   cout << divLine;
   //单次训练总属性
   {
@@ -303,40 +274,28 @@ void Game::print() const
     }
     printTableRow(oneRow);
   }
-  //充电量
-  if (turn >= 2 && !larc_isAbroad)
+  // lv up situation
   {
     string oneRow[5];//表格中一行要显示的内容
-    for (int i = 0; i < 5; i++)
-    {
-      bool haveZuoyue = false;
-      int chargeN = trainShiningNum[i] + 1;
-      int totalCharge = 0;
-      int totalChargeFull = 0;
-      for (int j = 0; j < 5; j++)
-      {
-        int p = personDistribution[i][j];
-        if (p < 0)break;//没人
-        int personType = persons[p].personType;
 
-        if (personType == 1)//佐岳卡
-        {
-          haveZuoyue = true;
-        }
-        else if (personType == 2|| personType == 3)//普通卡,npc
-        {
-          totalCharge += std::min(chargeN, 3 - persons[p].larc_charge);
-          if (persons[p].larc_charge < 3 && persons[p].larc_charge + chargeN >= 3)
-            totalChargeFull += 1;
-        }
-      }
-      oneRow[i] = to_string(totalCharge);
-      if (haveZuoyue)oneRow[i] = oneRow[i] + "+友";
-      oneRow[i] = "格:\033[32m" + oneRow[i] + "\033[0m|满:\033[32m" + to_string(totalChargeFull) + "\033[0m";
+    int lvUpTot[3] = { 0 };
+    int accLvUp[5] = { 0 };
+
+    for (int i = 0; i < 5; ++i) {
+
+        int dlt = std::min(100 - getTrainingLevel(i), (int)uaf_trainLevelGain[i]);
+        accLvUp[i] = dlt;
+        lvUpTot[uaf_trainingColor[i]] += dlt;
+    }
+
+    for (int i = 0; i < 5; i++) {
+      oneRow[i] = "up:"+ color_command[uaf_trainingColor[i]][0]+to_string(accLvUp[i]) 
+                + " tot:" + to_string(lvUpTot[uaf_trainingColor[i]]) + "\033[0m" + color_command[uaf_trainingColor[i]][1];
     }
     printTableRow(oneRow);
 
   }
+  /*
   if (larc_isAbroad)
   {
     string oneRow[5];//表格中一行要显示的内容
@@ -345,7 +304,8 @@ void Game::print() const
       oneRow[i] = "适性pt:\033[32m" + to_string(larc_shixingPtGainAbroad[i]) + "\033[0m";
     }
     printTableRow(oneRow);
-  } 
+  }
+  */
 
   cout << divLine;
   //人头
@@ -395,71 +355,8 @@ void Game::print() const
   }
   cout << divLine;
 
-
-  if (!larc_isAbroad && turn >= 2)
-  {
-    //ss人头
-    int chargeFullCount = 0;
-    int ssHeadIdx = 0;
-    vector<string> ssHeadsStr(15);//前5个是ss里面的，之后的是满格但不在ss里的
-    for (int i = 0; i < 15; i++)
-    {
-      if (persons[i].larc_charge != 3)
-        continue;
-
-      chargeFullCount += 1;
-
-      bool inSS = false;
-      for (int j = 0; j < 5; j++)
-        if (larc_ssPersons[j] == i)
-        {
-          inSS = true;
-          break;
-        }
-
-      string s = persons[i].getPersonStrColored(*this);
-      if (inSS)
-      {
-        ssHeadsStr[ssHeadIdx] = s;
-        ssHeadIdx += 1;
-      }
-      else
-      {
-        ssHeadsStr[4 + chargeFullCount - ssHeadIdx] = s;
-      }
-    
-    }
-    if (larc_ssPersonsCount < 5)
-      cout << "SS人数未满" << endl;
-    else if (!larc_isSSS)
-      cout << "\033[1;32mSS Match\033[0m" << endl;
-    else
-      cout << "\033[1;36mSSS Match\033[0m" << endl;
-    string oneRow[5];//表格中一行要显示的内容
-    for (int i = 0; i < 5; i++)
-      oneRow[i] = ssHeadsStr[i];
-    printTableRow(oneRow);
-    cout << endl;
-    cout << "下层属性：" << " 速:" << larc_ssValue[0] << " 耐:" << larc_ssValue[1] << " 力:" << larc_ssValue[2] << " 根:" << larc_ssValue[3] << " 智:" << larc_ssValue[4] << endl;
-    
-
-    if (chargeFullCount > 5)
-    {
-      cout << "其他满格人头" << endl;
-      for (int i = 0; i < 5; i++)
-        oneRow[i] = ssHeadsStr[i + 5];
-      printTableRow(oneRow);
-      if(chargeFullCount > 10)
-      {
-        for (int i = 0; i < 5; i++)
-          oneRow[i] = ssHeadsStr[i + 10];
-        printTableRow(oneRow);
-      }
-    }
-
-  }
-  */
   cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
+
 }
 
 static int convertToHalfIfOver1200(int x)

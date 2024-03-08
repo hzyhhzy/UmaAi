@@ -99,6 +99,8 @@ void GameDatabase::loadDBCards(const string& pathname)
 CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, int atTrain, int jiBan, int effectFactor, int trainingCardNum, int trainingShiningNum) const
 {
     CardTrainingEffect effect(this);
+
+    printf("This card is :%d", cardID);
     
 
     if (isDBCard || effectFactor==-1)  // 暂时使用effectFactor=-1表示验算模式

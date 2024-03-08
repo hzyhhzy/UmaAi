@@ -38,7 +38,7 @@ void main_playerPlay()
 
   int umaId = 103001;//米浴
   int umaStars = 5;
-  int cards[6] = { 301604,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
+  int cards[6] = { 301884,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 20,0,40,0,20,150 };
 
@@ -89,15 +89,17 @@ void main_playerPlay()
     }
     cout << endl;
 
+
     while(game.turn < TOTAL_TURN)
     {
       std::this_thread::sleep_for(std::chrono::seconds(1));//等几秒让人看清楚
       //assert(turn == game.turn && "回合数不正确");
       game.print();
 
-      if (game.turn < TOTAL_TURN - 1)
-      {
-        assert(false && "todo");
+      if (game.turn < TOTAL_TURN - 1){
+
+          std::cout << "????? -- turn: " << game.turn << "  tot_turn-1 : "<< TOTAL_TURN - 1 << "-----------------\n";
+        assert(true && "todo");
         /*
         Action handWrittenStrategy = Evaluator::handWrittenStrategy(game);
         string strategyText[10] =
@@ -179,7 +181,7 @@ void main_playerPlay()
       }
       */
 
-      auto tdata = search.exportTrainingSample();
+     // auto tdata = search.exportTrainingSample();
 
       if (game.isRacing)//比赛回合
       {
