@@ -7,7 +7,8 @@
 #include "Game.h"
 using namespace std;
 using json = nlohmann::json;
-
+int zhongmaBlue[5] = { 18,0,0,0,0 };
+int zhongmaBonus[6] = { 20,0,40,0,20,150 };
 // 是否把低破卡当做满破处理（会导致一定的预测偏差）
 // 为True时会把所有ID的最高位改为满破（马娘5xxx，卡4xxx）
 static bool maskUmaId = true;
@@ -27,20 +28,78 @@ bool Game::loadGameFromJson(std::string jsonStr)
   try
   {
     json j = json::parse(jsonStr, nullptr, true, true);
+    auto rand = mt19937_64(114514);
+    int newcards[6];
+    int newzmbluecount[5];
+    for (int i = 0; i < 6; i++) {
+        newcards[i] = j["cardId"][i];
+        if(i<5){ newzmbluecount[i] = j["zhongMaBlueCount"][i]; }
+        
+    }
+    newGame(rand,true,j["umaId"],5,newcards,zhongmaBlue,zhongmaBonus);
+    turn = j["turn"];
+    vital = j["vital"];
+    maxVital = j["maxVital"];
+    motivation = j["motivation"];
+    for (int i = 0; i < 5; i++) {
+        fiveStatus[i] = j["fiveStatus"][i];
+        fiveStatusLimit[i] = j["fiveStatusLimit"][i];
+        uaf_trainingColor[i]= j["uaf_trainingColor"][i]-1;
+    }
+    for (int i = 0; i < 6; i++) {
+        persons[i].friendship = j["persons"][i]["friendship"];
+    }
+    skillPt = j["skillPt"];
+    ptScoreRate = (j["ptScoreRate"] == 1.9) ? 2.1 : 2.3;
+    //TODO:SkillScore
+    failureRateBias= j["failureRateBias"];
+    isAiJiao = j["isAiJiao"];
+    isPositiveThinking = j["isPositiveThinking"];
+    isRacing = j["isRacing"];
+    for (int i = 0; i < 5; i++) {
+        for (int p = 0; p < 5; p++) {
+            if (j["personDistribution"][i][p] == 102) {
+                personDistribution[i][p] = 6;
+            }
+            else if (j["personDistribution"][i][p] == 103) {
+                personDistribution[i][p] = 7;
+            }
+            else if (j["personDistribution"][i][p] == 111) {
+                personDistribution[i][p] = 8;
+            }
+            else {
+                personDistribution[i][p] = j["personDistribution"][i][p];
+            }
+        }
+    }
+    lockedTrainingId = j["lockedTrainingId"];
+    for (int i = 0; i < 3; i++) {
+        for (int p = 0; p < 5; p++) {
+            uaf_trainingLevel[i][p] = j["uaf_trainingLevel"][i*5+p];
+        }
+    }
 
-    assert(false && "todo");
-    calculateTrainingValue(); //补全一些没填的信息
+    for (int a = 0; a < 5; a++) {
+        for (int b = 0; b < 3; b++) {
+            for (int c = 0; c < 5; c++) {
+                uaf_winHistory[a][b][c] = j["uaf_winHistory"][a * 15 + b * 5 + c];
 
-    for (int i = 0; i < 5; i++)
-      for (int k = 0; k < 7; k++)
-      {
-        trainValue[i][k] = j["trainValue"][i][k];
-      }
-
-    for (int i = 0; i < 5; i++)
-      failRate[i] = j["failRate"][i];
-
+            }
+        }
+    }
+    if (lianghua_type != 0) {
+        lianghua_outgoingUsed = j["lianghua_outgoingUsed"];
+    }
+    uaf_xiangtanRemain = j["uaf_xiangtanRemain"];
+    for (int i = 0; i < 3; i++) {
+        uaf_buffActivated[i] = j["uaf_buffActivated"][i];
+        uaf_buffNum[i]= j["uaf_buffNum"][i];
+    }
     calculateTrainingValue();
+  for (int k = 1; k < 5; k++) {
+        cout << trainValue[1][k] << endl;
+    }
+    
   }
   catch (string e)
   {

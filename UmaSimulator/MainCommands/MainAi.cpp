@@ -92,7 +92,7 @@ void main_ai()
 	GetModuleFileNameW(0, buf, 10240);
 	filesystem::path exeDir = filesystem::path(buf).parent_path();
 	filesystem::current_path(exeDir);
-	//std::cout << "当前工作目录：" << filesystem::current_path() << endl;
+	std::cout << "当前工作目录：" << filesystem::current_path() << endl;
 	cout << "当前程序目录：" << exeDir << endl;
 
 #if USE_BACKEND == BACKEND_NONE
@@ -106,12 +106,12 @@ void main_ai()
 	GameDatabase::loadDBCards("./db/cardDB.json"); //cardDB数据已经很完善了
 	loadRole();   // roleplay
 
-	string currentGameStagePath = string(getenv("LOCALAPPDATA"))+ "/UmamusumeResponseAnalyzer/GameData/thisTurn.json";
+	string currentGameStagePath = string(getenv("LOCALAPPDATA")) + "/UmamusumeResponseAnalyzer/GameData/thisTurn.json";
 	//string currentGameStagePath = "./gameData/thisTurn.json";
 
 
 
-	Model* modelptr = NULL;
+	/*Model* modelptr = NULL;
 	Model model(GameConfig::modelPath, GameConfig::batchSize);
 	if (GameConfig::modelPath != "")
 	{
@@ -126,7 +126,7 @@ void main_ai()
 
 	SearchParam searchParam = { GameConfig::searchN,GameConfig::searchDepth,GameConfig::radicalFactor };
 	Search search(modelptr, GameConfig::batchSize, GameConfig::threadNum, searchParam);
-
+	*/
 	websocket ws(GameConfig::useWebsocket ? "http://127.0.0.1:4693" : "");
 	if (GameConfig::useWebsocket)
 	{
@@ -167,6 +167,7 @@ void main_ai()
 		}
 
 		bool suc = game.loadGameFromJson(jsonStr);
+		//cout << "UZI IS STLL ALIVE\n" << endl;
 		game.eventStrength = GameConfig::eventStrength;
 
 		if (!suc)
@@ -180,6 +181,7 @@ void main_ai()
 			std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
 			continue;
 		}
+		cout << jsonStr << endl;
 		lastTurn = game.turn;
 		//if (game.venusIsWisdomActive)
 		/*
@@ -188,7 +190,7 @@ void main_ai()
 		  continue;
 		}
 		*/
-		if (game.turn == 0)//第一回合，或者重启ai的第一回合
+		/*if (game.turn == 0)//第一回合，或者重启ai的第一回合
 		{
 			scoreFirstTurn = 0;
 			scoreLastTurn = 0;
@@ -198,37 +200,37 @@ void main_ai()
 		cout << endl;
 		cout << rpText["name"] << rpText["calc"] << endl;
 		auto printPolicy = [](float p)
-		{
-			cout << fixed << setprecision(1);
-			if (!GameConfig::noColor)
 			{
-				if (p >= 0.3)cout << "\033[33m";
-				//else if (p >= 0.1)cout << "\033[32m";
-				else cout << "\033[36m";
-			}
-			cout << p * 100 << "% ";
-			if (!GameConfig::noColor)cout << "\033[0m";
-		};
+				cout << fixed << setprecision(1);
+				if (!GameConfig::noColor)
+				{
+					if (p >= 0.3)cout << "\033[33m";
+					//else if (p >= 0.1)cout << "\033[32m";
+					else cout << "\033[36m";
+				}
+				cout << p * 100 << "% ";
+				if (!GameConfig::noColor)cout << "\033[0m";
+			};
 
 		auto printValue = [&ws](int which, double p, double ref)
-		{
-			string prefix[] = { "速:", "耐:", "力:", "根:", "智:", "| SS: ", "| 休息: ", "友人: ", "普通外出: ", "比赛: " };
-			if (p < -50000)
 			{
-				cout << prefix[which] << "--- ";
-				return;
-			}
-			cout << fixed << setprecision(0);
-			if (!GameConfig::noColor)
-			{
-				if (ref - p < 20) cout << "\033[41m\033[1;33m*";
-				else if (ref - p < 100) cout << "\033[1;32m";
-				else cout << "\033[33m";
-			}
-			cout << prefix[which] << setw(3) << p;
-			if (!GameConfig::noColor)cout << "\033[0m";
-			cout << " ";
-		};
+				string prefix[] = { "速:", "耐:", "力:", "根:", "智:", "| SS: ", "| 休息: ", "友人: ", "普通外出: ", "比赛: " };
+				if (p < -50000)
+				{
+					cout << prefix[which] << "--- ";
+					return;
+				}
+				cout << fixed << setprecision(0);
+				if (!GameConfig::noColor)
+				{
+					if (ref - p < 20) cout << "\033[41m\033[1;33m*";
+					else if (ref - p < 100) cout << "\033[1;32m";
+					else cout << "\033[33m";
+				}
+				cout << prefix[which] << setw(3) << p;
+				if (!GameConfig::noColor)cout << "\033[0m";
+				cout << " ";
+			};
 
 		//search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
 		if (game.turn < TOTAL_TURN - 1 && !game.isRacing)
@@ -259,7 +261,7 @@ void main_ai()
 			cout << endl;*/
 
 			game.playerPrint = false;
-			search.runSearch(game, rand);
+			/*search.runSearch(game, rand);
 			game.playerPrint = true;
 
 			double maxMean = -1e7;
@@ -424,6 +426,8 @@ void main_ai()
 		  }
 		} // 输出结果Block
 		*/
-	} // while
+		} // while
 
-}
+	}
+
+//}

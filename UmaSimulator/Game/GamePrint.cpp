@@ -63,7 +63,7 @@ std::string Person::getPersonStrColored(const Game& game) const
     s = "\033[31m!\033[0m" + s;
 
   return s;*/
-  
+  return "TODO";
 }
 
 void Game::printEvents(string s) const
