@@ -36,7 +36,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         if(i<5){ newzmbluecount[i] = j["zhongMaBlueCount"][i]; }
         
     }
-    newGame(rand,true,j["umaId"],5,newcards,zhongmaBlue,zhongmaBonus);
+    newGame(rand,true,j["umaId"], j["umaStar"],newcards,zhongmaBlue,zhongmaBonus);
     turn = j["turn"];
     vital = j["vital"];
     maxVital = j["maxVital"];
@@ -44,13 +44,16 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 5; i++) {
         fiveStatus[i] = j["fiveStatus"][i];
         fiveStatusLimit[i] = j["fiveStatusLimit"][i];
-        uaf_trainingColor[i]= j["uaf_trainingColor"][i]-1;
+        uaf_trainingColor[i]= j["uaf_trainingColor"][i] - 1;
+    }
+    for (int i = 0; i < 9; i++) {
+      persons[i].friendship = j["persons"][i]["friendship"];
     }
     for (int i = 0; i < 6; i++) {
-        persons[i].friendship = j["persons"][i]["friendship"];
+      persons[i].isHint = j["persons"][i]["isHint"];
     }
     skillPt = j["skillPt"];
-    ptScoreRate = (j["ptScoreRate"] == 1.9) ? 2.1 : 2.3;
+    ptScoreRate = j["isQieZhe"] ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate;
     //TODO:SkillScore
     failureRateBias= j["failureRateBias"];
     isAiJiao = j["isAiJiao"];
@@ -89,16 +92,21 @@ bool Game::loadGameFromJson(std::string jsonStr)
     }
     if (lianghua_type != 0) {
         lianghua_outgoingUsed = j["lianghua_outgoingUsed"];
+        for (int i = 0; i < 6; i++) {
+          if (persons[i].personType == PersonType_lianghuaCard)
+            persons[i].friendOrGroupCardStage = j["lianghua_outgoingStage"];
+        }
     }
+    uaf_lastTurnNotTrain = j["uaf_rankGainIncreased"];
     uaf_xiangtanRemain = j["uaf_xiangtanRemain"];
     for (int i = 0; i < 3; i++) {
         uaf_buffActivated[i] = j["uaf_buffActivated"][i];
         uaf_buffNum[i]= j["uaf_buffNum"][i];
     }
     calculateTrainingValue();
-  for (int k = 1; k < 5; k++) {
-        cout << trainValue[1][k] << endl;
-    }
+  //for (int k = 1; k < 5; k++) {
+   //     cout << trainValue[1][k] << endl;
+   // }
     
   }
   catch (string e)

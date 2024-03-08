@@ -11,59 +11,50 @@ using std::endl;
 using std::to_string;
 using std::vector;
 
-std::string Person::getPersonStrColored(const Game& game) const
+std::string Person::getPersonStrColored(const Game& game, int personId, int atTrain) const
 {
     
-    if (personType == 0)
-        return "Unknown";
-    string personName = GameDatabase::AllCards[cardParam.cardID].cardName;
-
-    return  personName;
-
-  //assert(false && "Todo 这个函数要改的地方挺多的");
-  /*
   string s =
-    personType == 0 ? "未加载" :
-    personType == 1 ? "[友]佐岳" :
-    personType == 2 ? cardParam.cardName.substr(0, 8) :
-    personType == 3 ? "NPC" :
-    personType == 4 ? "理事长" :
-    personType == 5 ? "记者" :
-    personType == 6 ? "佐岳" :
+    personType == PersonType_unknown ? "未加载" :
+    personType == PersonType_lianghuaCard ? "[友]凉花" :
+    personType == PersonType_card ? cardParam.cardName.substr(0, 8) :
+    personType == PersonType_npc ? "NPC" :
+    personType == PersonType_lishizhang ? "理事长" :
+    personType == PersonType_jizhe ? "记者" :
+    personType == PersonType_lianghuaNonCard ? "凉花" :
     "未知";
-  if (personType == 1 || personType == 2 || personType == 4 || personType == 5 || personType == 6)
+  if (personType != PersonType_npc)
   {
     if (friendship < 100)
       s = s + ":" + to_string(friendship);
   }
 
   //根据闪彩等给名称加颜色
-  if (personType == 1)
+  if (personType == PersonType_lianghuaCard)
     s = "\033[32m" + s + "\033[0m"; // 友人
-  else if (personType == 2)
+  else if (personType == PersonType_card)
   {
-    if(game.isCardShining())
+    if(game.isCardShining(personId,atTrain))
       s = "\033[1;36m" + s + "\033[0m"; //闪彩
     else if(friendship<80)
       s = "\033[33m" + s + "\033[0m"; //需要拉羁绊
   }
-  else if (personType == 3)
+  else if (personType == PersonType_npc)
   {
     assert(false && "UAF has no npc");
   }
-  else if (personType == 4 || personType == 5 || personType == 6)
+  else if (personType == PersonType_lishizhang || personType == PersonType_jizhe || personType == PersonType_lianghuaNonCard)
   {
     s = "\033[35m" + s + "\033[0m"; //理事长记者等
   }
   else
-    s = "\033[31m" + s + "\033[0m"; //bug
+    s = "\033[31m" + s + "\033[0m"; //unknown
 
   //技能启发
-  if (personType == 2 && isHint)
+  if (personType == PersonType_card && isHint)
     s = "\033[31m!\033[0m" + s;
 
-  return s;*/
-  return "TODO";
+  return s;
 }
 
 void Game::printEvents(string s) const
@@ -155,8 +146,6 @@ void Game::print() const
   
   
 
-  /*if (turn >= 0)
-  {
     cout << "三种颜色五种训练的等级: \n";
 
     for (int i = 0; i < 3; ++i) {
@@ -171,7 +160,6 @@ void Game::print() const
         cout << "\n";
 
     }
-  }*/
 
  
 
@@ -283,7 +271,7 @@ void Game::print() const
 
     for (int i = 0; i < 5; ++i) {
 
-        int dlt = std::min(100 - getTrainingLevel(i), (int)uaf_trainLevelGain[i]);
+        int dlt = std::min(100 - uaf_trainingLevel[uaf_trainingColor[i]][i], (int)uaf_trainLevelGain[i]);
         accLvUp[i] = dlt;
         lvUpTot[uaf_trainingColor[i]] += dlt;
     }
@@ -319,7 +307,7 @@ void Game::print() const
         if (personId < 0)
           oneRow[item] = "";
         else
-          oneRow[item] = persons[personId].getPersonStrColored(*this);
+          oneRow[item] = persons[personId].getPersonStrColored(*this, personId, item);
       }
       printTableRow(oneRow);
     }
@@ -348,7 +336,10 @@ void Game::print() const
         s = "体";
       for (int item = 0; item < 5; item++)
       {
-        oneRow[item]=s + ":" + to_string(trainValue[item][i]);
+        if (s != "体")
+          oneRow[item] = s + ": " + to_string(trainValueLower[item][i]) + "+" + to_string(trainValue[item][i] - trainValueLower[item][i]);
+        else
+          oneRow[item] = s + ": " + to_string(trainVitalChange[item]);
       }
       printTableRow(oneRow);
     }

@@ -44,5 +44,5 @@ struct Person //任何一个可能出现在训练里的人头
 
   void getNNInputV1(float* buf, const Game& game, int index) const;//神经网络输入向量，不包括支援卡参数，Game类会把支援卡参数放在对应位置
   std::string getPersonName(const Game& game) const;//获得人物名称
-  std::string getPersonStrColored(const Game& game) const;//人物名称与羁绊等整合成带颜色的字符串，在小黑板表格中显示
+  std::string getPersonStrColored(const Game& game, int personId, int atTrain) const;//人物名称与羁绊等整合成带颜色的字符串，在小黑板表格中显示
 };

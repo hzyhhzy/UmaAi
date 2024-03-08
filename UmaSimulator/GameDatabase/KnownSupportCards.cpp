@@ -100,7 +100,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
 {
     CardTrainingEffect effect(this);
 
-    printf("This card is :%d", cardID);
+    //printf("This card is :%d", cardID);
     
 
     if (isDBCard || effectFactor==-1)  // 暂时使用effectFactor=-1表示验算模式
@@ -234,21 +234,25 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
             case 19:    // 凉花
                 break;
             case 20:    // 巨匠
+              if (jiBan >= 80)
+              {
+                int cardTypeCount[7] = { 0,0,0,0,0,0,0 };
+                for (int i = 0; i < 6; i++)
                 {
-                    int cardTypeCount[7] = { 0,0,0,0,0,0,0 };
-                    for (int i = 0; i < 6; i++)
-                    {
-                        int t = game.persons[i].cardParam.cardType;
-                        assert(t <= 6 && t >= 0);
-                        cardTypeCount[t]++;
-                    }
-                    cardTypeCount[5] += cardTypeCount[6];
-                    for (int i = 0; i < 4; i++)
-                        if (cardTypeCount[i] > 0)
-                            effect.apply(i + 3, cardTypeCount[i]);  // 速耐力根智 = 0-4 = CardEffect词条3-7
-                    if (cardTypeCount[5] > 0)
-                        effect.apply(30, cardTypeCount[5]); // pt = 30
+                  int t = game.persons[i].cardParam.cardType;
+                  assert(t <= 6 && t >= 0);
+                  cardTypeCount[t]++;
                 }
+                cardTypeCount[5] += cardTypeCount[6];
+
+                for (int i = 0; i < 6; i++)
+                  if (cardTypeCount[i] > 2)cardTypeCount[i] = 2;
+                for (int i = 0; i < 5; i++)
+                  if (cardTypeCount[i] > 0)
+                    effect.apply(i + 3, cardTypeCount[i]);  // 速耐力根智 = 0-4 = CardEffect词条3-7
+                if (cardTypeCount[5] > 0)
+                  effect.apply(30, cardTypeCount[5]); // pt = 30
+              }
             break;
             case 21:   // 耐万籁，编入4种支援卡时+10训练
               {

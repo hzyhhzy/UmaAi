@@ -183,6 +183,7 @@ void main_ai()
 		}
 		cout << jsonStr << endl;
 		lastTurn = game.turn;
+		game.print();
 		//if (game.venusIsWisdomActive)
 		/*
 		{

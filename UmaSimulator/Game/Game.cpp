@@ -377,10 +377,10 @@ void Game::calculateTrainingValue()
       int gain = splevel < 30 ? 1 : splevel < 50 ? 2 : 3;
       linkBasicValueBonus[color][t] += gain;
     }
-    linkBasicValueBonus[color][5] = trainingColorNum[color];
+    linkBasicValueBonus[color][5] = trainingColorNum[color] - 1;
     if (trainingColorNum[color] <= 1)
     {
-      for (int t = 0; t < 5; t++)
+      for (int t = 0; t < 6; t++)
         linkBasicValueBonus[color][t] = 0;//一个link都没有吃不到加成
     }
   }
@@ -388,9 +388,9 @@ void Game::calculateTrainingValue()
   //计算五个训练的各种数值
   for (int t = 0; t < 5; t++)
   {
-    int basicValueLower[6];//训练的下层基础值，=原基础值+支援卡加成
-    double valueLowerDouble[6];//训练的下层值，先不取整
-    double valueDouble[6];//训练的总数，先不取整
+    int basicValueLower[6] = { 0,0,0,0,0,0 };//训练的下层基础值，=原基础值+支援卡加成
+    double valueLowerDouble[6] = { 0,0,0,0,0,0 };//训练的下层值，先不取整
+    double valueDouble[6] = { 0,0,0,0,0,0 };//训练的总数，先不取整
     //int basicValue[6];//训练的基础值，= basicValueLower + linkBasicValueBonus
     int cardNum = 0;//几张卡，理事长记者不算
     int totalXunlian = 0;//训练1+训练2+...
@@ -403,10 +403,10 @@ void Game::calculateTrainingValue()
     int color = uaf_trainingColor[t]; 
     int colorNum = trainingColorNum[color];
     int splevel = uaf_trainingLevel[color][t];
-    int tlevel = convertTrainingLevel(splevel);
+    int tlevel = getTrainingLevel(t);
     for (int i = 0; i < 6; i++)
       basicValueLower[i] = GameConstants::TrainingBasicValue[color][t][tlevel][i];
-    vitalCostBasic = GameConstants::TrainingBasicValue[color][t][tlevel][6];
+    vitalCostBasic = -GameConstants::TrainingBasicValue[color][t][tlevel][6];
     vitalCostBasic += colorNum - 1;//link越多体力消耗越多
 
     for (int a = 0; a < 5; a++)
@@ -456,59 +456,58 @@ void Game::calculateTrainingValue()
     //下层可以开始算了
     for (int i = 0; i < 6; i++)
     {
-      if (basicValueLower[i] == 0)
-        trainValueLower[t][i] = 0;
-      else
+      bool isRelated = basicValueLower[i] != 0;
+      double bvl = basicValueLower[i];
+      double umaBonus = i < 5 ? 1 + 0.01 * fiveStatusBonus[i] : 1;
+      valueLowerDouble[i] = bvl * cardMultiplier * umaBonus;
+      valueDouble[i] = valueLowerDouble[i];
+      if (i != t)
       {
-        double umaBonus = i < 5 ? 1 + 0.01 * fiveStatusBonus[i] : 1;
-        double v = basicValueLower[i] * cardMultiplier * umaBonus;
-
-        //经过后续实验验证，100上限在这里还没算
-        //if (v < 1)v = 1;
-        //if (v > 100)v = 100;
-
-        //L = k * B * G //下层，先不取整
-        valueLowerDouble[i] = v;
-
-        trainValueLower[t][i] = std::min(int(v),100);
+        valueDouble[i] += linkBasicValueBonus[color][i] * cardMultiplier * (isRelated ? umaBonus : 1);
       }
+
+
+      trainValueLower[t][i] = std::min(int(valueLowerDouble[i]),100);
+      
     }
     
     //然后算总数
 
-    //P1 = L + k * C
-    for (int i = 0; i < 6; i++)//link基础值bonus
-      valueDouble[i] = valueLowerDouble[i] + linkBasicValueBonus[color][i] * cardMultiplier;
+
+    //P3 = P2 * (1 + link数加成 + 大会优胜数加成)
+    int linkNumTrainingRate = isXiahesu() ? GameConstants::UAF_LinkNumBonusXiahesu[colorNum] : GameConstants::UAF_LinkNumBonus[colorNum];
+    valueDouble[t] *= 1.0 + 0.01 * linkNumTrainingRate;
+
+
+    for (int i = 0; i < 6; i++)
+    {
+      valueDouble[i] *= 1.0 + 0.01 * uaf_trainingBonus;
+    }
 
     //P2 = P1 * (1 + 红buff倍率)，红buff倍率只乘在当前训练的主属性上
-    if (uaf_buffNum[0] > 0)
+    if (uaf_buffNum[1] > 0)
     {
       double redBuffMultiplier = 1 + 0.01 * GameConstants::UAF_RedBuffBonus[colorNum];
       valueDouble[t] *= redBuffMultiplier;
     }
 
-    //P3 = P2 * (1 + link数加成 + 大会优胜数加成)
-    int linkNumTrainingRate = isXiahesu() ? GameConstants::UAF_LinkNumBonusXiahesu[colorNum] : GameConstants::UAF_LinkNumBonus[colorNum];
-    double scenarioTrainingMultiplier = 1.0 + 0.01 * (linkNumTrainingRate + uaf_trainingBonus);
-
-    for (int i = 0; i < 6; i++)
-      valueDouble[i] *= scenarioTrainingMultiplier;
-    
-
     //总数T = P3 + 蓝buff
-    if (uaf_buffNum[1] > 0)
+    if (uaf_buffNum[0] > 0)
     {
       for (int i = 0; i < 5; i++)
       {
         int levelGain = uaf_trainLevelGain[i];
         int maxLevelGain = 100 - uaf_trainingLevel[uaf_trainingColor[i]][i];
-        if (levelGain > 100 - maxLevelGain)levelGain = maxLevelGain;
+        if (levelGain > maxLevelGain)levelGain = maxLevelGain;
         valueDouble[i] += int(levelGain / 2) + 1;
       }
       valueDouble[5] += 20;
     }
 
-
+    if (turn != 0 && t == 2)
+    {
+      cout << "";
+    }
     //上层U = T - L
 
     for (int i = 0; i < 6; i++)
@@ -589,9 +588,9 @@ int Game::calculateFailureRate(int trainType, double failRateMultiply) const
   
   double f = 0;
   double dif = x0 - vital;
-  if (dif<0)
+  if (dif < 0)
   {
-    double f = A * dif * dif + B * dif;
+    f = A * dif * dif + B * dif;
   }
   if (f < 0)f = 0;
   if (f > 99)f = 99;//无练习下手，失败率最高99%
@@ -1119,6 +1118,8 @@ bool Game::isEnd() const
 
 int Game::getTrainingLevel(int item) const
 {
+  if (isXiahesu())return 4;
+
   int splevel = uaf_trainingLevel[uaf_trainingColor[item]][item];
   return convertTrainingLevel(splevel);
 }
