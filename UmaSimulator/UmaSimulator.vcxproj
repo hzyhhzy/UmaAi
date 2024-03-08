@@ -73,8 +73,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;$(PublicIncludeDirectories)</PublicIncludeDirectories>
-    <ExternalIncludePath>D:\boost_1_83_0;G:\libtorch\include;G:\libtorch\include\torch\csrc\api\include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>D:\boost_1_83_0\stage\lib;G:\libtorch\lib;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\Users\zhenz\Downloads\boost_1_84_0\boost_1_84_0;G:\libtorch\include;G:\libtorch\include\torch\csrc\api\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>C:\Users\zhenz\Downloads\boost_1_84_0\boost_1_84_0\stage\lib;G:\libtorch\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;$(PublicIncludeDirectories)</PublicIncludeDirectories>
