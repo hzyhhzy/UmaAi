@@ -4,6 +4,8 @@ using namespace std;
 TrainingSample Search::exportTrainingSample(float policyDelta)
 {
   assert(false && "todo");
+  return TrainingSample();
+  /*
   TrainingSample tdata;
   int bfcn = buyBuffChoiceNum(gameLastSearch.turn);
   double values[4][10];
@@ -52,5 +54,7 @@ TrainingSample Search::exportTrainingSample(float policyDelta)
 
   gameLastSearch.getNNInputV1(tdata.nnInputVector,param);
   return tdata;
+  */
 }
+
 

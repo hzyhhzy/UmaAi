@@ -65,9 +65,9 @@ void Game::printEvents(string s) const
 #endif
 }
 
+const int tableWidth = 17;
 static void printTableRow(string strs[5])
 {
-  const int width = 17;
   cout << std::left;
   for (int i = 0; i < 5; i++)
   {
@@ -90,7 +90,7 @@ static void printTableRow(string strs[5])
       }
     }
     s = "| " + s;
-    cout << std::setw(width + colorCodeLen) << s;
+    cout << std::setw(tableWidth + colorCodeLen) << s;
   }
   cout << "|" << endl << std::internal;
 }
@@ -124,6 +124,13 @@ void Game::print() const
       cout << termcolor::bright_yellow << "有切者" << termcolor::reset << endl;
     if (isAiJiao)
       cout << termcolor::bright_yellow << "有爱娇" << termcolor::reset << endl;
+    if (isPositiveThinking)
+      cout << termcolor::bright_yellow << "有正向思考" << termcolor::reset << endl;
+
+    if (failureRateBias < 0)
+      cout << termcolor::bright_yellow << "有练习上手" << termcolor::reset << endl;
+    if (failureRateBias > 0)
+      cout << termcolor::red << "有练习下手" << termcolor::reset << endl;
   }
   {
     cout << endl;
@@ -142,25 +149,55 @@ void Game::print() const
       cout << termcolor::cyan << "友人出行已走完" << termcolor::reset << endl;
   }
 
-  string color_command[3][2] = { {"\033[1;36m","\033[0m"},{"\033[1;31m","\033[0m"},{"\033[1;33m","\033[0m"} };
+  const string color_name[3] = { "蓝","红","黄" };
+  const string color_command[3] = { "\033[1;36m","\033[1;31m","\033[1;33m" };
+  const string end_command = "\033[0m";
   
-  
-
-    cout << "三种颜色五种训练的等级: \n";
-
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 5; ++j) {
-            if(i==0)
-                cout<< "\033[1;36m" << uaf_trainingLevel[i][j]<<" "<< "\033[0m"<<" ";
-            if(i==1)
-                cout << "\033[1;31m" << uaf_trainingLevel[i][j] << " " << "\033[0m" << " ";
-            if (i == 2)
-                cout << "\033[1;33m" << uaf_trainingLevel[i][j] << " " << "\033[0m" << " ";
-        }
-        cout << "\n";
-
+  if (!uaf_haveLose)
+    cout << termcolor::yellow << "UAF目前全胜" << endl << termcolor::reset;
+  else
+  {
+    cout << termcolor::red << "UAF没有全胜" << endl << termcolor::reset;
+    for (int i = 0; i < 3; i++)
+    {
+      if (uaf_haveLoseColor[i] > 0)
+        cout << color_command[i] << color_name[i] << "色输了" << uaf_haveLoseColor[i] << "场" << endl;
     }
+  }
 
+  cout << "训练等级: \n";
+
+  for (int i = 0; i < 3; ++i) {
+    string colorCode = color_command[i];
+    cout << colorCode;
+    cout << "Lv" << uaf_trainLevelColorTotal[i] ;
+    if (uaf_buffNum[i] > 0)
+      cout << "(还剩" << uaf_buffNum[i] << "次)  ";
+    else
+      cout << "           ";
+
+    cout << "各训练lv: ";
+    for (int j = 0; j < 5; ++j) {
+      int targetLv = 10 * (turn / 12);
+      if (targetLv < 10)targetLv = 10;
+      if (targetLv > 50)targetLv = 50;
+      int lv = uaf_trainingLevel[i][j];
+      if (lv >= targetLv)
+        cout << colorCode << lv << " " << end_command;
+      else
+        cout << lv << " ";
+    }
+    cout << "\n";
+
+  }
+  cout << termcolor::cyan << "还有 " << termcolor::yellow << uaf_xiangtanRemain << termcolor::cyan << " 次相谈" << termcolor::reset << endl;
+
+  if (turn < 72)
+  {
+    int nextCompetition = (turn / 12 + 1) * 12;
+    if (turn < 24)nextCompetition = 24;
+    cout << "距离下次UAF还有 " << nextCompetition - turn << " 回合" << endl;
+  }
  
 
   
@@ -171,7 +208,21 @@ void Game::print() const
     return;//比赛回合就不显示训练了
   }
 
-  string divLine = "|------------------------------------------------------------------------------------|\n";
+  //string divLine = "|------------------------------------------------------------------------------------|\n";
+
+  string divLineOne = "";
+  for (int i = 0; i < tableWidth - 1; i++)
+    divLineOne += "-";
+
+  string divLine = "|";
+  for (int i = 0; i < 5; i++)
+  {
+    divLine += color_command[uaf_trainingColor[i]] + divLineOne + end_command;
+    if (i != 4)
+      divLine += "-";
+  }
+  divLine += "|\n";
+
   cout << divLine;
   //训练标题，失败率，碎片
   {
@@ -241,7 +292,7 @@ void Game::print() const
     string oneRow[5];//表格中一行要显示的内容
     for (int i = 0; i < 5; i++)
     {
-      oneRow[i] = "等级：" + color_command[uaf_trainingColor[i]][0] + to_string(getTrainingLevel(i) + 1) + color_command[uaf_trainingColor[i]][1];
+      oneRow[i] = "等级：" + color_command[uaf_trainingColor[i]] + to_string(getTrainingLevel(i) + 1) + end_command;
       /*if (getTrainingLevel(i) < 4)
         oneRow[i] = oneRow[i] + " (" + to_string(uaf_trainingLevel[uaf_trainingColor[i]][i] % 4) + ")";
         */
@@ -277,8 +328,8 @@ void Game::print() const
     }
 
     for (int i = 0; i < 5; i++) {
-      oneRow[i] = "up:"+ color_command[uaf_trainingColor[i]][0]+to_string(accLvUp[i]) 
-                + " tot:" + to_string(lvUpTot[uaf_trainingColor[i]]) + "\033[0m" + color_command[uaf_trainingColor[i]][1];
+      oneRow[i] = "up:"+ color_command[uaf_trainingColor[i]]+to_string(accLvUp[i]) 
+                + " tot:" + to_string(lvUpTot[uaf_trainingColor[i]]) + "\033[0m" + end_command;
     }
     printTableRow(oneRow);
 

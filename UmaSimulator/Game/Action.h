@@ -30,6 +30,7 @@ enum XiangtanTypeEnum :int16_t
 };
 struct Action //一个回合的操作
 {
+  static const int MAX_ACTION_TYPE = 10 * 5 + 3;//10种相谈*5种训练+外出休息比赛
   static const int XiangtanFromColor[10];
   static const int XiangtanToColor[10];
   static const int XiangtanNumCost[10];
@@ -38,4 +39,7 @@ struct Action //一个回合的操作
   //注：外出是优先友人外出，没有再普通外出，不提供选项
   
   int16_t xiangtanType;//相谈的10种方式，依次是不谈，6种单次相谈，3种两次相谈
+
+  int toInt() const;
+  static Action intToAction(int i);
 };

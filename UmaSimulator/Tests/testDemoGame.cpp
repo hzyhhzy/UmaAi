@@ -184,8 +184,10 @@ void main_testDemoGame()
 			game.playerPrint = true;
 
 
+			assert(false && "todo");
 			double maxMean = -1e7;
 			double maxValue = -1e7;
+			/*
 			for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
 				for (int j = 0; j < 10; j++)
 				{
@@ -202,7 +204,7 @@ void main_testDemoGame()
 				restValue = search.allChoicesValue[0][7].value;
 			if (search.allChoicesValue[0][8].value > restValue)
 				restValue = search.allChoicesValue[0][8].value;
-
+				*/
 
 			wstring strToSendURA = L"larc";
 			strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
@@ -222,7 +224,8 @@ void main_testDemoGame()
 			}
 			cout.flush();
 			scoreLastTurn = maxMean;
-
+			assert(false && "todo");
+			/*
 			for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
 			{
 				if (Search::buyBuffChoiceNum(game.turn) > 1 && i == 0)
@@ -246,6 +249,7 @@ void main_testDemoGame()
 				}
 				cout << endl;
 			}
+			*/
 
 
 			game.applyTrainingAndNextTurn(rand, bestAction);

@@ -202,9 +202,8 @@ namespace TestAiScore
         Game game;
         game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
         game.eventStrength = test.eventStrength;
-   
-        Action action = { TRA_rest,XT_none };//无条件外出，这样就无视第一回合的人头分布了
-        auto value = search.evaluateSingleAction(game, rand, action);
+
+        auto value = search.evaluateNewGame(game, rand);
         for (Evaluator ev : search.evaluators)
             for (Game g : ev.gameInput)
             {

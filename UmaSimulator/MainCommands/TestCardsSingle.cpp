@@ -168,8 +168,7 @@ void main_testCardsSingle()
       Game game;
       game.newGame(rand, false, umaId, umaStars, cards.data(), zhongmaBlue, zhongmaBonus);
       //game.addAllStatus(initialStatusBonus);
-      Action action = { TRA_rest,XT_none };//无条件外出，这样就无视第一回合的人头分布了
-      auto value = search.evaluateSingleAction(game, rand, action);
+      auto value = search.evaluateNewGame(game, rand);
 
       cout << "胡局分数=\033[1;32m" << int(value.value) << "\033[0m  平均分数=\033[1;32m" << int(value.scoreMean) << "\033[0m" << endl;
 

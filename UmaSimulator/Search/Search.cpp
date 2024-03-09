@@ -11,6 +11,13 @@
 #include "../External/mathFunctions.h"
 using namespace std;
 
+const ModelOutputValueV1 ModelOutputValueV1::illegalValue = { 1e-5,0,1e-5 };
+
+const double Search::searchFactorStage[searchStageNum] = { 0.25,0.25,0.5 };
+const double Search::searchThreholdStdevStage[searchStageNum] = { 6,5,0 };//5个标准差，非常保守
+
+double SearchResult::normDistributionCdfInv[NormDistributionSampling];
+
 static void softmax(float* f, int n)
 {
   float max = -1e30;
@@ -33,28 +40,9 @@ static void softmax(float* f, int n)
 static double adjustRadicalFactor(double maxRf, int turn)
 {
   //计算该取的激进度
-  double remainTurns = turn >= 65 ? 1 : 65 - turn;
-  double factor = (remainTurns <= 5 ? 5 * remainTurns : remainTurns + 20) / (67.0 + 20);//分段折线
+  double remainTurns = TOTAL_TURN - turn;
+  double factor = pow(remainTurns / TOTAL_TURN, 0.5);
   return factor * maxRf;
-}
-
-int Search::buyBuffChoiceNum(int turn)
-{
-  return
-    (turn <= 35 || (43 <= turn && turn <= 59)) ? 1 :
-      turn == 41 ? 2 :
-      ((36 <= turn && turn <= 39) || turn >= 60) ? 4 :
-      -1;
-}
-
-Action Search::buyBuffAction(int idx, int turn)
-{
-  Action action;
-  action.train = -1;
-
-  assert(false && "todo");
-
-  return action;
 }
 
 Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame(threadNumInGame), batchSize(batchSize)
@@ -63,12 +51,9 @@ Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame
   for (int i = 0; i < threadNumInGame; i++)
     evaluators[i] = Evaluator(model, batchSize);
 
-  //正态分布累积分布函数的反函数在0~1上均匀取点
-  for (int i = 0; i < NormDistributionSampling; i++)
-  {
-    double x = (i + 0.5) / NormDistributionSampling;
-    normDistributionCdfInv[i] = normalCDFInverse(x);
-  }
+  allActionResults.resize(Action::MAX_ACTION_TYPE);
+  for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
+    allActionResults.clear();
 
   param.samplingNum = 0;
 }
@@ -82,11 +67,11 @@ void Search::setParam(SearchParam param0)
   param = param0;
 
   //让param.samplingNum是整batch
-  int batchEveryThread = (param.samplingNum - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
-  if (batchEveryThread <= 0)batchEveryThread = 1;
-  int samplingNumEveryThread = batchSize * batchEveryThread;
-  param.samplingNum = threadNumInGame * samplingNumEveryThread;
-  NNresultBuf.resize(param.samplingNum);
+  //int batchEveryThread = (param.samplingNum - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
+  //if (batchEveryThread <= 0)batchEveryThread = 1;
+  //int samplingNumEveryThread = batchSize * batchEveryThread;
+  //param.samplingNum = threadNumInGame * samplingNumEveryThread;
+  //NNresultBuf.resize(param.samplingNum);
 }
 
 
@@ -96,73 +81,81 @@ Action Search::runSearch(const Game& game,
 {
   assert(param.samplingNum >= 0 && "Search.param not initialized");
 
-  gameLastSearch = game;
-  ModelOutputValueV1 illegalValue;
+  rootGame = game;
+  double radicalFactor = adjustRadicalFactor(param.maxRadicalFactor, rootGame.turn);
+
+
+  bool shouldContinueSearch[Action::MAX_ACTION_TYPE];
+  for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
   {
-    illegalValue.scoreMean = -1e5;
-    illegalValue.scoreStdev = 0;
-    illegalValue.value = -1e5;
+    Action action = Action::intToAction(actionInt);
+
+    allActionResults[actionInt].clear();
+    allActionResults[actionInt].isLegal = rootGame.isLegal(action);
+    shouldContinueSearch[actionInt] = allActionResults[actionInt].isLegal;
   }
 
-  for (int i = 0; i < 4; i++)
-    for (int j = 0; j < 10; j++)
-    {
-      allChoicesValue[i][j] = illegalValue;
-    }
-  assert(false && "todo");
-  /*
-  for (int buyBuffChoice = 0; buyBuffChoice < buyBuffChoiceNum(game.turn); buyBuffChoice++)
+  double bestValue = -1e4;
+  Action bestAction = { -1,0 };
+  for (int stage = 0; stage < searchStageNum; stage++)
   {
-    Action action0=buyBuffAction(buyBuffChoice,game.turn);
-    int trainNumToConsider = //如果买训练buff，则一定不休息
-      buyBuffChoice == 0 ? 10 :
-      action0.buyVital20 ? 4 : //买体力消耗减少的buff肯定不点智力
-      5;
-    for (int t = 0; t < trainNumToConsider; t++)
-    {
-      Action action = action0;
-      action.train = t;
-      allChoicesValue[buyBuffChoice][t] = evaluateSingleAction(game, rand, action);
-      assert(game.isLegal(action) == (allChoicesValue[buyBuffChoice][t].scoreMean > -1e4));//检查isLegal写的对不对
-    }
+    bestValue = -1e4; 
+    bestAction = { -1,0 };
+    int searchN = searchFactorStage[stage] * param.samplingNum;
 
-  }
-  */
-  Action action;
-  double bestValue = -5e4;
-  for (int i = 0; i < 4; i++)
-    for (int j = 0; j < 10; j++)
+    for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
     {
-      double v = allChoicesValue[i][j].value;
-      if (v > bestValue)
+      if (!shouldContinueSearch[actionInt])continue;
+      Action action = Action::intToAction(actionInt);
+
+      searchSingleAction(searchN, rand, allActionResults[actionInt], action);
+      ModelOutputValueV1 value = allActionResults[actionInt].getWeightedMeanScore(radicalFactor);//同时也保存到了allActionResults[actionInt].lastCalculate里
+      if (value.value > bestValue)
       {
-        bestValue = v;
-        action = buyBuffAction(i, game.turn);
-        action.train = j;
+        bestValue = value.value;
+        bestAction = action;
       }
+
     }
-  return action;
+
+    double stdev = double(expectedSearchStdev) / sqrt(double(searchN));
+    double continueSearchThrehold = bestValue - searchThreholdStdevStage[stage] * stdev;
+
+    for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+    {
+      if (allActionResults[actionInt].lastCalculate.value < continueSearchThrehold)//比最高分选项低了好几个标准差，无需继续计算
+        shouldContinueSearch[actionInt] = false;
+    }
+
+  }
+
+
+
+  assert(rootGame.isLegal(bestAction));
+  return bestAction;
+}
+
+ModelOutputValueV1 Search::evaluateNewGame(const Game& game, std::mt19937_64& rand)
+{
+  assert(false && "todo");
+  return ModelOutputValueV1();
 }
 
 
-ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, std::mt19937_64& rand, Action action)
+void Search::searchSingleAction(
+  int searchN,
+  std::mt19937_64& rand,
+  SearchResult& searchResult,
+  Action action)
 {
   //先检查action是否合法
-  Game game1 = game;
-  bool isLegal = game1.applyTraining(rand, action);
-  if (!isLegal)
-  {
-    ModelOutputValueV1 illegalValue;
-    illegalValue.scoreMean = -1e5;
-    illegalValue.scoreStdev = 0;
-    illegalValue.value = -1e5;
-    return illegalValue;
-  }
+  assert(rootGame.isLegal(action));
 
+  int batchNumEachThread = calculateBatchNumEachThread(searchN);
+  searchN = calculateRealSearchN(searchN);
+  if (NNresultBuf.size() < searchN) NNresultBuf.resize(searchN);
 
-  assert(param.samplingNum % (threadNumInGame * batchSize) == 0);
-  assert(NNresultBuf.size() == param.samplingNum);
-  int samplingNumEveryThread = param.samplingNum / threadNumInGame;
+  int samplingNumEveryThread = batchNumEachThread * batchSize;
 
   if (threadNumInGame > 1)
   {
@@ -174,11 +167,10 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, std::mt19937_6
     for (int i = 0; i < threadNumInGame; ++i) {
       threads.push_back(std::thread(
 
-        [this, i, samplingNumEveryThread, &game, &rands, action]() {
-          evaluateSingleActionThread(
+        [this, i, samplingNumEveryThread, &rands, action]() {
+          searchSingleActionThread(
             i,
             NNresultBuf.data() + samplingNumEveryThread * i,
-            game,
             samplingNumEveryThread,
             rands[i],
             action
@@ -192,12 +184,11 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, std::mt19937_6
       thread.join();
     }
   }
-  else
+  else //single thread for debug/speedtest
   {
-    evaluateSingleActionThread(
+    searchSingleActionThread(
       0,
       NNresultBuf.data(),
-      game,
       samplingNumEveryThread,
       rand,
       action
@@ -205,55 +196,30 @@ ModelOutputValueV1 Search::evaluateSingleAction(const Game& game, std::mt19937_6
   }
 
 
-  double rf = adjustRadicalFactor(param.maxRadicalFactor, game.turn);
 
-  //整合所有结果
-  for (int i = 0; i < MAX_SCORE; i++)
-    finalScoreDistribution[i] = 0;
-  for (int i = 0; i < param.samplingNum; i++)
+
+  for (int i = 0; i < searchN; i++)
   {
-    addNormDistribution(NNresultBuf[i].scoreMean, NNresultBuf[i].scoreStdev);
+    searchResult.addResult(NNresultBuf[i]);
   }
 
-  double N = 0;//总样本量
-  double scoreTotal = 0;//score的和
-  double scoreSqrTotal = 0;//score的平方和
-  //double winNum = 0;//score>=target的次数期望
-
-  double valueWeightTotal = 0;//sum(n^p*x[n]),x[n] from small to big
-  double valueTotal = 0;//sum(n^p)
-  double totalNinv = 1.0 / (param.samplingNum * NormDistributionSampling);
-  for (int s = 0; s < MAX_SCORE; s++)
-  {
-    double n = finalScoreDistribution[s]; //当前分数的次数
-    double r = (N + 0.5 * n) * totalNinv; //当前分数的排名比例
-    N += n;
-    scoreTotal += n * s;
-    scoreSqrTotal += n * s * s;
-
-    //按排名加权平均
-    double w = pow(r, rf);
-    valueWeightTotal += w * n;
-    valueTotal += w * n * s;
-  }
-
-  ModelOutputValueV1 v;
-  v.scoreMean = scoreTotal / N;
-  v.scoreStdev = sqrt(scoreSqrTotal * N - scoreTotal * scoreTotal) / N;
-  v.value = valueTotal / valueWeightTotal;
-  return v;
 }
 
-void Search::evaluateSingleActionThread(int threadIdx, ModelOutputValueV1* resultBuf, const Game& game, int samplingNum, std::mt19937_64& rand, Action action)
+void Search::searchSingleActionThread(
+  int threadIdx,
+  ModelOutputValueV1* resultBuf,
+  int batchNum,
+
+  std::mt19937_64& rand,
+  Action action
+)
 {
   Evaluator& eva = evaluators[threadIdx];
   assert(eva.maxBatchsize == batchSize);
-  assert(samplingNum % batchSize == 0);
-  int batchNum = samplingNum / batchSize;
 
   for (int batch = 0; batch < batchNum; batch++)
   {
-    eva.gameInput.assign(batchSize, game);
+    eva.gameInput.assign(batchSize, rootGame);
 
     //先走第一步
     for (int i = 0; i < batchSize; i++)
@@ -286,13 +252,83 @@ void Search::evaluateSingleActionThread(int threadIdx, ModelOutputValueV1* resul
   }
 }
 
-void Search::addNormDistribution(double mean, double stdev)
+
+void SearchResult::initNormDistributionCdfTable()
 {
+  //正态分布累积分布函数的反函数在0~1上均匀取点
   for (int i = 0; i < NormDistributionSampling; i++)
   {
-    int y = int(mean + stdev * normDistributionCdfInv[i] + 0.5);
+    double x = (i + 0.5) / NormDistributionSampling;
+    normDistributionCdfInv[i] = normalCDFInverse(x);
+  }
+}
+
+void SearchResult::clear()
+{
+  isLegal = false;
+  num = 0;
+  for (int i = 0; i < MAX_SCORE; i++)
+    finalScoreDistribution[i] = 0;
+  lastCalculate = ModelOutputValueV1::illegalValue;
+}
+
+void SearchResult::addResult(ModelOutputValueV1 v)
+{
+  num += 1;
+  for (int i = 0; i < NormDistributionSampling; i++)
+  {
+    int y = int(v.scoreMean + v.scoreStdev * normDistributionCdfInv[i] + 0.5);
     if (y < 0)y = 0;
     if (y >= MAX_SCORE)y = MAX_SCORE - 1;
     finalScoreDistribution[y] += 1;
   }
+}
+
+ModelOutputValueV1 SearchResult::getWeightedMeanScore(double radicalFactor) 
+{
+  if (!isLegal)
+  {
+    lastCalculate = ModelOutputValueV1::illegalValue;
+    return ModelOutputValueV1::illegalValue;
+  }
+  double N = 0;//总样本量
+  double scoreTotal = 0;//score的和
+  double scoreSqrTotal = 0;//score的平方和
+  //double winNum = 0;//score>=target的次数期望
+
+  double valueWeightTotal = 0;//sum(n^p*x[n]),x[n] from small to big
+  double valueTotal = 0;//sum(n^p)
+  double totalNinv = 1.0 / (num * NormDistributionSampling);
+  for (int s = 0; s < MAX_SCORE; s++)
+  {
+    double n = finalScoreDistribution[s]; //当前分数的次数
+    double r = (N + 0.5 * n) * totalNinv; //当前分数的排名比例
+    N += n;
+    scoreTotal += n * s;
+    scoreSqrTotal += n * s * s;
+
+    //按排名加权平均
+    double w = pow(r, radicalFactor);
+    valueWeightTotal += w * n;
+    valueTotal += w * n * s;
+  }
+
+  ModelOutputValueV1 v;
+  v.scoreMean = scoreTotal / N;
+  v.scoreStdev = sqrt(scoreSqrTotal * N - scoreTotal * scoreTotal) / N;
+  v.value = valueTotal / valueWeightTotal;
+  lastCalculate = v;
+  return v;
+}
+
+int Search::calculateBatchNumEachThread(int searchN) const
+{
+  int batchEveryThread = (param.samplingNum - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
+  if (batchEveryThread <= 0)batchEveryThread = 1;
+  return batchEveryThread;
+}
+
+int Search::calculateRealSearchN(int searchN) const
+{
+  return calculateBatchNumEachThread(searchN) * threadNumInGame * batchSize;
 }

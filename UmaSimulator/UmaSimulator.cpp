@@ -6,9 +6,11 @@
 #include "Tests/tests.h"
 #include "MainCommands/MainCommands.h"
 #include "websocket.h"
+#include "Search/Search.h"
 
 int main()
 {
+	SearchResult::initNormDistributionCdfTable();
 	//main_testCuda();
 	//return 0;
 

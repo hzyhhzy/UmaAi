@@ -449,7 +449,7 @@ void Game::calculateTrainingValue()
     failRate[t] = calculateFailureRate(t, failRateMultiplier);
 
 
-    //k = 人头 * 训练 * 干劲 * 友情    //支援卡倍率
+    //人头 * 训练 * 干劲 * 友情    //支援卡倍率
     double cardMultiplier = (1 + 0.05 * cardNum) * (1 + 0.01 * totalXunlian) * (1 + 0.1 * (motivation - 3) * (1 + 0.01 * totalGanjing)) * totalYouqingMultiplier;
     trainValueCardMultiplier[t] = cardMultiplier;
 
@@ -461,6 +461,7 @@ void Game::calculateTrainingValue()
       double umaBonus = i < 5 ? 1 + 0.01 * fiveStatusBonus[i] : 1;
       valueLowerDouble[i] = bvl * cardMultiplier * umaBonus;
       valueDouble[i] = valueLowerDouble[i];
+      //加上link训练
       if (i != t)
       {
         valueDouble[i] += linkBasicValueBonus[color][i] * cardMultiplier * (isRelated ? umaBonus : 1);
@@ -471,64 +472,70 @@ void Game::calculateTrainingValue()
       
     }
     
-    //然后算总数
-
-
-    //P3 = P2 * (1 + link数加成 + 大会优胜数加成)
+    //主属性link数加成
     int linkNumTrainingRate = isXiahesu() ? GameConstants::UAF_LinkNumBonusXiahesu[colorNum] : GameConstants::UAF_LinkNumBonus[colorNum];
     valueDouble[t] *= 1.0 + 0.01 * linkNumTrainingRate;
 
-
+    //剧本加成
     for (int i = 0; i < 6; i++)
     {
       valueDouble[i] *= 1.0 + 0.01 * uaf_trainingBonus;
     }
 
-    //P2 = P1 * (1 + 红buff倍率)，红buff倍率只乘在当前训练的主属性上
+    //红buff倍率只乘在当前训练的主属性上
     if (uaf_buffNum[1] > 0)
     {
       double redBuffMultiplier = 1 + 0.01 * GameConstants::UAF_RedBuffBonus[colorNum];
       valueDouble[t] *= redBuffMultiplier;
     }
 
-    //总数T = P3 + 蓝buff
+    //蓝buff
     if (uaf_buffNum[0] > 0)
     {
       for (int i = 0; i < 5; i++)
       {
         int levelGain = uaf_trainLevelGain[i];
-        int maxLevelGain = 100 - uaf_trainingLevel[uaf_trainingColor[i]][i];
-        if (levelGain > maxLevelGain)levelGain = maxLevelGain;
+        //int maxLevelGain = 100 - uaf_trainingLevel[uaf_trainingColor[i]][i];
+        //if (levelGain > maxLevelGain)levelGain = maxLevelGain;
         valueDouble[i] += int(levelGain / 2) + 1;
       }
       valueDouble[5] += 20;
     }
 
-    if (turn != 0 && t == 2)
-    {
-      cout << "";
-    }
-    //上层U = T - L
+    //上层=总数-下层
 
     for (int i = 0; i < 6; i++)
     {
-      //这里还要研究一下，upper是总数减去考虑100上限的下层，还是减去没考虑上限的浮点数下层
-      //之前有一个样例，为智高峰固有买了技能之后，下层+1，上层反而-1，因此应该是前者
+      //upper是总数减去考虑100上限的下层
+      trainValueLower[t][i] = calculateRealStatusGain(i, trainValueLower[t][i]);
       int upper = valueDouble[i] - trainValueLower[t][i];
       if (upper > 100)upper = 100;
-      trainValue[t][i] = upper + trainValueLower[t][i];
+      int tot = upper + trainValueLower[t][i];
+      trainValue[t][i] = calculateRealStatusGain(i, tot);
     }
 
 
   }
 }
+int Game::calculateRealStatusGain(int idx, int value) const//考虑1200以上为2的倍数的实际属性增加值
+{
+  if (idx == 5)return value;
+  int newValue = fiveStatus[idx] + value;
+  if (newValue <= 1200)return value;
+  if (value == 1)return 2;
+  return (newValue / 2) * 2 - fiveStatus[idx];
+}
 void Game::addStatus(int idx, int value)
 {
-  fiveStatus[idx] += value;
-  if (fiveStatus[idx] > fiveStatusLimit[idx])
-    fiveStatus[idx] = fiveStatusLimit[idx];
-  if (fiveStatus[idx] < 1)
-    fiveStatus[idx] = 1;
+  int t = fiveStatus[idx] + value;
+  
+  if (t > fiveStatusLimit[idx])
+    t = fiveStatusLimit[idx];
+  if (t < 1)
+    t = 1;
+  if (idx < 5 && t > 1200)
+    t = (t / 2) * 2;
+  fiveStatus[idx] = t;
 }
 void Game::addVital(int value)
 {
@@ -588,7 +595,7 @@ int Game::calculateFailureRate(int trainType, double failRateMultiply) const
   
   double f = 0;
   double dif = x0 - vital;
-  if (dif < 0)
+  if (dif > 0)
   {
     f = A * dif * dif + B * dif;
   }
