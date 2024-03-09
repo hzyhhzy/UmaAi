@@ -66,7 +66,7 @@ public:
   Action runSearch(const Game& game,
     std::mt19937_64& rand);//对于当前局面，计算每个选项的分数并返回最优选项
 
-  ModelOutputValueV1 evaluateNewGame(const Game& game,
+  ModelOutputValueV1 evaluateNewGame(const Game& game, int searchN, double radicalFactor,
     std::mt19937_64& rand);//直接从第一回合开始蒙特卡洛，用于测试卡组强度或者ai强度
 
   //对单个action进行蒙特卡洛，并将结果加到allActionResults里

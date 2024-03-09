@@ -184,6 +184,8 @@ void main_ai()
 		cout << jsonStr << endl;
 		lastTurn = game.turn;
 		game.print();
+		Action hl = Evaluator::handWrittenStrategy(game);
+		cout << hl.toString() << endl;
 		//if (game.venusIsWisdomActive)
 		/*
 		{

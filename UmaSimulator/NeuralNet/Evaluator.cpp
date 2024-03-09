@@ -118,12 +118,3 @@ Evaluator::Evaluator(Model* model, int maxBatchsize):model(model), maxBatchsize(
 }
 
 
-
-
-
-Action Evaluator::handWrittenStrategy(const Game& game)
-{
-  assert(false && "todo");
-  return Action();
-}
-

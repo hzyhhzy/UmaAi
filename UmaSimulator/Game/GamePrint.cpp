@@ -106,7 +106,7 @@ void Game::print() const
     int turnsBeforeRace = -1;
     for (int i = turn; i < TOTAL_TURN; i++)
     {
-      if (GameDatabase::AllUmas[umaId].races[i] & TURN_RACE)
+      if (isRacingTurn[i])
       {
         turnsBeforeRace = i - turn;
         break;

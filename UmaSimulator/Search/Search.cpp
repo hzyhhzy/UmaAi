@@ -53,7 +53,7 @@ Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame
 
   allActionResults.resize(Action::MAX_ACTION_TYPE);
   for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
-    allActionResults.clear();
+    allActionResults[i].clear();
 
   param.samplingNum = 0;
 }
@@ -135,10 +135,16 @@ Action Search::runSearch(const Game& game,
   return bestAction;
 }
 
-ModelOutputValueV1 Search::evaluateNewGame(const Game& game, std::mt19937_64& rand)
+ModelOutputValueV1 Search::evaluateNewGame(const Game& game, int searchN, double radicalFactor, std::mt19937_64& rand)
 {
-  assert(false && "todo");
-  return ModelOutputValueV1();
+  rootGame = game;
+  param.maxDepth = TOTAL_TURN;
+  param.maxRadicalFactor = radicalFactor;
+  param.samplingNum = searchN;
+  allActionResults[0].clear();
+  allActionResults[0].isLegal = true;
+  searchSingleAction(searchN, rand, allActionResults[0], Action::Action_RedistributeCardsForTest);
+  return allActionResults[0].getWeightedMeanScore(radicalFactor);
 }
 
 
@@ -149,7 +155,7 @@ void Search::searchSingleAction(
   Action action)
 {
   //先检查action是否合法
-  assert(rootGame.isLegal(action));
+  assert(action.train == TRA_redistributeCardsForTest || rootGame.isLegal(action));
 
   int batchNumEachThread = calculateBatchNumEachThread(searchN);
   searchN = calculateRealSearchN(searchN);
@@ -167,11 +173,11 @@ void Search::searchSingleAction(
     for (int i = 0; i < threadNumInGame; ++i) {
       threads.push_back(std::thread(
 
-        [this, i, samplingNumEveryThread, &rands, action]() {
+        [this, i, batchNumEachThread, samplingNumEveryThread, &rands, action]() {
           searchSingleActionThread(
             i,
             NNresultBuf.data() + samplingNumEveryThread * i,
-            samplingNumEveryThread,
+            batchNumEachThread,
             rands[i],
             action
           );
@@ -189,7 +195,7 @@ void Search::searchSingleAction(
     searchSingleActionThread(
       0,
       NNresultBuf.data(),
-      samplingNumEveryThread,
+      batchNumEachThread,
       rand,
       action
     );
@@ -217,6 +223,8 @@ void Search::searchSingleActionThread(
   Evaluator& eva = evaluators[threadIdx];
   assert(eva.maxBatchsize == batchSize);
 
+  bool isNewGame = action.train == TRA_redistributeCardsForTest;
+
   for (int batch = 0; batch < batchNum; batch++)
   {
     eva.gameInput.assign(batchSize, rootGame);
@@ -224,7 +232,10 @@ void Search::searchSingleActionThread(
     //先走第一步
     for (int i = 0; i < batchSize; i++)
     {
-      eva.gameInput[i].applyTrainingAndNextTurn(rand, action);
+      if(!isNewGame)//ai计算
+        eva.gameInput[i].applyTrainingAndNextTurn(rand, action);
+      else//重置游戏
+        eva.gameInput[i].randomDistributeCards(rand);
     }
 
     for (int depth = 0; depth < param.maxDepth; depth++)

@@ -168,7 +168,7 @@ void main_testCardsSingle()
       Game game;
       game.newGame(rand, false, umaId, umaStars, cards.data(), zhongmaBlue, zhongmaBonus);
       //game.addAllStatus(initialStatusBonus);
-      auto value = search.evaluateNewGame(game, rand);
+      auto value = search.evaluateNewGame(game, searchN, radicalFactor, rand);
 
       cout << "胡局分数=\033[1;32m" << int(value.value) << "\033[0m  平均分数=\033[1;32m" << int(value.scoreMean) << "\033[0m" << endl;
 

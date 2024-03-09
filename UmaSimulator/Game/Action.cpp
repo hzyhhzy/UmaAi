@@ -3,6 +3,32 @@
 const int Action::XiangtanFromColor[10] = { -1,0,0,1,1,2,2,-1,-1,-1 };
 const int Action::XiangtanToColor[10] = { -1,1,2,0,2,0,1,0,1,2 };
 const int Action::XiangtanNumCost[10] = { 0,1,1,1,1,1,1,2,2,2 };
+const Action Action::Action_RedistributeCardsForTest = { TRA_redistributeCardsForTest,0 };
+
+const std::string trainingName[8] =
+{
+  "速",
+  "耐",
+  "力",
+  "根",
+  "智",
+  "休息",
+  "外出",
+  "比赛"
+};
+const std::string xiangtanName[10] =
+{
+  "无",
+  "蓝->红",
+  "蓝->黄",
+  "红->蓝",
+  "红->黄",
+  "黄->蓝",
+  "黄->红",
+  "全蓝",
+  "全红",
+  "全黄",
+};
 
 int Action::toInt() const
 {
@@ -25,4 +51,9 @@ Action Action::intToAction(int i)
     a.xiangtanType = i / 5;
   }
   return a;
+}
+
+std::string Action::toString() const
+{
+  return trainingName[train] + " 相谈:" + xiangtanName[xiangtanType];
 }

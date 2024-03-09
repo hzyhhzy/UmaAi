@@ -173,6 +173,7 @@
     <ClCompile Include="MainCommands\TestAiScore.cpp" />
     <ClCompile Include="MainCommands\TestCardsSingle.cpp" />
     <ClCompile Include="NeuralNet\Evaluator.cpp" />
+    <ClCompile Include="NeuralNet\HandwrittenLogic.cpp" />
     <ClCompile Include="NeuralNet\Model.cpp" />
     <ClCompile Include="NeuralNet\Model_cuda.cpp" />
     <ClCompile Include="NeuralNet\Model_libtorch.cpp" />

@@ -203,7 +203,9 @@ namespace TestAiScore
         game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
         game.eventStrength = test.eventStrength;
 
-        auto value = search.evaluateNewGame(game, rand);
+        auto value = search.evaluateNewGame(game, searchN, radicalFactor, rand);
+
+        assert(false && "后面看起来写的不对或者需要修改，有时间再改");
         for (Evaluator ev : search.evaluators)
             for (Game g : ev.gameInput)
             {

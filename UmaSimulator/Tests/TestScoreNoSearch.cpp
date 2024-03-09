@@ -29,16 +29,16 @@ void main_testScoreNoSearch()
 #endif
 
   const int threadNum = 8;
-  int batchsize = 2048;
+  int batchsize = 16;
   const double radicalFactor = 5;//激进度
   TestConfig test;
 
   // 检查工作目录
-  GameDatabase::loadTranslation("../db/text_data.json");
-  GameDatabase::loadUmas("../db/umaDB.json");
-  GameDatabase::loadDBCards("../db/cardDB.json");
+  GameDatabase::loadTranslation("./db/text_data.json");
+  GameDatabase::loadUmas("./db/umaDB.json");
+  GameDatabase::loadDBCards("./db/cardDB.json");
 
-  test = TestConfig::loadFile("../ConfigTemplate/testConfig.json");  
+  test = TestConfig::loadFile("./testConfig.json");  
   cout << test.explain() << endl;
 
   test.totalGames = ((test.totalGames - 1) / (threadNum * batchsize) + 1) * threadNum * batchsize;
@@ -64,7 +64,7 @@ void main_testScoreNoSearch()
   game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
   
   auto start = std::chrono::high_resolution_clock::now();
-  auto value = search.evaluateNewGame(game, rand);
+  auto value = search.evaluateNewGame(game, test.totalGames, radicalFactor, rand);
   auto stop = std::chrono::high_resolution_clock::now();
 
   cout << "平均分数=\033[1;32m" << int(value.scoreMean) << " \033[0m" << "胡局分数=\033[1;32m" << int(value.value) << "\033[0m " << "标准差=\033[1;32m" << int(value.scoreStdev) << "\033[0m  " << endl;

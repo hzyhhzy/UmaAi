@@ -5,7 +5,7 @@
 #include "../config.h"
 
 const int TOTAL_TURN = 78;
-const int MAX_HEAD_NUM = 78;
+const int MAX_HEAD_NUM = 9;
 
 class GameConstants
 {

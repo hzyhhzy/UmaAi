@@ -213,6 +213,9 @@
     <ClCompile Include="NeuralNet\Model.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="NeuralNet\HandwrittenLogic.cpp">
+      <Filter>源文件\NeuralNet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">

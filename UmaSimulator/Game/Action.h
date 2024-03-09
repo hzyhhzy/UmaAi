@@ -12,7 +12,8 @@ enum TrainActionTypeEnum :int16_t
   TRA_wiz,
   TRA_rest,
   TRA_outgoing,
-  TRA_race
+  TRA_race,
+  TRA_redistributeCardsForTest = -1 //使用这个标记时，说明要randomDistributeCards，用于测试ai分数，在Search::searchSingleActionThread中使用
 };
 enum XiangtanTypeEnum :int16_t
 {
@@ -34,6 +35,7 @@ struct Action //一个回合的操作
   static const int XiangtanFromColor[10];
   static const int XiangtanToColor[10];
   static const int XiangtanNumCost[10];
+  static const Action Action_RedistributeCardsForTest;
 
   int16_t train;//01234速耐力根智，5外出，6休息，7比赛 
   //注：外出是优先友人外出，没有再普通外出，不提供选项
@@ -41,5 +43,6 @@ struct Action //一个回合的操作
   int16_t xiangtanType;//相谈的10种方式，依次是不谈，6种单次相谈，3种两次相谈
 
   int toInt() const;
+  std::string toString() const;
   static Action intToAction(int i);
 };

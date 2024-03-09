@@ -15,6 +15,7 @@ struct Game
   //基本状态，不包括当前回合的训练信息
   int32_t umaId;//马娘编号，见KnownUmas.cpp
   bool isLinkUma;//是否为link马
+  bool isRacingTurn[TOTAL_TURN];//这回合是否比赛
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
   int16_t eventStrength;//每回合有（待测）概率加这么多属性，模拟支援卡事件
 

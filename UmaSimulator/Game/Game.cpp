@@ -14,6 +14,8 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
   umaId = newUmaId;
   isLinkUma = GameConstants::isLinkChara(umaId);
+  for (int i = 0; i < TOTAL_TURN; i++)
+    isRacingTurn[i] = GameDatabase::AllUmas[umaId].races[i] == TURN_RACE;
   for (int i = 0; i < 5; i++)
     fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
   eventStrength = GameConstants::EventStrengthDefault;
@@ -649,7 +651,7 @@ void Game::xiangtanAndRecalculate(int x)
 {
   if (x == 0)return;
   int targetC = Action::XiangtanToColor[x];
-  int sourceC = Action::XiangtanToColor[x];
+  int sourceC = Action::XiangtanFromColor[x];
   for (int i = 0; i < 5; i++)
   {
     if (sourceC == -1 || sourceC == uaf_trainingColor[i])
@@ -1144,7 +1146,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   turn++;
   if (turn < TOTAL_TURN)
   {
-    isRacing = GameDatabase::AllUmas[umaId].races[turn] == TURN_RACE;
+    isRacing = isRacingTurn[turn];
     if (isRacing)
       checkEventAfterTrain(rand);//跳过这个回合
   }
@@ -1377,12 +1379,12 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     runRace(10, 80);
 
     //记者
-    if (persons[16].friendship >= 100)
+    if (persons[7].friendship >= 100)
     {
       addAllStatus(5);
       skillPt += 20;
     }
-    else if (persons[16].friendship >= 80)
+    else if (persons[7].friendship >= 80)
     {
       addAllStatus(3);
       skillPt += 10;
@@ -1414,17 +1416,20 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
       skillPt += 40;//全身全灵与进化
       addAllStatus(55);
       skillPt += 140;
+      //cout << 1;
     }
     else if (allTotallyWin)
     {
       skillPt += 40;//全身全灵与进化
       addAllStatus(30);
       skillPt += 90;
+      //cout << 2;
     }
     else
     {
       addAllStatus(20);
       skillPt += 70;
+      //cout << 3;
     }
 
 
