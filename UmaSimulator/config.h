@@ -7,7 +7,8 @@
 //#define UMAAI_SELFPLAY   //跑数据（用于神经网络训练）
 //#define UMAAI_TESTLIBTORCH   //测试c++版torch
 //#define UMAAI_MODELBENCHMARK   //测试神经网络速度
-//#define UMAAI_TESTSCORENOSEARCH //测试神经网络policy强度
+//#define UMAAI_TESTSCORESEARCH //测试蒙特卡洛强度
+//#define UMAAI_TESTSCORENOSEARCH //测试神经网络/手写逻辑policy强度
 
 #if defined UMAAI_TESTSCORE || defined UMAAI_SIMULATOR 
 #define PRINT_GAME_EVENT

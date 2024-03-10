@@ -7,8 +7,6 @@
 #include "Game.h"
 using namespace std;
 using json = nlohmann::json;
-int zhongmaBlue[5] = { 18,0,0,0,0 };
-int zhongmaBonus[6] = { 20,0,40,0,20,150 };
 // 是否把低破卡当做满破处理（会导致一定的预测偏差）
 // 为True时会把所有ID的最高位改为满破（马娘5xxx，卡4xxx）
 static bool maskUmaId = true;
@@ -36,7 +34,9 @@ bool Game::loadGameFromJson(std::string jsonStr)
         if(i<5){ newzmbluecount[i] = j["zhongMaBlueCount"][i]; }
         
     }
-    newGame(rand,true,j["umaId"], j["umaStar"],newcards,zhongmaBlue,zhongmaBonus);
+    //int zhongmaBlue[5] = { 18,0,0,0,0 };
+    int zhongmaBonus[6] = { 10,10,30,0,10,70 };
+    newGame(rand,true,j["umaId"], j["umaStar"],newcards, newzmbluecount,zhongmaBonus);
     turn = j["turn"];
     vital = j["vital"];
     maxVital = j["maxVital"];

@@ -153,7 +153,7 @@ public:
   }
   int uaf_competitionFinishedNum() const;//已经几次uaf大会了
   bool isXiangtanLegal(int x) const;//此相谈是否合法且有意义
-  void xiangtanAndRecalculate(int x);//相谈，并重新计算属性值
+  void xiangtanAndRecalculate(int x, bool forHandwrittenLogic);//相谈，并重新计算属性值，如果forHandwrittenLogic则是给手写逻辑用的，可以略微不准确
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
 
 
