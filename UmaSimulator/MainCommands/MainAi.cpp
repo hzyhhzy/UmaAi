@@ -181,6 +181,18 @@ void main_ai()
 			std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
 			continue;
 		}
+		bool maybeNonTrainingTurn = true;//有时会收到一些非训练回合的信息，共同点是没人头。正常训练没人头的概率约百万分之一
+		for (int i = 0; i < 5; i++)
+			for (int j = 0; j < 5; j++)
+			{
+				if (game.personDistribution[i][j] != -1)
+					maybeNonTrainingTurn = false;
+			}
+		if (maybeNonTrainingTurn)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
+			continue;
+		}
 		//cout << jsonStr << endl;
 		lastTurn = game.turn;
 		//if (game.venusIsWisdomActive)

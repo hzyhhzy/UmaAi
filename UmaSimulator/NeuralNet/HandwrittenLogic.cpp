@@ -4,9 +4,10 @@
 #include "../Search/Search.h"
 
 
-const double statusWeights[5] = { 6.0,5.0,5.0,5.0,4.0 };
-const double jibanValue = 14;
-const double vitalFactor = 6;
+const double statusWeights[5] = { 5.0,5.0,5.0,5.0,5.0 };
+const double jibanValue = 12;
+const double vitalFactorStart = 5;
+const double vitalFactorEnd = 8;
 
 const double reserveStatusFactor = 30;//控属性时给每回合预留多少，从0逐渐增加到这个数字
 
@@ -16,9 +17,9 @@ const double outgoingBonusIfNotFullMotivation = 150;//掉心情时提高外出分数
 const double nonTrainBonus = 100;//这回合不训练下回合+3的bonus，乘 剩余回合数/TOTAL_TURN
 const double raceBonus = 200;//比赛收益，不考虑体力
 
-const double colorBuffEvalRaw[3] = { 160,120,60 };//三色buff估值,其中红buff乘turn/TOTAL_TURN
-const double colorLevelEvalRaw[3] = { 8,8,8 };//不考虑凑大会目标的三色训练等级估值
-const double colorLevelTargetFactor = 80;//凑大会目标的系数
+const double colorBuffEvalRaw[3] = { 100,70,50 };//三色buff估值,其中红buff乘turn/TOTAL_TURN
+const double colorLevelEvalRaw[3] = { 6,6,4 };//不考虑凑大会目标的三色训练等级估值
+const double colorLevelTargetFactor = 100;//凑大会目标的系数
 
 const double xiangtanEvalBasicStart = 350;//消耗一次相谈的估值衰减(刚开局)
 const double xiangtanEvalBasicEnd = 350;//消耗一次相谈的估值衰减(结束)
@@ -31,8 +32,8 @@ static void levelGainEvaluation(const Game& g, double* result) { //result[0:3]依
   int uafRemainTurn = (g.turn / 12 + 1) * 12 - g.turn - 1;
   if (g.turn < 12)uafRemainTurn += 12;
   int uafRemainTurn2 = uafRemainTurn + 12;
-  double targetFactor1 = 3 * colorLevelTargetFactor / (double(uafRemainTurn) + 3);
-  double targetFactor2 = 3 * colorLevelTargetFactor / (double(uafRemainTurn2) + 3);
+  double targetFactor1 = 3  / (double(uafRemainTurn) + 3);
+  double targetFactor2 = 3  / (double(uafRemainTurn2) + 3);
 
 
   int targetLv = 10 * (g.turn / 12);
@@ -46,11 +47,11 @@ static void levelGainEvaluation(const Game& g, double* result) { //result[0:3]依
       double v = colorLevelEvalRaw[color] * lv;
       if (hasTarget1 && lv < targetLv)
       {
-        v -= targetFactor1 * (targetLv - lv + 3);
+        v -= colorLevelTargetFactor * targetFactor1 * (targetLv - lv + 8 * targetFactor1);
       }
       if (hasTarget2 && lv < targetLv2)
       {
-        v -= targetFactor2 * (targetLv2 - lv);
+        v -= colorLevelTargetFactor * targetFactor2 * (targetLv2 - lv);
       }
       return v;
     };
@@ -265,6 +266,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   double bestValue = -1e4;
   Game g = game;
 
+  double vitalFactor = vitalFactorStart + (game.turn / double(TOTAL_TURN)) * (vitalFactorEnd - vitalFactorStart);
 
   int maxVitalEquvalant = calculateMaxVitalEquvalant(game);
   double vitalEvalBeforeTrain = vitalEvaluation(std::min(maxVitalEquvalant, int(game.vital)), game.maxVital);
@@ -333,7 +335,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       continue;
     g = game;
     if (xt != XT_none)
-      g.xiangtanAndRecalculate(xt);
+      g.xiangtanAndRecalculate(xt, true);
 
     double levelGainE[3], statusGainE[5];
     levelGainEvaluation(g, levelGainE);

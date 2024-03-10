@@ -16,6 +16,11 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   isLinkUma = GameConstants::isLinkChara(umaId);
   for (int i = 0; i < TOTAL_TURN; i++)
     isRacingTurn[i] = GameDatabase::AllUmas[umaId].races[i] == TURN_RACE;
+  assert(isRacingTurn[11] == true);//出道赛
+  isRacingTurn[TOTAL_TURN - 5] = true;//ura1
+  isRacingTurn[TOTAL_TURN - 3] = true;//ura2
+  isRacingTurn[TOTAL_TURN - 1] = true;//ura3
+
   for (int i = 0; i < 5; i++)
     fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
   eventStrength = GameConstants::EventStrengthDefault;
@@ -651,7 +656,7 @@ bool Game::isXiangtanLegal(int x) const
     assert(false);
   return false;
 }
-void Game::xiangtanAndRecalculate(int x)
+void Game::xiangtanAndRecalculate(int x, bool forHandwrittenLogic)
 {
   if (x == 0)return;
   int targetC = Action::XiangtanToColor[x];
@@ -663,6 +668,8 @@ void Game::xiangtanAndRecalculate(int x)
   }
   uaf_xiangtanRemain -= Action::XiangtanNumCost[x];
   assert(uaf_xiangtanRemain >= 0);
+  if (!forHandwrittenLogic)
+    cardEffectCalculated = false;//保险起见，重新计算，比如速司机之类的固有可能会改变
   calculateTrainingValue();
 }
 void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
@@ -918,7 +925,7 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
   else if (action.train <= 4 && action.train >= 0)//常规训练
   {
     if (action.xiangtanType != XT_none)
-      xiangtanAndRecalculate(action.xiangtanType);
+      xiangtanAndRecalculate(action.xiangtanType, false);
 
     if (rand() % 100 < failRate[action.train])//训练失败
     {
@@ -1121,6 +1128,7 @@ int Game::finalScore() const
     total += GameConstants::FiveStatusFinalScore[min(fiveStatus[i],fiveStatusLimit[i])];
   
   total += getSkillScore();
+  //return uaf_haveLose ? 10000 : 20000;
   return total;
 }
 
@@ -1232,6 +1240,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
 
   if (turn == 11)//相谈刷新
   {
+    assert(isRacing);
     uaf_xiangtanRemain = 3;
   }
   else if (turn == 23)//第一年年底
@@ -1370,16 +1379,19 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   }
   else if (turn == 73)//ura1
   {
+    assert(isRacing);
     runRace(10, 40);
     printEvents("ura1结束");
   }
   else if (turn == 75)//ura2
   {
+    assert(isRacing);
     runRace(10, 60);
     printEvents("ura2结束");
   }
   else if (turn == 77)//ura3，游戏结束
   {
+    assert(isRacing);
     runRace(10, 80);
 
     //记者

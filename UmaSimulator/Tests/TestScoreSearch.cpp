@@ -28,11 +28,11 @@ namespace TestScoreSearch
   const string modelpath = "../training/example/model.txt";
 #endif
 
-  const int threadNum = 8;
-  const int threadNumInner = 1;
+  const int threadNum = 1;
+  const int threadNumInner = 8;
   const double radicalFactor = 3;//¼¤½ø¶È
   const int searchDepth = TOTAL_TURN;
-  const int searchN = 1024;
+  const int searchN = 2048;
   SearchParam searchParam = { searchN,searchDepth,radicalFactor };
   const bool recordGame = false;
 
@@ -65,7 +65,7 @@ namespace TestScoreSearch
     random_device rd;
     auto rand = mt19937_64(rd());
 
-    int batchsize = 512;
+    int batchsize = 16;
     Model* modelptr = NULL;
     Model model(modelpath, batchsize);
     if (modelpath != "")
