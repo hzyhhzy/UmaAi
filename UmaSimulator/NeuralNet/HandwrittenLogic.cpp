@@ -233,7 +233,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
   int turnNumBeforeRefresh = countTurnNumBeforeXiangtanRefresh(game);
   double xiangtanEvalBasic = xiangtanEvalBasicStart + (game.turn / double(TOTAL_TURN)) * (xiangtanEvalBasicEnd - xiangtanEvalBasicStart);
-  double xiangtanCost[3];
+  double xiangtanCost[4];
   xiangtanCost[0] = 0.0;
   for (int i = 1; i <= game.uaf_xiangtanRemain; i++)
   {

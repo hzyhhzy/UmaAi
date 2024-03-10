@@ -852,10 +852,10 @@ void Game::checkLianghuaGuyou()
 }
 bool Game::applyTraining(std::mt19937_64& rand, Action action)
 {
-  uaf_lastTurnNotTrain = false;
   if (isRacing)
   {
     assert(false && "所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
+    uaf_lastTurnNotTrain = true;
     return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
   }
   if (action.train == TRA_rest)//休息
@@ -1053,10 +1053,12 @@ bool Game::applyTraining(std::mt19937_64& rand, Action action)
     {
       if (uaf_buffNum[color] > 0)uaf_buffNum[color] -= 1;
     }
+    uaf_lastTurnNotTrain = false;
   }
   else
   {
     printEvents("未知的训练项目");
+    uaf_lastTurnNotTrain = true;
     return false;
   }
   return true;
