@@ -9,7 +9,7 @@ int GameConfig::eventStrength = 20;
 bool GameConfig::removeDebuff5 = true;
 bool GameConfig::removeDebuff7 = true;
 
-string GameConfig::modelPath = "db/model.txt";
+string GameConfig::modelPath ="";// "db/model.txt";
 int GameConfig::threadNum = 4;
 int GameConfig::batchSize = 256;
 int GameConfig::searchN = 2000;

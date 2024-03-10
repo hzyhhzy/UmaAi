@@ -167,7 +167,7 @@ void main_ai()
 		}
 
 		bool suc = game.loadGameFromJson(jsonStr);
-		//cout << "UZI IS STLL ALIVE\n" << endl;
+		
 		game.eventStrength = GameConfig::eventStrength;
 
 		if (!suc)
@@ -216,7 +216,7 @@ void main_ai()
 				string prefix[] = { "速:", "耐:", "力:", "根:", "智:", "| 休息: ", "外出: ", "比赛: " };
 				if (p < -5000)
 				{
-					cout << prefix[which] << "--- ";
+					cout << prefix[which] << "---- ";
 					return;
 				}
 				cout << fixed << setprecision(0);
@@ -288,8 +288,8 @@ void main_ai()
 				restValue = outgoingValue;
 
 
-			//wstring strToSendURA = L"larc";
-			//strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
+			wstring strToSendURA = L"UAF";
+			strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
 			if (game.turn == 0 || scoreFirstTurn == 0)
 			{
 				cout << "评分预测: 平均\033[1;32m" << int(maxMean) << "\033[0m" << "，乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m" << endl;
@@ -306,27 +306,35 @@ void main_ai()
 			}
 			cout.flush();
 			scoreLastTurn = maxMean;
+			
 
-
+			int xiangtannum = 0;
+			for (int xt = 0; xt < 10; xt++) {
+				if (!game.isXiangtanLegal(xt))continue;
+				xiangtannum += 1;
+			}
+			strToSendURA += L" " + to_wstring(xiangtannum);
 			for (int xt = 0; xt < 10; xt++)
 			{
 				if (!game.isXiangtanLegal(xt))continue;
 				cout << "相谈:" << setw(8) << Action::xiangtanName[xt] << "  ";
+				strToSendURA += L" " + to_wstring(xt)+ L" " + to_wstring(xt == XT_none ? 8 : 5);
 				for (int tr = 0; tr < (xt == XT_none ? 8 : 5); tr++)
 				{
 					Action a = { tr,xt };
 					double value = search.allActionResults[a.toInt()].lastCalculate.value;
-					//strToSendURA += L" " + to_wstring(value);
+					strToSendURA += L" " + to_wstring(tr) + L" "+ to_wstring(value-restValue) + L" " + to_wstring(maxValue - restValue);
 					printValue(tr, value - restValue, maxValue - restValue);
+
 				}
 				cout << endl;
 			}
 			//strToSendURA = L"0.1234567 5.4321";
-			//if (GameConfig::useWebsocket)
-			//{
-			//	wstring s = L"{\"CommandType\":1,\"Command\":\"PrintUmaAiResult\",\"Parameters\":[\"" + strToSendURA + L"\"]}";
-			//	ws.send(s);
-			//}
+			if (GameConfig::useWebsocket)
+			{
+				wstring s = L"{\"CommandType\":1,\"Command\":\"PrintUmaAiResult\",\"Parameters\":[\"" + strToSendURA + L"\"]}";
+				ws.send(s);
+			}
 
 			//提示购买友情+20%和pt+10
 

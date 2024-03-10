@@ -87,7 +87,7 @@ void main_testDemoGame()
 
 	int batchsize = 128;
 #if USE_BACKEND == BACKEND_LIBTORCH
-	const string modelpath = "../training/example/model_traced.pt";
+	const string modelpath =  "../training/example/model_traced.pt";
 #elif USE_BACKEND == BACKEND_NONE
 	const string modelpath = "";
 #else
