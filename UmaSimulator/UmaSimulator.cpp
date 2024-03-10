@@ -14,7 +14,9 @@ int main()
 	//main_testCuda();
 	//return 0;
 
-#if defined UMAAI_TESTSCORENOSEARCH
+#if defined UMAAI_TESTSCORESEARCH
+	main_testScoreSearch();
+#elif defined UMAAI_TESTSCORENOSEARCH
 	main_testScoreNoSearch();
 #elif defined UMAAI_MODELBENCHMARK
 	main_modelBenchmark();

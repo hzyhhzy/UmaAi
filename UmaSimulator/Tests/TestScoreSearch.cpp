@@ -30,7 +30,7 @@ namespace TestScoreSearch
 
   const int threadNum = 8;
   const int threadNumInner = 1;
-  const double radicalFactor = 5;//激进度
+  const double radicalFactor = 3;//激进度
   const int searchDepth = TOTAL_TURN;
   const int searchN = 1024;
   SearchParam searchParam = { searchN,searchDepth,radicalFactor };
@@ -85,10 +85,6 @@ namespace TestScoreSearch
       Game game;
       game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
 
-      //noSearch的测试，为了避免大改代码，第一回合强制外出
-      //有search的测试，公平起见，第一回合也强制外出
-      Action action0 = { TRA_rest,XT_none };//无条件休息，这样就无视第一回合的人头分布了
-      game.applyTrainingAndNextTurn(rand, action0);
 
       while (!game.isEnd())
       {
@@ -161,7 +157,17 @@ namespace TestScoreSearch
         << "UD7概率=" << float(segmentStats[387]) / n << ","
         << "UD8概率=" << float(segmentStats[394]) / n << ","
         << "UD9概率=" << float(segmentStats[400]) / n << ","
-        << "UC0概率=" << float(segmentStats[407]) / n << endl;
+        << "UC0概率=" << float(segmentStats[407]) / n << ","
+        << "UC1概率=" << float(segmentStats[413]) / n << ","
+        << "UC2概率=" << float(segmentStats[420]) / n << ","
+        << "UC3概率=" << float(segmentStats[427]) / n << ","
+        << "UC4概率=" << float(segmentStats[434]) / n << ","
+        << "UC5概率=" << float(segmentStats[440]) / n << ","
+        << "UC6概率=" << float(segmentStats[447]) / n << ","
+        << "UC7概率=" << float(segmentStats[454]) / n << ","
+        << "UC8概率=" << float(segmentStats[462]) / n << ","
+        << "UC9概率=" << float(segmentStats[469]) / n << ","
+        << "UB0概率=" << float(segmentStats[476]) / n << endl;
     }
 
   }
@@ -171,16 +177,16 @@ using namespace TestScoreSearch;
 void main_testScoreSearch()
 {
   // 检查工作目录
-  GameDatabase::loadTranslation("../db/text_data.json");
-  GameDatabase::loadUmas("../db/umaDB.json");
-  GameDatabase::loadDBCards("../db/cardDB.json");
+  GameDatabase::loadTranslation("./db/text_data.json");
+  GameDatabase::loadUmas("./db/umaDB.json");
+  GameDatabase::loadDBCards("./db/cardDB.json");
 
-  test = TestConfig::loadFile("../ConfigTemplate/testConfig.json");  
+  test = TestConfig::loadFile("./testConfig.json");  
   cout << test.explain() << endl;
   totalGames = test.totalGames;
   gamesEveryThread = totalGames / threadNum;
 
-  for (int i = 0; i < 200; i++)segmentStats[i] = 0;
+  for (int i = 0; i < 700; i++)segmentStats[i] = 0;
 
   cout << "正在测试……\033[?25l" << endl;
 
