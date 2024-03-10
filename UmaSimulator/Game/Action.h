@@ -35,6 +35,8 @@ struct Action //一个回合的操作
   static const int XiangtanFromColor[10];
   static const int XiangtanToColor[10];
   static const int XiangtanNumCost[10];
+  static const std::string trainingName[8];
+  static const std::string xiangtanName[10];
   static const Action Action_RedistributeCardsForTest;
 
   int16_t train;//01234速耐力根智，5外出，6休息，7比赛 

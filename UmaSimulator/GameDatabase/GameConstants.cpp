@@ -2,8 +2,8 @@
 #include "UmaData.h"
 
 //常数或者比较短的列表放在最前面
-const double GameConstants::ScorePtRate = 2.1;
-const double GameConstants::ScorePtRateQieZhe = 2.3;
+const double GameConstants::ScorePtRate = 2.0;
+const double GameConstants::ScorePtRateQieZhe = 2.2;
 const int GameConstants::BasicFiveStatusLimit[5] = { 2200,1800,1800,1800,1400 }; //游戏里原来是1700 1500 1500 1500 1300，模拟器中1200以上翻倍
 
 //const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3

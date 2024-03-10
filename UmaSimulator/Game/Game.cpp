@@ -131,6 +131,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
 void Game::randomDistributeCards(std::mt19937_64& rand)
 {
+  cardEffectCalculated = false;
   checkLianghuaGuyou();
 
   //比赛回合的人头分配，不需要置零，因为不输入神经网络
@@ -420,7 +421,9 @@ void Game::calculateTrainingValue()
       const Person& p = persons[pid];
       bool isThisCardShining = isCardShining_record[pid];//这张卡闪没闪
       bool isThisTrainingShining = trainShiningNum[t];//这个训练闪没闪
-      CardTrainingEffect eff = p.cardParam.getCardEffect(*this, isThisCardShining, t, p.friendship, p.cardRecord, cardNum_record[t], trainShiningNum[t]);
+      CardTrainingEffect eff = cardEffectCalculated ? cardEffects[pid] : 
+        p.cardParam.getCardEffect(*this, isThisCardShining, t, p.friendship, p.cardRecord, cardNum_record[t], trainShiningNum[t]);
+      if (!cardEffectCalculated)cardEffects[pid] = eff;
         
       for (int i = 0; i < 6; i++)//基础值bonus
       {
@@ -518,6 +521,7 @@ void Game::calculateTrainingValue()
 
 
   }
+  cardEffectCalculated = true;
 }
 int Game::calculateRealStatusGain(int idx, int value) const//考虑1200以上为2的倍数的实际属性增加值
 {

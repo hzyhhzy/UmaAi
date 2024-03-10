@@ -75,6 +75,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
             }
         }
     }
+
     lockedTrainingId = j["lockedTrainingId"];
     for (int i = 0; i < 3; i++) {
         for (int p = 0; p < 5; p++) {
@@ -103,6 +104,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         uaf_buffActivated[i] = j["uaf_buffActivated"][i];
         uaf_buffNum[i]= j["uaf_buffNum"][i];
     }
+    cardEffectCalculated = false;
     calculateTrainingValue();
   //for (int k = 1; k < 5; k++) {
    //     cout << trainValue[1][k] << endl;

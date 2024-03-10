@@ -86,6 +86,8 @@ struct Game
   int16_t trainValueLower[5][6];//训练数值的下层，第一个数是第几个训练，第二个数依次是速耐力根智pt体力
   double trainValueCardMultiplier[5];//支援卡乘区=(1+总训练加成)(1+干劲系数*(1+总干劲加成))(1+0.05*总卡数)(1+友情1)(1+友情2)...
 
+  bool cardEffectCalculated;//支援卡效果是否已经计算过？相谈后不需要重新计算，分配卡组或者读json时需要置为false
+  CardTrainingEffect cardEffects[6];
 
 
 

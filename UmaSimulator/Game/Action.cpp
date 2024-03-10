@@ -5,7 +5,7 @@ const int Action::XiangtanToColor[10] = { -1,1,2,0,2,0,1,0,1,2 };
 const int Action::XiangtanNumCost[10] = { 0,1,1,1,1,1,1,2,2,2 };
 const Action Action::Action_RedistributeCardsForTest = { TRA_redistributeCardsForTest,0 };
 
-const std::string trainingName[8] =
+const std::string Action::trainingName[8] =
 {
   "速",
   "耐",
@@ -16,7 +16,7 @@ const std::string trainingName[8] =
   "外出",
   "比赛"
 };
-const std::string xiangtanName[10] =
+const std::string Action::xiangtanName[10] =
 {
   "无",
   "蓝->红",

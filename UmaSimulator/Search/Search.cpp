@@ -14,7 +14,7 @@ using namespace std;
 const ModelOutputValueV1 ModelOutputValueV1::illegalValue = { 1e-5,0,1e-5 };
 
 const double Search::searchFactorStage[searchStageNum] = { 0.25,0.25,0.5 };
-const double Search::searchThreholdStdevStage[searchStageNum] = { 6,5,0 };//5个标准差，非常保守
+const double Search::searchThreholdStdevStage[searchStageNum] = { 4,4,0 };//4个标准差，比较保守
 
 double SearchResult::normDistributionCdfInv[NormDistributionSampling];
 
@@ -82,6 +82,7 @@ Action Search::runSearch(const Game& game,
   assert(param.samplingNum >= 0 && "Search.param not initialized");
 
   rootGame = game;
+  rootGame.playerPrint = false;
   double radicalFactor = adjustRadicalFactor(param.maxRadicalFactor, rootGame.turn);
 
 
@@ -97,11 +98,13 @@ Action Search::runSearch(const Game& game,
 
   double bestValue = -1e4;
   Action bestAction = { -1,0 };
+  int totalSearchN = 0;
   for (int stage = 0; stage < searchStageNum; stage++)
   {
     bestValue = -1e4; 
     bestAction = { -1,0 };
     int searchN = searchFactorStage[stage] * param.samplingNum;
+    totalSearchN += calculateRealSearchN(searchN);
 
     for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
     {
@@ -118,7 +121,7 @@ Action Search::runSearch(const Game& game,
 
     }
 
-    double stdev = double(expectedSearchStdev) / sqrt(double(searchN));
+    double stdev = double(expectedSearchStdev) / sqrt(double(totalSearchN));
     double continueSearchThrehold = bestValue - searchThreholdStdevStage[stage] * stdev;
 
     for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)

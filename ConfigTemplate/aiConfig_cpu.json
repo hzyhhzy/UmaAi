@@ -1,0 +1,15 @@
+{
+  "batchSize": 16,
+  "debugPrint": false,
+  "eventStrength": 20,
+  "modelPath": "",
+  "noColor": false,
+  "radicalFactor": 2.0,
+  "removeDebuff5": true,
+  "removeDebuff7": true,
+  "role": "default",
+  "searchDepth": 10,
+  "searchN": 3000,
+  "threadNum": 8,
+  "useWebsocket": true
+}

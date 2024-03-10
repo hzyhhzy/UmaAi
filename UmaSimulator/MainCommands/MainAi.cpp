@@ -111,7 +111,7 @@ void main_ai()
 
 
 
-	/*Model* modelptr = NULL;
+	Model* modelptr = NULL;
 	Model model(GameConfig::modelPath, GameConfig::batchSize);
 	if (GameConfig::modelPath != "")
 	{
@@ -126,7 +126,7 @@ void main_ai()
 
 	SearchParam searchParam = { GameConfig::searchN,GameConfig::searchDepth,GameConfig::radicalFactor };
 	Search search(modelptr, GameConfig::batchSize, GameConfig::threadNum, searchParam);
-	*/
+	
 	websocket ws(GameConfig::useWebsocket ? "http://127.0.0.1:4693" : "");
 	if (GameConfig::useWebsocket)
 	{
@@ -181,11 +181,8 @@ void main_ai()
 			std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
 			continue;
 		}
-		cout << jsonStr << endl;
+		//cout << jsonStr << endl;
 		lastTurn = game.turn;
-		game.print();
-		Action hl = Evaluator::handWrittenStrategy(game);
-		cout << hl.toString() << endl;
 		//if (game.venusIsWisdomActive)
 		/*
 		{
@@ -193,15 +190,14 @@ void main_ai()
 		  continue;
 		}
 		*/
-		/*if (game.turn == 0)//第一回合，或者重启ai的第一回合
+		if (game.turn == 0)//第一回合，或者重启ai的第一回合
 		{
 			scoreFirstTurn = 0;
 			scoreLastTurn = 0;
 		}
 
-		game.print();
 		cout << endl;
-		cout << rpText["name"] << rpText["calc"] << endl;
+		//cout << rpText["name"] << rpText["calc"] << endl;
 		auto printPolicy = [](float p)
 			{
 				cout << fixed << setprecision(1);
@@ -217,8 +213,8 @@ void main_ai()
 
 		auto printValue = [&ws](int which, double p, double ref)
 			{
-				string prefix[] = { "速:", "耐:", "力:", "根:", "智:", "| SS: ", "| 休息: ", "友人: ", "普通外出: ", "比赛: " };
-				if (p < -50000)
+				string prefix[] = { "速:", "耐:", "力:", "根:", "智:", "| 休息: ", "外出: ", "比赛: " };
+				if (p < -5000)
 				{
 					cout << prefix[which] << "--- ";
 					return;
@@ -226,11 +222,11 @@ void main_ai()
 				cout << fixed << setprecision(0);
 				if (!GameConfig::noColor)
 				{
-					if (ref - p < 20) cout << "\033[41m\033[1;33m*";
-					else if (ref - p < 100) cout << "\033[1;32m";
+					if (ref - p < 30) cout << "\033[41m\033[1;33m*";
+					else if (ref - p < 150) cout << "\033[1;32m";
 					else cout << "\033[33m";
 				}
-				cout << prefix[which] << setw(3) << p;
+				cout << prefix[which] << setw(4) << p;
 				if (!GameConfig::noColor)cout << "\033[0m";
 				cout << " ";
 			};
@@ -263,32 +259,37 @@ void main_ai()
 			}
 			cout << endl;*/
 
-			game.playerPrint = false;
-			/*search.runSearch(game, rand);
-			game.playerPrint = true;
+
+			game.print();
+			Action hl = Evaluator::handWrittenStrategy(game);
+			cout << "手写逻辑: " << hl.toString() << endl;
+
+			Action bestAction = search.runSearch(game, rand);
+			cout << "蒙特卡洛: " << bestAction.toString() << endl;
 
 			double maxMean = -1e7;
 			double maxValue = -1e7;
-			for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
-				for (int j = 0; j < 10; j++)
-				{
-					auto v = search.allChoicesValue[i][j];
-					if (v.value > maxValue)
-						maxValue = v.value;
-					if (v.scoreMean > maxMean)
-						maxMean = v.scoreMean;
-				}
+			for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
+			{
+				if (!search.allActionResults[i].isLegal)continue;
+				auto v = search.allActionResults[i].lastCalculate;
+				if (v.value > maxValue)
+					maxValue = v.value;
+				if (v.scoreMean > maxMean)
+					maxMean = v.scoreMean;
+			}
 
+			Action restAction = { TRA_rest,0 };
+			Action outgoingAction = { TRA_outgoing,0 };
 			//休息和外出里面分最高的那个。这个数字作为显示参考
-			double restValue = search.allChoicesValue[0][6].value;
-			if (search.allChoicesValue[0][7].value > restValue)
-				restValue = search.allChoicesValue[0][7].value;
-			if (search.allChoicesValue[0][8].value > restValue)
-				restValue = search.allChoicesValue[0][8].value;
+			double restValue = search.allActionResults[restAction.toInt()].lastCalculate.value;
+			double outgoingValue = search.allActionResults[outgoingAction.toInt()].lastCalculate.value;
+			if (outgoingValue > restValue)
+				restValue = outgoingValue;
 
 
-			wstring strToSendURA = L"larc";
-			strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
+			//wstring strToSendURA = L"larc";
+			//strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
 			if (game.turn == 0 || scoreFirstTurn == 0)
 			{
 				cout << "评分预测: 平均\033[1;32m" << int(maxMean) << "\033[0m" << "，乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m" << endl;
@@ -306,35 +307,26 @@ void main_ai()
 			cout.flush();
 			scoreLastTurn = maxMean;
 
-			for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
+
+			for (int xt = 0; xt < 10; xt++)
 			{
-				if (Search::buyBuffChoiceNum(game.turn) > 1 && i == 0)
-					cout << "不买:              ";
-				if (i == 1)
-					cout << "买+50%:            ";
-				if (i == 2 && game.turn < 50)
-					cout << "买pt+10:           ";
-				if (i == 2 && game.turn >= 50)
-					cout << "买体力-20%:        ";
-				if (i == 3 && game.turn < 50)
-					cout << "买+50%与pt+10:     ";
-				if (i == 3 && game.turn >= 50)
-					cout << "买+50%与体力-20%:  ";
-				//cout << "训练: ";
-				for (int j = 0; j < 10; j++)
+				if (!game.isXiangtanLegal(xt))continue;
+				cout << "相谈:" << setw(8) << Action::xiangtanName[xt] << "  ";
+				for (int tr = 0; tr < (xt == XT_none ? 8 : 5); tr++)
 				{
-					double value = search.allChoicesValue[i][j].value;
-					strToSendURA += L" " + to_wstring(value);
-					printValue(j, value - restValue, maxValue - restValue);
+					Action a = { tr,xt };
+					double value = search.allActionResults[a.toInt()].lastCalculate.value;
+					//strToSendURA += L" " + to_wstring(value);
+					printValue(tr, value - restValue, maxValue - restValue);
 				}
 				cout << endl;
 			}
 			//strToSendURA = L"0.1234567 5.4321";
-			if (GameConfig::useWebsocket)
-			{
-				wstring s = L"{\"CommandType\":1,\"Command\":\"PrintUmaAiResult\",\"Parameters\":[\"" + strToSendURA + L"\"]}";
-				ws.send(s);
-			}
+			//if (GameConfig::useWebsocket)
+			//{
+			//	wstring s = L"{\"CommandType\":1,\"Command\":\"PrintUmaAiResult\",\"Parameters\":[\"" + strToSendURA + L"\"]}";
+			//	ws.send(s);
+			//}
 
 			//提示购买友情+20%和pt+10
 
