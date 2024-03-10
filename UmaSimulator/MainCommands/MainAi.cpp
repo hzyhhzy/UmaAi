@@ -318,6 +318,10 @@ void main_ai()
 					double value = search.allActionResults[a.toInt()].lastCalculate.value;
 					//strToSendURA += L" " + to_wstring(value);
 					printValue(tr, value - restValue, maxValue - restValue);
+					if (tr == TRA_race &&  game.isLegal(a))
+					{
+						cout<<"(±ÈÈü¿÷Ëð:\033[1;36m" <<maxValue-value << "\033[0m£©" ;
+					}
 				}
 				cout << endl;
 			}
