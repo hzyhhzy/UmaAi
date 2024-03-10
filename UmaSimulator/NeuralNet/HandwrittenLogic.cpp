@@ -17,12 +17,19 @@ const double outgoingBonusIfNotFullMotivation = 150;//µôÐÄÇéÊ±Ìá¸ßÍâ³ö·ÖÊý
 const double nonTrainBonus = 100;//Õâ»ØºÏ²»ÑµÁ·ÏÂ»ØºÏ+3µÄbonus£¬³Ë Ê£Óà»ØºÏÊý/TOTAL_TURN
 const double raceBonus = 200;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
 
-const double colorBuffEvalRaw[3] = { 100,70,50 };//ÈýÉ«buff¹ÀÖµ,ÆäÖÐºìbuff³Ëturn/TOTAL_TURN
+const double colorBuffEvalRaw[3] = { 70,100,50 };//ÈýÉ«buff¹ÀÖµ,ÆäÖÐºìbuff³Ëturn/TOTAL_TURN
 const double colorLevelEvalRaw[3] = { 6,6,4 };//²»¿¼ÂÇ´Õ´ó»áÄ¿±êµÄÈýÉ«ÑµÁ·µÈ¼¶¹ÀÖµ
 const double colorLevelTargetFactor = 100;//´Õ´ó»áÄ¿±êµÄÏµÊý
 
-const double xiangtanEvalBasicStart = 350;//ÏûºÄÒ»´ÎÏàÌ¸µÄ¹ÀÖµË¥¼õ(¸Õ¿ª¾Ö)
-const double xiangtanEvalBasicEnd = 350;//ÏûºÄÒ»´ÎÏàÌ¸µÄ¹ÀÖµË¥¼õ(½áÊø)
+const double xiangtanEvalBasicStart = 40;//ÏûºÄÒ»´ÎÏàÌ¸µÄ¹ÀÖµË¥¼õ(¸Õ¿ª¾Ö)
+const double xiangtanEvalBasicEnd = 40;//ÏûºÄÒ»´ÎÏàÌ¸µÄ¹ÀÖµË¥¼õ(½áÊø)
+//ÏÂÃæµÄ²ÎÊýÈ«ÊÇÆ¾¸Ð¾õÏ¹È¡µÄ£¬»¹ÐèÒªµ÷²Î
+const double xiangtanRemainEvalTable[3][12] =
+{
+  {0,5,7,8,9,10,11,11,12,12,12,12},
+  {0,2,5,6,7,7,8,8,9,9,10,10},
+  {0,0,2,5,5,6,6,7,7,7,8,8}
+};
 //const double xiangtanExhaustLossMax = 800;//ÏàÌ¸ºÄ¾¡ÇÒÃ»´ï±êµÄ¹ÀÖµ¿Û·Ö
 
 static void levelGainEvaluation(const Game& g, double* result) { //result[0:3]ÒÀ´ÎÊÇÈýÖÖÑÕÉ«µÄ¹ÀÖµ
@@ -150,11 +157,10 @@ static void statusGainEvaluation(const Game& g, double* result) { //resultÒÀ´ÎÊÇ
   }
 }
 
-static void xiangtanCostFactor(const Game& g, double* result) { //result[0,1,2]ÊÇÏûºÄ0,1,2´ÎÏàÌ¸µÄ¹ÀÖµ
-  result[0] = 0;
-  if (g.uaf_xiangtanRemain == 0)
-    return;
 
+
+
+static int countTurnNumBeforeXiangtanRefresh(const Game& g) { //ÏÂ´ÎÏàÌ¸Ë¢ÐÂÇ°»¹ÓÐ¶àÉÙÑµÁ·»ØºÏ£¬°üÀ¨µ±Ç°»ØºÏ
   int turnNumBeforeRefresh = 0;
   int nextRefresh = (g.turn / 12 + 1) * 12;
   if (nextRefresh > TOTAL_TURN)nextRefresh = TOTAL_TURN;
@@ -164,53 +170,7 @@ static void xiangtanCostFactor(const Game& g, double* result) { //result[0,1,2]Ê
   }
 
   assert(turnNumBeforeRefresh > 0);
-  if (turnNumBeforeRefresh == 1)
-  {
-    result[1] = 0;
-    result[2] = 0;
-    return;
-  }
-  //ÏÂÃæµÄ²ÎÊýÈ«ÊÇÆ¾¸Ð¾õÏ¹È¡µÄ
-  else if (turnNumBeforeRefresh == 2)
-  {
-    if (g.uaf_xiangtanRemain == 1)
-    {
-      result[1] = 0.7;
-      result[2] = 0;
-      return;
-    }
-    else if (g.uaf_xiangtanRemain == 2)
-    {
-      result[1] = 0.3;
-      result[2] = 1.0;
-      return;
-    }
-    else if (g.uaf_xiangtanRemain == 3)
-    {
-      result[1] = 0.0;
-      result[2] = 0.5;
-      return;
-    }
-  }
-  else if (turnNumBeforeRefresh == 3)
-  {
-    //Ã»Ð´µÄ¾ÍÊÇÄ¬ÈÏ
-    if (g.uaf_xiangtanRemain == 2)
-    {
-      result[1] = 0.6;
-      result[2] = 1.5;
-      return;
-    }
-    else if (g.uaf_xiangtanRemain == 3)
-    {
-      result[1] = 0.3;
-      result[2] = 1.0;
-      return;
-    }
-  }
-
-  result[1] = 1.0;
-  result[2] = 2.0;
+  return turnNumBeforeRefresh;
 }
 
 static double calculateMaxVitalEquvalant(const Game& g)
@@ -271,11 +231,14 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   int maxVitalEquvalant = calculateMaxVitalEquvalant(game);
   double vitalEvalBeforeTrain = vitalEvaluation(std::min(maxVitalEquvalant, int(game.vital)), game.maxVital);
 
-  double xiangtanCost[3];
-  xiangtanCostFactor(game, xiangtanCost);
+  int turnNumBeforeRefresh = countTurnNumBeforeXiangtanRefresh(game);
   double xiangtanEvalBasic = xiangtanEvalBasicStart + (game.turn / double(TOTAL_TURN)) * (xiangtanEvalBasicEnd - xiangtanEvalBasicStart);
-  for (int i = 0; i < 3; i++)
-    xiangtanCost[i] *= xiangtanEvalBasic;
+  double xiangtanCost[3];
+  xiangtanCost[0] = 0.0;
+  for (int i = 1; i <= game.uaf_xiangtanRemain; i++)
+  {
+    xiangtanCost[i] = xiangtanCost[i - 1] + xiangtanEvalBasic * xiangtanRemainEvalTable[game.uaf_xiangtanRemain - i][turnNumBeforeRefresh - 1];
+  }
 
   double nonTrainE = nonTrainEvaluation(game);
 
@@ -424,7 +387,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         if (g.uaf_buffNum[i] > 0)
         {
           double buffLoss = colorBuffEvalRaw[i];
-          if (i == 0)buffLoss *= (double(g.turn) / TOTAL_TURN);
+          if (i == 1)buffLoss *= (double(g.turn) / TOTAL_TURN);
           value -= buffLoss;
         }
 
