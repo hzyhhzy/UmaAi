@@ -1235,8 +1235,12 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   uaf_checkNewBuffAfterLevelGain();
   if (isRacing)//生涯比赛
   {
-    runRace(3, 45);
-    addJiBan(6, 4);
+    if (turn < 72)
+    {
+      runRace(3, 45);
+      addJiBan(6, 4);
+    }
+    //否则是ura比赛，在后面有单独的处理
     uaf_lastTurnNotTrain = true;
   }
 
