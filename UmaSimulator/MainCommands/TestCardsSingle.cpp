@@ -29,16 +29,16 @@ void main_testCardsSingle()
 {
   //int toTestCardType = 0;//速耐力根智
   double radicalFactor = 10;//激进度
-  int searchN = 100000;
-  int threadNum = 4;
+  int searchN = 1000;
+  int threadNum = 8;
+  int batchsize = 16;
 
-  string modelPath = "../training/example/model.txt";
-  //string modelPath = "";
+  //string modelPath = "../training/example/model.txt";
+  string modelPath = "";
 
-  GameDatabase::loadUmas("../db/umaDB.json");
+  GameDatabase::loadUmas("./db/umaDB.json");
   //GameDatabase::loadCards("../db/card");
-  GameDatabase::loadDBCards("../db/cardDB.json");
-
+  GameDatabase::loadDBCards("./db/cardDB.json");
 
   random_device rd;
   auto rand = mt19937_64(rd());
@@ -50,65 +50,63 @@ void main_testCardsSingle()
   {
     if (toTestCardType == 0)
     {
-      //一速三根一智，测速卡
-      umaId = 101101;//草上飞，20速10力加成
-      cards = { 301604,300374,300194,300114,301724,0 };//友人，根皇帝，根乌拉拉，根风神，智麦昆，-   控制变量的五张卡都不要用link
-
-      //二速二耐一智，测速卡
-      //umaId = 102402;//花炮，10速10耐10智加成
-      //cards = { 301604,301724,301474,301734,301654,0 };//友人，智麦昆，速宝穴，耐万籁，耐谷水，-   控制变量的五张卡都不要用link
+      //2速1耐1根1智
+      umaId = 102401;//重炮，20耐10根加成
+      cards = { 301884,301724,301614,301874,301734,0 };//友人，智麦昆，速神鹰，根巨匠，耐万籁
     }
 
     else if (toTestCardType == 1)
     {
-      //二速二耐一智，测耐卡
-      umaId = 102402;//花炮，10速10耐10智加成
-      cards = { 301604,301724,301474,301614,301654,0 };//友人，智麦昆，速宝穴，速神鹰，耐谷水，-   控制变量的五张卡都不要用link，但耐卡没神鹰
-
+      //2速1耐1根1智
+      umaId = 102401;//重炮，20耐10根加成
+      cards = { 301884,301724,301614,301784,301874,0 };//友人，智麦昆，速神鹰，速大锤，根巨匠
     }
     else if (toTestCardType == 2)
     {
-      //二速二力一智，测力卡
-      umaId = 102402;//花炮，10速10耐10智加成
-      cards = { 301604,301724,301474,301074,301564,0 };//友人，智麦昆，速宝穴，速司机，力奇锐骏，-   控制变量的五张卡都不要用link
-
-      //一力三根一智，测力卡
-      //umaId = 101101;//草上飞，20速10力加成
-      //cards = { 301604,300374,300194,300114,301724,0 };//友人，根皇帝，根乌拉拉，根风神，智麦昆，-   控制变量的五张卡都不要用link
-
+      //1速1耐1力1根1智
+      umaId = 101101;//草上飞，20速10力加成
+      cards = { 301884,301724,301614,301874,301734,0 };//友人，智麦昆，速神鹰，速大锤，根巨匠，耐万籁
     }
     else if (toTestCardType == 3)
     {
-      //一速三根一智，测根卡
-      umaId = 101101;//草上飞，20速10力加成
-      cards = { 301604,301724,301474,300194,300114,0 };//友人，智麦昆，速宝穴，根乌拉拉，根风神，-   控制变量的五张卡都不要用link
-
+      //2速1耐1根1智
+      umaId = 102401;//重炮，20耐10根加成
+      cards = { 301884,301724,301614,301784,301734,0 };//友人，智麦昆，速神鹰，速大锤，耐万籁
     }
     else if (toTestCardType == 4)
     {
-
-      //一速三根一智，测智卡
-      umaId = 101101;//草上飞，20速10力加成
-      cards = { 301604,300374,300194,300114,301474,0 };//友人，根皇帝，根乌拉拉，根风神，速宝穴，-   控制变量的五张卡都不要用link
-
-
-      //二速二耐一智，测智卡
-      //umaId = 102402;//花炮，10速10耐10智加成
-      //cards = { 301604,301474,301474,301734,301654,0 };//友人，速宝穴，速宝穴，耐万籁，耐谷水，-   控制变量的五张卡都不要用link
-
+      //2速1耐1根1智
+      umaId = 102401;//重炮，20耐10根加成
+      cards = { 301884,301614,301784,301874,301734,0 };//友人，速神鹰，速大锤，根巨匠，耐万籁
     }
 
     int umaStars = 5;
     int zhongmaBlue[5] = { 18,0,0,0,0 };
     int zhongmaBonus[6] = { 10,10,30,0,10,70 };
-    bool allowedDebuffs[9] = { false, false, false, false, false, false, true, false, false };//第二年可以不消第几个debuff。第五个是智力，第七个是强心脏
 
-
-
+    {
+      cout << "测卡环境：" << endl;
+      cout << "马娘：" << GameDatabase::AllUmas[umaId].name << "(" << umaId << ") ";
+      for (int i = 0; i < 5; i++)
+      {
+        int gr = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
+        if (gr > 0)
+          cout << Action::trainingName[i] << "+" << gr << "% ";
+      }
+      cout << endl;
+      cout << "其他卡：";
+      for (int i = 0; i < 5; i++)
+      {
+        int t = cards[i];
+        string cardName = GameDatabase::AllCards[t].cardName;
+        cardName = cardName + "(" + to_string(t / 10) + ")";
+        cout << cardName << " ";
+      }
+      cout << endl;
+    }
 
     SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
 
-    int batchsize = 1024;
     Model* modelptr = NULL;
     Model model(modelPath, batchsize);
     if (modelPath != "")
@@ -181,6 +179,28 @@ void main_testCardsSingle()
     }
 
     cout << endl;
+
+    {
+      cout << "测卡环境：" << endl;
+      cout << "马娘：" << GameDatabase::AllUmas[umaId].name << "(" << umaId << ") ";
+      for (int i = 0; i < 5; i++)
+      {
+        int gr = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
+        if (gr > 0)
+          cout << Action::trainingName[i] << "+" << gr << "% ";
+      }
+      cout << endl;
+      cout << "其他卡：";
+      for (int i = 0; i < 5; i++)
+      {
+        int t = cards[i];
+        string cardName = GameDatabase::AllCards[t].cardName;
+        cardName = cardName + "(" + to_string(t / 10) + ")";
+        cout << cardName << " ";
+      }
+      cout << endl;
+    }
+
     cout << "\033[41m\033[30m**\033[0m是没考虑固有，\033[43m\033[30m#\033[0m是视为固有全开" << endl;
     cout << "按胡局分数从大到小排序：" << endl;
     cout << "-------------------------------------------------------------------------" << endl;
@@ -208,6 +228,28 @@ void main_testCardsSingle()
 
 
     cout << endl;
+
+    {
+      cout << "测卡环境：" << endl;
+      cout << "马娘：" << GameDatabase::AllUmas[umaId].name << "(" << umaId << ") ";
+      for (int i = 0; i < 5; i++)
+      {
+        int gr = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
+        if (gr > 0)
+          cout << Action::trainingName[i] << "+" << gr << "% ";
+      }
+      cout << endl;
+      cout << "其他卡：";
+      for (int i = 0; i < 5; i++)
+      {
+        int t = cards[i];
+        string cardName = GameDatabase::AllCards[t].cardName;
+        cardName = cardName + "(" + to_string(t / 10) + ")";
+        cout << cardName << " ";
+      }
+      cout << endl;
+    }
+
     cout << "\033[41m\033[30m**\033[0m是没考虑固有，\033[43m\033[30m#\033[0m是视为固有全开" << endl;
     cout << "按平均分数从大到小排序：" << endl;
     cout << "-------------------------------------------------------------------------" << endl;
