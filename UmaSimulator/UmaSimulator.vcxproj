@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;$(PublicIncludeDirectories)</PublicIncludeDirectories>
-    <ExternalIncludePath>D:\boost_1_83_0;G:\libtorch\include;G:\libtorch\include\torch\csrc\api\include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>D:\boost_1_83_0\stage\lib;G:\libtorch\lib;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\Users\zhenz\Downloads\boost_1_84_0\boost_1_84_0;G:\libtorch\include;G:\libtorch\include\torch\csrc\api\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>C:\Users\zhenz\Downloads\boost_1_84_0\boost_1_84_0\stage\lib;G:\libtorch\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -223,6 +223,7 @@
     <ClInclude Include="NeuralNet\Model.h" />
     <ClInclude Include="NeuralNet\NNInput.h" />
     <ClInclude Include="NeuralNet\TrainingSample.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Search\Search.h" />
     <ClInclude Include="Search\SearchParam.h" />
     <ClInclude Include="Selfplay\GameGenerator.h" />
@@ -233,6 +234,12 @@
     <ClInclude Include="Tests\TestConfig.h" />
     <ClInclude Include="Tests\tests.h" />
     <ClInclude Include="websocket.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="UmaAi.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Desktop\a2gck-bgix1-001.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
