@@ -1,15 +1,6 @@
 {
-  "batchSize": 16,
-  "debugPrint": false,
-  "eventStrength": 20,
-  "modelPath": "",
-  "noColor": false,
-  "radicalFactor": 2.0,
-  "removeDebuff5": true,
-  "removeDebuff7": true,
-  "role": "default",
-  "searchDepth": 10,
-  "searchN": 3000,
-  "threadNum": 8,
-  "useWebsocket": true
+  "radicalFactor": 3, // 激进度，默认为3，提高会导致计算变慢
+  "searchSingleMax": 4096, // 第一选项达到多少次搜索就停止蒙特卡洛
+  "threadNum": 8, // 线程数，可根据自身CPU调整，神经网络版直接设成4
+  "useWebsocket": true // 是否使用websocket与小黑板通信，否则使用文件通信
 }
