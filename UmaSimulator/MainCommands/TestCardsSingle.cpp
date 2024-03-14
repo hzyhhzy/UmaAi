@@ -105,7 +105,7 @@ void main_testCardsSingle()
       cout << endl;
     }
 
-    SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
+    SearchParam searchParam(searchN, radicalFactor);
 
     Model* modelptr = NULL;
     Model model(modelPath, batchsize);

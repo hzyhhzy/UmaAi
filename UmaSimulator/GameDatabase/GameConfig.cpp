@@ -6,14 +6,26 @@ using json = nlohmann::json;
 
 double GameConfig::radicalFactor = 5;
 int GameConfig::eventStrength = 20;
-bool GameConfig::removeDebuff5 = true;
-bool GameConfig::removeDebuff7 = true;
 
+#if USE_BACKEND!=BACKEND_NONE      //神经网络版
 string GameConfig::modelPath = "db/model.txt";
 int GameConfig::threadNum = 4;
-int GameConfig::batchSize = 256;
-int GameConfig::searchN = 2000;
-int GameConfig::searchDepth = 10;
+int GameConfig::batchSize = 128;
+int GameConfig::searchSingleMax = 8192;
+int GameConfig::searchTotalMax = 0;
+int GameConfig::searchGroupSize = 512;
+int GameConfig::searchDepth = 16;
+#else  //手写逻辑版
+string GameConfig::modelPath = "";
+int GameConfig::threadNum = 8;
+int GameConfig::batchSize = 8;
+int GameConfig::searchSingleMax = 4096;
+int GameConfig::searchTotalMax = 0;
+int GameConfig::searchGroupSize = 128;
+int GameConfig::maxDepth = TOTAL_TURN;
+#endif 
+
+double GameConfig::searchCpuct = 1.0;
 
 bool GameConfig::useWebsocket = true;
 string GameConfig::role = "default";
@@ -28,31 +40,7 @@ void GameConfig::load(const string& path)
 		ifstream ifs(path);
     if (!ifs) // 文件不存在的处理
     {
-      // 创建默认配置JSON
-      json j = {
-				{"radicalFactor", GameConfig::radicalFactor},
-				{"eventStrength", GameConfig::eventStrength},
-				{"removeDebuff5", GameConfig::removeDebuff5},
-				{"removeDebuff7", GameConfig::removeDebuff7},
-
-				{"modelPath", GameConfig::modelPath},
-        {"threadNum", GameConfig::threadNum},
-				{"batchSize", GameConfig::batchSize},
-				{"searchN", GameConfig::searchN},
-				{"searchDepth", GameConfig::searchDepth},
-
-        {"useWebsocket", GameConfig::useWebsocket},
-        {"role", GameConfig::role},
-
-				{"debugPrint", GameConfig::debugPrint},
-				{"noColor", GameConfig::noColor}
-      };
-      // 写入
-      ofstream ofs(path);
-      ofs << j.dump(2);
-      ofs.close();
-
-      cout << "找不到配置文件，已使用默认配置: " << j.dump(2) << endl;
+      cout << "找不到配置文件，已使用默认配置: " << endl;
       return;
     }
 
@@ -61,23 +49,37 @@ void GameConfig::load(const string& path)
 		ifs.close();
 		json j = json::parse(ss.str(),nullptr,true,true);
 
-		j.at("radicalFactor").get_to(GameConfig::radicalFactor);
-		j.at("eventStrength").get_to(GameConfig::eventStrength);
-		j.at("removeDebuff5").get_to(GameConfig::removeDebuff5);
-		j.at("removeDebuff7").get_to(GameConfig::removeDebuff7);
+		if (j.contains("radicalFactor"))
+			GameConfig::radicalFactor = j.at("radicalFactor");
+		if (j.contains("eventStrength"))
+			GameConfig::eventStrength = j.at("eventStrength");
+		if (j.contains("modelPath"))
+			GameConfig::modelPath = j.at("modelPath");
+		if (j.contains("threadNum"))
+			GameConfig::threadNum = j.at("threadNum");
+		if (j.contains("batchSize"))
+			GameConfig::batchSize = j.at("batchSize");
+		if (j.contains("searchSingleMax"))
+			GameConfig::searchSingleMax = j.at("searchSingleMax");
+		if (j.contains("searchTotalMax"))
+			GameConfig::searchTotalMax = j.at("searchTotalMax");
+		if (j.contains("searchGroupSize"))
+			GameConfig::searchGroupSize = j.at("searchGroupSize");
+		if (j.contains("searchCpuct"))
+			GameConfig::searchCpuct = j.at("searchCpuct");
+		if (j.contains("maxDepth"))
+			GameConfig::maxDepth = j.at("maxDepth");
+		if (j.contains("useWebsocket"))
+			GameConfig::useWebsocket = j.at("useWebsocket");
+		if (j.contains("role"))
+			GameConfig::role = j.at("role");
+		if (j.contains("debugPrint"))
+			GameConfig::debugPrint = j.at("debugPrint");
+		if (j.contains("noColor"))
+			GameConfig::noColor = j.at("noColor");
 
 
-		GameConfig::modelPath = j.value("modelPath", "db/model.txt");
-		j.at("threadNum").get_to(GameConfig::threadNum);
-		j.at("batchSize").get_to(GameConfig::batchSize);
-		j.at("searchN").get_to(GameConfig::searchN);
-		j.at("searchDepth").get_to(GameConfig::searchDepth);
 
-		j.at("useWebsocket").get_to(GameConfig::useWebsocket);
-		j.at("debugPrint").get_to(GameConfig::debugPrint);
-
-		j.at("noColor").get_to(GameConfig::noColor);
-		GameConfig::role = j.value("role", "default");
 
 		cout << "当前配置: " << j.dump(2) << endl;
 	}

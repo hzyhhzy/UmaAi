@@ -204,7 +204,7 @@ void GameGenerator::newGameBatch()
     turnsEveryGame[i] = randTurn;
   }
   //往后进行一些回合
-  SearchParam defaultSearchParam = { 1024,TOTAL_TURN,5.0 };//这个参数随意取，只用于生成开局时输入神经网络
+  SearchParam defaultSearchParam(1024, 5.0);//这个参数随意取，只用于生成开局时输入神经网络
   for (int depth = 0; depth < maxTurn; depth++)
   {
     evaluator.evaluateSelf(1, defaultSearchParam);//计算policy

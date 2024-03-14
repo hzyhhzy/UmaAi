@@ -22,7 +22,7 @@ void main_playerPlay()
   const int threadNum = 8;
   const int searchN = 8192;
   const double radicalFactor = 5;
-  SearchParam param = { searchN,TOTAL_TURN,radicalFactor };
+  SearchParam param(searchN, radicalFactor);
 
 
   cout << termcolor::cyan << "赛马娘凯旋门剧本育成模拟器 v0.1" << termcolor::reset << endl;

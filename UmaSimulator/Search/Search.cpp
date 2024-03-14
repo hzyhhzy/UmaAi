@@ -55,7 +55,7 @@ Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame
   for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
     allActionResults[i].clear();
 
-  param.samplingNum = 0;
+  param.searchSingleMax = 0;
 }
 
 Search::Search(Model* model, int batchSize, int threadNumInGame, SearchParam param0) :Search(model, batchSize, threadNumInGame)
@@ -65,6 +65,10 @@ Search::Search(Model* model, int batchSize, int threadNumInGame, SearchParam par
 void Search::setParam(SearchParam param0)
 {
   param = param0;
+
+  //让searchGroupSize是整batch
+  param.searchGroupSize = calculateRealSearchN(param.searchGroupSize);
+  param.searchSingleMax = calculateRealSearchN(param.searchSingleMax);
 
   //让param.samplingNum是整batch
   //int batchEveryThread = (param.samplingNum - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
@@ -79,61 +83,88 @@ void Search::setParam(SearchParam param0)
 Action Search::runSearch(const Game& game,
   std::mt19937_64& rand)
 {
-  assert(param.samplingNum >= 0 && "Search.param not initialized");
+  assert(param.searchSingleMax > 0 && "Search.param not initialized");
 
   rootGame = game;
   rootGame.playerPrint = false;
   double radicalFactor = adjustRadicalFactor(param.maxRadicalFactor, rootGame.turn);
 
 
-  bool shouldContinueSearch[Action::MAX_ACTION_TYPE];
+  //bool shouldContinueSearch[Action::MAX_ACTION_TYPE];
   for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
   {
     Action action = Action::intToAction(actionInt);
 
     allActionResults[actionInt].clear();
     allActionResults[actionInt].isLegal = rootGame.isLegal(action);
-    shouldContinueSearch[actionInt] = allActionResults[actionInt].isLegal;
+    //shouldContinueSearch[actionInt] = allActionResults[actionInt].isLegal;
   }
+
+  assert(param.searchGroupSize == calculateRealSearchN(param.searchGroupSize));//setParam应该处理过了
+  int totalSearchN = 0;//到目前一共搜了多少
+
+  //每个action先搜一组
+  for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+  {
+    if (!allActionResults[actionInt].isLegal)continue;
+    Action action = Action::intToAction(actionInt);
+    searchSingleAction(param.searchGroupSize, rand, allActionResults[actionInt], action);
+    totalSearchN += param.searchGroupSize;
+  }
+
+  //每次分配searchGroupSize的计算量到searchValue最大的那个action，直到达到searchSingleMax或searchTotalMax终止条件
+  while (true)
+  {
+    double bestSearchValue = -1e4;
+    int bestActionIntToSearch = -1;
+
+    for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+    {
+      if (!allActionResults[actionInt].isLegal)continue;
+      double value = allActionResults[actionInt].getWeightedMeanScore(radicalFactor).value;
+      double n = allActionResults[actionInt].num;
+      assert(n > 0);
+      double tn = double(totalSearchN);
+      double policy = 1.0;//对于马娘，常数1就行，懒得在这里调用神经网络
+      double searchValue = value + param.searchCpuct * policy * Search::expectedSearchStdev * sqrt(tn) / n;//抄的棋类ai的公式，平均分越高或计算量越少，searchValue越高
+      if (searchValue > bestSearchValue)
+      {
+        bestSearchValue = searchValue;
+        bestActionIntToSearch = actionInt;
+      }
+    }
+
+    assert(bestActionIntToSearch >= 0);
+
+    Action action = Action::intToAction(bestActionIntToSearch);
+    searchSingleAction(param.searchGroupSize, rand, allActionResults[bestActionIntToSearch], action);
+    totalSearchN += param.searchGroupSize;
+
+    if (allActionResults[bestActionIntToSearch].num >= param.searchSingleMax)
+      break;
+    if (param.searchTotalMax > 0 && totalSearchN >= param.searchTotalMax)
+      break;
+  }
+
+  //搜索完毕，找最高分的选项
 
   double bestValue = -1e4;
-  Action bestAction = { -1,0 };
-  int totalSearchN = 0;
-  for (int stage = 0; stage < searchStageNum; stage++)
+  int bestActionInt = -1;
+
+  for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
   {
-    bestValue = -1e4; 
-    bestAction = { -1,0 };
-    int searchN = searchFactorStage[stage] * param.samplingNum;
-    totalSearchN += calculateRealSearchN(searchN);
+    if (!allActionResults[actionInt].isLegal)continue;
 
-    for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+    ModelOutputValueV1 value = allActionResults[actionInt].getWeightedMeanScore(radicalFactor);
+    if (value.value > bestValue)
     {
-      if (!shouldContinueSearch[actionInt])continue;
-      Action action = Action::intToAction(actionInt);
-
-      searchSingleAction(searchN, rand, allActionResults[actionInt], action);
-      ModelOutputValueV1 value = allActionResults[actionInt].getWeightedMeanScore(radicalFactor);//同时也保存到了allActionResults[actionInt].lastCalculate里
-      if (value.value > bestValue)
-      {
-        bestValue = value.value;
-        bestAction = action;
-      }
-
-    }
-
-    double stdev = double(expectedSearchStdev) / sqrt(double(totalSearchN));
-    double continueSearchThrehold = bestValue - searchThreholdStdevStage[stage] * stdev;
-
-    for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
-    {
-      if (allActionResults[actionInt].lastCalculate.value < continueSearchThrehold)//比最高分选项低了好几个标准差，无需继续计算
-        shouldContinueSearch[actionInt] = false;
+      bestValue = value.value;
+      bestActionInt = actionInt;
     }
 
   }
 
-
-
+  Action bestAction = Action::intToAction(bestActionInt);
   assert(rootGame.isLegal(bestAction));
   return bestAction;
 }
@@ -143,7 +174,7 @@ ModelOutputValueV1 Search::evaluateNewGame(const Game& game, int searchN, double
   rootGame = game;
   param.maxDepth = TOTAL_TURN;
   param.maxRadicalFactor = radicalFactor;
-  param.samplingNum = searchN;
+  //param.samplingNum = searchN;
   allActionResults[0].clear();
   allActionResults[0].isLegal = true;
   searchSingleAction(searchN, rand, allActionResults[0], Action::Action_RedistributeCardsForTest);
@@ -283,11 +314,13 @@ void SearchResult::clear()
   num = 0;
   for (int i = 0; i < MAX_SCORE; i++)
     finalScoreDistribution[i] = 0;
+  upToDate = true;
   lastCalculate = ModelOutputValueV1::illegalValue;
 }
 
 void SearchResult::addResult(ModelOutputValueV1 v)
 {
+  upToDate = false;
   num += 1;
   for (int i = 0; i < NormDistributionSampling; i++)
   {
@@ -300,6 +333,8 @@ void SearchResult::addResult(ModelOutputValueV1 v)
 
 ModelOutputValueV1 SearchResult::getWeightedMeanScore(double radicalFactor) 
 {
+  if (upToDate && lastRadicalFactor == radicalFactor)
+    return lastCalculate;
   if (!isLegal)
   {
     lastCalculate = ModelOutputValueV1::illegalValue;
@@ -331,13 +366,15 @@ ModelOutputValueV1 SearchResult::getWeightedMeanScore(double radicalFactor)
   v.scoreMean = scoreTotal / N;
   v.scoreStdev = sqrt(scoreSqrTotal * N - scoreTotal * scoreTotal) / N;
   v.value = valueTotal / valueWeightTotal;
+  upToDate = true;
+  lastRadicalFactor = radicalFactor;
   lastCalculate = v;
   return v;
 }
 
 int Search::calculateBatchNumEachThread(int searchN) const
 {
-  int batchEveryThread = (param.samplingNum - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
+  int batchEveryThread = (searchN - 1) / (threadNumInGame * batchSize) + 1;//相当于向上取整
   if (batchEveryThread <= 0)batchEveryThread = 1;
   return batchEveryThread;
 }

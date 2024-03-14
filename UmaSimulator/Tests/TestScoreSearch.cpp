@@ -28,12 +28,11 @@ namespace TestScoreSearch
   const string modelpath = "../training/example/model.txt";
 #endif
 
-  const int threadNum = 1;
-  const int threadNumInner = 8;
+  const int threadNum = 8;
+  const int threadNumInner = 1;
   const double radicalFactor = 3;//¼¤½ø¶È
   const int searchDepth = TOTAL_TURN;
-  const int searchN = 2048;
-  SearchParam searchParam = { searchN,searchDepth,radicalFactor };
+  const int searchN = 512;
   const bool recordGame = false;
 
   int totalGames = 100000;
@@ -73,6 +72,8 @@ namespace TestScoreSearch
       modelptr = &model;
     }
 
+    SearchParam searchParam(searchN, radicalFactor);
+    searchParam.maxDepth = searchDepth;
     Search search(modelptr, batchsize, threadNumInner, searchParam);
 
     vector<Game> gameHistory;

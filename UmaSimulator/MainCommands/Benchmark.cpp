@@ -30,7 +30,7 @@ void main_benchmark()
   //const double radicalFactor = 5;//¼¤½ø¶È
   const int searchN = 2048;
   const double targetScore = 33000;
-  SearchParam param = { searchN,TOTAL_TURN,0 };
+  SearchParam param(searchN, 0);
 
   Search search(NULL, 128, threadNum, param);
 

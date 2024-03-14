@@ -63,7 +63,7 @@ namespace TestAiScore
   int zhongmaBonus[6] = { 10,10,30,0,10,70 };
   bool allowedDebuffs[9] = { false, false, false, false, false, false, true, false, false };//第二年可以不消第几个debuff。第五个是智力，第七个是强心脏
   */
-  SearchParam searchParam = { searchN,TOTAL_TURN,radicalFactor };
+  SearchParam searchParam(searchN, radicalFactor);
   TestConfig test;
 
   std::atomic<double> totalScore = 0;

@@ -303,8 +303,9 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   c++;
   buf[c] = 1.0 * log(param.maxRadicalFactor + 1.0);
   c++;
-  buf[c] = 0.0 * (log(param.samplingNum + 1.0) - 7.0);
-  c++;
+  assert(false && "todo");
+  //buf[c] = 0.0 * (log(param.samplingNum + 1.0) - 7.0);
+  //c++;
 
   assert(c == NNINPUT_CHANNELS_SEARCHPARAM_V1);
 

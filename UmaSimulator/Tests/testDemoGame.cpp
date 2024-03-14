@@ -83,7 +83,8 @@ void main_testDemoGame()
 	const int searchN = 1024;
 	const int searchDepth = 1;
 
-	SearchParam searchParam = { searchN,searchDepth,radicalFactor };
+	SearchParam searchParam(searchN, radicalFactor);
+	searchParam.maxDepth = searchDepth;
 
 	int batchsize = 128;
 #if USE_BACKEND == BACKEND_LIBTORCH

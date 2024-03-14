@@ -15,16 +15,21 @@ struct SearchResult
   bool isLegal;
   int num;
   int32_t finalScoreDistribution[MAX_SCORE];//某个action的最终分数分布预测
-  ModelOutputValueV1 lastCalculate;//上次调用getWeightedMeanScore的计算结果
   void clear();
   void addResult(ModelOutputValueV1 v); //O(N*NormDistributionSampling)
   ModelOutputValueV1 getWeightedMeanScore(double radicalFactor);//slow, O(MAXSCORE), avoid frequently call
+
+  ModelOutputValueV1 lastCalculate;//上次调用getWeightedMeanScore的计算结果
+private:
+  bool upToDate;//lastCalculate是否已过时
+  double lastRadicalFactor;//上次计算的radicalFactor
 };
 
 
 //一局游戏是一个search
 class Search
 {
+public:
   // 现在希望获得最终分数的分布
   // 使用神经网络进行蒙特卡洛时，如果depth<TOTAL_TURN，没有搜索到终局。这时让神经网络返回预测平均值mean和标准差stdev
   // 对于蒙特卡洛的所有样本，把每个样本视为正态分布，并在正态分布中取NormDistributionSampling个点，加在finalScoreDistribution上
@@ -42,7 +47,6 @@ class Search
 
 
 
-public:
   Game rootGame;//当前或刚搜索完的是哪个局面
   int threadNumInGame;//一个search里面几个线程
   int batchSize;

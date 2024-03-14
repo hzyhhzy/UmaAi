@@ -119,12 +119,19 @@ void main_ai()
 	}
 	else
 	{
-		GameConfig::searchDepth = TOTAL_TURN;
+		GameConfig::maxDepth = TOTAL_TURN;
 	}
 
 	Model::printBackendInfo();
 
-	SearchParam searchParam = { GameConfig::searchN,GameConfig::searchDepth,GameConfig::radicalFactor };
+	SearchParam searchParam(
+		GameConfig::searchSingleMax,
+		GameConfig::searchTotalMax,
+		GameConfig::searchGroupSize,
+		GameConfig::searchCpuct,
+		GameConfig::maxDepth,
+		GameConfig::radicalFactor
+	);
 	Search search(modelptr, GameConfig::batchSize, GameConfig::threadNum, searchParam);
 	
 	websocket ws(GameConfig::useWebsocket ? "http://127.0.0.1:4693" : "");
@@ -336,6 +343,8 @@ void main_ai()
 					double value = search.allActionResults[a.toInt()].lastCalculate.value;
 					strToSendURA += L" " + to_wstring(tr) + L" " + to_wstring(value - restValue) + L" " + to_wstring(maxValue - restValue);
 					printValue(tr, value - restValue, maxValue - restValue);
+					//cout << "(" << search.allActionResults[a.toInt()].num << ")";
+					//cout << "(¡À" << 2 * int(Search::expectedSearchStdev / sqrt(search.allActionResults[a.toInt()].num)) << ")";
 					if (tr == TRA_race &&  game.isLegal(a))
 					{
 						cout<<"(±ÈÈü¿÷Ëð:\033[1;36m" <<maxValue-value << "\033[0m£©" ;

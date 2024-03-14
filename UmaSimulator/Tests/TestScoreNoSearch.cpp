@@ -42,7 +42,7 @@ void main_testScoreNoSearch()
   cout << test.explain() << endl;
 
   test.totalGames = ((test.totalGames - 1) / (threadNum * batchsize) + 1) * threadNum * batchsize;
-  SearchParam searchParam = { test.totalGames,TOTAL_TURN,radicalFactor };
+  SearchParam searchParam(test.totalGames, radicalFactor);
 
   cout << "线程数：" << threadNum << "   batchsize：" << batchsize << endl;
   cout << "神经网络文件：" << modelpath << "   局数：" << test.totalGames << "（已对batchsize*线程数取整）" << endl;
