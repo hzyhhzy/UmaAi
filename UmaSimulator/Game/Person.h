@@ -42,7 +42,7 @@ struct Person //任何一个可能出现在训练里的人头
   void setNonCard(int pType);//把此人头设置为非支援卡人头（理事长记者等），只考虑刚开局的状态，如果是游戏半途，需要手动修改羁绊等
   
 
-  void getNNInputV1(float* buf, const Game& game, int index) const;//神经网络输入向量，不包括支援卡参数，Game类会把支援卡参数放在对应位置
+  void getCardNNInputV1(float* buf, const Game& game, int index) const;//神经网络输入向量，不包括支援卡参数，Game类会把支援卡参数放在对应位置
   std::string getPersonName(const Game& game) const;//获得人物名称
   std::string getPersonStrColored(const Game& game, int personId, int atTrain) const;//人物名称与羁绊等整合成带颜色的字符串，在小黑板表格中显示
 };

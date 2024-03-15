@@ -45,7 +45,7 @@ struct SupportCard
     // 大部分固有都可以在默认参数下计算
 	CardTrainingEffect getCardEffect(const Game& game, bool isShining, int atTrain, int jiBan, int effectFactor, int trainingCardNum, int trainingShiningNum) const;
 
-	void getNNInputV1(float* buf, const Game& game) const;//神经网络输入，size=NNINPUT_CHANNELS_CARD_V1
+	void getCardParamNNInputV1(float* buf, const Game& game) const;//神经网络输入，size=NNINPUT_CHANNELS_CARD_V1
 
 	void write_to_json(json& j, const std::string cdname, const int id) const;
 	void load_from_json(json& j, int x);

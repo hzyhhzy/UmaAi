@@ -29,6 +29,7 @@ namespace TestScoreSearch
 #endif
 
   const int threadNum = 8;
+  const int batchsize = 16;
   const int threadNumInner = 1;
   const double radicalFactor = 3;//¼¤½ø¶È
   const int searchDepth = TOTAL_TURN;
@@ -64,7 +65,6 @@ namespace TestScoreSearch
     random_device rd;
     auto rand = mt19937_64(rd());
 
-    int batchsize = 16;
     Model* modelptr = NULL;
     Model model(modelpath, batchsize);
     if (modelpath != "")
