@@ -67,7 +67,9 @@ TrainingSample SelfplayThread::generateSingleSample()
   Game game = gameGenerator.get();
   search.setParam(sp);
   search.runSearch(game, rand);
-  return search.exportTrainingSample(50.0);
+  TrainingSample res = search.exportTrainingSample(param.policyDelta);
+  //cout << res.valueTarget.scoreMean << endl;
+  return res;
 }
 
 void SelfplayThread::writeDataToFile()
