@@ -23,7 +23,7 @@ class GameGenerator
   bool isVaildGame(const Game& game);
 
 
-  std::vector<int> getRandomCardset(bool mustHaveZuoyue); //获取一组随机卡组，概率带友人，越好的卡的概率越大
+  std::vector<int> getRandomCardset(); //获取一组随机卡组，概率带友人，越好的卡的概率越大
   void randomizeUmaCardParam(Game& game); //给卡组
 public:
   GameGenerator(SelfplayParam param, Model* model);

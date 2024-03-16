@@ -4740,6 +4740,40 @@
     ],
     "star": 5
   },
+  "108001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      117,
+      105,
+      101,
+      106,
+      121
+    ],
+    "freeRaces": [],
+    "gameId": 108001,
+    "name": "transcend",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      38,
+      44,
+      46,
+      51,
+      59,
+      66,
+      68,
+      70
+    ],
+    "star": 5
+  },
   "108301": {
     "bonusData": [],
     "fiveStatusBonus": [

@@ -58,17 +58,10 @@ TrainingSample SelfplayThread::generateSingleSample()
   if (sp.maxRadicalFactor < 0)sp.maxRadicalFactor = 0;
   if (sp.maxRadicalFactor > param.radicalFactor_max)sp.maxRadicalFactor = param.radicalFactor_max;
 
-  assert(false&&"todo");
-  //sp.samplingNum = int(exp(param.searchN_logmean + normDistr(rand) * param.searchN_logstdev) + 0.5);
-  //if (sp.samplingNum > param.searchN_max)sp.samplingNum = param.searchN_max;
-  //if (sp.samplingNum < param.searchN_min)sp.samplingNum = param.searchN_min;
-  //让param.samplingNum是整batch
-  //{
-  //  int batchEveryThread = (sp.samplingNum - 1) / (param.threadNumInner * param.batchsize) + 1;//相当于向上取整
-  //  if (batchEveryThread <= 0)batchEveryThread = 1;
-  //  int samplingNumEveryThread = param.batchsize * batchEveryThread;
-  //  sp.samplingNum = param.threadNumInner * samplingNumEveryThread;
- // }
+  sp.searchTotalMax = 0;
+  sp.searchSingleMax = param.searchN;
+  sp.searchGroupSize = param.searchGroupSize;
+  sp.searchCpuct = param.searchCpuct;
 
 
   Game game = gameGenerator.get();

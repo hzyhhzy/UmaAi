@@ -1186,6 +1186,10 @@ void Game::uaf_checkNewBuffAfterLevelGain()
       uaf_buffNum[color] += 2 * (buffNumTotal - buffNumUsed);
       uaf_buffActivated[color] = buffNumTotal;
     }
+    else if (buffNumTotal < buffNumUsed)//可能是其他地方篡改了训练等级，比如Selfplay/GameGenerator
+    {
+      uaf_buffActivated[color] = buffNumTotal;
+    }
   }
 }
 void Game::uaf_runCompetition(int n)//第n次uaf大会
@@ -1583,7 +1587,8 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
 
 void Game::applyTrainingAndNextTurn(std::mt19937_64& rand, Action action)
 {
-  assert(turn < TOTAL_TURN && "Game::applyTrainingAndNextTurn游戏已结束");
+  if (isEnd()) return;
+  //assert(turn < TOTAL_TURN && "Game::applyTrainingAndNextTurn游戏已结束");
   assert(!isRacing && "比赛回合都在checkEventAfterTrain里跳过了");
   bool suc = applyTraining(rand, action);
   assert(suc && "Game::applyTrainingAndNextTurn选择了不合法的训练");

@@ -21,9 +21,9 @@ Game GameGenerator::randomOpening()
   std::uniform_real_distribution<double> uniDistr(0.0, 1.0);
 
   Game game;
-  int umaId = 101101;//草上飞
+  int umaId = 102401;//重炮
   int umaStars = 5;
-  int cards[6] = { 301604,301724,301614,301304,300114,300374 };//友人，智麦昆，速神鹰，根凯斯，根风神，根皇帝
+  int cards[6] = { 301884,301724,301614,301784,301874,301734 };
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 10,10,30,0,10,70 };
 
@@ -37,7 +37,7 @@ Game GameGenerator::randomOpening()
     while (!GameDatabase::AllUmas.count(umaId))
       umaId = 100000 + (rand() % 200) * 100 + rand() % 2 + 1;
 
-    auto cards1 = getRandomCardset(param.cardRandType == 1);
+    auto cards1 = getRandomCardset();
     for (int i = 0; i < 6; i++)cards[i] = cards1[i];
 
     //随机蓝因子和剧本因子
@@ -120,9 +120,21 @@ Game GameGenerator::randomOpening()
   }
   if (game.skillPt < 0)game.skillPt = 0;
 
-  assert(false && "pt性价比应该随机");
+  if (rand() % 2 == 0)
+    game.ptScoreRate = 2.1 + 0.1 * normDistr(rand);
+  else
+    game.ptScoreRate = 2.2 + 0.3 * normDistr(rand);
+
+
+  if (game.ptScoreRate > 3.0)game.ptScoreRate = 3.0;
+  if (game.ptScoreRate < 1.5)game.ptScoreRate = 1.5;
+
   //if (rand() % 8 == 0)
   //  game.isQieZhe = true;
+  if (rand() % 4 == 0) //练习上手
+    game.failureRateBias = -2;
+  if (rand() % 128 == 0) //双圈练习上手
+    game.failureRateBias = -5;
   if (rand() % 8 == 0)
     game.isAiJiao = true;
 
@@ -138,19 +150,12 @@ Game GameGenerator::randomOpening()
     }
   }
 
-  assert(false && "训练等级随机");
-  for (int i = 0; i < 5; i++)
-  {
-    if (rand() % 2)
-    {
-      int delta = int(expDistr(rand) * 1);
-    }
-  }
 
-  if (rand() % 2)
+  if (rand() % 4)
   {
     int delta = int(expDistr(rand) * 4);
     game.maxVital += delta;
+    if (game.maxVital > 120)game.maxVital = 120;
   }
 
   return game;
@@ -160,6 +165,8 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
 {
   Game game = game0;
   std::exponential_distribution<double> expDistr(1.0);
+  std::normal_distribution<double> normDistr(0.0, 1.0);
+  std::uniform_real_distribution<double> uniDistr(0.0, 1.0);
 
   //给属性加随机
   int type0 = rand() % 100;
@@ -185,22 +192,82 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
   if (rand() % 512 == 0)
     game.failureRateBias = 2;
 
+
+  //等级随机
+  if (rand() % 2 == 0)
+  {
+    double mean = expDistr(rand) * 3;
+
+    for (int color = 0; color < 3; color++)
+      for (int i = 0; i < 5; i++)
+      {
+        int dif = normDistr(rand) * mean + 0.5;
+        int newlevel = game.uaf_trainingLevel[color][i] + dif;
+        if (newlevel > 100)newlevel = 100;
+        if (newlevel < 1)newlevel = 1;
+        game.uaf_trainingLevel[color][i] = newlevel;
+      }
+    game.uaf_checkNewBuffAfterLevelGain();
+  }
+
+
+  //理事长记者的羁绊随机加
+  for (int i = 0; i < 3; i++)
+  {
+    if (game.lianghua_type != 0 && i == 2)continue;
+    if (rand() % 8 == 0)
+    {
+      game.addJiBan(6 + i, rand() % 8);
+    }
+  }
+
+
+  if (rand() % 4 == 0)
+  {
+    game.uaf_lastTurnNotTrain = rand() % 4 == 0;
+  }
+
+  if (rand() % 4 == 0)
+  {
+    game.uaf_xiangtanRemain = rand() % 4;
+  }
+
+  for (int color = 0; color < 3; color++)
+  {
+    if (rand() % 32 == 0)
+    {
+      game.uaf_buffNum[color] = 1.0 * expDistr(rand);
+      if (game.uaf_buffNum[color] > 5)game.uaf_buffNum[color] = 5;
+    }
+  }
+
+  //随机输几场
+  if (rand() % 8 == 0)
+  {
+    double loseProb = expDistr(rand) * 0.02;
+    int cf = game.uaf_competitionFinishedNum();
+
+    for (int c = 0; c < cf; c++)
+      for (int color = 0; color < 3; color++)
+        for (int i = 0; i < 5; i++)
+          if(uniDistr(rand) < loseProb)
+            game.uaf_winHistory[c][color][i] = false;
+  }
+  //game.print();
+  game.calculateTrainingValue();
+
   return game;
 }
 
 void GameGenerator::newGameBatch()
 {
-  const int maxTurn = TOTAL_TURN - 7;//7个比赛回合，因此最多训练TOTAL_TURN - 7次
+  const int maxTurn = TOTAL_TURN - 4;//4个固定比赛回合，因此最多训练TOTAL_TURN - 4次
   vector<int> turnsEveryGame(param.batchsize);
   evaluator.gameInput.resize(param.batchsize);
   for (int i = 0; i < param.batchsize; i++)
   {
     evaluator.gameInput[i] = randomOpening();
     int randTurn = rand() % maxTurn;
-    if (rand() % 3 == 0)//提高第二年远征的比例，因为神经网络在第二年远征的loss最高
-    {
-      randTurn = 36 - 2 + rand() % 5;
-    }
     turnsEveryGame[i] = randTurn;
   }
   //往后进行一些回合
@@ -214,9 +281,9 @@ void GameGenerator::newGameBatch()
     {
       if (turnsEveryGame[i] > depth)
       {
-        assert(!evaluator.gameInput[i].isEnd());//以后的剧本如果难以保证这个，可以删掉这个assert
+        //assert(!evaluator.gameInput[i].isEnd());//以后的剧本如果难以保证这个，可以删掉这个assert
         evaluator.gameInput[i].applyTrainingAndNextTurn(rand, evaluator.actionResults[i]);
-        assert(isVaildGame(evaluator.gameInput[i]));//以后的剧本如果难以保证这个，可以删掉这个assert
+        //assert(isVaildGame(evaluator.gameInput[i]));//以后的剧本如果难以保证这个，可以删掉这个assert
       }
     }
   }

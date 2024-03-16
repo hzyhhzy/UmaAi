@@ -23,134 +23,26 @@ void GameGenerator::loadCardRankFile()
   }
 }
 
-std::vector<int> GameGenerator::getRandomCardset(bool mustHaveZuoyue)
+std::vector<int> GameGenerator::getRandomCardset()
 {
   vector<int> cardset;
-  if (mustHaveZuoyue || rand() % 16 != 0)//带友人
+  if (rand() % 16 != 0)//带友人
   {
     if (rand() % 2 != 0)
-      cardset.push_back(301604);
-    else if (mustHaveZuoyue || rand() % 8 != 0)
-      cardset.push_back(301600 + rand() % 5);
+      cardset.push_back(301884);
+    else if (rand() % 8 != 0)
+      cardset.push_back(301880 + rand() % 5);
     else if(rand() % 2 != 0)
-      cardset.push_back(100944);
+      cardset.push_back(101044);
     else
-      cardset.push_back(100940 + rand() % 5);
+      cardset.push_back(101040 + rand() % 5);
   }
 
   int cardTypeCount[6] = { 0,0,0,0,0,0 };
-  int c1 = rand() % 100;
-  if (c1 < 45)//速根智大类与变种
+  
+  for (int i = 0; i < 6 - cardset.size(); i++)
   {
-    int c2 = rand() % 100;
-    if (c2 < 20)//10031
-    {
-      cardTypeCount[0] = 1;
-      cardTypeCount[3] = 3;
-      cardTypeCount[4] = 1;
-    }
-    else if (c2 < 32)//20021
-    {
-      cardTypeCount[0] = 2;
-      cardTypeCount[3] = 2;
-      cardTypeCount[4] = 1;
-    }
-    else if (c2 < 44)//00041
-    {
-      cardTypeCount[0] = 0;
-      cardTypeCount[3] = 4;
-      cardTypeCount[4] = 1;
-    }
-    else if (c2 < 54)//10022
-    {
-      cardTypeCount[0] = 1;
-      cardTypeCount[3] = 2;
-      cardTypeCount[4] = 2;
-    }
-    else if (c2 < 64)//00032
-    {
-      cardTypeCount[0] = 0;
-      cardTypeCount[3] = 3;
-      cardTypeCount[4] = 2;
-    }
-    else if (c2 < 70)//00131
-    {
-      cardTypeCount[2] = 1;
-      cardTypeCount[3] = 3;
-      cardTypeCount[4] = 1;
-    }
-    else if (c2 < 73)//00221
-    {
-      cardTypeCount[2] = 2;
-      cardTypeCount[3] = 2;
-      cardTypeCount[4] = 1;
-    }
-    else if (c2 < 76)//00122
-    {
-      cardTypeCount[2] = 1;
-      cardTypeCount[3] = 2;
-      cardTypeCount[4] = 2;
-    }
-    else //随机速根智
-    {
-      const int consideredCardtype[3] = { 0, 3, 4 };
-      for (int i = 0; i < 5; i++)
-      {
-        cardTypeCount[consideredCardtype[rand() % 3]] += 1;
-      }
-    }
-    if (cardset.size() == 0)//没友人，补一个根卡
-    {
-      cardTypeCount[3] += 1;
-    }
-
-  }
-  else if (c1 < 70)//速耐大类
-  {
-    int c2 = rand() % 100;
-    if (c2 < 30)//22001
-    {
-      cardTypeCount[0] = 2;
-      cardTypeCount[1] = 2;
-      cardTypeCount[4] = 1;
-    }
-    else if (c2 < 55)//31001
-    {
-      cardTypeCount[0] = 3;
-      cardTypeCount[1] = 1;
-      cardTypeCount[4] = 1;
-    }
-    else if (c2 < 70)//21002
-    {
-      cardTypeCount[0] = 2;
-      cardTypeCount[1] = 1;
-      cardTypeCount[4] = 2;
-    }
-    else if (c2 < 80)//32000
-    {
-      cardTypeCount[0] = 3;
-      cardTypeCount[1] = 2;
-      cardTypeCount[4] = 0;
-    }
-    else //随机速耐智
-    {
-      const int consideredCardtype[3] = { 0, 1, 4 };
-      for (int i = 0; i < 5; i++)
-      {
-        cardTypeCount[consideredCardtype[rand() % 3]] += 1;
-      }
-    }
-    if (cardset.size() == 0)//没友人，补一个耐卡
-    {
-      cardTypeCount[1] += 1;
-    }
-  }
-  else //随机配卡
-  {
-    for (int i = 0; i < 6 - cardset.size(); i++)
-    {
-      cardTypeCount[rand() % 5] += 1;
-    }
+    cardTypeCount[rand() % 5] += 1;
   }
 
   double cardRankFactor = rand() % 2 == 0 ? 2.0 : rand() % 2 ? 5.0 : 10.0;//一半是以top2的卡为主，四分之一是top5，四分之一是top10
@@ -167,6 +59,7 @@ std::vector<int> GameGenerator::getRandomCardset(bool mustHaveZuoyue)
         if (t >= cardRank[ct].size() || t < 0)
           continue;
 
+        cardId = cardRank[ct][t] * 10 + 4;
 
         break;
       }
@@ -190,15 +83,25 @@ void GameGenerator::randomizeUmaCardParam(Game& game)
   std::normal_distribution<double> normDistr(0.0, 1.0);
   std::uniform_real_distribution<double> uniDistr(0.0, 1.0);
 
-  //随机马娘属性加成
+  //随机马娘属性加成，随机link
   if (rand() % 4 == 0)
   {
+    game.isLinkUma = rand() % 8 == 0;
     for (int i = 0; i < 5; i++)
     {
       int x = game.fiveStatusBonus[i] + int(normDistr(rand) * 5.0 + 0.5);
       if (x < 0)x = 0;
       if (x > 30)x = 30;
       game.fiveStatusBonus[i] = x;
+    }
+  }
+
+  //随机赛程
+  if (rand() % 2 == 0)
+  {
+    for (int t = 12; t < 72; t++)
+    {
+      game.isRacingTurn[t] = rand() % 8 == 0;
     }
   }
 
