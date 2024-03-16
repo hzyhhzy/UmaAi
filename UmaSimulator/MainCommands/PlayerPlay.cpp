@@ -25,10 +25,10 @@ void main_playerPlay()
   SearchParam param(searchN, radicalFactor);
 
 
-  cout << termcolor::cyan << "赛马娘凯旋门剧本育成模拟器 v0.1" << termcolor::reset << endl;
+  cout << termcolor::cyan << "赛马娘UAF剧本育成模拟器 v0.1" << termcolor::reset << endl;
   cout << termcolor::cyan << "作者 Sigmoid，QQ: 2658628026" << termcolor::reset << endl;
   cout << termcolor::cyan << "代码开源：" << termcolor::yellow << "https://github.com/hzyhhzy/UmaAi" << termcolor::reset << endl;
-  cout << termcolor::bright_cyan << "此模拟器界面类似“小黑板”。为了方便，并没有买技能的功能，把固有技能和各种技能hint都换算成pt，每pt计为" << GameConstants::ScorePtRate << "分（切者" << GameConstants::ScorePtRateQieZhe << "分）" << termcolor::reset << endl;
+  cout << termcolor::bright_cyan << "此模拟器界面类似“小黑板”。为了方便，并没有买技能的功能，把固有技能和各种技能hint都换算成pt，每pt计为" << GameConstants::ScorePtRate << "分（切者" << GameConstants::ScorePtRate * 1.1 << "分）" << termcolor::reset << endl;
   cout << termcolor::bright_cyan << "所有Lv2的升级（消除debuff）均自动进行，Lv3需要玩家手动购买" << termcolor::reset << endl;
   cout << termcolor::bright_cyan << "第二年的凯旋门允许不消智力debuff，如果pt不够消除其他debuff则模拟器按输凯旋门计算" << termcolor::reset << endl;
   cout << endl;

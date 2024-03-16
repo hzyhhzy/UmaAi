@@ -53,7 +53,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
       persons[i].isHint = j["persons"][i]["isHint"];
     }
     skillPt = j["skillPt"];
-    ptScoreRate = j["isQieZhe"] ? GameConstants::ScorePtRateQieZhe : GameConstants::ScorePtRate;
+    ptScoreRate = j["isQieZhe"] ? GameConstants::ScorePtRate * 1.1 : GameConstants::ScorePtRate;
     //TODO:SkillScore
     failureRateBias= j["failureRateBias"];
     isAiJiao = j["isAiJiao"];

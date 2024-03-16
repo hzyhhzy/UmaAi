@@ -3,58 +3,49 @@
 using namespace std;
 TrainingSample Search::exportTrainingSample(float policyDelta)
 {
-  assert(false && "todo");
-  return TrainingSample();
-  /*
   TrainingSample tdata;
-  int bfcn = buyBuffChoiceNum(gameLastSearch.turn);
-  double values[4][10];
+  rootGame.getNNInputV1(tdata.nnInputVector, param);
 
-  double bestValue = -1e100;
-  for (int i = 0; i < bfcn; i++)
-    for (int j = 0; j < 10; j++)
-    {
-      double v = allChoicesValue[i][j].value;
-      values[i][j] = v;
-      if (v > bestValue)
-      {
-        tdata.valueTarget = allChoicesValue[i][j];
-        bestValue = v;
-      }
-    }
 
-  //policy target--------------------------
-  auto& pt = tdata.policyTarget;
-  //softmax
-  double totalPolicy = 0.0;
-  float policyDeltaInv = 1.0 / policyDelta;
-  for (int i = 0; i < bfcn; i++)
-    for (int j = 0; j < 10; j++)
-    {
-      values[i][j] = exp((values[i][j] - bestValue) * policyDeltaInv);
-      totalPolicy += values[i][j];
-    }
-  totalPolicy = 1 / totalPolicy;
-  for (int i = 0; i < bfcn; i++)
-    for (int j = 0; j < 10; j++)
-    {
-      values[i][j] *= totalPolicy;
-    }
 
-  //trainingPolicy
-  for (int j = 0; j < 10; j++)
+  double bestValue = -1e100; 
+  double values[Action::MAX_ACTION_TYPE];
+  for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
   {
-    pt.trainingPolicy[j] = 0.0;
-    for (int i = 0; i < bfcn; i++)
+    values[i] = -1e7;
+    const auto& res = allActionResults[i];
+    assert(res.upToDate);
+    if (!res.isLegal)
+      continue;
+    assert(res.num > 0);
+
+    double v = res.lastCalculate.value;
+    values[i] = v;
+    if (v > bestValue)
     {
-      pt.trainingPolicy[j] += values[i][j];
+      tdata.valueTarget = res.lastCalculate;
+      bestValue = v;
     }
   }
 
+  //policy target--------------------------
 
-  gameLastSearch.getNNInputV1(tdata.nnInputVector,param);
+  double totalPolicy = 0.0;
+  float policyDeltaInv = 1.0 / policyDelta;
+  for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
+  {
+    values[i] = exp((values[i] - bestValue) * policyDeltaInv);
+    totalPolicy += values[i];
+  }
+  totalPolicy = 1 / totalPolicy;
+  for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
+  {
+    values[i] *= totalPolicy;
+    tdata.policyTarget.actionPolicy[i] = values[i];
+    assert(allActionResults[i].isLegal || values[i] < 1e-7);
+  }
   return tdata;
-  */
+  
 }
 
 

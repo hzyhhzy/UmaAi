@@ -434,13 +434,15 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 
 
   //理事长和记者和无卡友人
-  //3*7=21 channels
+  //3*9=21 channels
   for (int p = 0; p < 3; p++)
   {
     if (p == 2 && lianghua_type != 0)
       break;
     buf[c + p * 7] = persons[p + 6].friendship * 0.01;
-    buf[c + p * 7 + 1] = persons[p + 6].friendship >= 60 ? 1.0 : 0.0;
+    buf[c + p * 7 + 1] = persons[p + 6].friendship >= 40 ? 1.0 : 0.0;
+    buf[c + p * 7 + 2] = persons[p + 6].friendship >= 60 ? 1.0 : 0.0;
+    buf[c + p * 7 + 3] = persons[p + 6].friendship >= 80 ? 1.0 : 0.0;
 
     //在哪个训练
     for (int tr = 0; tr < 5; tr++)
@@ -448,11 +450,11 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
       for (int i = 0; i < 5; i++)
       {
         if (personDistribution[tr][i] == p + 6)
-          buf[c + p * 7 + 2 + tr] = 1.0;
+          buf[c + p * 7 + 4 + tr] = 1.0;
       }
     }
   }
-  c += 3 * 7;
+  c += 3 * 9;
 
 
   for (int i = 0; i < 5; i++)

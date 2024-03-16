@@ -20,7 +20,6 @@ struct SearchResult
   ModelOutputValueV1 getWeightedMeanScore(double radicalFactor);//slow, O(MAXSCORE), avoid frequently call
 
   ModelOutputValueV1 lastCalculate;//上次调用getWeightedMeanScore的计算结果
-private:
   bool upToDate;//lastCalculate是否已过时
   double lastRadicalFactor;//上次计算的radicalFactor
 };
@@ -85,7 +84,7 @@ public:
   //ModelOutputPolicyV1 extractPolicyFromSearchResults(int mode, float delta = 0);
 
   //导出上次搜索的数据作为训练样本
-  TrainingSample exportTrainingSample(float policyDelta = 50);//policyDelta是policy的软化系数
+  TrainingSample exportTrainingSample(float policyDelta = 100);//policyDelta是policy的软化系数
 
 
 private:

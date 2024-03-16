@@ -3,16 +3,16 @@
 
 //常数或者比较短的列表放在最前面
 const double GameConstants::ScorePtRate = 2.0;
-const double GameConstants::ScorePtRateQieZhe = 2.2;
+//const double GameConstants::ScorePtRateQieZhe = 2.2;
 const int GameConstants::BasicFiveStatusLimit[5] = { 2200,1800,1800,1800,1400 }; //游戏里原来是1700 1500 1500 1500 1300，模拟器中1200以上翻倍
 
 //const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3
 //const int GameConstants::NormalRacePtBonus = 45;//常规比赛pt加成,G1=45
-const double GameConstants::EventProb = 0.3;
+const double GameConstants::EventProb = 0.25;
 const int GameConstants::EventStrengthDefault = 20;
 
-const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.05;
-const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.10;
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.08;
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.15;
 
 const double GameConstants::FriendVitalBonusSSR[5] = { 1.4,1.45,1.5,1.55,1.6 };//佐岳SSR卡的回复量倍数（满破1.6）
 const double GameConstants::FriendVitalBonusR[5] = { 1.2,1.23,1.26,1.3,1.3 };//佐岳R卡的回复量倍数

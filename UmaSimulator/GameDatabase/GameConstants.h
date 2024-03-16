@@ -42,7 +42,7 @@ public:
   //评分
   static const int FiveStatusFinalScore[1200+800*2+1];//不同属性对应的评分
   static const double ScorePtRate;//为了方便，直接视为每1pt对应多少分。
-  static const double ScorePtRateQieZhe;//为了方便，直接视为每1pt对应多少分。切者
+  //static const double ScorePtRateQieZhe;//为了方便，直接视为每1pt对应多少分。切者
 
   static bool isLinkChara(int id);
 

@@ -120,7 +120,7 @@ void Game::print() const
     cout << termcolor::cyan << "总属性：" << totalStatus << "     pt：" << skillPt << termcolor::reset << endl;
   }
   {
-    if (ptScoreRate > (GameConstants::ScorePtRate + GameConstants::ScorePtRateQieZhe) * 0.5)
+    if (ptScoreRate > GameConstants::ScorePtRate * 1.05)
       cout << termcolor::bright_yellow << "有切者" << termcolor::reset << endl;
     if (isAiJiao)
       cout << termcolor::bright_yellow << "有爱娇" << termcolor::reset << endl;

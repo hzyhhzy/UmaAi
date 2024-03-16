@@ -1401,14 +1401,18 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     runRace(10, 80);
 
     //记者
-    if (persons[7].friendship >= 100)
+    if (persons[7].friendship >= 80)
     {
       addAllStatus(5);
       skillPt += 20;
     }
-    else if (persons[7].friendship >= 80)
+    else if (persons[7].friendship >= 60)
     {
       addAllStatus(3);
+      skillPt += 10;
+    }
+    else if (persons[7].friendship >= 40)
+    {
       skillPt += 10;
     }
     else
@@ -1518,12 +1522,12 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
     printEvents("模拟支援卡随机事件：" + persons[card].cardParam.cardName + " 的羁绊+5，pt和随机属性+" + to_string(eventStrength));
 
     //支援卡一般是前几个事件加心情
-    if (randBool(rand, 0.2 * (1.0 - turn * 1.0 / TOTAL_TURN)))
+    if (randBool(rand, 0.4 * (1.0 - turn * 1.0 / TOTAL_TURN)))
     {
       addMotivation(1);
       printEvents("模拟支援卡随机事件：心情+1");
     }
-    if (randBool(rand, 0.3))
+    if (randBool(rand, 0.5))
     {
       addVital(10);
       printEvents("模拟支援卡随机事件：体力+10");
@@ -1532,6 +1536,11 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
     {
       addVital(-10);
       printEvents("模拟支援卡随机事件：体力-10");
+    }
+    if (randBool(rand, 0.03))
+    {
+      isPositiveThinking = true;
+      printEvents("模拟支援卡随机事件：获得“正向思考”");
     }
   }
 
@@ -1552,7 +1561,7 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   //加30体力（吃饭事件）,不敢吃饭了所以改成10体力
   if (randBool(rand, 0.02))
   {
-    addVital(30);
+    addVital(10);
     printEvents("模拟随机事件：体力+10");
   }
 
