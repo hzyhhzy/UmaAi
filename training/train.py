@@ -1,7 +1,7 @@
 
 from dataset import trainset
 from model import ModelDic
-#from config import boardH,boardW
+from config import *
 
 import argparse
 from torch.utils.data import Dataset, DataLoader
@@ -13,6 +13,7 @@ import os
 import time
 import random
 import copy
+
 
 backup_checkpoints=[50000*i for i in range(500)]
 
@@ -32,26 +33,24 @@ def cross_entropy_loss(output, target):
 
 
 def calculateLoss(output,label):
-    output_policy=output[:,:18]
-    output_value=output[:,18:]
-    label_policy=label[:,:18]
-    label_value=label[:,18:]
+    output_policy=output[:,:Game_Output_C_Policy]
+    output_value=output[:,Game_Output_C_Policy:]
+    label_policy=label[:,:Game_Output_C_Policy]
+    label_value=label[:,Game_Output_C_Policy:]
     #print(output_value*200+30000,label_value)
     #print(torch.softmax(output_policy[:,:10],dim=1), label_policy[:,:10])
 
     huberloss=nn.HuberLoss(reduction='mean',delta=1.0)
-    vloss1 = huberloss(output_value[:,0],(label_value[:,0]-30000)/200)
-    vloss2 = huberloss(output_value[:,1],(label_value[:,1]-0)/100)
-    vloss3 = huberloss(output_value[:,2],(label_value[:,2]-30000)/200)
+    vloss1 = huberloss(output_value[:,0],(label_value[:,0]-38000)/300)
+    vloss2 = huberloss(output_value[:,1],(label_value[:,1]-0)/150)
+    vloss3 = huberloss(output_value[:,2],(label_value[:,2]-38000)/300)
     vloss=vloss1+vloss2+vloss3
 
-    ploss1=cross_entropy_loss(output_policy[:,:10],label_policy[:,:10])
-    ploss2=(label_policy[:,:5]*BCEfunction(output_policy[:,10:15],label_policy[:,10:15])).sum(1).mean(0)
-    ploss3=(BCEfunction(output_policy[:,15:],label_policy[:,15:])).sum(1).mean(0)
-    ploss = ploss1+ploss2+ploss3
+    ploss1=cross_entropy_loss(output_policy,label_policy)
+    ploss = ploss1
 
     if(random.randint(0,1000)==0):
-        print(f"{vloss1.item():.4f} {vloss2.item():.4f} {vloss3.item():.4f} {ploss1.item():.4f} {ploss2.item():.4f} {ploss3.item():.4f} ")
+        print(f"{vloss1.item():.4f} {vloss2.item():.4f} {vloss3.item():.4f} {ploss1.item():.4f} ")
     return vloss,ploss
 
 
@@ -59,8 +58,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     #data settings
-    parser.add_argument('--tdatadir', type=str, default='../sp11/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
-    parser.add_argument('--vdatadir', type=str, default='../sp11/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--tdatadir', type=str, default='../sp1/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--vdatadir', type=str, default='../sp1/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
     parser.add_argument('--maxvalsamp', type=int, default=1000000, help='validation sample num')
     parser.add_argument('--maxstep', type=int, default=5000000000, help='max step to train')
     parser.add_argument('--savestep', type=int, default=2000, help='step to save and validation')
@@ -70,7 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('--valuesampling', type=float, default=1, help='value sampling rate(to avoid overfitting)')
 
     #model parameters
-    parser.add_argument('--modeltype', type=str, default='ems',help='model type defined in model.py')
+    parser.add_argument('--modeltype', type=str, default='res',help='model type defined in model.py')
     parser.add_argument('--modelparam', nargs='+',type=int,
                         default=(1,128,3,256,256), help='model size')
 
@@ -231,8 +230,8 @@ if __name__ == '__main__':
 
             vloss,ploss = calculateLoss(nnoutput,label)
 
-            _, p1_predicted = torch.max(nnoutput[:, :10], 1)
-            _, p1_labels = torch.max(label[:, :10], 1)
+            _, p1_predicted = torch.max(nnoutput[:, :], 1)
+            _, p1_labels = torch.max(label[:, :], 1)
             p1_correct = (p1_predicted == p1_labels).sum().item()
             #print(p1_predicted ,p1_labels)
 
@@ -333,8 +332,8 @@ if __name__ == '__main__':
 
                             vloss,ploss = calculateLoss(nnoutput,label)
 
-                            _, p1_predicted = torch.max(nnoutput[:,:10], 1)
-                            _, p1_labels = torch.max(label[:,:10], 1)
+                            _, p1_predicted = torch.max(nnoutput[:,:], 1)
+                            _, p1_labels = torch.max(label[:,:], 1)
                             p1_correct = (p1_predicted == p1_labels).sum().item()
 
                             loss = 1.0*vloss+1.0*ploss

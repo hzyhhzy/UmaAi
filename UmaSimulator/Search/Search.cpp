@@ -115,6 +115,9 @@ Action Search::runSearch(const Game& game,
   //每次分配searchGroupSize的计算量到searchValue最大的那个action，直到达到searchSingleMax或searchTotalMax终止条件
   while (true)
   {
+    if (param.searchGroupSize >= param.searchSingleMax)//前面搜索的一个group已经达到预定目标计算量，无需继续搜索
+      break;
+
     double bestSearchValue = -1e4;
     int bestActionIntToSearch = -1;
 

@@ -22,7 +22,7 @@ struct SelfplayParam
   std::string exportDataDir = "./selfplay/0/";
   int sampleNumEachFile = 1024;
 
-  int searchN = 2048;
+  int searchN = 1024;
   int searchGroupSize = 256;
   int searchCpuct = 1.0; 
   double policyDelta = 100.0;//分数每降低多少，policy变成1/e倍

@@ -59,6 +59,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
     isAiJiao = j["isAiJiao"];
     isPositiveThinking = j["isPositiveThinking"];
     isRacing = j["isRacing"];
+    assert(!isRacing);
+    isRacingTurn[turn] = false;
     for (int i = 0; i < 5; i++) {
         for (int p = 0; p < 5; p++) {
             if (j["personDistribution"][i][p] == 102) {
