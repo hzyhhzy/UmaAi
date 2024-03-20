@@ -31,7 +31,11 @@ void main_testCardsSingle()
   double radicalFactor = 10;//激进度
   int searchN = 1000;
   int threadNum = 8;
-  int batchsize = 16;
+#if USE_BACKEND != BACKEND_NONE      //神经网络版
+  int batchsize = 512;
+#else
+  int batchsize = 1;
+#endif
 
   //string modelPath = "../training/example/model.txt";
   string modelPath = "";

@@ -84,17 +84,27 @@ void Evaluator::evaluateSelf(int mode, const SearchParam& param)
 ModelOutputValueV1 Evaluator::extractValueFromNNOutputBuf(float* buf)
 {
   ModelOutputValueV1 v;
-  v.scoreMean = 30000 + 200 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 0];
-  v.scoreStdev = 100 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 1]; 
-  v.value = 30000 + 200 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 2];
+  v.scoreMean = 38000 + 300 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 0];
+  v.scoreStdev = 150 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 1]; 
+  v.value = 38000 + 300 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 2];
   return v;
 }
 
 Action Evaluator::extractActionFromNNOutputBuf(float* buf, const Game& game)
 {
-  Action action;
-  assert(false && "todo");
-  return action;
+  Action bestAction = { -1, 0 };
+  float bestValue = -1e8;
+  for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+  {
+    Action action = Action::intToAction(actionInt);
+    if (!game.isLegal(action))continue;
+    if (buf[actionInt] > bestValue)
+    {
+      bestAction = action;
+      bestValue = buf[actionInt];
+    }
+  }
+  return bestAction;
 }
 
 Evaluator::Evaluator()

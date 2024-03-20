@@ -7,18 +7,22 @@ using json = nlohmann::json;
 double GameConfig::radicalFactor = 5;
 int GameConfig::eventStrength = 20;
 
-#if USE_BACKEND!=BACKEND_NONE      //神经网络版
+#if USE_BACKEND != BACKEND_NONE      //神经网络版
+#if USE_BACKEND == BACKEND_LIBTORCH      //神经网络版
+string GameConfig::modelPath = "db/model_traced.pt";
+#else
 string GameConfig::modelPath = "db/model.txt";
+#endif
 int GameConfig::threadNum = 4;
 int GameConfig::batchSize = 128;
-int GameConfig::searchSingleMax = 8192;
+int GameConfig::searchSingleMax = 4096;
 int GameConfig::searchTotalMax = 0;
 int GameConfig::searchGroupSize = 512;
-int GameConfig::searchDepth = 16;
+int GameConfig::maxDepth = TOTAL_TURN;
 #else  //手写逻辑版
 string GameConfig::modelPath = "";
 int GameConfig::threadNum = 8;
-int GameConfig::batchSize = 8;
+int GameConfig::batchSize = 1;
 int GameConfig::searchSingleMax = 4096;
 int GameConfig::searchTotalMax = 0;
 int GameConfig::searchGroupSize = 128;

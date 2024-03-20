@@ -131,7 +131,7 @@ class Model_TransformerMlp(nn.Module): #输出加一个relu
 
     def __init__(self,b,f,nhead,mlpb):
         super().__init__()
-        self.model_type = "tfmlp"
+        self.model_type = "tf"
         self.model_param=(b,f,nhead,mlpb)
         self.f=f
         self.headC=Game_Input_C_Global+Game_Input_C_Card+Game_Input_C_Person

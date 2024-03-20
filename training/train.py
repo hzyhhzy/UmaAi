@@ -41,9 +41,9 @@ def calculateLoss(output,label):
     #print(torch.softmax(output_policy[:,:10],dim=1), label_policy[:,:10])
 
     huberloss=nn.HuberLoss(reduction='mean',delta=1.0)
-    vloss1 = huberloss(output_value[:,0],(label_value[:,0]-38000)/300)
+    vloss1 = 0.5*huberloss(output_value[:,0],(label_value[:,0]-38000)/300)
     vloss2 = huberloss(output_value[:,1],(label_value[:,1]-0)/150)
-    vloss3 = huberloss(output_value[:,2],(label_value[:,2]-38000)/300)
+    vloss3 = 0.5*huberloss(output_value[:,2],(label_value[:,2]-38000)/300)
     vloss=vloss1+vloss2+vloss3
 
     ploss1=cross_entropy_loss(output_policy,label_policy)
@@ -58,8 +58,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     #data settings
-    parser.add_argument('--tdatadir', type=str, default='../sp1/selfplay/0', help='train dataset path: dir include dataset files or single dataset file')
-    parser.add_argument('--vdatadir', type=str, default='../sp1/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--tdatadir', type=str, default='../sp_gen0/selfplay/all.npz', help='train dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--vdatadir', type=str, default='../sp_gen0/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
     parser.add_argument('--maxvalsamp', type=int, default=1000000, help='validation sample num')
     parser.add_argument('--maxstep', type=int, default=5000000000, help='max step to train')
     parser.add_argument('--savestep', type=int, default=2000, help='step to save and validation')
@@ -69,9 +69,15 @@ if __name__ == '__main__':
     parser.add_argument('--valuesampling', type=float, default=1, help='value sampling rate(to avoid overfitting)')
 
     #model parameters
-    parser.add_argument('--modeltype', type=str, default='res',help='model type defined in model.py')
+    #parser.add_argument('--modeltype', type=str, default='ems',help='model type defined in model.py')
+    #parser.add_argument('--modelparam', nargs='+',type=int,
+    #                    default=(1,128,3,256,256), help='model size')
+    #parser.add_argument('--modeltype', type=str, default='tl',help='model type defined in model.py')
+    #parser.add_argument('--modelparam', nargs='+',type=int,
+    #                    default=(256,), help='model size')
+    parser.add_argument('--modeltype', type=str, default='tf',help='model type defined in model.py')
     parser.add_argument('--modelparam', nargs='+',type=int,
-                        default=(1,128,3,256,256), help='model size')
+                        default=(3,256,4,2), help='model size')
 
     parser.add_argument('--savename', type=str ,default='auto', help='model save pth, ""null"" means does not save, ""auto"" means modeltype+modelparam')
     parser.add_argument('--new', action='store_true', default=False, help='whether to retrain')
@@ -205,15 +211,17 @@ if __name__ == '__main__':
     modelbackup2_loss=1e10
 
     time0=time.time()
-    loss_record_init=[0,0,0,1e-30,0]
+    loss_record_init=[0,0,0,1e-30,0,0]
     loss_record=loss_record_init.copy()
     print("Start Training..............................................................................................")
     while True:
-        tdata_file=random.choice(tdata_files)
-        #print(f"Selected training file: {tdata_file}")
-        tDataset = trainset(tdata_file)
-        #print(f"{tDataset.__len__()} rows")
-        tDataloader = DataLoader(tDataset, shuffle=True, batch_size=args.batchsize)
+        #if there is only one file, avoid repeating loading it
+        if((len(tdata_files)!=1) or ('tDataloader' not in locals())):
+            tdata_file=random.choice(tdata_files)
+            #print(f"Selected training file: {tdata_file}")
+            tDataset = trainset(tdata_file)
+            #print(f"{tDataset.__len__()} rows")
+            tDataloader = DataLoader(tDataset, shuffle=True, batch_size=args.batchsize)
 
         for _ , (x,label) in enumerate(tDataloader):
             if(x.shape[0]!=args.batchsize): #只要完整的batch
@@ -230,10 +238,15 @@ if __name__ == '__main__':
 
             vloss,ploss = calculateLoss(nnoutput,label)
 
-            _, p1_predicted = torch.max(nnoutput[:, :], 1)
-            _, p1_labels = torch.max(label[:, :], 1)
+
+            nnoutput_policy=nnoutput[:, :Game_Output_C_Policy]
+            label_policy=label[:, :Game_Output_C_Policy]
+            _, p1_predicted = torch.max(nnoutput_policy, 1)
+            p1_labelValues, p1_labels = torch.max(label_policy, 1)
+            p1_predictedValues = label_policy[torch.arange(label_policy.shape[0]),p1_predicted]
+            p1_valueDif = 100 * (torch.log(p1_labelValues + 0.01) - torch.log(p1_predictedValues + 0.01)).sum().item()
             p1_correct = (p1_predicted == p1_labels).sum().item()
-            #print(p1_predicted ,p1_labels)
+            #print(torch.log(p1_labelValues + 0.01) - torch.log(p1_predictedValues + 0.01))
 
             loss = 0.0*vloss+1.0*ploss
             if(random.random()<=args.valuesampling):
@@ -243,6 +256,7 @@ if __name__ == '__main__':
             loss_record[2] += ploss.detach().item()
             loss_record[3] += 1
             loss_record[4] += p1_correct / args.batchsize
+            loss_record[5] += p1_valueDif / args.batchsize
 
             loss.backward()
             optimizer.step()
@@ -257,13 +271,15 @@ if __name__ == '__main__':
                 vloss_train=loss_record[1]/loss_record[3]
                 ploss_train=loss_record[2]/loss_record[3]
                 p1acc_train=loss_record[4]/loss_record[3]
-                print("name: {}, time: {:.2f} s, step: {}, totalloss: {:.4f}, vloss: {:.4f}, ploss: {:.4f}, p1acc: {:.2f}%"
-                      .format(args.savename,time_used,totalstep,totalloss_train,vloss_train,ploss_train,100*p1acc_train))
+                p1dif_train=loss_record[5]/loss_record[3]
+                print("name: {}, time: {:.2f} s, step: {}, totalloss: {:.4f}, vloss: {:.4f}, ploss: {:.4f}, p1acc: {:.2f}%, p1dif: {:.2f}"
+                      .format(args.savename,time_used,totalstep,totalloss_train,vloss_train,ploss_train,100*p1acc_train,p1dif_train))
                 train_writer.add_scalar("steps_each_second",loss_record[3]/time_used,global_step=totalstep)
                 train_writer.add_scalar("totalloss",totalloss_train,global_step=totalstep)
                 train_writer.add_scalar("vloss",vloss_train,global_step=totalstep)
                 train_writer.add_scalar("ploss",ploss_train,global_step=totalstep)
                 train_writer.add_scalar("p1acc",p1acc_train,global_step=totalstep)
+                train_writer.add_scalar("p1dif",p1dif_train,global_step=totalstep)
 
                 loss_record = loss_record_init.copy()
 
@@ -332,8 +348,13 @@ if __name__ == '__main__':
 
                             vloss,ploss = calculateLoss(nnoutput,label)
 
-                            _, p1_predicted = torch.max(nnoutput[:,:], 1)
-                            _, p1_labels = torch.max(label[:,:], 1)
+                            nnoutput_policy = nnoutput[:, :Game_Output_C_Policy]
+                            label_policy = label[:, :Game_Output_C_Policy]
+                            _, p1_predicted = torch.max(nnoutput_policy, 1)
+                            p1_labelValues, p1_labels = torch.max(label_policy, 1)
+                            p1_predictedValues = label_policy[torch.arange(label_policy.shape[0]),p1_predicted]
+                            p1_valueDif = 100 * (torch.log(p1_labelValues + 0.01) - torch.log(
+                                p1_predictedValues + 0.01)).sum().item()
                             p1_correct = (p1_predicted == p1_labels).sum().item()
 
                             loss = 1.0*vloss+1.0*ploss
@@ -343,6 +364,7 @@ if __name__ == '__main__':
                             loss_record_val[2]+=ploss.detach().item()
                             loss_record_val[3]+=1
                             loss_record_val[4]+=p1_correct/args.batchsize
+                            loss_record_val[5]+=p1_valueDif/args.batchsize
                             if(vsamp>=args.maxvalsamp):
                                 break
 
@@ -353,15 +375,20 @@ if __name__ == '__main__':
                     vloss_val = loss_record_val[1] / loss_record_val[3]
                     ploss_val = loss_record_val[2] / loss_record_val[3]
                     p1acc_val = loss_record_val[4] / loss_record_val[3]
-                    print("Validation: name: {}, time: {:.2f} s, step: {}, totalloss: {:.4f}, vloss: {:.4f}, ploss: {:.4f}, p1acc: {:.2f}%"
-                          .format(args.savename, time_used, totalstep, totalloss_val, vloss_val, ploss_val, p1acc_val*100))
+                    p1dif_val = loss_record_val[5] / loss_record_val[3]
+                    print("Validation: name: {}, time: {:.2f} s, step: {}, totalloss: {:.4f}, vloss: {:.4f}, ploss: {:.4f}, p1acc: {:.2f}%, p1dif: {:.2f}"
+                          .format(args.savename, time_used, totalstep, totalloss_val, vloss_val, ploss_val, p1acc_val*100,p1dif_val))
                     val_writer.add_scalar("steps_each_second", loss_record[3] / time_used, global_step=totalstep)
                     val_writer.add_scalar("totalloss", totalloss_val, global_step=totalstep)
                     val_writer.add_scalar("vloss", vloss_val, global_step=totalstep)
                     val_writer.add_scalar("ploss", ploss_val, global_step=totalstep)
                     val_writer.add_scalar("p1acc", p1acc_val, global_step=totalstep)
+                    val_writer.add_scalar("p1dif",p1dif_val,global_step=totalstep)
 
                     model.train()
 
             if(totalstep - startstep >= args.maxstep):
                 break
+
+        if(totalstep - startstep >= args.maxstep):
+            break

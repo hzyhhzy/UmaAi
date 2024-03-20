@@ -21,15 +21,19 @@ using namespace std;
 void main_testScoreNoSearch()
 {
 #if USE_BACKEND == BACKEND_LIBTORCH
-  const string modelpath = "../training/example/model_traced.pt";
+  const string modelpath = "./db/model_traced.pt";
+  const int threadNum = 4;
+  int batchsize = 512;
 #elif USE_BACKEND == BACKEND_NONE
   const string modelpath = "";
+  const int threadNum = 8;
+  int batchsize = 1;
 #else
-  const string modelpath = "../training/example/model.txt";
+  const string modelpath = "./db/model.txt";
+  const int threadNum = 4;
+  int batchsize = 512;
 #endif
 
-  const int threadNum = 8;
-  int batchsize = 16;
   const double radicalFactor = 5;//¼¤½ø¶È
   TestConfig test;
 

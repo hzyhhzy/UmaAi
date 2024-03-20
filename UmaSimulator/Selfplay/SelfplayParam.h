@@ -13,7 +13,7 @@ struct SelfplayParam
   int batchsize = 256;
 #elif USE_BACKEND == BACKEND_NONE
   std::string modelPath = "";
-  int batchsize = 16;
+  int batchsize = 1;
 #else
   std::string modelPath = "./model.txt";
   int batchsize = 256;

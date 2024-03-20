@@ -113,9 +113,12 @@ void main_ai()
 
 	Model* modelptr = NULL;
 	Model model(GameConfig::modelPath, GameConfig::batchSize);
+	Model* modelSingleptr = NULL;
+	Model modelSingle(GameConfig::modelPath, 1);
 	if (GameConfig::modelPath != "")
 	{
 		modelptr = &model;
+		modelSingleptr = &modelSingle;
 	}
 	else
 	{
@@ -133,6 +136,7 @@ void main_ai()
 		GameConfig::radicalFactor
 	);
 	Search search(modelptr, GameConfig::batchSize, GameConfig::threadNum, searchParam);
+	Evaluator evaSingle(modelSingleptr, 1);
 	
 	websocket ws(GameConfig::useWebsocket ? "http://127.0.0.1:4693" : "");
 	if (GameConfig::useWebsocket)
@@ -174,7 +178,6 @@ void main_ai()
 		}
 
 		bool suc = game.loadGameFromJson(jsonStr);
-		//cout << "UZI IS STLL ALIVE\n" << endl;
 		game.eventStrength = GameConfig::eventStrength;
 
 		if (!suc)
@@ -280,8 +283,14 @@ void main_ai()
 
 
 			game.print();
-			Action hl = Evaluator::handWrittenStrategy(game);
-			cout << "ÊÖÐ´Âß¼­: " << hl.toString() << endl;
+
+			evaSingle.gameInput[0] = game;
+			evaSingle.evaluateSelf(1,searchParam);
+			Action hl = evaSingle.actionResults[0];
+			if(GameConfig::modelPath=="")
+				cout << "ÊÖÐ´Âß¼­: " << hl.toString() << endl;
+			else
+				cout << "´¿Éñ¾­ÍøÂç: " << hl.toString() << endl;
 
 			Action bestAction = search.runSearch(game, rand);
 			cout << "ÃÉÌØ¿¨Âå: " << bestAction.toString() << endl;

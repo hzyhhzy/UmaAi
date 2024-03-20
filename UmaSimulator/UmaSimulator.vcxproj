@@ -235,12 +235,6 @@
     <ClInclude Include="Tests\tests.h" />
     <ClInclude Include="websocket.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="UmaAi.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\Desktop\a2gck-bgix1-001.ico" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
