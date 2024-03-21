@@ -87,7 +87,9 @@ void ModelCudaBuf::init(const ModelWeight& weight, int batchSize)
   mallocAndCopyToDevice("inputheadGlobal1", weight.inputheadGlobal1, inputheadGlobal1);
   mallocAndCopyToDevice("inputheadGlobal2", weight.inputheadGlobal2, inputheadGlobal2);
   mallocAndCopyToDevice("inputheadCard", weight.inputheadCard, inputheadCard);
+#ifndef NO_NN_GAME_PERSON
   mallocAndCopyToDevice("inputheadPerson", weight.inputheadPerson, inputheadPerson);
+#endif // !NO_NN_GAME_PERSON
 
   for(int i=0;i<ModelWeight::encoderLayer;i++)
   {
@@ -112,16 +114,20 @@ void ModelCudaBuf::init(const ModelWeight& weight, int batchSize)
   mallocOnDevice("input", batchSize * NNINPUT_CHANNELS_V1, input);
   mallocOnDevice("inputGlobal", batchSize * NNINPUT_CHANNELS_V1, inputGlobal);
   mallocOnDevice("inputCard", batchSize * NNINPUT_CHANNELS_V1, inputCard);
+#ifndef NO_NN_GAME_PERSON
   mallocOnDevice("inputPerson", batchSize * NNINPUT_CHANNELS_V1, inputPerson);
+#endif // !NO_NN_GAME_PERSON
   mallocOnDevice("gf", batchSize * ModelWeight::globalCh, gf);
   mallocOnDevice("encoderInput_gf", batchSize * ModelWeight::encoderCh, encoderInput_gf);
+#ifndef NO_NN_GAME_PERSON
   mallocOnDevice("encoderInput_cardf", batchSize * NN_Game_Card_Num * ModelWeight::encoderCh, encoderInput_cardf);
-  mallocOnDevice("encoderInput", batchSize * NN_Game_Person_Num * ModelWeight::encoderCh, encoderInput);
-  mallocOnDevice("encoderQ", batchSize * NN_Game_Person_Num * ModelWeight::encoderCh, encoderQ);
-  mallocOnDevice("encoderV", batchSize * NN_Game_Person_Num * ModelWeight::encoderCh, encoderV);
-  mallocOnDevice("encoderAtt", batchSize * NN_Game_Person_Num * NN_Game_Person_Num, encoderAtt);
+#endif // !NO_NN_GAME_PERSON
+  mallocOnDevice("encoderInput", batchSize * NN_TF_NUM * ModelWeight::encoderCh, encoderInput);
+  mallocOnDevice("encoderQ", batchSize * NN_TF_NUM * ModelWeight::encoderCh, encoderQ);
+  mallocOnDevice("encoderV", batchSize * NN_TF_NUM * ModelWeight::encoderCh, encoderV);
+  mallocOnDevice("encoderAtt", batchSize * NN_TF_NUM * NN_TF_NUM, encoderAtt);
   mallocOnDevice("encoderGf", batchSize * ModelWeight::encoderCh, encoderGf);
-  mallocOnDevice("encoderOutput", batchSize * NN_Game_Person_Num * ModelWeight::encoderCh, encoderOutput);
+  mallocOnDevice("encoderOutput", batchSize * NN_TF_NUM * ModelWeight::encoderCh, encoderOutput);
   mallocOnDevice("encoderSum", batchSize * ModelWeight::encoderCh, encoderSum);
   mallocOnDevice("mlpInput", batchSize * ModelWeight::mlpCh, mlpInput);
   mallocOnDevice("mlpMid", batchSize * ModelWeight::mlpCh, mlpMid);
@@ -206,7 +212,9 @@ void ModelWeight::load(std::string path)
   loadWeight("inputheadGlobal1", fs, inputheadGlobal1);
   loadWeight("inputheadGlobal2", fs, inputheadGlobal2);
   loadWeight("inputheadCard", fs, inputheadCard);
+#ifndef NO_NN_GAME_PERSON
   loadWeight("inputheadPerson", fs, inputheadPerson);
+#endif // !NO_NN_GAME_PERSON
   for (int i = 0; i < encoderLayer; i++)
   {
     loadWeight("encoder_" + to_string(i) + ".lin_Q", fs, encoder_Q[i]);
@@ -228,6 +236,8 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 {
   assert(eva != NULL);
 
+
+#ifdef COMPRESS_NNINPUT
 
   //压缩nninput以节省pcie带宽
   vector<uint16_t>& onesIdx = eva->inputBufOnesIdx;
@@ -254,13 +264,12 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
         countFloat++;
       }
     }
+    //assert(false && "NNINPUT_MAX_FLOAT还需要测试");
+    if (countOne > 185 || countFloat > 185)
+      cout << "Warning: countOne=" << countOne << " countFloat=" << countFloat << endl;
     assert(countOne <= NNINPUT_MAX_ONES);
     assert(countFloat <= NNINPUT_MAX_FLOAT);
   }
-
-
-
-
 
 
   std::lock_guard<std::mutex> lock(mtx);
@@ -270,76 +279,103 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
   CUDA_ERR("", cudaMemcpy(cb.inputFloatValue, floatValue.data(), sizeof(float) * floatValue.size(), cudaMemcpyHostToDevice));
 
   CUDA_ERR("", decompressNNInput(cb.inputOnesIdx, cb.inputFloatIdx, cb.inputFloatValue, cb.input, batchSize, NNINPUT_CHANNELS_V1));
-
   //vector<float> f(batchSize * NNINPUT_CHANNELS_V1);
   //CUDA_ERR("", cudaMemcpy(f.data(), cb.input, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1, cudaMemcpyDeviceToHost)); //batchsize*NNInputC矩阵
   //for (int i = 0; i < batchSize * NNINPUT_CHANNELS_V1; i++)if (f[i] != inputBuf[i])cout << f[i] - inputBuf[i] << endl;
+#else
+  std::lock_guard<std::mutex> lock(mtx);
+  CUDA_ERR("", cudaMemcpy(cb.input, inputBuf, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1, cudaMemcpyHostToDevice));
+#endif
 
-  const int sliceIdx1 = NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1;
-  const int sliceIdx2 = sliceIdx1 + NN_Game_Card_Num * NNINPUT_CHANNELS_CARD_V1;
-  const int sliceIdx3 = sliceIdx2 + NN_Game_Person_Num * NNINPUT_CHANNELS_PERSON_V1;
+  const int sliceIdx1 = NNINPUT_CHANNELS_GAMEGLOBAL_V1;
+#ifndef NO_NN_GAME_PERSON
+  const int Part2Size = NNINPUT_CHANNELS_CARD_V1;
+  const int Part3Size = NNINPUT_CHANNELS_PERSON_V1;
+  const int sliceIdx2 = sliceIdx1 + NN_Game_Card_Num * Part2Size;
+  const int sliceIdx3 = sliceIdx2 + NN_Game_Person_Num * Part3Size;
   static_assert(sliceIdx3 == NNINPUT_CHANNELS_V1);
+#else
+  const int Part2Size = NNINPUT_CHANNELS_PERSON_V1 + NNINPUT_CHANNELS_CARD_V1;
+  const int sliceIdx2 = sliceIdx1 + NN_Game_Card_Num * Part2Size;
+  static_assert(sliceIdx2 == NNINPUT_CHANNELS_V1);
+#endif // !NO_NN_GAME_PERSON
 
+#ifndef NO_NN_GAME_PERSON
   CUDA_ERR("", cropMatrixRowsCUDA(cb.inputGlobal, cb.input, batchSize, NNINPUT_CHANNELS_V1, 0, sliceIdx1));//[batch,c1]
-  CUDA_ERR("", cropMatrixRowsCUDA(cb.inputCard, cb.input, batchSize, NNINPUT_CHANNELS_V1, sliceIdx1, sliceIdx2));//[batch,7,c2]
-  CUDA_ERR("", cropMatrixRowsCUDA(cb.inputPerson, cb.input, batchSize, NNINPUT_CHANNELS_V1, sliceIdx2, sliceIdx3));//[batch,20,c3]
-  
+  CUDA_ERR("", cropMatrixRowsCUDA(cb.inputCard, cb.input, batchSize, NNINPUT_CHANNELS_V1, sliceIdx1, sliceIdx2));//[batch,7,c2] for larc
+  CUDA_ERR("", cropMatrixRowsCUDA(cb.inputPerson, cb.input, batchSize, NNINPUT_CHANNELS_V1, sliceIdx2, sliceIdx3));//[batch,20,c3] for larc
+#else
+  CUDA_ERR("", cropMatrixRowsCUDA(cb.inputGlobal, cb.input, batchSize, NNINPUT_CHANNELS_V1, 0, sliceIdx1));//[batch,c1]
+  CUDA_ERR("", cropMatrixRowsCUDA(cb.inputCard, cb.input, batchSize, NNINPUT_CHANNELS_V1, sliceIdx1, sliceIdx2));//[batch,6,c2] for uaf
+#endif // !NO_NN_GAME_PERSON
+
   const float one = 1.0;
   const float zero = 0.0;
 
   CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::globalCh, batchSize, sliceIdx1, &one, cb.inputheadGlobal1, sliceIdx1, cb.inputGlobal, sliceIdx1, &zero, cb.gf, ModelWeight::globalCh));
-  CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::encoderCh, batchSize * NN_Game_Card_Num, NNINPUT_CHANNELS_CARD_V1, &one, cb.inputheadCard, NNINPUT_CHANNELS_CARD_V1, cb.inputCard, NNINPUT_CHANNELS_CARD_V1, &zero, cb.encoderInput_cardf, ModelWeight::encoderCh));
-  CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::encoderCh, batchSize * NN_Game_Person_Num, NNINPUT_CHANNELS_PERSON_V1, &one, cb.inputheadPerson, NNINPUT_CHANNELS_PERSON_V1, cb.inputPerson, NNINPUT_CHANNELS_PERSON_V1, &zero, cb.encoderInput, ModelWeight::encoderCh));
+
+#ifndef NO_NN_GAME_PERSON
+  CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::encoderCh, batchSize * NN_Game_Card_Num, Part2Size, &one, cb.inputheadCard, Part2Size, cb.inputCard, Part2Size, &zero, cb.encoderInput_cardf, ModelWeight::encoderCh));
+  CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::encoderCh, batchSize * NN_Game_Person_Num, Part3Size, &one, cb.inputheadPerson, Part3Size, cb.inputPerson, Part3Size, &zero, cb.encoderInput, ModelWeight::encoderCh));
+#else
+  CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::encoderCh, batchSize * NN_Game_Card_Num, Part2Size, &one, cb.inputheadCard, Part2Size, cb.inputCard, Part2Size, &zero, cb.encoderInput, ModelWeight::encoderCh));
+#endif // !NO_NN_GAME_PERSON
+
   CUDA_ERR("", reluInPlace(cb.gf, ModelWeight::globalCh * batchSize));
   CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::encoderCh, batchSize, ModelWeight::globalCh, &one, cb.inputheadGlobal2, ModelWeight::globalCh, cb.gf, ModelWeight::globalCh, &zero, cb.encoderInput_gf, ModelWeight::encoderCh));
 
-  CUDA_ERR("", addThreeFeatures(cb.encoderInput_gf, cb.encoderInput_cardf, cb.encoderInput, batchSize, NN_Game_Person_Num, NN_Game_Card_Num, ModelWeight::encoderCh));
-  CUDA_ERR("", reluInPlace(cb.encoderInput, ModelWeight::encoderCh * NN_Game_Person_Num * batchSize));
+#ifndef NO_NN_GAME_PERSON
+  CUDA_ERR("", addThreeFeatures(cb.encoderInput_gf, cb.encoderInput_cardf, cb.encoderInput, batchSize, NN_TF_NUM, NN_Game_Card_Num, ModelWeight::encoderCh));
+#else  
+  CUDA_ERR("", broadcastDim1Add(cb.encoderInput, cb.encoderInput_gf, batchSize, NN_TF_NUM, ModelWeight::encoderCh));
+#endif // !NO_NN_GAME_PERSON
+
+  CUDA_ERR("", reluInPlace(cb.encoderInput, ModelWeight::encoderCh * NN_TF_NUM * batchSize));
 
   //接下来是encoder部分
   for (int layer = 0; layer < ModelWeight::encoderLayer; layer++)
   {
     CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N,
-      ModelWeight::encoderCh, batchSize * NN_Game_Person_Num, ModelWeight::encoderCh, &one,
+      ModelWeight::encoderCh, batchSize * NN_TF_NUM, ModelWeight::encoderCh, &one,
       cb.encoder_Q[layer], ModelWeight::encoderCh,
       cb.encoderInput, ModelWeight::encoderCh, &zero,
       cb.encoderQ, ModelWeight::encoderCh));
 
     CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N,
-      ModelWeight::encoderCh, batchSize * NN_Game_Person_Num, ModelWeight::encoderCh, &one,
+      ModelWeight::encoderCh, batchSize * NN_TF_NUM, ModelWeight::encoderCh, &one,
       cb.encoder_V[layer], ModelWeight::encoderCh,
       cb.encoderInput, ModelWeight::encoderCh, &zero,
       cb.encoderV, ModelWeight::encoderCh));
 
     //Q*x计算attention，只能每个矩阵分开算
     CUBLAS_ERR("", cublasSgemmStridedBatched(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N,
-      NN_Game_Person_Num, NN_Game_Person_Num, ModelWeight::encoderCh, &one,
-      cb.encoderQ, ModelWeight::encoderCh, NN_Game_Person_Num * ModelWeight::encoderCh,
-      cb.encoderInput, ModelWeight::encoderCh, NN_Game_Person_Num * ModelWeight::encoderCh,
+      NN_TF_NUM, NN_TF_NUM, ModelWeight::encoderCh, &one,
+      cb.encoderQ, ModelWeight::encoderCh, NN_TF_NUM* ModelWeight::encoderCh,
+      cb.encoderInput, ModelWeight::encoderCh, NN_TF_NUM* ModelWeight::encoderCh,
       &zero,
-      cb.encoderAtt, NN_Game_Person_Num, NN_Game_Person_Num * NN_Game_Person_Num, 
+      cb.encoderAtt, NN_TF_NUM, NN_TF_NUM * NN_TF_NUM,
       batchSize));
 
-    CUDA_ERR("", reluInPlace(cb.encoderAtt, NN_Game_Person_Num * NN_Game_Person_Num * batchSize));
+    CUDA_ERR("", reluInPlace(cb.encoderAtt, NN_TF_NUM * NN_TF_NUM* batchSize));
 
     //attention*v，只能每个矩阵分开算
     CUBLAS_ERR("", cublasSgemmStridedBatched(cb.cublas, CUBLAS_OP_N, CUBLAS_OP_N,
-      ModelWeight::encoderCh, NN_Game_Person_Num, NN_Game_Person_Num, &one,
-      cb.encoderV, ModelWeight::encoderCh, NN_Game_Person_Num * ModelWeight::encoderCh,
-      cb.encoderAtt, NN_Game_Person_Num, NN_Game_Person_Num * NN_Game_Person_Num,
+      ModelWeight::encoderCh, NN_TF_NUM, NN_TF_NUM, &one,
+      cb.encoderV, ModelWeight::encoderCh, NN_TF_NUM* ModelWeight::encoderCh,
+      cb.encoderAtt, NN_TF_NUM, NN_TF_NUM* NN_TF_NUM,
       &zero,
-      cb.encoderOutput, ModelWeight::encoderCh, NN_Game_Person_Num * ModelWeight::encoderCh,
+      cb.encoderOutput, ModelWeight::encoderCh, NN_TF_NUM * ModelWeight::encoderCh,
       batchSize));
 
     CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::encoderCh, batchSize, ModelWeight::globalCh, &one, cb.encoder_global[layer], ModelWeight::globalCh, cb.gf, ModelWeight::globalCh, &zero, cb.encoderGf, ModelWeight::encoderCh));
 
-    CUDA_ERR("", broadcastDim1Add(cb.encoderOutput, cb.encoderGf, batchSize, NN_Game_Person_Num, ModelWeight::encoderCh));
-    CUDA_ERR("", reluInPlace(cb.encoderOutput, batchSize * NN_Game_Person_Num * ModelWeight::encoderCh));
-    CUDA_ERR("", addInPlace(cb.encoderInput, cb.encoderOutput, batchSize * NN_Game_Person_Num * ModelWeight::encoderCh));//ResNet结构，放回input
+    CUDA_ERR("", broadcastDim1Add(cb.encoderOutput, cb.encoderGf, batchSize, NN_TF_NUM, ModelWeight::encoderCh));
+    CUDA_ERR("", reluInPlace(cb.encoderOutput, batchSize * NN_TF_NUM * ModelWeight::encoderCh));
+    CUDA_ERR("", addInPlace(cb.encoderInput, cb.encoderOutput, batchSize * NN_TF_NUM * ModelWeight::encoderCh));//ResNet结构，放回input
   }
 
   //h=h.mean(dim=1)
-  CUDA_ERR("", sumDim1(cb.encoderSum, cb.encoderInput, batchSize, NN_Game_Person_Num, ModelWeight::encoderCh));
+  CUDA_ERR("", sumDim1(cb.encoderSum, cb.encoderInput, batchSize, NN_TF_NUM, ModelWeight::encoderCh));
 
   //linBeforeMLP2(h)
   CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::mlpCh, batchSize, ModelWeight::encoderCh, &one, cb.linBeforeMLP2, ModelWeight::encoderCh, cb.encoderSum, ModelWeight::encoderCh, &zero, cb.mlpInput, ModelWeight::mlpCh));
@@ -370,13 +406,13 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
   /*
   
-  CUDA_ERR("", cudaMemcpy(f.data(), cb.encoderInput, sizeof(float) * batchSize * ModelWeight::encoderCh * NN_Game_Person_Num, cudaMemcpyDeviceToHost)); //batchsize*NNInputC矩阵
+  CUDA_ERR("", cudaMemcpy(f.data(), cb.encoderInput, sizeof(float) * batchSize * ModelWeight::encoderCh * NN_TF_NUM, cudaMemcpyDeviceToHost)); //batchsize*NNInputC矩阵
 
   for (int i = 0; i < batchSize; i++)
   {
-    for (int p = 0; p < NN_Game_Person_Num; p++)
+    for (int p = 0; p < NN_TF_NUM; p++)
     {
-      cout << f[i * ModelWeight::encoderCh * NN_Game_Person_Num + p * ModelWeight::encoderCh + 30] << " ";
+      cout << f[i * ModelWeight::encoderCh * NN_TF_NUM + p * ModelWeight::encoderCh + 30] << " ";
     }
     cout << endl;
   }

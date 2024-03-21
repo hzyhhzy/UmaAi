@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--vdata', type=str, default='./example/example_data.npz', help='validation dataset file')
 
-    parser.add_argument('--savename', type=str ,default='ems_1_128_3_256_256', help='model save pth')
+    parser.add_argument('--savename', type=str ,default='ems_1_128_1_256_256', help='model save pth')
 
     #training parameters
     parser.add_argument('--gpu', type=int,
@@ -86,21 +86,24 @@ if __name__ == '__main__':
     print(modeltype,file=exportfile)
     print(model.model_param[0],model.model_param[1],model.model_param[2],model.model_param[3],model.model_param[4],file=exportfile)
 
+    hasPersonFeature=Game_Head_Num!=0
+    headN=Game_Head_Num if hasPersonFeature else Game_Card_Num
 
     #inputhead
     exportWeight(model.inputheadGlobal1.weight,"inputheadGlobal1",exportfile)
     exportWeight(model.inputheadGlobal2.weight,"inputheadGlobal2",exportfile)
     exportWeight(model.inputheadCard.weight,"inputheadCard",exportfile)
-    exportWeight(model.inputheadPerson.weight,"inputheadPerson",exportfile)
+    if hasPersonFeature:
+        exportWeight(model.inputheadPerson.weight,"inputheadPerson",exportfile)
 
     for i in range(len(model.encoderTrunk)):
-        exportWeight(model.encoderTrunk[i].lin_Q.weight / Game_Head_Num, f"encoder_{i}.lin_Q", exportfile)
+        exportWeight(model.encoderTrunk[i].lin_Q.weight / headN, f"encoder_{i}.lin_Q", exportfile)
         exportWeight(model.encoderTrunk[i].lin_V.weight, f"encoder_{i}.lin_V", exportfile)
         exportWeight(model.encoderTrunk[i].lin_global.weight, f"encoder_{i}.lin_global", exportfile)
 
 
     exportWeight(model.linBeforeMLP1.weight,"linBeforeMLP1",exportfile)
-    exportWeight(model.linBeforeMLP2.weight / Game_Head_Num,"linBeforeMLP2",exportfile)
+    exportWeight(model.linBeforeMLP2.weight / headN,"linBeforeMLP2",exportfile)
 
     for i in range(len(model.mlpTrunk)):
         exportWeight(model.mlpTrunk[i].lin1.weight, f"mlp_{i}.lin1", exportfile)

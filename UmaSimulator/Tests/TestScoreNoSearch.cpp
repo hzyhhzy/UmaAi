@@ -22,16 +22,16 @@ void main_testScoreNoSearch()
 {
 #if USE_BACKEND == BACKEND_LIBTORCH
   const string modelpath = "./db/model_traced.pt";
-  const int threadNum = 4;
-  int batchsize = 512;
+  const int threadNum = 16;
+  int batchsize = 1024;
 #elif USE_BACKEND == BACKEND_NONE
   const string modelpath = "";
   const int threadNum = 8;
   int batchsize = 1;
 #else
   const string modelpath = "./db/model.txt";
-  const int threadNum = 4;
-  int batchsize = 512;
+  const int threadNum = 16;
+  int batchsize = 1024;
 #endif
 
   const double radicalFactor = 5;//¼¤½ø¶È

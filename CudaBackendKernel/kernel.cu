@@ -223,8 +223,8 @@ cudaError_t sparseToDense(uint32_t* idx, float* value, float* output, int m) {
   return cudaGetLastError();
 }
 
-const int NNINPUT_MAX_FLOAT = 128; //nninput里面最多有多少个非0非1的数
-const int NNINPUT_MAX_ONES = 272; //nninput里面最多有多少个1
+const int NNINPUT_MAX_FLOAT = 192; //nninput里面最多有多少个非0非1的数
+const int NNINPUT_MAX_ONES = 192; //nninput里面最多有多少个1
 __global__ void decompressNNInputKernel(uint16_t* onesIdx, uint16_t* floatIdx, float* floatValue, float* output, int m, int nninputSize) {
   int index = blockIdx.x * blockDim.x + threadIdx.x;
   if (index < m) {

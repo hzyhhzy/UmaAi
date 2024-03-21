@@ -34,11 +34,11 @@ void printMatrix(const float* matrix, int m, int n) {
 void main_testCuda()
 {
   const int bs = 32;
-  const string modelpath = "../training/example/model.txt";
+  const string modelpath = "./db/model.txt";
   Model model(modelpath, bs);
 
   // 准备输入数据
-  std::string filename = "../training/example/example_data.npz";
+  std::string filename = "./db/example_data.npz";
   cnpy::npz_t my_npz = cnpy::npz_load(filename);
   cnpy::NpyArray arr = my_npz["x"];
 
@@ -57,5 +57,10 @@ void main_testCuda()
 
   Evaluator evaBuf(&model, bs);//只用于提供一些缓存区
   model.evaluate(&evaBuf, data.data(), output.data(), bs);
-
+  for (int t = 0; t < 32; t++)
+  {
+    for (int i = 0; i < 5; i++)
+      cout << output[NNOUTPUT_CHANNELS_V1 * t + i] << " ";
+    cout << endl;
+  }
 }

@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--vdata', type=str, default='./example/example_data.npz', help='validation dataset file')
 
-    parser.add_argument('--savename', type=str ,default='ems_2_256_3_256_256', help='model save pth')
+    parser.add_argument('--savename', type=str ,default='ems_1_128_1_256_256', help='model save pth')
 
     #training parameters
     parser.add_argument('--gpu', type=int,

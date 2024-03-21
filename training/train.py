@@ -41,9 +41,9 @@ def calculateLoss(output,label):
     #print(torch.softmax(output_policy[:,:10],dim=1), label_policy[:,:10])
 
     huberloss=nn.HuberLoss(reduction='mean',delta=1.0)
-    vloss1 = 0.5*huberloss(output_value[:,0],(label_value[:,0]-38000)/300)
-    vloss2 = huberloss(output_value[:,1],(label_value[:,1]-0)/150)
-    vloss3 = 0.5*huberloss(output_value[:,2],(label_value[:,2]-38000)/300)
+    vloss1 = 0.2*huberloss(output_value[:,0],(label_value[:,0]-38000)/300)
+    vloss2 = 0.4*huberloss(output_value[:,1],(label_value[:,1]-0)/150)
+    vloss3 = 0.2*huberloss(output_value[:,2],(label_value[:,2]-38000)/300)
     vloss=vloss1+vloss2+vloss3
 
     ploss1=cross_entropy_loss(output_policy,label_policy)
@@ -163,10 +163,10 @@ if __name__ == '__main__':
     startstep=totalstep
     if model_type == 'res' or model_type == 'tl':
 
-        lr = 1e-3
-        lrhead = 3e-4
-        wd = 2e-4
-        wdhead = 2e-4
+        lr = 1.5e-3
+        lrhead = 5e-4
+        wd = 1e-5
+        wdhead = 1e-5
         # lowl2param是一些密集型神经网络参数(mlp,cnn等)，对lr和weightdecay更敏感，使用float32计算，几乎不需要weightdecay
         # otherparam需要高的weightdecay
         headparam = list(map(id, model.inputhead.parameters()))
@@ -177,9 +177,9 @@ if __name__ == '__main__':
                                lr=lr*args.lrscale, weight_decay=wd*args.wdscale)
     elif model_type == 'tf' or model_type == 'tf2' or model_type == 'tfmlp':
 
-        lr = 3e-4
-        lrhead = 3e-4
-        lrtf = 3e-4
+        lr = 5e-4
+        lrhead = 5e-4
+        lrtf = 5e-4
         wd = 2e-5
         wdhead = 2e-5
         headparam = list(map(id, model.inputhead.parameters()))
@@ -192,13 +192,13 @@ if __name__ == '__main__':
                                 {'params': transformerparam, 'lr': lrtf*args.lrscale, 'weight_decay': wd*args.wdscale}],
                                lr=lr*args.lrscale, weight_decay=wd*args.wdscale)
 
-    elif model_type == 'em' or model_type == 'ems' or model_type == 'emsb':
-        lr = 5e-4
-        wd = 2e-5
+    elif model_type == 'em' or model_type == 'ems' or model_type == 'ems2' or model_type == 'ems3' or model_type == 'emsf' or model_type == 'emsm' or model_type == 'emsb':
+        lr = 7e-4
+        wd = 1e-5
         optimizer = optim.Adam(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)
     else:
-        lr = 1e-3
-        wd = 2e-5
+        lr = 7e-4
+        wd = 1e-5
         optimizer = optim.Adam(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)
     model.train()
 

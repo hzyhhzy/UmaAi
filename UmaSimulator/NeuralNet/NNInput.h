@@ -14,8 +14,8 @@ const int NNINPUT_CHANNELS_V1 = NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNEL
 
 #if USE_BACKEND == BACKEND_CUDA
 //改以下数字，kernel.cu也要改
-const int NNINPUT_MAX_FLOAT = 128; //nninput里面最多有多少个非0非1的数
-const int NNINPUT_MAX_ONES = 272; //nninput里面最多有多少个1
+const int NNINPUT_MAX_FLOAT = 192; //nninput里面最多有多少个非0非1的数
+const int NNINPUT_MAX_ONES = 192; //nninput里面最多有多少个1
 static_assert(NNINPUT_CHANNELS_V1 < 32767);//int16
 #endif
 

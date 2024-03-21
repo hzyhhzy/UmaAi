@@ -51,12 +51,66 @@ class EncoderLayerSimple(nn.Module):
         y=x.view(x.shape[0]*x.shape[1],x.shape[2])
         q=self.lin_Q(y).view(x.shape[0],x.shape[1],self.inout_c)
         v=self.lin_V(y).view(x.shape[0],x.shape[1],self.inout_c)
-        att=torch.relu(torch.bmm(x,q.transpose(1,2)))*0.05
+        att=torch.relu(torch.bmm(x,q.transpose(1,2)))/x.shape[1]
         y=torch.bmm(att,v)
         y=torch.relu(y+self.lin_global(gf).view(x.shape[0],1,self.inout_c))
 
         y = y + x
         return y
+
+class EncoderLayerSoftmax(nn.Module):
+    def __init__(self, inout_c, global_c):
+        super().__init__()
+        self.inout_c = inout_c
+        self.lin_Q = nn.Linear(inout_c, inout_c, bias=False)
+        self.lin_V = nn.Linear(inout_c, inout_c, bias=False)
+        self.lin_global = nn.Linear(global_c, inout_c, bias=False)
+
+    def forward(self, x, gf):
+        y=x.view(x.shape[0]*x.shape[1],x.shape[2])
+        q=self.lin_Q(y).view(x.shape[0],x.shape[1],self.inout_c)
+        v=self.lin_V(y).view(x.shape[0],x.shape[1],self.inout_c)
+        att=torch.softmax(torch.bmm(x,q.transpose(1,2)),dim=2)
+        y=torch.bmm(att,v)
+        y=torch.relu(y+self.lin_global(gf).view(x.shape[0],1,self.inout_c))
+
+        y = y + x
+        return y
+
+class EncoderLayerFull(nn.Module):
+    def __init__(self, inout_c, global_c):
+        super().__init__()
+        self.inout_c = inout_c
+        self.encoder = EncoderLayerSoftmax(inout_c, global_c)
+        self.ff1 = nn.Linear(inout_c, 2*inout_c, bias=False)
+        self.ff2 = nn.Linear(2*inout_c, inout_c, bias=False)
+
+    def forward(self, x, gf):
+        y = self.encoder(x,gf).view(x.shape[0]*x.shape[1], self.inout_c)
+        y=self.ff1(y)
+        y=torch.relu(y)
+        y=self.ff2(y)
+        y=torch.relu(y)
+        y=y.view(x.shape)
+
+        y = y + x
+        return y
+
+class EncoderLayerFF(nn.Module):
+    def __init__(self, inout_c, global_c):
+        super().__init__()
+        self.inout_c = inout_c
+        self.encoder = EncoderLayerSimple(inout_c, global_c)
+        self.ff1 = nn.Linear(inout_c, inout_c, bias=False)
+
+    def forward(self, x, gf):
+        y = self.encoder(x,gf).view(x.shape[0]*x.shape[1], self.inout_c)
+        y1=self.ff1(y)
+        y1=torch.relu(y1)
+        y1 = y1 + y
+        y1=y1.view(x.shape)
+
+        return y1
 
 class EncoderLayerSimpleBN(nn.Module):
     def __init__(self, inout_c, global_c):
@@ -257,6 +311,186 @@ class Model_EncoderMlpSimple(nn.Module): #简易版transformer+mlp
         return self.outputhead(h)
 
 
+class Model_EncoderMlpSoftmax(nn.Module):  # ems的encoder换成softmax型
+
+    def __init__(self, encoderB, encoderF, mlpB, mlpF, globalF):
+        super().__init__()
+        self.model_type = "emsm"
+        self.model_param = (encoderB, encoderF, mlpB, mlpF, globalF)
+        self.encoderF = encoderF
+        self.inputheadGlobal1 = nn.Linear(Game_Input_C_Global, globalF, bias=False)
+        self.inputheadGlobal2 = nn.Linear(globalF, encoderF, bias=False)
+        self.inputheadCard = nn.Linear(Game_Input_C_Card, encoderF, bias=False)
+        if (Game_Head_Num != 0):
+            self.inputheadPerson = nn.Linear(Game_Input_C_Person, encoderF, bias=False)
+
+        self.encoderTrunk = nn.ModuleList()
+        for i in range(encoderB):
+            self.encoderTrunk.append(EncoderLayerSoftmax(inout_c=encoderF, global_c=globalF))
+
+        self.linBeforeMLP1 = nn.Linear(globalF, mlpF, bias=False)
+        self.linBeforeMLP2 = nn.Linear(encoderF, mlpF, bias=False)
+
+        self.mlpTrunk = nn.ModuleList()
+        for i in range(mlpB):
+            self.mlpTrunk.append(ResnetLayer(mlpF, mlpF))
+
+        self.outputhead = nn.Linear(mlpF, Game_Output_C)
+
+    def forward(self, x):
+        x1 = x[:, :Game_Input_C_Global]
+        if (Game_Head_Num != 0):
+            x2 = x[:, Game_Input_C_Global:Game_Input_C_Global + Game_Card_Num * Game_Input_C_Card].reshape(-1,
+                                                                                                           Game_Input_C_Card)
+            x3 = x[:, Game_Input_C_Global + Game_Card_Num * Game_Input_C_Card:].reshape(-1, Game_Input_C_Person)
+        else:
+            x2 = x[:, Game_Input_C_Global:].reshape(-1, Game_Input_C_Card)
+
+        gf = torch.relu(self.inputheadGlobal1(x1))
+        if (Game_Head_Num != 0):
+            h = self.inputheadGlobal2(gf).view(-1, 1, self.encoderF) + \
+                F.pad(self.inputheadCard(x2).view(-1, Game_Card_Num, self.encoderF),
+                      (0, 0, 0, Game_Head_Num - Game_Card_Num, 0, 0)) + \
+                self.inputheadPerson(x3).view(-1, Game_Head_Num, self.encoderF)
+        else:
+            h = self.inputheadGlobal2(gf).view(-1, 1, self.encoderF) + \
+                self.inputheadCard(x2).view(-1, Game_Card_Num, self.encoderF)
+
+        h = torch.relu(h)
+
+        for block in self.encoderTrunk:
+            h = block(h, gf)
+
+        h = h.mean(dim=1)
+
+        h = self.linBeforeMLP2(h) + self.linBeforeMLP1(gf)
+        h = torch.relu(h)
+
+        for block in self.mlpTrunk:
+            h = block(h)
+
+        return self.outputhead(h)
+
+
+class Model_EncoderMlpFull(nn.Module):  # 比较完整的encoder
+
+    def __init__(self, encoderB, encoderF, mlpB, mlpF, globalF):
+        super().__init__()
+        self.model_type = "ems2"
+        self.model_param = (encoderB, encoderF, mlpB, mlpF, globalF)
+        self.encoderF = encoderF
+        self.inputheadGlobal1 = nn.Linear(Game_Input_C_Global, globalF, bias=False)
+        self.inputheadGlobal2 = nn.Linear(globalF, encoderF, bias=False)
+        self.inputheadCard = nn.Linear(Game_Input_C_Card, encoderF, bias=False)
+        if (Game_Head_Num != 0):
+            self.inputheadPerson = nn.Linear(Game_Input_C_Person, encoderF, bias=False)
+
+        self.encoderTrunk = nn.ModuleList()
+        for i in range(encoderB):
+            self.encoderTrunk.append(EncoderLayerFull(inout_c=encoderF, global_c=globalF))
+
+        self.linBeforeMLP1 = nn.Linear(globalF, mlpF, bias=False)
+        self.linBeforeMLP2 = nn.Linear(encoderF, mlpF, bias=False)
+
+        self.mlpTrunk = nn.ModuleList()
+        for i in range(mlpB):
+            self.mlpTrunk.append(ResnetLayer(mlpF, mlpF))
+
+        self.outputhead = nn.Linear(mlpF, Game_Output_C)
+
+    def forward(self, x):
+        x1 = x[:, :Game_Input_C_Global]
+        if (Game_Head_Num != 0):
+            x2 = x[:, Game_Input_C_Global:Game_Input_C_Global + Game_Card_Num * Game_Input_C_Card].reshape(-1,
+                                                                                                           Game_Input_C_Card)
+            x3 = x[:, Game_Input_C_Global + Game_Card_Num * Game_Input_C_Card:].reshape(-1, Game_Input_C_Person)
+        else:
+            x2 = x[:, Game_Input_C_Global:].reshape(-1, Game_Input_C_Card)
+
+        gf = torch.relu(self.inputheadGlobal1(x1))
+        if (Game_Head_Num != 0):
+            h = self.inputheadGlobal2(gf).view(-1, 1, self.encoderF) + \
+                F.pad(self.inputheadCard(x2).view(-1, Game_Card_Num, self.encoderF),
+                      (0, 0, 0, Game_Head_Num - Game_Card_Num, 0, 0)) + \
+                self.inputheadPerson(x3).view(-1, Game_Head_Num, self.encoderF)
+        else:
+            h = self.inputheadGlobal2(gf).view(-1, 1, self.encoderF) + \
+                self.inputheadCard(x2).view(-1, Game_Card_Num, self.encoderF)
+
+        h = torch.relu(h)
+
+        for block in self.encoderTrunk:
+            h = block(h, gf)
+
+        h = h.mean(dim=1)
+
+        h = self.linBeforeMLP2(h) + self.linBeforeMLP1(gf)
+        h = torch.relu(h)
+
+        for block in self.mlpTrunk:
+            h = block(h)
+
+        return self.outputhead(h)
+
+class Model_EncoderMlpF(nn.Module):  # 比较完整的encoder
+
+    def __init__(self, encoderB, encoderF, mlpB, mlpF, globalF):
+        super().__init__()
+        self.model_type = "emsf"
+        self.model_param = (encoderB, encoderF, mlpB, mlpF, globalF)
+        self.encoderF = encoderF
+        self.inputheadGlobal1 = nn.Linear(Game_Input_C_Global, globalF, bias=False)
+        self.inputheadGlobal2 = nn.Linear(globalF, encoderF, bias=False)
+        self.inputheadCard = nn.Linear(Game_Input_C_Card, encoderF, bias=False)
+        if (Game_Head_Num != 0):
+            self.inputheadPerson = nn.Linear(Game_Input_C_Person, encoderF, bias=False)
+
+        self.encoderTrunk = nn.ModuleList()
+        for i in range(encoderB):
+            self.encoderTrunk.append(EncoderLayerFF(inout_c=encoderF, global_c=globalF))
+
+        self.linBeforeMLP1 = nn.Linear(globalF, mlpF, bias=False)
+        self.linBeforeMLP2 = nn.Linear(encoderF, mlpF, bias=False)
+
+        self.mlpTrunk = nn.ModuleList()
+        for i in range(mlpB):
+            self.mlpTrunk.append(ResnetLayer(mlpF, mlpF))
+
+        self.outputhead = nn.Linear(mlpF, Game_Output_C)
+
+    def forward(self, x):
+        x1 = x[:, :Game_Input_C_Global]
+        if (Game_Head_Num != 0):
+            x2 = x[:, Game_Input_C_Global:Game_Input_C_Global + Game_Card_Num * Game_Input_C_Card].reshape(-1,
+                                                                                                           Game_Input_C_Card)
+            x3 = x[:, Game_Input_C_Global + Game_Card_Num * Game_Input_C_Card:].reshape(-1, Game_Input_C_Person)
+        else:
+            x2 = x[:, Game_Input_C_Global:].reshape(-1, Game_Input_C_Card)
+
+        gf = torch.relu(self.inputheadGlobal1(x1))
+        if (Game_Head_Num != 0):
+            h = self.inputheadGlobal2(gf).view(-1, 1, self.encoderF) + \
+                F.pad(self.inputheadCard(x2).view(-1, Game_Card_Num, self.encoderF),
+                      (0, 0, 0, Game_Head_Num - Game_Card_Num, 0, 0)) + \
+                self.inputheadPerson(x3).view(-1, Game_Head_Num, self.encoderF)
+        else:
+            h = self.inputheadGlobal2(gf).view(-1, 1, self.encoderF) + \
+                self.inputheadCard(x2).view(-1, Game_Card_Num, self.encoderF)
+
+        h = torch.relu(h)
+
+        for block in self.encoderTrunk:
+            h = block(h, gf)
+
+        h = h.mean(dim=1)
+
+        h = self.linBeforeMLP2(h) + self.linBeforeMLP1(gf)
+        h = torch.relu(h)
+
+        for block in self.mlpTrunk:
+            h = block(h)
+
+        return self.outputhead(h)
 
 class Model_twolayer(nn.Module):
     #
@@ -295,5 +529,12 @@ ModelDic = {
     "tf": Model_TransformerMlp, #transformer后接mlp
     "tl": Model_twolayer, #2 layer mlp
     "lin": Model_linear, #linear
-    "ems": Model_EncoderMlpSimple #手写极简版transformer+mlp
+
+    "ems": Model_EncoderMlpSimple, #手写极简版transformer+mlp，层数少时可以使用这个
+    "ems2": Model_EncoderMlpFull, #完整的transformer encoder，层数多时使用这个
+
+
+    #deprecated, only for test
+    "emsf": Model_EncoderMlpF, #Model_EncoderMlpFull的简化版
+    "emsm": Model_EncoderMlpSoftmax, #手写极简版transformer+mlp
 }
