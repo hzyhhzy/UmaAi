@@ -31,6 +31,7 @@ const int GameConstants::FailRateBasic = 504;
 
 bool GameConstants::isLinkChara(int id)
 {
+  if (id > 100000)id /= 100;
   for (int i = 0; i < UAF_LinkCharas.size(); i++)
   {
     if (UAF_LinkCharas[i] == id)
