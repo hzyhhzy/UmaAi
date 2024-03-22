@@ -68,18 +68,30 @@ for URL in urls:
 
     t=soup.find_all('div', class_="characters_objective_text__VbDAs")
     all_races=[]
+    free_races = []
+    last_goal = 0
     for t1 in t:
         t2=t1.find_all('div')
-
+        #print(t2)
         if(len(t2)!=4 or ("Turf" not in t2[3].text and "Dirt" not in t2[3].text)): #非单场比赛目标
             print(nameid,t2[0].text)
-            continue
-
-        all_races.append(int(t2[1].text[5:7])-1)
+            end_turn = int(t2[1].text.split(" ")[1])
+            if "fans" in t2[0].text:    # 粉丝数要求
+                free_races.append([last_goal, end_turn-1, 1])
+                print(f"Turn {last_goal+1} -> {end_turn}, 1 free race")
+            elif "races" in t2[0].text: # 场次要求
+                count = int(t2[0].text.split(" in ")[1].split(" ")[0])
+                free_races.append([last_goal, end_turn-1, count])
+                print(f"Turn {last_goal+1} -> {end_turn}, {count} free race(s)")
+            last_goal = end_turn+1
+        else:
+            last_goal = int(t2[1].text[5:7])
+            all_races.append(last_goal-1)        
 
     umadata["gameId"]=umaid
     umadata["name"]=name
     umadata["races"]=all_races
+    umadata["freeRaces"]=free_races
     pool[umaid] = umadata
 
 #    with open('uma/'+nameid+".json", 'w') as file:
