@@ -61,8 +61,8 @@ static_assert(sizeof(ModelOutputV1) == sizeof(float) * NNOUTPUT_CHANNELS_V1,"NNO
 struct ModelWeight
 {
   static const int encoderLayer = 1;
-  static const int encoderCh = 128;
-  static const int mlpBlock = 1;
+  static const int encoderCh = 256;
+  static const int mlpBlock = 2;
   static const int globalCh = 256;
   static const int mlpCh = 256;
 

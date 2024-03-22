@@ -29,16 +29,21 @@ void main_testCardsSingle()
 {
   //int toTestCardType = 0;//速耐力根智
   double radicalFactor = 10;//激进度
-  int searchN = 1000;
-  int threadNum = 8;
-#if USE_BACKEND != BACKEND_NONE      //神经网络版
-  int batchsize = 512;
-#else
+  int searchN = 100000;
+#if USE_BACKEND == BACKEND_LIBTORCH
+  const string modelpath = "./db/model_traced.pt";
+  const int threadNum = 16;
+  int batchsize = 1024;
+#elif USE_BACKEND == BACKEND_NONE
+  const string modelpath = "";
+  const int threadNum = 8;
   int batchsize = 1;
+#else
+  const string modelpath = "./db/model.txt";
+  const int threadNum = 16;
+  int batchsize = 1024;
 #endif
 
-  //string modelPath = "../training/example/model.txt";
-  string modelPath = "";
 
   GameDatabase::loadUmas("./db/umaDB.json");
   //GameDatabase::loadCards("../db/card");
@@ -112,8 +117,8 @@ void main_testCardsSingle()
     SearchParam searchParam(searchN, radicalFactor);
 
     Model* modelptr = NULL;
-    Model model(modelPath, batchsize);
-    if (modelPath != "")
+    Model model(modelpath, batchsize);
+    if (modelpath != "")
     {
       modelptr = &model;
     }
