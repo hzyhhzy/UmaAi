@@ -31,10 +31,16 @@ void SelfplayThread::run()
   int fileNum = 1 + ((param.maxSampleNum - 1) / param.threadNum);
   for (int f = 0; f < fileNum; f++)
   {
+    auto start = std::chrono::high_resolution_clock::now();
+
     for (int g = 0; g < param.sampleNumEachFile; g++)
       sampleData[g] = generateSingleSample();
     writeDataToFile();
-    cout << f << endl;
+
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    double duration_s = 0.000001 * duration.count();
+    cout << f << ": " << duration_s << " s" << endl;
   }
 }
 

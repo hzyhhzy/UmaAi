@@ -111,7 +111,13 @@
       122,
       108
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
     "gameId": 100201,
     "name": "silence-suzuka",
     "preferRaces": [],
@@ -143,7 +149,13 @@
       104,
       103
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
     "gameId": 100202,
     "name": "silence-suzuka",
     "preferRaces": [],
@@ -412,7 +424,18 @@
       103,
       112
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      },
+      {
+        "startTurn": 48,
+        "endTurn": 59,
+        "count": 2
+      }
+    ],
     "gameId": 100601,
     "name": "oguri-cap",
     "preferRaces": [],
@@ -443,7 +466,18 @@
       93,
       95
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      },
+      {
+        "startTurn": 48,
+        "endTurn": 59,
+        "count": 2
+      }
+    ],
     "gameId": 100602,
     "name": "oguri-cap",
     "preferRaces": [],
@@ -916,7 +950,13 @@
       125,
       115
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 101301,
     "name": "mejiro-mcqueen",
     "preferRaces": [],
@@ -947,7 +987,13 @@
       132,
       105
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 101302,
     "name": "mejiro-mcqueen",
     "preferRaces": [],
@@ -978,7 +1024,13 @@
       138,
       108
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 101303,
     "name": "mejiro-mcqueen",
     "preferRaces": [],
@@ -1075,7 +1127,13 @@
       125,
       111
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 27,
+        "count": 1
+      }
+    ],
     "gameId": 101501,
     "name": "tm-opera-o",
     "preferRaces": [],
@@ -1108,7 +1166,13 @@
       107,
       122
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 27,
+        "count": 1
+      }
+    ],
     "gameId": 101502,
     "name": "tm-opera-o",
     "preferRaces": [],
@@ -1349,7 +1413,13 @@
       122,
       112
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 46,
+        "endTurn": 59,
+        "count": 3
+      }
+    ],
     "gameId": 101901,
     "name": "agnes-digital",
     "preferRaces": [],
@@ -1380,7 +1450,13 @@
       129,
       86
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 46,
+        "endTurn": 59,
+        "count": 3
+      }
+    ],
     "gameId": 101902,
     "name": "agnes-digital",
     "preferRaces": [],
@@ -1411,7 +1487,13 @@
       101,
       101
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 24,
+        "count": 1
+      }
+    ],
     "gameId": 102001,
     "name": "seiun-sky",
     "preferRaces": [],
@@ -1445,7 +1527,13 @@
       108,
       107
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 24,
+        "count": 1
+      }
+    ],
     "gameId": 102002,
     "name": "seiun-sky",
     "preferRaces": [],
@@ -1479,7 +1567,18 @@
       102,
       102
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 28,
+        "count": 1
+      },
+      {
+        "startTurn": 30,
+        "endTurn": 48,
+        "count": 4
+      }
+    ],
     "gameId": 102101,
     "name": "tamamo-cross",
     "preferRaces": [],
@@ -1510,7 +1609,18 @@
       113,
       108
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 28,
+        "count": 1
+      },
+      {
+        "startTurn": 30,
+        "endTurn": 48,
+        "count": 4
+      }
+    ],
     "gameId": 102102,
     "name": "tamamo-cross",
     "preferRaces": [],
@@ -1541,7 +1651,13 @@
       108,
       107
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 102201,
     "name": "fine-motion",
     "preferRaces": [],
@@ -1575,7 +1691,13 @@
       115,
       121
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 102202,
     "name": "fine-motion",
     "preferRaces": [],
@@ -1677,7 +1799,13 @@
       123,
       117
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 36,
+        "count": 1
+      }
+    ],
     "gameId": 102401,
     "name": "mayano-top-gun",
     "preferRaces": [],
@@ -1710,7 +1838,13 @@
       110,
       115
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 36,
+        "count": 1
+      }
+    ],
     "gameId": 102402,
     "name": "mayano-top-gun",
     "preferRaces": [],
@@ -1743,7 +1877,13 @@
       105,
       109
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 25,
+        "count": 1
+      }
+    ],
     "gameId": 102501,
     "name": "manhattan-cafe",
     "preferRaces": [],
@@ -1777,7 +1917,13 @@
       99,
       109
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 25,
+        "count": 1
+      }
+    ],
     "gameId": 102502,
     "name": "manhattan-cafe",
     "preferRaces": [],
@@ -1947,7 +2093,18 @@
       111,
       113
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 22,
+        "count": 1
+      },
+      {
+        "startTurn": 24,
+        "endTurn": 36,
+        "count": 1
+      }
+    ],
     "gameId": 102801,
     "name": "hishi-akebono",
     "preferRaces": [],
@@ -2285,7 +2442,13 @@
       90,
       97
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 103401,
     "name": "inari-one",
     "preferRaces": [],
@@ -2318,7 +2481,13 @@
       95,
       110
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 103402,
     "name": "inari-one",
     "preferRaces": [],
@@ -2559,7 +2728,13 @@
       111,
       119
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 22,
+        "count": 1
+      }
+    ],
     "gameId": 103801,
     "name": "curren-chan",
     "preferRaces": [],
@@ -2592,7 +2767,13 @@
       104,
       126
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 22,
+        "count": 1
+      }
+    ],
     "gameId": 103802,
     "name": "curren-chan",
     "preferRaces": [],
@@ -2625,7 +2806,13 @@
       101,
       109
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 30,
+        "count": 1
+      }
+    ],
     "gameId": 103901,
     "name": "kawakami-princess",
     "preferRaces": [],
@@ -2658,7 +2845,13 @@
       112,
       101
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 30,
+        "count": 1
+      }
+    ],
     "gameId": 103902,
     "name": "kawakami-princess",
     "preferRaces": [],
@@ -2869,7 +3062,13 @@
       98,
       107
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 24,
+        "count": 1
+      }
+    ],
     "gameId": 104301,
     "name": "shinko-windy",
     "preferRaces": [],
@@ -3002,7 +3201,13 @@
       122,
       105
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 24,
+        "count": 2
+      }
+    ],
     "gameId": 104601,
     "name": "smart-falcon",
     "preferRaces": [],
@@ -3037,7 +3242,13 @@
       128,
       101
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 24,
+        "count": 2
+      }
+    ],
     "gameId": 104602,
     "name": "smart-falcon",
     "preferRaces": [],
@@ -3072,7 +3283,13 @@
       91,
       122
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
     "gameId": 104701,
     "name": "zenno-rob-roy",
     "preferRaces": [],
@@ -3344,7 +3561,23 @@
       119,
       114
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 36,
+        "count": 1
+      },
+      {
+        "startTurn": 38,
+        "endTurn": 44,
+        "count": 1
+      },
+      {
+        "startTurn": 46,
+        "endTurn": 47,
+        "count": 1
+      }
+    ],
     "gameId": 105201,
     "name": "haru-urara",
     "preferRaces": [],
@@ -3375,7 +3608,23 @@
       119,
       120
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 36,
+        "count": 1
+      },
+      {
+        "startTurn": 38,
+        "endTurn": 44,
+        "count": 1
+      },
+      {
+        "startTurn": 46,
+        "endTurn": 47,
+        "count": 1
+      }
+    ],
     "gameId": 105202,
     "name": "haru-urara",
     "preferRaces": [],
@@ -3406,7 +3655,18 @@
       112,
       102
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      },
+      {
+        "startTurn": 25,
+        "endTurn": 28,
+        "count": 1
+      }
+    ],
     "gameId": 105301,
     "name": "bamboo-memory",
     "preferRaces": [],
@@ -3438,7 +3698,18 @@
       102,
       102
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      },
+      {
+        "startTurn": 25,
+        "endTurn": 28,
+        "count": 1
+      }
+    ],
     "gameId": 105302,
     "name": "bamboo-memory",
     "preferRaces": [],
@@ -3470,7 +3741,13 @@
       109,
       96
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 24,
+        "count": 1
+      }
+    ],
     "gameId": 105401,
     "name": "biko-pegasus",
     "preferRaces": [],
@@ -3505,7 +3782,13 @@
       93,
       121
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
     "gameId": 105501,
     "name": "marvelous-sunday",
     "preferRaces": [],
@@ -3638,7 +3921,18 @@
       118,
       99
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 30,
+        "count": 1
+      },
+      {
+        "startTurn": 32,
+        "endTurn": 43,
+        "count": 1
+      }
+    ],
     "gameId": 105801,
     "name": "meisho-doto",
     "preferRaces": [],
@@ -3670,7 +3964,18 @@
       126,
       114
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 30,
+        "count": 1
+      },
+      {
+        "startTurn": 32,
+        "endTurn": 43,
+        "count": 1
+      }
+    ],
     "gameId": 105802,
     "name": "meisho-doto",
     "preferRaces": [],
@@ -3942,7 +4247,13 @@
       114,
       110
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 106201,
     "name": "matikanetannhauser",
     "preferRaces": [],
@@ -3976,7 +4287,13 @@
       101,
       106
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 106202,
     "name": "matikanetannhauser",
     "preferRaces": [],
@@ -4049,7 +4366,13 @@
       111,
       108
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 34,
+        "count": 1
+      }
+    ],
     "gameId": 106401,
     "name": "mejiro-palmer",
     "preferRaces": [],
@@ -4081,7 +4404,13 @@
       123,
       94
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 34,
+        "count": 1
+      }
+    ],
     "gameId": 106402,
     "name": "mejiro-palmer",
     "preferRaces": [],
@@ -4147,7 +4476,18 @@
       119,
       89
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 28,
+        "count": 1
+      },
+      {
+        "startTurn": 42,
+        "endTurn": 56,
+        "count": 3
+      }
+    ],
     "gameId": 106601,
     "name": "twin-turbo",
     "preferRaces": [],
@@ -4283,7 +4623,13 @@
       105,
       107
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
     "gameId": 106801,
     "name": "kitasan-black",
     "preferRaces": [],
@@ -4318,7 +4664,13 @@
       100,
       116
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
     "gameId": 106802,
     "name": "kitasan-black",
     "preferRaces": [],
@@ -4353,7 +4705,13 @@
       112,
       103
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
     "gameId": 106803,
     "name": "kitasan-black",
     "preferRaces": [],
@@ -4489,7 +4847,13 @@
       98,
       121
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
     "gameId": 107101,
     "name": "mejiro-ardan",
     "preferRaces": [],
@@ -4522,7 +4886,13 @@
       103,
       121
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
     "gameId": 107102,
     "name": "mejiro-ardan",
     "preferRaces": [],
@@ -4657,7 +5027,23 @@
       120,
       100
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 24,
+        "count": 1
+      },
+      {
+        "startTurn": 26,
+        "endTurn": 31,
+        "count": 1
+      },
+      {
+        "startTurn": 33,
+        "endTurn": 45,
+        "count": 1
+      }
+    ],
     "gameId": 107601,
     "name": "sakura-laurel",
     "preferRaces": [],
@@ -4688,7 +5074,13 @@
       112,
       101
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 107701,
     "name": "narita-top-road",
     "preferRaces": [],
@@ -4756,7 +5148,13 @@
       106,
       121
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 31,
+        "count": 1
+      }
+    ],
     "gameId": 108001,
     "name": "transcend",
     "preferRaces": [],
@@ -4790,7 +5188,13 @@
       102,
       102
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 25,
+        "count": 1
+      }
+    ],
     "gameId": 108301,
     "name": "symboli-kris-s",
     "preferRaces": [],
@@ -4824,7 +5228,13 @@
       105,
       105
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 25,
+        "count": 1
+      }
+    ],
     "gameId": 108302,
     "name": "symboli-kris-s",
     "preferRaces": [],
@@ -5030,7 +5440,18 @@
       110,
       107
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      },
+      {
+        "startTurn": 25,
+        "endTurn": 46,
+        "count": 3
+      }
+    ],
     "gameId": 108901,
     "name": "cheval-grand",
     "preferRaces": [],
@@ -5061,7 +5482,13 @@
       99,
       106
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
     "gameId": 109101,
     "name": "vivlos",
     "preferRaces": [],
@@ -5095,7 +5522,13 @@
       125,
       103
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 31,
+        "count": 1
+      }
+    ],
     "gameId": 109301,
     "name": "ksmiracle",
     "preferRaces": [],
@@ -5131,7 +5564,13 @@
       106,
       110
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 109801,
     "name": "copano-rickey",
     "preferRaces": [],
@@ -5165,7 +5604,13 @@
       105,
       119
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 30,
+        "count": 1
+      }
+    ],
     "gameId": 109901,
     "name": "hokko-tarumae",
     "preferRaces": [],
@@ -5199,7 +5644,13 @@
       123,
       122
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
     "gameId": 110001,
     "name": "wonder-acute",
     "preferRaces": [],
@@ -5234,7 +5685,13 @@
       112,
       94
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
     "gameId": 110401,
     "name": "katsuragi-ace",
     "preferRaces": [],
@@ -5268,7 +5725,13 @@
       96,
       127
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
     "gameId": 110501,
     "name": "neo-universe",
     "preferRaces": [],
@@ -5303,7 +5766,13 @@
       107,
       104
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 33,
+        "count": 1
+      }
+    ],
     "gameId": 110601,
     "name": "hishi-miracle",
     "preferRaces": [],
@@ -5336,7 +5805,13 @@
       117,
       96
     ],
-    "freeRaces": [],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
     "gameId": 110701,
     "name": "tap-dance-city",
     "preferRaces": [],
@@ -5383,6 +5858,41 @@
       59,
       67,
       69
+    ],
+    "star": 5
+  },
+  "110901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      15,
+      0
+    ],
+    "fiveStatusInitial": [
+      114,
+      105,
+      112,
+      114,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 110901,
+    "name": "rhein-kraft",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      28,
+      30,
+      32,
+      43,
+      53,
+      56,
+      65,
+      68
     ],
     "star": 5
   }

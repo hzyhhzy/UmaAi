@@ -4,26 +4,26 @@
 #include "../config.h"
 struct SelfplayParam
 {
-  int threadNum = 8;
+  int threadNum = 16;
   int threadNumInner = 1;
   int maxSampleNum = 1000 * 1024 * 16;
 
 #if USE_BACKEND == BACKEND_LIBTORCH
-  std::string modelPath = "./model_traced.pt";
-  int batchsize = 256;
+  std::string modelPath = "./db/model_traced.pt";
+  int batchsize = 1024;
 #elif USE_BACKEND == BACKEND_NONE
   std::string modelPath = "";
   int batchsize = 1;
 #else
-  std::string modelPath = "./model.txt";
-  int batchsize = 256;
+  std::string modelPath = "./db/model.txt";
+  int batchsize = 1024;
 #endif
 
   std::string exportDataDir = "./selfplay/0/";
-  int sampleNumEachFile = 1024;
+  int sampleNumEachFile = 128;
 
   int searchN = 1024;
-  int searchGroupSize = 256;
+  int searchGroupSize = 1024;
   int searchCpuct = 1.0; 
   double policyDelta = 100.0;//分数每降低多少，policy变成1/e倍
 
