@@ -183,6 +183,12 @@ void main_ai()
 		if (!suc)
 		{
 			cout << "出现错误" << endl;
+			if (jsonStr != "[test]" && jsonStr != "{\"Result\":1,\"Reason\":null}")
+			{
+				auto ofs = ofstream("lastError.json");
+				ofs.write(jsonStr.data(),jsonStr.size());
+				ofs.close();
+			}
 			std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
 			continue;
 		}
@@ -281,6 +287,19 @@ void main_ai()
 			}
 			cout << endl;*/
 
+			//备份回合信息用于debug
+			try
+			{
+				std::filesystem::create_directories("log");
+				string fname = "log/turn" + to_string(game.turn) + ".json";
+				auto ofs = ofstream(fname);
+				ofs.write(jsonStr.data(), jsonStr.size());
+				ofs.close();
+			}
+			catch(...)
+			{
+				cout << "保存回合信息失败" << endl;
+			}
 
 			game.print();
 
