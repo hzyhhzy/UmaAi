@@ -181,6 +181,22 @@ class Skill:
 
 
 @dataclass
+class RouteRaceData:
+    id: int
+    race_set_id: int
+    scenario_group_id: int
+    target_type: int
+    sort_id: int
+    turn: int
+    race_type: int
+    condition_type: int
+    condition_id: int
+    condition_value_1: int
+    condition_value_2: int
+    determine_race: int # 根据选项决定的比赛
+    determine_race_flag: int
+
+@dataclass
 class CharacterCard:
     id: str
     name: str
@@ -193,7 +209,7 @@ class CharacterCard:
     rairty_skill_set: dict[int,List[str]] = field(default_factory=dict)
     original_name:str = None
     is_translated:bool = False
-
+    route_races: list[RouteRaceData] = field(default_factory=list)
 
 @dataclass
 class SupportCardEffect:

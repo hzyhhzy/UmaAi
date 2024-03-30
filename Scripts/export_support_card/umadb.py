@@ -16,6 +16,7 @@ _TABLE_SUPPORT_CARD_EFFECT_TABLE = "support_card_effect_table"
 _TABLE_SUPPORT_CARD_UNIQUE_EFFECT_TABLE = "support_card_unique_effect"
 _TABLE_SINGLE_MODE_HINT_GAIN = "single_mode_hint_gain"
 _TABLE_SKILL_UPGRADE_DESCRIPTION = "skill_upgrade_description"
+_TABLE_SINGLE_MODE_ROUTE_RACE = "single_mode_route_race"
 
 _TEXT_SKILL_NAME = 47
 _TEXT_SKILL_DESCRIPTION = 48
@@ -319,6 +320,7 @@ class Umadb:
 
     def get_all_character_card_data(self) -> list[CharacterCard]:
         text_dict = self._get_all_text_data()
+        route_race_dict = {}
         with self as conn:
             cursor = conn.cursor()
             cursor.execute(f'SELECT * FROM {_TABLE_CARD_DATA} WHERE default_rarity != 0')
@@ -337,6 +339,11 @@ class Umadb:
             skill_upgrade_description_dict = collections.defaultdict(lambda:collections.defaultdict(list))
             for desc in skill_upgrade_description_data:
                 skill_upgrade_description_dict[desc.card_id][desc.rank].append(str(desc.skill_id))
+            # 生涯比赛
+            for card in card_data:
+                cursor.execute(f'SELECT * from {_TABLE_SINGLE_MODE_ROUTE_RACE} WHERE race_set_id == {card.chara_id} AND scenario_group_id == 100')
+                route_race_dict[card.id] = [RouteRaceData(*row) for row in cursor.fetchall()]
+
         card_dict = {}
         name_dict = text_dict[_TEXT_CARD_NAME]
         for card in card_data:
@@ -344,6 +351,7 @@ class Umadb:
                 card.talent_speed, card.talent_stamina, card.talent_power, card.talent_guts, card.talent_wiz))
             chara_card.available_skill_set = available_skill_set_dict[card.skill_set_id]
             chara_card.upgrade_skill_set = skill_upgrade_description_dict[card.id]
+            chara_card.route_races = route_race_dict[card.id]
             card_dict[card.id] = chara_card
         for card in card_rarity_data:
             chara_card: CharacterCard = card_dict[card.card_id]
