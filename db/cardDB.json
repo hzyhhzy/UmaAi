@@ -17517,8 +17517,8 @@
   "10105": {
     "cardId": 10105,
     "charaId": 1089,
-    "cardName": "[耐]シュヴァルグラン",
-    "fullName": "[トレセン学園]シュヴァルグラン",
+    "cardName": "[耐]高尚骏逸",
+    "fullName": "[特雷森学园]高尚骏逸",
     "rarity": 1,
     "cardType": 1,
     "cardValue": [
@@ -17867,8 +17867,8 @@
   "10114": {
     "cardId": 10114,
     "charaId": 1109,
-    "cardName": "[根]ラインクラフト",
-    "fullName": "[トレセン学園]ラインクラフト",
+    "cardName": "[根]莱茵力量",
+    "fullName": "[特雷森学园]莱茵力量",
     "rarity": 1,
     "cardType": 3,
     "cardValue": [
@@ -30948,8 +30948,8 @@
   "20075": {
     "cardId": 20075,
     "charaId": 1107,
-    "cardName": "[根]タップダンスシチー",
-    "fullName": "[Cheers!]タップダンスシチー",
+    "cardName": "[根]跳舞城",
+    "fullName": "[Cheers!]跳舞城",
     "rarity": 2,
     "cardType": 3,
     "cardValue": [
@@ -64473,8 +64473,8 @@
   "30191": {
     "cardId": 30191,
     "charaId": 1102,
-    "cardName": "[力]サウンズオブアース",
-    "fullName": "[ブリッランテな旋律を君と]サウンズオブアース",
+    "cardName": "[力]万籁争鸣",
+    "fullName": "[同你共奏华丽旋律]万籁争鸣",
     "rarity": 3,
     "cardType": 2,
     "cardValue": [
@@ -64658,8 +64658,8 @@
   "30193": {
     "cardId": 30193,
     "charaId": 1089,
-    "cardName": "[耐]シュヴァルグラン",
-    "fullName": "[Over the Ocean]シュヴァルグラン",
+    "cardName": "[耐]高尚骏逸",
+    "fullName": "[Over the Ocean]高尚骏逸",
     "rarity": 3,
     "cardType": 1,
     "cardValue": [
@@ -64838,8 +64838,8 @@
   "30194": {
     "cardId": 30194,
     "charaId": 1109,
-    "cardName": "[根]ラインクラフト",
-    "fullName": "[ティアラが描くレイライン]ラインクラフト",
+    "cardName": "[根]莱茵力量",
+    "fullName": "[皇冠描绘的境界线]莱茵力量",
     "rarity": 3,
     "cardType": 3,
     "cardValue": [
@@ -65016,6 +65016,571 @@
       80,
       8,
       10,
+      0,
+      0
+    ]
+  },
+  "30195": {
+    "cardId": 30195,
+    "charaId": 1093,
+    "cardName": "[力]凯斯奇迹",
+    "fullName": "[白鸟的阿拉贝斯克]凯斯奇迹",
+    "rarity": 3,
+    "cardType": 2,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 20,
+        "ganJing": 20,
+        "xunLian": 10,
+        "initialJiBan": 25,
+        "saiHou": 0,
+        "hintProbIncrease": 30,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 21,
+        "ganJing": 23,
+        "xunLian": 11,
+        "initialJiBan": 26,
+        "saiHou": 0,
+        "hintProbIncrease": 33,
+        "deYiLv": 53
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 23,
+        "ganJing": 26,
+        "xunLian": 12,
+        "initialJiBan": 27,
+        "saiHou": 0,
+        "hintProbIncrease": 36,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 25,
+        "ganJing": 30,
+        "xunLian": 13,
+        "initialJiBan": 28,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 61
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 25,
+        "ganJing": 30,
+        "xunLian": 15,
+        "initialJiBan": 30,
+        "saiHou": 10,
+        "hintProbIncrease": 40,
+        "deYiLv": 65
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时パワーボーナス(1)スキルポイントボーナス(1)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      5,
+      1,
+      30,
+      1
+    ]
+  },
+  "30196": {
+    "cardId": 30196,
+    "charaId": 1078,
+    "cardName": "[速]也文摄辉",
+    "fullName": "[浚风]也文摄辉",
+    "rarity": 3,
+    "cardType": 0,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 25,
+        "ganJing": 40,
+        "xunLian": 5,
+        "initialJiBan": 25,
+        "saiHou": 1,
+        "hintProbIncrease": 30,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          10,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 26,
+        "ganJing": 42,
+        "xunLian": 5,
+        "initialJiBan": 26,
+        "saiHou": 2,
+        "hintProbIncrease": 33,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          25,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 27,
+        "ganJing": 45,
+        "xunLian": 5,
+        "initialJiBan": 27,
+        "saiHou": 3,
+        "hintProbIncrease": 36,
+        "deYiLv": 65
+      },
+      {
+        "filled": true,
+        "bonus": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          25,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 28,
+        "ganJing": 47,
+        "xunLian": 5,
+        "initialJiBan": 28,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 72
+      },
+      {
+        "filled": true,
+        "bonus": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          25,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 30,
+        "ganJing": 50,
+        "xunLian": 5,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 80
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时スキルポイントボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      30,
+      2,
+      0,
+      0
+    ]
+  },
+  "30197": {
+    "cardId": 30197,
+    "charaId": 1053,
+    "cardName": "[力]青竹回忆",
+    "fullName": "[Burning!!]青竹回忆",
+    "rarity": 3,
+    "cardType": 2,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 15,
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 0,
+        "hintProbIncrease": 20,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 16,
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 0,
+        "hintProbIncrease": 23,
+        "deYiLv": 40
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 18,
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 0,
+        "hintProbIncrease": 26,
+        "deYiLv": 45
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 20,
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 15,
+        "hintProbIncrease": 30,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 20,
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 30,
+        "hintProbIncrease": 30,
+        "deYiLv": 50
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时パワーボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      5,
+      2,
       0,
       0
     ]
