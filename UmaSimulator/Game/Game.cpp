@@ -1123,15 +1123,45 @@ float Game::getSkillScore() const
   return ptScoreRate * skillPt + skillScore;
 }
 
+static double factorOver1200(double x)//耐力胜负，脚色十分，追比
+{
+  if (x <= 1150)return 0;
+  return tanh((x - 1150) / 100.0) * sqrt(x - 1150);
+}
+
+static double realStatus(double x)
+{
+  if (x < 1200)return x;
+  return 1200 + (x - 1200) / 4;
+}
+
+static double smoothUpperBound(double x)
+{
+  return (x - sqrt(x * x + 1))/2;
+}
+
 int Game::finalScore() const
 {
-  int total = 0;
+  double weights[5] = { 400,20,150,100,200 };
+  double weights1200[5] = { 0,0,30,50,0 };
+
+
+  double staminaTarget = 700;
+  double staminaBonus = 7 * 100 * (smoothUpperBound((realStatus(fiveStatus[1]) - staminaTarget) / 100.0) - smoothUpperBound((0 - staminaTarget) / 100.0));
+
+  double total = 0;
+  total += staminaBonus;
   for (int i = 0; i < 5; i++)
-    total += GameConstants::FiveStatusFinalScore[min(fiveStatus[i],fiveStatusLimit[i])];
+  {
+    double realStat = realStatus(min(fiveStatus[i], fiveStatusLimit[i]));
+    total += weights[i] * sqrt(realStat);
+    total += weights1200[i] * factorOver1200(realStat);
+  }
   
   total += getSkillScore();
+  if (total < 0)total = 0;
   //return uaf_haveLose ? 10000 : 20000;
-  return total;
+  return (int)total;
 }
 
 bool Game::isEnd() const

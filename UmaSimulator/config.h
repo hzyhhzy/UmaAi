@@ -21,7 +21,7 @@ const bool PrintHandwrittenLogicValueForDebug = false;
 #define BACKEND_CUDA 2//使用cuda(GPU)计算神经网络
 #define BACKEND_EIGEN 3//使用Eigen库(CPU)计算神经网络
 
-#define USE_BACKEND BACKEND_CUDA
+#define USE_BACKEND BACKEND_NONE
 
 const int MAX_SCORE = 200000;//最大允许的分数，70000在larc剧本肯定很够用了，但不排除selfplay随机出来的开局存在一些极端情况
 

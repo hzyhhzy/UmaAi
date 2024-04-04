@@ -33,7 +33,7 @@ namespace TestScoreSearch
   const int threadNumInner = 1;
   const double radicalFactor = 3;//¼¤½ø¶È
   const int searchDepth = TOTAL_TURN;
-  const int searchN = 512;
+  const int searchN = 1024;
   const bool recordGame = false;
 
   int totalGames = 100000;

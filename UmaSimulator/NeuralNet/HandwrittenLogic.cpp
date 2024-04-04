@@ -23,6 +23,8 @@ const double colorLevelTargetFactor = 100;//凑大会目标的系数
 
 const double xiangtanEvalBasicStart = 40;//消耗一次相谈的估值衰减(刚开局)
 const double xiangtanEvalBasicEnd = 40;//消耗一次相谈的估值衰减(结束)
+
+const double ptExtraFactor = 1.5;
 //下面的参数全是凭感觉瞎取的，还需要调参
 const double xiangtanRemainEvalTable[3][12] =
 {
@@ -152,7 +154,7 @@ static void statusGainEvaluation(const Game& g, double* result) { //result依次是
       double s1 = statusSoftFunction(g.trainValue[tra][sta] - remain[sta], reserve, reserveInvX2);
       res += statusWeights[sta] * (s1 - s0);
     }
-    res += g.ptScoreRate * g.trainValue[tra][5];
+    res += ptExtraFactor * g.ptScoreRate * g.trainValue[tra][5];
     result[tra] = res;
   }
 }
@@ -358,7 +360,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
           {
             for (int i = 0; i < 5; i++)
               value += p.cardParam.hintBonus[i] * statusWeights[i] * hintProb * yellowBuffFactor;
-            value += p.cardParam.hintBonus[5] * g.ptScoreRate * hintProb * yellowBuffFactor;
+            value += p.cardParam.hintBonus[5] * ptExtraFactor * g.ptScoreRate * hintProb * yellowBuffFactor;
           }
         }
 
