@@ -29,7 +29,7 @@ void main_testCardsSingle()
 {
   //int toTestCardType = 0;//速耐力根智
   double radicalFactor = 10;//激进度
-  int searchN = 100000;
+  int searchN = 20000;
 #if USE_BACKEND == BACKEND_LIBTORCH
   const string modelpath = "./db/model_traced.pt";
   const int threadNum = 16;
@@ -40,7 +40,7 @@ void main_testCardsSingle()
   int batchsize = 1;
 #else
   const string modelpath = "./db/model.txt";
-  const int threadNum = 16;
+  const int threadNum = 4;
   int batchsize = 1024;
 #endif
 
@@ -175,7 +175,7 @@ void main_testCardsSingle()
       Game game;
       game.newGame(rand, false, umaId, umaStars, cards.data(), zhongmaBlue, zhongmaBonus);
       //game.addAllStatus(initialStatusBonus);
-      auto value = search.evaluateNewGame(game, searchN, radicalFactor, rand);
+      auto value = search.evaluateNewGame(game, rand);
 
       cout << "胡局分数=\033[1;32m" << int(value.value) << "\033[0m  平均分数=\033[1;32m" << int(value.scoreMean) << "\033[0m" << endl;
 

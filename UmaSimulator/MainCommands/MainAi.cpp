@@ -136,6 +136,7 @@ void main_ai()
 		GameConfig::radicalFactor
 	);
 	Search search(modelptr, GameConfig::batchSize, GameConfig::threadNum, searchParam);
+	Search search2(modelptr, GameConfig::batchSize, GameConfig::threadNum, searchParam);
 	Evaluator evaSingle(modelSingleptr, 1);
 	
 	websocket ws(GameConfig::useWebsocket ? "http://127.0.0.1:4693" : "");
@@ -313,6 +314,39 @@ void main_ai()
 
 			Action bestAction = search.runSearch(game, rand);
 			cout << "蒙特卡洛: " << bestAction.toString() << endl;
+			//如果重新分配卡组，平均分是多少，与当前回合对比可以获得运气情况
+			auto trainAvgScore = search2.evaluateNewGame(game, rand);
+
+			double trainLuckRate = -1;
+			//重新分配卡组，有多大概率比这回合好
+			if(modelptr!=NULL)//只有神经网络版支持此功能
+			{
+				int64_t count = 0;
+				int64_t luckCount = 0;
+				auto& eva = search2.evaluators[0];
+				eva.gameInput.assign(eva.maxBatchsize, game);
+				eva.evaluateSelf(0, search2.param);
+				double refValue = eva.valueResults[0].scoreMean;//当前训练的平均分
+
+				int batchN = 1 + 4 * GameConfig::searchSingleMax / eva.maxBatchsize;
+				for (int b = 0; b < batchN; b++)
+				{
+					for (int i = 0; i < eva.maxBatchsize; i++)
+					{
+						eva.gameInput[i] = game;
+						eva.gameInput[i].randomDistributeCards(rand);
+					}
+					eva.evaluateSelf(0, search2.param);
+					for (int i = 0; i < eva.maxBatchsize; i++)
+					{
+						count++;
+						if (eva.valueResults[i].scoreMean < refValue)
+							luckCount++;
+					}
+
+				}
+				trainLuckRate = double(luckCount) / count;
+			}
 
 			double maxMean = -1e7;
 			double maxValue = -1e7;
@@ -339,14 +373,20 @@ void main_ai()
 			strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue); 
 			if (game.turn == 0 || scoreFirstTurn == 0)
 			{
-				cout << "评分预测: 平均\033[1;32m" << int(maxMean) << "\033[0m" << "，乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m" << endl;
-				scoreFirstTurn = maxMean;
+				//cout << "评分预测: 平均\033[1;32m" << int(maxMean) << "\033[0m" << "，乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m" << endl;
+				scoreFirstTurn = search.allActionResults[outgoingAction.toInt()].lastCalculate.scoreMean;
 			}
-			else
+			//else
 			{
 				cout << rpText["luck"] << " | 本局：";
 				print_luck(maxMean - scoreFirstTurn);
-				cout << " | 本回合：" << maxMean - scoreLastTurn
+				cout << " | 本回合：" << maxMean - scoreLastTurn;
+				cout << "（训练：\033[1;36m" << int(maxMean - trainAvgScore.scoreMean) << "\033[0m";
+				if (trainLuckRate >= 0)
+				{
+					cout << fixed << setprecision(2) << " 超过了\033[1;36m" << trainLuckRate*100<<"%\033[0m";
+				}
+				cout << "）"
 					<< " | 评分预测: \033[1;32m" << maxMean << "\033[0m"
 					<< "（乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m）" << endl;
 

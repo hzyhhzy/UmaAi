@@ -172,16 +172,17 @@ Action Search::runSearch(const Game& game,
   return bestAction;
 }
 
-ModelOutputValueV1 Search::evaluateNewGame(const Game& game, int searchN, double radicalFactor, std::mt19937_64& rand)
+ModelOutputValueV1 Search::evaluateNewGame(const Game& game, std::mt19937_64& rand)
 {
   rootGame = game;
-  param.maxDepth = TOTAL_TURN;
-  param.maxRadicalFactor = radicalFactor;
+  //param.maxDepth = TOTAL_TURN;
+  //param.maxRadicalFactor = radicalFactor;
   //param.samplingNum = searchN;
+  double radicalFactor = adjustRadicalFactor(param.maxRadicalFactor, game.turn);
   allActionResults[0].clear();
   allActionResults[0].isLegal = true;
-  searchSingleAction(searchN, rand, allActionResults[0], Action::Action_RedistributeCardsForTest);
-  return allActionResults[0].getWeightedMeanScore(radicalFactor);
+  searchSingleAction(param.searchSingleMax, rand, allActionResults[0], Action::Action_RedistributeCardsForTest);
+  return allActionResults[0].getWeightedMeanScore(adjustRadicalFactor(radicalFactor,game.turn));
 }
 
 
@@ -274,7 +275,7 @@ void Search::searchSingleActionThread(
       else//÷ÿ÷√”Œœ∑
         eva.gameInput[i].randomDistributeCards(rand);
     }
-
+    int maxdepth = isNewGame ? param.maxDepth + 1 : param.maxDepth;
     for (int depth = 0; depth < param.maxDepth; depth++)
     {
       eva.evaluateSelf(1, param);//º∆À„policy
