@@ -39,6 +39,83 @@ BonusKeys = {
     "スキルポイントボーナス": 5
 }
 
+RaceConditionIds = {
+    700: "Pre-OP",
+    100: "G1",
+    300: "G3"
+}
+
+# 生涯比赛会改变的情况（能不比就不比）
+# 回合数已经-1了
+SpecialRaces = {
+    1005: {
+        "races": [32, 45],
+        "note": "富士 - 选择英里路线"
+    },
+    1009: {
+        "races": [33],
+        "note": "大和 - 比赛回合不变"
+    },
+    1016: {
+        "races": [55, 67, 69, 71],
+        "note": "白仁 - 比赛回合不变"
+    },
+    1022: {
+        "freeRaces": [
+            {
+                "startTurn": 67,
+                "endTurn": 71,
+                "count": 1
+            }
+        ],
+        "note": "美妙 - 自选最终比赛"
+    },
+    1031: {
+        "freeRaces": [
+            {
+                "startTurn": 69,
+                "endTurn": 71,
+                "count": 1
+            }
+        ],
+        "note": "风神 - 自选最终比赛"
+    },
+    1032: {
+        "races": [33],
+        "note": "速子 - 设置为日本德比（不触发低心情改赛）"
+    },
+    1056: {
+        "races": [29],
+        "freeRaces": [
+            {
+                "startTurn": 60,
+                "endTurn": 63,
+                "count": 1
+            }
+        ],
+        "note": "福来 - 抽签比赛，设置为第二年3月下，第三年夏季自选比赛"
+    },
+    1062: {
+        "note": "诗歌剧 - 设置为不比日本杯（不流鼻血要扣分）"
+    },
+    1071: {
+        "races": [43],
+        "note": "阿尔丹 - 比赛回合不变"
+    },
+    1069: {
+        "races": [58],
+        "note": "千代 - 设置为安田纪念"
+    },
+    1093: {
+        "races": [41],
+        "note": "凯斯 - 比赛改为休息"
+    },
+    1109: {
+        "races": [32],
+        "note": "莱茵 - 设置为NHK"
+    }
+}
+
 def short_name(card):
     return re.sub(r"\[.*\]", "[%s]" % ShortType[card.type], card.original_name)
 
@@ -49,6 +126,7 @@ db = Umadb('master.mdb')
 trans = translators.TrainersLegendTranslator(None)
 
 card_list = db.get_all_support_card_data()
+uma_list = db.get_all_character_card_data()
 result = {}
 
 def mergeCardEffect(cardValue, effect):
@@ -145,72 +223,166 @@ def prepareUniqueEffect(card, ueffect):
     if useParam:
         card["uniqueEffectParam"] = ueffect["uniqueParams"]
 
+# 支援卡解析
+def parseSupportCard():
+    for card in card_list:
+        # 调用github TLG翻译
+        trans_card = trans.translate_support_card(card)
+        print(trans_card.name)
+        
+        # 处理效果
+        effect = {}
+        unique_effect = None
+        effect_range = 3 + card.rarity
 
-for card in card_list:
-    # 调用github TLG翻译
-    trans_card = trans.translate_support_card(card)
-    print(trans_card.name)
-    
-    # 处理效果
-    effect = {}
-    unique_effect = None
-    effect_range = 3 + card.rarity
+        if card.unique_effect:
+            unique_effect = parseUniqueEffectRow(card.unique_effect)
 
-    if card.unique_effect:
-        unique_effect = parseUniqueEffectRow(card.unique_effect)
+        if card.effect_row_dict:    
+            for tp, row in card.effect_row_dict.items():
+                type_name = effectTypeToStr(tp)
+                type_data = parseEffectRow(row)
+                effect[type_name] = type_data[effect_range : effect_range+5]
 
-    if card.effect_row_dict:    
-        for tp, row in card.effect_row_dict.items():
-            type_name = effectTypeToStr(tp)
-            type_data = parseEffectRow(row)
-            effect[type_name] = type_data[effect_range : effect_range+5]
-
-    # 整理
-    trans_card.unique_effect = unique_effect
-    trans_card.effect_row_dict = effect
-    trans_card.original_name = trans_card.name
-    trans_card.name = short_name(trans_card)
-    
-    # 转换成UmaSim格式
-    ucard = dict(
-        cardId = int(trans_card.id),
-        charaId = trans_card.chara_id,
-        cardName = trans_card.name,
-        fullName = trans_card.original_name,
-        rarity = trans_card.rarity.value,
-       # cardSkill = list(map(lambda x: int(x), trans_card.train_skill_list)),
-        cardType = trans_card.type.value - 1, # 从0开始
-        cardValue = []
-        #uniqueEffect = trans_card.unique_effect
-    )
-    for i in range(0, 5):
-        d = dict(
-            filled = True,
-            bonus = [0, 0, 0, 0, 0, 0],
-            initialBonus = [0, 0, 0, 0, 0, 0],
-            hintBonus = [0, 0, 0, 0, 0, 5] # 暂定
+        # 整理
+        trans_card.unique_effect = unique_effect
+        trans_card.effect_row_dict = effect
+        trans_card.original_name = trans_card.name
+        trans_card.name = short_name(trans_card)
+        
+        # 转换成UmaSim格式
+        ucard = dict(
+            cardId = int(trans_card.id),
+            charaId = trans_card.chara_id,
+            cardName = trans_card.name,
+            fullName = trans_card.original_name,
+            rarity = trans_card.rarity.value,
+        # cardSkill = list(map(lambda x: int(x), trans_card.train_skill_list)),
+            cardType = trans_card.type.value - 1, # 从0开始
+            cardValue = []
+            #uniqueEffect = trans_card.unique_effect
         )
-        for key, value in trans_card.effect_row_dict.items():
-            if key in DirectKeys:
-                d[key] = value[i]
-            elif key == "hintLvUp":
-                d["hintBonus"][5] += 5 * value[i]
-            elif '初期' in key:
-                d['initialBonus'][InitialKeys[key]] = value[i]
-            elif 'ボーナス' in key:
-                d['bonus'][BonusKeys[key]] = value[i]
-        ucard["cardValue"].append(d)
-    # 对UniqueEffect字段进行进一步预处理
-    if trans_card.unique_effect:
-        prepareUniqueEffect(ucard, trans_card.unique_effect)
-    if len(trans_card.train_skill_list) == 0 and ucard["cardType"] < 5:
-        # 无技能的卡，把hint技能点换为属性
         for i in range(0, 5):
-            ucard["cardValue"][i]["hintBonus"] = HintValues[ucard["cardType"]]
-        print(f"hintBonus = {HintValues[ucard['cardType']]}")
-    result[int(trans_card.id)] = ucard
+            d = dict(
+                filled = True,
+                bonus = [0, 0, 0, 0, 0, 0],
+                initialBonus = [0, 0, 0, 0, 0, 0],
+                hintBonus = [0, 0, 0, 0, 0, 5] # 暂定
+            )
+            for key, value in trans_card.effect_row_dict.items():
+                if key in DirectKeys:
+                    d[key] = value[i]
+                elif key == "hintLvUp":
+                    d["hintBonus"][5] += 5 * value[i]
+                elif '初期' in key:
+                    d['initialBonus'][InitialKeys[key]] = value[i]
+                elif 'ボーナス' in key:
+                    d['bonus'][BonusKeys[key]] = value[i]
+            ucard["cardValue"].append(d)
+        # 对UniqueEffect字段进行进一步预处理
+        if trans_card.unique_effect:
+            prepareUniqueEffect(ucard, trans_card.unique_effect)
+        if len(trans_card.train_skill_list) == 0 and ucard["cardType"] < 5:
+            # 无技能的卡，把hint技能点换为属性
+            for i in range(0, 5):
+                ucard["cardValue"][i]["hintBonus"] = HintValues[ucard["cardType"]]
+            print(f"hintBonus = {HintValues[ucard['cardType']]}")
+        result[int(trans_card.id)] = ucard
+    return result
 
-with codecs.open('card/cardDB.json', 'w', encoding='utf-8') as f:
-    f.write(jsons.dumps(result, strip_nulls=True, jdkwargs=dict(ensure_ascii=False, indent=2, skipkeys=True)))
-    f.write("\n")
-    
+# 马娘解析
+def parseUma():
+    result = {}
+    for uma in uma_list:
+        # 调用github TLG翻译
+        trans_uma = trans.translate_chara_card(uma)
+        print(trans_uma.id, trans_uma.name)
+
+        fiveStatusBonus = [
+            uma.talent_info.speed,
+            uma.talent_info.stamina,
+            uma.talent_info.power,
+            uma.talent_info.guts,
+            uma.talent_info.wiz
+        ]
+        fiveStatusInitial = [
+            uma.status_set[5].speed,
+            uma.status_set[5].stamina,
+            uma.status_set[5].power,
+            uma.status_set[5].guts,
+            uma.status_set[5].wiz
+        ]
+
+        # 生涯比赛
+        chara_id = int(int(uma.id) / 100)
+        races = []
+        freeRaces = []
+        last_race = -1
+        for race in uma.route_races:
+            if race.condition_type == 1:
+                # 固定比赛
+                if race.turn not in races:
+                    if race.determine_race != 0:
+                        if chara_id not in SpecialRaces:
+                            print(f"** 回合 {race.turn} 有特殊生涯比赛，需要手动添加")
+                    else:
+                        races.append(race.turn - 1)
+            elif race.condition_type == 2:
+                # 自选比赛
+                grade = RaceConditionIds[race.condition_id]
+                rank = race.condition_value_1
+                count = race.condition_value_2
+                print(f"  回合 {last_race+1} -> {race.turn} 在 {count} 场 {grade} 中取得 {rank} 名以内")
+                freeRaces.append({
+                    "startTurn": last_race,
+                    "endTurn": race.turn-1,
+                    "count": count
+                })
+            elif race.condition_type == 3:
+                # 粉丝数
+                print(f"  回合 {last_race+1} -> {race.turn} 取得 {race.condition_value_1} 粉丝")
+                freeRaces.append({
+                    "startTurn": last_race,
+                    "endTurn": race.turn-1,
+                    "count": 1
+                })
+            last_race = race.turn
+        
+        # 特殊生涯比赛
+        if chara_id in SpecialRaces:
+            entry = SpecialRaces[chara_id]
+            if "races" in entry:
+                races.extend(entry["races"])
+            if "freeRaces" in entry:
+                freeRaces.extend(entry["freeRaces"])
+            if "note" in entry:
+                print("** 特殊生涯比赛: " + entry["note"])
+
+        races.sort()
+        freeRaces.sort(key=lambda x: x["startTurn"])
+
+        # 返回
+        result[uma.id] = dict(
+            bonusData=[],
+            fiveStatusBonus=fiveStatusBonus,
+            fiveStatusInitial=fiveStatusInitial,
+            freeRaces=freeRaces,
+            gameId=int(uma.id),
+            name=trans_uma.name,
+            preferRaces=[],
+            preferReds=[],
+            races=races,
+            star=5
+        )
+    return result
+
+if __name__ == "__main__":
+    cardDB = parseSupportCard()
+    umaDB = parseUma()
+
+    with codecs.open('card/cardDB.json', 'w', encoding='utf-8') as f:
+        f.write(jsons.dumps(cardDB, strip_nulls=True, jdkwargs=dict(ensure_ascii=False, indent=2, skipkeys=True)))
+        f.write("\n")
+    with codecs.open('card/umaDB.json', 'w', encoding='utf-8') as f:
+        f.write(jsons.dumps(umaDB, strip_nulls=True, jdkwargs=dict(ensure_ascii=False, indent=2, skipkeys=True)))
+        f.write("\n")

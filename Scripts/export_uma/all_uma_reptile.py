@@ -77,11 +77,11 @@ for URL in urls:
             print(nameid,t2[0].text)
             end_turn = int(t2[1].text.split(" ")[1])
             if "fans" in t2[0].text:    # 粉丝数要求
-                free_races.append([last_goal, end_turn-1, 1])
+                free_races.append(dict(startTurn=last_goal, endTurn=end_turn-1, count=1))
                 print(f"Turn {last_goal+1} -> {end_turn}, 1 free race")
             elif "races" in t2[0].text: # 场次要求
                 count = int(t2[0].text.split(" in ")[1].split(" ")[0])
-                free_races.append([last_goal, end_turn-1, count])
+                free_races.append(dict(startTurn=last_goal, endTurn=end_turn-1, count=count))
                 print(f"Turn {last_goal+1} -> {end_turn}, {count} free race(s)")
             last_goal = end_turn+1
         else:
