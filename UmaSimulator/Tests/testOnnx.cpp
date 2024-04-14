@@ -7,7 +7,6 @@
 #include <atomic>
 #include <mutex>
 #include <cmath>
-#include <onnxruntime_cxx_api.h>
 #include "../Game/Game.h"
 #include "../NeuralNet/Evaluator.h"
 #include "../Search/Search.h"
@@ -20,6 +19,7 @@
 #include "../External/cnpy/cnpy.h"
 
 #if USE_BACKEND == BACKEND_ONNX
+#include <onnxruntime_cxx_api.h>
 using namespace std;
 
 // 主机端打印函数
