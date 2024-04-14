@@ -28,7 +28,11 @@ void main_testScoreNoSearch()
   const string modelpath = "";
   const int threadNum = 8;
   int batchsize = 1;
-#else
+#elif USE_BACKEND == BACKEND_ONNX
+  const string modelpath = "./db/model.onnx";
+  const int threadNum = 4;
+  int batchsize = 1024;
+#else 
   const string modelpath = "./db/model.txt";
   const int threadNum = 16;
   int batchsize = 1024;

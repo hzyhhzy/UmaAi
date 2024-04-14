@@ -11,7 +11,7 @@
 int main()
 {
 	SearchResult::initNormDistributionCdfTable();
-	//main_testCuda();
+	//main_testOnnx();
 	//return 0;
 
 #if defined UMAAI_TESTSCORESEARCH

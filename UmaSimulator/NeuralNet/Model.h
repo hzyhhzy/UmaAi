@@ -30,6 +30,10 @@ const int NN_TF_NUM = NN_Game_Person_Num;//transformer有几个项
 #include <cuda_runtime.h>
 #endif
 
+#if USE_BACKEND == BACKEND_ONNX
+#include <onnxruntime_cxx_api.h>
+#endif
+
 //用-1e7表示不合法操作，在神经网络训练时直接忽略掉这些值
 struct ModelOutputPolicyV1
 {
@@ -174,17 +178,25 @@ public:
 
 
 private:
+#if USE_BACKEND == BACKEND_ONNX
+  Ort::Env onnxEnv;
+  Ort::Session onnxSession{ nullptr };
+  Ort::Value onnxInput{ nullptr };
+  Ort::MemoryInfo onnxMemoryInfo{ nullptr }; 
+
+#endif
+
 #if USE_BACKEND == BACKEND_LIBTORCH
   torch::jit::script::Module model;
 #endif
 
 #if USE_BACKEND != BACKEND_NONE && USE_BACKEND != BACKEND_LIBTORCH 
   const int batchSize;
-  ModelWeight modelWeight;
   std::mutex mtx; // 互斥锁
 #endif
 
 #if USE_BACKEND == BACKEND_CUDA
+  ModelWeight modelWeight;
   ModelCudaBuf cb;
 #endif
 };

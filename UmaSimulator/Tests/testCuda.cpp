@@ -21,6 +21,7 @@
 
 using namespace std;
 
+#if USE_BACKEND == BACKEND_CUDA
 // 主机端打印函数
 void printMatrix(const float* matrix, int m, int n) {
   for (int i = 0; i < m; i++) {
@@ -64,3 +65,9 @@ void main_testCuda()
     cout << endl;
   }
 }
+#else
+
+void main_testCuda()
+{
+}
+#endif

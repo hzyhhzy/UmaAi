@@ -216,6 +216,12 @@
     <ClCompile Include="NeuralNet\HandwrittenLogic.cpp">
       <Filter>源文件\NeuralNet</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\testOnnx.cpp">
+      <Filter>源文件\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="NeuralNet\Model_onnx.cpp">
+      <Filter>源文件\NeuralNet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Game.h">
@@ -317,5 +323,8 @@
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

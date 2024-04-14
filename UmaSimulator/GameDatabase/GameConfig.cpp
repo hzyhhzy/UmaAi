@@ -10,6 +10,8 @@ int GameConfig::eventStrength = 20;
 #if USE_BACKEND != BACKEND_NONE      //神经网络版
 #if USE_BACKEND == BACKEND_LIBTORCH      //神经网络版
 string GameConfig::modelPath = "db/model_traced.pt";
+#elif USE_BACKEND == BACKEND_ONNX      
+string GameConfig::modelPath = "db/model.onnx";
 #else
 string GameConfig::modelPath = "db/model.txt";
 #endif
