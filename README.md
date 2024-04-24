@@ -1,1 +1,1 @@
-Enter file contents here
+This tool is just for **algorithm learning**. Don't use it for illegal purposes
