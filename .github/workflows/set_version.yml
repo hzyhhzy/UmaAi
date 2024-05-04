@@ -1,0 +1,17 @@
+name: Set dist-oss/version.txt
+on: 
+  push:
+    branches: [ master ]
+jobs:
+  set-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: set version
+        run: |
+          git rev-parse HEAD > dist-oss/version.txt
+      - name: check
+        run: |
+          cat dist-oss/version.txt
+          

@@ -1,0 +1,9 @@
+{
+    "umaId": 102401,
+    "umaStars": 5,
+    "cards": [ 301884,301754,301614,301784,301874,301734 ],
+    "zhongmaBlue": [ 18, 0, 0, 0, 0 ],
+    "zhongmaBonus": [ 10, 10, 30, 0, 10, 70 ],
+    "allowedDebuffs": [ false, false, false, false, false, false, true, false, false ],
+    "totalGames": 100000
+}

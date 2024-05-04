@@ -1,0 +1,6 @@
+﻿{
+  "radicalFactor": 3, // 激进度，默认为2，提高会导致计算变慢
+  "searchSingleMax": 5000, // 第一选项达到多少次搜索就停止蒙特卡洛
+  "maxDepth": 16, // 最大搜索深度
+  "useWebsocket": true // 是否使用websocket与小黑板通信，否则使用文件通信
+}
