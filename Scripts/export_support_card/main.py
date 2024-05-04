@@ -380,9 +380,9 @@ if __name__ == "__main__":
     cardDB = parseSupportCard()
     umaDB = parseUma()
 
-    with codecs.open('card/cardDB.json', 'w', encoding='utf-8') as f:
+    with codecs.open('cardDB.json', 'w', encoding='utf-8') as f:
         f.write(jsons.dumps(cardDB, strip_nulls=True, jdkwargs=dict(ensure_ascii=False, indent=2, skipkeys=True)))
         f.write("\n")
-    with codecs.open('card/umaDB.json', 'w', encoding='utf-8') as f:
+    with codecs.open('umaDB.json', 'w', encoding='utf-8') as f:
         f.write(jsons.dumps(umaDB, strip_nulls=True, jdkwargs=dict(ensure_ascii=False, indent=2, skipkeys=True)))
         f.write("\n")

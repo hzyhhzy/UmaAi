@@ -17694,6 +17694,356 @@
       }
     ]
   },
+  "10106": {
+    "cardId": 10106,
+    "charaId": 1105,
+    "cardName": "[智]新宇宙",
+    "fullName": "[特雷森学园]新宇宙",
+    "rarity": 1,
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 10,
+        "xunLian": 5,
+        "initialJiBan": 20,
+        "hintProbIncrease": 20,
+        "deYiLv": 20,
+        "wizVitalBonus": 2
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 11,
+        "xunLian": 5,
+        "initialJiBan": 21,
+        "hintProbIncrease": 23,
+        "deYiLv": 25,
+        "wizVitalBonus": 2
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 13,
+        "xunLian": 5,
+        "initialJiBan": 22,
+        "hintProbIncrease": 26,
+        "deYiLv": 30,
+        "wizVitalBonus": 2
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 15,
+        "xunLian": 5,
+        "initialJiBan": 23,
+        "hintProbIncrease": 30,
+        "deYiLv": 35,
+        "wizVitalBonus": 2
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 15,
+        "xunLian": 5,
+        "initialJiBan": 25,
+        "hintProbIncrease": 30,
+        "deYiLv": 35,
+        "wizVitalBonus": 3
+      }
+    ]
+  },
+  "10107": {
+    "cardId": 10107,
+    "charaId": 1106,
+    "cardName": "[耐]菱钻奇宝",
+    "fullName": "[特雷森学园]菱钻奇宝",
+    "rarity": 1,
+    "cardType": 1,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 10,
+        "ganJing": 15,
+        "initialJiBan": 15,
+        "saiHou": 1,
+        "hintProbIncrease": 12,
+        "deYiLv": 20
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 11,
+        "ganJing": 18,
+        "initialJiBan": 16,
+        "saiHou": 2,
+        "hintProbIncrease": 20,
+        "deYiLv": 25
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 13,
+        "ganJing": 21,
+        "initialJiBan": 18,
+        "saiHou": 3,
+        "hintProbIncrease": 20,
+        "deYiLv": 30
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 15,
+        "ganJing": 25,
+        "initialJiBan": 20,
+        "saiHou": 5,
+        "hintProbIncrease": 20,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 15,
+        "ganJing": 25,
+        "initialJiBan": 20,
+        "saiHou": 5,
+        "hintProbIncrease": 20,
+        "deYiLv": 35
+      }
+    ]
+  },
   "10113": {
     "cardId": 10113,
     "charaId": 1116,
@@ -18040,6 +18390,176 @@
         "initialJiBan": 20,
         "saiHou": 5,
         "hintProbIncrease": 20,
+        "deYiLv": 35
+      }
+    ]
+  },
+  "10117": {
+    "cardId": 10117,
+    "charaId": 1096,
+    "cardName": "[根]莫名其妙",
+    "fullName": "[特雷森学园]莫名其妙",
+    "rarity": 1,
+    "cardType": 3,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          15,
+          15,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 10,
+        "ganJing": 15,
+        "initialJiBan": 15,
+        "saiHou": 1,
+        "deYiLv": 20
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          16,
+          16,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 11,
+        "ganJing": 18,
+        "initialJiBan": 16,
+        "saiHou": 2,
+        "deYiLv": 25
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          18,
+          18,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 13,
+        "ganJing": 21,
+        "initialJiBan": 18,
+        "saiHou": 3,
+        "deYiLv": 30
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          20,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 15,
+        "ganJing": 25,
+        "initialJiBan": 20,
+        "saiHou": 5,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          20,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 15,
+        "ganJing": 25,
+        "initialJiBan": 20,
+        "saiHou": 5,
         "deYiLv": 35
       }
     ]
@@ -31126,6 +31646,178 @@
     ],
     "uniqueEffectType": 0,
     "uniqueEffectSummary": "xunLian(5),初期パワーアップ(20)"
+  },
+  "20076": {
+    "cardId": 20076,
+    "charaId": 1036,
+    "cardName": "[力]空中神宫",
+    "fullName": "[路旁反馈]空中神宫",
+    "rarity": 2,
+    "cardType": 2,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "youQing": 15,
+        "xunLian": 10,
+        "initialJiBan": 15,
+        "hintProbIncrease": 0,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 16,
+        "xunLian": 11,
+        "initialJiBan": 16,
+        "hintProbIncrease": 20,
+        "deYiLv": 38
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 18,
+        "xunLian": 12,
+        "initialJiBan": 18,
+        "hintProbIncrease": 25,
+        "deYiLv": 42
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 20,
+        "xunLian": 13,
+        "initialJiBan": 20,
+        "hintProbIncrease": 30,
+        "deYiLv": 46
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 20,
+        "xunLian": 15,
+        "initialJiBan": 20,
+        "hintProbIncrease": 30,
+        "deYiLv": 50
+      }
+    ],
+    "uniqueEffectType": 0,
+    "uniqueEffectSummary": "持久力ボーナス(1),初期パワーアップ(20)"
   },
   "30001": {
     "cardId": 30001,
@@ -64655,6 +65347,191 @@
       0
     ]
   },
+  "30192": {
+    "cardId": 30192,
+    "charaId": 1091,
+    "cardName": "[速]强击",
+    "fullName": "[珍藏的谢幕礼]强击",
+    "rarity": 3,
+    "cardType": 0,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 20,
+        "ganJing": 0,
+        "initialJiBan": 20,
+        "saiHou": 1,
+        "hintProbIncrease": 20,
+        "deYiLv": 20
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 21,
+        "ganJing": 20,
+        "initialJiBan": 21,
+        "saiHou": 2,
+        "hintProbIncrease": 23,
+        "deYiLv": 25
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 23,
+        "ganJing": 40,
+        "initialJiBan": 23,
+        "saiHou": 3,
+        "hintProbIncrease": 26,
+        "deYiLv": 30
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 25,
+        "ganJing": 40,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          30,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 25,
+        "ganJing": 40,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 35
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时速度ボーナス(1)パワーボーナス(1)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      3,
+      1,
+      5,
+      1
+    ]
+  },
   "30193": {
     "cardId": 30193,
     "charaId": 1089,
@@ -65580,6 +66457,766 @@
       101,
       80,
       5,
+      2,
+      0,
+      0
+    ]
+  },
+  "30198": {
+    "cardId": 30198,
+    "charaId": 1105,
+    "cardName": "[智]新宇宙",
+    "fullName": "[致V.E.R.2285的你]新宇宙",
+    "rarity": 3,
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "xunLian": 0,
+        "initialJiBan": 25,
+        "saiHou": 1,
+        "hintProbIncrease": 40,
+        "deYiLv": 35,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 21,
+        "ganJing": 42,
+        "xunLian": 5,
+        "initialJiBan": 26,
+        "saiHou": 2,
+        "hintProbIncrease": 42,
+        "deYiLv": 40,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 23,
+        "ganJing": 45,
+        "xunLian": 10,
+        "initialJiBan": 27,
+        "saiHou": 3,
+        "hintProbIncrease": 45,
+        "deYiLv": 45,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 25,
+        "ganJing": 47,
+        "xunLian": 10,
+        "initialJiBan": 28,
+        "saiHou": 5,
+        "hintProbIncrease": 47,
+        "deYiLv": 50,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "youQing": 25,
+        "ganJing": 50,
+        "xunLian": 10,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 50,
+        "deYiLv": 50,
+        "wizVitalBonus": 5
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时賢さボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      7,
+      2,
+      0,
+      0
+    ]
+  },
+  "30199": {
+    "cardId": 30199,
+    "charaId": 1106,
+    "cardName": "[耐]菱钻奇宝",
+    "fullName": "[Work・a・Miracle！]菱钻奇宝",
+    "rarity": 3,
+    "cardType": 1,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 15,
+        "ganJing": 0,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 16,
+        "ganJing": 20,
+        "initialJiBan": 27,
+        "saiHou": 5,
+        "hintProbIncrease": 42,
+        "deYiLv": 53
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 18,
+        "ganJing": 40,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 45,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "initialJiBan": 32,
+        "saiHou": 5,
+        "hintProbIncrease": 47,
+        "deYiLv": 61
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          2,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "initialJiBan": 35,
+        "saiHou": 5,
+        "hintProbIncrease": 50,
+        "deYiLv": 65
+      }
+    ],
+    "uniqueEffectType": 2,
+    "uniqueEffectSummary": "羁绊>=100时youQing(20)",
+    "uniqueEffectParam": [
+      101,
+      100,
+      1,
+      20,
+      0,
+      0
+    ]
+  },
+  "30200": {
+    "cardId": 30200,
+    "charaId": 1096,
+    "cardName": "[根]莫名其妙",
+    "fullName": "[大胆无畏的将士啊]莫名其妙",
+    "rarity": 3,
+    "cardType": 3,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          25,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 20,
+        "ganJing": 40,
+        "initialJiBan": 20,
+        "saiHou": 0,
+        "hintProbIncrease": 20,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          26,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 21,
+        "ganJing": 42,
+        "initialJiBan": 21,
+        "saiHou": 5,
+        "hintProbIncrease": 20,
+        "deYiLv": 40
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          27,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 23,
+        "ganJing": 45,
+        "initialJiBan": 23,
+        "saiHou": 5,
+        "hintProbIncrease": 20,
+        "deYiLv": 45
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          15,
+          28,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 25,
+        "ganJing": 47,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 20,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          30,
+          30,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 25,
+        "ganJing": 50,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 20,
+        "deYiLv": 50
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时根性ボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      6,
+      2,
+      0,
+      0
+    ]
+  },
+  "30201": {
+    "cardId": 30201,
+    "charaId": 1050,
+    "cardName": "[智]成田大进",
+    "fullName": "[Take Them Down!]成田大进",
+    "rarity": 3,
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 25,
+        "ganJing": 20,
+        "xunLian": 10,
+        "initialJiBan": 20,
+        "saiHou": 0,
+        "hintProbIncrease": 40,
+        "deYiLv": 50,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          26,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 27,
+        "ganJing": 20,
+        "xunLian": 11,
+        "initialJiBan": 21,
+        "saiHou": 0,
+        "hintProbIncrease": 42,
+        "deYiLv": 53,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          27,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 30,
+        "ganJing": 20,
+        "xunLian": 12,
+        "initialJiBan": 23,
+        "saiHou": 0,
+        "hintProbIncrease": 45,
+        "deYiLv": 57,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          28,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 32,
+        "ganJing": 20,
+        "xunLian": 13,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 47,
+        "deYiLv": 61,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          30,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "youQing": 35,
+        "ganJing": 20,
+        "xunLian": 15,
+        "initialJiBan": 25,
+        "saiHou": 10,
+        "hintProbIncrease": 50,
+        "deYiLv": 65,
+        "wizVitalBonus": 5
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时賢さボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      7,
       2,
       0,
       0
