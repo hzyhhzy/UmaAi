@@ -2411,6 +2411,40 @@
     ],
     "star": 5
   },
+  "103203": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      0,
+      8,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      115,
+      104,
+      106,
+      103,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 103203,
+    "name": "[Σ Experiment]アグネスタキオン",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      33,
+      43,
+      53,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "103301": {
     "bonusData": [],
     "fiveStatusBonus": [
