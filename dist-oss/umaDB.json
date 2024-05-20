@@ -2429,7 +2429,7 @@
     ],
     "freeRaces": [],
     "gameId": 103203,
-    "name": "[Σ Experiment]アグネスタキオン",
+    "name": "[Σ Experiment]爱丽速子",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -5362,6 +5362,45 @@
       66,
       68,
       70
+    ],
+    "star": 5
+  },
+  "108201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      119,
+      93,
+      113,
+      115,
+      110
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 32,
+        "count": 1
+      }
+    ],
+    "gameId": 108201,
+    "name": "[Looking Fly!]ノースフライト",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      42,
+      43,
+      53,
+      55,
+      58,
+      67,
+      69
     ],
     "star": 5
   },

@@ -67763,5 +67763,190 @@
       5,
       1
     ]
+  },
+  "30203": {
+    "cardId": 30203,
+    "charaId": 1094,
+    "cardName": "[力]ジャングルポケット",
+    "fullName": "[新時代を開く者]ジャングルポケット",
+    "rarity": 3,
+    "cardType": 2,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 25,
+        "ganJing": 20,
+        "initialJiBan": 0,
+        "saiHou": 1,
+        "hintProbIncrease": 20,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          10,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 26,
+        "ganJing": 23,
+        "initialJiBan": 0,
+        "saiHou": 2,
+        "hintProbIncrease": 23,
+        "deYiLv": 40
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "youQing": 27,
+        "ganJing": 26,
+        "initialJiBan": 0,
+        "saiHou": 3,
+        "hintProbIncrease": 26,
+        "deYiLv": 45
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 28,
+        "ganJing": 30,
+        "initialJiBan": 15,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "youQing": 30,
+        "ganJing": 30,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 50
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时パワーボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      5,
+      2,
+      0,
+      0
+    ]
   }
 }
