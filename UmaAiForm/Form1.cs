@@ -179,5 +179,173 @@ namespace UmaAiForm
         {
 
         }
+
+        private void label37_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label38_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void colorComboBox_DrawItem(System.Windows.Forms.ComboBox box, DrawItemEventArgs e)
+        {
+
+            // 如果没有项，直接返回
+            if (e.Index < 0) return;
+
+            // 获取当前项的文本
+            string text = box.Items[e.Index].ToString();
+
+            // 设置绘制背景颜色
+            e.DrawBackground();
+
+            // 根据项的文本设置不同的颜色
+            Color color;
+            Color fontColor = Color.Black;
+            switch (text)
+            {
+                case "Red":
+                    color = Color.Red;
+                    fontColor = Color.Black;
+                    break;
+                case "Blue":
+                    color = Color.Blue;
+                    fontColor = Color.White;
+                    break;
+                case "Yellow":
+                    color = Color.Yellow;
+                    fontColor = Color.Black;
+                    break;
+                default:
+                    color = e.BackColor;
+                    break;
+            }
+
+            // 设置绘制背景颜色
+            using (SolidBrush brush = new SolidBrush(color))
+            {
+                e.Graphics.FillRectangle(brush, e.Bounds);
+            }
+
+            // 绘制文本
+            using (SolidBrush textBrush = new SolidBrush(fontColor))
+            {
+                e.Graphics.DrawString(text, e.Font, textBrush, e.Bounds);
+            }
+
+            // 绘制焦点框
+            e.DrawFocusRectangle();
+        }
+
+        private void colorComboBox_SelectedIndexChanged(System.Windows.Forms.ComboBox box)
+        {
+            string text = box.Text.ToString();
+
+            // 根据项的文本设置不同的颜色
+            Color color;
+            Color fontColor = Color.Black;
+            switch (text)
+            {
+                case "Red":
+                    color = Color.Red;
+                    fontColor = Color.Black;
+                    break;
+                case "Blue":
+                    color = Color.Blue;
+                    fontColor = Color.White;
+                    break;
+                case "Yellow":
+                    color = Color.Yellow;
+                    fontColor = Color.Black;
+                    break;
+                default:
+                    color = comboBox2.BackColor;
+                    fontColor = comboBox2.ForeColor;
+                    break;
+            }
+            box.BackColor = color;
+            box.ForeColor = fontColor;
+            box.Invalidate();
+        }
+        private void comboBox2_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            colorComboBox_DrawItem(comboBox2, e);
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            colorComboBox_SelectedIndexChanged(comboBox2);
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            colorComboBox_SelectedIndexChanged(comboBox3);
+        }
+
+        private void comboBox3_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+            colorComboBox_DrawItem(comboBox3, e);
+        }
+
+        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            colorComboBox_SelectedIndexChanged(comboBox4);
+
+        }
+
+        private void comboBox4_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            colorComboBox_DrawItem(comboBox4, e);
+
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            colorComboBox_SelectedIndexChanged(comboBox5);
+        }
+
+        private void comboBox5_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+            colorComboBox_DrawItem(comboBox5, e);
+        }
+
+        private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            colorComboBox_SelectedIndexChanged(comboBox6);
+        }
+
+        private void comboBox6_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+            colorComboBox_DrawItem(comboBox6, e);
+        }
+
+        private void label48_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label52_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
