@@ -3205,6 +3205,41 @@
     ],
     "star": 5
   },
+  "104402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      104,
+      125,
+      91,
+      107
+    ],
+    "freeRaces": [],
+    "gameId": 104402,
+    "name": "[リアライズ・ルーン]スイープトウショウ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      44,
+      58,
+      59,
+      67,
+      68
+    ],
+    "star": 5
+  },
   "104501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -4345,6 +4380,40 @@
     "freeRaces": [],
     "gameId": 106102,
     "name": "[洁白崇高的应援服]圣王光环",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      53,
+      58,
+      65,
+      67
+    ],
+    "star": 5
+  },
+  "106103": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      10,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      122,
+      85,
+      134,
+      104,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 106103,
+    "name": "[Evergreen Identity]キングヘイロー",
     "preferRaces": [],
     "preferReds": [],
     "races": [
