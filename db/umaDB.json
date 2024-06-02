@@ -2411,6 +2411,40 @@
     ],
     "star": 5
   },
+  "103203": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      14,
+      0,
+      8,
+      0,
+      8
+    ],
+    "fiveStatusInitial": [
+      115,
+      104,
+      106,
+      103,
+      122
+    ],
+    "freeRaces": [],
+    "gameId": 103203,
+    "name": "[Σ Experiment]爱丽速子",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      33,
+      43,
+      53,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "103301": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -2575,6 +2609,40 @@
     "freeRaces": [],
     "gameId": 103502,
     "name": "[Dream Deliverer]胜利奖券",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      28,
+      30,
+      33,
+      43,
+      53,
+      59,
+      71
+    ],
+    "star": 5
+  },
+  "103503": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      125,
+      102,
+      130,
+      99,
+      94
+    ],
+    "freeRaces": [],
+    "gameId": 103503,
+    "name": "[Glorious Coat]胜利奖券",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -3137,6 +3205,41 @@
     ],
     "star": 5
   },
+  "104402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      104,
+      125,
+      91,
+      107
+    ],
+    "freeRaces": [],
+    "gameId": 104402,
+    "name": "[リアライズ・ルーン]スイープトウショウ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      44,
+      58,
+      59,
+      67,
+      68
+    ],
+    "star": 5
+  },
   "104501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -3189,6 +3292,39 @@
     "freeRaces": [],
     "gameId": 104502,
     "name": "[雪纺丝带Mummy]超级溪流",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      27,
+      43,
+      47,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "104503": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      13,
+      0,
+      0,
+      7
+    ],
+    "fiveStatusInitial": [
+      91,
+      135,
+      86,
+      122,
+      116
+    ],
+    "freeRaces": [],
+    "gameId": 104503,
+    "name": "[慈雨华影]超级溪流",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -4259,6 +4395,40 @@
     ],
     "star": 5
   },
+  "106103": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      10,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      122,
+      85,
+      134,
+      104,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 106103,
+    "name": "[Evergreen Identity]キングヘイロー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      53,
+      58,
+      65,
+      67
+    ],
+    "star": 5
+  },
   "106201": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -5001,6 +5171,40 @@
     ],
     "star": 5
   },
+  "107202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      6,
+      12,
+      12,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      107,
+      119,
+      109,
+      100
+    ],
+    "freeRaces": [],
+    "gameId": 107202,
+    "name": "[黑将Zen]八重无敌",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      29,
+      30,
+      33,
+      43,
+      53,
+      58,
+      59,
+      67
+    ],
+    "star": 5
+  },
   "107401": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -5227,6 +5431,45 @@
       66,
       68,
       70
+    ],
+    "star": 5
+  },
+  "108201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      119,
+      93,
+      113,
+      115,
+      110
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 32,
+        "count": 1
+      }
+    ],
+    "gameId": 108201,
+    "name": "[Looking Fly!]ノースフライト",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      42,
+      43,
+      53,
+      55,
+      58,
+      67,
+      69
     ],
     "star": 5
   },
@@ -5757,6 +6000,46 @@
       59,
       68,
       70,
+      71
+    ],
+    "star": 5
+  },
+  "110201": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      105,
+      113,
+      116,
+      103,
+      113
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 27,
+        "count": 1
+      }
+    ],
+    "gameId": 110201,
+    "name": "[Ritmo・Della・Terra]万籁争鸣",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      32,
+      33,
+      43,
+      53,
+      55,
+      63,
+      69,
       71
     ],
     "star": 5

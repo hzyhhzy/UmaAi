@@ -13,7 +13,13 @@ struct GameConfig
     static double radicalFactor; // 激进度，提高会导致计算变慢
     static int searchSingleMax;  // 第一选项达到多少次搜索就停止蒙特卡洛
     static int threadNum;   // 线程数，可根据自身CPU调整，神经网络版直接设成4
-    static bool useWebsocket;    // 是否使用websocket与小黑板通信，否则使用文件通信
+
+
+    // "localfile": checking ./thisTurn.json
+    // "urafile": communicating with URA using file
+    // "websocket": communicating with URA using websocket
+    static std::string communicationMode;    
+
 
     //以下不经常修改
 
