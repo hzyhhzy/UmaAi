@@ -5883,6 +5883,41 @@
     ],
     "star": 5
   },
+  "109401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      114,
+      104,
+      133,
+      107,
+      92
+    ],
+    "freeRaces": [],
+    "gameId": 109401,
+    "name": "[王者の喊声]ジャングルポケット",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      45,
+      53,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "109801": {
     "bonusData": [],
     "fiveStatusBonus": [
