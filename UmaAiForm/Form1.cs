@@ -105,62 +105,6 @@ namespace UmaAiForm
 
         }
 
-        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            HandleKeyPress(e);
-        }
-
-        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            HandleKeyPress(e);
-        }
-
-        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            HandleKeyPress(e);
-        }
-
-        private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-            HandleKeyPress(e);
-        }
-
-        private void textBox5_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-            HandleKeyPress(e);
-        }
-
-        private void textBox6_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-            HandleKeyPress(e);
-        }
-
-        private void textBox7_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-            HandleKeyPress(e);
-        }
-
-        private void textBox8_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-            HandleKeyPress(e);
-        }
-
-        private void textBox9_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-            HandleKeyPress(e);
-        }
-
-        private void textBox10_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-            HandleKeyPress(e);
-        }
 
 
         private void HandleKeyPress(KeyPressEventArgs e)
@@ -780,7 +724,7 @@ namespace UmaAiForm
                 {
                     if (!havelose[c]) continue;
                     //set the lowest level training as a lose 
-                    int loseIdx = Enumerable.Range(c * 5, (c + 1) * 5)
+                    int loseIdx = Enumerable.Range(c * 5, 5)
                          .OrderBy(index => stage["uaf_trainingLevel"][index])
                          .First();
                     uaf_winHistory[(uafFinished - 1) * 15 + loseIdx] = false;
@@ -796,8 +740,8 @@ namespace UmaAiForm
             int[] uaf_levelColor_total = new int[]
             {
                 trainLevels.Skip(0).Take(5).Sum(),
-                trainLevels.Skip(5).Take(10).Sum(),
-                trainLevels.Skip(10).Take(15).Sum()
+                trainLevels.Skip(5).Take(5).Sum(),
+                trainLevels.Skip(10).Take(5).Sum()
             };
             stage["uaf_buffActivated"] = new JArray
             {
@@ -831,14 +775,121 @@ namespace UmaAiForm
             saveFile("./thisTurn.json");
         }
 
+        private void updateTrainingLevelTotal()
+        {
+            int[] trainLevels = new int[] {
+                (int)numericUpDown35.Value,
+                (int)numericUpDown36.Value,
+                (int)numericUpDown37.Value,
+                (int)numericUpDown38.Value,
+                (int)numericUpDown39.Value,
+                (int)numericUpDown40.Value,
+                (int)numericUpDown41.Value,
+                (int)numericUpDown42.Value,
+                (int)numericUpDown43.Value,
+                (int)numericUpDown44.Value,
+                (int)numericUpDown45.Value,
+                (int)numericUpDown46.Value,
+                (int)numericUpDown47.Value,
+                (int)numericUpDown48.Value,
+                (int)numericUpDown49.Value
+            };
+            int[] uaf_levelColor_total = new int[]
+            {
+                trainLevels.Skip(0).Take(5).Sum(),
+                trainLevels.Skip(5).Take(5).Sum(),
+                trainLevels.Skip(10).Take(5).Sum()
+            };
+            textBox1.Text = uaf_levelColor_total[0].ToString();
+            textBox2.Text = uaf_levelColor_total[1].ToString();
+            textBox3.Text = uaf_levelColor_total[2].ToString();
+        }
+
+
+
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
-
+            
         }
 
         private void radioButton11_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void numericUpDown35_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown36_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown37_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown38_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown39_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown40_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown41_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown42_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown43_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown44_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown45_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown46_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown47_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown48_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
+        }
+
+        private void numericUpDown49_ValueChanged(object sender, EventArgs e)
+        {
+            updateTrainingLevelTotal();
         }
 
         private void saveFile(string fileName)

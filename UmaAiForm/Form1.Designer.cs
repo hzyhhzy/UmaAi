@@ -512,7 +512,7 @@
             // numericUpDown5
             // 
             this.numericUpDown5.Increment = new decimal(new int[] {
-            10,
+            20,
             0,
             0,
             0});
@@ -534,7 +534,7 @@
             // numericUpDown4
             // 
             this.numericUpDown4.Increment = new decimal(new int[] {
-            10,
+            20,
             0,
             0,
             0});
@@ -556,7 +556,7 @@
             // numericUpDown3
             // 
             this.numericUpDown3.Increment = new decimal(new int[] {
-            10,
+            20,
             0,
             0,
             0});
@@ -578,7 +578,7 @@
             // numericUpDown2
             // 
             this.numericUpDown2.Increment = new decimal(new int[] {
-            10,
+            20,
             0,
             0,
             0});
@@ -600,7 +600,7 @@
             // numericUpDown1
             // 
             this.numericUpDown1.Increment = new decimal(new int[] {
-            10,
+            20,
             0,
             0,
             0});
@@ -788,6 +788,11 @@
             // 
             // numericUpDown11
             // 
+            this.numericUpDown11.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             this.numericUpDown11.Location = new System.Drawing.Point(778, 249);
             this.numericUpDown11.Maximum = new decimal(new int[] {
             120,
@@ -1570,6 +1575,7 @@
             0,
             0,
             0});
+            this.numericUpDown35.ValueChanged += new System.EventHandler(this.numericUpDown35_ValueChanged);
             // 
             // numericUpDown36
             // 
@@ -1587,6 +1593,7 @@
             0,
             0,
             0});
+            this.numericUpDown36.ValueChanged += new System.EventHandler(this.numericUpDown36_ValueChanged);
             // 
             // numericUpDown37
             // 
@@ -1604,6 +1611,7 @@
             0,
             0,
             0});
+            this.numericUpDown37.ValueChanged += new System.EventHandler(this.numericUpDown37_ValueChanged);
             // 
             // numericUpDown38
             // 
@@ -1621,6 +1629,7 @@
             0,
             0,
             0});
+            this.numericUpDown38.ValueChanged += new System.EventHandler(this.numericUpDown38_ValueChanged);
             // 
             // numericUpDown39
             // 
@@ -1638,6 +1647,7 @@
             0,
             0,
             0});
+            this.numericUpDown39.ValueChanged += new System.EventHandler(this.numericUpDown39_ValueChanged);
             // 
             // numericUpDown40
             // 
@@ -1655,6 +1665,7 @@
             0,
             0,
             0});
+            this.numericUpDown40.ValueChanged += new System.EventHandler(this.numericUpDown40_ValueChanged);
             // 
             // numericUpDown41
             // 
@@ -1672,6 +1683,7 @@
             0,
             0,
             0});
+            this.numericUpDown41.ValueChanged += new System.EventHandler(this.numericUpDown41_ValueChanged);
             // 
             // numericUpDown42
             // 
@@ -1689,6 +1701,7 @@
             0,
             0,
             0});
+            this.numericUpDown42.ValueChanged += new System.EventHandler(this.numericUpDown42_ValueChanged);
             // 
             // numericUpDown43
             // 
@@ -1706,6 +1719,7 @@
             0,
             0,
             0});
+            this.numericUpDown43.ValueChanged += new System.EventHandler(this.numericUpDown43_ValueChanged);
             // 
             // numericUpDown44
             // 
@@ -1723,6 +1737,7 @@
             0,
             0,
             0});
+            this.numericUpDown44.ValueChanged += new System.EventHandler(this.numericUpDown44_ValueChanged);
             // 
             // numericUpDown45
             // 
@@ -1740,6 +1755,7 @@
             0,
             0,
             0});
+            this.numericUpDown45.ValueChanged += new System.EventHandler(this.numericUpDown45_ValueChanged);
             // 
             // numericUpDown46
             // 
@@ -1757,6 +1773,7 @@
             0,
             0,
             0});
+            this.numericUpDown46.ValueChanged += new System.EventHandler(this.numericUpDown46_ValueChanged);
             // 
             // numericUpDown47
             // 
@@ -1774,6 +1791,7 @@
             0,
             0,
             0});
+            this.numericUpDown47.ValueChanged += new System.EventHandler(this.numericUpDown47_ValueChanged);
             // 
             // numericUpDown48
             // 
@@ -1791,6 +1809,7 @@
             0,
             0,
             0});
+            this.numericUpDown48.ValueChanged += new System.EventHandler(this.numericUpDown48_ValueChanged);
             // 
             // numericUpDown49
             // 
@@ -1808,6 +1827,7 @@
             0,
             0,
             0});
+            this.numericUpDown49.ValueChanged += new System.EventHandler(this.numericUpDown49_ValueChanged);
             // 
             // numericUpDown52
             // 
@@ -3816,7 +3836,6 @@
             this.Controls.Add(this.label9);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.button1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form1";
