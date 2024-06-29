@@ -1,3 +1,19 @@
+# 2024.6.26 New scenario started. UmaAi needs to be updated
+### What is needed?
+#### 1.Analyzing scenario mechanics
+1.1 Formula of status/vegetable/... gain. Probability of the buffs of big success cooking. ......   
+1.2 Events at a fixed turn of scenario    
+1.3 List of parameters    
+#### 2.Scenario Simulator
+Mainly Game.h/cpp
+#### 3.Search,Handwritten-logic,....
+#### 4.OCR: Connecting the game and UmaAI
+I will be very glad if someone can help me do this. I have no experience with OCR.
+
+
+
+
+
 ## Manual-input version updated on 2024.6.3. See the release page.
 introduction will be written later. 
 
