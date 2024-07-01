@@ -6305,5 +6305,40 @@
       68
     ],
     "star": 5
+  },
+  "111901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      105,
+      115,
+      125,
+      88,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 111901,
+    "name": "[夢路のよすが]ドリームジャーニー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      53,
+      55,
+      59,
+      65,
+      71
+    ],
+    "star": 5
   }
 }

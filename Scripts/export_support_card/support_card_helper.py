@@ -123,7 +123,8 @@ _effectTypeExHandlers:dict[int,tuple[int,EffectSummary]] = {
     118: (3, EffectSummary("羁绊>={}时，可以出现在2个位置", lambda params, summary: summary.format(params[2]) )),
     119: (4, EffectSummary("羁绊>={}时，编成支援卡更容易出现在训练中", lambda params, summary: summary.format(params[3]))),
     120: (5, EffectSummary("羁绊>={}时，根据编成支援卡类型提升副属性(对应属性+{}，友人/团队卡PT+{}，最多+{})",
-                                lambda params, summary: summary.format(params[2], params[3], params[3], params[4]) ))    
+                                lambda params, summary: summary.format(params[2], params[3], params[3], params[4]) ))  ,
+    121: (3, EffectSummary("支援卡羁绊上升量+{}，一起训练时额外+{}", lambda params, summary: summary.format(params[1], params[2])))  
 }
 
 def _effectTypeHandler(params:list[int], offset)->tuple[SupportCardEffect, int, EffectSummary]:
