@@ -2265,6 +2265,39 @@
     ],
     "star": 5
   },
+  "103003": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      85,
+      152,
+      80,
+      127,
+      106
+    ],
+    "freeRaces": [],
+    "gameId": 103003,
+    "name": "[Yummy Dreamy Fairy]ライスシャワー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      29,
+      33,
+      43,
+      53,
+      55,
+      59,
+      71
+    ],
+    "star": 5
+  },
   "103101": {
     "bonusData": [],
     "fiveStatusBonus": [
