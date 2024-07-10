@@ -7,17 +7,44 @@
 
 struct SearchParam;
 
+
+enum FarmUpgradeStrategyEnum :int16_t
+{
+  FUS_default,//默认（调试出来的最优）
+  FUS_noGarlicLv3,//不升级Lv3大蒜
+  FUS_garlicLv3,//升级Lv3大蒜
+};
+
+enum scoringModeEnum :int16_t
+{
+  SM_normal,//普通(凹分、评价点)模式
+  SM_race,//通用大赛模式
+  SM_jjc,//竞技场模式
+  SM_long,//长距离模式
+  SM_2400m,//2400m模式
+  SM_2000m,//2000m模式
+  SM_mile,//英里模式
+  SM_short,//短距离模式
+};
+
 struct Game
 {
   //显示相关
   bool playerPrint;//给人玩的时候，显示更多信息
+
+  //参数设置
+
+  float ptScoreRate;//每pt多少分
+  float hintPtRate;//每一级hint等价多少pt
+  int16_t eventStrength;//每回合有（待测）概率加这么多属性，模拟支援卡事件
+  int16_t farmUpgradeStrategy;//升级农田的策略
+  int16_t scoringMode;//评分方式
 
   //基本状态，不包括当前回合的训练信息
   int32_t umaId;//马娘编号，见KnownUmas.cpp
   bool isLinkUma;//是否为link马
   bool isRacingTurn[TOTAL_TURN];//这回合是否比赛
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
-  int16_t eventStrength;//每回合有（待测）概率加这么多属性，模拟支援卡事件
 
   int16_t turn;//回合数，从0开始，到77结束
   int16_t vital;//体力，叫做“vital”是因为游戏里就这样叫的
@@ -30,8 +57,6 @@ struct Game
   int16_t skillScore;//已买技能的分数
   int16_t trainLevelCount[5];//训练等级计数，每点4下加一级
 
-  float ptScoreRate;//每pt多少分
-  float hintPtRate;//每一级hint等价多少pt
   int16_t failureRateBias;//失败率改变量。练习上手=-2，练习下手=2
   //bool isQieZhe;//切者  合并到ptScoreRate了
   bool isAiJiao;//爱娇
@@ -44,10 +69,11 @@ struct Game
   int16_t saihou;//赛后加成
   bool isRacing;//这个回合是否在比赛
 
-  Person persons[MAX_HEAD_NUM];//最多8个头。依次是6张卡，非卡理事长6，记者7。 NPC们不单独分配person类，编号一律8
-  int16_t personDistribution[5][5];//每个训练有哪些人头id，personDistribution[哪个训练][第几个人头]，空位置为-1
+  Person persons[MAX_INFO_PERSON_NUM];//依次是6张卡。非卡理事长，记者，NPC们不单独分配person类，编号一律8
+  int16_t personDistribution[5][5];//每个训练有哪些人头id，personDistribution[哪个训练][第几个人头]，空位置为-1，0~5是6张卡，非卡理事长6，记者7，NPC们编号一律8
   //int lockedTrainingId;//是否锁训练，以及锁在了哪个训练。可以先不加，等ai做完了有时间再加。
-
+  int16_t friendship_noncard_yayoi;//非卡理事长羁绊
+  int16_t friendship_noncard_reporter;//非卡记者羁绊
 
   //剧本相关--------------------------------------------------------------------------------------
   
@@ -77,8 +103,8 @@ struct Game
   int16_t friend_personId;//友人卡在persons里的编号
   int16_t friend_stage;//0是未点击，1是已点击但未解锁出行，2是已解锁出行
   int16_t friend_outgoingUsed;//友人的出行已经走了几段了   暂时不考虑其他友人团队卡的出行
-  double friend_vitalBonus;//友人卡的回复量倍数（满破1.60）
-  double friend_statusBonus;//友人卡的事件效果倍数（满破1.25）
+  double friend_vitalBonus;//友人卡的回复量倍数
+  double friend_statusBonus;//友人卡的事件效果倍数
 
 
 
@@ -188,17 +214,19 @@ public:
 
   bool isCardShining(int personIdx, int trainIdx) const;    // 判断指定卡是否闪彩。普通卡看羁绊与所在训练，团队卡看friendOrGroupCardStage
   //bool trainShiningCount(int trainIdx) const;    // 指定训练彩圈数 //uaf不一定有用
-  //void calculateTrainingValueSingle(int trainType);//计算每个训练加多少   uaf剧本可能五个训练一起算比较方便
+  void calculateTrainingValueSingle(int trainType);//计算每个训练加多少   //uaf剧本可能五个训练一起算比较方便
 
   //做菜相关
   bool upgradeFarm(int item);//把第item个农田升1级，失败返回false
   bool isDishLegal(int dishId) const;//此料理是否允许
   int getDishTrainingBonus(int trainIdx) const;//计算当前料理的训练加成
-  int getDishRaceBonus() const;//计算当前料理的比赛
-  void handleDishBigSuccess();//处理大成功buff
-  void dishInvitePeople(int trainIdx);//料理大成功的分身效果：往trainIdx随机分配一个支援卡
+  int getDishRaceBonus() const;//计算当前料理的比赛加成
+  void handleDishBigSuccess(int dishId, std::mt19937_64& rand);//处理料理大成功相关的事件
+  std::vector<int> dishBigSuccess_getBuffs(int dishId, std::mt19937_64& rand);//料理大成功-获取有哪些buff
+  void dishBigSuccess_hint(std::mt19937_64& rand);//料理大成功-技能hint
+  void dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand);//料理大成功的分身效果：往trainIdx随机分配一个支援卡
   int turnIdxInHarvestLoop() const;//收获周期里的第几回合(turn%4)。夏合宿恒为0
-  void maybeHarvest();//每4回合收菜，合宿每回合收菜
+  void maybeHarvest();//每4回合收菜，合宿每回合收菜，不是收菜回合就直接return
   
 
 
@@ -206,7 +234,7 @@ public:
   //友人卡相关事件
   void handleFriendUnlock(std::mt19937_64& rand);//友人外出解锁
   void handleFriendOutgoing(std::mt19937_64& rand);//友人外出
-  void handleFriendClickEvent(std::mt19937_64& rand, int atTrain);//友人事件（お疲れ様）
+  void handleFriendClickEvent(std::mt19937_64& rand, int atTrain);//友人点击事件（お疲れ様）
   void handleFriendFixedEvent();//友人固定事件，拜年+结算
   
 

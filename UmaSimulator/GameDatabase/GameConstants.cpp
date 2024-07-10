@@ -2,175 +2,147 @@
 #include "UmaData.h"
 
 //常数或者比较短的列表放在最前面
-const double GameConstants::ScorePtRate = 2.0;
+const double GameConstants::ScorePtRateDefault = 2.0;
 //const double GameConstants::ScorePtRateQieZhe = 2.2;
-const int GameConstants::BasicFiveStatusLimit[5] = { 2200,1800,1800,1800,1400 }; //游戏里原来是1700 1500 1500 1500 1300，模拟器中1200以上翻倍
+const int GameConstants::BasicFiveStatusLimit[5] = { 2300,1000,2200,2200,1500 }; //游戏里原来是1750 1000 1700 1700 1350，模拟器中1200以上翻倍
 
 //const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3
 //const int GameConstants::NormalRacePtBonus = 45;//常规比赛pt加成,G1=45
-const double GameConstants::EventProb = 0.25;
+const double GameConstants::EventProb = 0.35;
 const int GameConstants::EventStrengthDefault = 20;
 
-const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.08;
-const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.15;
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.1;
+const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.2;
 
-const double GameConstants::FriendVitalBonusSSR[5] = { 1.4,1.45,1.5,1.55,1.6 };//佐岳SSR卡的回复量倍数（满破1.6）
-const double GameConstants::FriendVitalBonusR[5] = { 1.2,1.23,1.26,1.3,1.3 };//佐岳R卡的回复量倍数
-const double GameConstants::FriendStatusBonusSSR[5] = { 1.2,1.21,1.23,1.25,1.25 };//佐岳SSR卡的事件效果倍数（满破1.25）
-const double GameConstants::FriendStatusBonusR[5] = { 1.1,1.11,1.13,1.15,1.15 };//佐岳R卡的事件效果倍数
+const double GameConstants::FriendVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//友人SSR卡的回复量倍数（满破1.8）
+const double GameConstants::FriendVitalBonusR[5] = { 1.2,1.23,1.26,1.3,1.3 };//友人R卡的回复量倍数
+const double GameConstants::FriendStatusBonusSSR[5] = { 1.2,1.21,1.23,1.25,1.25 };//友人SSR卡的事件效果倍数（满破1.25）
+const double GameConstants::FriendStatusBonusR[5] = { 1.1,1.11,1.13,1.15,1.15 };//友人R卡的事件效果倍数
 
-const std::vector<int> GameConstants::UAF_LinkCharas = { 9044,1027,1035,1048,1072,1077 };
-const int GameConstants::UAF_WinNumTrainingBonus[26] = { 0,1,1,1,1,3,3,3,3,3,7,7,7,7,7,12,12,12,12,12,17,17,17,17,17,17 };
-const int GameConstants::UAF_RedBuffBonus[6] = { -1000,0,30,45,54,60 };
-const int GameConstants::UAF_LinkNumBonus[6] = { -1000,0,10,20,25,30 };
-const int GameConstants::UAF_LinkNumBonusXiahesu[6] = { -1000,0,20,30,35,40 };
+const std::vector<int> GameConstants::Cook_LinkCharas = { 9002,1001,1028,1030,1051,1104 };
+
+const int GameConstants::Cook_DishPtTrainingBonus[8] = { 0,10,16,21,25,28,30,30 };//料理pt训练加成
+const int GameConstants::Cook_DishPtSkillPtBonus[8] = { 0,15,24,33,42,51,60,60 };//料理pt技能点加成
+const int GameConstants::Cook_DishPtDeyilvBonus[8] = { 0,5,8,11,14,17,20,20 };//料理pt得意率加成
+const int GameConstants::Cook_DishPtBigSuccessRate[8] = { 0,15,18,20,22,24,25,100 };//料理大成功概率
+
+const int GameConstants::Cook_DishLevel[14] = { 0,1,1,2,2,2,2,2,3,3,3,3,3,4 };//1级：第一年的两个，2级：第二年的5个，3级：第三年的5个，4级：第四年的G1Plate
+const int GameConstants::Cook_DishGainPt[14] = { 0,250,250,500,500,500,500,500,800,800,800,800,800,1500 };//料理的料理pt
 
 
-const int GameConstants::FailRateBasic = 504;
+const int GameConstants::Cook_DishCost[14][5]=
+{
+  {0,0,0,0,0},
+  {25,0,50,0,50},
+  {25,50,0,50,0},
+  {150,0,80,0,0},
+  {0,150,0,80,0},
+  {0,80,150,0,0},
+  {40,0,40,150,0},
+  {80,0,0,0,150},
+  {250,0,80,0,0},
+  {0,250,0,80,0},
+  {0,80,250,0,0},
+  {40,0,40,250,0},
+  {80,0,0,0,250},
+  {80,80,80,80,80},
+};//料理原料消耗
+const bool GameConstants::Cook_DishTrainingBonusEffective[14][5]=
+{
+  {0,0,0,0,0},
+  {1,0,1,0,1},
+  {1,1,0,1,0},
+  {1,0,0,0,0},
+  {0,1,0,0,0},
+  {0,0,1,0,0},
+  {0,0,0,1,0},
+  {0,0,0,0,1},
+  {1,0,0,0,0},
+  {0,1,0,0,0},
+  {0,0,1,0,0},
+  {0,0,0,1,0},
+  {0,0,0,0,1},
+  {1,1,1,1,1},
+};//料理对哪些训练有加成
+const int GameConstants::Cook_FarmLvCost[4] = { 100,180,220,250 };//农田升级消耗
+
+const int GameConstants::FailRateBasic[5][5] =
+{
+  {520,524,528,532,536},
+  {507,511,515,519,523},
+  {516,520,524,528,532},
+  {532,536,540,544,548},
+  {320,321,322,323,324}
+};
+
+
+int GameConstants::Cook_DishPtLevel(int dishPt)
+{
+  if (dishPt < 300)return 0;
+  else if (dishPt < 1500)return 1;
+  else if (dishPt < 2500)return 2;
+  else if (dishPt < 5000)return 3;
+  else if (dishPt < 7000)return 4;
+  else if (dishPt < 10000)return 5;
+  else if (dishPt < 12000)return 6;
+  else return 7;  
+}
 
 
 bool GameConstants::isLinkChara(int id)
 {
   if (id > 100000)id /= 100;
-  for (int i = 0; i < UAF_LinkCharas.size(); i++)
+  for (int i = 0; i < Cook_LinkCharas.size(); i++)
   {
-    if (UAF_LinkCharas[i] == id)
+    if (Cook_LinkCharas[i] == id)
       return true;
   }
   return false;
 }
 
-const int GameConstants::TrainingBasicValue[3][5][5][7] =
+const int GameConstants::TrainingBasicValue[5][5][7] =
 {
-  //蓝
+  //速
   {
-    //速
-    {
-      { 12, 0, 1, 0, 0, 6, -15},
-      { 13, 0, 1, 0, 0, 6, -15},
-      { 14, 0, 1, 0, 0, 6, -15},
-      { 15, 0, 1, 0, 0, 6, -15},
-      { 16, 0, 2, 0, 0, 6, -15},
-    },
-    //耐
-    {
-      { 0, 11, 0, 2, 0, 6, -15},
-      { 0, 12, 0, 2, 0, 6, -15},
-      { 0, 13, 0, 2, 0, 6, -15},
-      { 0, 14, 0, 2, 0, 6, -15},
-      { 0, 15, 0, 3, 0, 6, -15},
-    },
-    //力
-    {
-      { 0, 2, 11, 0, 0, 6, -15},
-      { 0, 2, 12, 0, 0, 6, -15},
-      { 0, 2, 13, 0, 0, 6, -15},
-      { 0, 2, 14, 0, 0, 6, -15},
-      { 0, 3, 15, 0, 0, 6, -15},
-    },
-    //根
-    {
-      { 1, 0, 1, 12, 0, 6, -15},
-      { 1, 0, 1, 13, 0, 6, -15},
-      { 1, 0, 1, 14, 0, 6, -15},
-      { 1, 0, 1, 15, 0, 6, -15},
-      { 2, 0, 1, 16, 0, 6, -15},
-    },
-    //智
-    {
-      { 2, 0, 0, 0, 11, 6, -15},
-      { 2, 0, 0, 0, 12, 6, -15},
-      { 2, 0, 0, 0, 13, 6, -15},
-      { 2, 0, 0, 0, 14, 6, -15},
-      { 3, 0, 0, 0, 15, 6, -15},
-    },
+    { 11, 0, 2, 0, 0, 5, -19},
+    { 12, 0, 2, 0, 0, 5, -21},
+    { 13, 0, 3, 0, 0, 5, -22},
+    { 14, 0, 3, 0, 0, 5, -24},
+    { 15, 0, 4, 0, 0, 5, -25},
   },
-  //红
+  //耐
   {
-    //速
-    {
-      { 8, 0, 1, 0, 0, 10, -15},
-      { 9, 0, 1, 0, 0, 10, -15},
-      { 10, 0, 1, 0, 0, 10, -15},
-      { 11, 0, 1, 0, 0, 10, -15},
-      { 12, 0, 2, 0, 0, 10, -15},
-    },
-    //耐
-    {
-      { 0, 7, 0, 2, 0, 10, -15},
-      { 0, 8, 0, 2, 0, 10, -15},
-      { 0, 9, 0, 2, 0, 10, -15},
-      { 0, 10, 0, 2, 0, 10, -15},
-      { 0, 11, 0, 3, 0, 10, -15},
-    },
-    //力
-    {
-      { 0, 2, 7, 0, 0, 10, -15},
-      { 0, 2, 8, 0, 0, 10, -15},
-      { 0, 2, 9, 0, 0, 10, -15},
-      { 0, 2, 10, 0, 0, 10, -15},
-      { 0, 3, 11, 0, 0, 10, -15},
-    },
-    //根
-    {
-      { 1, 0, 1, 8, 0, 10, -15},
-      { 1, 0, 1, 9, 0, 10, -15},
-      { 1, 0, 1, 10, 0, 10, -15},
-      { 1, 0, 1, 11, 0, 10, -15},
-      { 2, 0, 1, 12, 0, 10, -15},
-    },
-    //智
-    {
-      { 2, 0, 0, 0, 7, 10, -15},
-      { 2, 0, 0, 0, 8, 10, -15},
-      { 2, 0, 0, 0, 9, 10, -15},
-      { 2, 0, 0, 0, 10, 10, -15},
-      { 3, 0, 0, 0, 11, 10, -15},
-    },
+    { 0, 8, 0, 5, 0, 5, -20},
+    { 0, 9, 0, 5, 0, 5, -22},
+    { 0, 10, 0, 6, 0, 5, -23},
+    { 0, 11, 0, 7, 0, 5, -25},
+    { 0, 12, 0, 8, 0, 5, -26},
   },
-  //黄
+  //力
   {
-    //速
-    {
-      { 14, 0, 1, 0, 0, 4, -15},
-      { 15, 0, 1, 0, 0, 4, -15},
-      { 16, 0, 1, 0, 0, 4, -15},
-      { 17, 0, 1, 0, 0, 4, -15},
-      { 18, 0, 2, 0, 0, 4, -15},
-    },
-    //耐
-    {
-      { 1, 10, 0, 2, 0, 6, -15},
-      { 1, 11, 0, 2, 0, 6, -15},
-      { 1, 12, 0, 2, 0, 6, -15},
-      { 1, 13, 0, 2, 0, 6, -15},
-      { 2, 14, 0, 2, 0, 6, -15},
-    },
-    //力
-    {
-      { 1, 2, 10, 0, 0, 6, -15},
-      { 1, 2, 11, 0, 0, 6, -15},
-      { 1, 2, 12, 0, 0, 6, -15},
-      { 1, 2, 13, 0, 0, 6, -15},
-      { 2, 2, 14, 0, 0, 6, -15},
-    },
-    //根
-    {
-      { 2, 0, 1, 12, 0, 5, -15},
-      { 2, 0, 1, 13, 0, 5, -15},
-      { 2, 0, 1, 14, 0, 5, -15},
-      { 2, 0, 1, 15, 0, 5, -15},
-      { 3, 0, 1, 16, 0, 5, -15},
-    },
-    //智
-    {
-      { 4, 0, 0, 0, 10, 5, -15},
-      { 4, 0, 0, 0, 11, 5, -15},
-      { 4, 0, 0, 0, 12, 5, -15},
-      { 4, 0, 0, 0, 13, 5, -15},
-      { 5, 0, 0, 0, 14, 5, -15},
-    },
+    { 0, 4, 9, 0, 0, 5, -20},
+    { 0, 4, 10, 0, 0, 5, -22},
+    { 0, 5, 11, 0, 0, 5, -23},
+    { 0, 5, 12, 0, 0, 5, -25},
+    { 0, 6, 13, 0, 0, 5, -26},
   },
+  //根
+  {
+    { 2, 0, 2, 10, 0, 5, -20},
+    { 2, 0, 2, 11, 0, 5, -22},
+    { 2, 0, 2, 12, 0, 5, -23},
+    { 2, 0, 2, 13, 0, 5, -25},
+    { 3, 0, 3, 14, 0, 5, -26},
+  },
+  //智
+  {
+    { 2, 0, 0, 0, 8, 5, 5},
+    { 2, 0, 0, 0, 9, 5, 5},
+    { 3, 0, 0, 0, 10, 5, 5},
+    { 3, 0, 0, 0, 11, 5, 5},
+    { 4, 0, 0, 0, 12, 5, 5},
+  },
+  
 };
 
 const int GameConstants::FiveStatusFinalScore[2801] = {
