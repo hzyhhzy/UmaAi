@@ -86,6 +86,7 @@ void main_ai()
 	int lastTurn = -1;
 	int scoreFirstTurn = 0;   // 第一回合分数
 	int scoreLastTurn = 0;   // 上一回合分数
+	string lastJsonStr;//json str of the last time
 
 	// 检查工作目录
 	wchar_t buf[10240];
@@ -106,7 +107,11 @@ void main_ai()
 	GameDatabase::loadDBCards("./db/cardDB.json"); //cardDB数据已经很完善了
 	loadRole();   // roleplay
 
-	string currentGameStagePath = string(getenv("LOCALAPPDATA")) + "/UmamusumeResponseAnalyzer/GameData/thisTurn.json";
+	bool uraFileMode= GameConfig::communicationMode == "urafile";
+	bool refreshIfAnyChanged = GameConfig::communicationMode == "localfile";//if false, only new turns will refresh
+	string currentGameStagePath = uraFileMode ?
+		string(getenv("LOCALAPPDATA")) + "/UmamusumeResponseAnalyzer/GameData/thisTurn.json"
+		: "./thisTurn.json";
 	//string currentGameStagePath = "./gameData/thisTurn.json";
 
 
@@ -139,8 +144,9 @@ void main_ai()
 	Search search2(modelptr, GameConfig::batchSize, GameConfig::threadNum, searchParam);
 	Evaluator evaSingle(modelSingleptr, 1);
 	
-	websocket ws(GameConfig::useWebsocket ? "http://127.0.0.1:4693" : "");
-	if (GameConfig::useWebsocket)
+	bool useWebsocket = GameConfig::communicationMode == "websocket";
+	websocket ws(useWebsocket ? "http://127.0.0.1:4693" : "");
+	if (useWebsocket)
 	{
 		do {
 			Sleep(500);
@@ -152,7 +158,7 @@ void main_ai()
 	{
 		Game game;
 		string jsonStr;
-		if (GameConfig::useWebsocket)
+		if (useWebsocket)
 		{
 			jsonStr = lastFromWs;
 		}
@@ -195,8 +201,11 @@ void main_ai()
 		}
 		if (game.turn == lastTurn)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
-			continue;
+			if ((!refreshIfAnyChanged) || (lastJsonStr == jsonStr))
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
+				continue;
+			}
 		}
 		bool maybeNonTrainingTurn = true;//有时会收到一些非训练回合的信息，共同点是没人头。正常训练没人头的概率约百万分之一
 		for (int i = 0; i < 5; i++)
@@ -205,13 +214,14 @@ void main_ai()
 				if (game.personDistribution[i][j] != -1)
 					maybeNonTrainingTurn = false;
 			}
-		if (maybeNonTrainingTurn)
+		if (maybeNonTrainingTurn && !refreshIfAnyChanged)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
 			continue;
 		}
 		//cout << jsonStr << endl;
 		lastTurn = game.turn;
+		lastJsonStr = jsonStr;
 		//if (game.venusIsWisdomActive)
 		/*
 		{
@@ -421,7 +431,7 @@ void main_ai()
 				cout << endl;
 			}
 			//strToSendURA = L"0.1234567 5.4321";
-			if (GameConfig::useWebsocket)
+			if (useWebsocket)
 			{
 				wstring s = L"{\"CommandType\":1,\"Command\":\"PrintUmaAiResult\",\"Parameters\":[\"" + strToSendURA + L"\"]}";
 				ws.send(s);

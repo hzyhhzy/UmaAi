@@ -13,9 +13,6 @@ Person::Person()
   isHint = false;
   cardRecord = 0;
 
-  friendOrGroupCardStage = 0;
-  groupCardShiningContinuousTurns = 0;
-
   std::vector<int> probs = { 1,1,1,1,1,1 }; //速耐力根智鸽
   distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 }
@@ -28,8 +25,6 @@ void Person::setCard(int cardId)
   friendship = cardParam.initialJiBan;
   isHint = false;
   cardRecord = 0;
-  friendOrGroupCardStage = 0;
-  groupCardShiningContinuousTurns = 0;
 
   int cardType = cardParam.cardType;
   if (cardType == 5)//友人卡
@@ -39,7 +34,7 @@ void Person::setCard(int cardId)
     std::vector<int> probs = { 100,100,100,100,100,100 }; //基础概率，速耐力根智鸽
     distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 
-    if (realCardId == 30188 || realCardId == 10104)//剧本友人卡
+    if (realCardId == GameConstants::FriendCardIdR || realCardId == GameConstants::FriendCardIdSSR)//剧本友人卡
     {
       personType = 1;
     }
@@ -63,7 +58,7 @@ void Person::setCard(int cardId)
   }
 
 }
-
+/*
 void Person::setNonCard(int pType)
 {
   personType = pType;
@@ -80,3 +75,4 @@ void Person::setNonCard(int pType)
   std::vector<int> probs = { 100,100,100,100,100,200 }; //基础概率，速耐力根智鸽
   distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 }
+*/

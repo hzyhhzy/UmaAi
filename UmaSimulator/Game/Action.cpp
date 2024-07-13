@@ -1,9 +1,5 @@
 #include "Action.h"
-
-const int Action::XiangtanFromColor[10] = { -1,0,0,1,1,2,2,-1,-1,-1 };
-const int Action::XiangtanToColor[10] = { -1,1,2,0,2,0,1,0,1,2 };
-const int Action::XiangtanNumCost[10] = { 0,1,1,1,1,1,1,2,2,2 };
-const Action Action::Action_RedistributeCardsForTest = { TRA_redistributeCardsForTest,0 };
+const Action Action::Action_RedistributeCardsForTest = { 0, TRA_redistributeCardsForTest };
 
 const std::string Action::trainingName[8] =
 {
@@ -16,18 +12,22 @@ const std::string Action::trainingName[8] =
   "外出",
   "比赛"
 };
-const std::string Action::xiangtanName[10] =
+const std::string Action::dishName[14] =
 {
   "无",
-  "蓝->红",
-  "蓝->黄",
-  "红->蓝",
-  "红->黄",
-  "黄->蓝",
-  "黄->红",
-  "全蓝",
-  "全红",
-  "全黄",
+  "三明治",
+  "咖喱",
+  "小速",
+  "小耐",
+  "小力",
+  "小根",
+  "小智",
+  "大速",
+  "大耐",
+  "大力",
+  "大根",
+  "大智",
+  "G1Plate"
 };
 
 int Action::toInt() const

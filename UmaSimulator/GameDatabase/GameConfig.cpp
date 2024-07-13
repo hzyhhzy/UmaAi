@@ -33,7 +33,7 @@ int GameConfig::maxDepth = TOTAL_TURN;
 
 double GameConfig::searchCpuct = 1.0;
 
-bool GameConfig::useWebsocket = true;
+string GameConfig::communicationMode = "localfile";
 string GameConfig::role = "default";
 
 bool GameConfig::debugPrint = false;
@@ -75,8 +75,8 @@ void GameConfig::load(const string& path)
 			GameConfig::searchCpuct = j.at("searchCpuct");
 		if (j.contains("maxDepth"))
 			GameConfig::maxDepth = j.at("maxDepth");
-		if (j.contains("useWebsocket"))
-			GameConfig::useWebsocket = j.at("useWebsocket");
+		if (j.contains("communicationMode"))
+			GameConfig::communicationMode = j.at("communicationMode");
 		if (j.contains("role"))
 			GameConfig::role = j.at("role");
 		if (j.contains("debugPrint"))
