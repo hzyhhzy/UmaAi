@@ -41,6 +41,9 @@ public:
   static const int Cook_DishPtDeyilvBonus[8];//料理pt得意率加成
   static const int Cook_DishPtBigSuccessRate[8];//料理大成功概率
 
+  static const double Cook_RestGreenRate;//休息绿色概率
+  static const double Cook_RaceGreenRate;//比赛绿色概率
+
   static const int Cook_DishLevel[14];//1级：第一年的两个，2级：第二年的5个，3级：第三年的5个，4级：第四年的G1Plate
   static const int Cook_DishGainPt[14];//料理获得的料理pt
   static const int Cook_DishCost[14][5];//料理原料消耗

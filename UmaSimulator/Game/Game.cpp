@@ -11,19 +11,29 @@ static bool randBool(mt19937_64& rand, double p)
 void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int umaStars, int newCards[6], int newZhongMaBlueCount[5], int newZhongMaExtraBonus[6])
 {
   playerPrint = enablePlayerPrint;
+  ptScoreRate = GameConstants::ScorePtRateDefault;
+  hintPtRate = GameConstants::HintLevelPtRateDefault;
+  eventStrength = GameConstants::EventStrengthDefault;
+  farmUpgradeStrategy = FUS_default;
+  scoringMode = SM_normal;
 
   umaId = newUmaId;
   isLinkUma = GameConstants::isLinkChara(umaId);
+  if (!GameDatabase::AllUmas.count(umaId))
+  {
+    throw "ERROR Unknown character. Updating database is required.";
+  }
   for (int i = 0; i < TOTAL_TURN; i++)
     isRacingTurn[i] = GameDatabase::AllUmas[umaId].races[i] == TURN_RACE;
   assert(isRacingTurn[11] == true);//出道赛
   isRacingTurn[TOTAL_TURN - 5] = true;//ura1
   isRacingTurn[TOTAL_TURN - 3] = true;//ura2
   isRacingTurn[TOTAL_TURN - 1] = true;//ura3
+  isUraRace = false;
 
   for (int i = 0; i < 5; i++)
     fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
-  eventStrength = GameConstants::EventStrengthDefault;
+
   turn = 0;
   vital = 100;
   maxVital = 100;
@@ -36,11 +46,17 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
   skillPt = 120;
   skillScore = umaStars >= 3 ? 170 * (umaStars - 2) : 120 * (umaStars);//固有技能
-  ptScoreRate = GameConstants::ScorePtRate;
+
+  for (int i = 0; i < 4; i++)
+  {
+    trainLevelCount[i] = 0;
+  }
 
   failureRateBias = 0;
+  isQieZhe = false;
   isAiJiao = false;
   isPositiveThinking = false;
+  isRefreshMind = false;
 
   for (int i = 0; i < 5; i++)
     zhongMaBlueCount[i] = newZhongMaBlueCount[i];
@@ -54,18 +70,21 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
   isRacing = false;
 
-  for (int i = 0; i < MAX_HEAD_NUM; i++)
+  friendship_noncard_yayoi = 0;
+  friendship_noncard_reporter = 0;
+
+  for (int i = 0; i < MAX_INFO_PERSON_NUM; i++)
   {
     persons[i] = Person();
   }
 
   saihou = 0;
-  lianghua_type = 0;
-  lianghua_personId = -1;
-  lianghua_outgoingUsed = 0;
-  lianghua_vitalBonus = 1.0;
-  lianghua_statusBonus = 1.0;
-  lianghua_guyouEffective = false;
+  friend_type = 0;
+  friend_personId = PSID_none;
+  friend_stage = 0;
+  friend_outgoingUsed = 0;
+  friend_vitalBonus = 1.0;
+  friend_statusBonus = 1.0;
   for (int i = 0; i < 6; i++)
   {
     int cardId = newCards[i];
@@ -74,27 +93,32 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
     if (persons[i].personType == 1)
     {
-      lianghua_personId = i;
+      friend_personId = i;
       bool isSSR = cardId > 300000;
       if (isSSR)
-        lianghua_type = 1;
+        friend_type = 1;
       else
-        lianghua_type = 2;
+        friend_type = 2;
       int friendLevel = cardId % 10;
-      if (lianghua_type ==1)
+      if (friend_type ==1)
       {
-        lianghua_vitalBonus = GameConstants::FriendVitalBonusSSR[friendLevel];
-        lianghua_statusBonus = GameConstants::FriendStatusBonusSSR[friendLevel];
+        friend_vitalBonus = GameConstants::FriendVitalBonusSSR[friendLevel];
+        friend_statusBonus = GameConstants::FriendStatusBonusSSR[friendLevel];
       }
       else
       {
-        lianghua_vitalBonus = GameConstants::FriendVitalBonusR[friendLevel];
-        lianghua_statusBonus = GameConstants::FriendStatusBonusR[friendLevel];
+        friend_vitalBonus = GameConstants::FriendVitalBonusR[friendLevel];
+        friend_statusBonus = GameConstants::FriendStatusBonusR[friendLevel];
       }
-      lianghua_vitalBonus += 1e-10;
-      lianghua_statusBonus += 1e-10;//加个小量，避免因为舍入误差而算错
+      friend_vitalBonus += 1e-10;
+      friend_statusBonus += 1e-10;//加个小量，避免因为舍入误差而算错
     }
   }
+
+  std::vector<int> probs = { 100,100,100,100,100,200 }; //速耐力根智鸽
+  distribution_noncard = std::discrete_distribution<>(probs.begin(), probs.end());
+  std::vector<int> probs = { 100,100,100,100,100,100 }; //速耐力根智鸽
+  distribution_npc = std::discrete_distribution<>(probs.begin(), probs.end());
 
   for (int i = 0; i < 6; i++)//支援卡初始加成
   {
@@ -103,42 +127,46 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     skillPt += persons[i].cardParam.initialBonus[5];
   }
 
-  persons[6].setNonCard(PersonType_lishizhang);
-  persons[7].setNonCard(PersonType_jizhe);
-  if (lianghua_type == 0)
-    persons[8].setNonCard(PersonType_lianghuaNonCard);
-  else
-    persons[8].personType = 0;
 
 
 
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 5; j++)
-      uaf_trainingLevel[i][j] = 1;
+  for (int i = 0; i < 5; i++)
+  {
+    if (isLinkUma)
+      cook_material[i] = 75;
+    else
+      cook_material[i] = 50;
+  }
+  cook_dish_pt = 0;
+  cook_dish_pt_turn_begin = 0;
+  for (int i = 0; i < 5; i++)
+    cook_farm_level[i] = 1;
+  cook_farm_pt = 0;
+  cook_dish_sure_success = false;
+  cook_dish = 0;
+  for (int i = 0; i < 5; i++)
+    cook_win_history[i] = 0;
 
-  for (int k = 0; k < 5; k++)
-    for (int i = 0; i < 3; i++)
-      for (int j = 0; j < 5; j++)
-        uaf_winHistory[k][i][j] = false;
+  for (int i = 0; i < 4; i++)
+    cook_harvest_history[i] = -1;
+  for (int i = 0; i < 5; i++)
+    cook_harvest_extra[i] = 0;
+  cook_harvest_green_count = 0;
 
-  uaf_lastTurnNotTrain = false;
-  uaf_xiangtanRemain = 3;
+  for (int i = 0; i < 8; i++)
+  {
+    cook_train_material_type[i] = -1;
+    cook_train_green[i] = false;
+  }
 
-  for (int i = 0; i < 3; i++)
-    uaf_buffActivated[i] = 0;
+  updateDishPt(-1, 0);//初始化料理pt
 
-  for (int i = 0; i < 3; i++)
-    uaf_buffNum[i] = 0;
-
-
-  randomDistributeCards(rand); 
+  randomDistributeCards(rand); //随机分配卡组，包括计算属性
+  
 }
 
 void Game::randomDistributeCards(std::mt19937_64& rand)
 {
-  cardEffectCalculated = false;
-  checkLianghuaGuyou();
-
   //比赛回合的人头分配，不需要置零，因为不输入神经网络
   if (isRacing)
     return;//比赛不用分配卡组
@@ -152,24 +180,30 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   for (int i = 0; i < 5; i++)
     buckets[i].clear();
   //先放友人/理事长/记者
-  for (int i = 0; i < MAX_HEAD_NUM; i++)
+  for (int i = 0; i < 6 + 2; i++)
   {
-    Person& p = persons[i];
-    if (p.personType == PersonType_jizhe && turn <= 12)//记者第13回合来
-      continue;
-    if (p.personType == PersonType_lianghuaCard ||
-      p.personType == PersonType_otherFriend ||
-      p.personType == PersonType_groupCard ||
-      p.personType == PersonType_lishizhang ||
-      p.personType == PersonType_jizhe ||
-      p.personType == PersonType_lianghuaNonCard)
+    int atTrain = 5;
+    if (friend_type != 0 && i == friend_personId)
     {
-      int atTrain = p.distribution(rand);
-      if (atTrain < 5)
-      {
-        buckets[atTrain].push_back(i);
-      }
+      //友人卡
+      atTrain = persons[i].distribution(rand);
     }
+    else if (i == PSID_noncardYayoi && friend_type == 0)//非卡理事长
+    {
+      atTrain = distribution_noncard(rand);
+    }
+    else if (i == PSID_noncardReporter)//记者
+    {
+      if (turn < 12 || isXiahesu())//记者第13回合来，夏合宿也不在
+        continue;
+      atTrain = distribution_noncard(rand);
+    }
+
+    if (atTrain < 5)
+    {
+      buckets[atTrain].push_back(i);
+    }
+    
   }
   for (int i = 0; i < 5; i++)
   {
@@ -186,12 +220,11 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
     buckets[i].clear();
   }
 
-  //然后是普通支援卡/npc(如果有)
-  for (int i = 0; i < MAX_HEAD_NUM; i++)
+  //然后是普通支援卡
+  for (int i = 0; i < 6; i++)
   {
     Person& p = persons[i];
-    if (p.personType == PersonType_card ||
-      p.personType == PersonType_npc)
+    if (p.personType == PersonType_card)
     {
       int atTrain = p.distribution(rand);
       if (atTrain < 5)
@@ -200,6 +233,19 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
       }
     }
   }
+
+  //npc
+  int npcCount = friend_type == 0 ? 6 : 7;//算上支援卡一共12个
+  for (int i = 0; i < npcCount; i++)
+  {
+    int atTrain = distribution_npc(rand);
+    if (atTrain < 5)
+    {
+      buckets[atTrain].push_back(PSID_npc);
+    }
+  }
+
+  //选出不超过5个人头
   for (int i = 0; i < 5; i++)
   {
     int maxHead = 5 - headN[i];
@@ -251,20 +297,29 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
 
       if (persons[pid].personType == PersonType_card)
       {
-        if (uaf_buffNum[2] > 0)//黄buff
-          persons[pid].isHint = true;
-        else
-        {
-          double hintProb = 0.06 * (1 + 0.01 * persons[pid].cardParam.hintProbIncrease);
-          persons[pid].isHint = randBool(rand, hintProb);
-        }
+        double hintProb = 0.06 * (1 + 0.01 * persons[pid].cardParam.hintProbIncrease);
+        persons[pid].isHint = randBool(rand, hintProb);
+        
       }
     }
   }
 
-  //随机颜色
-  for (int i = 0; i < 5; i++)
-    uaf_trainingColor[i] = rand() % 3;
+  //休息外出比赛：随机菜种，随机绿圈
+  //休息&外出
+  int restMaterialType = rand() % 5;
+  bool restGreen = randBool(rand, GameConstants::Cook_RestGreenRate);
+  cook_train_material_type[TRA_rest] = restMaterialType;
+  cook_train_material_type[TRA_outgoing] = restMaterialType;
+  cook_train_green[TRA_rest] = restGreen;
+  cook_train_green[TRA_outgoing] = restGreen;
+
+  //比赛
+  int raceMaterialType = rand() % 5;
+  bool raceGreen = randBool(rand, GameConstants::Cook_RaceGreenRate);
+  cook_train_material_type[TRA_race] = raceMaterialType;
+  cook_train_green[TRA_race] = raceGreen;
+
+  //训练的绿圈在calculateTrainingValue里计算
 
   calculateTrainingValue();
 }
@@ -287,246 +342,17 @@ void Game::calculateTrainingValue()
 
 
   //剧本训练加成
-  uaf_trainingBonus = 0;
-  int competitionFinishedNum = uaf_competitionFinishedNum();
-  uaf_haveLose = false;
-  uaf_haveLoseColor[0] = false;
-  uaf_haveLoseColor[1] = false;
-  uaf_haveLoseColor[2] = false;
-  for (int color = 0; color < 3; color++)
-  {
-    int levelTotal = 0;
-    int winCount = 0;
-    for (int i = 0; i < 5; i++)
-      levelTotal += uaf_trainingLevel[color][i];
+  int cookDishLevel = GameConstants::Cook_DishPtLevel(cook_dish_pt);
+  cook_dishpt_success_rate = GameConstants::Cook_DishPtBigSuccessRate[cookDishLevel];
+  cook_dishpt_training_bonus = GameConstants::Cook_DishPtTrainingBonus[cookDishLevel];
+  cook_dishpt_skillpt_bonus = GameConstants::Cook_DishPtSkillPtBonus[cookDishLevel];
+  cook_dishpt_deyilv_bonus = GameConstants::Cook_DishPtDeyilvBonus[cookDishLevel];
+  
+  for (int i = 0; i < 8; i++)
+    cook_train_material_num_extra[i] = 0;
 
-    for (int i = 0; i < competitionFinishedNum; i++)
-      for (int j = 0; j < 5; j++)
-      {
-        if(uaf_winHistory[i][color][j])
-          winCount += 1;
-        else
-        {
-          uaf_haveLose = true;
-          uaf_haveLoseColor[color] = true;
-        }
-      }
-
-    uaf_trainLevelColorTotal[color] = levelTotal;
-    uaf_colorWinCount[color] = winCount;
-    uaf_trainingBonus += GameConstants::UAF_WinNumTrainingBonus[winCount];
-  }
-
-  //训练等级增加量与卡数的关系
-  static const int cardNumLevelBonus[6] = { 0,1,2,2,3,3 };
-
-  //把闪彩的卡按persons的编号记下来
-  bool isCardShining_record[6] = { false,false,false,false,false,false };
-  int cardNum_record[5];
-
-  //计算等级增加量
-  for (int tra = 0; tra < 5; tra++)
-  {
-    int cardNum = 0;
-    int shiningNum = 0;
-    int linkNum = 0;
-    for (int h = 0; h < 5; h++)
-    {
-      int pIdx = personDistribution[tra][h];
-      if (pIdx < 0)break;
-      const Person& p = persons[pIdx];
-      if (pIdx >= 6)continue;//不是支援卡
-      assert(p.personType == PersonType_card || p.personType == PersonType_lianghuaCard || p.personType == PersonType_otherFriend || p.personType == PersonType_groupCard);
-      
-      cardNum += 1;
-      if (isCardShining(pIdx, tra))
-      {
-        shiningNum += 1;
-        isCardShining_record[pIdx] = true;
-      }
-      if (p.cardParam.isLink)
-      {
-        linkNum += 1;
-      }
-
-    }
-    cardNum_record[tra] = cardNum;
-    trainShiningNum[tra] = shiningNum;
-
-    int levelGain = 3 + cardNumLevelBonus[cardNum];
-    if (shiningNum > 0)
-      levelGain *= 2;
-    levelGain += linkNum;
-    if (uaf_lastTurnNotTrain)
-      levelGain += 3;
-    uaf_trainLevelGain[tra] = levelGain;
-  }
-
-
-  //link统计与加成
-  int trainingColorNum[3];//三种颜色的训练个数
-  int levelGainColorTotal[3];//三种颜色的训练等级提升总数
-  int linkBasicValueBonus[3][6];//三种颜色的基础值增加量
-
-  for (int color = 0; color < 3; color++)
-  {
-    trainingColorNum[color] = 0;
-    levelGainColorTotal[color] = 0;
-    for (int i = 0; i < 6; i++)
-      linkBasicValueBonus[color][i] = 0;
-
-    for (int t = 0; t < 5; t++)
-    {
-      if (uaf_trainingColor[t] != color)
-        continue;
-      trainingColorNum[color] += 1;
-      levelGainColorTotal[color] += uaf_trainLevelGain[t];
-      int splevel = uaf_trainingLevel[color][t];
-      int gain = splevel < 30 ? 1 : splevel < 50 ? 2 : 3;
-      linkBasicValueBonus[color][t] += gain;
-    }
-    linkBasicValueBonus[color][5] = trainingColorNum[color] - 1;
-    if (trainingColorNum[color] <= 1)
-    {
-      for (int t = 0; t < 6; t++)
-        linkBasicValueBonus[color][t] = 0;//一个link都没有吃不到加成
-    }
-  }
-
-  //计算五个训练的各种数值
-  for (int t = 0; t < 5; t++)
-  {
-    int basicValueLower[6] = { 0,0,0,0,0,0 };//训练的下层基础值，=原基础值+支援卡加成
-    double valueLowerDouble[6] = { 0,0,0,0,0,0 };//训练的下层值，先不取整
-    double valueDouble[6] = { 0,0,0,0,0,0 };//训练的总数，先不取整
-    //int basicValue[6];//训练的基础值，= basicValueLower + linkBasicValueBonus
-    int cardNum = 0;//几张卡，理事长记者不算
-    int totalXunlian = 0;//训练1+训练2+...
-    int totalGanjing = 0;//干劲1+干劲2+...
-    double totalYouqingMultiplier = 1.0;//(1+友情1)*(1+友情2)*...
-    int vitalCostBasic;//体力消耗基础量，=ReLU(基础体力消耗+link体力消耗增加-智彩体力消耗减少)
-    double vitalCostMultiplier = 1.0;//(1-体力消耗减少率1)*(1-体力消耗减少率2)*...
-    double failRateMultiplier = 1.0;//(1-失败率下降率1)*(1-失败率下降率2)*...
-
-    int color = uaf_trainingColor[t]; 
-    int colorNum = trainingColorNum[color];
-    int splevel = uaf_trainingLevel[color][t];
-    int tlevel = getTrainingLevel(t);
-    for (int i = 0; i < 6; i++)
-      basicValueLower[i] = GameConstants::TrainingBasicValue[color][t][tlevel][i];
-    vitalCostBasic = -GameConstants::TrainingBasicValue[color][t][tlevel][6];
-    vitalCostBasic += colorNum - 1;//link越多体力消耗越多
-
-    for (int a = 0; a < 5; a++)
-    {
-      int pid = personDistribution[t][a];
-      if (pid < 0)break;//没人
-      if (pid >= 6)continue;//不是卡
-      cardNum += 1;
-      const Person& p = persons[pid];
-      bool isThisCardShining = isCardShining_record[pid];//这张卡闪没闪
-      bool isThisTrainingShining = trainShiningNum[t];//这个训练闪没闪
-      CardTrainingEffect eff = cardEffectCalculated ? cardEffects[pid] : 
-        p.cardParam.getCardEffect(*this, isThisCardShining, t, p.friendship, p.cardRecord, cardNum_record[t], trainShiningNum[t]);
-      if (!cardEffectCalculated)cardEffects[pid] = eff;
-        
-      for (int i = 0; i < 6; i++)//基础值bonus
-      {
-        if (basicValueLower[i] > 0)
-          basicValueLower[i] += eff.bonus[i];
-      }
-      if (isCardShining_record[pid])//闪彩，友情加成和智彩回复
-      {
-        totalYouqingMultiplier *= (1 + 0.01 * eff.youQing);
-        if (t == TRA_wiz)
-          vitalCostBasic -= eff.vitalBonus;
-      }
-      totalXunlian += eff.xunLian;
-      totalGanjing += eff.ganJing;
-      vitalCostMultiplier *= (1 - 0.01 * eff.vitalCostDrop);
-      failRateMultiplier *= (1 - 0.01 * eff.failRateDrop);
-
-    }
-
-    //体力，失败率
-
-    if (vitalCostBasic < 0)//uaf训练不会加体力，即使是很多智彩
-      vitalCostBasic = 0;
-    int vitalChangeInt = -int(vitalCostBasic * vitalCostMultiplier);
-    if (vitalChangeInt > maxVital - vital)vitalChangeInt = maxVital - vital;
-    if (vitalChangeInt < -vital)vitalChangeInt = -vital;
-    trainVitalChange[t] = vitalChangeInt;
-    failRate[t] = calculateFailureRate(t, failRateMultiplier);
-
-
-    //人头 * 训练 * 干劲 * 友情    //支援卡倍率
-    double cardMultiplier = (1 + 0.05 * cardNum) * (1 + 0.01 * totalXunlian) * (1 + 0.1 * (motivation - 3) * (1 + 0.01 * totalGanjing)) * totalYouqingMultiplier;
-    trainValueCardMultiplier[t] = cardMultiplier;
-
-    //下层可以开始算了
-    for (int i = 0; i < 6; i++)
-    {
-      bool isRelated = basicValueLower[i] != 0;
-      double bvl = basicValueLower[i];
-      double umaBonus = i < 5 ? 1 + 0.01 * fiveStatusBonus[i] : 1;
-      valueLowerDouble[i] = bvl * cardMultiplier * umaBonus;
-      valueDouble[i] = valueLowerDouble[i];
-      //加上link训练
-      if (i != t)
-      {
-        valueDouble[i] += linkBasicValueBonus[color][i] * cardMultiplier * (isRelated ? umaBonus : 1);
-      }
-
-
-      trainValueLower[t][i] = std::min(int(valueLowerDouble[i]),100);
-      
-    }
-    
-    //主属性link数加成
-    int linkNumTrainingRate = isXiahesu() ? GameConstants::UAF_LinkNumBonusXiahesu[colorNum] : GameConstants::UAF_LinkNumBonus[colorNum];
-    valueDouble[t] *= 1.0 + 0.01 * linkNumTrainingRate;
-
-    //剧本加成
-    for (int i = 0; i < 6; i++)
-    {
-      valueDouble[i] *= 1.0 + 0.01 * uaf_trainingBonus;
-    }
-
-    //红buff倍率只乘在当前训练的主属性上
-    if (uaf_buffNum[1] > 0)
-    {
-      double redBuffMultiplier = 1 + 0.01 * GameConstants::UAF_RedBuffBonus[colorNum];
-      valueDouble[t] *= redBuffMultiplier;
-    }
-
-    //蓝buff
-    if (uaf_buffNum[0] > 0)
-    {
-      for (int i = 0; i < 5; i++)
-      {
-        int levelGain = uaf_trainLevelGain[i];
-        //int maxLevelGain = 100 - uaf_trainingLevel[uaf_trainingColor[i]][i];
-        //if (levelGain > maxLevelGain)levelGain = maxLevelGain;
-        valueDouble[i] += int(levelGain / 2) + 1;
-      }
-      valueDouble[5] += 20;
-    }
-
-    //上层=总数-下层
-
-    for (int i = 0; i < 6; i++)
-    {
-      //upper是总数减去考虑100上限的下层
-      trainValueLower[t][i] = calculateRealStatusGain(i, trainValueLower[t][i]);
-      int upper = valueDouble[i] - trainValueLower[t][i];
-      if (upper > 100)upper = 100;
-      int tot = upper + trainValueLower[t][i];
-      trainValue[t][i] = calculateRealStatusGain(i, tot);
-    }
-
-
-  }
-  cardEffectCalculated = true;
+  for (int i = 0; i < 5; i++)
+    calculateTrainingValueSingle(i);
 }
 int Game::calculateRealStatusGain(int idx, int value) const//考虑1200以上为2的倍数的实际属性增加值
 {
@@ -1147,6 +973,143 @@ int Game::getTrainingLevel(int item) const
   return convertTrainingLevel(splevel);
 }
 
+int Game::turnIdxInHarvestLoop() const
+{
+  return 0;
+}
+
+void Game::calculateTrainingValueSingle(int tra)
+{
+  int headNum = 0;//几张卡或者npc，理事长记者不算
+  int shiningNum = 0;//几张闪彩
+  int linkNum = 0;//几张link
+
+  int basicValue[6] = { 0,0,0,0,0,0 };//训练的基础值，=原基础值+支援卡加成
+
+  int totalXunlian = 0;//训练1+训练2+...
+  int totalGanjing = 0;//干劲1+干劲2+...
+  double totalYouqingMultiplier = 1.0;//(1+友情1)*(1+友情2)*...
+  int vitalCostBasic;//体力消耗基础量，=ReLU(基础体力消耗+link体力消耗增加-智彩体力消耗减少)
+  double vitalCostMultiplier = 1.0;//(1-体力消耗减少率1)*(1-体力消耗减少率2)*...
+  double failRateMultiplier = 1.0;//(1-失败率下降率1)*(1-失败率下降率2)*...
+
+  int tlevel = getTrainingLevel(tra);
+
+
+  bool isCardShining_record[6] = { false,false,false,false,false,false };
+  for (int h = 0; h < 5; h++)
+  {
+    int pIdx = personDistribution[tra][h];
+    if (pIdx < 0)break;
+    if (pIdx == PSID_npc)
+    {
+      headNum += 1;
+      continue;
+    }
+    if (pIdx >= 6)continue;//不是支援卡
+
+    headNum += 1;
+    const Person& p = persons[pIdx];
+   
+    if (isCardShining(pIdx, tra))
+    {
+      shiningNum += 1;
+      isCardShining_record[pIdx] = true;
+    }
+    if (p.cardParam.isLink)
+    {
+      linkNum += 1;
+    }
+  }
+  isTrainShining[tra] = shiningNum;
+
+  //菜量获取值
+  cook_train_material_type[tra] = tra;
+  cook_train_green[tra] = shiningNum > 0;
+  cook_train_material_num_extra[tra] = headNum + 2 * linkNum;
+
+
+  //基础值
+  for (int i = 0; i < 6; i++)
+    basicValue[i] = GameConstants::TrainingBasicValue[tra][tlevel][i];
+  vitalCostBasic = -GameConstants::TrainingBasicValue[tra][tlevel][6];
+
+  for (int h = 0; h < 5; h++)
+  {
+    int pid = personDistribution[tra][h];
+    if (pid < 0)break;//没人
+    if (pid >= 6)continue;//不是卡
+    const Person& p = persons[pid];
+    bool isThisCardShining = isCardShining_record[pid];//这张卡闪没闪
+    bool isThisTrainingShining = shiningNum > 0;//这个训练闪没闪
+    CardTrainingEffect eff = p.cardParam.getCardEffect(*this, isThisCardShining, tra, p.friendship, p.cardRecord, headNum, shiningNum);
+    
+    for (int i = 0; i < 6; i++)//基础值bonus
+    {
+      if (basicValue[i] > 0)
+        basicValue[i] += eff.bonus[i];
+    }
+    if (isCardShining_record[pid])//闪彩，友情加成和智彩回复
+    {
+      totalYouqingMultiplier *= (1 + 0.01 * eff.youQing);
+      if (tra == TRA_wiz)
+        vitalCostBasic -= eff.vitalBonus;
+    }
+    totalXunlian += eff.xunLian;
+    totalGanjing += eff.ganJing;
+    vitalCostMultiplier *= (1 - 0.01 * eff.vitalCostDrop);
+    failRateMultiplier *= (1 - 0.01 * eff.failRateDrop);
+
+  }
+
+  //体力，失败率
+
+  int vitalChangeInt = -int(vitalCostBasic * vitalCostMultiplier);
+  if (vitalChangeInt > maxVital - vital)vitalChangeInt = maxVital - vital;
+  if (vitalChangeInt < -vital)vitalChangeInt = -vital;
+  trainVitalChange[tra] = vitalChangeInt;
+  failRate[tra] = calculateFailureRate(tra, failRateMultiplier);
+
+
+  //人头 * 训练 * 干劲 * 友情    //支援卡倍率
+  double cardMultiplier = (1 + 0.05 * headNum) * (1 + 0.01 * totalXunlian) * (1 + 0.1 * (motivation - 3) * (1 + 0.01 * totalGanjing)) * totalYouqingMultiplier;
+  //trainValueCardMultiplier[t] = cardMultiplier;
+
+  //下层可以开始算了
+  for (int i = 0; i < 6; i++)
+  {
+    bool isRelated = basicValue[i] != 0;
+    double bvl = basicValue[i];
+    double umaBonus = i < 5 ? 1 + 0.01 * fiveStatusBonus[i] : 1;
+    trainValueLower[tra][i] = bvl * cardMultiplier * umaBonus;
+  }
+
+  //剧本训练加成
+  double scenarioTrainMultiplier = 1 + 0.01 * cook_dishpt_training_bonus;
+  //料理训练加成
+  if (cook_dish != DISH_none)
+    scenarioTrainMultiplier += 0.01 * getDishTrainingBonus(tra);
+  double skillPtMultiplier = scenarioTrainMultiplier * (1 + 0.01 * cook_dishpt_skillpt_bonus);
+
+
+
+  //上层=总数-下层
+
+  for (int i = 0; i < 6; i++)
+  {
+    int lower = trainValueLower[tra][i];
+    if (lower > 100) lower = 100;
+    lower = calculateRealStatusGain(i, lower);//consider the integer over 1200
+    trainValueLower[tra][i] = lower;
+    double multiplier = i < 5 ? scenarioTrainMultiplier : skillPtMultiplier;
+    int total = int(lower * multiplier);
+    if (total > 100 + lower)total = 100 + lower;
+    total = calculateRealStatusGain(i, total);
+    trainValue[tra][i] = total;
+  }
+
+
+}
 
 void Game::checkEventAfterTrain(std::mt19937_64& rand)
 {

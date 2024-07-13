@@ -10,8 +10,8 @@ enum TrainActionTypeEnum :int16_t
   TRA_power,
   TRA_guts,
   TRA_wiz,
-  TRA_rest,
-  TRA_outgoing,
+  TRA_rest, 
+  TRA_outgoing, //包括合宿的“休息&外出”
   TRA_race,
   TRA_none = -1, //此Action不训练，只做菜
   TRA_redistributeCardsForTest = -2 //使用这个标记时，说明要randomDistributeCards，用于测试ai分数，在Search::searchSingleActionThread中使用

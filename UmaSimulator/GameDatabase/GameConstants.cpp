@@ -26,6 +26,9 @@ const int GameConstants::Cook_DishPtSkillPtBonus[8] = { 0,15,24,33,42,51,60,60 }
 const int GameConstants::Cook_DishPtDeyilvBonus[8] = { 0,5,8,11,14,17,20,20 };//料理pt得意率加成
 const int GameConstants::Cook_DishPtBigSuccessRate[8] = { 0,15,18,20,22,24,25,100 };//料理大成功概率
 
+const double GameConstants::Cook_RestGreenRate = 0.2;//休息绿色概率
+const double GameConstants::Cook_RaceGreenRate = 0.4;//比赛绿色概率
+
 const int GameConstants::Cook_DishLevel[14] = { 0,1,1,2,2,2,2,2,3,3,3,3,3,4 };//1级：第一年的两个，2级：第二年的5个，3级：第三年的5个，4级：第四年的G1Plate
 const int GameConstants::Cook_DishGainPt[14] = { 0,250,250,500,500,500,500,500,800,800,800,800,800,1500 };//料理的料理pt
 

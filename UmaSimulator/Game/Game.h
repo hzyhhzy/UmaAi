@@ -27,6 +27,14 @@ enum scoringModeEnum :int16_t
   SM_short,//短距离模式
 };
 
+enum personIdEnum :int16_t
+{
+  PSID_none = -1,//未分配
+  PSID_noncardYayoi = 6,//非卡理事长
+  PSID_noncardReporter = 7,//非卡记者
+  PSID_npc = 8//NPC
+};
+
 struct Game
 {
   //显示相关
@@ -44,6 +52,7 @@ struct Game
   int32_t umaId;//马娘编号，见KnownUmas.cpp
   bool isLinkUma;//是否为link马
   bool isRacingTurn[TOTAL_TURN];//这回合是否比赛
+  bool isUraRace;//是否为ura比赛
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
 
   int16_t turn;//回合数，从0开始，到77结束
@@ -58,7 +67,7 @@ struct Game
   int16_t trainLevelCount[5];//训练等级计数，每点4下加一级
 
   int16_t failureRateBias;//失败率改变量。练习上手=-2，练习下手=2
-  //bool isQieZhe;//切者  合并到ptScoreRate了
+  bool isQieZhe;//切者 
   bool isAiJiao;//爱娇
   bool isPositiveThinking;//ポジティブ思考，友人第三段出行选上的buff，可以防一次掉心情
   bool isRefreshMind;//+5 vital every turn
@@ -66,14 +75,19 @@ struct Game
   int16_t zhongMaBlueCount[5];//种马的蓝因子个数，假设只有3星
   int16_t zhongMaExtraBonus[6];//种马的剧本因子以及技能白因子（等效成pt），每次继承加多少。全大师杯因子典型值大约是30速30力200pt
   
-  int16_t saihou;//赛后加成
   bool isRacing;//这个回合是否在比赛
+
+  int16_t friendship_noncard_yayoi;//非卡理事长羁绊
+  int16_t friendship_noncard_reporter;//非卡记者羁绊
 
   Person persons[MAX_INFO_PERSON_NUM];//依次是6张卡。非卡理事长，记者，NPC们不单独分配person类，编号一律8
   int16_t personDistribution[5][5];//每个训练有哪些人头id，personDistribution[哪个训练][第几个人头]，空位置为-1，0~5是6张卡，非卡理事长6，记者7，NPC们编号一律8
   //int lockedTrainingId;//是否锁训练，以及锁在了哪个训练。可以先不加，等ai做完了有时间再加。
-  int16_t friendship_noncard_yayoi;//非卡理事长羁绊
-  int16_t friendship_noncard_reporter;//非卡记者羁绊
+
+  int16_t saihou;//赛后加成
+
+  std::discrete_distribution<> distribution_noncard;//非卡理事长/记者的分布
+  std::discrete_distribution<> distribution_npc;//npc的分布
 
   //剧本相关--------------------------------------------------------------------------------------
   
@@ -83,13 +97,12 @@ struct Game
   int32_t cook_dish_pt_turn_begin;//回合刚开始（吃菜之前）的料理pt：用来检查料理pt相关的升级
   int16_t cook_farm_level[5];//五种农田的等级
   int16_t cook_farm_pt;//农田升级pt
-  int16_t cook_success_rate;//大成功率%
   bool cook_dish_sure_success;//大成功确定
   int16_t cook_dish;//当前生效的菜
   int16_t cook_win_history[5];//五次试食会是否“大满足”，非大满足0，大满足1，超满足2
 
   //最终收获值=f(cook_harvest_green_count)*(基本收获 + cook_harvest_history*追加收获 + cook_harvest_extra)
-  int16_t cook_harvest_history[4];//此4回合分别是哪4种菜
+  int16_t cook_harvest_history[4];//此4回合分别是哪4种菜，-1是还未选择
   int16_t cook_harvest_extra[5];//每回合收获=追加收获+人头数。cook_harvest_extra是人头数累计菜量
   int16_t cook_harvest_green_count;//此4回合有多少个绿菜
 
@@ -114,7 +127,7 @@ struct Game
   int16_t trainValue[5][6];//训练数值的总数（下层+上层），第一个数是第几个训练，第二个数依次是速耐力根智pt
   int16_t trainVitalChange[5];//训练后的体力变化（负的体力消耗）
   int16_t failRate[5];//训练失败率
-  int16_t trainShiningNum[5];//每个训练有几个彩圈
+  bool isTrainShining[5];//训练是否闪彩
 
   int16_t cook_dishpt_success_rate;//大成功率
   int16_t cook_dishpt_training_bonus;//料理pt训练加成
@@ -125,7 +138,7 @@ struct Game
 
   //训练数值计算的中间变量，存下来方便手写逻辑进行估计
   int16_t trainValueLower[5][6];//训练数值的下层，第一个数是第几个训练，第二个数依次是速耐力根智pt体力
-  double trainValueCardMultiplier[5];//支援卡乘区=(1+总训练加成)(1+干劲系数*(1+总干劲加成))(1+0.05*总卡数)(1+友情1)(1+友情2)...
+  //double trainValueCardMultiplier[5];//支援卡乘区=(1+总训练加成)(1+干劲系数*(1+总干劲加成))(1+0.05*总卡数)(1+友情1)(1+友情2)...
 
   //bool cardEffectCalculated;//支援卡效果是否已经计算过？吃无关菜不需要重新计算，分配卡组或者读json时需要置为false
   //CardTrainingEffect cardEffects[6];
@@ -166,6 +179,7 @@ public:
   //原则上这几个private就行，如果private在某些地方非常不方便那就改成public
 
   void autoUpdateFarm();//农田升级策略用手写逻辑处理，就不额外计算了
+  void updateDishPt(int oldPt, int newPt);//料理pt相关项目更新（加成、必定大成功、训练等级升级）,oldPt=-1代表第一次加载
   void randomDistributeCards(std::mt19937_64& rand);//随机分配人头
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率、训练等级提升等
   bool makeDish(int16_t dishId);//做菜，并处理相关收益，计算相关数值
@@ -207,17 +221,18 @@ public:
   void addVitalFriend(int value);//友人卡事件，增加体力，考虑回复量加成
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
   void addTrainingLevelCount(int trainIdx);//为某个训练增加一次计数
-
+  void updateDeyilv();//在dishPt升级后，更新得意率
 
   int getTrainingLevel(int trainIdx) const;//计算训练等级
   int calculateFailureRate(int trainType, double failRateMultiply) const;//计算训练失败率，failRateMultiply是训练失败率乘数=(1-支援卡1的失败率下降)*(1-支援卡2的失败率下降)*...
 
   bool isCardShining(int personIdx, int trainIdx) const;    // 判断指定卡是否闪彩。普通卡看羁绊与所在训练，团队卡看friendOrGroupCardStage
   //bool trainShiningCount(int trainIdx) const;    // 指定训练彩圈数 //uaf不一定有用
-  void calculateTrainingValueSingle(int trainType);//计算每个训练加多少   //uaf剧本可能五个训练一起算比较方便
+  void calculateTrainingValueSingle(int tra);//计算每个训练加多少   //uaf剧本可能五个训练一起算比较方便
 
   //做菜相关
   bool upgradeFarm(int item);//把第item个农田升1级，失败返回false
+  void addDishMaterial(int idx, int num);//增加菜材料，并处理溢出
   bool isDishLegal(int dishId) const;//此料理是否允许
   int getDishTrainingBonus(int trainIdx) const;//计算当前料理的训练加成
   int getDishRaceBonus() const;//计算当前料理的比赛加成

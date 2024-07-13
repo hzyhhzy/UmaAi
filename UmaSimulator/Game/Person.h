@@ -39,6 +39,7 @@ struct Person //任何一个可能出现在训练里的人头
 
   Person();//未加载的人头
   void setCard(int cardId);//把此人头设置为某个支援卡，只考虑刚开局的状态，如果是游戏半途，需要手动修改羁绊等
+  void setExtraDeyilvBonus(int deyilvBonus);//额外的得意率加成
   //void setNonCard(int pType);//把此人头设置为非支援卡人头（理事长记者等），只考虑刚开局的状态，如果是游戏半途，需要手动修改羁绊等
   
 
