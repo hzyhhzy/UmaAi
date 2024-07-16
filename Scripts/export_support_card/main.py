@@ -259,13 +259,15 @@ def parseSupportCard():
                 filled = True,
                 bonus = [0, 0, 0, 0, 0, 0],
                 initialBonus = [0, 0, 0, 0, 0, 0],
-                hintBonus = [0, 0, 0, 0, 0, 5] # 暂定
+                hintBonus = [0, 0, 0, 0, 0, 5], # deprecated
+                hintLevel = 0
             )
             for key, value in trans_card.effect_row_dict.items():
                 if key in DirectKeys:
                     d[key] = value[i]
                 elif key == "hintLvUp":
                     d["hintBonus"][5] += 5 * value[i]
+                    d["hintLevel"] = value[i] + 1
                 elif '初期' in key:
                     d['initialBonus'][InitialKeys[key]] = value[i]
                 elif 'ボーナス' in key:
@@ -278,6 +280,7 @@ def parseSupportCard():
             # 无技能的卡，把hint技能点换为属性
             for i in range(0, 5):
                 ucard["cardValue"][i]["hintBonus"] = HintValues[ucard["cardType"]]
+                ucard["cardValue"][i]["hintLevel"] = 0
             print(f"hintBonus = {HintValues[ucard['cardType']]}")
         result[int(trans_card.id)] = ucard
     return result
