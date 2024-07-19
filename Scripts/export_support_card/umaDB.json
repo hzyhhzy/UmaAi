@@ -2283,7 +2283,7 @@
     ],
     "freeRaces": [],
     "gameId": 103003,
-    "name": "[Yummy Dreamy Fairy]ライスシャワー",
+    "name": "[Yummy Dreamy Fairy]米浴",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -5934,7 +5934,7 @@
     ],
     "freeRaces": [],
     "gameId": 109401,
-    "name": "[王者の喊声]ジャングルポケット",
+    "name": "[王者的呐喊]森林宝穴",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6357,7 +6357,7 @@
     ],
     "freeRaces": [],
     "gameId": 111901,
-    "name": "[夢路のよすが]ドリームジャーニー",
+    "name": "[梦境的尽头]梦之旅",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6371,6 +6371,39 @@
       59,
       65,
       71
+    ],
+    "star": 5
+  },
+  "112001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      145,
+      70,
+      113,
+      114,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 112001,
+    "name": "[真実一路]カルストンライトオ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      33,
+      37,
+      41,
+      53,
+      61,
+      65
     ],
     "star": 5
   }
