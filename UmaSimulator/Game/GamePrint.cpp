@@ -11,18 +11,23 @@ using std::endl;
 using std::to_string;
 using std::vector;
 
-std::string Person::getPersonStrColored(const Game& game, int personId, int atTrain) const
+std::string Person::getPersonName() const
 {
-    
   string s =
     personType == PersonType_unknown ? "未加载" :
-    personType == PersonType_lianghuaCard ? "[友]凉花" :
+    personType == PersonType_scenarioCard ? "[友]理事长" :
     personType == PersonType_card ? cardParam.cardName.substr(0, 8) :
     personType == PersonType_npc ? "NPC" :
-    personType == PersonType_lishizhang ? "理事长" :
-    personType == PersonType_jizhe ? "记者" :
-    personType == PersonType_lianghuaNonCard ? "凉花" :
+    personType == PersonType_yayoi ? "理事长" :
+    personType == PersonType_reporter ? "记者" :
     "未知";
+  return s;
+}
+
+
+std::string Person::getPersonStrColored(const Game& game, int personId, int atTrain) const
+{
+  string s = getPersonName();
   if (personType != PersonType_npc)
   {
     if (friendship < 100)

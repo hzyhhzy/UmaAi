@@ -36,7 +36,7 @@ void Person::setCard(int cardId)
 
     if (realCardId == GameConstants::FriendCardIdR || realCardId == GameConstants::FriendCardIdSSR)//¾ç±¾ÓÑÈË¿¨
     {
-      personType = 1;
+      personType = PersonType_scenarioCard;
     }
     else
     {

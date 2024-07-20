@@ -40,15 +40,22 @@ public:
   static const int Cook_DishPtSkillPtBonus[8];//料理pt技能点加成
   static const int Cook_DishPtDeyilvBonus[8];//料理pt得意率加成
   static const int Cook_DishPtBigSuccessRate[8];//料理大成功概率
+  //大成功时，先按基础概率的比例选出一个buff（忽略无效buff），再对每个buff按追加概率决定是否追加
+  static const int Cook_DishPtBigSuccessBuffProb[5][6];//料理大成功的buff基础概率，[料理等级][buff类型]，其中buff类型依次1体力，2心情，3羁绊，4分身，5体力上限
+  static const int Cook_DishPtBigSuccessBuffExtraProb[5][6];//料理大成功的buff追加概率，[料理等级][buff类型]，其中buff类型依次1体力，2心情，3羁绊，4分身，5体力上限
 
   static const double Cook_RestGreenRate;//休息绿色概率
   static const double Cook_RaceGreenRate;//比赛绿色概率
 
   static const int Cook_DishLevel[14];//1级：第一年的两个，2级：第二年的5个，3级：第三年的5个，4级：第四年的G1Plate
+  static const int Cook_DishMainTraining[14];//料理的主训练，1级和4级没有
   static const int Cook_DishGainPt[14];//料理获得的料理pt
   static const int Cook_DishCost[14][5];//料理原料消耗
   static const bool Cook_DishTrainingBonusEffective[14][5];//料理对哪些训练有加成
-  static const int Cook_FarmLvCost[4];//农田升级消耗
+  static const int Cook_FarmLvCost[5];//农田升级消耗
+  static const int Cook_HarvestBasic[6];//农田等级收获基础值
+  static const int Cook_HarvestExtra[6];//农田等级收获追加值
+  static const int Cook_MaterialLimit[6];//材料上限
 
 
   //评分

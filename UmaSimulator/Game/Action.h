@@ -36,6 +36,10 @@ enum DishTypeEnum :int16_t
 //考虑到这个剧本做菜有随机性，可能会影响希望选的训练
 //一个回合可以拆成两步：先做菜，再训练，也可以不拆
 //Action类表示做菜，或者训练，或者做菜+训练
+//“标准的Action”是做菜或者训练，不包括 做菜+训练 和 不做菜也不训练
+//标准的Action有编号，8+13=21种
+//搜索时，每次只搜一层“标准的Action”
+//ura比赛时，两个合法的action是做菜+不选训练（自动比赛）和不做菜+选择比赛
 struct Action 
 {
   static const std::string trainingName[8];
@@ -47,7 +51,7 @@ struct Action
 
   int16_t train;//-1暂时不训练，01234速耐力根智，5外出，6休息，7比赛 
   //注：外出是优先友人外出，没有再普通外出，不提供选项
-
+  bool isActionStandard() const;
   int toInt() const;
   std::string toString() const;
   static Action intToAction(int i);
