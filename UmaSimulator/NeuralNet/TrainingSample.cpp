@@ -1,7 +1,7 @@
 #include "TrainingSample.h"
 #include "../Search/Search.h"
 using namespace std;
-TrainingSample Search::exportTrainingSample(float policyDelta)
+TrainingSample Search::exportTrainingSample(double policyDelta)
 {
   TrainingSample tdata;
   rootGame.getNNInputV1(tdata.nnInputVector, param);

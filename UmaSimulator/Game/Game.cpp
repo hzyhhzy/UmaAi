@@ -101,6 +101,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
       else
         friend_type = 2;
       int friendLevel = cardId % 10;
+      assert(friendLevel >= 0 && friendLevel <= 4);
       if (friend_type ==1)
       {
         friend_vitalBonus = GameConstants::FriendVitalBonusSSR[friendLevel];
@@ -118,7 +119,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
   std::vector<int> probs = { 100,100,100,100,100,200 }; //速耐力根智鸽
   distribution_noncard = std::discrete_distribution<>(probs.begin(), probs.end());
-  std::vector<int> probs = { 100,100,100,100,100,100 }; //速耐力根智鸽
+  probs = { 100,100,100,100,100,100 }; //速耐力根智鸽
   distribution_npc = std::discrete_distribution<>(probs.begin(), probs.end());
 
   for (int i = 0; i < 6; i++)//支援卡初始加成
@@ -160,7 +161,6 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     cook_train_green[i] = false;
   }
 
-  updateDishPt(-1, 0);//初始化料理pt
 
   randomDistributeCards(rand); //随机分配卡组，包括计算属性
   
@@ -390,14 +390,40 @@ bool Game::isDishLegal(int dishId) const
   return true;
 }
 
-void Game::maybeHarvest()
+int Game::maxFarmPtUntilNow() const
 {
-  if (!(isXiahesu() || turn >= 72 || turn % 4 == 3))
-    return;//no harvest
+  int totalCost = 0;
+  for (int i = 0; i < 5; i++)
+  {
+    for (int j = 1; j < cook_farm_level[i]; j++)
+    {
+      totalCost += GameConstants::Cook_FarmLvCost[j];
+    }
+  }
+
+  //计算假如全程绿圈，最多多少pt
+  int normalCycleNum = turn <= 39 ? turn / 4 :
+    turn <= 63 ? turn / 4 - 1 :
+    turn <= 72 ? turn / 4 - 2 :
+    72 / 4 - 2;
+  int smallCycleNum = turn <= 36 ? 0 :
+    turn <= 39 ? turn - 36 :
+    turn <= 60 ? 4 :
+    turn <= 63 ? 4 + turn - 60 :
+    turn <= 72 ? 8 :
+    8 + turn - 72;
+  int maxFarmPt = normalCycleNum * 160 + smallCycleNum * 75;
+  return maxFarmPt - totalCost;
+}
+
+std::vector<int> Game::calculateHarvestNum(bool isAfterTrain) const
+{
   bool smallHarvest = isXiahesu() || turn >= 72;
   int harvestTurnNum = smallHarvest ? 1 : 4;
+  if (!isAfterTrain)//只供训练前显示
+    harvestTurnNum -= 1;
 
-  int harvestBasic[5] = { 0,0,0,0,0 };
+  vector<int> harvestBasic = { 0,0,0,0,0 };
   for (int i = 0; i < 5; i++)
   {
     harvestBasic[i] = GameConstants::Cook_HarvestBasic[cook_farm_level[i]];
@@ -414,17 +440,30 @@ void Game::maybeHarvest()
     harvestBasic[matType] += GameConstants::Cook_HarvestExtra[cook_farm_level[matType]];
   }
 
-  double multiplier = smallHarvest ? (cook_harvest_green_count == 0 ? 1.0 : 1.5) :
-    cook_harvest_green_count == 0 ? 1.0 :
-    cook_harvest_green_count == 1 ? 1.1 :
-    cook_harvest_green_count == 2 ? 1.2 :
-    cook_harvest_green_count == 3 ? 1.4 :
-    cook_harvest_green_count == 4 ? 1.6 :
+  double multiplier = smallHarvest ? (cook_harvest_green_count == 0 ? 1.0000001 : 1.5000001) :
+    cook_harvest_green_count == 0 ? 1.0000001 :
+    cook_harvest_green_count == 1 ? 1.1000001 :
+    cook_harvest_green_count == 2 ? 1.2000001 :
+    cook_harvest_green_count == 3 ? 1.4000001 :
+    cook_harvest_green_count == 4 ? 1.6000001 :
     1000;
 
-  cook_farm_pt += smallHarvest ? multiplier * 50 : multiplier * 100;
+  int farmPt = smallHarvest ? int(multiplier * 50) : int(multiplier * 100);
+  for(int i=0;i<5;i++)
+    harvestBasic[i] = int(harvestBasic[i] * multiplier);
+  harvestBasic.push_back(farmPt);
+  return harvestBasic;
+}
+void Game::maybeHarvest()
+{
+  if (!(isXiahesu() || turn >= 72 || turn % 4 == 3))
+    return;//no harvest
+
+  vector<int> harvest = calculateHarvestNum(true);
+
   for (int i = 0; i < 5; i++)
-    addDishMaterial(i, harvestBasic[i] * multiplier);
+    addDishMaterial(i, harvest[i]);
+  cook_farm_pt += harvest[5];
 
   //clear
   for (int i = 0; i < 4; i++)
@@ -432,7 +471,6 @@ void Game::maybeHarvest()
   for (int i = 0; i < 5; i++)
     cook_harvest_extra[i] = 0;
   cook_harvest_green_count = 0;
-
 }
 
 void Game::addTrainingLevelCount(int trainIdx, int n)
@@ -587,13 +625,12 @@ void Game::handleDishBigSuccess(int dishId, std::mt19937_64& rand)
 void Game::updateDeyilv(int deyilvBonus)
 {
   for (int i = 0; i < 6; i++)
+  {
     if (persons[i].personType == PersonType_card)
     {
-      int newDeyilv = persons[i].cardParam.deYiLv + deyilvBonus;
-      std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-      probs[persons[i].cardParam.cardType] += newDeyilv;
-      persons[i].distribution = std::discrete_distribution<>(probs.begin(), probs.end());
+      persons[i].setExtraDeyilvBonus(deyilvBonus);
     }
+  }
 }
 void Game::dishBigSuccess_hint(std::mt19937_64& rand)
 {
@@ -609,7 +646,7 @@ void Game::dishBigSuccess_hint(std::mt19937_64& rand)
   int hintlevel = 1;
   if (availableHintLevels.size() > 0)
     hintlevel = availableHintLevels[rand() % availableHintLevels.size()];
-  skillPt += hintlevel * hintPtRate;
+  skillPt += int(hintlevel * hintPtRate);
 }
 void Game::dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand)
 {
@@ -955,13 +992,14 @@ int Game::calculateRealStatusGain(int idx, int value) const//考虑1200以上为2的倍
 }
 void Game::addStatus(int idx, int value)
 {
+  assert(idx >= 0 && idx < 5);
   int t = fiveStatus[idx] + value;
   
   if (t > fiveStatusLimit[idx])
     t = fiveStatusLimit[idx];
   if (t < 1)
     t = 1;
-  if (idx < 5 && t > 1200)
+  if (t > 1200)
     t = (t / 2) * 2;
   fiveStatus[idx] = t;
 }
@@ -972,6 +1010,12 @@ void Game::addVital(int value)
     vital = maxVital;
   if (vital < 0)
     vital = 0;
+}
+void Game::addVitalMax(int value)
+{
+  maxVital += value;
+  if (maxVital > 120)
+    maxVital = 120;
 }
 void Game::addMotivation(int value)
 {
@@ -1451,7 +1495,7 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
         int hintLevel = persons[hintCard].cardParam.hintLevel;
         if (hintLevel > 0)
         {
-          skillPt += hintLevel * hintPtRate;
+          skillPt += int(hintLevel * hintPtRate);
         }
         else //根乌拉拉这种，只给属性
         {
@@ -1566,7 +1610,7 @@ bool Game::isLegal(Action action) const
 
 float Game::getSkillScore() const
 {
-  double rate = isQieZhe ? ptScoreRate : ptScoreRate * 1.1;
+  float rate = isQieZhe ? ptScoreRate : ptScoreRate * 1.1;
   return rate * skillPt + skillScore;
 }
 
@@ -1578,7 +1622,7 @@ int Game::finalScore() const
     for (int i = 0; i < 5; i++)
       total += GameConstants::FiveStatusFinalScore[min(fiveStatus[i], fiveStatusLimit[i])];
 
-    total += getSkillScore();
+    total += int(getSkillScore());
     //return uaf_haveLose ? 10000 : 20000;
     return total;
   }
@@ -1692,7 +1736,7 @@ void Game::calculateTrainingValueSingle(int tra)
     for (int i = 0; i < 6; i++)//基础值bonus
     {
       if (basicValue[i] > 0)
-        basicValue[i] += eff.bonus[i];
+        basicValue[i] += int(eff.bonus[i]);
     }
     if (isCardShining_record[pid])//闪彩，友情加成和智彩回复
     {

@@ -3,6 +3,7 @@
 
 //常数或者比较短的列表放在最前面
 const double GameConstants::ScorePtRateDefault = 2.0;
+const double GameConstants::HintLevelPtRateDefault = 7.0;//以前默认5，种菜杯的hint经常稀缺，就增加到7
 //const double GameConstants::ScorePtRateQieZhe = 2.2;
 const int GameConstants::BasicFiveStatusLimit[5] = { 2300,1000,2200,2200,1500 }; //游戏里原来是1750 1000 1700 1700 1350，模拟器中1200以上翻倍
 
@@ -33,6 +34,9 @@ const int GameConstants::Cook_DishLevel[14] = { 0,1,1,2,2,2,2,2,3,3,3,3,3,4 };//
 const int GameConstants::Cook_DishMainTraining[14] = { -1,-1,-1,0,1,2,3,4,0,1,2,3,4,-1 };//料理的主训练，1级和4级没有
 const int GameConstants::Cook_DishGainPt[14] = { 0,250,250,500,500,500,500,500,800,800,800,800,800,1500 };//料理的料理pt
 
+const std::string GameConstants::Cook_MaterialNames[5] = {
+  "萝卜","大蒜","土豆","辣椒","草莓"
+};
 
 const int GameConstants::Cook_DishCost[14][5]=
 {

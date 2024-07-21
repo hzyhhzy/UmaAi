@@ -112,7 +112,7 @@ namespace TestAiScore
   {
     stringstream buf;
     double rate = clamp((double)value / maxValue, 0.0, 1.0);
-    int n = rate * width;
+    int n = int(rate * width);
     buf << "[" << string(n, '=') << ">" << string(width - n, ' ') << "] " << setprecision((int)(2 + rate)) << rate * 100 << "%   ";
 
     std::lock_guard<std::mutex> lock(printLock);    // 返回时自动释放cout锁
@@ -149,7 +149,7 @@ namespace TestAiScore
         else {
           action = search.runSearch(game, rand);
         }
-        game.applyTrainingAndNextTurn(rand, action);
+        game.applyAction(rand, action);
       }
       //cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
       GameResult result = getResult(game);

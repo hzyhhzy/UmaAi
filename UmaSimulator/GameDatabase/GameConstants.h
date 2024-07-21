@@ -33,6 +33,8 @@ public:
   
 
   //剧本相关
+  static const std::string Cook_MaterialNames[5];//料理原料名称
+
   static const std::vector<int> Cook_LinkCharas;// Link角色
   //static const int Cook_DishPtBounds[7];//料理pt的分档
   static int Cook_DishPtLevel(int dishPt);//料理pt的分档

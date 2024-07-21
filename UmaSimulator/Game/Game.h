@@ -188,7 +188,6 @@ public:
   //原则上这几个private就行，如果private在某些地方非常不方便那就改成public
 
   void autoUpgradeFarm();//农田升级策略用手写逻辑处理，就不额外计算了
-  void updateDishPt(int oldPt, int newPt);//料理pt相关项目更新（加成、必定大成功、训练等级升级）,oldPt=-1代表第一次加载
   void randomDistributeCards(std::mt19937_64& rand);//随机分配人头
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率、训练等级提升等
   bool makeDish(int16_t dishId, std::mt19937_64& rand);//做菜，并处理相关收益，计算相关数值
@@ -246,6 +245,7 @@ public:
   void calculateTrainingValueSingle(int tra);//计算每个训练加多少   //uaf剧本可能五个训练一起算比较方便
 
   //做菜相关
+  int maxFarmPtUntilNow() const;//假如全程绿圈，获得的农田pt数减去已经升级的pt数
   bool upgradeFarm(int item);//把第item个农田升1级，失败返回false
   void addDishMaterial(int idx, int num);//增加菜材料，并处理溢出
   bool isDishLegal(int dishId) const;//此料理是否允许
@@ -257,6 +257,7 @@ public:
   void dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand);//料理大成功的分身效果：往trainIdx随机分配一个支援卡
   int turnIdxInHarvestLoop() const;//收获周期里的第几回合(turn%4)。夏合宿恒为0
   void addFarm(int type, int extra, bool isGreen);//种田，extra是人头附加，isGreen是绿圈
+  std::vector<int> calculateHarvestNum(bool isAfterTrain) const;//收获五种菜的数量，以及农田pt数
   void maybeHarvest();//每4回合收菜，合宿每回合收菜，不是收菜回合就直接return
   void maybeCookingMeeting();//试食会
 
@@ -273,8 +274,8 @@ public:
   float getSkillScore() const;//技能分，输入神经网络之前也可能提前减去
 
 
-  //显示事件
+  //显示
   void printEvents(std::string s) const;//用绿色字体显示事件
-
+  std::string getPersonStrColored(int personId, int atTrain) const;//人物名称与羁绊等整合成带颜色的字符串，在小黑板表格中显示
 };
 

@@ -146,7 +146,7 @@ Game GameGenerator::randomOpening()
     if (rand() % 2)
     {
       int delta = int(expDistr(rand) * 5);
-      game.addJiBan(cardPerson, delta);
+      game.addJiBan(cardPerson, delta, true);
     }
   }
 
@@ -163,6 +163,8 @@ Game GameGenerator::randomOpening()
 
 Game GameGenerator::randomizeBeforeOutput(const Game& game0)
 {
+  assert("false" && "not implemented, TODO: GameGenerator::randomizeBeforeOutput");
+  /*
   Game game = game0;
   std::exponential_distribution<double> expDistr(1.0);
   std::normal_distribution<double> normDistr(0.0, 1.0);
@@ -257,6 +259,7 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
   game.calculateTrainingValue();
 
   return game;
+  */
 }
 
 void GameGenerator::newGameBatch()
@@ -275,14 +278,14 @@ void GameGenerator::newGameBatch()
   for (int depth = 0; depth < maxTurn; depth++)
   {
     evaluator.evaluateSelf(1, defaultSearchParam);//计算policy
-
+    assert("false" && "TODO:新剧本applyAction不一定是一个回合，要改生成策略");
 
     for (int i = 0; i < param.batchsize; i++)
     {
       if (turnsEveryGame[i] > depth)
       {
         //assert(!evaluator.gameInput[i].isEnd());//以后的剧本如果难以保证这个，可以删掉这个assert
-        evaluator.gameInput[i].applyTrainingAndNextTurn(rand, evaluator.actionResults[i]);
+        evaluator.gameInput[i].applyAction(rand, evaluator.actionResults[i]);
         //assert(isVaildGame(evaluator.gameInput[i]));//以后的剧本如果难以保证这个，可以删掉这个assert
       }
     }

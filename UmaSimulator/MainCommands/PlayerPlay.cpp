@@ -25,18 +25,17 @@ void main_playerPlay()
   SearchParam param(searchN, radicalFactor);
 
 
-  cout << termcolor::cyan << "赛马娘UAF剧本育成模拟器 v0.1" << termcolor::reset << endl;
+  cout << termcolor::cyan << "赛马娘种菜杯剧本育成模拟器 v0.1" << termcolor::reset << endl;
   cout << termcolor::cyan << "作者 Sigmoid，QQ: 2658628026" << termcolor::reset << endl;
   cout << termcolor::cyan << "代码开源：" << termcolor::yellow << "https://github.com/hzyhhzy/UmaAi" << termcolor::reset << endl;
-  cout << termcolor::bright_cyan << "此模拟器界面类似“小黑板”。为了方便，并没有买技能的功能，把固有技能和各种技能hint都换算成pt，每pt计为" << GameConstants::ScorePtRate << "分（切者" << GameConstants::ScorePtRate * 1.1 << "分）" << termcolor::reset << endl;
-  cout << termcolor::bright_cyan << "所有Lv2的升级（消除debuff）均自动进行，Lv3需要玩家手动购买" << termcolor::reset << endl;
-  cout << termcolor::bright_cyan << "第二年的凯旋门允许不消智力debuff，如果pt不够消除其他debuff则模拟器按输凯旋门计算" << termcolor::reset << endl;
+  cout << termcolor::bright_cyan << "此模拟器界面类似“小黑板”。为了方便，并没有买技能的功能，把固有技能和各种技能hint都换算成pt，每pt计为" << GameConstants::ScorePtRateDefault << "分（切者" << GameConstants::ScorePtRateDefault * 1.1 << "分）" << termcolor::reset << endl;
+  cout << termcolor::bright_cyan << "所有农田的升级均自动进行" << termcolor::reset << endl;
   cout << endl;
 
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  int umaId = 103001;//米浴
+  int umaId = 101101;//草上飞
   int umaStars = 5;
   int cards[6] = { 301884,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
   int zhongmaBlue[5] = { 18,0,0,0,0 };
@@ -194,7 +193,7 @@ void main_playerPlay()
 
 
         string s;
-
+        assert(false && "todo");  
         cout << termcolor::cyan << "请选择训练：1速，2耐，3力，4根，5智，S键SS对战，a友人出行，b普通出行，c休息，d额外比赛，remake重开，cheat作弊" << termcolor::reset << endl;
        
         cin >> s;
@@ -391,7 +390,7 @@ void main_playerPlay()
 
         }*/
 
-        bool suc = game.applyTraining(rand, action);
+        bool suc = game.applyTraining(rand, action.train);
         assert(suc);
         cout << endl;
         game.checkEventAfterTrain(rand);

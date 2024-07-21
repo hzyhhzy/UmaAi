@@ -93,7 +93,7 @@ namespace TestScoreSearch
           gameHistory.push_back(game);
         Action action;
         action = search.runSearch(game, rand);
-        game.applyTrainingAndNextTurn(rand, action);
+        game.applyAction(rand, action);
       }
       //cout << termcolor::red << "Óý³É½áÊø£¡" << termcolor::reset << endl;
       int score = game.finalScore();

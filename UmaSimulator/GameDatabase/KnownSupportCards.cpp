@@ -171,7 +171,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
                 expectedVital = game.vital + game.trainVitalChange[atTrain];
                 rate = clamp(expectedVital / game.maxVital, 0.3, 1.0);
                 // (0.3, 1) --> (1, 0)
-                effect.apply(1, args[5] + args[2] * (1 - rate) / 0.7);
+                effect.apply(1, args[5] + int(args[2] * (1 - rate) / 0.7));
                 break;
             case 8:   // 彩珠
                 effect.xunLian += 5 + 3 * clamp((game.maxVital - 100) / 4, 0, 5);
@@ -208,11 +208,11 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
                 }
                 else if (args[1] == 2)//加速度技能
                 {
-                  count = 0.7 + game.turn / 12.0;
+                  count = int(0.7 + game.turn / 12.0);
                 }
                 else if (args[1] == 3)//回体技能
                 {
-                  count = 0.4 + game.turn / 15.0;
+                  count = int(0.4 + game.turn / 15.0);
                 }
                 else
                 {

@@ -45,6 +45,7 @@ struct Action
   static const std::string trainingName[8];
   static const std::string dishName[14];
   static const Action Action_RedistributeCardsForTest;
+  static const int MAX_ACTION_TYPE = 21;//标准的Action有编号，8+13=21种
 
   
   int16_t dishType;//做菜，0为不做菜

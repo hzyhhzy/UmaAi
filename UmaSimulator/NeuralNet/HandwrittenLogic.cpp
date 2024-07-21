@@ -17,97 +17,9 @@ const double outgoingBonusIfNotFullMotivation = 150;//掉心情时提高外出分数
 const double nonTrainBonus = 100;//这回合不训练下回合+3的bonus，乘 剩余回合数/TOTAL_TURN
 const double raceBonus = 200;//比赛收益，不考虑体力
 
-const double colorBuffEvalRaw[3] = { 70,100,50 };//三色buff估值,其中红buff乘turn/TOTAL_TURN
-const double colorLevelEvalRaw[3] = { 6,6,4 };//不考虑凑大会目标的三色训练等级估值
-const double colorLevelTargetFactor = 100;//凑大会目标的系数
 
-const double xiangtanEvalBasicStart = 40;//消耗一次相谈的估值衰减(刚开局)
-const double xiangtanEvalBasicEnd = 40;//消耗一次相谈的估值衰减(结束)
-//下面的参数全是凭感觉瞎取的，还需要调参
-const double xiangtanRemainEvalTable[3][12] =
-{
-  {0,5,7,8,9,10,11,11,12,12,12,12},
-  {0,2,5,6,7,7,8,8,9,9,10,10},
-  {0,0,2,5,5,6,6,7,7,7,8,8}
-};
 //const double xiangtanExhaustLossMax = 800;//相谈耗尽且没达标的估值扣分
 
-static void levelGainEvaluation(const Game& g, double* result) { //result[0:3]依次是三种颜色的估值
-  bool hasTarget1 = g.turn < 72;//还有至少一次uaf
-  bool hasTarget2 = g.turn < 60;//还有至少两次uaf
-
-  int uafRemainTurn = (g.turn / 12 + 1) * 12 - g.turn - 1;
-  if (g.turn < 12)uafRemainTurn += 12;
-  int uafRemainTurn2 = uafRemainTurn + 12;
-  double targetFactor1 = 3  / (double(uafRemainTurn) + 3);
-  double targetFactor2 = 3  / (double(uafRemainTurn2) + 3);
-
-
-  int targetLv = 10 * (g.turn / 12);
-  if (targetLv < 10)targetLv = 10;
-  if (targetLv > 50)targetLv = 50;
-  int targetLv2 = targetLv + 10;
-
-  auto lvEval = [&](int lv,int color)
-    {
-      if (lv > 100)lv = 100;
-      double v = colorLevelEvalRaw[color] * lv;
-      if (hasTarget1 && lv < targetLv)
-      {
-        v -= colorLevelTargetFactor * targetFactor1 * (targetLv - lv + 8 * targetFactor1);
-      }
-      if (hasTarget2 && lv < targetLv2)
-      {
-        v -= colorLevelTargetFactor * targetFactor2 * (targetLv2 - lv);
-      }
-      return v;
-    };
-
-  double gain[3] = { 0,0,0 };
-  for (int i = 0; i < 5; i++)
-  {
-    int color = g.uaf_trainingColor[i];
-    int lv = g.uaf_trainingLevel[color][i];
-    gain[color] += lvEval(lv + g.uaf_trainLevelGain[i], color) - lvEval(lv, color);
-  }
-
-  result[0] = gain[0];
-  result[1] = gain[1];
-  result[2] = gain[2];
-}
-static double levelGainEvaluationFriendOutgoing(const Game& g) { //友人外出凑等级收益（不考虑colorLevelEvalRaw）
-
-  bool hasTarget1 = g.turn < 72;//还有至少一次uaf
-  bool hasTarget2 = g.turn < 60;//还有至少两次uaf
-
-  int uafRemainTurn = (g.turn / 12 + 1) * 12 - g.turn - 1;
-  if (g.turn < 12)uafRemainTurn += 12;
-  int uafRemainTurn2 = uafRemainTurn + 12;
-  double targetFactor1 = 3 * colorLevelTargetFactor / (double(uafRemainTurn) + 3);
-  double targetFactor2 = 3 * colorLevelTargetFactor / (double(uafRemainTurn2) + 3);
-
-
-  int targetLv = 10 * (g.turn / 12);
-  if (targetLv < 10)targetLv = 10;
-  if (targetLv > 50)targetLv = 50;
-  int targetLv2 = targetLv + 10;
-
-  double friendTargetBonus = 0.0;
-  for (int color = 0; color < 3; color++)
-  {
-    for (int i = 0; i < 5; i++)
-    {
-      int lv = g.uaf_trainingLevel[color][i];
-      if (lv == targetLv - 1)
-        friendTargetBonus += targetFactor1 * 3;
-      if (lv < targetLv)
-        friendTargetBonus += targetFactor1;
-      if (lv < targetLv2)
-        friendTargetBonus += targetFactor2;
-    }
-  }
-  return friendTargetBonus;
-}
 //一个分段函数，用来控属性
 inline double statusSoftFunction(double x, double reserve, double reserveInvX2)//reserve是控属性保留空间（降低权重），reserveInvX2是1/(2*reserve)
 {
@@ -124,7 +36,8 @@ static void statusGainEvaluation(const Game& g, double* result) { //result依次是
   double reserve = reserveStatusFactor * remainTurn * (1 - double(remainTurn) / (TOTAL_TURN * 2));
   double reserveInvX2 = 1 / (2 * reserve);
 
-  double finalBonus0 = g.uaf_haveLose ? 30 : 55;
+  double finalBonus0 = 60;
+  assert(false && "not implemented");
   finalBonus0 += 20;//ura3和最终事件
   if (remainTurn >= 1)finalBonus0 += 15;//ura2
   if (remainTurn >= 2)finalBonus0 += 15;//ura1
@@ -136,7 +49,7 @@ static void statusGainEvaluation(const Game& g, double* result) { //result依次是
     remain[i] = g.fiveStatusLimit[i] - g.fiveStatus[i] - finalBonus0;
   }
 
-  if (g.lianghua_type != 0)
+  if (g.friend_type != 0)
   {
     remain[0] -= 36;
     remain[4] -= 36;
@@ -160,19 +73,6 @@ static void statusGainEvaluation(const Game& g, double* result) { //result依次是
 
 
 
-static int countTurnNumBeforeXiangtanRefresh(const Game& g) { //下次相谈刷新前还有多少训练回合，包括当前回合
-  int turnNumBeforeRefresh = 0;
-  int nextRefresh = (g.turn / 12 + 1) * 12;
-  if (nextRefresh > TOTAL_TURN)nextRefresh = TOTAL_TURN;
-  for (int t = g.turn; t < nextRefresh; t++)
-  {
-    if (!g.isRacingTurn[t])turnNumBeforeRefresh++;
-  }
-
-  assert(turnNumBeforeRefresh > 0);
-  return turnNumBeforeRefresh;
-}
-
 static double calculateMaxVitalEquvalant(const Game& g)
 {
   int t = g.turn;
@@ -183,21 +83,7 @@ static double calculateMaxVitalEquvalant(const Game& g)
   if (t == TOTAL_TURN - 6)//uaf1
     return 65;
 
-
-  int uafRemainTurn = (t / 12 + 1) * 12 - t - 1;
-  if (t < 12)uafRemainTurn += 12;
-  bool thisTurnUaf = uafRemainTurn == 0 || (uafRemainTurn == 1 && g.isRacingTurn[t + 1]);
-  if (thisTurnUaf)
-  {
-    int newMaxVital = g.maxVital - 15;
-    int uafCount = t / 12;
-    if (uafCount == 1 && g.lianghua_type != 0)
-      newMaxVital -= 15;
-    if (uafCount == 5)
-      newMaxVital = 65;
-    return newMaxVital;
-  }
-  return g.maxVital;
+  assert(false && "not implemented");
 
 }
 
@@ -213,14 +99,12 @@ static double vitalEvaluation(int vital, int maxVital)
     return vitalEvaluation(maxVital, maxVital);
 }
 
-static double nonTrainEvaluation(const Game& g)//下回合+3级的估值
-{
-  if (g.isRacingTurn[g.turn + 1])return 0;
-  return (1.0 - double(g.turn) / double(TOTAL_TURN)) * nonTrainBonus;
-}
 
 Action Evaluator::handWrittenStrategy(const Game& game)
 {
+  assert(false && "not implemented");
+  return Action();
+  /*
   Action bestAction = { -1,0 };
   if (game.isEnd())return bestAction;
   double bestValue = -1e4;
@@ -391,45 +275,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
           value -= buffLoss;
         }
 
-      //相谈用完且存在未达标训练，则额外扣分
-      /*
-      if (xt != XT_none && (g.uaf_xiangtanRemain == 0))
-      {
-        bool hasAnyNotReachedTarget = false;
-
-
-        int targetLv = 10 * (g.turn / 12);
-        if (targetLv < 10)targetLv = 10;
-        if (targetLv > 50)targetLv = 50;
-        for (int color = 0; color < 3; color++)
-        {
-          for (int i = 0; i < 5; i++)
-          {
-            int newLv = g.uaf_trainingLevel[color][i];
-            if (g.uaf_trainingColor[tra] == color)
-              newLv += g.uaf_trainLevelGain[i];
-            if (newLv < targetLv)
-              hasAnyNotReachedTarget = true;
-          }
-        }
-
-        if (hasAnyNotReachedTarget)
-        {
-
-          int turnNumBeforeRefresh = 0;
-          int nextRefresh = (g.turn / 12 + 1) * 12;
-          if (nextRefresh > TOTAL_TURN)nextRefresh = TOTAL_TURN;
-          for (int t = g.turn; t < nextRefresh; t++)
-          {
-            if (!g.isRacingTurn[t])turnNumBeforeRefresh++;
-          }
-          assert(turnNumBeforeRefresh > 0);
-
-          double f = 6.0 / (6.0 + turnNumBeforeRefresh);
-          value -= xiangtanExhaustLossMax * f;
-        }
-      }
-      */
       if (value > bestValue)
       {
         bestValue = value;
@@ -442,5 +287,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
   }
   return bestAction;
+  */
 }
 

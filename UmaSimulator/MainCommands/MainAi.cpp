@@ -108,7 +108,9 @@ void main_ai()
 	loadRole();   // roleplay
 
 	bool uraFileMode= GameConfig::communicationMode == "urafile";
-	bool refreshIfAnyChanged = GameConfig::communicationMode == "localfile";//if false, only new turns will refresh
+	//吃菜影响决策，所以每次文件改变都刷新
+	bool refreshIfAnyChanged = true;//if false, only new turns will refresh
+	//bool refreshIfAnyChanged = GameConfig::communicationMode == "localfile";//if false, only new turns will refresh
 	string currentGameStagePath = uraFileMode ?
 		string(getenv("LOCALAPPDATA")) + "/UmamusumeResponseAnalyzer/GameData/thisTurn.json"
 		: "./thisTurn.json";
@@ -403,7 +405,8 @@ void main_ai()
 			}
 			cout.flush();
 			scoreLastTurn = maxMean;
-
+      assert(false && "todo");
+			/*
 			int xiangtannum = 0;
 			for (int xt = 0; xt < 10; xt++) {
 				if (!game.isXiangtanLegal(xt))continue;
@@ -429,7 +432,7 @@ void main_ai()
 					}
 				}
 				cout << endl;
-			}
+			}*/
 			//strToSendURA = L"0.1234567 5.4321";
 			if (useWebsocket)
 			{
