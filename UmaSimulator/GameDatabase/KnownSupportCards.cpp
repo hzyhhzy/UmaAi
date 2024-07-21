@@ -253,7 +253,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
                 if (cardTypeCount[5] > 0)
                   effect.apply(30, cardTypeCount[5]); // pt = 30
               }
-            break;
+              break;
             case 21:   // 耐万籁，编入4种支援卡时+10训练
               {
                 int cardTypeCount[7] = { 0,0,0,0,0,0,0 };
@@ -270,6 +270,8 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
                 if (cardTypes >= args[1])
                   effect.apply(args[2], args[3]);
               }
+              break;
+            case 22://理事长
               break;
             default:   // type == 0
                 if (uniqueEffectType != 0) {

@@ -111,8 +111,9 @@ struct Game
 
   //最终收获值=f(cook_harvest_green_count)*(基本收获 + cook_harvest_history*追加收获 + cook_harvest_extra)
   int16_t cook_harvest_history[4];//此4回合分别是哪4种菜，-1是还未选择
+  bool cook_harvest_green_history[4];//此4回合是不是绿菜
   int16_t cook_harvest_extra[5];//每回合收获=追加收获+人头数。cook_harvest_extra是人头数累计菜量
-  int16_t cook_harvest_green_count;//此4回合有多少个绿菜
+  
 
 
   //菜量获取相关
@@ -187,7 +188,7 @@ public:
 
   //原则上这几个private就行，如果private在某些地方非常不方便那就改成public
 
-  void autoUpgradeFarm();//农田升级策略用手写逻辑处理，就不额外计算了
+  void autoUpgradeFarm(bool beforeXiahesu);//农田升级策略用手写逻辑处理，就不额外计算了，beforeXiahesu是夏合宿前那个回合收菜后进行升级
   void randomDistributeCards(std::mt19937_64& rand);//随机分配人头
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率、训练等级提升等
   bool makeDish(int16_t dishId, std::mt19937_64& rand);//做菜，并处理相关收益，计算相关数值

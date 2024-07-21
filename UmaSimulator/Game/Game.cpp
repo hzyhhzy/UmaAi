@@ -48,7 +48,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   skillPt = 120;
   skillScore = umaStars >= 3 ? 170 * (umaStars - 2) : 120 * (umaStars);//固有技能
 
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 5; i++)
   {
     trainLevelCount[i] = 0;
   }
@@ -150,10 +150,12 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     cook_win_history[i] = 0;
 
   for (int i = 0; i < 4; i++)
+  {
     cook_harvest_history[i] = -1;
+    cook_harvest_green_history[i] = false;
+  }
   for (int i = 0; i < 5; i++)
     cook_harvest_extra[i] = 0;
-  cook_harvest_green_count = 0;
 
   for (int i = 0; i < 8; i++)
   {
@@ -311,7 +313,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   //休息外出比赛：随机菜种，随机绿圈
   //休息&外出
   int restMaterialType = rand() % 5;
-  bool restGreen = randBool(rand, GameConstants::Cook_RestGreenRate);
+  bool restGreen = isXiahesu() ? true : randBool(rand, GameConstants::Cook_RestGreenRate);
   cook_train_material_type[TRA_rest] = restMaterialType;
   cook_train_material_type[TRA_outgoing] = restMaterialType;
   cook_train_green[TRA_rest] = restGreen;
@@ -347,6 +349,10 @@ void Game::calculateTrainingValue()
 }
 bool Game::isDishLegal(int dishId) const
 {
+  //同一回合不能重复制作料理
+  if (cook_dish != DISH_none)
+    return false;
+
   int dishLevel = GameConstants::Cook_DishLevel[dishId];
   //检查是否达到解锁时间
   if (dishLevel == 0)
@@ -421,9 +427,12 @@ std::vector<int> Game::calculateHarvestNum(bool isAfterTrain) const
   bool smallHarvest = isXiahesu() || turn >= 72;
   int harvestTurnNum = smallHarvest ? 1 : 4;
   if (!isAfterTrain)//只供训练前显示
-    harvestTurnNum -= 1;
+  {
+    harvestTurnNum = smallHarvest ? 0 : turn % 4;
+  }
 
   vector<int> harvestBasic = { 0,0,0,0,0 };
+  int greenNum = 0;
   for (int i = 0; i < 5; i++)
   {
     harvestBasic[i] = GameConstants::Cook_HarvestBasic[cook_farm_level[i]];
@@ -438,14 +447,16 @@ std::vector<int> Game::calculateHarvestNum(bool isAfterTrain) const
       throw "ERROR: Game::maybeHarvest cook_harvest_history[i] == -1";
 
     harvestBasic[matType] += GameConstants::Cook_HarvestExtra[cook_farm_level[matType]];
+    if (cook_harvest_green_history[i])
+      greenNum += 1;
   }
 
-  double multiplier = smallHarvest ? (cook_harvest_green_count == 0 ? 1.0000001 : 1.5000001) :
-    cook_harvest_green_count == 0 ? 1.0000001 :
-    cook_harvest_green_count == 1 ? 1.1000001 :
-    cook_harvest_green_count == 2 ? 1.2000001 :
-    cook_harvest_green_count == 3 ? 1.4000001 :
-    cook_harvest_green_count == 4 ? 1.6000001 :
+  double multiplier = smallHarvest ? (greenNum == 0 ? 1.0000001 : 1.5000001) :
+    greenNum == 0 ? 1.0000001 :
+    greenNum == 1 ? 1.1000001 :
+    greenNum == 2 ? 1.2000001 :
+    greenNum == 3 ? 1.4000001 :
+    greenNum == 4 ? 1.6000001 :
     1000;
 
   int farmPt = smallHarvest ? int(multiplier * 50) : int(multiplier * 100);
@@ -458,7 +469,7 @@ void Game::maybeHarvest()
 {
   if (!(isXiahesu() || turn >= 72 || turn % 4 == 3))
     return;//no harvest
-
+  printEvents("农田收获");
   vector<int> harvest = calculateHarvestNum(true);
 
   for (int i = 0; i < 5; i++)
@@ -467,10 +478,12 @@ void Game::maybeHarvest()
 
   //clear
   for (int i = 0; i < 4; i++)
+  {
     cook_harvest_history[i] = -1;
+    cook_harvest_green_history[i] = false;
+  }
   for (int i = 0; i < 5; i++)
     cook_harvest_extra[i] = 0;
-  cook_harvest_green_count = 0;
 }
 
 void Game::addTrainingLevelCount(int trainIdx, int n)
@@ -483,6 +496,7 @@ void Game::checkDishPtUpgrade()
   int oldDishPt = cook_dish_pt_turn_begin;
   if (GameConstants::Cook_DishPtLevel(oldDishPt) != GameConstants::Cook_DishPtLevel(cook_dish_pt))
   {
+    printEvents("料理pt达到下一阶段");
     //upgrade deyilv
     updateDeyilv(GameConstants::Cook_DishPtDeyilvBonus[GameConstants::Cook_DishPtLevel(cook_dish_pt)]);
   }
@@ -492,6 +506,7 @@ void Game::checkDishPtUpgrade()
     || (oldDishPt < 12000 && cook_dish_pt >= 12000)
     )
   {
+    printEvents("食意开眼，全体训练等级+1");
     for (int i = 0; i < 5; i++)
       addTrainingLevelCount(i, 4);
   }
@@ -518,7 +533,7 @@ bool Game::makeDish(int16_t dishId, std::mt19937_64& rand)
   cook_dish = dishId;
 
   //升级农田
-  autoUpgradeFarm();
+  autoUpgradeFarm(false);
 
   //检查是否大成功
   bool isBigSuccess = cook_dish_sure_success ? true : randBool(rand, 0.01 * cook_dishpt_success_rate);
@@ -530,6 +545,7 @@ bool Game::makeDish(int16_t dishId, std::mt19937_64& rand)
   int pt = GameConstants::Cook_DishGainPt[dishId];
   cook_dish_pt += pt;
 
+  cook_dish_sure_success = false;
   //如果跨越1500倍数了，或者大于12000，下次必为大成功
   if (cook_dish_pt >= 12000 || cook_dish_pt / 1500 != cook_dish_pt_turn_begin / 1500)
     cook_dish_sure_success = true;
@@ -586,12 +602,21 @@ void Game::handleDishBigSuccess(int dishId, std::mt19937_64& rand)
   for (int i = 0; i < buffs.size(); i++)
   {
     if (buffs[i] == 1)
+    {
       addVital(10);
+      printEvents("料理大成功：体力+10");
+    }
     else if (buffs[i] == 2)
+    {
       addMotivation(1);
+      printEvents("料理大成功：干劲+1");
+    }
     else if (buffs[i] == 3)
+    {
       for (int i = 0; i < 6; i++)
         addJiBan(i, 3, true);
+      printEvents("料理大成功：全体羁绊+3");
+    }
     else if (buffs[i] == 4)
     {
       int dishlevel = GameConstants::Cook_DishLevel[dishId];
@@ -612,10 +637,12 @@ void Game::handleDishBigSuccess(int dishId, std::mt19937_64& rand)
       }
       else
         throw "ERROR: Game::handleDishBigSuccess buffs[i] == 4 but dishlevel != 2 or 3 or 4";
+      printEvents("料理大成功：摇人");
     }
     else if (buffs[i] == 5)
     {
       //已经处理过了
+      printEvents("料理大成功：体力上限+4");
     }
     else
       throw "ERROR: Game::handleDishBigSuccess Unknown buff type";
@@ -646,6 +673,7 @@ void Game::dishBigSuccess_hint(std::mt19937_64& rand)
   int hintlevel = 1;
   if (availableHintLevels.size() > 0)
     hintlevel = availableHintLevels[rand() % availableHintLevels.size()];
+  printEvents("料理大成功：hint +" + to_string(hintlevel));
   skillPt += int(hintlevel * hintPtRate);
 }
 void Game::dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand)
@@ -662,7 +690,6 @@ void Game::dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand)
 
     if (pid >= 0 && pid < 6)
     {
-      count++;
       alreadyHere[pid] = true;
     }
   }
@@ -682,7 +709,7 @@ void Game::dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand)
   personDistribution[trainIdx][count] = pid;
   //require recalculate later
 }
-void Game::autoUpgradeFarm()
+void Game::autoUpgradeFarm(bool beforeXiahesu)
 {
   if (farmUpgradeStrategy == FUS_none)
     return;
@@ -741,7 +768,7 @@ void Game::autoUpgradeFarm()
     {
       bool suc = upgradeFarm(maxIdx);
       assert(suc);
-      autoUpgradeFarm();//有可能再升级一个
+      autoUpgradeFarm(beforeXiahesu);//有可能再升级一个
     }
   }
   //第二年，吃菜前或者收菜前升级
@@ -751,7 +778,7 @@ void Game::autoUpgradeFarm()
     {
       if (GameConstants::Cook_DishLevel[cook_dish] != 2)
         return;
-      if (cook_dish_pt < GameConstants::Cook_FarmLvCost[2])
+      if (cook_farm_pt < GameConstants::Cook_FarmLvCost[2])
         return;//升级pt不够
       if (maxVital - vital <= 0)
         return;//体力满了
@@ -778,20 +805,27 @@ void Game::autoUpgradeFarm()
         if (cook_farm_level[i] == 1)
           value[i] += 60; //这个数恰好可以让蒜溢出时升级lv2，而不升级lv3
       }
-      //统计4回合内点击数，快溢出则额外加
-      int clickNums[5] = { 0,0,0,0,0 };
-      for (int i = 0; i < 4; i++)
+      if(beforeXiahesu)
       {
-        int type = cook_harvest_history[i];
-        if (type == -1)
-          throw "ERROR: Game::autoUpgradeFarm cook_harvest_history[i] == -1，第二年训练后收菜前才可自动升级农田";
-        clickNums[type] += 1;
+        //nothing
       }
-      for (int i = 0; i < 5; i++)
+      else
       {
-        int overflow = 55 + 45 * clickNums[i] + cook_material[i] - GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
-        if (overflow > 0)
-          value[i] += overflow;
+        //统计4回合内点击数，快溢出则额外加
+        int clickNums[5] = { 0,0,0,0,0 };
+        for (int i = 0; i < 4; i++)
+        {
+          int type = cook_harvest_history[i];
+          if (type == -1)
+            throw "ERROR: Game::autoUpgradeFarm cook_harvest_history[i] == -1，第二年训练后收菜前才可自动升级农田";
+          clickNums[type] += 1;
+        }
+        for (int i = 0; i < 5; i++)
+        {
+          int overflow = 55 + 45 * clickNums[i] + cook_material[i] - GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
+          if (overflow > 0)
+            value[i] += overflow;
+        }
       }
       //选出最大的
       int maxIdx = 0;
@@ -805,7 +839,7 @@ void Game::autoUpgradeFarm()
       {
         bool suc = upgradeFarm(maxIdx);
         assert(suc);
-        autoUpgradeFarm();//有可能再升级一个
+        autoUpgradeFarm(beforeXiahesu);//有可能再升级一个
       }
     }
     else
@@ -835,21 +869,29 @@ void Game::autoUpgradeFarm()
       else if (cook_farm_level[i] == 5)
         value[i] -= 99999;
     }
-    //统计4回合内点击数，快溢出则额外加
-    int clickNums[5] = { 0,0,0,0,0 };
-    for (int i = 0; i < 4; i++)
+
+    if (beforeXiahesu)
     {
-      int type = cook_harvest_history[i];
-      if (type == -1)
-        throw "ERROR: Game::autoUpgradeFarm cook_harvest_history[i] == -1，第二年训练后收菜前才可自动升级农田";
-      clickNums[type] += 1;
+      //nothing
     }
-    for (int i = 0; i < 5; i++)
+    else
     {
-      value[i] += clickNums[i] * 10;
-      int overflow = 55 + 45 * clickNums[i] + cook_material[i] - GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
-      if (overflow > 0)
-        value[i] += overflow;
+      //统计4回合内点击数，快溢出则额外加
+      int clickNums[5] = { 0,0,0,0,0 };
+      for (int i = 0; i < 4; i++)
+      {
+        int type = cook_harvest_history[i];
+        if (type == -1)
+          throw "ERROR: Game::autoUpgradeFarm cook_harvest_history[i] == -1，第二年训练后收菜前才可自动升级农田";
+        clickNums[type] += 1;
+      }
+      for (int i = 0; i < 5; i++)
+      {
+        value[i] += clickNums[i] * 10;
+        int overflow = 55 + 45 * clickNums[i] + cook_material[i] - GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
+        if (overflow > 0)
+          value[i] += overflow;
+      }
     }
     //选出最大的
     int maxIdx = 0;
@@ -863,7 +905,7 @@ void Game::autoUpgradeFarm()
     {
       bool suc = upgradeFarm(maxIdx);
       assert(suc);
-      autoUpgradeFarm();//有可能再升级一个
+      autoUpgradeFarm(beforeXiahesu);//有可能再升级一个
     }
     
 
@@ -901,7 +943,7 @@ void Game::autoUpgradeFarm()
     {
       bool suc = upgradeFarm(maxIdx);
       assert(suc);
-      autoUpgradeFarm();//有可能再升级一个
+      autoUpgradeFarm(beforeXiahesu);//有可能再升级一个
     }
 
 
@@ -976,7 +1018,20 @@ std::vector<int> Game::dishBigSuccess_getBuffs(int dishId, std::mt19937_64& rand
     if (prob == 0)continue;
     if (!isBuffLegal(i))continue;
     if (randBool(rand, prob * 0.01))
-      buffs.push_back(i);
+    {
+      //检查是否已经有这个buff
+      bool hasBuff = false;
+      for (int j = 0; j < buffs.size(); j++)
+      {
+        if (buffs[j] == i)
+        {
+          hasBuff = true;
+          break;
+        }
+      }
+      if (!hasBuff)
+        buffs.push_back(i);
+    }
   }
   return buffs;
 
@@ -1327,228 +1382,228 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
     matType = cook_train_material_type[train];
     matExtra = cook_train_material_num_extra[train];
     isGreen = cook_train_green[train];//如果训练失败，后续将其设为false
-  }
 
-  if (train == TRA_rest)//休息
-  {
-    if (isXiahesu())//合宿只能外出
-    {
-      return false;
-    }
-    else
-    {
-      int r = rand() % 100;
-      if (r < 25)
-        addVital(70);
-      else if (r < 82)
-        addVital(50);
-      else
-        addVital(30);
-    }
-  }
-  else if (train == TRA_race)//比赛
-  {
-    if (turn <= 12 || turn >= 72)
-    {
-      printEvents("Cannot race now."); 
-      return false;
-    }
-    addAllStatus(1);//武者振
-    runRace(2, 40);//粗略的近似
 
-    //扣体固定15
-    addVital(-15);
-    if (rand() % 10 == 0)
-      addMotivation(1);
-  }
-  else if (train == TRA_outgoing)//外出
-  {
-    if (isXiahesu())
+    if (train == TRA_rest)//休息
     {
-      addVital(40);
-      addMotivation(1);
-    }
-    else if (friend_type != 0 &&  //带了友人卡
-      friend_stage == FriendStage_afterUnlockOutgoing &&  //已解锁外出
-      friend_outgoingUsed < 5  //外出没走完
-      )
-    {
-      //友人出行
-      handleFriendOutgoing(rand);
-      isGreen = true;
-    }
-    else //普通出行
-    {
-      //懒得查概率了，就50%加2心情，50%加1心情10体力
-      if (rand() % 2)
-        addMotivation(2);
+      if (isXiahesu())//合宿只能外出
+      {
+        return false;
+      }
       else
       {
+        int r = rand() % 100;
+        if (r < 25)
+          addVital(70);
+        else if (r < 82)
+          addVital(50);
+        else
+          addVital(30);
+      }
+    }
+    else if (train == TRA_race)//比赛
+    {
+      if (turn <= 12 || turn >= 72)
+      {
+        printEvents("Cannot race now.");
+        return false;
+      }
+      addAllStatus(1);//武者振
+      runRace(2, 40);//粗略的近似
+
+      //扣体固定15
+      addVital(-15);
+      if (rand() % 10 == 0)
         addMotivation(1);
-        addVital(10);
-      }
     }
-  }
-  else if (train <= 4 && train >= 0)//常规训练
-  {
-    if (rand() % 100 < failRate[train])//训练失败
+    else if (train == TRA_outgoing)//外出
     {
-      isGreen = false;
-      if (failRate[train] >= 20 && (rand() % 100 < failRate[train]))//训练大失败，概率是瞎猜的
+      if (isXiahesu())
       {
-        printEvents("训练大失败！");
-        addStatus(train, -10);
-        if (fiveStatus[train] > 1200)
-          addStatus(train, -10);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
-        //随机扣2个10，不妨改成全属性-4降低随机性
-        for (int i = 0; i < 5; i++)
-        {
-          addStatus(i, -4);
-          if (fiveStatus[i] > 1200)
-            addStatus(i, -4);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
-        }
-        addMotivation(-3);
-        addVital(10);
+        addVital(40);
+        addMotivation(1);
       }
-      else//小失败
+      else if (friend_type != 0 &&  //带了友人卡
+        friend_stage == FriendStage_afterUnlockOutgoing &&  //已解锁外出
+        friend_outgoingUsed < 5  //外出没走完
+        )
       {
-        printEvents("训练小失败！");
-        addStatus(train, -5);
-        if (fiveStatus[train] > 1200)
-          addStatus(train, -5);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
-        addMotivation(-1);
+        //友人出行
+        handleFriendOutgoing(rand);
+        isGreen = true;
       }
-    }
-    else
-    {
-      //先加上训练值
-      for (int i = 0; i < 5; i++)
-        addStatus(i, trainValue[train][i]);
-      skillPt += trainValue[train][5];
-      addVital(trainVitalChange[train]);
-
-      int friendshipExtra = 0;//如果带了SSR友人卡，+1。如果友人卡在这个训练，再+2。爱娇不在这里处理
-      if (friend_type == 1)
-        friendshipExtra += 1;
-
-      vector<int> hintCards;//有哪几个卡出红感叹号了
-      bool clickFriend = false;//这个训练有没有友人
-      //检查SSR友人在不在这里
-      for (int i = 0; i < 5; i++)
+      else //普通出行
       {
-        int p = personDistribution[train][i];
-        if (p == PSID_none)break;//没人
-        if (friend_type == 1 && p == friend_personId)
-        {
-          friendshipExtra += 2;
-          break;
-        }
-      }
-      for (int i = 0; i < 5; i++)
-      {
-        int p = personDistribution[train][i];
-        if (p < 0)break;//没人
-        int personType = persons[p].personType;
-
-        if (personType == PersonType_scenarioCard)//友人卡
-        {
-          assert(p == friend_personId);
-          addJiBan(p, 4 + friendshipExtra, false);
-          clickFriend = true;
-        }
-        else if (personType== PersonType_card)//普通卡
-        {
-          addJiBan(p, 7 + friendshipExtra, false);
-          if(persons[p].isHint)
-            hintCards.push_back(p);
-        }
-        else if (personType == PersonType_npc)//npc
-        {
-          //nothing
-        }
-        else if (personType == PersonType_yayoi)//非卡理事长
-        {
-          int jiban = friendship_noncard_yayoi;
-          int g = jiban < 40 ? 2 : jiban < 60 ? 3 : jiban < 80 ? 4 : 5;
-          skillPt += g;
-          addJiBan(PSID_noncardYayoi, 7, false);
-        }
-        else if (personType == PersonType_reporter)//记者
-        {
-          int jiban = friendship_noncard_reporter;
-          int g = jiban < 40 ? 2 : jiban < 60 ? 3 : jiban < 80 ? 4 : 5;
-          addStatus(train, g);
-          addJiBan(PSID_noncardReporter, 7, false);
-        }
+        //懒得查概率了，就50%加2心情，50%加1心情10体力
+        if (rand() % 2)
+          addMotivation(2);
         else
         {
-          //其他友人/团卡暂不支持
-          assert(false);
+          addMotivation(1);
+          addVital(10);
         }
       }
-
-      if (hintCards.size() > 0)
+    }
+    else if (train <= 4 && train >= 0)//常规训练
+    {
+      if (rand() % 100 < failRate[train])//训练失败
       {
-        int hintCard = hintCards[rand() % hintCards.size()];//随机一张卡出hint
-
-        addJiBan(hintCard, 5, false);
-        int hintLevel = persons[hintCard].cardParam.hintLevel;
-        if (hintLevel > 0)
+        isGreen = false;
+        if (failRate[train] >= 20 && (rand() % 100 < failRate[train]))//训练大失败，概率是瞎猜的
         {
-          skillPt += int(hintLevel * hintPtRate);
+          printEvents("训练大失败！");
+          addStatus(train, -10);
+          if (fiveStatus[train] > 1200)
+            addStatus(train, -10);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
+          //随机扣2个10，不妨改成全属性-4降低随机性
+          for (int i = 0; i < 5; i++)
+          {
+            addStatus(i, -4);
+            if (fiveStatus[i] > 1200)
+              addStatus(i, -4);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
+          }
+          addMotivation(-3);
+          addVital(10);
         }
-        else //根乌拉拉这种，只给属性
+        else//小失败
         {
-          if (train == 0)
-          {
-            addStatus(0, 6);
-            addStatus(2, 2);
-          }
-          else if (train == 1)
-          {
-            addStatus(1, 6);
-            addStatus(3, 2);
-          }
-          else if (train == 2)
-          {
-            addStatus(2, 6);
-            addStatus(1, 2);
-          }
-          else if (train == 3)
-          {
-            addStatus(3, 6);
-            addStatus(0, 1);
-            addStatus(2, 1);
-          }
-          else if (train == 4)
-          {
-            addStatus(4, 6);
-            skillPt += 5;
-          }
+          printEvents("训练小失败！");
+          addStatus(train, -5);
+          if (fiveStatus[train] > 1200)
+            addStatus(train, -5);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
+          addMotivation(-1);
         }
       }
+      else
+      {
+        //先加上训练值
+        for (int i = 0; i < 5; i++)
+          addStatus(i, trainValue[train][i]);
+        skillPt += trainValue[train][5];
+        addVital(trainVitalChange[train]);
 
-      if (clickFriend)
-        handleFriendClickEvent(rand, train);
-      
+        int friendshipExtra = 0;//如果带了SSR友人卡，+1。如果友人卡在这个训练，再+2。爱娇不在这里处理
+        if (friend_type == 1)
+          friendshipExtra += 1;
 
-      //训练等级提升
-      addTrainingLevelCount(train, 1);
+        vector<int> hintCards;//有哪几个卡出红感叹号了
+        bool clickFriend = false;//这个训练有没有友人
+        //检查SSR友人在不在这里
+        for (int i = 0; i < 5; i++)
+        {
+          int p = personDistribution[train][i];
+          if (p == PSID_none)break;//没人
+          if (friend_type == 1 && p == friend_personId)
+          {
+            friendshipExtra += 2;
+            break;
+          }
+        }
+        for (int i = 0; i < 5; i++)
+        {
+          int p = personDistribution[train][i];
+          if (p < 0)break;//没人
+
+          if (p == friend_personId && friend_type != 0)//友人卡
+          {
+            assert(persons[p].personType == PersonType_scenarioCard);
+            addJiBan(p, 4 + friendshipExtra, false);
+            clickFriend = true;
+          }
+          else if (p < 6)//普通卡
+          {
+            addJiBan(p, 7 + friendshipExtra, false);
+            if (persons[p].isHint)
+              hintCards.push_back(p);
+          }
+          else if (p == PSID_npc)//npc
+          {
+            //nothing
+          }
+          else if (p == PSID_noncardYayoi)//非卡理事长
+          {
+            int jiban = friendship_noncard_yayoi;
+            int g = jiban < 40 ? 2 : jiban < 60 ? 3 : jiban < 80 ? 4 : 5;
+            skillPt += g;
+            addJiBan(PSID_noncardYayoi, 7, false);
+          }
+          else if (p == PSID_noncardReporter)//记者
+          {
+            int jiban = friendship_noncard_reporter;
+            int g = jiban < 40 ? 2 : jiban < 60 ? 3 : jiban < 80 ? 4 : 5;
+            addStatus(train, g);
+            addJiBan(PSID_noncardReporter, 7, false);
+          }
+          else
+          {
+            //其他友人/团卡暂不支持
+            assert(false);
+          }
+        }
+
+        if (hintCards.size() > 0)
+        {
+          int hintCard = hintCards[rand() % hintCards.size()];//随机一张卡出hint
+
+          addJiBan(hintCard, 5, false);
+          int hintLevel = persons[hintCard].cardParam.hintLevel;
+          if (hintLevel > 0)
+          {
+            skillPt += int(hintLevel * hintPtRate);
+          }
+          else //根乌拉拉这种，只给属性
+          {
+            if (train == 0)
+            {
+              addStatus(0, 6);
+              addStatus(2, 2);
+            }
+            else if (train == 1)
+            {
+              addStatus(1, 6);
+              addStatus(3, 2);
+            }
+            else if (train == 2)
+            {
+              addStatus(2, 6);
+              addStatus(1, 2);
+            }
+            else if (train == 3)
+            {
+              addStatus(3, 6);
+              addStatus(0, 1);
+              addStatus(2, 1);
+            }
+            else if (train == 4)
+            {
+              addStatus(4, 6);
+              skillPt += 5;
+            }
+          }
+        }
+
+        if (clickFriend)
+          handleFriendClickEvent(rand, train);
+
+
+        //训练等级提升
+        addTrainingLevelCount(train, 1);
+
+      }
 
     }
-
-  }
-  else
-  {
-    printEvents("未知的训练项目");
-    return false;
+    else
+    {
+      printEvents("未知的训练项目");
+      return false;
+    }
   }
 
 
   //种菜
   addFarm(matType, matExtra, isGreen);
   gameStage = GameStage_afterTrain;
-  autoUpgradeFarm();
+  autoUpgradeFarm(false);
   return true;
 }
 
@@ -1558,20 +1613,25 @@ bool Game::isLegal(Action action) const
   if (!action.isActionStandard())
     return false;
 
+  //是否吃得起菜
+  if (action.dishType != DISH_none)
+    if (!isDishLegal(action.dishType))
+      return false;
+
   if (isRacing)
   {
-    if (isUraRace)
-    {
+    //if (isUraRace)
+    //{
       if (action.train == TRA_none || action.train == TRA_race)//none是吃菜然后比赛，race是直接比赛
         return true;
       else
         return false;
-    }
-    else
-    {
-      assert(false && "所有ura以外的剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
-      return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
-    }
+    //}
+    //else
+    //{
+      //assert(false && "所有ura以外的剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
+      //return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
+    //}
   }
 
   if (action.train == TRA_rest)
@@ -1665,6 +1725,7 @@ bool Game::upgradeFarm(int item)
     return false;
   cook_farm_pt -= GameConstants::Cook_FarmLvCost[lv];
   cook_farm_level[item] += 1;
+  printEvents(GameConstants::Cook_MaterialNames[item] + "升至" + to_string(cook_farm_level[item]) + "级");
 }
 void Game::calculateTrainingValueSingle(int tra)
 {
@@ -1861,12 +1922,13 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
 {
   assert(gameStage == GameStage_afterTrain);
   checkFixedEvents(rand);
-
   checkRandomEvents(rand);
 
+  cook_dish = DISH_none;
 
   //回合数+1
   turn++;
+  isRacing = isRacingTurn[turn];
   gameStage = GameStage_beforeTrain;
   if (turn >= TOTAL_TURN)
   {
@@ -1958,7 +2020,8 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
 {
   //处理各种固定事件
   checkDishPtUpgrade();
-  maybeHarvest();
+  maybeHarvest(); 
+  maybeCookingMeeting();
   if (isRefreshMind)
   {
     addVital(5);
@@ -2023,6 +2086,11 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
 
     printEvents("第二年继承");
   }
+  else if (turn == 35)
+  {
+    autoUpgradeFarm(true);//合宿前升级农田
+    printEvents("第二年合宿开始");
+  }
   else if (turn == 47)//第二年年底
   {
     //年底事件，体力低选择体力，否则选属性
@@ -2033,7 +2101,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
       else
         addAllStatus(8);
     }
-    printEvents("uaf大会3结束");
+    printEvents("第二年结束");
   }
   else if (turn == 48)//抽奖
   {
@@ -2097,6 +2165,11 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
       addVital(-5);
       skillPt += 25;
     }
+  }
+  else if (turn == 59)
+  {
+    autoUpgradeFarm(true);//合宿前升级农田
+    printEvents("第三年合宿开始");
   }
   else if (turn == 70)
   {
@@ -2252,10 +2325,11 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
 }
 void Game::addFarm(int type, int extra, bool isGreen)
 {
-  cook_harvest_history[turnIdxInHarvestLoop()] = type;
+  int harvestLoopIdx = turnIdxInHarvestLoop();
+  cook_harvest_history[harvestLoopIdx] = type;
   cook_harvest_extra[type] += extra;
   if (isGreen)
-    cook_harvest_green_count += 1;
+    cook_harvest_green_history[harvestLoopIdx] = true;
 
 }
 void Game::applyAction(std::mt19937_64& rand, Action action)
@@ -2278,13 +2352,16 @@ void Game::applyAction(std::mt19937_64& rand, Action action)
 
     randomDistributeCards(rand);
 
-    if (isRacing && !isUraRace)//非ura的比赛回合，直接跳到下一个回合
-    {
-      Action emptyAction;
-      emptyAction.train = TRA_none;
-      emptyAction.dishType = DISH_none;
-      applyAction(rand, emptyAction);
-    }
+
+    //非ura的比赛回合也可能吃菜，用来刷pt，所以不跳过
+    
+    //if (isRacing && !isUraRace)//非ura的比赛回合，直接跳到下一个回合
+    //{
+    //  Action emptyAction;
+    //  emptyAction.train = TRA_none;
+    //  emptyAction.dishType = DISH_none;
+    //  applyAction(rand, emptyAction);
+    //}
   }
 }
 

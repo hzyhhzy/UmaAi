@@ -164,6 +164,7 @@ Game GameGenerator::randomOpening()
 Game GameGenerator::randomizeBeforeOutput(const Game& game0)
 {
   assert("false" && "not implemented, TODO: GameGenerator::randomizeBeforeOutput");
+  return Game();
   /*
   Game game = game0;
   std::exponential_distribution<double> expDistr(1.0);
