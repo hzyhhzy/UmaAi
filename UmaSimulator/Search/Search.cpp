@@ -172,6 +172,21 @@ Action Search::runSearch(const Game& game,
   return bestAction;
 }
 
+void Search::printSearchResult(bool showSearchNum)
+{
+  for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+  {
+    Action action = Action::intToAction(actionInt);
+    SearchResult& res = allActionResults[actionInt];
+    if (!res.isLegal)continue;
+    ModelOutputValueV1 value = res.getWeightedMeanScore(param.maxRadicalFactor);
+    cout << action.toString() << ":" << int(value.value);
+    if (showSearchNum)
+      cout << ", searchNum=" << res.num ;
+    cout << endl;
+  }
+}
+
 ModelOutputValueV1 Search::evaluateNewGame(const Game& game, std::mt19937_64& rand)
 {
   rootGame = game;

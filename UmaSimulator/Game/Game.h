@@ -59,7 +59,6 @@ struct Game
   int32_t umaId;//马娘编号，见KnownUmas.cpp
   bool isLinkUma;//是否为link马
   bool isRacingTurn[TOTAL_TURN];//这回合是否比赛
-  bool isUraRace;//是否为ura比赛
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
 
   int16_t turn;//回合数，从0开始，到77结束

@@ -4,25 +4,24 @@
 #include "../Search/Search.h"
 
 
-const double statusWeights[5] = { 5.0,5.0,5.0,5.0,5.0 };
-const double jibanValue = 2.0;
-const double vitalFactorStart = 5;
-const double vitalFactorEnd = 8;
-const double vitalFactorTraining = 0.7;//选训练时别太看重体力，否则智力溢出
+const double statusWeights[5] = { 7.0,7.0,7.0,7.0,7.0 };
+const double jibanValue = 4;
+const double vitalFactorStart = 2;
+const double vitalFactorEnd = 5;
+const double vitalFactorTraining = 1;//选训练时别太看重体力，否则智力溢出
 
 const double reserveStatusFactor = 40;//控属性时给每回合预留多少，从0逐渐增加到这个数字
 
 const double smallFailValue = -150;
 const double bigFailValue = -500;
 const double outgoingBonusIfNotFullMotivation = 150;//掉心情时提高外出分数
-const double nonTrainBonus = 100;//这回合不训练下回合+3的bonus，乘 剩余回合数/TOTAL_TURN
 const double raceBonus = 200;//比赛收益，不考虑体力
 
 //const double materialValue[5] = { 0.5,0.2,0.5,0.5,0.3 };//每个料理原料的估值
 //const double materialValueScale = 1.0;//料理原料的估值乘以这个系数，方便一起改
-const double greenBonusBasicYear1 = 200;//绿色料理的加成，羁绊没满时降低系数，第一年
-const double greenBonusBasicYear2 = 200;//绿色料理的加成，第二年
-const double greenBonusBasicYear3 = 100;//绿色料理的加成，第三年
+const double greenBonusBasicYear1 = 100;//绿色料理的加成，羁绊没满时降低系数，第一年
+const double greenBonusBasicYear2 = 100;//绿色料理的加成，第二年
+const double greenBonusBasicYear3 = 50;//绿色料理的加成，第三年
 
 
 //const double xiangtanExhaustLossMax = 800;//相谈耗尽且没达标的估值扣分
@@ -126,7 +125,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   //比赛
   if (game.isRacing)
   {
-    if (!game.isUraRace)//常规比赛不吃菜
+    if (game.turn < 72)//常规比赛不吃菜
     {
       bestAction.train = TRA_race;
       return bestAction;
@@ -140,6 +139,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         if (game.isLegal(bestAction))return bestAction;
       }
       //什么都吃不了
+      bestAction.dishType = DISH_none;
       bestAction.train = TRA_race;
       return bestAction;
     }
@@ -154,7 +154,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       int matGain = 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]];
       if (matType == game.cook_main_race_material_type)
         matGain += 1.5001 * GameConstants::Cook_HarvestExtra[game.cook_farm_level[matType]];
-      if (game.cook_material[matType] + matGain < 2 * g1plateCost)
+      if (game.cook_material[matType] < g1plateCost || game.cook_material[matType] + matGain < 2 * g1plateCost)
       {
         haveG1Plate = false;
         break;
@@ -374,7 +374,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         else if (game.turn < 48)//第二年
         {
           //能吃lv2就赶快吃，否则不吃
-          int dish = DISH_curry + tra;
+          int dish = DISH_speed1 + tra;
           assert(GameConstants::Cook_DishMainTraining[dish] == tra);
           if (game.isDishLegal(dish))
           {
@@ -384,21 +384,18 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         else if (game.turn < 72)//第三年
         {
           //前半年能吃lv3就赶快吃，否则不吃
-          int dish = DISH_wiz1 + tra;
+          int dish = DISH_speed2 + tra;
           assert(GameConstants::Cook_DishMainTraining[dish] == tra);
           if (game.isDishLegal(dish))
           {
-            if (game.turn < 60)
+            int matReserve =
+              game.turn < 60 ? (tra == TRA_speed ? 40 : 0) :
+              game.turn < 68 ? (tra == TRA_speed ? 80 : 80) :
+              (tra == TRA_speed ? 120 : 40);
+            int matRemain = game.cook_material[tra] - 250;
+            if (matRemain >= matReserve)
             {
               bestDish = dish;
-            }
-            else //后半年，保证主消耗菜剩余量不低于150
-            {
-              int matRemain = game.cook_material[tra] - 250;
-              if (matRemain >= 150)
-              {
-                bestDish = dish;
-              }
             }
           }
           

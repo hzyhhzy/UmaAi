@@ -6,7 +6,7 @@ SearchParam::SearchParam() :
   searchTotalMax(0),
   searchGroupSize(128),
   searchCpuct(1.0),
-  maxDepth(TOTAL_TURN),
+  maxDepth(2 * TOTAL_TURN),
   maxRadicalFactor(0.0)
 {
 }
@@ -16,7 +16,7 @@ SearchParam::SearchParam(int searchSingleMax, double maxRadicalFactor) :
   searchTotalMax(0),
   searchGroupSize(128),
   searchCpuct(1.0),
-  maxDepth(TOTAL_TURN),
+  maxDepth(2 * TOTAL_TURN),
   maxRadicalFactor(maxRadicalFactor)
 {
 }

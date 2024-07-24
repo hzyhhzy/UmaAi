@@ -28,13 +28,14 @@ namespace TestScoreSearch
   const string modelpath = "../training/example/model.txt";
 #endif
 
-  const int threadNum = 8;
-  const int batchsize = 16;
-  const int threadNumInner = 1;
+  const int threadNum = 1;
+  const int batchsize = 1;
+  const int threadNumInner = 8;
   const double radicalFactor = 3;//激进度
-  const int searchDepth = TOTAL_TURN;
-  const int searchN = 512;
-  const bool recordGame = false;
+  const int searchDepth = 2 * TOTAL_TURN;
+  const int searchN = 1024;
+  const bool recordGame = true;
+  const bool debugPrint = false;
 
   int totalGames = 100000;
   int gamesEveryThread = totalGames / threadNum;
@@ -74,6 +75,7 @@ namespace TestScoreSearch
 
     SearchParam searchParam(searchN, radicalFactor);
     searchParam.maxDepth = searchDepth;
+    //searchParam.searchCpuct = 10.0;
     Search search(modelptr, batchsize, threadNumInner, searchParam);
 
     vector<Game> gameHistory;
@@ -93,11 +95,17 @@ namespace TestScoreSearch
           gameHistory.push_back(game);
         Action action;
         action = search.runSearch(game, rand);
+        if (debugPrint)
+        {
+          game.print();
+          search.printSearchResult(true);
+          cout<<action.toString()<<endl;
+        }
         game.applyAction(rand, action);
       }
       //cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
-      int score = game.finalScore();
-      if (score > 42000)
+      int64_t score = game.finalScore();
+      if (score >= 50000)
       {
         if (recordGame)
           for (int i = 0; i < gameHistory.size(); i++)

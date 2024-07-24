@@ -29,7 +29,6 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   isRacingTurn[TOTAL_TURN - 5] = true;//ura1
   isRacingTurn[TOTAL_TURN - 3] = true;//ura2
   isRacingTurn[TOTAL_TURN - 1] = true;//ura3
-  isUraRace = false;
 
   for (int i = 0; i < 5; i++)
     fiveStatusBonus[i] = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
@@ -300,6 +299,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
     {
       int pid = personDistribution[t][h];
       if (pid < 0)break;
+      if (pid >= 6)continue;
 
       if (persons[pid].personType == PersonType_card)
       {
@@ -1156,7 +1156,6 @@ void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
         if (cook_farm_level[i] >= 5)
           lv5Count++;
       extraBonus = 80 + 5 * lv5Count;
-
     }
     dishMultiply = 1 + 0.01 * extraBonus;
   }
