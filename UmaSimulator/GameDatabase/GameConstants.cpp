@@ -3,6 +3,7 @@
 
 //常数或者比较短的列表放在最前面
 const double GameConstants::ScorePtRateDefault = 2.0;
+const double GameConstants::HintLevelPtRateDefault = 7.0;//以前默认5，种菜杯的hint经常稀缺，就增加到7
 //const double GameConstants::ScorePtRateQieZhe = 2.2;
 const int GameConstants::BasicFiveStatusLimit[5] = { 2300,1000,2200,2200,1500 }; //游戏里原来是1750 1000 1700 1700 1350，模拟器中1200以上翻倍
 
@@ -30,8 +31,12 @@ const double GameConstants::Cook_RestGreenRate = 0.2;//休息绿色概率
 const double GameConstants::Cook_RaceGreenRate = 0.4;//比赛绿色概率
 
 const int GameConstants::Cook_DishLevel[14] = { 0,1,1,2,2,2,2,2,3,3,3,3,3,4 };//1级：第一年的两个，2级：第二年的5个，3级：第三年的5个，4级：第四年的G1Plate
+const int GameConstants::Cook_DishMainTraining[14] = { -1,-1,-1,0,1,2,3,4,0,1,2,3,4,-1 };//料理的主训练，1级和4级没有
 const int GameConstants::Cook_DishGainPt[14] = { 0,250,250,500,500,500,500,500,800,800,800,800,800,1500 };//料理的料理pt
 
+const std::string GameConstants::Cook_MaterialNames[5] = {
+  "萝卜","大蒜","土豆","辣椒","草莓"
+};
 
 const int GameConstants::Cook_DishCost[14][5]=
 {
@@ -67,7 +72,10 @@ const bool GameConstants::Cook_DishTrainingBonusEffective[14][5]=
   {0,0,0,0,1},
   {1,1,1,1,1},
 };//料理对哪些训练有加成
-const int GameConstants::Cook_FarmLvCost[4] = { 100,180,220,250 };//农田升级消耗
+const int GameConstants::Cook_FarmLvCost[5] = { 0,100,180,220,250 };//农田升级消耗
+const int GameConstants::Cook_HarvestBasic[6] = { 0,20,20,30,40,40 };
+const int GameConstants::Cook_HarvestExtra[6] = { 0,20,30,30,40,40 };
+const int GameConstants::Cook_MaterialLimit[6] = { 0,200,400,600,800,999 };
 
 const int GameConstants::FailRateBasic[5][5] =
 {
@@ -77,7 +85,23 @@ const int GameConstants::FailRateBasic[5][5] =
   {532,536,540,544,548},
   {320,321,322,323,324}
 };
+const int GameConstants::Cook_DishPtBigSuccessBuffProb[5][6] =
+{
+  {0, 0, 0, 0, 0, 0},
+  {0, 34, 33, 33, 0, 0},
+  {0, 30, 30, 0, 40, 0},
+  {0, 30, 20, 0, 50, 0},
+  {0, 0, 100, 0, 0, 0},
+};
 
+const int GameConstants::Cook_DishPtBigSuccessBuffExtraProb[5][6] =
+{
+  {0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 10},
+  {0, 10, 10, 30, 10, 10},
+  {0, 15, 15, 0, 15, 10},
+  {0, 0, 0, 0, 100, 0},
+};
 
 int GameConstants::Cook_DishPtLevel(int dishPt)
 {

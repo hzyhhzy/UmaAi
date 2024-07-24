@@ -271,7 +271,7 @@ void Search::searchSingleActionThread(
     for (int i = 0; i < batchSize; i++)
     {
       if(!isNewGame)//ai¼ÆËã
-        eva.gameInput[i].applyTrainingAndNextTurn(rand, action);
+        eva.gameInput[i].applyAction(rand, action);
       else//ÖØÖÃÓÎÏ·
         eva.gameInput[i].randomDistributeCards(rand);
     }
@@ -286,7 +286,7 @@ void Search::searchSingleActionThread(
       for (int i = 0; i < batchSize; i++)
       {
         if(!eva.gameInput[i].isEnd())
-          eva.gameInput[i].applyTrainingAndNextTurn(rand, eva.actionResults[i]);
+          eva.gameInput[i].applyAction(rand, eva.actionResults[i]);
         //Search::runOneTurnUsingPolicy(rand, gamesBuf[i], evaluators->policyResults[i], distributeCards);
         if (!eva.gameInput[i].isEnd())allFinished = false;
       }

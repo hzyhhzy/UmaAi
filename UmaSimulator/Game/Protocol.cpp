@@ -27,6 +27,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
   {
     json j = json::parse(jsonStr, nullptr, true, true);
     auto rand = mt19937_64(114514);
+    assert(false && "not implemented, TODO: Game::loadGameFromJson");
+    /*
     int newcards[6];
     int newzmbluecount[5];
     for (int i = 0; i < 6; i++) {
@@ -112,7 +114,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
   //for (int k = 1; k < 5; k++) {
    //     cout << trainValue[1][k] << endl;
    // }
-    
+    */
   }
   catch (string e)
   {

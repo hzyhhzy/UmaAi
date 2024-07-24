@@ -29,31 +29,83 @@ const std::string Action::dishName[14] =
   "大智",
   "G1Plate"
 };
+bool Action::isActionStandard() const
+{
+  if (train >= 0 && train < 8)
+  {
+    if (dishType == DISH_none)
+      return true;
+    else
+      return false;
+  }
+  else if (train == TRA_none)
+  {
+    if (dishType != DISH_none)
+      return true;
+    else
+      return false;
+  }
+  return false;
+}
 
 int Action::toInt() const
 {
-  if (train < 5)return xiangtanType * 5 + train;
-  if (train == TRA_rest)return 50;
-  if (train == TRA_outgoing)return 51;
-  if (train == TRA_race)return 52;
+  if (train >= 0 && train < 8)
+  {
+    if (dishType == DISH_none)
+      return train;
+    else
+    {
+      throw "Action::toInt(): Not standard Action, both dish and training";
+      return -1;
+    }
+  }
+  else if (train == TRA_none)
+  {
+    if (dishType != DISH_none)
+    {
+      return 8 + dishType - 1;
+    }
+    else
+    {
+      throw "Action::toInt(): Not standard Action, no dish and training";
+      return -1;
+    }
+  }
+  throw "Action::toInt(): Not standard Action, special training type";
   return -1;
 }
 
 Action Action::intToAction(int i)
 {
-  Action a = { 0,0 };
-  if (i == 50)a.train = TRA_rest;
-  else if (i == 51)a.train = TRA_outgoing;
-  else if (i == 52)a.train = TRA_race;
+  Action a;
+  a.train = TRA_none;
+  a.dishType = DISH_none;
+  if (i > 0 && i < 8)
+    a.train = i;
+  else if (i < 21)
+    a.dishType = i - 8 + 1;
   else
-  {
-    a.train = i % 5;
-    a.xiangtanType = i / 5;
-  }
+    throw "Action::intToAction(): Invalid int";
   return a;
 }
 
 std::string Action::toString() const
 {
-  return trainingName[train] + " 相谈:" + xiangtanName[xiangtanType];
+  if (train >= 0 && train < 8)
+  {
+    if (dishType == DISH_none)
+      return "不做菜+" + trainingName[train];
+    else
+      return dishName[dishType] + "+" + trainingName[train];
+  }
+  else if (train == TRA_none)
+  {
+    if (dishType != DISH_none)
+      return "先做菜:" + dishName[dishType];
+    else
+      return "什么都不做";
+  }
+  throw "Action::toString(): Unknown Action";
+  return "";
 }

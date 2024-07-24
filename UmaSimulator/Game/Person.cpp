@@ -36,7 +36,7 @@ void Person::setCard(int cardId)
 
     if (realCardId == GameConstants::FriendCardIdR || realCardId == GameConstants::FriendCardIdSSR)//剧本友人卡
     {
-      personType = 1;
+      personType = PersonType_scenarioCard;
     }
     else
     {
@@ -53,10 +53,20 @@ void Person::setCard(int cardId)
   {
     personType = 2;
     std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
-    probs[cardType] += cardParam.deYiLv;
+    probs[cardType] += int(cardParam.deYiLv);
     distribution = std::discrete_distribution<>(probs.begin(), probs.end());
   }
 
+}
+void Person::setExtraDeyilvBonus(int deyilvBonus)
+{
+  if (personType == PersonType_card)
+  {
+    int newDeyilv = int(cardParam.deYiLv) + deyilvBonus;
+    std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
+    probs[cardParam.cardType] += newDeyilv;
+    distribution = std::discrete_distribution<>(probs.begin(), probs.end());
+  }
 }
 /*
 void Person::setNonCard(int pType)

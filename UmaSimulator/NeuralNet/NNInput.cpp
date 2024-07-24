@@ -23,8 +23,12 @@ void SupportCard::getCardParamNNInputV1(float* buf, const Game& game) const
   for (int i = 0; i < 6; i++)
     buf[10 + i] = bonusBasic[i] * 0.5;
   buf[16] = wizVitalBonusBasic * 0.2;
-  for (int i = 0; i < 6; i++)
-    buf[17 + i] = hintBonus[i] * 0.05;
+  //for (int i = 0; i < 6; i++)
+  //  buf[17 + i] = hintBonus[i] * 0.05;
+  if(hintLevel > 0)
+    buf[17] = hintLevel * 0.4;
+  else
+    buf[18] = 1.0;
   buf[23] = hintProbIncrease * 0.02;
   buf[24] = deYiLv * 0.02;
   buf[25] = failRateDrop * 0.04;
@@ -227,6 +231,7 @@ void SupportCard::getCardParamNNInputV1(float* buf, const Game& game) const
   else if (uniqueEffectType == 19)//凉花
   {
     bufUniqueType[19] = 1.0;
+    assert(false && "本ai不支持非剧本友人卡");
   }
   else if (uniqueEffectType == 20)//巨匠
   {
@@ -266,6 +271,10 @@ void SupportCard::getCardParamNNInputV1(float* buf, const Game& game) const
       bufUniqueType[21] = 1.0;
       writeUniqueEffect(uniqueEffectParam[2], uniqueEffectParam[3]);
     }
+  }
+  else if (uniqueEffectType == 22)//理事长
+  {
+    bufUniqueType[22] = 1.0;
   }
   else
   {
@@ -318,6 +327,8 @@ void Person::getCardNNInputV1(float* buf, const Game& game, int index) const
 
 void Game::getNNInputV1(float* buf, const SearchParam& param) const
 {
+  throw "not implemented";
+  /*
   for (int i = 0; i < NNINPUT_CHANNELS_V1; i++)
     buf[i] = 0.0;
   int c = 0;
@@ -624,4 +635,5 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   {
     persons[card].getCardNNInputV1(cardBuf + NNINPUT_CHANNELS_CARDPERSON_V1 * card, *this, card);
   }
+  */
 }

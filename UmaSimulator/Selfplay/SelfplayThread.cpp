@@ -82,7 +82,8 @@ void SelfplayThread::writeDataToFile()
 {
   nnInputBuf.resize(NNINPUT_CHANNELS_V1 * param.sampleNumEachFile);
   nnOutputBuf.resize(NNOUTPUT_CHANNELS_V1 * param.sampleNumEachFile);
-  static_assert(sizeof(ModelOutputPolicyV1) + sizeof(ModelOutputValueV1) == sizeof(float) * NNOUTPUT_CHANNELS_V1);
+  assert(false);
+  //static_assert(sizeof(ModelOutputPolicyV1) + sizeof(ModelOutputValueV1) == sizeof(float) * NNOUTPUT_CHANNELS_V1);
   
   for (int i = 0; i < param.sampleNumEachFile; i++)
   {

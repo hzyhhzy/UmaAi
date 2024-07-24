@@ -3,20 +3,27 @@
 #include <random>
 #include <string>
 #include "../SupportCard/SupportCard.h"
-struct Game;
+class Game;
 
 
 enum PersonTypeEnum :int8_t
 {
   PersonType_unknown = 0,
-  PersonType_lianghuaCard,
+  PersonType_scenarioCard,
   PersonType_card,
   PersonType_npc,
-  PersonType_lishizhang,
-  PersonType_jizhe,
-  PersonType_lianghuaNonCard,
+  PersonType_yayoi,
+  PersonType_reporter,
   PersonType_otherFriend,
   PersonType_groupCard
+};
+
+enum FriendStageEnum :int8_t
+{
+  FriendStage_notClicked = 0,
+  FriendStage_beforeUnlockOutgoing,
+  FriendStage_afterUnlockOutgoing,
+  FriendStage_refusedOutgoing
 };
 
 struct Person //任何一个可能出现在训练里的人头
@@ -44,6 +51,6 @@ struct Person //任何一个可能出现在训练里的人头
   
 
   void getCardNNInputV1(float* buf, const Game& game, int index) const;//神经网络输入向量，不包括支援卡参数，Game类会把支援卡参数放在对应位置
-  std::string getPersonName(const Game& game) const;//获得人物名称
-  std::string getPersonStrColored(const Game& game, int personId, int atTrain) const;//人物名称与羁绊等整合成带颜色的字符串，在小黑板表格中显示
+  std::string getPersonName() const;//获得人物名称
+  //std::string getPersonStrColored(const Game& game, int personId, int atTrain) const;//人物名称与羁绊等整合成带颜色的字符串，在小黑板表格中显示
 };

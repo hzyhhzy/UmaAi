@@ -57,7 +57,7 @@ bool compare_card_value(const SupportCard& a, const SupportCard& b)
 	compare_array(a.initialBonus, b.initialBonus, 6, "initialBonus");
 	COMPARE(initialJiBan);//初始羁绊
 	COMPARE(saiHou);//赛后
-	compare_array(a.hintBonus, b.hintBonus, 6, "hintBonus");
+  COMPARE(hintLevel);//红点等级
 	COMPARE(hintProbIncrease);//启发发生率提升
 	COMPARE(deYiLv);//得意率
 	COMPARE(failRateDrop); //失败率降低

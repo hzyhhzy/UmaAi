@@ -29,7 +29,7 @@ void SupportCard::write_to_json(json& j, const std::string cdname, const int id)
 		j["cardValue"][x]["initialBonus"] = initialBonus;
 		j["cardValue"][x]["initialJiBan"] = initialJiBan;
 		j["cardValue"][x]["saiHou"] = saiHou;
-		j["cardValue"][x]["hintBonus"] = hintBonus;
+		j["cardValue"][x]["hintLevel"] = hintLevel;
 		j["cardValue"][x]["hintProbIncrease"] = hintProbIncrease;
 		j["cardValue"][x]["deYiLv"] = deYiLv;
 		j["cardValue"][x]["failRateDrop"] = failRateDrop;
@@ -68,7 +68,7 @@ void SupportCard::load_from_json(json& j, int x) {
 
 		j["cardValue"][x].at("bonus").get_to(bonusBasic);
 		j["cardValue"][x].at("initialBonus").get_to(initialBonus);
-		j["cardValue"][x].at("hintBonus").get_to(hintBonus);		
+		j["cardValue"][x].at("hintLevel").get_to(hintLevel);
 	}
 
 	if (charaId > 0) {

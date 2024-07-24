@@ -253,7 +253,7 @@ void main_testDemoGame()
 			*/
 
 
-			game.applyTrainingAndNextTurn(rand, bestAction);
+			game.applyAction(rand, bestAction);
 		} // while
 		game.printFinalStats();
 		if (game.finalScore() < 26000)

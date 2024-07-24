@@ -15,9 +15,9 @@ using namespace std;
 
 void main_playerPlay()
 {
-  GameDatabase::loadUmas("../db/umaDB.json");
+  GameDatabase::loadUmas("./db/umaDB.json");
   //GameDatabase::loadCards("../db/card");
-  GameDatabase::loadDBCards("../db/cardDB.json");
+  GameDatabase::loadDBCards("./db/cardDB.json");
 
   const int threadNum = 8;
   const int searchN = 8192;
@@ -25,22 +25,21 @@ void main_playerPlay()
   SearchParam param(searchN, radicalFactor);
 
 
-  cout << termcolor::cyan << "赛马娘UAF剧本育成模拟器 v0.1" << termcolor::reset << endl;
+  cout << termcolor::cyan << "赛马娘种菜杯剧本育成模拟器 v0.1" << termcolor::reset << endl;
   cout << termcolor::cyan << "作者 Sigmoid，QQ: 2658628026" << termcolor::reset << endl;
   cout << termcolor::cyan << "代码开源：" << termcolor::yellow << "https://github.com/hzyhhzy/UmaAi" << termcolor::reset << endl;
-  cout << termcolor::bright_cyan << "此模拟器界面类似“小黑板”。为了方便，并没有买技能的功能，把固有技能和各种技能hint都换算成pt，每pt计为" << GameConstants::ScorePtRate << "分（切者" << GameConstants::ScorePtRate * 1.1 << "分）" << termcolor::reset << endl;
-  cout << termcolor::bright_cyan << "所有Lv2的升级（消除debuff）均自动进行，Lv3需要玩家手动购买" << termcolor::reset << endl;
-  cout << termcolor::bright_cyan << "第二年的凯旋门允许不消智力debuff，如果pt不够消除其他debuff则模拟器按输凯旋门计算" << termcolor::reset << endl;
+  cout << termcolor::bright_cyan << "此模拟器界面类似“小黑板”。为了方便，并没有买技能的功能，把固有技能和各种技能hint都换算成pt，每pt计为" << GameConstants::ScorePtRateDefault << "分（切者" << GameConstants::ScorePtRateDefault * 1.1 << "分）" << termcolor::reset << endl;
+  cout << termcolor::bright_cyan << "所有农田的升级均自动进行" << termcolor::reset << endl;
   cout << endl;
 
   random_device rd;
   auto rand = mt19937_64(rd());
 
-  int umaId = 103001;//米浴
+  int umaId = 101101;//草上飞
   int umaStars = 5;
-  int cards[6] = { 301884,301344,301614,300194,300114,301074 };//友人，高峰，神鹰，乌拉拉，风神，司机
+  int cards[6] = { 302074,302064,302084,301874,300194,301724 };//友人，速强击，力西野花，根巨匠，根乌拉拉，智麦昆
   int zhongmaBlue[5] = { 18,0,0,0,0 };
-  int zhongmaBonus[6] = { 20,0,40,0,20,150 };
+  int zhongmaBonus[6] = { 5,15,25,5,5,150 };
 
   int batchsize = 512;
 
@@ -96,11 +95,13 @@ void main_playerPlay()
       //assert(turn == game.turn && "回合数不正确");
       game.print();
 
+
+      /*
       if (game.turn < TOTAL_TURN - 1){
 
-          std::cout << "????? -- turn: " << game.turn << "  tot_turn-1 : "<< TOTAL_TURN - 1 << "-----------------\n";
-        assert(true && "todo");
-        /*
+        //  std::cout << "????? -- turn: " << game.turn << "  tot_turn-1 : "<< TOTAL_TURN - 1 << "-----------------\n";
+        //assert(true && "todo");
+        
         Action handWrittenStrategy = Evaluator::handWrittenStrategy(game);
         string strategyText[10] =
         {
@@ -161,8 +162,8 @@ void main_playerPlay()
           }
           cout << endl;
         }
-      */
-      }
+      
+      }*/
       /*
 
       {
@@ -183,66 +184,107 @@ void main_playerPlay()
 
      // auto tdata = search.exportTrainingSample();
 
-      if (game.isRacing)//比赛回合
+      Action action;
+      action.train = -1;
+      string dishKeys[14] = { "0","a1","a2","b1","b2","b3","b4","b5","c1","c2","c3","c4","c5","d" };//13种菜对应的键盘输入
+
+      string s;
+      if (game.isRacing)
       {
-        assert(false && "比赛回合应该已经在game类里跳过");
+        cout << termcolor::green << "比赛回合：" << termcolor::reset <<
+          termcolor::cyan << "0" << termcolor::reset << ":不吃菜并比赛 " <<
+          termcolor::cyan << "remake" << termcolor::reset << ":重开 " <<
+          termcolor::cyan << "cheat" << termcolor::reset << ":重置比赛菜种 " <<
+          endl;
+        
       }
-      else//常规训练回合
+      else
       {
-        Action action;
-        action.train = -1;
+        cout << termcolor::green << "请选择训练：" << termcolor::reset <<
+          termcolor::cyan << "1" << termcolor::reset << ":速 " <<
+          termcolor::cyan << "2" << termcolor::reset << ":耐 " <<
+          termcolor::cyan << "3" << termcolor::reset << ":力 " <<
+          termcolor::cyan << "4" << termcolor::reset << ":根 " <<
+          termcolor::cyan << "5" << termcolor::reset << ":智 " <<
+          termcolor::cyan << "6" << termcolor::reset << ":休息 " <<
+          termcolor::cyan << "7" << termcolor::reset << ":外出(优先友人) " <<
+          termcolor::cyan << "8" << termcolor::reset << ":比赛 " <<
+          termcolor::cyan << "remake" << termcolor::reset << ":重开 " <<
+          termcolor::cyan << "cheat" << termcolor::reset << ":重置人头分布 " <<
+          endl;
+      }
 
+      //显示可以吃的菜
+      if (game.cook_dish == DISH_none)
+      {
+        if (game.isRacing)
+          cout << termcolor::green << "吃菜并比赛：" << termcolor::reset;
+        else
+          cout << termcolor::green << "吃菜：" << termcolor::reset;
+        int legalDishNum = 0;
+        for (int i = 1; i < 14; i++)
+        {
+          if (!game.isDishLegal(i))
+            continue;
+          legalDishNum += 1;
+          cout << termcolor::cyan << dishKeys[i] << termcolor::reset << ":" << Action::dishName[i] << " ";
+        }
+        if (legalDishNum == 0)
+          cout << termcolor::red << "没有可以吃的菜" << termcolor::reset;
+        cout << endl;
+      }
 
-        string s;
+      cin >> s;
 
-        cout << termcolor::cyan << "请选择训练：1速，2耐，3力，4根，5智，S键SS对战，a友人出行，b普通出行，c休息，d额外比赛，remake重开，cheat作弊" << termcolor::reset << endl;
-       
-        cin >> s;
-
-
-        if (s == "1")
-          action.train = 0;
+      //s是不是吃菜
+      bool isDish = false;
+      for (int i = 1; i < 14; i++)
+      {
+        if (s == dishKeys[i])
+        {
+          action.dishType = i;
+          action.train = TRA_none;
+          isDish = true;
+        }
+      }
+      if (!isDish)
+      {
+        action.dishType = 0;
+        if (game.isRacing && s == "0")
+          action.train = TRA_race;
+        else if (s == "1")
+          action.train = TRA_speed;
         else if (s == "2")
-          action.train = 1;
+          action.train = TRA_stamina;
         else if (s == "3")
-          action.train = 2;
+          action.train = TRA_power;
         else if (s == "4")
-          action.train = 3;
+          action.train = TRA_guts;
         else if (s == "5")
-          action.train = 4;
-        else if (s == "s")
-          action.train = 5;
-        else if (s == "a")
-        {
-          cout << termcolor::green << "你确定要出行吗？输入y确认，输入n重新选择" << termcolor::reset << endl;
-          cin >> s;
-          if (s != "y")
-            continue;
-          action.train = 7;
-        }
-        else if (s == "b")
-        {
-          cout << termcolor::green << "你确定要出行吗？输入y确认，输入n重新选择" << termcolor::reset << endl;
-          cin >> s;
-          if (s != "y")
-            continue;
-          action.train = 8;
-        }
-        else if (s == "c")
+          action.train = TRA_wiz;
+        else if (s == "6")
         {
           cout << termcolor::green << "你确定要休息吗？输入y确认，输入n重新选择" << termcolor::reset << endl;
           cin >> s;
           if (s != "y")
             continue;
-          action.train = 6;
+          action.train = TRA_rest;
         }
-        else if (s == "d")
+        else if (s == "7")
+        {
+          cout << termcolor::green << "你确定要外出吗？输入y确认，输入n重新选择" << termcolor::reset << endl;
+          cin >> s;
+          if (s != "y")
+            continue;
+          action.train = TRA_outgoing;
+        }
+        else if (s == "8")
         {
           cout << termcolor::green << "你确定要比赛吗？输入y确认，输入n重新选择" << termcolor::reset << endl;
           cin >> s;
           if (s != "y")
             continue;
-          action.train = 9;
+          action.train = TRA_race;
         }
         else if (s == "remake")
         {
@@ -260,145 +302,22 @@ void main_playerPlay()
           //game.print();
           continue;
         }
-        else if (s.size() == 2 && s[0] == 'b' && (s[1] >= '1' && s[1] <= '8'))
-        {
-          int buy_idx = s[1] == '1' ? 3:
-            s[1] == '2' ? 1:
-            s[1] == '3' ? 2:
-            s[1] == '4' ? 0:
-            s[1] == '5' ? 4:
-            s[1] == '6' ? 5:
-            s[1] == '7' ? 6:
-            s[1] == '8' ? 7:
-            -1;
-          continue;
-        }
         else
         {
           cout << termcolor::red << "输入有误，请重新输入" << termcolor::reset << endl;
           continue;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-
-        if (game.venusAvailableWisdom != 0)
-        {
-          cout << termcolor::cyan << "是否开启女神睿智？y开启，n不开启" << termcolor::reset << endl;
-          cin >> s;
-          if (s == "y")
-          {
-            useVenus = true;
-          }
-          else if (s == "n")
-          {
-            useVenus = false;
-          }
-          else
-          {
-            cout << termcolor::red << "输入有误，请重新输入" << termcolor::reset << endl;
-            continue;
-          }
-        }
-
-
-        if (chosenTrain == 7 && game.turn <= 12)
-        {
-          cout << termcolor::red << "前13回合无法比赛" << termcolor::reset << endl;
-          continue;
-        }
-
-
-
-
-        int chosenOutgoing = 5;
-        if (chosenTrain == 6 && game.venusCardUnlockOutgoing)
-        {
-          cout << termcolor::cyan << "请选择外出：0为普通外出，五个女神外出分别为 1 2 3 4 5" << termcolor::reset << endl;
-          cin >> s;
-          if (s == "0")
-            chosenOutgoing = 5;
-          else if (s == "1")
-            chosenOutgoing = 0;
-          else if (s == "2")
-            chosenOutgoing = 1;
-          else if (s == "3")
-            chosenOutgoing = 2;
-          else if (s == "4")
-            chosenOutgoing = 3;
-          else if (s == "5")
-            chosenOutgoing = 4;
-          else
-          {
-            cout << termcolor::red << "输入有误，请重新输入" << termcolor::reset << endl;
-            continue;
-          }
-
-          if (!game.isOutgoingLegal(chosenOutgoing))
-          {
-            cout << termcolor::red << "不合法的外出，请重新输入" << termcolor::reset << endl;
-            continue;
-          }
-        }
-
-
-        assert(game.cardData[0]->cardType == 5 && "神团卡不在第一个位置");
-
-
-        if (chosenTrain >= 0 && chosenTrain < 5 && game.cardDistribution[chosenTrain][0])//神团卡在选择的训练
-        {
-          if (chosenSpiritColor == -1)
-          {
-            cout << termcolor::cyan << "如果出现女神三选一事件，选择什么颜色的碎片？q红，a蓝，z黄" << termcolor::reset << endl;
-            cin >> s;
-            if (s == "q")
-            {
-              chosenSpiritColor = 0;
-            }
-            else if (s == "a")
-            {
-              chosenSpiritColor = 1;
-            }
-            else if (s == "z")
-            {
-              chosenSpiritColor = 2;
-            }
-            else
-            {
-              cout << termcolor::red << "输入有误，请重新输入" << termcolor::reset << endl;
-              continue;
-            }
-          }
-          else//提前选了碎片了
-            cout << termcolor::cyan << "已提前选择碎片颜色" << termcolor::reset << endl;
-
-        }*/
-
-        bool suc = game.applyTraining(rand, action);
-        assert(suc);
-        cout << endl;
-        game.checkEventAfterTrain(rand);
-        if(!game.isEnd())
-          game.randomDistributeCards(rand);
       }
+      if (!game.isLegal(action))
+      {
+        cout << termcolor::red << "这个操作不合法，请重新输入" << termcolor::reset << endl;
+        continue;
+      }
+      game.applyAction(rand, action);
+      cout << endl;
+      if (game.isEnd())break;
     }
+    
     cout << termcolor::red << "育成结束！" << termcolor::reset << endl;
     game.printFinalStats();
   }

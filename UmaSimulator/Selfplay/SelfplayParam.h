@@ -24,7 +24,7 @@ struct SelfplayParam
 
   int searchN = 1024;
   int searchGroupSize = 1024;
-  int searchCpuct = 1.0; 
+  double searchCpuct = 1.0; 
   double policyDelta = 100.0;//分数每降低多少，policy变成1/e倍
 
   //radicalFactor=radicalFactor_scale * (1/pow(rand(),radicalFactor_pow) - 1)

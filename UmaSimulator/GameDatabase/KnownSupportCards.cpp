@@ -171,7 +171,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
                 expectedVital = game.vital + game.trainVitalChange[atTrain];
                 rate = clamp(expectedVital / game.maxVital, 0.3, 1.0);
                 // (0.3, 1) --> (1, 0)
-                effect.apply(1, args[5] + args[2] * (1 - rate) / 0.7);
+                effect.apply(1, args[5] + int(args[2] * (1 - rate) / 0.7));
                 break;
             case 8:   // 彩珠
                 effect.xunLian += 5 + 3 * clamp((game.maxVital - 100) / 4, 0, 5);
@@ -208,11 +208,11 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
                 }
                 else if (args[1] == 2)//加速度技能
                 {
-                  count = 0.7 + game.turn / 12.0;
+                  count = int(0.7 + game.turn / 12.0);
                 }
                 else if (args[1] == 3)//回体技能
                 {
-                  count = 0.4 + game.turn / 15.0;
+                  count = int(0.4 + game.turn / 15.0);
                 }
                 else
                 {
@@ -253,7 +253,7 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
                 if (cardTypeCount[5] > 0)
                   effect.apply(30, cardTypeCount[5]); // pt = 30
               }
-            break;
+              break;
             case 21:   // 耐万籁，编入4种支援卡时+10训练
               {
                 int cardTypeCount[7] = { 0,0,0,0,0,0,0 };
@@ -270,6 +270,8 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
                 if (cardTypes >= args[1])
                   effect.apply(args[2], args[3]);
               }
+              break;
+            case 22://理事长
               break;
             default:   // type == 0
                 if (uniqueEffectType != 0) {

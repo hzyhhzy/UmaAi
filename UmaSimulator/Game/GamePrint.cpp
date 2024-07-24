@@ -11,50 +11,81 @@ using std::endl;
 using std::to_string;
 using std::vector;
 
-std::string Person::getPersonStrColored(const Game& game, int personId, int atTrain) const
+std::string Person::getPersonName() const
 {
-    
   string s =
     personType == PersonType_unknown ? "未加载" :
-    personType == PersonType_lianghuaCard ? "[友]凉花" :
+    personType == PersonType_scenarioCard ? "[友]理事长" :
     personType == PersonType_card ? cardParam.cardName.substr(0, 8) :
     personType == PersonType_npc ? "NPC" :
-    personType == PersonType_lishizhang ? "理事长" :
-    personType == PersonType_jizhe ? "记者" :
-    personType == PersonType_lianghuaNonCard ? "凉花" :
+    personType == PersonType_yayoi ? "理事长" :
+    personType == PersonType_reporter ? "记者" :
     "未知";
-  if (personType != PersonType_npc)
-  {
-    if (friendship < 100)
-      s = s + ":" + to_string(friendship);
-  }
+  return s;
+}
+
+
+std::string Game::getPersonStrColored(int personId, int atTrain) const
+{
+  if (personId < 0)
+    return "Empty";
 
   //根据闪彩等给名称加颜色
-  if (personType == PersonType_lianghuaCard)
-    s = "\033[32m" + s + "\033[0m"; // 友人
-  else if (personType == PersonType_card)
+  if (personId < 6)//card
   {
-    if(game.isCardShining(personId,atTrain))
-      s = "\033[1;36m" + s + "\033[0m"; //闪彩
-    else if(friendship<80)
-      s = "\033[33m" + s + "\033[0m"; //需要拉羁绊
+    const Person& p = persons[personId];
+    string s = p.getPersonName();
+    if (p.personType != PersonType_npc)
+    {
+      if (p.friendship < 100)
+        s = s + ":" + to_string(p.friendship);
+    }
+    if (p.personType == PersonType_scenarioCard)
+      s = "\033[32m" + s + "\033[0m"; // 友人
+    else if (p.personType == PersonType_card)
+    {
+      if (isCardShining(personId, atTrain))
+        s = "\033[1;36m" + s + "\033[0m"; //闪彩
+      else if (p.friendship < 80)
+        s = "\033[33m" + s + "\033[0m"; //需要拉羁绊
+    }
+    else assert(false);
+
+    //技能启发
+    if (p.personType == PersonType_card && p.isHint)
+      s = "\033[31m!\033[0m" + s;
+
+    return s;
   }
-  else if (personType == PersonType_npc)
+  else if (personId==PSID_npc)
   {
-    assert(false && "UAF has no npc");
+    //gray NPC
+    return "\033[37mNPC\033[0m";
   }
-  else if (personType == PersonType_lishizhang || personType == PersonType_jizhe || personType == PersonType_lianghuaNonCard)
+  else if (personId == PSID_noncardYayoi)
   {
-    s = "\033[35m" + s + "\033[0m"; //理事长记者等
+    //理事长
+    int friendship = friendship_noncard_yayoi;
+    string s = "理事长";
+    if (friendship < 100)
+      s = s + ":" + to_string(friendship);
+    return "\033[35m" + s + "\033[0m";
+  }
+  else if (personId == PSID_noncardReporter)
+  {
+    //记者
+    int friendship = friendship_noncard_reporter;
+    string s = "记者";
+    if (friendship < 100)
+      s = s + ":" + to_string(friendship);
+    return "\033[35m" + s + "\033[0m";
   }
   else
-    s = "\033[31m" + s + "\033[0m"; //unknown
+  {
+    assert(false);
+    return "\033[31mUnknown\033[0m";
+  }
 
-  //技能启发
-  if (personType == PersonType_card && isHint)
-    s = "\033[31m!\033[0m" + s;
-
-  return s;
 }
 
 void Game::printEvents(string s) const
@@ -64,6 +95,7 @@ void Game::printEvents(string s) const
     cout << "\033[32m" + s + "\033[0m" << endl;
 #endif
 }
+
 
 const int tableWidth = 17;
 static void printTableRow(string strs[5])
@@ -120,93 +152,104 @@ void Game::print() const
     cout << termcolor::cyan << "总属性：" << totalStatus << "     pt：" << skillPt << termcolor::reset << endl;
   }
   {
-    if (ptScoreRate > GameConstants::ScorePtRate * 1.05)
+    if (isQieZhe)
       cout << termcolor::bright_yellow << "有切者" << termcolor::reset << endl;
     if (isAiJiao)
       cout << termcolor::bright_yellow << "有爱娇" << termcolor::reset << endl;
     if (isPositiveThinking)
       cout << termcolor::bright_yellow << "有正向思考" << termcolor::reset << endl;
+    if (isRefreshMind)
+      cout << termcolor::bright_yellow << "有每回合体力+5" << termcolor::reset << endl;
+    
 
     if (failureRateBias < 0)
       cout << termcolor::bright_yellow << "有练习上手" << termcolor::reset << endl;
     if (failureRateBias > 0)
       cout << termcolor::red << "有练习下手" << termcolor::reset << endl;
   }
-  {
-    cout << endl;
-  }
   
   //友人卡状态
-  if (lianghua_type == 1 || lianghua_type == 2)
+  if (friend_type == 1 || friend_type == 2)
   {
-    if (persons[lianghua_personId].friendOrGroupCardStage == 0)
+    if (friend_stage == 0)
       cout << termcolor::cyan << "友人卡未点击" << termcolor::reset << endl;
-    else if (persons[lianghua_personId].friendOrGroupCardStage == 1)
+    else if (friend_stage == 1)
       cout << termcolor::cyan << "友人出行未解锁" << termcolor::reset << endl;
-    else if (lianghua_outgoingUsed < 5)
-      cout << termcolor::cyan << "友人出行已走" << termcolor::yellow << lianghua_outgoingUsed << termcolor::cyan << "段" << termcolor::reset << endl;
-    else if (lianghua_outgoingUsed == 5)
+    else if (friend_outgoingUsed < 5)
+      cout << termcolor::cyan << "友人出行已走" << termcolor::yellow << friend_outgoingUsed << termcolor::cyan << "段" << termcolor::reset << endl;
+    else if (friend_outgoingUsed == 5)
       cout << termcolor::cyan << "友人出行已走完" << termcolor::reset << endl;
   }
-
-  const string color_name[3] = { "蓝","红","黄" };
-  const string color_command[3] = { "\033[1;36m","\033[1;31m","\033[1;33m" };
-  const string end_command = "\033[0m";
-  
-  if (!uaf_haveLose)
-    cout << termcolor::yellow << "UAF目前全胜" << endl << termcolor::reset;
-  else
-  {
-    cout << termcolor::red << "UAF没有全胜" << endl << termcolor::reset;
-    for (int i = 0; i < 3; i++)
-    {
-      if (uaf_haveLoseColor[i] > 0)
-        cout << color_command[i] << color_name[i] << "色输了" << uaf_haveLoseColor[i] << "场" << endl;
-    }
-  }
-
-  cout << "训练等级: \n";
-
-  for (int i = 0; i < 3; ++i) {
-    string colorCode = color_command[i];
-    cout << colorCode;
-    cout << "Lv" << uaf_trainLevelColorTotal[i] ;
-    if (uaf_buffNum[i] > 0)
-      cout << "(还剩" << uaf_buffNum[i] << "次)  ";
-    else
-      cout << "           ";
-
-    cout << "各训练lv: ";
-    for (int j = 0; j < 5; ++j) {
-      int targetLv = 10 * (turn / 12);
-      if (targetLv < 10)targetLv = 10;
-      if (targetLv > 50)targetLv = 50;
-      int lv = uaf_trainingLevel[i][j];
-      if (lv >= targetLv)
-        cout << colorCode << lv << " " << end_command;
-      else
-        cout << lv << " ";
-    }
-    cout << "\n";
-
-  }
-  cout << termcolor::cyan << "还有 " << termcolor::yellow << uaf_xiangtanRemain << termcolor::cyan << " 次相谈" << termcolor::reset << endl;
 
   if (turn < 72)
   {
     int nextCompetition = (turn / 12 + 1) * 12;
     if (turn < 24)nextCompetition = 24;
-    cout << "距离下次UAF还有 " << nextCompetition - turn << " 回合" << endl;
+    cout << "距离下次试食会还有 " << nextCompetition - turn << " 回合" << endl;
   }
+
+  cout << "农田pt：" << termcolor::green << cook_farm_pt << termcolor::reset << " (断绿亏损=" << maxFarmPtUntilNow() - cook_farm_pt << ")" << endl;
+  if (isXiahesu() || turn >= 72)
+  {
+    cout << termcolor::cyan << "夏合宿或Ura期间，每回合收获" << termcolor::reset << endl;
+  }
+  else
+  {
+    cout << "农田材料种类：";
+    int farmCount = turn % 4;
+    for (int i = 0; i < farmCount; i++)
+    {
+      bool isGreen = cook_harvest_green_history[i];
+      int materialType = cook_harvest_history[i];
+      if (isGreen)
+        cout << termcolor::green << GameConstants::Cook_MaterialNames[materialType] << termcolor::reset;
+      else
+        cout << termcolor::yellow << GameConstants::Cook_MaterialNames[materialType] << termcolor::reset;
+      cout << " ";
+    }
+    for (int i = 0; i < 4 - farmCount; i++)
+    {
+      cout << "__ ";
+    }
+    cout << endl;
+  }
+
+  cout << "料理pt：" << termcolor::bright_yellow << cook_dish_pt << termcolor::reset;
+  if (cook_dish_sure_success)
+    cout << termcolor::bright_green << "   大成功确定" << termcolor::reset;
+  else
+    cout << "   大成功 " << cook_dish_pt % 1500 << "/1500";
+  cout << endl;
+  
+  cout << "生效料理：" << termcolor::bright_green << Action::dishName[cook_dish] << termcolor::reset << endl;
+  
  
 
-  
-
-  if (isRacing)
   {
-    cout << termcolor::red << "比赛回合" << termcolor::reset << endl;
-    return;//比赛回合就不显示训练了
+    string vitalColor;
+    if (vital > 70)
+      vitalColor = "\033[32m";
+    else if (vital > 50)
+      vitalColor = "\033[33m";
+    else
+      vitalColor = "\033[31m";
+    cout << "体力：" << vitalColor << "|";
+    for (int i = 0; i < vital / 2; i++)
+      cout << "#";
+    for (int i = vital / 2; i < maxVital / 2; i++)
+      cout << "-";
+    cout << "|  " << vital << "\033[0m" << "/" << maxVital;
+
+
+    cout <<"  干劲:" <<
+      (motivation == 1 ? "\033[31m绝不调\033[0m" :
+        motivation == 2 ? "\033[31m不调\033[0m" :
+        motivation == 3 ? "\033[31m普通\033[0m" :
+        motivation == 4 ? "\033[33m好调\033[0m" :
+        motivation == 5 ? "\033[32m绝好调\033[0m" : "未知") << endl;
+    cout << endl;
   }
+  
 
   //string divLine = "|------------------------------------------------------------------------------------|\n";
 
@@ -215,13 +258,24 @@ void Game::print() const
     divLineOne += "-";
 
   string divLine = "|";
+  string divLineWhite = "|";
   for (int i = 0; i < 5; i++)
   {
-    divLine += color_command[uaf_trainingColor[i]] + divLineOne + end_command;
+    bool isGreen = cook_train_green[i];
+    if (isGreen)
+      divLine += "\033[32m" + divLineOne + "\033[0m";
+    else
+      divLine += divLineOne;
+    divLineWhite += divLineOne;
+
     if (i != 4)
+    {
       divLine += "-";
+      divLineWhite += "-";
+    }
   }
   divLine += "|\n";
+  divLineWhite += "|\n";
 
   cout << divLine;
   //训练标题，失败率，碎片
@@ -251,6 +305,50 @@ void Game::print() const
     printTableRow(oneRow);
   }
   cout << divLine;
+  // 菜量
+  {
+    string oneRow[5];//表格中一行要显示的内容
+    for (int i = 0; i < 5; i++)
+    {
+      oneRow[i] = GameConstants::Cook_MaterialNames[i] + ":";
+      oneRow[i] += to_string(cook_material[i]) + "/" + to_string(GameConstants::Cook_MaterialLimit[cook_farm_level[i]]);
+    }
+    printTableRow(oneRow);
+  }
+  {
+    string oneRow[5];//表格中一行要显示的内容
+    auto matGain = calculateHarvestNum(false);
+    for (int i = 0; i < 5; i++)
+    {
+      bool willOverflow = cook_material[i] + matGain[i] > GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
+      if (willOverflow)
+      {
+        oneRow[i] = "\033[31m" + to_string(matGain[i]) + "\033[0m";
+      }
+      else
+        oneRow[i] = to_string(matGain[i]);
+    }
+    printTableRow(oneRow);
+  }
+  {
+    string oneRow[5];//表格中一行要显示的内容
+    for (int i = 0; i < 5; i++)
+    {
+      oneRow[i] = "LV " + to_string(cook_farm_level[i]);
+    }
+    printTableRow(oneRow);
+  }
+
+  cout << divLine;
+
+  if (isRacing)
+  {
+    cout << "比赛菜种：" << "\033[32m" << GameConstants::Cook_MaterialNames[cook_main_race_material_type] << "\033[0m" << endl;
+    cout << divLineWhite;
+    cout << termcolor::red << "比赛回合" << termcolor::reset << endl;
+    return;//比赛回合就不显示训练了
+  }
+
   //属性值
   {
     string oneRow[5];//表格中一行要显示的内容
@@ -292,10 +390,10 @@ void Game::print() const
     string oneRow[5];//表格中一行要显示的内容
     for (int i = 0; i < 5; i++)
     {
-      oneRow[i] = "等级：" + color_command[uaf_trainingColor[i]] + to_string(getTrainingLevel(i) + 1) + end_command;
-      /*if (getTrainingLevel(i) < 4)
-        oneRow[i] = oneRow[i] + " (" + to_string(uaf_trainingLevel[uaf_trainingColor[i]][i] % 4) + ")";
-        */
+      oneRow[i] = "等级：" + to_string(getTrainingLevel(i) + 1);
+      if (getTrainingLevel(i) < 4)
+        oneRow[i] = oneRow[i] + "(+" + to_string(trainLevelCount[i] % 4) + ")";
+        
     }
     printTableRow(oneRow);
   }
@@ -313,40 +411,8 @@ void Game::print() const
     }
     printTableRow(oneRow);
   }
-  // lv up situation
-  {
-    string oneRow[5];//表格中一行要显示的内容
-
-    int lvUpTot[3] = { 0 };
-    int accLvUp[5] = { 0 };
-
-    for (int i = 0; i < 5; ++i) {
-
-        int dlt = std::min(100 - uaf_trainingLevel[uaf_trainingColor[i]][i], (int)uaf_trainLevelGain[i]);
-        accLvUp[i] = dlt;
-        lvUpTot[uaf_trainingColor[i]] += dlt;
-    }
-
-    for (int i = 0; i < 5; i++) {
-      oneRow[i] = "up:"+ color_command[uaf_trainingColor[i]]+to_string(accLvUp[i]) 
-                + " tot:" + to_string(lvUpTot[uaf_trainingColor[i]]) + "\033[0m" + end_command;
-    }
-    printTableRow(oneRow);
-
-  }
-  /*
-  if (larc_isAbroad)
-  {
-    string oneRow[5];//表格中一行要显示的内容
-    for (int i = 0; i < 5; i++)
-    {
-      oneRow[i] = "适性pt:\033[32m" + to_string(larc_shixingPtGainAbroad[i]) + "\033[0m";
-    }
-    printTableRow(oneRow);
-  }
-  */
-
   cout << divLine;
+
   //人头
   {
     for (int head = 0; head < 5; head++)
@@ -358,7 +424,7 @@ void Game::print() const
         if (personId < 0)
           oneRow[item] = "";
         else
-          oneRow[item] = persons[personId].getPersonStrColored(*this, personId, item);
+          oneRow[item] = getPersonStrColored(personId, item);
       }
       printTableRow(oneRow);
     }
@@ -395,7 +461,42 @@ void Game::print() const
       printTableRow(oneRow);
     }
   }
-  cout << divLine;
+  cout << divLineWhite;
+
+  //休息外出比赛的菜种
+  {
+    string oneRow[5];//表格中一行要显示的内容
+
+    for (int t = 5; t < 8; t++)
+    {
+      string s;
+      if (t == 5)
+        s = "休息";
+      else if (t == 6)
+        s = "外出";
+      else if (t == 7)
+        s = "比赛";
+      Action action;
+      action.dishType = DISH_none;
+      action.train = t;
+      if(!isLegal(action))
+        s = "\033[31m" + s + ":__\033[0m";
+      else
+      {
+        int matType = cook_train_material_type[t];
+        s = s + ":";
+        bool isGreen = cook_train_green[t];
+        if (isGreen)
+          s = s + "\033[32m" + GameConstants::Cook_MaterialNames[matType] + "\033[0m";
+        else
+          s = s + "\033[33m" + GameConstants::Cook_MaterialNames[matType] + "\033[0m";
+      }
+      oneRow[t - 5] = s;
+    }
+    printTableRow(oneRow);
+  }
+
+  cout << divLineWhite;
 
   cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
 
@@ -412,7 +513,7 @@ void Game::printFinalStats() const
   int fiveStatusScore = 0;
   for (int i = 0; i < 5; i++)
     fiveStatusScore += GameConstants::FiveStatusFinalScore[std::min(fiveStatus[i], fiveStatusLimit[i])];
-  int skillScore = getSkillScore();
+  int skillScore = int(getSkillScore());
 
   cout << termcolor::bright_red << "你的得分是：" << termcolor::bright_green << finalScore() << termcolor::reset << endl;
   cout << termcolor::bright_red << "属性分=" << termcolor::bright_green << fiveStatusScore << termcolor::reset << "，" << termcolor::bright_red << "技能分=" << termcolor::bright_green << skillScore << termcolor::reset << endl;
