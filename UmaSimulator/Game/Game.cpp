@@ -1348,9 +1348,9 @@ void Game::handleFriendFixedEvent()
     else
     {
       //just guess, to be filled
-      addStatusFriend(0, 15);
-      addStatusFriend(3, 15);
-      addStatusFriend(5, 40);
+      addStatusFriend(0, 16);
+      addStatusFriend(3, 16);
+      addStatusFriend(5, 43);
     }
 
   }
@@ -2224,7 +2224,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     handleFriendFixedEvent();
 
     addAllStatus(5);
-    skillPt += 30;
+    skillPt += 20;
 
     printEvents("ura3Ω· ¯£¨”Œœ∑Ω·À„");
   }

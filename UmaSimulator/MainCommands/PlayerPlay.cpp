@@ -233,6 +233,10 @@ void main_playerPlay()
           cout << termcolor::red << "没有可以吃的菜" << termcolor::reset;
         cout << endl;
       }
+      //显示手写逻辑
+      Action handWrittenAction = Evaluator::handWrittenStrategy(game);
+      cout << "手写逻辑：" << termcolor::green << handWrittenAction.toString() << termcolor::reset << endl;
+
 
       cin >> s;
 

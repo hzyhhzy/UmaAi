@@ -327,6 +327,7 @@ void Game::print() const
       }
       else
         oneRow[i] = to_string(matGain[i]);
+      oneRow[i] = "+" + oneRow[i];
     }
     printTableRow(oneRow);
   }
