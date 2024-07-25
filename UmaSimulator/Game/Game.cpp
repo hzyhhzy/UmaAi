@@ -498,7 +498,7 @@ void Game::checkDishPtUpgrade()
   {
     printEvents("料理pt达到下一阶段");
     //upgrade deyilv
-    updateDeyilv(GameConstants::Cook_DishPtDeyilvBonus[GameConstants::Cook_DishPtLevel(cook_dish_pt)]);
+    updateDeyilv();
   }
   if ((oldDishPt < 2000 && cook_dish_pt >= 2000)
     || (oldDishPt < 5000 && cook_dish_pt >= 5000)
@@ -649,8 +649,9 @@ void Game::handleDishBigSuccess(int dishId, std::mt19937_64& rand)
   }
 
 }
-void Game::updateDeyilv(int deyilvBonus)
+void Game::updateDeyilv()
 {
+  int deyilvBonus = GameConstants::Cook_DishPtDeyilvBonus[GameConstants::Cook_DishPtLevel(cook_dish_pt)];
   for (int i = 0; i < 6; i++)
   {
     if (persons[i].personType == PersonType_card)

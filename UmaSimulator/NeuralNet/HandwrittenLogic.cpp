@@ -8,7 +8,7 @@ const double statusWeights[5] = { 7.0,7.0,7.0,7.0,7.0 };
 const double jibanValue = 4;
 const double vitalFactorStart = 2;
 const double vitalFactorEnd = 5;
-const double vitalFactorTraining = 1;//选训练时别太看重体力，否则智力溢出
+const double vitalScaleTraining = 1;
 
 const double reserveStatusFactor = 40;//控属性时给每回合预留多少，从0逐渐增加到这个数字
 
@@ -21,7 +21,7 @@ const double raceBonus = 200;//比赛收益，不考虑体力
 //const double materialValueScale = 1.0;//料理原料的估值乘以这个系数，方便一起改
 const double greenBonusBasicYear1 = 100;//绿色料理的加成，羁绊没满时降低系数，第一年
 const double greenBonusBasicYear2 = 100;//绿色料理的加成，第二年
-const double greenBonusBasicYear3 = 50;//绿色料理的加成，第三年
+const double greenBonusBasicYear3 = 100;//绿色料理的加成，第三年
 
 
 //const double xiangtanExhaustLossMax = 800;//相谈耗尽且没达标的估值扣分
@@ -253,7 +253,8 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     }
   }
   //比赛
-  Action raceAction = { TRA_race,0 };
+  Action raceAction;
+  raceAction.train = TRA_race;
   if(game.isLegal(raceAction))
   {
     double value = raceBonus;
@@ -404,7 +405,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
       //理论上，估值需要乘上菜的训练加成然后减去菜的开销，但过于复杂，懒得考虑了
       int vitalAfterTrain = std::min(maxVitalEquvalant, game.trainVitalChange[tra] + game.vital);
-      value += vitalFactorTraining * vitalFactor * (vitalEvaluation(vitalAfterTrain, game.maxVital) - vitalEvalBeforeTrain);
+      value += vitalScaleTraining * vitalFactor * (vitalEvaluation(vitalAfterTrain, game.maxVital) - vitalEvalBeforeTrain);
 
       //到目前为止都是训练成功的value
       //计算吃菜之后的体力，重新计算失败率

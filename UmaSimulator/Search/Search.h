@@ -39,7 +39,7 @@ public:
   //如果某个action的分数相比最高分低了searchThreholdStdevStage个标准差，则排除掉这个选项
   //没被排除的action进行第二轮搜索，计算量是searchFactorStage[1]
   //stage数不能太多，因为每次每个action都要计算getWeightedMeanScore()
-  static const int expectedSearchStdev = 1800;
+  static const int expectedSearchStdev = 2200;
   static const int searchStageNum = 3;
   static const double searchFactorStage[searchStageNum];
   static const double searchThreholdStdevStage[searchStageNum];
