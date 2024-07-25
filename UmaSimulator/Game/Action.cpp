@@ -81,7 +81,7 @@ Action Action::intToAction(int i)
   Action a;
   a.train = TRA_none;
   a.dishType = DISH_none;
-  if (i > 0 && i < 8)
+  if (i >= 0 && i < 8)
     a.train = i;
   else if (i < 21)
     a.dishType = i - 8 + 1;

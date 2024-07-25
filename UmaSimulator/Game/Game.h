@@ -59,7 +59,6 @@ struct Game
   int32_t umaId;//马娘编号，见KnownUmas.cpp
   bool isLinkUma;//是否为link马
   bool isRacingTurn[TOTAL_TURN];//这回合是否比赛
-  bool isUraRace;//是否为ura比赛
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
 
   int16_t turn;//回合数，从0开始，到77结束
@@ -236,7 +235,7 @@ public:
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
   void addTrainingLevelCount(int trainIdx, int n);//为某个训练增加n次计数
   void checkDishPtUpgrade();//在回合后，检查料理pt是否跨段，如果跨段则更新得意率或提升训练等级
-  void updateDeyilv(int deyilvBonus);//在dishPt升级后，更新得意率
+  void updateDeyilv();//在dishPt升级后，更新得意率
 
   int getTrainingLevel(int trainIdx) const;//计算训练等级
   int calculateFailureRate(int trainType, double failRateMultiply) const;//计算训练失败率，failRateMultiply是训练失败率乘数=(1-支援卡1的失败率下降)*(1-支援卡2的失败率下降)*...
