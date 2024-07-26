@@ -2265,6 +2265,39 @@
     ],
     "star": 5
   },
+  "103003": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      85,
+      152,
+      80,
+      127,
+      106
+    ],
+    "freeRaces": [],
+    "gameId": 103003,
+    "name": "[Yummy Dreamy Fairy]米浴",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      29,
+      33,
+      43,
+      53,
+      55,
+      59,
+      71
+    ],
+    "star": 5
+  },
   "103101": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -3223,7 +3256,7 @@
     ],
     "freeRaces": [],
     "gameId": 104402,
-    "name": "[リアライズ・ルーン]スイープトウショウ",
+    "name": "[Realize・Rune]东商变革",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -4413,7 +4446,7 @@
     ],
     "freeRaces": [],
     "gameId": 106103,
-    "name": "[Evergreen Identity]キングヘイロー",
+    "name": "[Evergreen Identity]圣王光环",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -5458,7 +5491,7 @@
       }
     ],
     "gameId": 108201,
-    "name": "[Looking Fly!]ノースフライト",
+    "name": "[Looking Fly!]北方飞翔",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -5883,6 +5916,41 @@
     ],
     "star": 5
   },
+  "109401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      114,
+      104,
+      133,
+      107,
+      92
+    ],
+    "freeRaces": [],
+    "gameId": 109401,
+    "name": "[王者的呐喊]森林宝穴",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      45,
+      53,
+      55,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "109801": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6268,6 +6336,74 @@
       56,
       65,
       68
+    ],
+    "star": 5
+  },
+  "111901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      105,
+      115,
+      125,
+      88,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 111901,
+    "name": "[梦境的尽头]梦之旅",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      53,
+      55,
+      59,
+      65,
+      71
+    ],
+    "star": 5
+  },
+  "112001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      145,
+      70,
+      113,
+      114,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 112001,
+    "name": "[真実一路]カルストンライトオ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      33,
+      37,
+      41,
+      53,
+      61,
+      65
     ],
     "star": 5
   }
