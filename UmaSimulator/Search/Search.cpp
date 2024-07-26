@@ -54,13 +54,16 @@ Action Search::intToTwoStageAction(int i)
     Action a;
     a.dishType = DISH_sandwich;
     a.train = i - 21;
+    return a;
   }
   else if (i < 21 + 8 + 8)
   {
     Action a;
     a.dishType = DISH_curry;
     a.train = i - 21 - 8;
+    return a;
   }
+  assert(false);
   return Action();
 }
 
@@ -147,6 +150,7 @@ Action Search::runSearch(const Game& game,
   {
     if (!allActionResults[actionInt].isLegal)continue;
     Action action = intToTwoStageAction(actionInt);
+    //cout << action.dishType << action.train << endl;
     searchSingleAction(param.searchGroupSize, rand, allActionResults[actionInt], action);
     totalSearchN += param.searchGroupSize;
   }
@@ -319,7 +323,6 @@ void Search::searchSingleActionThread(
 {
   Evaluator& eva = evaluators[threadIdx];
   assert(eva.maxBatchsize == batchSize);
-
   bool isTwoStageAction = (action.dishType != DISH_none && action.train != TRA_none);
   bool isNewGame = action.train == TRA_redistributeCardsForTest;
 
