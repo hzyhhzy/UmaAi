@@ -72,8 +72,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
       persons[i].friendship = j["persons"][i]["friendship"];
       persons[i].isHint = j["persons"][i]["isHint"];
     }
-    friendship_noncard_yayoi = j["persons"][PSID_noncardYayoi]["friendship"];
-    friendship_noncard_reporter = j["persons"][PSID_noncardReporter]["friendship"];
+    friendship_noncard_yayoi = j["friendship_noncard_yayoi"];
+    friendship_noncard_reporter = j["friendship_noncard_reporter"];
 
     for (int i = 0; i < 5; i++) {
       for (int p = 0; p < 5; p++) {
@@ -87,7 +87,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         else if (pid >= 1000) {
           personDistribution[i][p] = PSID_npc;
         }
-        else if (pid >= 0 && pid < 6)
+        else if (pid >= 0 && pid < 9)
         {
           personDistribution[i][p] = pid;
         }

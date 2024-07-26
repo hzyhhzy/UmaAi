@@ -129,7 +129,7 @@ void main_ai()
 	}
 	else
 	{
-		GameConfig::maxDepth = TOTAL_TURN;
+		GameConfig::maxDepth = 2 * TOTAL_TURN;
 	}
 
 	Model::printBackendInfo();
@@ -247,7 +247,7 @@ void main_ai()
 
 		auto printValue = [&ws](int which, double p, double ref)
 			{
-				string prefix[] = { "速:", "耐:", "力:", "根:", "智:", "| 休息: ", "外出: ", "比赛: " };
+				string prefix[Action::MAX_ACTION_TYPE] = { "速:", "耐:", "力:", "根:", "智:", "| 休息: ", "外出: ", "比赛: " };
 				for (int dish = 1; dish < 14; dish++)
 				{
 					prefix[dish + TRA_race] = Action::dishName[dish] + ": ";
@@ -346,8 +346,10 @@ void main_ai()
 			}
 
 			Action restAction;
+			restAction.dishType = DISH_none;
 			restAction.train = TRA_rest;
 			Action outgoingAction;
+			outgoingAction.dishType = DISH_none;
 			outgoingAction.train = TRA_outgoing;
 			//休息和外出里面分最高的那个。这个数字作为显示参考
 			double restValue = search.allActionResults[restAction.toInt()].lastCalculate.value;
@@ -384,6 +386,7 @@ void main_ai()
 			for (int tr = 0; tr < 8; tr++)
 			{
 				Action a;
+				a.dishType = DISH_none;
 				a.train = tr;
 				double value = search.allActionResults[a.toInt()].lastCalculate.value;
 				strToSendURA += L" " + to_wstring(tr) + L" " + to_wstring(value - restValue) + L" " + to_wstring(maxValue - restValue);
@@ -413,6 +416,7 @@ void main_ai()
 				for (int dish = 1; dish < 14; dish++)
 				{
 					Action a;
+					a.train = TRA_none;
 					a.dishType = dish;
 					if (!search.allActionResults[a.toInt()].isLegal)continue;
 					double value = search.allActionResults[a.toInt()].lastCalculate.value;

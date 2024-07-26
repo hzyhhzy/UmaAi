@@ -28,7 +28,7 @@ int GameConfig::batchSize = 1;
 int GameConfig::searchSingleMax = 4096;
 int GameConfig::searchTotalMax = 0;
 int GameConfig::searchGroupSize = 128;
-int GameConfig::maxDepth = TOTAL_TURN;
+int GameConfig::maxDepth = 2 * TOTAL_TURN;
 #endif 
 
 double GameConfig::searchCpuct = 1.0;

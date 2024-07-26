@@ -1670,7 +1670,7 @@ bool Game::isLegal(Action action) const
 
 float Game::getSkillScore() const
 {
-  float rate = isQieZhe ? ptScoreRate : ptScoreRate * 1.1;
+  float rate = isQieZhe ? ptScoreRate * 1.1 : ptScoreRate ;
   return rate * skillPt + skillScore;
 }
 

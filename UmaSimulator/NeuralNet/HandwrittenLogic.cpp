@@ -254,6 +254,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   }
   //±ÈÈü
   Action raceAction;
+  raceAction.dishType = DISH_none;
   raceAction.train = TRA_race;
   if(game.isLegal(raceAction))
   {

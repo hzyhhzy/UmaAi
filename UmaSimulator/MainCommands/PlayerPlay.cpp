@@ -185,6 +185,7 @@ void main_playerPlay()
      // auto tdata = search.exportTrainingSample();
 
       Action action;
+      action.dishType = DISH_none;
       action.train = -1;
       string dishKeys[14] = { "0","a1","a2","b1","b2","b3","b4","b5","c1","c2","c3","c4","c5","d" };//13种菜对应的键盘输入
 
