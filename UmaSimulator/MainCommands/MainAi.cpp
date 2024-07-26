@@ -184,11 +184,12 @@ void main_ai()
 			fs.close();
 
 			jsonStr = tmp.str();
-			if (lastJsonStr == jsonStr)
-			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
-				continue;
-			}
+		}
+
+		if (lastJsonStr == jsonStr)//没有更新
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));//等一下
+			continue;
 		}
 
 		bool suc = game.loadGameFromJson(jsonStr);
@@ -282,7 +283,7 @@ void main_ai()
 			try
 			{
 				std::filesystem::create_directories("log");
-				string fname = "log/turn" + to_string(game.turn) + ".json";
+				string fname = "log/turn" + to_string(game.turn) + (game.cook_dish == DISH_none ? "a" : "b") + ".json";
 				auto ofs = ofstream(fname);
 				ofs.write(jsonStr.data(), jsonStr.size());
 				ofs.close();
@@ -304,40 +305,46 @@ void main_ai()
 
 			Action bestAction = search.runSearch(game, rand);
 			cout << "蒙特卡洛: " << bestAction.toString() << endl;
+
+
 			//如果重新分配卡组，平均分是多少，与当前回合对比可以获得运气情况
-			auto trainAvgScore = search2.evaluateNewGame(game, rand);
-
+			ModelOutputValueV1 trainAvgScore = { -1,-1,-1 };
 			double trainLuckRate = -1;
-			//重新分配卡组，有多大概率比这回合好
-			if (modelptr != NULL)//只有神经网络版支持此功能
+
+			if (game.cook_dish == DISH_none)
 			{
-				int64_t count = 0;
-				int64_t luckCount = 0;
-				auto& eva = search2.evaluators[0];
-				eva.gameInput.assign(eva.maxBatchsize, game);
-				eva.evaluateSelf(0, search2.param);
-				double refValue = eva.valueResults[0].scoreMean;//当前训练的平均分
+				auto trainAvgScore = search2.evaluateNewGame(game, rand);
 
-				int batchN = 1 + 4 * GameConfig::searchSingleMax / eva.maxBatchsize;
-				for (int b = 0; b < batchN; b++)
+				//重新分配卡组，有多大概率比这回合好
+				if (modelptr != NULL)//只有神经网络版支持此功能
 				{
-					for (int i = 0; i < eva.maxBatchsize; i++)
-					{
-						eva.gameInput[i] = game;
-						eva.gameInput[i].randomDistributeCards(rand);
-					}
+					int64_t count = 0;
+					int64_t luckCount = 0;
+					auto& eva = search2.evaluators[0];
+					eva.gameInput.assign(eva.maxBatchsize, game);
 					eva.evaluateSelf(0, search2.param);
-					for (int i = 0; i < eva.maxBatchsize; i++)
+					double refValue = eva.valueResults[0].scoreMean;//当前训练的平均分
+
+					int batchN = 1 + 4 * GameConfig::searchSingleMax / eva.maxBatchsize;
+					for (int b = 0; b < batchN; b++)
 					{
-						count++;
-						if (eva.valueResults[i].scoreMean < refValue)
-							luckCount++;
+						for (int i = 0; i < eva.maxBatchsize; i++)
+						{
+							eva.gameInput[i] = game;
+							eva.gameInput[i].randomDistributeCards(rand);
+						}
+						eva.evaluateSelf(0, search2.param);
+						for (int i = 0; i < eva.maxBatchsize; i++)
+						{
+							count++;
+							if (eva.valueResults[i].scoreMean < refValue)
+								luckCount++;
+						}
+
 					}
-
+					trainLuckRate = double(luckCount) / count;
 				}
-				trainLuckRate = double(luckCount) / count;
 			}
-
 			double maxMean = -1e7;
 			double maxValue = -1e7;
 			for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
@@ -375,7 +382,9 @@ void main_ai()
 				cout << rpText["luck"] << " | 本局：";
 				print_luck(maxMean - scoreFirstTurn);
 				cout << " | 本回合：" << maxMean - scoreLastTurn;
-				cout << "（训练：\033[1;36m" << int(maxMean - trainAvgScore.scoreMean) << "\033[0m";
+				if (trainAvgScore.value >= 0) {
+					cout << "（训练：\033[1;36m" << int(maxMean - trainAvgScore.scoreMean) << "\033[0m";
+				}
 				if (trainLuckRate >= 0)
 				{
 					cout << fixed << setprecision(2) << " 超过了\033[1;36m" << trainLuckRate * 100 << "%\033[0m";

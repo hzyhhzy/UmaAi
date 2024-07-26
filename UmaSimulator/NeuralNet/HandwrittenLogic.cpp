@@ -23,6 +23,9 @@ const double greenBonusBasicYear1 = 100;//绿色料理的加成，羁绊没满时降低系数，第
 const double greenBonusBasicYear2 = 100;//绿色料理的加成，第二年
 const double greenBonusBasicYear3 = 100;//绿色料理的加成，第三年
 
+const double cookingThreholdFactorLv2 = 0.5;//越大第二三年吃菜越激进（2级菜）
+const double cookingThreholdFactorLv3 = 1.0;//越大第三年吃菜越激进（3级菜）
+
 
 //const double xiangtanExhaustLossMax = 800;//相谈耗尽且没达标的估值扣分
 
@@ -112,6 +115,23 @@ static double vitalEvaluation(int vital, int maxVital)
     return 1.0 * (vital - 70) + vitalEvaluation(70, maxVital);
   else
     return vitalEvaluation(maxVital, maxVital);
+}
+
+static double materialEvaluation(int turn, int count) //评估吃菜的开销，决定第二三年吃不吃菜
+{
+  double bias =
+    turn < 48 ? 100 :
+    turn < 60 ? 100 :
+    turn < 68 ? 60 :
+    10;
+
+  double scale =
+    turn < 48 ? 20 :
+    turn < 60 ? 30 :
+    turn < 68 ? 40 :
+    40;
+
+  return sqrt(count + bias) * scale;
 }
 
 
@@ -373,32 +393,37 @@ Action Evaluator::handWrittenStrategy(const Game& game)
             }
           }
         }
-        else if (game.turn < 48)//第二年
+        else if (game.turn < 72)//第二三年
         {
-          //能吃lv2就赶快吃，否则不吃
-          int dish = DISH_speed1 + tra;
-          assert(GameConstants::Cook_DishMainTraining[dish] == tra);
-          if (game.isDishLegal(dish))
+          int dish1 = DISH_speed1 + tra;
+          int dish2 = DISH_speed2 + tra;
+          assert(GameConstants::Cook_DishMainTraining[dish1] == tra);
+          assert(GameConstants::Cook_DishMainTraining[dish2] == tra);
+
+          if (game.isDishLegal(dish1))
           {
-            bestDish = dish;
-          }
-        }
-        else if (game.turn < 72)//第三年
-        {
-          //前半年能吃lv3就赶快吃，否则不吃
-          int dish = DISH_speed2 + tra;
-          assert(GameConstants::Cook_DishMainTraining[dish] == tra);
-          if (game.isDishLegal(dish))
-          {
-            int matReserve =
-              game.turn < 60 ? (tra == TRA_speed ? 40 : 0) :
-              game.turn < 68 ? (tra == TRA_speed ? 80 : 80) :
-              (tra == TRA_speed ? 120 : 40);
-            int matRemain = game.cook_material[tra] - 250;
-            if (matRemain >= matReserve)
+            int mat0 = game.cook_material[tra];
+            assert(mat0 >= 150);
+            double matEval0 = materialEvaluation(game.turn, mat0);
+            double matEval1 = materialEvaluation(game.turn, mat0 - 150);
+            double matEval2 = (game.turn >= 48 && mat0 >= 250) ? materialEvaluation(game.turn, mat0 - 250) : -99999;
+            double trValue = statusGainE[tra];
+
+            double gain1 = trValue * cookingThreholdFactorLv2 - matEval0 + matEval1;
+            double gain2 = trValue * cookingThreholdFactorLv3 - matEval0 + matEval2;
+            //std::cout << game.turn << " " << gain1 << std::endl;
+
+
+            if (gain1 > 0)
             {
-              bestDish = dish;
+              bestDish = dish1;
             }
+
+            if (gain2 > 0 && gain2 > gain1)
+            {
+              bestDish = dish2;
+            }
+
           }
           
         } 
