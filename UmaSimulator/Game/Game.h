@@ -221,7 +221,7 @@ public:
     return turn >= 13 && turn <= 71;
   }
 
-  int calculateRealStatusGain(int idx, int value) const;//考虑1200以上为2的倍数的实际属性增加值
+  int calculateRealStatusGain(int value, int gain) const;//考虑1200以上为2的倍数的实际属性增加值
   void addStatus(int idx, int value);//增加属性值，并处理溢出
   void addAllStatus(int value);//同时增加五个属性值
   void addVital(int value);//增加或减少体力，并处理溢出

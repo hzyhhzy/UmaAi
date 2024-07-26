@@ -1038,13 +1038,12 @@ std::vector<int> Game::dishBigSuccess_getBuffs(int dishId, std::mt19937_64& rand
 
 
 }
-int Game::calculateRealStatusGain(int idx, int value) const//考虑1200以上为2的倍数的实际属性增加值
+int Game::calculateRealStatusGain(int value, int gain) const//考虑1200以上为2的倍数的实际属性增加值
 {
-  if (idx == 5)return value;
-  int newValue = fiveStatus[idx] + value;
-  if (newValue <= 1200)return value;
-  if (value == 1)return 2;
-  return (newValue / 2) * 2 - fiveStatus[idx];
+  int newValue = value + gain;
+  if (newValue <= 1200)return gain;
+  if (gain == 1)return 2;
+  return (newValue / 2) * 2 - value;
 }
 void Game::addStatus(int idx, int value)
 {
@@ -1849,12 +1848,17 @@ void Game::calculateTrainingValueSingle(int tra)
   {
     int lower = trainValueLower[tra][i];
     if (lower > 100) lower = 100;
-    lower = calculateRealStatusGain(i, lower);//consider the integer over 1200
     trainValueLower[tra][i] = lower;
     double multiplier = i < 5 ? scenarioTrainMultiplier : skillPtMultiplier;
     int total = int(lower * multiplier);
-    if (total > 100 + lower)total = 100 + lower;
-    total = calculateRealStatusGain(i, total);
+    int upper = total - lower;
+    if (upper > 100)upper = 100;
+    if (i < 5)
+    {
+      lower = calculateRealStatusGain(fiveStatus[i], lower);//consider the integer over 1200
+      upper = calculateRealStatusGain(fiveStatus[i] + lower, upper);
+    }
+    total = upper + lower;
     trainValue[tra][i] = total;
   }
 
@@ -1887,9 +1891,11 @@ int Game::getDishTrainingBonus(int trainIdx) const
     return 25;
   else if (dishLevel == 2)
   {
-    int b = 60;
+    int b = 50;
     int mainTrainingIdx = GameConstants::Cook_DishMainTraining[cook_dish];
     if (cook_farm_level[mainTrainingIdx] >= 5)
+      b += 10;
+    if (turn >= 36)
       b += 10;
     return b;
   }

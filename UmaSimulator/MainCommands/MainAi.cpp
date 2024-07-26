@@ -379,18 +379,19 @@ void main_ai()
 			}
 			//else
 			{
-				cout << rpText["luck"] << " | 本局：";
+				cout << "运气指标：" << " | 本局：";
 				print_luck(maxMean - scoreFirstTurn);
 				cout << " | 本回合：" << maxMean - scoreLastTurn;
 				if (trainAvgScore.value >= 0) {
 					cout << "（训练：\033[1;36m" << int(maxMean - trainAvgScore.scoreMean) << "\033[0m";
+
+					if (trainLuckRate >= 0)
+					{
+						cout << fixed << setprecision(2) << " 超过了\033[1;36m" << trainLuckRate * 100 << "%\033[0m";
+					}
+					cout << "）";
 				}
-				if (trainLuckRate >= 0)
-				{
-					cout << fixed << setprecision(2) << " 超过了\033[1;36m" << trainLuckRate * 100 << "%\033[0m";
-				}
-				cout << "）"
-					<< " | 评分预测: \033[1;32m" << maxMean << "\033[0m"
+				cout	<< " | 评分预测: \033[1;32m" << maxMean << "\033[0m"
 					<< "（乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m）" << endl;
 
 			}
