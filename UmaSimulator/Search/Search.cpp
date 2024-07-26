@@ -375,8 +375,9 @@ void Search::integrateTwoStageResults()
 {
   for (int dish = 1; dish <= 2; dish++)
   {
+    if (!rootGame.isDishLegal(dish))
+      continue;
     double bestValue = -1e6;
-    assert(bestValue < ModelOutputValueV1::illegalValue.value);
     int bestActionInt = -1;
     for (int tra = 0; tra < 8; tra++)
     {
@@ -394,7 +395,6 @@ void Search::integrateTwoStageResults()
         }
       }
     }
-    assert(bestActionInt > 0);
     allActionResults[Action(dish, TRA_none).toInt()] = allActionResults[bestActionInt];
   }
 }
