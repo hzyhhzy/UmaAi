@@ -31,7 +31,7 @@ int GameConfig::searchGroupSize = 128;
 int GameConfig::maxDepth = 2 * TOTAL_TURN;
 #endif 
 
-double GameConfig::searchCpuct = 1.0;
+double GameConfig::searchCpuct = 2.0;
 
 string GameConfig::communicationMode = "localfile";
 string GameConfig::role = "default";
