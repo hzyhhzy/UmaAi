@@ -101,11 +101,11 @@ void main_ai()
 #else
 	GameConfig::load("./aiConfig.json");
 #endif
-	GameDatabase::loadTranslation("./db/text_data.json");
+	//GameDatabase::loadTranslation("./db/text_data.json");
 	GameDatabase::loadUmas("./db/umaDB.json");
 	//GameDatabase::loadCards("./db/card"); // 载入并优先使用手动支援卡数据
 	GameDatabase::loadDBCards("./db/cardDB.json"); //cardDB数据已经很完善了
-	loadRole();   // roleplay
+	//loadRole();   // roleplay
 
 	bool uraFileMode = GameConfig::communicationMode == "urafile";
 	//吃菜影响决策，所以每次文件改变都刷新
