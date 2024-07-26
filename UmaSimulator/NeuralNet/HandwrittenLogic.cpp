@@ -174,7 +174,8 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       int matGain = 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]];
       if (matType == game.cook_main_race_material_type)
         matGain += 1.5001 * GameConstants::Cook_HarvestExtra[game.cook_farm_level[matType]];
-      if (game.cook_material[matType] < g1plateCost || game.cook_material[matType] + matGain < 2 * g1plateCost)
+      int reserveMin = game.turn == 73 ? 2 * g1plateCost + 30 : 2 * g1plateCost;//要保证后续的训练回合一直可以吃到g1plate
+      if (game.cook_material[matType] < g1plateCost || game.cook_material[matType] + matGain < reserveMin)
       {
         haveG1Plate = false;
         break;
