@@ -184,6 +184,11 @@ void main_ai()
 			fs.close();
 
 			jsonStr = tmp.str();
+			if (lastJsonStr == jsonStr)
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
+				continue;
+			}
 		}
 
 		bool suc = game.loadGameFromJson(jsonStr);
@@ -203,7 +208,7 @@ void main_ai()
 		}
 		if (game.turn == lastTurn)
 		{
-			if ((!refreshIfAnyChanged) || (lastJsonStr == jsonStr))
+			if (!refreshIfAnyChanged)
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
 				continue;
@@ -270,7 +275,7 @@ void main_ai()
 			};
 
 		//search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
-		if (game.turn < TOTAL_TURN - 1 && !game.isRacing)
+		if (game.turn < TOTAL_TURN )
 		{
 
 			//备份回合信息用于debug
@@ -424,6 +429,7 @@ void main_ai()
 					printValue(a.toInt(), value - restValue, maxValue - restValue);
 				}
 			}
+			cout << endl;
 
 			//农田升级是Game类内部自动进行的，需要显示具体怎样升级的
 			{
@@ -438,6 +444,7 @@ void main_ai()
 					}
 				if (anyUpgrade)
 				{
+					cout << "\033[1;36m";
 					if (game.turn == 35 || game.turn == 59)//合宿前一回合
 						cout << "推荐农田升级(可以训练结束后再升级)：";
 					else
@@ -448,7 +455,7 @@ void main_ai()
 						{
 							cout << GameConstants::Cook_MaterialNames[i] << "升至" << game2.cook_farm_level[i] << "级  ";
 						}
-					cout << endl;
+					cout << "\033[0m" << endl;
 				}
 
 
