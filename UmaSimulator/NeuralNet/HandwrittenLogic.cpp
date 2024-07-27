@@ -370,7 +370,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       }
 
       int bestDish = 0;
-      double bestDishValue = 0;
       //考虑吃各种菜
       //第一年：自己相应训练只有一种菜
       //第二年：只考虑lv2菜
@@ -380,16 +379,23 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       {
         if (game.turn < 24)//第一年
         {
-          if (game.cook_dish_pt < 2500)//吃到2500pt
+          if (game.cook_dish_pt < 3000)//吃到2500pt
           {
-            if (game.isDishLegal(DISH_curry))
+            if (tra == 0)
             {
-              if (tra == 0 || tra == 1 || tra == 3)
+              if (game.isDishLegal(DISH_curry))
+                bestDish = DISH_curry;
+              else if (game.isDishLegal(DISH_sandwich))
+                bestDish = DISH_sandwich;
+            }
+            else if (tra == 1 || tra == 3)
+            {
+              if (game.isDishLegal(DISH_curry))
                 bestDish = DISH_curry;
             }
-            else if (game.isDishLegal(DISH_sandwich))
+            else if (tra == 2 || tra == 4)
             {
-              if (tra == 0 || tra == 2 || tra == 4)
+              if (game.isDishLegal(DISH_sandwich))
                 bestDish = DISH_sandwich;
             }
           }

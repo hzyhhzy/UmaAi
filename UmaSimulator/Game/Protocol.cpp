@@ -182,8 +182,13 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 8; i++) {
       cook_train_material_type[i] = j["cook_train_material_type"][i];
       cook_train_green[i] = j["cook_train_green"][i];
+      if (cook_train_material_type[i] == -1)
+        cook_train_material_type[i] = i < 5 ? i : 0;//凯斯连战休息，以及锁比赛回合可能返回-1，这里设成萝卜，避免闪退
     }
+    
     cook_main_race_material_type = j.contains("cook_main_race_material_type") ? int(j["cook_main_race_material_type"]) : -1;
+    if (isRacing && cook_main_race_material_type == -1)//凯斯特殊回合
+      cook_main_race_material_type = 0;
 
     if (friend_type != 0) {
       friend_outgoingUsed = j["friend_outgoingUsed"];
