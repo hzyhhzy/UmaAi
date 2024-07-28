@@ -1166,8 +1166,9 @@ void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 
   int fiveStatusBonus = int(dishMultiply * int(raceMultiply * basicFiveStatusBonus));
   int ptBonus = int(dishMultiply * int(raceMultiply * basicPtBonus));
+  //cout << fiveStatusBonus << " " << ptBonus << endl;
   addAllStatus(fiveStatusBonus);
-  skillPt += basicPtBonus;
+  skillPt += ptBonus;
 }
 
 void Game::addStatusFriend(int idx, int value)

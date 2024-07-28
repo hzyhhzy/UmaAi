@@ -313,7 +313,7 @@ void main_ai()
 
 			if (game.cook_dish == DISH_none)
 			{
-				auto trainAvgScore = search2.evaluateNewGame(game, rand);
+				trainAvgScore = search2.evaluateNewGame(game, rand);
 
 				//重新分配卡组，有多大概率比这回合好
 				if (modelptr != NULL)//只有神经网络版支持此功能
