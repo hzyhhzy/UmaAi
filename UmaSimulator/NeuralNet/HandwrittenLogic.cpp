@@ -4,10 +4,10 @@
 #include "../Search/Search.h"
 
 
-const double statusWeights[5] = { 7.0,7.0,7.0,7.0,7.0 };
-const double jibanValue = 4;
+const double statusWeights[5] = { 5,5,7,6,6 };
+const double jibanValue = 3.5;
 const double vitalFactorStart = 2;
-const double vitalFactorEnd = 5;
+const double vitalFactorEnd = 4;
 const double vitalScaleTraining = 1;
 
 const double reserveStatusFactor = 40;//¿ØÊôĞÔÊ±¸øÃ¿»ØºÏÔ¤Áô¶àÉÙ£¬´Ó0Öğ½¥Ôö¼Óµ½Õâ¸öÊı×Ö
@@ -15,7 +15,7 @@ const double reserveStatusFactor = 40;//¿ØÊôĞÔÊ±¸øÃ¿»ØºÏÔ¤Áô¶àÉÙ£¬´Ó0Öğ½¥Ôö¼Óµ½Õ
 const double smallFailValue = -150;
 const double bigFailValue = -500;
 const double outgoingBonusIfNotFullMotivation = 150;//µôĞÄÇéÊ±Ìá¸ßÍâ³ö·ÖÊı
-const double raceBonus = 200;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
+const double raceBonus = 150;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
 
 //const double materialValue[5] = { 0.5,0.2,0.5,0.5,0.3 };//Ã¿¸öÁÏÀíÔ­ÁÏµÄ¹ÀÖµ
 //const double materialValueScale = 1.0;//ÁÏÀíÔ­ÁÏµÄ¹ÀÖµ³ËÒÔÕâ¸öÏµÊı£¬·½±ãÒ»Æğ¸Ä
@@ -171,10 +171,12 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     bool haveG1Plate = true;
     for (int matType = 0; matType < 5; matType++)
     {
-      int matGain = 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]];
+      int matGain = 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]] / 2;
       if (matType == game.cook_main_race_material_type)
         matGain += 1.5001 * GameConstants::Cook_HarvestExtra[game.cook_farm_level[matType]];
-      int reserveMin = game.turn == 73 ? 2 * g1plateCost + 30 : 2 * g1plateCost;//Òª±£Ö¤ºóĞøµÄÑµÁ·»ØºÏÒ»Ö±¿ÉÒÔ³Ôµ½g1plate
+      int reserveMin = game.turn == 73 ?
+        2 * g1plateCost + 80 - 3 * 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]] / 2 :
+        2 * g1plateCost;//Òª±£Ö¤ºóĞøµÄÑµÁ·»ØºÏÒ»Ö±¿ÉÒÔ³Ôµ½g1plate
       if (game.cook_material[matType] < g1plateCost || game.cook_material[matType] + matGain < reserveMin)
       {
         haveG1Plate = false;

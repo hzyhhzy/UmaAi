@@ -855,7 +855,8 @@ void Game::autoUpgradeFarm(bool beforeXiahesu)
       return;
 
     //升级路线：32333 42443 43443 43453 53553
-    int value[5] = { 160,20,180,200,40 };//优先级
+    int value[5] = { 283,140,281,282,160 };//优先级
+    int priorLv5[5] = { 3,1,4,5,2 };//优先级
     //根据lv调整权重
     for (int i = 0; i < 5; i++)
     {
@@ -888,7 +889,10 @@ void Game::autoUpgradeFarm(bool beforeXiahesu)
       }
       for (int i = 0; i < 5; i++)
       {
-        value[i] += clickNums[i] * 10;
+        if (cook_farm_level[i] <= 3)
+          value[i] += clickNums[i] * 15;
+        else
+          value[i] += 3 * priorLv5[i];
         int overflow = 55 + 45 * clickNums[i] + cook_material[i] - GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
         if (overflow > 0)
           value[i] += overflow;
@@ -1247,7 +1251,7 @@ void Game::handleFriendOutgoing(std::mt19937_64& rand)
 void Game::handleFriendUnlock(std::mt19937_64& rand)
 {
   assert(friend_stage == FriendStage_beforeUnlockOutgoing);
-  if (maxVital - vital >= 20)
+  if (maxVital - vital >= 40)
   {
     addVitalFriend(25);
     printEvents("友人外出解锁！选上");

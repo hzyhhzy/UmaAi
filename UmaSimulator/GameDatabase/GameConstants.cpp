@@ -10,7 +10,7 @@ const int GameConstants::BasicFiveStatusLimit[5] = { 2300,1000,2200,2200,1500 };
 //const int GameConstants::NormalRaceFiveStatusBonus = 3;//常规比赛属性加成=3
 //const int GameConstants::NormalRacePtBonus = 45;//常规比赛pt加成,G1=45
 const double GameConstants::EventProb = 0.35;
-const int GameConstants::EventStrengthDefault = 25;
+const int GameConstants::EventStrengthDefault = 20;
 
 const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.1;
 const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.2;
