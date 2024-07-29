@@ -71375,5 +71375,590 @@
       6,
       2
     ]
+  },
+  "30210": {
+    "cardId": 30210,
+    "charaId": 1046,
+    "cardName": "[速]スマートファルコン",
+    "fullName": "[波間のオフショット]スマートファルコン",
+    "rarity": 3,
+    "cardType": 0,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          25,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "hintLevel": 1,
+        "youQing": 20,
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 0,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          26,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "hintLevel": 1,
+        "youQing": 21,
+        "ganJing": 23,
+        "xunLian": 6,
+        "initialJiBan": 26,
+        "saiHou": 6,
+        "hintProbIncrease": 0,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          27,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "hintLevel": 1,
+        "youQing": 23,
+        "ganJing": 26,
+        "xunLian": 8,
+        "initialJiBan": 27,
+        "saiHou": 7,
+        "hintProbIncrease": 0,
+        "deYiLv": 65
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          28,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 25,
+        "ganJing": 30,
+        "xunLian": 10,
+        "initialJiBan": 28,
+        "saiHou": 8,
+        "hintProbIncrease": 30,
+        "deYiLv": 72
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          30,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "hintLevel": 4,
+        "youQing": 25,
+        "ganJing": 30,
+        "xunLian": 10,
+        "initialJiBan": 30,
+        "saiHou": 10,
+        "hintProbIncrease": 40,
+        "deYiLv": 80
+      }
+    ],
+    "uniqueEffectType": 16,
+    "uniqueEffectSummary": "根据速度技能个数，提高速度ボーナス效果(每个+1, 最大3个)",
+    "uniqueEffectParam": [
+      116,
+      1,
+      3,
+      1,
+      3,
+      0
+    ]
+  },
+  "30211": {
+    "cardId": 30211,
+    "charaId": 1098,
+    "cardName": "[智]コパノリッキー",
+    "fullName": "[Lucky☆Summertime]コパノリッキー",
+    "rarity": 3,
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          25,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 25,
+        "ganJing": 40,
+        "xunLian": 5,
+        "initialJiBan": 0,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 50,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "initialBonus": [
+          26,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 26,
+        "ganJing": 42,
+        "xunLian": 6,
+        "initialJiBan": 0,
+        "saiHou": 5,
+        "hintProbIncrease": 33,
+        "deYiLv": 53,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "initialBonus": [
+          27,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 27,
+        "ganJing": 45,
+        "xunLian": 8,
+        "initialJiBan": 0,
+        "saiHou": 5,
+        "hintProbIncrease": 36,
+        "deYiLv": 57,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "initialBonus": [
+          28,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 28,
+        "ganJing": 47,
+        "xunLian": 10,
+        "initialJiBan": 15,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 61,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "initialBonus": [
+          30,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 30,
+        "ganJing": 50,
+        "xunLian": 10,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 65,
+        "wizVitalBonus": 5
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时賢さボーナス(1)スキルポイントボーナス(1)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      7,
+      1,
+      30,
+      1
+    ]
+  },
+  "30212": {
+    "cardId": 30212,
+    "charaId": 1100,
+    "cardName": "[耐]ワンダーアキュート",
+    "fullName": "[あの夏のキリトリ線]ワンダーアキュート",
+    "rarity": 3,
+    "cardType": 1,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          25,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "hintLevel": 2,
+        "youQing": 15,
+        "ganJing": 20,
+        "initialJiBan": 0,
+        "saiHou": 1,
+        "hintProbIncrease": 20,
+        "deYiLv": 20
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          26,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "hintLevel": 2,
+        "youQing": 16,
+        "ganJing": 20,
+        "initialJiBan": 0,
+        "saiHou": 2,
+        "hintProbIncrease": 23,
+        "deYiLv": 25
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          27,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "hintLevel": 2,
+        "youQing": 18,
+        "ganJing": 20,
+        "initialJiBan": 0,
+        "saiHou": 3,
+        "hintProbIncrease": 26,
+        "deYiLv": 30
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          28,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 20,
+        "ganJing": 20,
+        "initialJiBan": 15,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          30,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 20,
+        "ganJing": 20,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 35
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时xunLian(10)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      8,
+      10,
+      0,
+      0
+    ]
   }
 }

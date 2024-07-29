@@ -62,7 +62,7 @@ void Person::setExtraDeyilvBonus(int deyilvBonus)
 {
   if (personType == PersonType_card)
   {
-    int newDeyilv = int(cardParam.deYiLv) + deyilvBonus;
+    int newDeyilv = int((100.0 + cardParam.deYiLv) * (1.00 + 0.01 * deyilvBonus) - 100); //我不知道这里应该加还是乘，但设成乘更能模拟胡局
     std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
     probs[cardParam.cardType] += newDeyilv;
     distribution = std::discrete_distribution<>(probs.begin(), probs.end());

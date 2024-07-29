@@ -45,14 +45,36 @@ static double adjustRadicalFactor(double maxRf, int turn)
   return factor * maxRf;
 }
 
+Action Search::intToTwoStageAction(int i)
+{
+  if (i < 21)
+    return Action::intToAction(i);
+  else if (i < 21 + 8)
+  {
+    Action a;
+    a.dishType = DISH_sandwich;
+    a.train = i - 21;
+    return a;
+  }
+  else if (i < 21 + 8 + 8)
+  {
+    Action a;
+    a.dishType = DISH_curry;
+    a.train = i - 21 - 8;
+    return a;
+  }
+  assert(false);
+  return Action();
+}
+
 Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame(threadNumInGame), batchSize(batchSize)
 {
   evaluators.resize(threadNumInGame);
   for (int i = 0; i < threadNumInGame; i++)
     evaluators[i] = Evaluator(model, batchSize);
 
-  allActionResults.resize(Action::MAX_ACTION_TYPE);
-  for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
+  allActionResults.resize(Action::MAX_TWOSTAGE_ACTION_TYPE);
+  for (int i = 0; i < Action::MAX_TWOSTAGE_ACTION_TYPE; i++)
     allActionResults[i].clear();
 
   param.searchSingleMax = 0;
@@ -81,7 +103,7 @@ void Search::setParam(SearchParam param0)
 
 
 Action Search::runSearch(const Game& game,
-  std::mt19937_64& rand)
+  std::mt19937_64& rand, bool twoStageSearchFirstYear)
 {
   assert(param.searchSingleMax > 0 && "Search.param not initialized");
 
@@ -89,14 +111,34 @@ Action Search::runSearch(const Game& game,
   rootGame.playerPrint = false;
   double radicalFactor = adjustRadicalFactor(param.maxRadicalFactor, rootGame.turn);
 
+  bool needTwoStageSearch =
+    twoStageSearchFirstYear &&
+    game.turn < 24 &&
+    !game.isRacing &&
+    game.cook_dish == DISH_none &&
+    (game.isDishLegal(DISH_curry) || game.isDishLegal(DISH_sandwich));
+
+  int maxActionType = needTwoStageSearch ? Action::MAX_TWOSTAGE_ACTION_TYPE : Action::MAX_ACTION_TYPE;
 
   //bool shouldContinueSearch[Action::MAX_ACTION_TYPE];
-  for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+  for (int actionInt = 0; actionInt < maxActionType; actionInt++)
   {
-    Action action = Action::intToAction(actionInt);
+    Action action = intToTwoStageAction(actionInt);
 
     allActionResults[actionInt].clear();
-    allActionResults[actionInt].isLegal = rootGame.isLegal(action);
+    bool islegal = false;
+    if (needTwoStageSearch)
+    {
+      //二阶段搜索不单独做菜
+      if (action.train == TRA_none)islegal = false;
+      else if (action.dishType == DISH_none)islegal = rootGame.isLegal(action);
+      else
+        islegal = rootGame.isLegal(Action(action.dishType, TRA_none)) && rootGame.isLegal(Action(DISH_none, action.train));
+    }
+    else
+      islegal = rootGame.isLegal(action);
+
+    allActionResults[actionInt].isLegal = islegal;
     //shouldContinueSearch[actionInt] = allActionResults[actionInt].isLegal;
   }
 
@@ -104,10 +146,11 @@ Action Search::runSearch(const Game& game,
   int totalSearchN = 0;//到目前一共搜了多少
 
   //每个action先搜一组
-  for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+  for (int actionInt = 0; actionInt < maxActionType; actionInt++)
   {
     if (!allActionResults[actionInt].isLegal)continue;
-    Action action = Action::intToAction(actionInt);
+    Action action = intToTwoStageAction(actionInt);
+    //cout << action.dishType << action.train << endl;
     searchSingleAction(param.searchGroupSize, rand, allActionResults[actionInt], action);
     totalSearchN += param.searchGroupSize;
   }
@@ -121,7 +164,7 @@ Action Search::runSearch(const Game& game,
     double bestSearchValue = -1e4;
     int bestActionIntToSearch = -1;
 
-    for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+    for (int actionInt = 0; actionInt < maxActionType; actionInt++)
     {
       if (!allActionResults[actionInt].isLegal)continue;
       double value = allActionResults[actionInt].getWeightedMeanScore(radicalFactor).value;
@@ -139,7 +182,7 @@ Action Search::runSearch(const Game& game,
 
     assert(bestActionIntToSearch >= 0);
 
-    Action action = Action::intToAction(bestActionIntToSearch);
+    Action action = intToTwoStageAction(bestActionIntToSearch);
     searchSingleAction(param.searchGroupSize, rand, allActionResults[bestActionIntToSearch], action);
     totalSearchN += param.searchGroupSize;
 
@@ -150,6 +193,10 @@ Action Search::runSearch(const Game& game,
   }
 
   //搜索完毕，找最高分的选项
+
+  //把二阶段搜索整合到第一个阶段里
+  if (needTwoStageSearch)
+    integrateTwoStageResults();
 
   double bestValue = -1e4;
   int bestActionInt = -1;
@@ -208,7 +255,8 @@ void Search::searchSingleAction(
   Action action)
 {
   //先检查action是否合法
-  assert(action.train == TRA_redistributeCardsForTest || rootGame.isLegal(action));
+  assert(action.train == TRA_redistributeCardsForTest || rootGame.isLegal(action)
+    || (rootGame.isLegal(Action(action.dishType, TRA_none)) && rootGame.isLegal(Action(DISH_none, action.train))));
 
   int batchNumEachThread = calculateBatchNumEachThread(searchN);
   searchN = calculateRealSearchN(searchN);
@@ -275,7 +323,7 @@ void Search::searchSingleActionThread(
 {
   Evaluator& eva = evaluators[threadIdx];
   assert(eva.maxBatchsize == batchSize);
-
+  bool isTwoStageAction = (action.dishType != DISH_none && action.train != TRA_none);
   bool isNewGame = action.train == TRA_redistributeCardsForTest;
 
   for (int batch = 0; batch < batchNum; batch++)
@@ -285,10 +333,17 @@ void Search::searchSingleActionThread(
     //先走第一步
     for (int i = 0; i < batchSize; i++)
     {
-      if(!isNewGame)//ai计算
-        eva.gameInput[i].applyAction(rand, action);
-      else//重置游戏
+      if (isNewGame)//重置游戏
         eva.gameInput[i].randomDistributeCards(rand);
+      else if(!isTwoStageAction)//常规
+        eva.gameInput[i].applyAction(rand, action);
+      else//二阶段Action
+      {
+        Action action1 = { action.dishType,TRA_none };
+        Action action2 = { DISH_none,action.train };
+        eva.gameInput[i].applyAction(rand, action1);
+        eva.gameInput[i].applyAction(rand, action2);
+      }
     }
     int maxdepth = isNewGame ? param.maxDepth + 1 : param.maxDepth;
     for (int depth = 0; depth < param.maxDepth; depth++)
@@ -313,6 +368,34 @@ void Search::searchSingleActionThread(
       resultBuf[batch * batchSize + i] = eva.valueResults[i];
     }
 
+  }
+}
+
+void Search::integrateTwoStageResults()
+{
+  for (int dish = 1; dish <= 2; dish++)
+  {
+    if (!rootGame.isDishLegal(dish))
+      continue;
+    double bestValue = -1e6;
+    int bestActionInt = -1;
+    for (int tra = 0; tra < 8; tra++)
+    {
+      int actionInt = 21 - 8 + dish * 8 + tra;
+      auto& res = allActionResults[actionInt];
+
+      if (res.isLegal)
+      {
+        double value = res.getWeightedMeanScore(res.lastRadicalFactor).value;
+        //cout << dish << tra << " " << value << endl;
+        if (value > bestValue)
+        {
+          bestValue = value;
+          bestActionInt = actionInt;
+        }
+      }
+    }
+    allActionResults[Action(dish, TRA_none).toInt()] = allActionResults[bestActionInt];
   }
 }
 

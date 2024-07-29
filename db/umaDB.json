@@ -2283,7 +2283,7 @@
     ],
     "freeRaces": [],
     "gameId": 103003,
-    "name": "[Yummy Dreamy Fairy]ライスシャワー",
+    "name": "[Yummy Dreamy Fairy]米浴",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -2815,6 +2815,41 @@
     "freeRaces": [],
     "gameId": 103702,
     "name": "[COLLECT・巧克力职人]荣进闪耀",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      45,
+      47,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103703": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      116,
+      101,
+      106,
+      107,
+      120
+    ],
+    "freeRaces": [],
+    "gameId": 103703,
+    "name": "[Reines Plätschern]エイシンフラッシュ",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -5934,7 +5969,7 @@
     ],
     "freeRaces": [],
     "gameId": 109401,
-    "name": "[王者の喊声]ジャングルポケット",
+    "name": "[王者的呐喊]森林宝穴",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6016,6 +6051,46 @@
     ],
     "gameId": 109901,
     "name": "[Star・Light・Ship]北港火山",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      38,
+      46,
+      50,
+      56,
+      59,
+      68,
+      70,
+      71
+    ],
+    "star": 5
+  },
+  "109902": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      10,
+      0,
+      0,
+      5
+    ],
+    "fiveStatusInitial": [
+      111,
+      103,
+      105,
+      112,
+      119
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 30,
+        "count": 1
+      }
+    ],
+    "gameId": 109902,
+    "name": "[パステルマリン・ロコドル]ホッコータルマエ",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6357,7 +6432,7 @@
     ],
     "freeRaces": [],
     "gameId": 111901,
-    "name": "[夢路のよすが]ドリームジャーニー",
+    "name": "[梦境的尽头]梦之旅",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6371,6 +6446,39 @@
       59,
       65,
       71
+    ],
+    "star": 5
+  },
+  "112001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      145,
+      70,
+      113,
+      114,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 112001,
+    "name": "[真実一路]カルストンライトオ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      33,
+      37,
+      41,
+      53,
+      61,
+      65
     ],
     "star": 5
   }

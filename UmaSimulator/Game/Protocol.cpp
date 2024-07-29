@@ -72,8 +72,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
       persons[i].friendship = j["persons"][i]["friendship"];
       persons[i].isHint = j["persons"][i]["isHint"];
     }
-    friendship_noncard_yayoi = j["persons"][PSID_noncardYayoi]["friendship"];
-    friendship_noncard_reporter = j["persons"][PSID_noncardReporter]["friendship"];
+    friendship_noncard_yayoi = j["friendship_noncard_yayoi"];
+    friendship_noncard_reporter = j["friendship_noncard_reporter"];
 
     for (int i = 0; i < 5; i++) {
       for (int p = 0; p < 5; p++) {
@@ -87,7 +87,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         else if (pid >= 1000) {
           personDistribution[i][p] = PSID_npc;
         }
-        else if (pid >= 0 && pid < 6)
+        else if (pid >= 0 && pid < 9)
         {
           personDistribution[i][p] = pid;
         }
@@ -182,8 +182,13 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 8; i++) {
       cook_train_material_type[i] = j["cook_train_material_type"][i];
       cook_train_green[i] = j["cook_train_green"][i];
+      if (cook_train_material_type[i] == -1)
+        cook_train_material_type[i] = i < 5 ? i : 0;//凯斯连战休息，以及锁比赛回合可能返回-1，这里设成萝卜，避免闪退
     }
+    
     cook_main_race_material_type = j.contains("cook_main_race_material_type") ? int(j["cook_main_race_material_type"]) : -1;
+    if (isRacing && cook_main_race_material_type == -1)//凯斯特殊回合
+      cook_main_race_material_type = 0;
 
     if (friend_type != 0) {
       friend_outgoingUsed = j["friend_outgoingUsed"];

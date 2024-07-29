@@ -37,7 +37,7 @@ void main_playerPlay()
 
   int umaId = 101101;//草上飞
   int umaStars = 5;
-  int cards[6] = { 302074,302064,302084,301874,300194,301724 };//友人，速强击，力西野花，根巨匠，根乌拉拉，智麦昆
+  int cards[6] = { 302074,302064,302084,301874,302024,301724 };//友人，速强击，力西野花，根巨匠，根伏特加，智麦昆
   int zhongmaBlue[5] = { 18,0,0,0,0 };
   int zhongmaBonus[6] = { 5,15,25,5,5,150 };
 
@@ -185,6 +185,7 @@ void main_playerPlay()
      // auto tdata = search.exportTrainingSample();
 
       Action action;
+      action.dishType = DISH_none;
       action.train = -1;
       string dishKeys[14] = { "0","a1","a2","b1","b2","b3","b4","b5","c1","c2","c3","c4","c5","d" };//13种菜对应的键盘输入
 

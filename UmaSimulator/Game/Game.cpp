@@ -855,7 +855,8 @@ void Game::autoUpgradeFarm(bool beforeXiahesu)
       return;
 
     //升级路线：32333 42443 43443 43453 53553
-    int value[5] = { 160,20,180,200,40 };//优先级
+    int value[5] = { 283,140,281,282,160 };//优先级
+    int priorLv5[5] = { 3,1,4,5,2 };//优先级
     //根据lv调整权重
     for (int i = 0; i < 5; i++)
     {
@@ -888,7 +889,10 @@ void Game::autoUpgradeFarm(bool beforeXiahesu)
       }
       for (int i = 0; i < 5; i++)
       {
-        value[i] += clickNums[i] * 10;
+        if (cook_farm_level[i] <= 3)
+          value[i] += clickNums[i] * 15;
+        else
+          value[i] += 3 * priorLv5[i];
         int overflow = 55 + 45 * clickNums[i] + cook_material[i] - GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
         if (overflow > 0)
           value[i] += overflow;
@@ -1038,13 +1042,12 @@ std::vector<int> Game::dishBigSuccess_getBuffs(int dishId, std::mt19937_64& rand
 
 
 }
-int Game::calculateRealStatusGain(int idx, int value) const//考虑1200以上为2的倍数的实际属性增加值
+int Game::calculateRealStatusGain(int value, int gain) const//考虑1200以上为2的倍数的实际属性增加值
 {
-  if (idx == 5)return value;
-  int newValue = fiveStatus[idx] + value;
-  if (newValue <= 1200)return value;
-  if (value == 1)return 2;
-  return (newValue / 2) * 2 - fiveStatus[idx];
+  int newValue = value + gain;
+  if (newValue <= 1200)return gain;
+  if (gain == 1)return 2;
+  return (newValue / 2) * 2 - value;
 }
 void Game::addStatus(int idx, int value)
 {
@@ -1163,8 +1166,9 @@ void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 
   int fiveStatusBonus = int(dishMultiply * int(raceMultiply * basicFiveStatusBonus));
   int ptBonus = int(dishMultiply * int(raceMultiply * basicPtBonus));
+  //cout << fiveStatusBonus << " " << ptBonus << endl;
   addAllStatus(fiveStatusBonus);
-  skillPt += basicPtBonus;
+  skillPt += ptBonus;
 }
 
 void Game::addStatusFriend(int idx, int value)
@@ -1248,7 +1252,7 @@ void Game::handleFriendOutgoing(std::mt19937_64& rand)
 void Game::handleFriendUnlock(std::mt19937_64& rand)
 {
   assert(friend_stage == FriendStage_beforeUnlockOutgoing);
-  if (maxVital - vital >= 20)
+  if (maxVital - vital >= 40)
   {
     addVitalFriend(25);
     printEvents("友人外出解锁！选上");
@@ -1670,7 +1674,7 @@ bool Game::isLegal(Action action) const
 
 float Game::getSkillScore() const
 {
-  float rate = isQieZhe ? ptScoreRate : ptScoreRate * 1.1;
+  float rate = isQieZhe ? ptScoreRate * 1.1 : ptScoreRate ;
   return rate * skillPt + skillScore;
 }
 
@@ -1849,12 +1853,17 @@ void Game::calculateTrainingValueSingle(int tra)
   {
     int lower = trainValueLower[tra][i];
     if (lower > 100) lower = 100;
-    lower = calculateRealStatusGain(i, lower);//consider the integer over 1200
     trainValueLower[tra][i] = lower;
     double multiplier = i < 5 ? scenarioTrainMultiplier : skillPtMultiplier;
     int total = int(lower * multiplier);
-    if (total > 100 + lower)total = 100 + lower;
-    total = calculateRealStatusGain(i, total);
+    int upper = total - lower;
+    if (upper > 100)upper = 100;
+    if (i < 5)
+    {
+      lower = calculateRealStatusGain(fiveStatus[i], lower);//consider the integer over 1200
+      upper = calculateRealStatusGain(fiveStatus[i] + lower, upper);
+    }
+    total = upper + lower;
     trainValue[tra][i] = total;
   }
 
@@ -1887,9 +1896,11 @@ int Game::getDishTrainingBonus(int trainIdx) const
     return 25;
   else if (dishLevel == 2)
   {
-    int b = 60;
+    int b = 50;
     int mainTrainingIdx = GameConstants::Cook_DishMainTraining[cook_dish];
     if (cook_farm_level[mainTrainingIdx] >= 5)
+      b += 10;
+    if (turn >= 36)
       b += 10;
     return b;
   }

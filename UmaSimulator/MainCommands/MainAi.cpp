@@ -101,11 +101,11 @@ void main_ai()
 #else
 	GameConfig::load("./aiConfig.json");
 #endif
-	GameDatabase::loadTranslation("./db/text_data.json");
+	//GameDatabase::loadTranslation("./db/text_data.json");
 	GameDatabase::loadUmas("./db/umaDB.json");
 	//GameDatabase::loadCards("./db/card"); // 载入并优先使用手动支援卡数据
 	GameDatabase::loadDBCards("./db/cardDB.json"); //cardDB数据已经很完善了
-	loadRole();   // roleplay
+	//loadRole();   // roleplay
 
 	bool uraFileMode = GameConfig::communicationMode == "urafile";
 	//吃菜影响决策，所以每次文件改变都刷新
@@ -129,7 +129,7 @@ void main_ai()
 	}
 	else
 	{
-		GameConfig::maxDepth = TOTAL_TURN;
+		GameConfig::maxDepth = 2 * TOTAL_TURN;
 	}
 
 	Model::printBackendInfo();
@@ -186,6 +186,12 @@ void main_ai()
 			jsonStr = tmp.str();
 		}
 
+		if (lastJsonStr == jsonStr)//没有更新
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));//等一下
+			continue;
+		}
+
 		bool suc = game.loadGameFromJson(jsonStr);
 		game.eventStrength = GameConfig::eventStrength;
 
@@ -203,7 +209,7 @@ void main_ai()
 		}
 		if (game.turn == lastTurn)
 		{
-			if ((!refreshIfAnyChanged) || (lastJsonStr == jsonStr))
+			if (!refreshIfAnyChanged)
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(300));//检查是否有更新
 				continue;
@@ -247,7 +253,7 @@ void main_ai()
 
 		auto printValue = [&ws](int which, double p, double ref)
 			{
-				string prefix[] = { "速:", "耐:", "力:", "根:", "智:", "| 休息: ", "外出: ", "比赛: " };
+				string prefix[Action::MAX_ACTION_TYPE] = { "速:", "耐:", "力:", "根:", "智:", "| 休息: ", "外出: ", "比赛: " };
 				for (int dish = 1; dish < 14; dish++)
 				{
 					prefix[dish + TRA_race] = Action::dishName[dish] + ": ";
@@ -270,14 +276,14 @@ void main_ai()
 			};
 
 		//search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
-		if (game.turn < TOTAL_TURN - 1 && !game.isRacing)
+		if (game.turn < TOTAL_TURN )
 		{
 
 			//备份回合信息用于debug
 			try
 			{
 				std::filesystem::create_directories("log");
-				string fname = "log/turn" + to_string(game.turn) + ".json";
+				string fname = "log/turn" + to_string(game.turn) + (game.cook_dish == DISH_none ? "a" : "b") + ".json";
 				auto ofs = ofstream(fname);
 				ofs.write(jsonStr.data(), jsonStr.size());
 				ofs.close();
@@ -299,40 +305,46 @@ void main_ai()
 
 			Action bestAction = search.runSearch(game, rand);
 			cout << "蒙特卡洛: " << bestAction.toString() << endl;
+
+
 			//如果重新分配卡组，平均分是多少，与当前回合对比可以获得运气情况
-			auto trainAvgScore = search2.evaluateNewGame(game, rand);
-
+			ModelOutputValueV1 trainAvgScore = { -1,-1,-1 };
 			double trainLuckRate = -1;
-			//重新分配卡组，有多大概率比这回合好
-			if (modelptr != NULL)//只有神经网络版支持此功能
+
+			if (game.cook_dish == DISH_none)
 			{
-				int64_t count = 0;
-				int64_t luckCount = 0;
-				auto& eva = search2.evaluators[0];
-				eva.gameInput.assign(eva.maxBatchsize, game);
-				eva.evaluateSelf(0, search2.param);
-				double refValue = eva.valueResults[0].scoreMean;//当前训练的平均分
+				trainAvgScore = search2.evaluateNewGame(game, rand);
 
-				int batchN = 1 + 4 * GameConfig::searchSingleMax / eva.maxBatchsize;
-				for (int b = 0; b < batchN; b++)
+				//重新分配卡组，有多大概率比这回合好
+				if (modelptr != NULL)//只有神经网络版支持此功能
 				{
-					for (int i = 0; i < eva.maxBatchsize; i++)
-					{
-						eva.gameInput[i] = game;
-						eva.gameInput[i].randomDistributeCards(rand);
-					}
+					int64_t count = 0;
+					int64_t luckCount = 0;
+					auto& eva = search2.evaluators[0];
+					eva.gameInput.assign(eva.maxBatchsize, game);
 					eva.evaluateSelf(0, search2.param);
-					for (int i = 0; i < eva.maxBatchsize; i++)
+					double refValue = eva.valueResults[0].scoreMean;//当前训练的平均分
+
+					int batchN = 1 + 4 * GameConfig::searchSingleMax / eva.maxBatchsize;
+					for (int b = 0; b < batchN; b++)
 					{
-						count++;
-						if (eva.valueResults[i].scoreMean < refValue)
-							luckCount++;
+						for (int i = 0; i < eva.maxBatchsize; i++)
+						{
+							eva.gameInput[i] = game;
+							eva.gameInput[i].randomDistributeCards(rand);
+						}
+						eva.evaluateSelf(0, search2.param);
+						for (int i = 0; i < eva.maxBatchsize; i++)
+						{
+							count++;
+							if (eva.valueResults[i].scoreMean < refValue)
+								luckCount++;
+						}
+
 					}
-
+					trainLuckRate = double(luckCount) / count;
 				}
-				trainLuckRate = double(luckCount) / count;
 			}
-
 			double maxMean = -1e7;
 			double maxValue = -1e7;
 			for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
@@ -346,8 +358,10 @@ void main_ai()
 			}
 
 			Action restAction;
+			restAction.dishType = DISH_none;
 			restAction.train = TRA_rest;
 			Action outgoingAction;
+			outgoingAction.dishType = DISH_none;
 			outgoingAction.train = TRA_outgoing;
 			//休息和外出里面分最高的那个。这个数字作为显示参考
 			double restValue = search.allActionResults[restAction.toInt()].lastCalculate.value;
@@ -365,16 +379,19 @@ void main_ai()
 			}
 			//else
 			{
-				cout << rpText["luck"] << " | 本局：";
+				cout << "运气指标：" << " | 本局：";
 				print_luck(maxMean - scoreFirstTurn);
 				cout << " | 本回合：" << maxMean - scoreLastTurn;
-				cout << "（训练：\033[1;36m" << int(maxMean - trainAvgScore.scoreMean) << "\033[0m";
-				if (trainLuckRate >= 0)
-				{
-					cout << fixed << setprecision(2) << " 超过了\033[1;36m" << trainLuckRate * 100 << "%\033[0m";
+				if (trainAvgScore.value >= 0) {
+					cout << "（训练：\033[1;36m" << int(maxMean - trainAvgScore.scoreMean) << "\033[0m";
+
+					if (trainLuckRate >= 0)
+					{
+						cout << fixed << setprecision(2) << " 超过了\033[1;36m" << trainLuckRate * 100 << "%\033[0m";
+					}
+					cout << "）";
 				}
-				cout << "）"
-					<< " | 评分预测: \033[1;32m" << maxMean << "\033[0m"
+				cout	<< " | 评分预测: \033[1;32m" << maxMean << "\033[0m"
 					<< "（乐观\033[1;36m+" << int(maxValue - maxMean) << "\033[0m）" << endl;
 
 			}
@@ -384,6 +401,7 @@ void main_ai()
 			for (int tr = 0; tr < 8; tr++)
 			{
 				Action a;
+				a.dishType = DISH_none;
 				a.train = tr;
 				double value = search.allActionResults[a.toInt()].lastCalculate.value;
 				strToSendURA += L" " + to_wstring(tr) + L" " + to_wstring(value - restValue) + L" " + to_wstring(maxValue - restValue);
@@ -413,6 +431,7 @@ void main_ai()
 				for (int dish = 1; dish < 14; dish++)
 				{
 					Action a;
+					a.train = TRA_none;
 					a.dishType = dish;
 					if (!search.allActionResults[a.toInt()].isLegal)continue;
 					double value = search.allActionResults[a.toInt()].lastCalculate.value;
@@ -420,6 +439,7 @@ void main_ai()
 					printValue(a.toInt(), value - restValue, maxValue - restValue);
 				}
 			}
+			cout << endl;
 
 			//农田升级是Game类内部自动进行的，需要显示具体怎样升级的
 			{
@@ -434,6 +454,7 @@ void main_ai()
 					}
 				if (anyUpgrade)
 				{
+					cout << "\033[1;36m";
 					if (game.turn == 35 || game.turn == 59)//合宿前一回合
 						cout << "推荐农田升级(可以训练结束后再升级)：";
 					else
@@ -444,7 +465,7 @@ void main_ai()
 						{
 							cout << GameConstants::Cook_MaterialNames[i] << "升至" << game2.cook_farm_level[i] << "级  ";
 						}
-					cout << endl;
+					cout << "\033[0m" << endl;
 				}
 
 

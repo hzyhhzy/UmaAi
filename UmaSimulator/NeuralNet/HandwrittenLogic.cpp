@@ -4,10 +4,10 @@
 #include "../Search/Search.h"
 
 
-const double statusWeights[5] = { 7.0,7.0,7.0,7.0,7.0 };
-const double jibanValue = 4;
+const double statusWeights[5] = { 5,5,7,6,6 };
+const double jibanValue = 3.5;
 const double vitalFactorStart = 2;
-const double vitalFactorEnd = 5;
+const double vitalFactorEnd = 4;
 const double vitalScaleTraining = 1;
 
 const double reserveStatusFactor = 40;//¿ØÊôĞÔÊ±¸øÃ¿»ØºÏÔ¤Áô¶àÉÙ£¬´Ó0Öğ½¥Ôö¼Óµ½Õâ¸öÊı×Ö
@@ -15,13 +15,16 @@ const double reserveStatusFactor = 40;//¿ØÊôĞÔÊ±¸øÃ¿»ØºÏÔ¤Áô¶àÉÙ£¬´Ó0Öğ½¥Ôö¼Óµ½Õ
 const double smallFailValue = -150;
 const double bigFailValue = -500;
 const double outgoingBonusIfNotFullMotivation = 150;//µôĞÄÇéÊ±Ìá¸ßÍâ³ö·ÖÊı
-const double raceBonus = 200;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
+const double raceBonus = 150;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
 
 //const double materialValue[5] = { 0.5,0.2,0.5,0.5,0.3 };//Ã¿¸öÁÏÀíÔ­ÁÏµÄ¹ÀÖµ
 //const double materialValueScale = 1.0;//ÁÏÀíÔ­ÁÏµÄ¹ÀÖµ³ËÒÔÕâ¸öÏµÊı£¬·½±ãÒ»Æğ¸Ä
 const double greenBonusBasicYear1 = 100;//ÂÌÉ«ÁÏÀíµÄ¼Ó³É£¬î¿°íÃ»ÂúÊ±½µµÍÏµÊı£¬µÚÒ»Äê
 const double greenBonusBasicYear2 = 100;//ÂÌÉ«ÁÏÀíµÄ¼Ó³É£¬µÚ¶şÄê
 const double greenBonusBasicYear3 = 100;//ÂÌÉ«ÁÏÀíµÄ¼Ó³É£¬µÚÈıÄê
+
+const double cookingThreholdFactorLv2 = 0.5;//Ô½´óµÚ¶şÈıÄê³Ô²ËÔ½¼¤½ø£¨2¼¶²Ë£©
+const double cookingThreholdFactorLv3 = 1.0;//Ô½´óµÚÈıÄê³Ô²ËÔ½¼¤½ø£¨3¼¶²Ë£©
 
 
 //const double xiangtanExhaustLossMax = 800;//ÏàÌ¸ºÄ¾¡ÇÒÃ»´ï±êµÄ¹ÀÖµ¿Û·Ö
@@ -114,6 +117,23 @@ static double vitalEvaluation(int vital, int maxVital)
     return vitalEvaluation(maxVital, maxVital);
 }
 
+static double materialEvaluation(int turn, int count) //ÆÀ¹À³Ô²ËµÄ¿ªÏú£¬¾ö¶¨µÚ¶şÈıÄê³Ô²»³Ô²Ë
+{
+  double bias =
+    turn < 48 ? 100 :
+    turn < 60 ? 100 :
+    turn < 68 ? 60 :
+    10;
+
+  double scale =
+    turn < 48 ? 20 :
+    turn < 60 ? 30 :
+    turn < 68 ? 40 :
+    40;
+
+  return sqrt(count + bias) * scale;
+}
+
 
 Action Evaluator::handWrittenStrategy(const Game& game)
 {
@@ -151,10 +171,13 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     bool haveG1Plate = true;
     for (int matType = 0; matType < 5; matType++)
     {
-      int matGain = 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]];
+      int matGain = 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]] / 2;
       if (matType == game.cook_main_race_material_type)
         matGain += 1.5001 * GameConstants::Cook_HarvestExtra[game.cook_farm_level[matType]];
-      if (game.cook_material[matType] < g1plateCost || game.cook_material[matType] + matGain < 2 * g1plateCost)
+      int reserveMin = game.turn == 73 ?
+        2 * g1plateCost + 80 - 3 * 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]] / 2 :
+        2 * g1plateCost;//Òª±£Ö¤ºóĞøµÄÑµÁ·»ØºÏÒ»Ö±¿ÉÒÔ³Ôµ½g1plate
+      if (game.cook_material[matType] < g1plateCost || game.cook_material[matType] + matGain < reserveMin)
       {
         haveG1Plate = false;
         break;
@@ -254,6 +277,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   }
   //±ÈÈü
   Action raceAction;
+  raceAction.dishType = DISH_none;
   raceAction.train = TRA_race;
   if(game.isLegal(raceAction))
   {
@@ -348,7 +372,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       }
 
       int bestDish = 0;
-      double bestDishValue = 0;
       //¿¼ÂÇ³Ô¸÷ÖÖ²Ë
       //µÚÒ»Äê£º×Ô¼ºÏàÓ¦ÑµÁ·Ö»ÓĞÒ»ÖÖ²Ë
       //µÚ¶şÄê£ºÖ»¿¼ÂÇlv2²Ë
@@ -358,46 +381,58 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       {
         if (game.turn < 24)//µÚÒ»Äê
         {
-          if (game.cook_dish_pt < 2500)//³Ôµ½2500pt
+          if (game.cook_dish_pt < 3000)//³Ôµ½2500pt
           {
-            if (game.isDishLegal(DISH_curry))
+            if (tra == 0)
             {
-              if (tra == 0 || tra == 1 || tra == 3)
+              if (game.isDishLegal(DISH_curry))
+                bestDish = DISH_curry;
+              else if (game.isDishLegal(DISH_sandwich))
+                bestDish = DISH_sandwich;
+            }
+            else if (tra == 1 || tra == 3)
+            {
+              if (game.isDishLegal(DISH_curry))
                 bestDish = DISH_curry;
             }
-            else if (game.isDishLegal(DISH_sandwich))
+            else if (tra == 2 || tra == 4)
             {
-              if (tra == 0 || tra == 2 || tra == 4)
+              if (game.isDishLegal(DISH_sandwich))
                 bestDish = DISH_sandwich;
             }
           }
         }
-        else if (game.turn < 48)//µÚ¶şÄê
+        else if (game.turn < 72)//µÚ¶şÈıÄê
         {
-          //ÄÜ³Ôlv2¾Í¸Ï¿ì³Ô£¬·ñÔò²»³Ô
-          int dish = DISH_speed1 + tra;
-          assert(GameConstants::Cook_DishMainTraining[dish] == tra);
-          if (game.isDishLegal(dish))
+          int dish1 = DISH_speed1 + tra;
+          int dish2 = DISH_speed2 + tra;
+          assert(GameConstants::Cook_DishMainTraining[dish1] == tra);
+          assert(GameConstants::Cook_DishMainTraining[dish2] == tra);
+
+          if (game.isDishLegal(dish1))
           {
-            bestDish = dish;
-          }
-        }
-        else if (game.turn < 72)//µÚÈıÄê
-        {
-          //Ç°°ëÄêÄÜ³Ôlv3¾Í¸Ï¿ì³Ô£¬·ñÔò²»³Ô
-          int dish = DISH_speed2 + tra;
-          assert(GameConstants::Cook_DishMainTraining[dish] == tra);
-          if (game.isDishLegal(dish))
-          {
-            int matReserve =
-              game.turn < 60 ? (tra == TRA_speed ? 40 : 0) :
-              game.turn < 68 ? (tra == TRA_speed ? 80 : 80) :
-              (tra == TRA_speed ? 120 : 40);
-            int matRemain = game.cook_material[tra] - 250;
-            if (matRemain >= matReserve)
+            int mat0 = game.cook_material[tra];
+            assert(mat0 >= 150);
+            double matEval0 = materialEvaluation(game.turn, mat0);
+            double matEval1 = materialEvaluation(game.turn, mat0 - 150);
+            double matEval2 = (game.turn >= 48 && mat0 >= 250) ? materialEvaluation(game.turn, mat0 - 250) : -99999;
+            double trValue = statusGainE[tra];
+
+            double gain1 = trValue * cookingThreholdFactorLv2 - matEval0 + matEval1;
+            double gain2 = trValue * cookingThreholdFactorLv3 - matEval0 + matEval2;
+            //std::cout << game.turn << " " << gain1 << std::endl;
+
+
+            if (gain1 > 0)
             {
-              bestDish = dish;
+              bestDish = dish1;
             }
+
+            if (gain2 > 0 && gain2 > gain1)
+            {
+              bestDish = dish2;
+            }
+
           }
           
         } 

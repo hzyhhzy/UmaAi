@@ -4,8 +4,8 @@
 using namespace std;
 using json = nlohmann::json;
 
-double GameConfig::radicalFactor = 5;
-int GameConfig::eventStrength = 20;
+double GameConfig::radicalFactor = 3;
+int GameConfig::eventStrength = GameConstants::EventStrengthDefault;
 
 #if USE_BACKEND != BACKEND_NONE      //神经网络版
 #if USE_BACKEND == BACKEND_LIBTORCH      //神经网络版
@@ -28,10 +28,10 @@ int GameConfig::batchSize = 1;
 int GameConfig::searchSingleMax = 4096;
 int GameConfig::searchTotalMax = 0;
 int GameConfig::searchGroupSize = 128;
-int GameConfig::maxDepth = TOTAL_TURN;
+int GameConfig::maxDepth = 2 * TOTAL_TURN;
 #endif 
 
-double GameConfig::searchCpuct = 1.0;
+double GameConfig::searchCpuct = 4.0;
 
 string GameConfig::communicationMode = "localfile";
 string GameConfig::role = "default";

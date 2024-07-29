@@ -3,7 +3,7 @@
 
 //常数或者比较短的列表放在最前面
 const double GameConstants::ScorePtRateDefault = 2.0;
-const double GameConstants::HintLevelPtRateDefault = 7.0;//以前默认5，种菜杯的hint经常稀缺，就增加到7
+const double GameConstants::HintLevelPtRateDefault = 8.0;//以前默认5，种菜杯的hint经常稀缺，就增加到8
 //const double GameConstants::ScorePtRateQieZhe = 2.2;
 const int GameConstants::BasicFiveStatusLimit[5] = { 2300,1000,2200,2200,1500 }; //游戏里原来是1750 1000 1700 1700 1350，模拟器中1200以上翻倍
 
@@ -133,7 +133,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
   {
     { 11, 0, 2, 0, 0, 5, -19},
     { 12, 0, 2, 0, 0, 5, -21},
-    { 13, 0, 3, 0, 0, 5, -22},
+    { 13, 0, 2, 0, 0, 5, -22},
     { 14, 0, 3, 0, 0, 5, -24},
     { 15, 0, 4, 0, 0, 5, -25},
   },
@@ -149,7 +149,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
   {
     { 0, 4, 9, 0, 0, 5, -20},
     { 0, 4, 10, 0, 0, 5, -22},
-    { 0, 5, 11, 0, 0, 5, -23},
+    { 0, 4, 11, 0, 0, 5, -23},
     { 0, 5, 12, 0, 0, 5, -25},
     { 0, 6, 13, 0, 0, 5, -26},
   },
@@ -158,14 +158,14 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
     { 2, 0, 2, 10, 0, 5, -20},
     { 2, 0, 2, 11, 0, 5, -22},
     { 2, 0, 2, 12, 0, 5, -23},
-    { 2, 0, 2, 13, 0, 5, -25},
+    { 3, 0, 3, 13, 0, 5, -25},
     { 3, 0, 3, 14, 0, 5, -26},
   },
   //智
   {
     { 2, 0, 0, 0, 8, 5, 5},
     { 2, 0, 0, 0, 9, 5, 5},
-    { 3, 0, 0, 0, 10, 5, 5},
+    { 2, 0, 0, 0, 10, 5, 5},
     { 3, 0, 0, 0, 11, 5, 5},
     { 4, 0, 0, 0, 12, 5, 5},
   },

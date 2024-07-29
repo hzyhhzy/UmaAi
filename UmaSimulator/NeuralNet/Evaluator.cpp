@@ -92,7 +92,7 @@ ModelOutputValueV1 Evaluator::extractValueFromNNOutputBuf(float* buf)
 
 Action Evaluator::extractActionFromNNOutputBuf(float* buf, const Game& game)
 {
-  Action bestAction = { -1, 0 };
+  Action bestAction = { 0, -1 };
   float bestValue = -1e8;
   for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
   {

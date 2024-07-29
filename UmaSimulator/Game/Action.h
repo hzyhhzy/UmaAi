@@ -46,6 +46,7 @@ struct Action
   static const std::string dishName[14];
   static const Action Action_RedistributeCardsForTest;
   static const int MAX_ACTION_TYPE = 21;//标准的Action有编号，8+13=21种
+  static const int MAX_TWOSTAGE_ACTION_TYPE = 21 + 8 + 8;//二阶段搜索考虑的最多Action个数，只有两种1级菜需要考虑二阶段搜索，8+13+2*8=37种
 
   
   int16_t dishType;//做菜，0为不做菜

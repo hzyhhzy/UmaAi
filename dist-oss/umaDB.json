@@ -2831,6 +2831,41 @@
     ],
     "star": 5
   },
+  "103703": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      116,
+      101,
+      106,
+      107,
+      120
+    ],
+    "freeRaces": [],
+    "gameId": 103703,
+    "name": "[Reines Plätschern]エイシンフラッシュ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      45,
+      47,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "103801": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6016,6 +6051,46 @@
     ],
     "gameId": 109901,
     "name": "[Star・Light・Ship]北港火山",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      38,
+      46,
+      50,
+      56,
+      59,
+      68,
+      70,
+      71
+    ],
+    "star": 5
+  },
+  "109902": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      10,
+      0,
+      0,
+      5
+    ],
+    "fiveStatusInitial": [
+      111,
+      103,
+      105,
+      112,
+      119
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 30,
+        "count": 1
+      }
+    ],
+    "gameId": 109902,
+    "name": "[パステルマリン・ロコドル]ホッコータルマエ",
     "preferRaces": [],
     "preferReds": [],
     "races": [
