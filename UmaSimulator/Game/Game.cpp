@@ -501,7 +501,7 @@ void Game::checkDishPtUpgrade()
     updateDeyilv();
   }
   if ((oldDishPt < 2000 && cook_dish_pt >= 2000)
-    || (oldDishPt < 5000 && cook_dish_pt >= 5000)
+   // || (oldDishPt < 5000 && cook_dish_pt >= 5000)
     || (oldDishPt < 7000 && cook_dish_pt >= 7000)
     || (oldDishPt < 12000 && cook_dish_pt >= 12000)
     )
@@ -874,7 +874,13 @@ void Game::autoUpgradeFarm(bool beforeXiahesu)
 
     if (beforeXiahesu)
     {
-      //nothing
+      for (int i = 0; i < 5; i++)
+      {
+        if (cook_farm_level[i] <= 3)
+          value[i] += 0;
+        else
+          value[i] += 3 * priorLv5[i];
+      }
     }
     else
     {
@@ -1125,15 +1131,14 @@ int Game::calculateFailureRate(int trainType, double failRateMultiply) const
   double x0 = 0.1 * GameConstants::FailRateBasic[trainType][getTrainingLevel(trainType)];
   
   double f = 0;
-  double dif = x0 - vital;
-  if (dif > 0)
+  if (vital < x0)
   {
-    f = A * dif * dif + B * dif;
+    f = (100 - vital) * (x0 - vital) / 40.0;
   }
   if (f < 0)f = 0;
   if (f > 99)f = 99;//无练习下手，失败率最高99%
   f *= failRateMultiply;//支援卡的训练失败率下降词条
-  int fr = round(f);
+  int fr = ceil(f);
   fr += failureRateBias;
   if (fr < 0)fr = 0;
   if (fr > 100)fr = 100;
@@ -1818,7 +1823,7 @@ void Game::calculateTrainingValueSingle(int tra)
 
   //体力，失败率
 
-  int vitalChangeInt = -int(vitalCostBasic * vitalCostMultiplier);
+  int vitalChangeInt = vitalCostBasic > 0 ? -int(vitalCostBasic * vitalCostMultiplier) : -vitalCostBasic;
   if (vitalChangeInt > maxVital - vital)vitalChangeInt = maxVital - vital;
   if (vitalChangeInt < -vital)vitalChangeInt = -vital;
   trainVitalChange[tra] = vitalChangeInt;

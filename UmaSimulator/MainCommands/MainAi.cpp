@@ -114,6 +114,9 @@ void main_ai()
 	string currentGameStagePath = uraFileMode ?
 		string(getenv("LOCALAPPDATA")) + "/UmamusumeResponseAnalyzer/GameData/thisTurn.json"
 		: "./thisTurn.json";
+	//string currentGameStagePath2 = 
+	//	string(getenv("LOCALAPPDATA")) + "/UmamusumeResponseAnalyzer/GameData/turn34.json"
+	//	
 	//string currentGameStagePath = "./gameData/thisTurn.json";
 
 
@@ -159,7 +162,9 @@ void main_ai()
 	while (true)
 	{
 		Game game;
+		//Game game2;
 		string jsonStr;
+		//string jsonStr2;
 		if (useWebsocket)
 		{
 			jsonStr = lastFromWs;
@@ -184,6 +189,12 @@ void main_ai()
 			fs.close();
 
 			jsonStr = tmp.str();
+			//ifstream fs2(currentGameStagePath2);
+			//ostringstream tmp2;
+			//tmp2 << fs2.rdbuf();
+			//fs2.close();
+
+			//jsonStr2 = tmp2.str();
 		}
 
 		if (lastJsonStr == jsonStr)//没有更新
@@ -194,6 +205,8 @@ void main_ai()
 
 		bool suc = game.loadGameFromJson(jsonStr);
 		game.eventStrength = GameConfig::eventStrength;
+		//bool suc2 = game2.loadGameFromJson(jsonStr2);
+		//game2.eventStrength = GameConfig::eventStrength;
 
 		if (!suc)
 		{
@@ -293,7 +306,10 @@ void main_ai()
 				cout << "保存回合信息失败" << endl;
 			}
 
+			//game.applyAction(rand, Action(DISH_none, TRA_guts));
 			game.print();
+			//game2.print();
+			//game = game2;
 
 			evaSingle.gameInput[0] = game;
 			evaSingle.evaluateSelf(1, searchParam);
