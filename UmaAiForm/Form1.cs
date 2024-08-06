@@ -8,11 +8,12 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+//using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using System.Runtime.Remoting.Messaging;
+using System.Text.RegularExpressions;
 
 namespace UmaAiForm
 {
@@ -23,6 +24,8 @@ namespace UmaAiForm
         public Form1()
         {
             InitializeComponent();
+            RefreshTrainingComboBoxItems(); 
+            ClearTrainingComboBoxSelection();
         }
         private void InitTextboxes()
         {
@@ -264,7 +267,7 @@ namespace UmaAiForm
             // 绘制焦点框
             e.DrawFocusRectangle();
         }
-
+        /*
         private void colorComboBox_SelectedIndexChanged(System.Windows.Forms.ComboBox box)
         {
             string text = box.Text.ToString();
@@ -294,64 +297,8 @@ namespace UmaAiForm
             box.BackColor = color;
             box.ForeColor = fontColor;
             box.Invalidate();
-        }
-        private void comboBox2_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            colorComboBox_DrawItem(comboBox2, e);
-        }
+        }*/
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            colorComboBox_SelectedIndexChanged(comboBox2);
-        }
-
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            colorComboBox_SelectedIndexChanged(comboBox3);
-        }
-
-        private void comboBox3_DrawItem(object sender, DrawItemEventArgs e)
-        {
-
-            colorComboBox_DrawItem(comboBox3, e);
-        }
-
-        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            colorComboBox_SelectedIndexChanged(comboBox4);
-
-        }
-
-        private void comboBox4_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            colorComboBox_DrawItem(comboBox4, e);
-
-        }
-
-        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            colorComboBox_SelectedIndexChanged(comboBox5);
-        }
-
-        private void comboBox5_DrawItem(object sender, DrawItemEventArgs e)
-        {
-
-            colorComboBox_DrawItem(comboBox5, e);
-        }
-
-        private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            colorComboBox_SelectedIndexChanged(comboBox6);
-        }
-
-        private void comboBox6_DrawItem(object sender, DrawItemEventArgs e)
-        {
-
-            colorComboBox_DrawItem(comboBox6, e);
-        }
 
         private void label48_Click(object sender, EventArgs e)
         {
@@ -360,14 +307,14 @@ namespace UmaAiForm
 
         private void numericUpDown14_ValueChanged(object sender, EventArgs e)
         {
-            textBox4.Text = getCardName((int)numericUpDown14.Value);
-            textBox12.Text = getCardName((int)numericUpDown14.Value);
+            textBox4.Text = getCardName((int)numericUpDown14.Value); 
+            RefreshTrainingComboBoxItems();
         }
 
         private void numericUpDown15_ValueChanged(object sender, EventArgs e)
         {
             textBox5.Text = getCardName((int)numericUpDown15.Value);
-            textBox13.Text = getCardName((int)numericUpDown15.Value);
+            RefreshTrainingComboBoxItems();
         }
 
 
@@ -375,26 +322,25 @@ namespace UmaAiForm
         {
 
             textBox6.Text = getCardName((int)numericUpDown16.Value);
-            textBox14.Text = getCardName((int)numericUpDown16.Value);
+            RefreshTrainingComboBoxItems();
 
         }
         private void numericUpDown17_ValueChanged(object sender, EventArgs e)
         {
             textBox7.Text = getCardName((int)numericUpDown17.Value);
-            textBox15.Text = getCardName((int)numericUpDown17.Value);
+            RefreshTrainingComboBoxItems();
         }
 
         private void numericUpDown18_ValueChanged(object sender, EventArgs e)
         {
             textBox8.Text = getCardName((int)numericUpDown18.Value);
-            textBox16.Text = getCardName((int)numericUpDown18.Value);
-
+            RefreshTrainingComboBoxItems();
         }
 
         private void numericUpDown19_ValueChanged(object sender, EventArgs e)
         {
             textBox9.Text = getCardName((int)numericUpDown19.Value);
-            textBox17.Text = getCardName((int)numericUpDown19.Value);
+            RefreshTrainingComboBoxItems();
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
@@ -427,7 +373,7 @@ namespace UmaAiForm
             stage["turn"] = turn;
             stage["vital"] = (int)numericUpDown11.Value;
             stage["maxVital"] = (int)numericUpDown12.Value;
-            stage["motivation"] = (int)comboBox1.SelectedIndex + 1;
+            stage["motivation"] = (int)comboBoxMotivation.SelectedIndex + 1;
             if((int)stage["motivation"]<=0)
             {
                 throw new Exception("Motivation not set!");
@@ -589,62 +535,6 @@ namespace UmaAiForm
 
             var personDistributionArray = new bool[,]
             {
-                {
-                    radioButton1.Checked,
-                    radioButton6.Checked,
-                    radioButton2.Checked,
-                    radioButton3.Checked,
-                    radioButton4.Checked,
-                },
-                {
-                    radioButton12.Checked,
-                    radioButton7.Checked,
-                    radioButton11.Checked,
-                    radioButton10.Checked,
-                    radioButton9.Checked,
-                },
-{
-                    radioButton18.Checked,
-                    radioButton13.Checked,
-                    radioButton17.Checked,
-                    radioButton16.Checked,
-                    radioButton15.Checked,
-                },
-{
-                    radioButton24.Checked,
-                    radioButton19.Checked,
-                    radioButton23.Checked,
-                    radioButton22.Checked,
-                    radioButton21.Checked,
-                },
-{
-                    radioButton30.Checked,
-                    radioButton25.Checked,
-                    radioButton29.Checked,
-                    radioButton28.Checked,
-                    radioButton27.Checked,
-                },
-{
-                    radioButton36.Checked,
-                    radioButton31.Checked,
-                    radioButton35.Checked,
-                    radioButton34.Checked,
-                    radioButton33.Checked,
-                },
-{
-                    radioButton42.Checked,
-                    radioButton37.Checked,
-                    radioButton41.Checked,
-                    radioButton40.Checked,
-                    radioButton39.Checked,
-                },
-{
-                    radioButton48.Checked,
-                    radioButton43.Checked,
-                    radioButton47.Checked,
-                    radioButton46.Checked,
-                    radioButton45.Checked,
-                },
 
             };
 
@@ -674,36 +564,9 @@ namespace UmaAiForm
 
             stage["lockedTrainingId"] = -1;//not used
 
-            var uaf_trainingColor = new int[] {
-                (int)comboBox2.SelectedIndex + 1,
-                (int)comboBox3.SelectedIndex + 1,
-                (int)comboBox4.SelectedIndex + 1,
-                (int)comboBox5.SelectedIndex + 1,
-                (int)comboBox6.SelectedIndex + 1
-            };
-            if (uaf_trainingColor.Any(x => x <= 0))
-            {
-                throw new Exception("Training color not selected");
-            }
 
-            stage["uaf_trainingColor"] = new JArray(uaf_trainingColor);
 
             int[] trainLevels=new int[] {
-                (int)numericUpDown35.Value,
-                (int)numericUpDown36.Value,
-                (int)numericUpDown37.Value,
-                (int)numericUpDown38.Value,
-                (int)numericUpDown39.Value,
-                (int)numericUpDown40.Value,
-                (int)numericUpDown41.Value,
-                (int)numericUpDown42.Value,
-                (int)numericUpDown43.Value,
-                (int)numericUpDown44.Value,
-                (int)numericUpDown45.Value,
-                (int)numericUpDown46.Value,
-                (int)numericUpDown47.Value,
-                (int)numericUpDown48.Value,
-                (int)numericUpDown49.Value
             };
             stage["uaf_trainingLevel"] = new JArray(trainLevels);
 
@@ -714,9 +577,6 @@ namespace UmaAiForm
             //have lose?
             var havelose = new bool[]
             {
-                checkBox1.Checked,
-                checkBox2.Checked,
-                checkBox3.Checked,
             };
             if (uafFinished > 0)
             {
@@ -732,10 +592,6 @@ namespace UmaAiForm
                 }
             }
 
-            stage["uaf_winHistory"] = new JArray(uaf_winHistory);
-
-            stage["uaf_rankGainIncreased"] = checkBox4.Checked;
-            stage["uaf_xiangtanRemain"] = (int)numericUpDown55.Value;
 
             int[] uaf_levelColor_total = new int[]
             {
@@ -750,18 +606,15 @@ namespace UmaAiForm
                 uaf_levelColor_total[2]/50
             };
             stage["uaf_buffNum"] = new JArray {
-                (int)numericUpDown52.Value,
-                (int)numericUpDown53.Value,
-                (int)numericUpDown54.Value
             };
 
             stage["lianghua_type"] = lianghuaType;
             stage["lianghua_personId"] = lianghuaIndex;
             stage["lianghua_outgoingStage"] =
                 lianghuaType == 0 ? 0 :
-                comboBox7.SelectedIndex == 1 ? 0 :
-                comboBox7.SelectedIndex == 2 ? 1 :
-                comboBox7.SelectedIndex == 3 ? 2 :
+                comboBoxFriendStage.SelectedIndex == 1 ? 0 :
+                comboBoxFriendStage.SelectedIndex == 2 ? 1 :
+                comboBoxFriendStage.SelectedIndex == 3 ? 2 :
                 -1;
             if((int)stage["lianghua_outgoingStage"]==-1)
                 throw new Exception("Friend card stage is empty or wrong");
@@ -775,37 +628,6 @@ namespace UmaAiForm
             saveFile("./thisTurn.json");
         }
 
-        private void updateTrainingLevelTotal()
-        {
-            int[] trainLevels = new int[] {
-                (int)numericUpDown35.Value,
-                (int)numericUpDown36.Value,
-                (int)numericUpDown37.Value,
-                (int)numericUpDown38.Value,
-                (int)numericUpDown39.Value,
-                (int)numericUpDown40.Value,
-                (int)numericUpDown41.Value,
-                (int)numericUpDown42.Value,
-                (int)numericUpDown43.Value,
-                (int)numericUpDown44.Value,
-                (int)numericUpDown45.Value,
-                (int)numericUpDown46.Value,
-                (int)numericUpDown47.Value,
-                (int)numericUpDown48.Value,
-                (int)numericUpDown49.Value
-            };
-            int[] uaf_levelColor_total = new int[]
-            {
-                trainLevels.Skip(0).Take(5).Sum(),
-                trainLevels.Skip(5).Take(5).Sum(),
-                trainLevels.Skip(10).Take(5).Sum()
-            };
-            textBox1.Text = uaf_levelColor_total[0].ToString();
-            textBox2.Text = uaf_levelColor_total[1].ToString();
-            textBox3.Text = uaf_levelColor_total[2].ToString();
-        }
-
-
 
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
@@ -817,79 +639,113 @@ namespace UmaAiForm
 
         }
 
-        private void numericUpDown35_ValueChanged(object sender, EventArgs e)
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
+
         }
 
-        private void numericUpDown36_ValueChanged(object sender, EventArgs e)
+        private void RefreshTrainingComboBoxItems()
         {
-            updateTrainingLevelTotal();
+            // 获取所有的TextBox内容
+            string[] cardNames = new string[6];
+            cardNames[0] = textBox4.Text;
+            cardNames[1] = textBox5.Text;
+            cardNames[2] = textBox6.Text;
+            cardNames[3] = textBox7.Text;
+            cardNames[4] = textBox8.Text;
+            cardNames[5] = textBox9.Text;
+
+            string[] comboBoxItems = new string[10];
+            comboBoxItems[0] = "None";
+            for (int i = 0; i < 6; i++)
+            {
+                comboBoxItems[i + 1] = "C" + (i + 1) + ":" + cardNames[i];
+            }
+            comboBoxItems[7] = "Yayoi(Non-card)";
+            comboBoxItems[8] = "Reporter";
+            comboBoxItems[9] = "NPC";
+
+            // 设置每个ComboBox的选项
+            foreach (Control control in tableLayoutPanel4.Controls)
+            {
+                if (control is ComboBox comboBox)
+                {
+                    int idx =int.Parse(Regex.Match(control.Name, @"\d+").Value);
+                    comboBox.Items.Clear();
+                    comboBox.Items.AddRange(comboBoxItems);
+                }
+            }
         }
 
-        private void numericUpDown37_ValueChanged(object sender, EventArgs e)
+        private void ClearTrainingComboBoxSelection()
         {
-            updateTrainingLevelTotal();
+            // 设置每个ComboBox的选项
+            foreach (Control control in tableLayoutPanel4.Controls)
+            {
+                if (control is ComboBox comboBox)
+                {
+                    comboBox.SelectedIndex = 0;
+                }
+            }
+        }
+        private void numericUpDown61_ValueChanged(object sender, EventArgs e)
+        {
+
         }
 
-        private void numericUpDown38_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown28_ValueChanged(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
+            int lvcount = (int)numericUpDown28.Value;
+            int lv = lvcount / 4 + 1;
+            label36.Text = "Lv " + lv.ToString() + "  ,Count=";
         }
 
-        private void numericUpDown39_ValueChanged(object sender, EventArgs e)
+        private void label36_Click(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
+
         }
 
-        private void numericUpDown40_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown29_ValueChanged(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
+            int lvcount = (int)numericUpDown29.Value;
+            int lv = lvcount / 4 + 1;
+            label40.Text = "Lv " + lv.ToString() + "  ,Count=";
         }
 
-        private void numericUpDown41_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown30_ValueChanged(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
+            int lvcount = (int)numericUpDown30.Value;
+            int lv = lvcount / 4 + 1;
+            label41.Text = "Lv " + lv.ToString() + "  ,Count=";
         }
 
-        private void numericUpDown42_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown31_ValueChanged(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
+            int lvcount = (int)numericUpDown31.Value;
+            int lv = lvcount / 4 + 1;
+            label43.Text = "Lv " + lv.ToString() + "  ,Count=";
         }
 
-        private void numericUpDown43_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown32_ValueChanged(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
+            int lvcount = (int)numericUpDown32.Value;
+            int lv = lvcount / 4 + 1;
+            label44.Text = "Lv " + lv.ToString() + "  ,Count=";
         }
 
-        private void numericUpDown44_ValueChanged(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
+            ClearTrainingComboBoxSelection();
         }
 
-        private void numericUpDown45_ValueChanged(object sender, EventArgs e)
+        private void comboBox26_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
+
         }
 
-        private void numericUpDown46_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown6_ValueChanged(object sender, EventArgs e)
         {
-            updateTrainingLevelTotal();
-        }
 
-        private void numericUpDown47_ValueChanged(object sender, EventArgs e)
-        {
-            updateTrainingLevelTotal();
-        }
-
-        private void numericUpDown48_ValueChanged(object sender, EventArgs e)
-        {
-            updateTrainingLevelTotal();
-        }
-
-        private void numericUpDown49_ValueChanged(object sender, EventArgs e)
-        {
-            updateTrainingLevelTotal();
         }
 
         private void saveFile(string fileName)
