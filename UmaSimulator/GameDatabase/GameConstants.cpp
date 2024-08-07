@@ -3,7 +3,7 @@
 
 //常数或者比较短的列表放在最前面
 const double GameConstants::ScorePtRateDefault = 2.0;
-const double GameConstants::HintLevelPtRateDefault = 8.0;//以前默认5，种菜杯的hint经常稀缺，就增加到8
+const double GameConstants::HintLevelPtRateDefault = 6.5;//以前默认5，种菜杯的hint经常稀缺，就调大一点
 //const double GameConstants::ScorePtRateQieZhe = 2.2;
 const int GameConstants::BasicFiveStatusLimit[5] = { 2300,1000,2200,2200,1500 }; //游戏里原来是1750 1000 1700 1700 1350，模拟器中1200以上翻倍
 

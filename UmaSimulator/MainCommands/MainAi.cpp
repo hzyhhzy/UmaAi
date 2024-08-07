@@ -205,6 +205,8 @@ void main_ai()
 
 		bool suc = game.loadGameFromJson(jsonStr);
 		game.eventStrength = GameConfig::eventStrength;
+		game.ptScoreRate = GameConfig::scorePtRate;
+		game.scoringMode = GameConfig::scoringMode;
 		//bool suc2 = game2.loadGameFromJson(jsonStr2);
 		//game2.eventStrength = GameConfig::eventStrength;
 

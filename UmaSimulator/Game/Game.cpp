@@ -681,7 +681,20 @@ void Game::dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand)
 {
   //先数一下已经有几个人
   int count = 0;
-  bool alreadyHere[6] = { false,false,false,false,false,false };
+  bool cannotInvite[6] = { true, true, true, true, true, true };//不在任何一个训练，或者已经在当前训练
+  for (int tra = 0; tra < 5; tra++)
+  {
+    if (tra == trainIdx)continue;
+    for (int idx = 0; idx < 5; idx++)
+    {
+      int pid = personDistribution[tra][idx];
+      if (pid == -1)continue;
+      if (pid >= 0 && pid < 6)
+      {
+        cannotInvite[pid] = false;
+      }
+    }
+  }
   for (int i = 0; i < 5; i++)
   {
     int pid = personDistribution[trainIdx][i];
@@ -691,7 +704,7 @@ void Game::dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand)
 
     if (pid >= 0 && pid < 6)
     {
-      alreadyHere[pid] = true;
+      cannotInvite[pid] = true;
     }
   }
   if (count >= 5)return;//已经满了
@@ -701,11 +714,14 @@ void Game::dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand)
   vector<int> availablePeople;
   for (int i = 0; i < 6; i++)
   {
-    if (!alreadyHere[i])
+    if (!cannotInvite[i])
       availablePeople.push_back(i);
   }
   if (availablePeople.size() == 0)
-    throw "ERROR: Game::dishBigSuccess_invitePeople availablePeople.size() == 0";
+  {
+    return;//可能其他训练都是当前训练的复制人头，因此没有可邀请的人
+    //throw "ERROR: Game::dishBigSuccess_invitePeople availablePeople.size() == 0 && turn < 72";
+  }
   int pid = availablePeople[rand() % availablePeople.size()];
   personDistribution[trainIdx][count] = pid;
   //require recalculate later
@@ -996,7 +1012,20 @@ std::vector<int> Game::dishBigSuccess_getBuffs(int dishId, std::mt19937_64& rand
           return false;
         int mainTrain = GameConstants::Cook_DishMainTraining[dishId];
         if (personDistribution[mainTrain][4] == PSID_none)
-          return true;
+        {
+          //检查其他训练是否有可以邀请的人
+          for (int tra = 0; tra < 5; tra++)
+          {
+            if (tra == mainTrain)continue;
+            for (int idx = 0; idx < 5; idx++)
+            {
+              int pid = personDistribution[tra][idx];
+              if (pid == -1)continue;
+              if (pid >= 0 && pid < 6)
+                return true;
+            }
+          }
+        }
         return false;
       }
       else if (buffType == 5)//体力上限，满120不触发
@@ -1683,17 +1712,87 @@ float Game::getSkillScore() const
   return rate * skillPt + skillScore;
 }
 
+static double scoringFactorOver1200(double x)//耐力胜负，脚色十分，追比
+{
+  if (x <= 1150)return 0;
+  return tanh((x - 1150) / 100.0) * sqrt(x - 1150);
+}
+
+static double realRacingStatus(double x)
+{
+  if (x < 1200)return x;
+  return 1200 + (x - 1200) / 4;
+}
+
+static double smoothUpperBound(double x)
+{
+  return (x - sqrt(x * x + 1)) / 2;
+}
+
+int Game::finalScore_mile() const
+{
+  double weights[5] = { 400,300,70,70,120 };
+  double weights1200[5] = { 0,0,20,10,0 };
+
+
+  double staminaTarget = 900;
+  double staminaBonus = 5 * 100 * (smoothUpperBound((realRacingStatus(fiveStatus[1]) - staminaTarget) / 100.0) - smoothUpperBound((0 - staminaTarget) / 100.0));
+
+  double total = 0;
+  total += staminaBonus;
+  for (int i = 0; i < 5; i++)
+  {
+    double realStat = realRacingStatus(min(fiveStatus[i], fiveStatusLimit[i]));
+    total += weights[i] * sqrt(realStat);
+    total += weights1200[i] * scoringFactorOver1200(realStat);
+  }
+
+  total += getSkillScore();
+  if (total < 0)total = 0;
+  //return uaf_haveLose ? 10000 : 20000;
+  return (int)total;
+}
+
+int Game::finalScore_sum() const
+{
+  double weights[5] = { 5,3,3,3,3 };
+  double total = 0;
+  for (int i = 0; i < 5; i++)
+  {
+    double realStat = min(fiveStatus[i], fiveStatusLimit[i]);
+    if (realStat > 1200)realStat = 1200 + (realStat - 1200) / 2;
+    total += weights[i] * realStat;
+  }
+
+  total += getSkillScore();
+  if (total < 0)total = 0;
+  return (int)total;
+}
+
+int Game::finalScore_rank() const
+{
+  int total = 0;
+  for (int i = 0; i < 5; i++)
+    total += GameConstants::FiveStatusFinalScore[min(fiveStatus[i], fiveStatusLimit[i])];
+
+  total += int(getSkillScore());
+  //return uaf_haveLose ? 10000 : 20000;
+  return total;
+}
+
 int Game::finalScore() const
 {
   if (scoringMode == SM_normal)
   {
-    int total = 0;
-    for (int i = 0; i < 5; i++)
-      total += GameConstants::FiveStatusFinalScore[min(fiveStatus[i], fiveStatusLimit[i])];
-
-    total += int(getSkillScore());
-    //return uaf_haveLose ? 10000 : 20000;
-    return total;
+    return finalScore_rank();
+  }
+  else if (scoringMode == SM_race)
+  {
+    return finalScore_sum();
+  }
+  else if (scoringMode == SM_mile)
+  {
+    return finalScore_mile();
   }
   else
   {
@@ -2248,7 +2347,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
 
 void Game::checkRandomEvents(std::mt19937_64& rand)
 {
-  if (turn>=72)
+  if (turn >= 72)
     return;//ura期间不会发生各种随机事件
 
   //友人会不会解锁出行
@@ -2332,7 +2431,7 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   }
 
   //掉心情
-  if (randBool(rand, 0.04))
+  if (turn >= 12 && randBool(rand, 0.04))
   {
     addMotivation(-1);
     printEvents("模拟随机事件：\033[0m\033[33m心情-1\033[0m\033[32m");

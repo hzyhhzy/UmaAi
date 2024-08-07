@@ -181,6 +181,9 @@ public:
     Action action);
 
   int finalScore() const;//最终总分
+  int finalScore_rank() const;//评价点
+  int finalScore_sum() const;//极简大赛近似：属性之和*4+技能分
+  int finalScore_mile() const;//大赛评分—英里
   bool isEnd() const;//是否已经终局
 
 

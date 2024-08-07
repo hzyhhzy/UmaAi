@@ -14,6 +14,8 @@ struct GameConfig
     static int searchSingleMax;  // 第一选项达到多少次搜索就停止蒙特卡洛
     static int threadNum;   // 线程数，可根据自身CPU调整，神经网络版直接设成4
 
+    static double scorePtRate;    // 每pt的分数
+    static int scoringMode;    // 打分方式
 
     // "localfile": checking ./thisTurn.json
     // "urafile": communicating with URA using file
