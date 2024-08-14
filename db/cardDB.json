@@ -25859,6 +25859,183 @@
     "uniqueEffectType": 0,
     "uniqueEffectSummary": "ganJing(15),saiHou(5)"
   },
+  "20036": {
+    "cardId": 20036,
+    "charaId": 1064,
+    "cardName": "[耐]メジロパーマー",
+    "fullName": "[救いはあるよっ♪]メジロパーマー",
+    "rarity": 2,
+    "cardType": 1,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          20,
+          0,
+          35,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 25,
+        "ganJing": 20,
+        "initialJiBan": 20,
+        "hintProbIncrease": 30,
+        "deYiLv": 0
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          21,
+          0,
+          36,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 26,
+        "ganJing": 23,
+        "initialJiBan": 21,
+        "hintProbIncrease": 32,
+        "deYiLv": 30
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          22,
+          0,
+          38,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 27,
+        "ganJing": 26,
+        "initialJiBan": 22,
+        "hintProbIncrease": 35,
+        "deYiLv": 45
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          23,
+          0,
+          40,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 28,
+        "ganJing": 30,
+        "initialJiBan": 23,
+        "hintProbIncrease": 37,
+        "deYiLv": 60
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          25,
+          0,
+          40,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 30,
+        "ganJing": 30,
+        "initialJiBan": 25,
+        "hintProbIncrease": 40,
+        "deYiLv": 60
+      }
+    ],
+    "uniqueEffectType": 0,
+    "uniqueEffectSummary": "持久力ボーナス(1),初期根性アップ(20)"
+  },
   "20037": {
     "cardId": 20037,
     "charaId": 1022,
@@ -71957,6 +72134,201 @@
       80,
       8,
       10,
+      0,
+      0
+    ]
+  },
+  "30214": {
+    "cardId": 30214,
+    "charaId": 1022,
+    "cardName": "[根]ファインモーション",
+    "fullName": "[歴史も美食も余すところなく]ファインモーション",
+    "rarity": 3,
+    "cardType": 3,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          15,
+          0,
+          0,
+          25,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "hintLevel": 1,
+        "youQing": 25,
+        "ganJing": 40,
+        "xunLian": 5,
+        "initialJiBan": 20,
+        "saiHou": 5,
+        "hintProbIncrease": 0,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          16,
+          0,
+          0,
+          26,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "hintLevel": 1,
+        "youQing": 26,
+        "ganJing": 42,
+        "xunLian": 6,
+        "initialJiBan": 21,
+        "saiHou": 6,
+        "hintProbIncrease": 0,
+        "deYiLv": 53
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          18,
+          0,
+          0,
+          27,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5
+        ],
+        "hintLevel": 1,
+        "youQing": 27,
+        "ganJing": 45,
+        "xunLian": 8,
+        "initialJiBan": 23,
+        "saiHou": 7,
+        "hintProbIncrease": 0,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          20,
+          0,
+          0,
+          28,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 28,
+        "ganJing": 47,
+        "xunLian": 10,
+        "initialJiBan": 25,
+        "saiHou": 8,
+        "hintProbIncrease": 30,
+        "deYiLv": 61
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          20,
+          0,
+          0,
+          30,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "hintLevel": 4,
+        "youQing": 30,
+        "ganJing": 50,
+        "xunLian": 10,
+        "initialJiBan": 25,
+        "saiHou": 10,
+        "hintProbIncrease": 40,
+        "deYiLv": 65
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时スキルポイントボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      30,
+      2,
       0,
       0
     ]
