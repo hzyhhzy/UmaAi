@@ -6,18 +6,18 @@
 #include <vector>
 #include <mutex>
 
-#define NO_NN_GAME_PERSON //uaf¾ç±¾Ã»ÓĞµ¥¶ÀµÄperson£¬Èç¹ûÊÇÀàËÆ¿­ĞıÃÅµÄ¾ç±¾Ôò×¢ÊÍµôÕâĞĞ£¬½öÏŞcuda
-//#define COMPRESS_NNINPUT //Ñ¹ËõÊäÈë£¬½ÚÊ¡pcie´ø¿í£¬½öÏŞcuda
+#define NO_NN_GAME_PERSON //uafå‰§æœ¬æ²¡æœ‰å•ç‹¬çš„personï¼Œå¦‚æœæ˜¯ç±»ä¼¼å‡¯æ—‹é—¨çš„å‰§æœ¬åˆ™æ³¨é‡Šæ‰è¿™è¡Œï¼Œä»…é™cuda
+//#define COMPRESS_NNINPUT //å‹ç¼©è¾“å…¥ï¼ŒèŠ‚çœpcieå¸¦å®½ï¼Œä»…é™cuda
 
-const int NN_Game_Card_Num = 6;//7ÕÅ¿¨£¨Ã¿´ÎÓĞÇÒ½öÓĞÒ»¸öÎ»ÖÃÎª¿Õ£©
-const int NN_Game_Person_Num = 0;//20¸öÈËÍ·£¨Ã¿´ÎÓĞÇÒ½öÓĞ¶ş¸öÎ»ÖÃÎª¿Õ£©
+const int NN_Game_Card_Num = 6;//7å¼ å¡ï¼ˆæ¯æ¬¡æœ‰ä¸”ä»…æœ‰ä¸€ä¸ªä½ç½®ä¸ºç©ºï¼‰
+const int NN_Game_Person_Num = 0;//20ä¸ªäººå¤´ï¼ˆæ¯æ¬¡æœ‰ä¸”ä»…æœ‰äºŒä¸ªä½ç½®ä¸ºç©ºï¼‰
 
 #ifdef NO_NN_GAME_PERSON
 static_assert(NN_Game_Person_Num == 0);
-const int NN_TF_NUM = NN_Game_Card_Num;//transformerÓĞ¼¸¸öÏî
+const int NN_TF_NUM = NN_Game_Card_Num;//transformeræœ‰å‡ ä¸ªé¡¹
 #else
 static_assert(NN_Game_Person_Num != 0);
-const int NN_TF_NUM = NN_Game_Person_Num;//transformerÓĞ¼¸¸öÏî
+const int NN_TF_NUM = NN_Game_Person_Num;//transformeræœ‰å‡ ä¸ªé¡¹
 #endif
 
 #if USE_BACKEND == BACKEND_LIBTORCH
@@ -34,32 +34,32 @@ const int NN_TF_NUM = NN_Game_Person_Num;//transformerÓĞ¼¸¸öÏî
 #include <onnxruntime_cxx_api.h>
 #endif
 
-//ÓÃ-1e7±íÊ¾²»ºÏ·¨²Ù×÷£¬ÔÚÉñ¾­ÍøÂçÑµÁ·Ê±Ö±½ÓºöÂÔµôÕâĞ©Öµ
+//ç”¨-1e7è¡¨ç¤ºä¸åˆæ³•æ“ä½œï¼Œåœ¨ç¥ç»ç½‘ç»œè®­ç»ƒæ—¶ç›´æ¥å¿½ç•¥æ‰è¿™äº›å€¼
 struct ModelOutputPolicyV1
 {
-  float actionPolicy[Action::MAX_ACTION_TYPE];//Ö±½Ó°´Ë³ĞòÁĞ¾Ù
+  float actionPolicy[Action::MAX_ACTION_TYPE];//ç›´æ¥æŒ‰é¡ºåºåˆ—ä¸¾
 
 };
-static_assert(sizeof(ModelOutputPolicyV1) == sizeof(float) * NNOUTPUT_CHANNELS_POLICY_V1, "NNOUTPUT_CHANNELS_POLICY_V1´íÎó");
+static_assert(sizeof(ModelOutputPolicyV1) == sizeof(float) * NNOUTPUT_CHANNELS_POLICY_V1, "NNOUTPUT_CHANNELS_POLICY_V1é”™è¯¯");
 
 
 struct ModelOutputValueV1
 {
-  float scoreMean;//scoreµÄÆ½¾ùÖµ
-  float scoreStdev;//scoreµÄ±ê×¼²î
-  //float winRate;//score>=targetµÄ¸ÅÂÊ
-  float value;//¿¼ÂÇ¼¤½ø¶ÈÖ®ºóµÄ´ò·Ö
+  float scoreMean;//scoreçš„å¹³å‡å€¼
+  float scoreStdev;//scoreçš„æ ‡å‡†å·®
+  //float winRate;//score>=targetçš„æ¦‚ç‡
+  float value;//è€ƒè™‘æ¿€è¿›åº¦ä¹‹åçš„æ‰“åˆ†
   //float extract(int i);
   static const ModelOutputValueV1 illegalValue;
 };
-static_assert(sizeof(ModelOutputValueV1) == sizeof(float) * NNOUTPUT_CHANNELS_VALUE_V1, "NNOUTPUT_CHANNELS_VALUE_V1´íÎó");
+static_assert(sizeof(ModelOutputValueV1) == sizeof(float) * NNOUTPUT_CHANNELS_VALUE_V1, "NNOUTPUT_CHANNELS_VALUE_V1é”™è¯¯");
 
 struct ModelOutputV1
 {
   ModelOutputValueV1 value;
   ModelOutputPolicyV1 policy;
 };
-static_assert(sizeof(ModelOutputV1) == sizeof(float) * NNOUTPUT_CHANNELS_V1,"NNOUTPUT_CHANNELS_V1´íÎó");
+static_assert(sizeof(ModelOutputV1) == sizeof(float) * NNOUTPUT_CHANNELS_V1,"NNOUTPUT_CHANNELS_V1é”™è¯¯");
 
 #if USE_BACKEND != BACKEND_NONE && USE_BACKEND != BACKEND_LIBTORCH 
 struct ModelWeight
@@ -70,8 +70,8 @@ struct ModelWeight
   static const int globalCh = 256;
   static const int mlpCh = 256;
 
-  //ÎªÁËÊ¡ÊÂ£¬¾ø´ó²¿·ÖÏßĞÔ±ä»»Ã»ÓĞbiasÖ»ÓĞweight
-  //ÄÚ´æÅÅÁĞ·½Ê½ÊÇÊäÈëÍ¨µÀÓÅÏÈ
+  //ä¸ºäº†çœäº‹ï¼Œç»å¤§éƒ¨åˆ†çº¿æ€§å˜æ¢æ²¡æœ‰biasåªæœ‰weight
+  //å†…å­˜æ’åˆ—æ–¹å¼æ˜¯è¾“å…¥é€šé“ä¼˜å…ˆ
   std::vector<float> inputheadGlobal1;// [globalCh * (NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_SEARCHPARAM_V1)] ;
   std::vector<float> inputheadGlobal2;// [encoderCh * globalCh];
   std::vector<float> inputheadCard;// [encoderCh * NNINPUT_CHANNELS_CARD_V1];
@@ -104,7 +104,7 @@ struct ModelCudaBuf
   //cudnnHandle_t cudnn;
 
 
-  //ÄÚ´æÅÅÁĞ·½Ê½ÊÇÊäÈëÍ¨µÀÓÅÏÈ
+  //å†…å­˜æ’åˆ—æ–¹å¼æ˜¯è¾“å…¥é€šé“ä¼˜å…ˆ
   float* inputheadGlobal1;
   float* inputheadGlobal2;
   float* inputheadCard;
@@ -124,7 +124,7 @@ struct ModelCudaBuf
   float* outputhead_w;
   float* outputhead_b;
 
-  //ÖĞ¼ä±äÁ¿
+  //ä¸­é—´å˜é‡
   uint16_t* inputOnesIdx;
   uint16_t* inputFloatIdx;
   float* inputFloatValue;
@@ -140,7 +140,7 @@ struct ModelCudaBuf
 #ifndef NO_NN_GAME_PERSON
   float* encoderInput_cardf;
 #endif // !NO_NN_GAME_PERSON
-  float* encoderInput;//self.inputheadPerson(x3)Ö±½Ó±£´æÔÚÕâÀïÈ»ºó¼ÓÉÏgfºÍcardf£¬È»ºórelu
+  float* encoderInput;//self.inputheadPerson(x3)ç›´æ¥ä¿å­˜åœ¨è¿™é‡Œç„¶ååŠ ä¸Šgfå’Œcardfï¼Œç„¶årelu
 
   float* encoderQ;
   float* encoderV;
@@ -170,9 +170,9 @@ class Evaluator;
 class Model
 {
 public:
-  //static lock;//ËùÓĞµÄevaluator¹²ÓÃÒ»¸ölock
+  //static lock;//æ‰€æœ‰çš„evaluatorå…±ç”¨ä¸€ä¸ªlock
   Model(std::string path, int batchsize);
-  void evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int gameNum);//¼ÆËãgamesBufÖĞgameNum¾ÖÓÎÏ·µÄÊä³ö£¬Êä³öµ½outputBuf
+  void evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int gameNum);//è®¡ç®—gamesBufä¸­gameNumå±€æ¸¸æˆçš„è¾“å‡ºï¼Œè¾“å‡ºåˆ°outputBuf
   static void printBackendInfo();
 
 
@@ -192,7 +192,7 @@ private:
 
 #if USE_BACKEND != BACKEND_NONE && USE_BACKEND != BACKEND_LIBTORCH 
   const int batchSize;
-  std::mutex mtx; // »¥³âËø
+  std::mutex mtx; // äº’æ–¥é”
 #endif
 
 #if USE_BACKEND == BACKEND_CUDA

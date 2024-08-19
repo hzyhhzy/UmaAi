@@ -6,37 +6,38 @@
 #include <cstdlib>
 using json = nlohmann::json;
 
-// »ØºÏ±ê¼ÇÎ» 0-ÆÕÍ¨£¬1-ÉúÑÄ±ÈÈü£¬2-½¨Òé±ÈÈü£¬4-½¨ÒéºìÅ®Éñ
-// »¹¿ÉÒÔÌí¼ÓÆäËû±ê¼ÇÀàĞÍ
+// å›åˆæ ‡è®°ä½ 0-æ™®é€šï¼Œ1-ç”Ÿæ¶¯æ¯”èµ›ï¼Œ2-å»ºè®®æ¯”èµ›ï¼Œ4-å»ºè®®çº¢å¥³ç¥
+// è¿˜å¯ä»¥æ·»åŠ å…¶ä»–æ ‡è®°ç±»å‹
 enum TurnFlags { TURN_NORMAL = 0, TURN_RACE = 1, TURN_PREFER_RACE = 2, TURN_RED = 4 };
 
-// ÃèÊö×ÔÓÉ±ÈÈüÇø¼ä [start, end]
+// æè¿°è‡ªç”±æ¯”èµ›åŒºé—´ [start, end]
 struct FreeRaceData
 {
-	int startTurn;	// ¿ªÊ¼»ØºÏ
-	int endTurn;	// ½áÊø»ØºÏ£¨°üº¬£©
-	int count;		// ĞèÒªµÄ´ÎÊı
+	int startTurn;	// å¼€å§‹å›åˆ
+	int endTurn;	// ç»“æŸå›åˆï¼ˆåŒ…å«ï¼‰
+	int count;		// éœ€è¦çš„æ¬¡æ•°
 
-	// Éú³Éfriend from_json, to_json¹©json¿âÊ¹ÓÃ
+	// ç”Ÿæˆfriend from_json, to_jsonä¾›jsonåº“ä½¿ç”¨
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(FreeRaceData, startTurn, endTurn, count)
 };
 
-//ÂíÄïµÄ²ÎÊı
+//é©¬å¨˜çš„å‚æ•°
 struct UmaData
 {
-	int star;//ĞÇÊı
+	int star;//æ˜Ÿæ•°
 	int gameId;
-	int races[TOTAL_TURN];// »ØºÏ±ê¼Ç enum TurnFlags
-	int fiveStatusBonus[5];//ÊôĞÔ¼Ó³É
-	int fiveStatusInitial[5];//³õÊ¼ÊôĞÔ
-	std::vector<FreeRaceData> freeRaces;	// ×ÔÓÉ±ÈÈüÇø¼ä£¨¶à¸ö£©
+	int races[TOTAL_TURN];// å›åˆæ ‡è®° enum TurnFlags
+	int fiveStatusBonus[5];//å±æ€§åŠ æˆ
+	int fiveStatusInitial[5];//åˆå§‹å±æ€§
+	std::vector<FreeRaceData> freeRaces;	// è‡ªç”±æ¯”èµ›åŒºé—´ï¼ˆå¤šä¸ªï¼‰
 	std::string name;
 
-	// ±ØĞëinline
+	// å¿…é¡»inline
 	friend void to_json(json& j, const UmaData& me)
 	{
 		j["gameId"] = me.gameId;
-		j["name"] = string_To_UTF8(me.name);
+		//j["name"] = string_To_UTF8(me.name);
+		j["name"] = me.name;
 		j["star"] = me.star;
 		j["fiveStatusBonus"] = arrayToJson(me.fiveStatusBonus, 5);
 		j["fiveStatusInitial"] = arrayToJson(me.fiveStatusInitial, 5);
@@ -61,31 +62,32 @@ struct UmaData
 		  std::string st;
 		  j.at("gameId").get_to(me.gameId);
 		  j.at("name").get_to(st);
-		  me.name = UTF8_To_string(st);
+		  //me.name = UTF8_To_string(st);
+		  me.name = st;
 		  j.at("star").get_to(me.star);
 		  jsonToArray(j.at("fiveStatusBonus"), me.fiveStatusBonus, 5);
 		  jsonToArray(j.at("fiveStatusInitial"), me.fiveStatusInitial, 5);
 		  j.at("freeRaces").get_to(me.freeRaces);
 
-		  // ½«Races£¬preferRacesºÍpreferRedsÑ¹Ëõ½øRaceFlagsÖĞ
+		  // å°†Racesï¼ŒpreferRaceså’ŒpreferRedså‹ç¼©è¿›RaceFlagsä¸­
 		  memset(me.races, 0, sizeof(me.races));
 		  if (j["races"][0].is_boolean())
 		  {
-			  // ÀÏ±ÈÈü¸ñÊ½
+			  // è€æ¯”èµ›æ ¼å¼
 			  for (int i = 0; i < j["races"].size(); ++i)
 				  if ((bool)(j["races"][i]))
 					  me.races[i] |= TURN_RACE;
 		  }
 		  else // is int
 		  {
-				me.races[TOTAL_TURN - 1] = true;//Grand Master£¨×îºóÒ»Õ½£©
+				me.races[TOTAL_TURN - 1] = true;//Grand Masterï¼ˆæœ€åä¸€æˆ˜ï¼‰
 
 				for (auto turn : j["races"])
 				{
 					static_assert(TOTAL_TURN < 1000);
 					if(turn<TOTAL_TURN)
 						me.races[turn] |= TURN_RACE;
-					else if (turn > 1000)//ÄêÔÂÔÂ°ë£¬ÀıÈç1061´ú±íµÚÒ»Äê6ÔÂÉÏ°ë£¬2112´ú±íµÚ¶şÄê11ÔÂÏÂ°ë
+					else if (turn > 1000)//å¹´æœˆæœˆåŠï¼Œä¾‹å¦‚1061ä»£è¡¨ç¬¬ä¸€å¹´6æœˆä¸ŠåŠï¼Œ2112ä»£è¡¨ç¬¬äºŒå¹´11æœˆä¸‹åŠ
 					{
 						int year = turn / 1000 - 1;
 						int month = (turn % 1000) / 10 - 1;

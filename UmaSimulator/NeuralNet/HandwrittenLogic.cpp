@@ -10,48 +10,48 @@ const double vitalFactorStart = 2;
 const double vitalFactorEnd = 4;
 const double vitalScaleTraining = 1;
 
-const double reserveStatusFactor = 40;//¿ØÊôĞÔÊ±¸øÃ¿»ØºÏÔ¤Áô¶àÉÙ£¬´Ó0Öğ½¥Ôö¼Óµ½Õâ¸öÊı×Ö
+const double reserveStatusFactor = 40;//æ§å±æ€§æ—¶ç»™æ¯å›åˆé¢„ç•™å¤šå°‘ï¼Œä»0é€æ¸å¢åŠ åˆ°è¿™ä¸ªæ•°å­—
 
 const double smallFailValue = -150;
 const double bigFailValue = -500;
-const double outgoingBonusIfNotFullMotivation = 150;//µôĞÄÇéÊ±Ìá¸ßÍâ³ö·ÖÊı
-const double raceBonus = 150;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
+const double outgoingBonusIfNotFullMotivation = 150;//æ‰å¿ƒæƒ…æ—¶æé«˜å¤–å‡ºåˆ†æ•°
+const double raceBonus = 150;//æ¯”èµ›æ”¶ç›Šï¼Œä¸è€ƒè™‘ä½“åŠ›
 
-//const double materialValue[5] = { 0.5,0.2,0.5,0.5,0.3 };//Ã¿¸öÁÏÀíÔ­ÁÏµÄ¹ÀÖµ
-//const double materialValueScale = 1.0;//ÁÏÀíÔ­ÁÏµÄ¹ÀÖµ³ËÒÔÕâ¸öÏµÊı£¬·½±ãÒ»Æğ¸Ä
-const double greenBonusBasicYear1 = 100;//ÂÌÉ«ÁÏÀíµÄ¼Ó³É£¬î¿°íÃ»ÂúÊ±½µµÍÏµÊı£¬µÚÒ»Äê
-const double greenBonusBasicYear2 = 100;//ÂÌÉ«ÁÏÀíµÄ¼Ó³É£¬µÚ¶şÄê
-const double greenBonusBasicYear3 = 100;//ÂÌÉ«ÁÏÀíµÄ¼Ó³É£¬µÚÈıÄê
+//const double materialValue[5] = { 0.5,0.2,0.5,0.5,0.3 };//æ¯ä¸ªæ–™ç†åŸæ–™çš„ä¼°å€¼
+//const double materialValueScale = 1.0;//æ–™ç†åŸæ–™çš„ä¼°å€¼ä¹˜ä»¥è¿™ä¸ªç³»æ•°ï¼Œæ–¹ä¾¿ä¸€èµ·æ”¹
+const double greenBonusBasicYear1 = 100;//ç»¿è‰²æ–™ç†çš„åŠ æˆï¼Œç¾ç»Šæ²¡æ»¡æ—¶é™ä½ç³»æ•°ï¼Œç¬¬ä¸€å¹´
+const double greenBonusBasicYear2 = 100;//ç»¿è‰²æ–™ç†çš„åŠ æˆï¼Œç¬¬äºŒå¹´
+const double greenBonusBasicYear3 = 100;//ç»¿è‰²æ–™ç†çš„åŠ æˆï¼Œç¬¬ä¸‰å¹´
 
-const double cookingThreholdFactorLv2 = 0.5;//Ô½´óµÚ¶şÈıÄê³Ô²ËÔ½¼¤½ø£¨2¼¶²Ë£©
-const double cookingThreholdFactorLv3 = 1.0;//Ô½´óµÚÈıÄê³Ô²ËÔ½¼¤½ø£¨3¼¶²Ë£©
+const double cookingThreholdFactorLv2 = 0.5;//è¶Šå¤§ç¬¬äºŒä¸‰å¹´åƒèœè¶Šæ¿€è¿›ï¼ˆ2çº§èœï¼‰
+const double cookingThreholdFactorLv3 = 1.0;//è¶Šå¤§ç¬¬ä¸‰å¹´åƒèœè¶Šæ¿€è¿›ï¼ˆ3çº§èœï¼‰
 
 
-//const double xiangtanExhaustLossMax = 800;//ÏàÌ¸ºÄ¾¡ÇÒÃ»´ï±êµÄ¹ÀÖµ¿Û·Ö
+//const double xiangtanExhaustLossMax = 800;//ç›¸è°ˆè€—å°½ä¸”æ²¡è¾¾æ ‡çš„ä¼°å€¼æ‰£åˆ†
 
-//Ò»¸ö·Ö¶Îº¯Êı£¬ÓÃÀ´¿ØÊôĞÔ
-inline double statusSoftFunction(double x, double reserve, double reserveInvX2)//reserveÊÇ¿ØÊôĞÔ±£Áô¿Õ¼ä£¨½µµÍÈ¨ÖØ£©£¬reserveInvX2ÊÇ1/(2*reserve)
+//ä¸€ä¸ªåˆ†æ®µå‡½æ•°ï¼Œç”¨æ¥æ§å±æ€§
+inline double statusSoftFunction(double x, double reserve, double reserveInvX2)//reserveæ˜¯æ§å±æ€§ä¿ç•™ç©ºé—´ï¼ˆé™ä½æƒé‡ï¼‰ï¼ŒreserveInvX2æ˜¯1/(2*reserve)
 {
   if (x >= 0)return 0;
   if (x > -reserve)return -x * x * reserveInvX2;
   return x + 0.5 * reserve;
 }
 
-static void statusGainEvaluation(const Game& g, double* result) { //resultÒÀ´ÎÊÇÎåÖÖÑµÁ·µÄ¹ÀÖµ
-  int remainTurn = TOTAL_TURN - g.turn - 1;//Õâ´ÎÑµÁ·ºó»¹ÓĞ¼¸¸öÑµÁ·»ØºÏ
-  //uraÆÚ¼äµÄÒ»¸ö»ØºÏÊÓÎªÁ½¸ö»ØºÏ£¬Òò´Ë²»ĞèÒª¶îÍâ´¦Àí
-  //if (remainTurn == 2)remainTurn = 1;//uraµÚ¶ş»ØºÏ
-  //else if (remainTurn >= 4)remainTurn -= 2;//uraµÚÒ»»ØºÏ
+static void statusGainEvaluation(const Game& g, double* result) { //resultä¾æ¬¡æ˜¯äº”ç§è®­ç»ƒçš„ä¼°å€¼
+  int remainTurn = TOTAL_TURN - g.turn - 1;//è¿™æ¬¡è®­ç»ƒåè¿˜æœ‰å‡ ä¸ªè®­ç»ƒå›åˆ
+  //uraæœŸé—´çš„ä¸€ä¸ªå›åˆè§†ä¸ºä¸¤ä¸ªå›åˆï¼Œå› æ­¤ä¸éœ€è¦é¢å¤–å¤„ç†
+  //if (remainTurn == 2)remainTurn = 1;//uraç¬¬äºŒå›åˆ
+  //else if (remainTurn >= 4)remainTurn -= 2;//uraç¬¬ä¸€å›åˆ
 
   double reserve = reserveStatusFactor * remainTurn * (1 - double(remainTurn) / (TOTAL_TURN * 2));
   double reserveInvX2 = 1 / (2 * reserve);
 
   double finalBonus0 = 60;
-  finalBonus0 += 30;//ura3ºÍ×îÖÕÊÂ¼ş
+  finalBonus0 += 30;//ura3å’Œæœ€ç»ˆäº‹ä»¶
   if (remainTurn >= 1)finalBonus0 += 20;//ura2
   if (remainTurn >= 2)finalBonus0 += 20;//ura1
 
-  double remain[5]; //Ã¿ÖÖÊôĞÔ»¹ÓĞ¶àÉÙ¿Õ¼ä
+  double remain[5]; //æ¯ç§å±æ€§è¿˜æœ‰å¤šå°‘ç©ºé—´
 
   for (int i = 0; i < 5; i++)
   {
@@ -87,12 +87,12 @@ static double calculateMaxVitalEquvalant(const Game& g)
 {
   int t = g.turn;
   if (g.turn >= 76)
-    return 0;//×îºóÒ»»ØºÏ²»ĞèÒªÌåÁ¦
+    return 0;//æœ€åä¸€å›åˆä¸éœ€è¦ä½“åŠ›
   if (g.turn > 71)
-    return 10;//uraÆÚ¼ä¿ÉÒÔ³Ô²Ë
+    return 10;//uraæœŸé—´å¯ä»¥åƒèœ
   if (g.turn == 71)
-    return 30;//uraÇ°×îºóÒ»»ØºÏ£¬30ÌåÁ¦½ø¾ÍĞĞ
-  int nonRaceTurn = 0;//71»ØºÏÇ°£¬Ã¿¸öÑµÁ·»ØºÏ°´ÏûºÄ15ÌåÁ¦¼ÆËã
+    return 30;//uraå‰æœ€åä¸€å›åˆï¼Œ30ä½“åŠ›è¿›å°±è¡Œ
+  int nonRaceTurn = 0;//71å›åˆå‰ï¼Œæ¯ä¸ªè®­ç»ƒå›åˆæŒ‰æ¶ˆè€—15ä½“åŠ›è®¡ç®—
   for (int i = 71; i > g.turn; i--)
   {
     if (!g.isRacingTurn[i])nonRaceTurn++;
@@ -117,7 +117,7 @@ static double vitalEvaluation(int vital, int maxVital)
     return vitalEvaluation(maxVital, maxVital);
 }
 
-static double materialEvaluation(int turn, int count) //ÆÀ¹À³Ô²ËµÄ¿ªÏú£¬¾ö¶¨µÚ¶şÈıÄê³Ô²»³Ô²Ë
+static double materialEvaluation(int turn, int count) //è¯„ä¼°åƒèœçš„å¼€é”€ï¼Œå†³å®šç¬¬äºŒä¸‰å¹´åƒä¸åƒèœ
 {
   double bias =
     turn < 48 ? 100 :
@@ -142,30 +142,30 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   bestAction.train = TRA_none;
 
   if (game.isEnd())return bestAction;
-  //±ÈÈü
+  //æ¯”èµ›
   if (game.isRacing)
   {
-    if (game.turn < 72)//³£¹æ±ÈÈü²»³Ô²Ë
+    if (game.turn < 72)//å¸¸è§„æ¯”èµ›ä¸åƒèœ
     {
       bestAction.train = TRA_race;
       return bestAction;
     }
-    if (game.turn == TOTAL_TURN - 1)//ura×îºóÒ»»ØºÏ£¬ÄÜ³ÔÊ²Ã´¾Í³ÔÊ²Ã´
+    if (game.turn == TOTAL_TURN - 1)//uraæœ€åä¸€å›åˆï¼Œèƒ½åƒä»€ä¹ˆå°±åƒä»€ä¹ˆ
     {
-      //´ÓºóÍùÇ°°¤¸öÊÔ
+      //ä»åå¾€å‰æŒ¨ä¸ªè¯•
       for (int i = DISH_g1plate; i >= 1; i--)
       {
         bestAction.dishType = i;
         if (game.isLegal(bestAction))return bestAction;
       }
-      //Ê²Ã´¶¼³Ô²»ÁË
+      //ä»€ä¹ˆéƒ½åƒä¸äº†
       bestAction.dishType = DISH_none;
       bestAction.train = TRA_race;
       return bestAction;
     }
 
 
-    //ura1ºÍura2£¬ËãÒ»ÏÂÄÜ²»ÄÜ³Ôg1plate
+    //ura1å’Œura2ï¼Œç®—ä¸€ä¸‹èƒ½ä¸èƒ½åƒg1plate
     int g1plateCost = game.cook_win_history[4] == 2 ? 80 : 100;
 
     bool haveG1Plate = true;
@@ -176,7 +176,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         matGain += 1.5001 * GameConstants::Cook_HarvestExtra[game.cook_farm_level[matType]];
       int reserveMin = game.turn == 73 ?
         2 * g1plateCost + 80 - 3 * 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]] / 2 :
-        2 * g1plateCost;//Òª±£Ö¤ºóĞøµÄÑµÁ·»ØºÏÒ»Ö±¿ÉÒÔ³Ôµ½g1plate
+        2 * g1plateCost;//è¦ä¿è¯åç»­çš„è®­ç»ƒå›åˆä¸€ç›´å¯ä»¥åƒåˆ°g1plate
       if (game.cook_material[matType] < g1plateCost || game.cook_material[matType] + matGain < reserveMin)
       {
         haveG1Plate = false;
@@ -190,13 +190,13 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     }
     else
     {
-      //³ÔÁËÏÂ»ØºÏÑµÁ·Ã»·¨³ÔÁË
+      //åƒäº†ä¸‹å›åˆè®­ç»ƒæ²¡æ³•åƒäº†
       bestAction.train = TRA_race;
       return bestAction;
     }
   }
 
-  //uraÆÚ¼äÈç¹ûÄÜ³ÔG1Plate¾ÍÖ±½Ó³Ô£¬·ñÔò²»³Ô
+  //uraæœŸé—´å¦‚æœèƒ½åƒG1Plateå°±ç›´æ¥åƒï¼Œå¦åˆ™ä¸åƒ
   if (game.turn >= 72 && game.cook_dish==DISH_none)
   {
     if (game.isDishLegal(DISH_g1plate))
@@ -204,13 +204,13 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       bestAction.dishType = DISH_g1plate;
       return bestAction;
     }
-    //·ñÔòÊÇ³Ô¹ıÁË»òÕß³Ô²»ÁË£¬Ñ°ÕÒ×îÓÅÑµÁ·
+    //å¦åˆ™æ˜¯åƒè¿‡äº†æˆ–è€…åƒä¸äº†ï¼Œå¯»æ‰¾æœ€ä¼˜è®­ç»ƒ
   }
 
 
-  //³£¹æÑµÁ·»ØºÏ
+  //å¸¸è§„è®­ç»ƒå›åˆ
   
-  //Èç¹û³ÔÁË2¼¶3¼¶²Ë£¬Ö±½ÓÑ¡Ôñ¶ÔÓ¦ÑµÁ·
+  //å¦‚æœåƒäº†2çº§3çº§èœï¼Œç›´æ¥é€‰æ‹©å¯¹åº”è®­ç»ƒ
   if (game.cook_dish != DISH_none)
   {
     int dishLevel = GameConstants::Cook_DishLevel[game.cook_dish];
@@ -238,12 +238,12 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     game.turn < 24 ? greenBonusBasicYear1 :
     game.turn < 48 ? greenBonusBasicYear2 :
     greenBonusBasicYear3;
-  //î¿°íÃ»ÂúÊ±½µµÍÂÌÉ«ÁÏÀí¼Ó³É
+  //ç¾ç»Šæ²¡æ»¡æ—¶é™ä½ç»¿è‰²æ–™ç†åŠ æˆ
   for (int i = 0; i < 6; i++)
     if (game.persons[i].friendship < 80)
       greenBonus *= 0.85;
 
-  //Íâ³ö/ĞİÏ¢
+  //å¤–å‡º/ä¼‘æ¯
   {
     bool isFriendOutgoingAvailable =
       game.friend_type != 0 &&
@@ -253,7 +253,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     Action action;
     action.dishType = DISH_none;
     action.train = TRA_rest;
-    if (isFriendOutgoingAvailable || game.isXiahesu())action.train = TRA_outgoing;//ÓĞÓÑÈËÍâ³öÓÅÏÈÍâ³ö£¬·ñÔòĞİÏ¢
+    if (isFriendOutgoingAvailable || game.isXiahesu())action.train = TRA_outgoing;//æœ‰å‹äººå¤–å‡ºä¼˜å…ˆå¤–å‡ºï¼Œå¦åˆ™ä¼‘æ¯
 
     int vitalGain = isFriendOutgoingAvailable ? 50 : game.isXiahesu() ? 40 : 50;
     bool addMotivation = game.motivation < 5 && action.train == TRA_outgoing;
@@ -275,7 +275,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       bestAction = action;
     }
   }
-  //±ÈÈü
+  //æ¯”èµ›
   Action raceAction;
   raceAction.dishType = DISH_none;
   raceAction.train = TRA_race;
@@ -300,9 +300,9 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   }
 
 
-  //ÑµÁ·
+  //è®­ç»ƒ
 
-  //ÏÈÕÒµ½×îºÃµÄÑµÁ·£¬È»ºó¼ÆËãÒª²»Òª³Ô²Ë
+  //å…ˆæ‰¾åˆ°æœ€å¥½çš„è®­ç»ƒï¼Œç„¶åè®¡ç®—è¦ä¸è¦åƒèœ
   {
     double statusGainE[5];
     statusGainEvaluation(game, statusGainE);
@@ -313,13 +313,13 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       double value = statusGainE[tra];
 
 
-      //´¦ÀíhintºÍî¿°í
-      int cardHintNum = 0;//ËùÓĞhintËæ»úÈ¡Ò»¸ö£¬ËùÒÔ´ò·ÖµÄÊ±ºòÈ¡Æ½¾ù
+      //å¤„ç†hintå’Œç¾ç»Š
+      int cardHintNum = 0;//æ‰€æœ‰hintéšæœºå–ä¸€ä¸ªï¼Œæ‰€ä»¥æ‰“åˆ†çš„æ—¶å€™å–å¹³å‡
       for (int j = 0; j < 5; j++)
       {
         int p = game.personDistribution[tra][j];
-        if (p < 0)break;//Ã»ÈË
-        if (p >= 6)continue;//²»ÊÇ¿¨
+        if (p < 0)break;//æ²¡äºº
+        if (p >= 6)continue;//ä¸æ˜¯å¡
         if (game.persons[p].isHint)
           cardHintNum += 1;
       }
@@ -328,10 +328,10 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       for (int j = 0; j < 5; j++)
       {
         int pi = game.personDistribution[tra][j];
-        if (pi < 0)break;//Ã»ÈË
-        if (pi >= 6)continue;//²»ÊÇ¿¨
+        if (pi < 0)break;//æ²¡äºº
+        if (pi >= 6)continue;//ä¸æ˜¯å¡
         const Person& p = game.persons[pi];
-        if (p.personType == PersonType_scenarioCard)//ÓÑÈË¿¨
+        if (p.personType == PersonType_scenarioCard)//å‹äººå¡
         {
           haveFriend = true;
           if (game.friend_stage == FriendStage_notClicked)
@@ -372,16 +372,16 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       }
 
       int bestDish = 0;
-      //¿¼ÂÇ³Ô¸÷ÖÖ²Ë
-      //µÚÒ»Äê£º×Ô¼ºÏàÓ¦ÑµÁ·Ö»ÓĞÒ»ÖÖ²Ë
-      //µÚ¶şÄê£ºÖ»¿¼ÂÇlv2²Ë
-      //µÚÈıÄê£ºlv2ºÍlv3¶¼¿¼ÂÇ
-      //ura£º´ó¸ÅÂÊÒÑ¾­³Ô¹ıg1plateÁË£¬ÕâÀï²»¿¼ÂÇ³Ô²Ë
+      //è€ƒè™‘åƒå„ç§èœ
+      //ç¬¬ä¸€å¹´ï¼šè‡ªå·±ç›¸åº”è®­ç»ƒåªæœ‰ä¸€ç§èœ
+      //ç¬¬äºŒå¹´ï¼šåªè€ƒè™‘lv2èœ
+      //ç¬¬ä¸‰å¹´ï¼šlv2å’Œlv3éƒ½è€ƒè™‘
+      //uraï¼šå¤§æ¦‚ç‡å·²ç»åƒè¿‡g1plateäº†ï¼Œè¿™é‡Œä¸è€ƒè™‘åƒèœ
       if (game.cook_dish == DISH_none)
       {
-        if (game.turn < 24)//µÚÒ»Äê
+        if (game.turn < 24)//ç¬¬ä¸€å¹´
         {
-          if (game.cook_dish_pt < 3000)//³Ôµ½2500pt
+          if (game.cook_dish_pt < 3000)//åƒåˆ°2500pt
           {
             if (tra == 0)
             {
@@ -402,7 +402,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
             }
           }
         }
-        else if (game.turn < 72)//µÚ¶şÈıÄê
+        else if (game.turn < 72)//ç¬¬äºŒä¸‰å¹´
         {
           int dish1 = DISH_speed1 + tra;
           int dish2 = DISH_speed2 + tra;
@@ -438,12 +438,12 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         } 
       }
 
-      //ÀíÂÛÉÏ£¬¹ÀÖµĞèÒª³ËÉÏ²ËµÄÑµÁ·¼Ó³ÉÈ»ºó¼õÈ¥²ËµÄ¿ªÏú£¬µ«¹ıÓÚ¸´ÔÓ£¬ÀÁµÃ¿¼ÂÇÁË
+      //ç†è®ºä¸Šï¼Œä¼°å€¼éœ€è¦ä¹˜ä¸Šèœçš„è®­ç»ƒåŠ æˆç„¶åå‡å»èœçš„å¼€é”€ï¼Œä½†è¿‡äºå¤æ‚ï¼Œæ‡’å¾—è€ƒè™‘äº†
       int vitalAfterTrain = std::min(maxVitalEquvalant, game.trainVitalChange[tra] + game.vital);
       value += vitalScaleTraining * vitalFactor * (vitalEvaluation(vitalAfterTrain, game.maxVital) - vitalEvalBeforeTrain);
 
-      //µ½Ä¿Ç°ÎªÖ¹¶¼ÊÇÑµÁ·³É¹¦µÄvalue
-      //¼ÆËã³Ô²ËÖ®ºóµÄÌåÁ¦£¬ÖØĞÂ¼ÆËãÊ§°ÜÂÊ
+      //åˆ°ç›®å‰ä¸ºæ­¢éƒ½æ˜¯è®­ç»ƒæˆåŠŸçš„value
+      //è®¡ç®—åƒèœä¹‹åçš„ä½“åŠ›ï¼Œé‡æ–°è®¡ç®—å¤±è´¥ç‡
       double failRate = game.failRate[tra];
       if (bestDish != 0 && failRate > 0)
       {
@@ -451,9 +451,9 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         int dishMainTraining = GameConstants::Cook_DishMainTraining[bestDish];
         int vitalGainDish = dishLevel==1?0:
           dishLevel == 2 ? (game.cook_farm_level[dishMainTraining] >= 3 ? 5 : 0):
-          dishLevel == 3 ? (game.cook_farm_level[dishMainTraining] >= 3 ? 20 : 15): //¼ÙÉèÒ»°ë´ó³É¹¦¼ÓÌåÁ¦
+          dishLevel == 3 ? (game.cook_farm_level[dishMainTraining] >= 3 ? 20 : 15): //å‡è®¾ä¸€åŠå¤§æˆåŠŸåŠ ä½“åŠ›
           25;
-        failRate -= 1.7 * vitalGainDish;//´Ö²Ú¹À¼Æ
+        failRate -= 1.7 * vitalGainDish;//ç²—ç³™ä¼°è®¡
         if (failRate < 0)failRate = 0;
       }
 
@@ -468,7 +468,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       }
 
       Action action;
-      if (bestDish != DISH_none)//ÏÈ³Ô²Ë£¬ÏÂÒ»´ÎÔÙÑµÁ·
+      if (bestDish != DISH_none)//å…ˆåƒèœï¼Œä¸‹ä¸€æ¬¡å†è®­ç»ƒ
       {
         action.dishType = bestDish;
         action.train = TRA_none;

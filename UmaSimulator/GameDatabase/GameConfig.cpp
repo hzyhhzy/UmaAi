@@ -1,4 +1,4 @@
-﻿#include "GameConfig.h"
+#include "GameConfig.h"
 #include "../Game/Game.h"
 
 using namespace std;

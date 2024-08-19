@@ -19,6 +19,6 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
 void Model::printBackendInfo()
 {
-    cout << "AI°æ±¾£ºÊÖÐ´Âß¼­+MonteCarlo" << endl;
+    cout << "AIç‰ˆæœ¬ï¼šæ‰‹å†™é€»è¾‘+MonteCarlo" << endl;
 }
 #endif

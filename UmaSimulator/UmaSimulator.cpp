@@ -10,6 +10,7 @@
 
 int main()
 {
+	system("chcp 65001");
 	SearchResult::initNormDistributionCdfTable();
 	//main_testOnnx();
 	//return 0;
