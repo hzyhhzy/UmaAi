@@ -342,14 +342,6 @@ void Game::print() const
 
   cout << divLine;
 
-  if (isRacing)
-  {
-    cout << "比赛菜种：" << "\033[32m" << GameConstants::Cook_MaterialNames[cook_main_race_material_type] << "\033[0m" << endl;
-    cout << divLineWhite;
-    cout << termcolor::red << "比赛回合" << termcolor::reset << endl;
-    return;//比赛回合就不显示训练了
-  }
-
   //属性值
   {
     string oneRow[5];//表格中一行要显示的内容
@@ -359,6 +351,15 @@ void Game::print() const
     }
     printTableRow(oneRow);
   }
+
+  if (isRacing)
+  {
+    cout << divLineWhite;
+    cout << "比赛菜种：" << "\033[32m" << GameConstants::Cook_MaterialNames[cook_main_race_material_type] << "\033[0m" << endl;
+    cout << termcolor::red << "比赛回合" << termcolor::reset << endl;
+    return;//比赛回合就不显示训练了
+  }
+
   //体力
   {
     string oneRow[5];//表格中一行要显示的内容

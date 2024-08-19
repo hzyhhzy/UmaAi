@@ -1,10 +1,12 @@
 ﻿#include "GameConfig.h"
-#include "../GameDatabase/GameConstants.h"
+#include "../Game/Game.h"
 
 using namespace std;
 using json = nlohmann::json;
 
-double GameConfig::radicalFactor = 3;
+double GameConfig::radicalFactor = 3; 
+int GameConfig::scoringMode = SM_normal;
+double GameConfig::scorePtRate = GameConstants::ScorePtRateDefault;
 int GameConfig::eventStrength = GameConstants::EventStrengthDefault;
 
 #if USE_BACKEND != BACKEND_NONE      //神经网络版
@@ -59,6 +61,20 @@ void GameConfig::load(const string& path)
 			GameConfig::radicalFactor = j.at("radicalFactor");
 		if (j.contains("eventStrength"))
 			GameConfig::eventStrength = j.at("eventStrength");
+		if (j.contains("scorePtRate"))
+			GameConfig::scorePtRate = j.at("scorePtRate");
+		if (j.contains("scoringMode"))
+		{
+			string smStr = j.at("scoringMode");
+			if (smStr == to_string(SM_normal) || smStr == "normal")
+				GameConfig::scoringMode = SM_normal;
+			else if (smStr == to_string(SM_race) || smStr == "race")
+				GameConfig::scoringMode = SM_race;
+			else if (smStr == to_string(SM_mile) || smStr == "mile")
+				GameConfig::scoringMode = SM_mile;
+			else
+				throw "config文件里未知的scoringMode设置";
+		}
 		if (j.contains("modelPath"))
 			GameConfig::modelPath = j.at("modelPath");
 		if (j.contains("threadNum"))
