@@ -19,12 +19,12 @@ namespace UmaAiForm
 {
     public partial class Form1 : Form
     {
-        private JObject umaDB,cardDB;
+        private JObject umaDB, cardDB;
 
         public Form1()
         {
             InitializeComponent();
-            RefreshTrainingComboBoxItems(); 
+            RefreshTrainingComboBoxItems();
             ClearTrainingComboBoxSelection();
         }
         private void InitTextboxes()
@@ -96,7 +96,12 @@ namespace UmaAiForm
             LoadJsonData();
             InitTextboxes();
         }
-        
+
+        private int HarvestLoopCount(int turn)
+        {
+            bool isXiahesuOrUra = (turn >= 36 && turn <= 39) || (turn >= 60 && turn <= 63) || turn >= 72;
+            return isXiahesuOrUra ? 0 : turn % 4;
+        }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
@@ -133,7 +138,7 @@ namespace UmaAiForm
                 textBox.Text = string.Empty;
             }
         }
-        
+
 
         private void label9_Click(object sender, EventArgs e)
         {
@@ -175,7 +180,17 @@ namespace UmaAiForm
             int year = 1 + turn / 24;
             int month = 1 + (turn % 24) / 2;
             string halfMonth = turn % 2 == 1 ? "latter half" : "first half";
-            textBox11.Text=$"Year {year}, Month {month}, {halfMonth}";
+            textBox11.Text = $"Year {year}, Month {month}, {halfMonth}";
+            //harvest history
+            int enabledHistNum = HarvestLoopCount(turn);
+            comboBox27.Enabled = enabledHistNum > 0;
+            comboBox28.Enabled = enabledHistNum > 1;
+            comboBox29.Enabled = enabledHistNum > 2;
+            comboBox30.Enabled = enabledHistNum > 3;
+            checkBox1.Enabled = enabledHistNum > 0;
+            checkBox2.Enabled = enabledHistNum > 1;
+            checkBox3.Enabled = enabledHistNum > 2;
+            checkBox4.Enabled = enabledHistNum > 3;
         }
 
         private void label32_Click(object sender, EventArgs e)
@@ -744,6 +759,35 @@ namespace UmaAiForm
         }
 
         private void numericUpDown6_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label51_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown49_ValueChanged(object sender, EventArgs e)
+        {
+            if(numericUpDown49.Value >= 12000)
+            {
+                checkBox11.Checked = true;
+                checkBox11.Enabled = false;
+            }
+            else
+            {
+                checkBox11.Checked = false;
+                checkBox11.Enabled = true;
+            }
+        }
+
+        private void label59_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label60_Click(object sender, EventArgs e)
         {
 
         }
