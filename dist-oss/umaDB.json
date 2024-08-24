@@ -2849,7 +2849,7 @@
     ],
     "freeRaces": [],
     "gameId": 103703,
-    "name": "[Reines Plätschern]エイシンフラッシュ",
+    "name": "[Reines Plätschern]荣进闪耀",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6090,7 +6090,7 @@
       }
     ],
     "gameId": 109902,
-    "name": "[パステルマリン・ロコドル]ホッコータルマエ",
+    "name": "[海边粉彩・地方偶像]北港火山",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6414,6 +6414,41 @@
     ],
     "star": 5
   },
+  "111601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      121,
+      102,
+      116,
+      112,
+      99
+    ],
+    "freeRaces": [],
+    "gameId": 111601,
+    "name": "[Regina dei fiori]ジェンティルドンナ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      43,
+      45,
+      53,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
   "111901": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6467,7 +6502,7 @@
     ],
     "freeRaces": [],
     "gameId": 112001,
-    "name": "[真実一路]カルストンライトオ",
+    "name": "[一心向前]金镇之光",
     "preferRaces": [],
     "preferReds": [],
     "races": [
