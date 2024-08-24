@@ -38,6 +38,10 @@ void main_testCardsSingle()
   const string modelpath = "";
   const int threadNum = 8;
   int batchsize = 1;
+#elif USE_BACKEND == BACKEND_ONNX
+  const string modelpath = "./db/model_uaf.onnx";
+  const int threadNum = 4;
+  int batchsize = 1024;
 #else
   const string modelpath = "./db/model.txt";
   const int threadNum = 4;
