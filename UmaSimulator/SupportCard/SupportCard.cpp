@@ -39,7 +39,6 @@ void SupportCard::write_to_json(json& j, const std::string cdname, const int id)
 
 	//j["cardSkill"]["skillNum"] = 0;
 	//j["cardSkill"]["SkillList"] = NULL;
-
 }
 
 void SupportCard::load_from_json(json& j, int x) {

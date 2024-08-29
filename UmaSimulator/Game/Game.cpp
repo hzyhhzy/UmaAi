@@ -128,9 +128,6 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     skillPt += persons[i].cardParam.initialBonus[5];
   }
 
-
-
-
   for (int i = 0; i < 5; i++)
   {
     if (isLinkUma)

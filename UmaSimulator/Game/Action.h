@@ -47,11 +47,13 @@ struct Action
   static const Action Action_RedistributeCardsForTest;
   static const int MAX_ACTION_TYPE = 21;//标准的Action有编号，8+13=21种
   static const int MAX_TWOSTAGE_ACTION_TYPE = 21 + 8 + 8;//二阶段搜索考虑的最多Action个数，只有两种1级菜需要考虑二阶段搜索，8+13+2*8=37种
-
   
   int16_t dishType;//做菜，0为不做菜
 
-  int16_t train;//-1暂时不训练，01234速耐力根智，5外出，6休息，7比赛 
+  //-1暂时不训练，01234速耐力根智，5外出，6休息，7比赛
+  // 种田杯：8-21 吃菜 100-104 升级田
+  int16_t train;
+  
   //注：外出是优先友人外出，没有再普通外出，不提供选项
   bool isActionStandard() const;
   int toInt() const;

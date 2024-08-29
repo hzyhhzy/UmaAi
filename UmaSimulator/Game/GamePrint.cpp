@@ -224,8 +224,6 @@ void Game::print() const
   cout << endl;
   
   cout << "生效料理：" << termcolor::bright_green << Action::dishName[cook_dish] << termcolor::reset << endl;
-  
- 
 
   {
     string vitalColor;
@@ -250,8 +248,7 @@ void Game::print() const
         motivation == 4 ? "\033[33m好调\033[0m" :
         motivation == 5 ? "\033[32m绝好调\033[0m" : "未知") << endl;
     cout << endl;
-  }
-  
+  } 
 
   //string divLine = "|------------------------------------------------------------------------------------|\n";
 
@@ -369,7 +366,6 @@ void Game::print() const
     {
       int newVital = vital;
       newVital += trainVitalChange[i];
-
 
       //cout << " The vital dlt of training " << i << " is : " << trainVitalChange[i] << '\n';
 

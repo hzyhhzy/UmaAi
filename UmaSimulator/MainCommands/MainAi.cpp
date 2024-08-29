@@ -90,11 +90,11 @@ void main_ai()
 	string lastJsonStr;//json str of the last time
 
 	// 检查工作目录
-	wchar_t buf[10240];
-	GetModuleFileNameW(0, buf, 10240);
+	char buf[10240];
+	GetModuleFileNameA(0, buf, 10240);
 	filesystem::path exeDir = filesystem::path(buf).parent_path();
 	filesystem::current_path(exeDir);
-	std::cout << "当前工作目录：" << filesystem::current_path() << endl;
+	cout << "当前工作目录：" << filesystem::current_path() << endl;
 	cout << "当前程序目录：" << exeDir << endl;
 
 #if USE_BACKEND == BACKEND_NONE
@@ -120,8 +120,6 @@ void main_ai()
 	//	
 	//string currentGameStagePath = "./gameData/thisTurn.json";
 
-
-
 	Model* modelptr = NULL;
 	Model model(GameConfig::modelPath, GameConfig::batchSize);
 	Model* modelSingleptr = NULL;
@@ -135,8 +133,7 @@ void main_ai()
 	{
 		GameConfig::maxDepth = 2 * TOTAL_TURN;
 	}
-
-	Model::printBackendInfo();
+	cout << "\x1b[92m"; Model::printBackendInfo(); cout << "\x1b[0m";
 
 	SearchParam searchParam(
 		GameConfig::searchSingleMax,
@@ -151,13 +148,18 @@ void main_ai()
 	Evaluator evaSingle(modelSingleptr, 1);
 
 	bool useWebsocket = GameConfig::communicationMode == "websocket";
+	bool isLinkError = false;
 	websocket ws(useWebsocket ? "http://127.0.0.1:4693" : "");
 	if (useWebsocket)
 	{
 		do {
 			Sleep(500);
-			std::cout << "等待URA连接" << std::endl;
+			if (!isLinkError) {
+				std::cout << "\x1b[93m等待URA连接\x1b[0m" << std::endl;
+				isLinkError = true;
+			}
 		} while (ws.get_status() != "Open");
+		isLinkError = false;
 	}
 
 	while (true)
@@ -172,17 +174,22 @@ void main_ai()
 		}
 		else
 		{
-
 			while (!filesystem::exists(currentGameStagePath))
 			{
-				std::cout << "找不到" + currentGameStagePath + "，可能是育成未开始或小黑板未正常工作" << endl;
-				std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
+				if (!isLinkError) {
+					std::cout << "\x1b[93m找不到" + currentGameStagePath + "，可能是育成未开始或小黑板未正常工作\x1b[0m" << endl;
+					std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
+					isLinkError = true;
+				}
 			}
 			ifstream fs(currentGameStagePath);
 			if (!fs.good())
 			{
-				cout << "读取文件错误" << endl;
-				std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
+				if (isLinkError) {
+					cout << "读取文件错误" << endl;
+					std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
+					isLinkError = true;
+				}
 				continue;
 			}
 			ostringstream tmp;
@@ -190,6 +197,7 @@ void main_ai()
 			fs.close();
 
 			jsonStr = tmp.str();
+			isLinkError = false;
 			//ifstream fs2(currentGameStagePath2);
 			//ostringstream tmp2;
 			//tmp2 << fs2.rdbuf();
@@ -213,7 +221,10 @@ void main_ai()
 
 		if (!suc)
 		{
-			cout << "出现错误" << endl;
+			if (!isLinkError) {
+				cout << "\x1b[93m小黑板通信出错\x1b[0m" << endl;
+				isLinkError = true;
+			}
 			if (jsonStr != "[test]" && jsonStr != "{\"Result\":1,\"Reason\":null}")
 			{
 				auto ofs = ofstream("lastError.json");
@@ -223,6 +234,11 @@ void main_ai()
 			std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
 			continue;
 		}
+		else
+		{
+			isLinkError = false;
+		}
+
 		if (game.turn == lastTurn)
 		{
 			if (!refreshIfAnyChanged)
@@ -321,10 +337,9 @@ void main_ai()
 				cout << "手写逻辑: " << hl.toString() << endl;
 			else
 				cout << "纯神经网络: " << hl.toString() << endl;
-
+			cout << "优化中 >>>" << endl;
 			Action bestAction = search.runSearch(game, rand);
-			cout << "蒙特卡洛: " << bestAction.toString() << endl;
-
+			cout << "\x1b[96m蒙特卡洛: " << bestAction.toString() << "\x1b[0m" << endl;
 
 			//如果重新分配卡组，平均分是多少，与当前回合对比可以获得运气情况
 			ModelOutputValueV1 trainAvgScore = { -1,-1,-1 };
@@ -382,12 +397,17 @@ void main_ai()
 			Action outgoingAction;
 			outgoingAction.dishType = DISH_none;
 			outgoingAction.train = TRA_outgoing;
+			Action raceAction;
+			raceAction.dishType = DISH_none;
+			raceAction.train = TRA_race;
 			//休息和外出里面分最高的那个。这个数字作为显示参考
 			double restValue = search.allActionResults[restAction.toInt()].lastCalculate.value;
 			double outgoingValue = search.allActionResults[outgoingAction.toInt()].lastCalculate.value;
+			double raceValue = search.allActionResults[raceAction.toInt()].lastCalculate.value;
 			if (outgoingValue > restValue)
 				restValue = outgoingValue;
-
+			if (!search.allActionResults[restAction.toInt()].isLegal)
+				restValue = raceValue;
 
 			wstring strToSendURA = L"UMAAI_COOK";
 			strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
@@ -483,18 +503,16 @@ void main_ai()
 						if (game2.cook_farm_level[i] > game.cook_farm_level[i])
 						{
 							cout << GameConstants::Cook_MaterialNames[i] << "升至" << game2.cook_farm_level[i] << "级  ";
+							strToSendURA += L" " + to_wstring(100 + i) + L" " + to_wstring(game2.cook_farm_level[i]);
 						}
 					cout << "\033[0m" << endl;
 				}
-
-
 			}
-
 			//strToSendURA = L"0.1234567 5.4321";
 			if (useWebsocket)
 			{
 				wstring s = L"{\"CommandType\":1,\"Command\":\"PrintUmaAiResult\",\"Parameters\":[\"" + strToSendURA + L"\"]}";
-				//ws.send(s);
+				ws.send(s);
 			}
 
 		}

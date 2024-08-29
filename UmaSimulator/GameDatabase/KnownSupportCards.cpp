@@ -53,7 +53,7 @@ void GameDatabase::loadCards(const string& dir)
     }
     catch (exception& e)
     {
-        cout << "读取支援卡信息出错: " << endl << e.what() << endl;
+        cout << "\x1b[91m读取支援卡信息出错，请检查当前目录下是否有“db”文件夹: \x1b[0m" << endl << e.what() << endl;
     }
     catch (...)
     {
@@ -88,7 +88,7 @@ void GameDatabase::loadDBCards(const string& pathname)
     }
     catch (exception& e)
     {
-        cout << "读取支援卡信息出错: " << endl << e.what() << endl;
+        cout << "\x1b[91m读取支援卡信息出错，请检查当前目录下是否有“db”文件夹: \x1b[0m" << endl << e.what() << endl;
     }
     catch (...)
     {
@@ -275,14 +275,17 @@ CardTrainingEffect SupportCard::getCardEffect(const Game& game, bool isShining, 
               break;
             default:   // type == 0
                 if (uniqueEffectType != 0) {
-                    cout << "未知固有 #" << uniqueEffectType << endl;
+               //     cout << "未知固有 #" << uniqueEffectType << endl;
                 }
                 break;
         }   // switch
     }
    else
    {
-     assert(false);
+       cout << "\x1b[91m未知支援卡: #" << this->cardID << " " << this->cardName << ", 请更新AI数据\x1b[0m" << endl;
+       cout << "\x1b[91m** 程序即将退出**\x1b[0m" << endl;
+       system("pause");
+       assert(false);
    }
     
     return effect;

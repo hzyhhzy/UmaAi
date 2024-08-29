@@ -36,7 +36,7 @@ void GameDatabase::loadUmas(const string& pathname)
     }
     catch (exception& e)
     {
-        cout << "读取马娘信息出错: " << endl << e.what() << endl;
+        cout << "\x1b[91m读取马娘信息出错，请检查当前目录下是否有“db”文件夹: \x1b[0m" << endl << e.what() << endl;
     }
     catch (...)
     {

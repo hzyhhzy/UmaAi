@@ -48,7 +48,7 @@ void GameConfig::load(const string& path)
 		ifstream ifs(path);
     if (!ifs) // 文件不存在的处理
     {
-      cout << "找不到配置文件，已使用默认配置: " << endl;
+      cout << "\x1b[91m缺少配置文件: "<< path <<", 请重新解压AI\x1b[0m" << endl;
       return;
     }
 
