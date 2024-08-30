@@ -3530,6 +3530,47 @@
     ],
     "star": 5
   },
+  "104702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      114,
+      110,
+      112,
+      106,
+      108
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
+    "gameId": 104702,
+    "name": "[Inlaid Stories]ゼンノロブロイ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      31,
+      33,
+      43,
+      47,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "104801": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6268,6 +6309,47 @@
     ],
     "star": 5
   },
+  "110502": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      7,
+      10,
+      13
+    ],
+    "fiveStatusInitial": [
+      108,
+      102,
+      109,
+      104,
+      127
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
+    "gameId": 110502,
+    "name": "[Like “ZEER”]ネオユニヴァース",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      35,
+      43,
+      45,
+      53,
+      55,
+      67,
+      69
+    ],
+    "star": 5
+  },
   "110601": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6432,7 +6514,7 @@
     ],
     "freeRaces": [],
     "gameId": 111601,
-    "name": "[Regina dei fiori]ジェンティルドンナ",
+    "name": "[Regina dei fiori]贵妇人",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6445,7 +6527,8 @@
       53,
       59,
       67,
-      69
+      69,
+      71
     ],
     "star": 5
   },
