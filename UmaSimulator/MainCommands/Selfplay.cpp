@@ -26,7 +26,7 @@ void main_selfplay()
   {
     modelptr = &model;
   }
-  std::cout << "Éñ¾­ÍøÂçÄ£ÐÍÂ·¾¶£º" << param.modelPath << std::endl;
+  std::cout << "ç¥žç»ç½‘ç»œæ¨¡åž‹è·¯å¾„ï¼š" << param.modelPath << std::endl;
   Model::printBackendInfo();
 
 
@@ -42,7 +42,7 @@ void main_selfplay()
     threads.emplace_back(&SelfplayThread::run, &spt);
   }
 
-  // µÈ´ýËùÓÐÏß³ÌÍê³É
+  // ç­‰å¾…æ‰€æœ‰çº¿ç¨‹å®Œæˆ
   for (auto& th : threads) {
     th.join();
   }

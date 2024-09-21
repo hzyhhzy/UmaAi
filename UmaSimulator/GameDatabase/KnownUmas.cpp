@@ -32,15 +32,15 @@ void GameDatabase::loadUmas(const string& pathname)
             AllUmas[id] = uma;
            //cout << uma.name << endl;
         }
-        cout << "¹²ÔØÈë " << AllUmas.size() << " Óý³ÉÂíÄï" << endl;        
+        cout << "å…±è½½å…¥ " << AllUmas.size() << " è‚²æˆé©¬å¨˜" << endl;        
     }
     catch (exception& e)
     {
-        cout << "¶ÁÈ¡ÂíÄïÐÅÏ¢³ö´í: " << endl << e.what() << endl;
+        cout << "\x1b[91mè¯»å–é©¬å¨˜ä¿¡æ¯å‡ºé”™ï¼Œè¯·æ£€æŸ¥å½“å‰ç›®å½•ä¸‹æ˜¯å¦æœ‰â€œdbâ€æ–‡ä»¶å¤¹: \x1b[0m" << endl << e.what() << endl;
     }
     catch (...)
     {
-        cout << "¶ÁÈ¡ÂíÄïÐÅÏ¢³ö´í£ºÎ´Öª´íÎó" << endl;
+        cout << "è¯»å–é©¬å¨˜ä¿¡æ¯å‡ºé”™ï¼šæœªçŸ¥é”™è¯¯" << endl;
     }
 }
 
@@ -63,18 +63,19 @@ void GameDatabase::loadTranslation(const string& filename)
                 int index = atoi(it1.key().c_str());
                 string st;
                 it1.value().get_to(st);
-                dict[index] = UTF8_To_string(st);   // json±ØÐëÊÇutf8£¬ÕâÀï×ª»»»áÓÐÉÙÁ¿ÂÒÂë
+                //dict[index] = UTF8_To_string(st);   // jsonå¿…é¡»æ˜¯utf8ï¼Œè¿™é‡Œè½¬æ¢ä¼šæœ‰å°‘é‡ä¹±ç 
+                dict[index] = st;
             }
             TLGTranslation[idx] = dict;
         }
-        cout << "ÒëÎÄÔØÈëÍê±Ï" << endl;
+        cout << "è¯‘æ–‡è½½å…¥å®Œæ¯•" << endl;
     }
     catch (exception& e)
     {
-        cout << "¶ÁÈ¡ÒëÎÄÐÅÏ¢³ö´í: " << endl << e.what() << endl;
+        cout << "è¯»å–è¯‘æ–‡ä¿¡æ¯å‡ºé”™: " << endl << e.what() << endl;
     }
     catch (...)
     {
-        cout << "¶ÁÈ¡ÒëÎÄÐÅÏ¢³ö´í£ºÎ´Öª´íÎó" << endl;
+        cout << "è¯»å–è¯‘æ–‡ä¿¡æ¯å‡ºé”™ï¼šæœªçŸ¥é”™è¯¯" << endl;
     }
 }

@@ -1,4 +1,4 @@
-//测试不同人头数的概率
+//娴嬭瘯涓嶅悓浜哄ご鏁扮殑姒傜巼
 #include <iostream>
 #include <random>
 #include <sstream>

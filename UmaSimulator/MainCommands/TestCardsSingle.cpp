@@ -1,4 +1,4 @@
-//²âÊÔÑµÁ·ÊôĞÔÖµËã·¨
+//æµ‹è¯•è®­ç»ƒå±æ€§å€¼ç®—æ³•
 #include <iostream>
 #include <random>
 #include <sstream>
@@ -27,8 +27,8 @@ struct testResult
 
 void main_testCardsSingle()
 {
-  //int toTestCardType = 0;//ËÙÄÍÁ¦¸ùÖÇ
-  double radicalFactor = 10;//¼¤½ø¶È
+  //int toTestCardType = 0;//é€Ÿè€åŠ›æ ¹æ™º
+  double radicalFactor = 10;//æ¿€è¿›åº¦
   int searchN = 50000;
 #if USE_BACKEND == BACKEND_LIBTORCH
   const string modelpath = "./db/model_traced.pt";
@@ -59,34 +59,34 @@ void main_testCardsSingle()
   {
     if (toTestCardType == 0)
     {
-      //1ËÙ1Á¦2¸ù1ÖÇ
-      umaId = 101101;//²İÉÏ·É£¬20ËÙ10Á¦¼Ó³É
-      cards = { 302074,302084,301874,300194,301724,-1 };//ÓÑÈË£¬--£¬Á¦Î÷Ò°»¨£¬¸ù¾Ş½³£¬¸ùÎÚÀ­À­£¬ÖÇÂóÀ¥
+      //1é€Ÿ1åŠ›2æ ¹1æ™º
+      umaId = 101101;//è‰ä¸Šé£ï¼Œ20é€Ÿ10åŠ›åŠ æˆ
+      cards = { 302074,302084,301874,300194,301724,-1 };//å‹äººï¼Œ--ï¼ŒåŠ›è¥¿é‡èŠ±ï¼Œæ ¹å·¨åŒ ï¼Œæ ¹ä¹Œæ‹‰æ‹‰ï¼Œæ™ºéº¦æ˜†
     }
 
     else if (toTestCardType == 1)
     {
-      //1ËÙ1ÄÍ1Á¦1¸ù1ÖÇ
-      umaId = 101101;//²İÉÏ·É£¬20ËÙ10Á¦¼Ó³É
-      cards = { 302074,302064,302084,301874,301724,-1 };//ÓÑÈË£¬ËÙÇ¿»÷£¬--, Á¦Î÷Ò°»¨£¬¸ù¾Ş½³£¬ÖÇÂóÀ¥
+      //1é€Ÿ1è€1åŠ›1æ ¹1æ™º
+      umaId = 101101;//è‰ä¸Šé£ï¼Œ20é€Ÿ10åŠ›åŠ æˆ
+      cards = { 302074,302064,302084,301874,301724,-1 };//å‹äººï¼Œé€Ÿå¼ºå‡»ï¼Œ--, åŠ›è¥¿é‡èŠ±ï¼Œæ ¹å·¨åŒ ï¼Œæ™ºéº¦æ˜†
     }
     else if (toTestCardType == 2)
     {
-      //1ËÙ1Á¦2¸ù1ÖÇ
-      umaId = 101101;//²İÉÏ·É£¬20ËÙ10Á¦¼Ó³É
-      cards = { 302074,302064,301874,300194,301724,-1 };//ÓÑÈË£¬ËÙÇ¿»÷£¬--£¬¸ù¾Ş½³£¬¸ùÎÚÀ­À­£¬ÖÇÂóÀ¥
+      //1é€Ÿ1åŠ›2æ ¹1æ™º
+      umaId = 101101;//è‰ä¸Šé£ï¼Œ20é€Ÿ10åŠ›åŠ æˆ
+      cards = { 302074,302064,301874,300194,301724,-1 };//å‹äººï¼Œé€Ÿå¼ºå‡»ï¼Œ--ï¼Œæ ¹å·¨åŒ ï¼Œæ ¹ä¹Œæ‹‰æ‹‰ï¼Œæ™ºéº¦æ˜†
     }
     else if (toTestCardType == 3)
     {
-      //1ËÙ1Á¦2¸ù1ÖÇ
-      umaId = 101101;//²İÉÏ·É£¬20ËÙ10Á¦¼Ó³É
-      cards = { 302074,302064,302084,301874,301724,-1 };//ÓÑÈË£¬ËÙÇ¿»÷£¬Á¦Î÷Ò°»¨£¬¸ù¾Ş½³£¬--£¬ÖÇÂóÀ¥
+      //1é€Ÿ1åŠ›2æ ¹1æ™º
+      umaId = 101101;//è‰ä¸Šé£ï¼Œ20é€Ÿ10åŠ›åŠ æˆ
+      cards = { 302074,302064,302084,301874,301724,-1 };//å‹äººï¼Œé€Ÿå¼ºå‡»ï¼ŒåŠ›è¥¿é‡èŠ±ï¼Œæ ¹å·¨åŒ ï¼Œ--ï¼Œæ™ºéº¦æ˜†
     }
     else if (toTestCardType == 4)
     {
-      //1ËÙ1Á¦2¸ù1ÖÇ
-      umaId = 101101;//²İÉÏ·É£¬20ËÙ10Á¦¼Ó³É
-      cards = { 302074,302064,302084,301874,300194,-1 };//ÓÑÈË£¬ËÙÇ¿»÷£¬Á¦Î÷Ò°»¨£¬¸ù¾Ş½³£¬¸ùÎÚÀ­À­£¬--
+      //1é€Ÿ1åŠ›2æ ¹1æ™º
+      umaId = 101101;//è‰ä¸Šé£ï¼Œ20é€Ÿ10åŠ›åŠ æˆ
+      cards = { 302074,302064,302084,301874,300194,-1 };//å‹äººï¼Œé€Ÿå¼ºå‡»ï¼ŒåŠ›è¥¿é‡èŠ±ï¼Œæ ¹å·¨åŒ ï¼Œæ ¹ä¹Œæ‹‰æ‹‰ï¼Œ--
     }
 
     int umaStars = 5;
@@ -94,8 +94,8 @@ void main_testCardsSingle()
     int zhongmaBonus[6] = { 10,10,30,0,10,70 };
 
     {
-      cout << "²â¿¨»·¾³£º" << endl;
-      cout << "ÂíÄï£º" << GameDatabase::AllUmas[umaId].name << "(" << umaId << ") ";
+      cout << "æµ‹å¡ç¯å¢ƒï¼š" << endl;
+      cout << "é©¬å¨˜ï¼š" << GameDatabase::AllUmas[umaId].name << "(" << umaId << ") ";
       for (int i = 0; i < 5; i++)
       {
         int gr = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
@@ -103,7 +103,7 @@ void main_testCardsSingle()
           cout << Action::trainingName[i] << "+" << gr << "% ";
       }
       cout << endl;
-      cout << "ÆäËû¿¨£º";
+      cout << "å…¶ä»–å¡ï¼š";
       for (int i = 0; i < 5; i++)
       {
         int t = cards[i];
@@ -154,14 +154,14 @@ void main_testCardsSingle()
 
       cardName = cardName + "(" + to_string(cardId) + ")";
 
-      //Ã»¿¼ÂÇ¹ÌÓĞµÄ¿¨
+      //æ²¡è€ƒè™‘å›ºæœ‰çš„å¡
       if (card.uniqueEffectType == 5 ||
         card.uniqueEffectType == 12 ||
         card.uniqueEffectType == 15
         )
         cardName = "\033[41m\033[30m**\033[0m" + cardName;
 
-      //¹ÌÓĞÊÓÎªÈ«¿ªµÄ¿¨
+      //å›ºæœ‰è§†ä¸ºå…¨å¼€çš„å¡
       else if (card.uniqueEffectType == 6
         || cardId == 30155
         || cardId == 30171
@@ -169,7 +169,7 @@ void main_testCardsSingle()
         cardName = "\033[43m\033[30m#\033[0m" + cardName;
       else
         cardName = "\033[43m\033[30m\033[0m" + cardName;
-      cout << setw(55) << cardName << "£º";
+      cout << setw(55) << cardName << "ï¼š";
 
       cards[5] = cardIdLv50;
       Game game;
@@ -177,7 +177,7 @@ void main_testCardsSingle()
       //game.addAllStatus(initialStatusBonus);
       auto value = search.evaluateNewGame(game, rand);
 
-      cout << "ºú¾Ö·ÖÊı=\033[1;32m" << int(value.value) << "\033[0m  Æ½¾ù·ÖÊı=\033[1;32m" << int(value.scoreMean) << "\033[0m" << endl;
+      cout << "èƒ¡å±€åˆ†æ•°=\033[1;32m" << int(value.value) << "\033[0m  å¹³å‡åˆ†æ•°=\033[1;32m" << int(value.scoreMean) << "\033[0m" << endl;
 
       testResult tr;
       tr.cardId = cardId;
@@ -190,8 +190,8 @@ void main_testCardsSingle()
     cout << endl;
 
     {
-      cout << "²â¿¨»·¾³£º" << endl;
-      cout << "ÂíÄï£º" << GameDatabase::AllUmas[umaId].name << "(" << umaId << ") ";
+      cout << "æµ‹å¡ç¯å¢ƒï¼š" << endl;
+      cout << "é©¬å¨˜ï¼š" << GameDatabase::AllUmas[umaId].name << "(" << umaId << ") ";
       for (int i = 0; i < 5; i++)
       {
         int gr = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
@@ -199,7 +199,7 @@ void main_testCardsSingle()
           cout << Action::trainingName[i] << "+" << gr << "% ";
       }
       cout << endl;
-      cout << "ÆäËû¿¨£º";
+      cout << "å…¶ä»–å¡ï¼š";
       for (int i = 0; i < 5; i++)
       {
         int t = cards[i];
@@ -210,8 +210,8 @@ void main_testCardsSingle()
       cout << endl;
     }
 
-    cout << "\033[41m\033[30m**\033[0mÊÇÃ»¿¼ÂÇ¹ÌÓĞ£¬\033[43m\033[30m#\033[0mÊÇÊÓÎª¹ÌÓĞÈ«¿ª" << endl;
-    cout << "°´ºú¾Ö·ÖÊı´Ó´óµ½Ğ¡ÅÅĞò£º" << endl;
+    cout << "\033[41m\033[30m**\033[0mæ˜¯æ²¡è€ƒè™‘å›ºæœ‰ï¼Œ\033[43m\033[30m#\033[0mæ˜¯è§†ä¸ºå›ºæœ‰å…¨å¼€" << endl;
+    cout << "æŒ‰èƒ¡å±€åˆ†æ•°ä»å¤§åˆ°å°æ’åºï¼š" << endl;
     cout << "-------------------------------------------------------------------------" << endl;
     std::sort(allResult.begin(), allResult.end(), [](const testResult& a, const testResult& b) {
       return a.result.value > b.result.value;
@@ -220,11 +220,11 @@ void main_testCardsSingle()
     for (int i = 0; i < allResult.size(); i++)
     {
       auto tr = allResult[i];
-      cout << setw(55) << tr.cardName << "£º";
-      cout << "ºú¾Ö·ÖÊı=\033[1;32m" << int(tr.result.value) << "\033[0m  Æ½¾ù·ÖÊı=\033[1;32m" << int(tr.result.scoreMean) << "\033[0m" << endl;
+      cout << setw(55) << tr.cardName << "ï¼š";
+      cout << "èƒ¡å±€åˆ†æ•°=\033[1;32m" << int(tr.result.value) << "\033[0m  å¹³å‡åˆ†æ•°=\033[1;32m" << int(tr.result.scoreMean) << "\033[0m" << endl;
 
     }
-    //±£´æ½á¹û£¬Ö÷ÒªÊÇÓÃÓÚselfplayËæ»úÑ¡¿¨
+    //ä¿å­˜ç»“æœï¼Œä¸»è¦æ˜¯ç”¨äºselfplayéšæœºé€‰å¡
     string resultname = "testcard_" + to_string(toTestCardType) + ".txt";
     ofstream fs(resultname);
     fs << allResult.size() << endl;
@@ -239,8 +239,8 @@ void main_testCardsSingle()
     cout << endl;
 
     {
-      cout << "²â¿¨»·¾³£º" << endl;
-      cout << "ÂíÄï£º" << GameDatabase::AllUmas[umaId].name << "(" << umaId << ") ";
+      cout << "æµ‹å¡ç¯å¢ƒï¼š" << endl;
+      cout << "é©¬å¨˜ï¼š" << GameDatabase::AllUmas[umaId].name << "(" << umaId << ") ";
       for (int i = 0; i < 5; i++)
       {
         int gr = GameDatabase::AllUmas[umaId].fiveStatusBonus[i];
@@ -248,7 +248,7 @@ void main_testCardsSingle()
           cout << Action::trainingName[i] << "+" << gr << "% ";
       }
       cout << endl;
-      cout << "ÆäËû¿¨£º";
+      cout << "å…¶ä»–å¡ï¼š";
       for (int i = 0; i < 5; i++)
       {
         int t = cards[i];
@@ -259,8 +259,8 @@ void main_testCardsSingle()
       cout << endl;
     }
 
-    cout << "\033[41m\033[30m**\033[0mÊÇÃ»¿¼ÂÇ¹ÌÓĞ£¬\033[43m\033[30m#\033[0mÊÇÊÓÎª¹ÌÓĞÈ«¿ª" << endl;
-    cout << "°´Æ½¾ù·ÖÊı´Ó´óµ½Ğ¡ÅÅĞò£º" << endl;
+    cout << "\033[41m\033[30m**\033[0mæ˜¯æ²¡è€ƒè™‘å›ºæœ‰ï¼Œ\033[43m\033[30m#\033[0mæ˜¯è§†ä¸ºå›ºæœ‰å…¨å¼€" << endl;
+    cout << "æŒ‰å¹³å‡åˆ†æ•°ä»å¤§åˆ°å°æ’åºï¼š" << endl;
     cout << "-------------------------------------------------------------------------" << endl;
     std::sort(allResult.begin(), allResult.end(), [](const testResult& a, const testResult& b) {
       return a.result.scoreMean > b.result.scoreMean;
@@ -269,8 +269,8 @@ void main_testCardsSingle()
     for (int i = 0; i < allResult.size(); i++)
     {
       auto tr = allResult[i];
-      cout << setw(55) << tr.cardName << "£º";
-      cout << "ºú¾Ö·ÖÊı=\033[1;32m" << int(tr.result.value) << "\033[0m  Æ½¾ù·ÖÊı=\033[1;32m" << int(tr.result.scoreMean) << "\033[0m" << endl;
+      cout << setw(55) << tr.cardName << "ï¼š";
+      cout << "èƒ¡å±€åˆ†æ•°=\033[1;32m" << int(tr.result.value) << "\033[0m  å¹³å‡åˆ†æ•°=\033[1;32m" << int(tr.result.scoreMean) << "\033[0m" << endl;
 
     }
   }

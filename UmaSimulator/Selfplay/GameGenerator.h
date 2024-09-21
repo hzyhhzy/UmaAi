@@ -5,7 +5,7 @@
 #include "../NeuralNet/Evaluator.h"
 class GameGenerator
 {
-  //ÏÈËæ»úÉú³ÉÒ»Ğ©¿ª¾Ö£¬È»ºóËæ»úÍùºó½øĞĞÒ»Ğ©»ØºÏÊı£¬´¢´æÔÚgameBuf£¬ÔÚ·¢³öÀ´Ö®Ç°ÔÙ¼ÓËæ»úĞÔ
+  //å…ˆéšæœºç”Ÿæˆä¸€äº›å¼€å±€ï¼Œç„¶åéšæœºå¾€åè¿›è¡Œä¸€äº›å›åˆæ•°ï¼Œå‚¨å­˜åœ¨gameBufï¼Œåœ¨å‘å‡ºæ¥ä¹‹å‰å†åŠ éšæœºæ€§
   SelfplayParam param;
   Evaluator evaluator;
   
@@ -13,7 +13,7 @@ class GameGenerator
   std::vector<Game> gameBuf;
   int nextGamePointer;
 
-  std::vector<int> cardRank[5];//ËÙÄÍÁ¦¸ùÖÇ¿¨µÄÅÅĞĞ
+  std::vector<int> cardRank[5];//é€Ÿè€åŠ›æ ¹æ™ºå¡çš„æ’è¡Œ
 
   void loadCardRankFile();
 
@@ -23,8 +23,8 @@ class GameGenerator
   bool isVaildGame(const Game& game);
 
 
-  std::vector<int> getRandomCardset(); //»ñÈ¡Ò»×éËæ»ú¿¨×é£¬¸ÅÂÊ´øÓÑÈË£¬Ô½ºÃµÄ¿¨µÄ¸ÅÂÊÔ½´ó
-  void randomizeUmaCardParam(Game& game); //¸ø¿¨×é
+  std::vector<int> getRandomCardset(); //è·å–ä¸€ç»„éšæœºå¡ç»„ï¼Œæ¦‚ç‡å¸¦å‹äººï¼Œè¶Šå¥½çš„å¡çš„æ¦‚ç‡è¶Šå¤§
+  void randomizeUmaCardParam(Game& game); //ç»™å¡ç»„
 public:
   GameGenerator(SelfplayParam param, Model* model);
   Game get();

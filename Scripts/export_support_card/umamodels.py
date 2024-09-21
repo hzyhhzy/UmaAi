@@ -129,7 +129,8 @@ class SupportCardEffectType(IntEnum):
     TrainingHPConsumptionDown = 28
     MinigameEffectUP = 29
     SkillPointBonus = 30
-    WizRecoverUp = 31 
+    WizRecoverUp = 31
+    InitialPtUp = 32 
 
 class SupportCardRarity(IntEnum):
     R = 1

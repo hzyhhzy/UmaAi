@@ -11,8 +11,8 @@
 using namespace std;
 using json = nlohmann::json;
 
-static string AttrNames[] = { "ËÙ", "ÄÍ", "Á¦", "¸ù", "ÖÇ", "Pt" };
-static string LessonNames[] = { "¸ù", "ÄÍ", "Á¦", "ËÙ", "ÖÇ", "Pt", "ÌåÁ¦", "ÓÑÇé", "¶òÔË"};
+static string AttrNames[] = { "é€Ÿ", "è€", "åŠ›", "æ ¹", "æ™º", "Pt" };
+static string LessonNames[] = { "æ ¹", "è€", "åŠ›", "é€Ÿ", "æ™º", "Pt", "ä½“åŠ›", "å‹æƒ…", "å„è¿"};
 
 class TestConfig
 {
@@ -52,11 +52,11 @@ public:
         }
         catch (exception& e)
         {
-            cout << "¶ÁÈ¡²âÊÔÅäÖÃ³ö´í: " << endl << e.what() << endl;
+            cout << "è¯»å–æµ‹è¯•é…ç½®å‡ºé”™: " << endl << e.what() << endl;
         }
         catch (...)
         {
-            cout << "¶ÁÈ¡²âÊÔÅäÖÃ³ö´í£ºÎ´Öª´íÎó" << endl;
+            cout << "è¯»å–æµ‹è¯•é…ç½®å‡ºé”™ï¼šæœªçŸ¥é”™è¯¯" << endl;
         }
     }
 
@@ -64,27 +64,27 @@ public:
     {
         stringstream ss;
         int i;
-        ss << "\033[1;36mÂíÄï£º ¡î" << umaStars << GameDatabase::AllUmas[umaId].name << "\033[0m";
-        ss << " ¼Ó³É: ";
+        ss << "\033[1;36mé©¬å¨˜ï¼š â˜†" << umaStars << GameDatabase::AllUmas[umaId].name << "\033[0m";
+        ss << " åŠ æˆ: ";
         for (i = 0; i < 5; ++i)
             if (GameDatabase::AllUmas[umaId].fiveStatusBonus[i] > 0)
                 ss << GameDatabase::AllUmas[umaId].fiveStatusBonus[i] << AttrNames[i] << " ";
-        ss << endl << "\033[33m" << "¿¨×é£º";
+        ss << endl << "\033[33m" << "å¡ç»„ï¼š";
         for (int i : cards)
             ss << GameDatabase::AllCards[i].cardName << "+" << i % 10 << " ";
-        ss << endl << "\033[32mÖÖÂí£º";
+        ss << endl << "\033[32mç§é©¬ï¼š";
         for (i = 0; i < 5; ++i)
             if (zhongmaBlue[i] > 0)
                 ss << zhongmaBlue[i] << AttrNames[i] << " ";
-        ss << " ¶îÍâ¼Ì³ĞÊôĞÔ£º";
+        ss << " é¢å¤–ç»§æ‰¿å±æ€§ï¼š";
         for (i = 0; i < 6; ++i)
             if (zhongmaBonus[i] > 0)
                 ss << "+" << zhongmaBonus[i] << AttrNames[i] << " ";
-        ss << "\033[34m" << endl << "Ìø¹ı¿Î³Ì£º";
+        ss << "\033[34m" << endl << "è·³è¿‡è¯¾ç¨‹ï¼š";
         for (i = 0; i < 9; ++i)
             if (allowedDebuffs[i])
                 ss << LessonNames[i] << " ";
-        ss << ", ¾ÖÊı£º" << totalGames << ", ÊÂ¼şÇ¿¶È£º" << eventStrength << "ÊôĞÔ/Pt"
+        ss << ", å±€æ•°ï¼š" << totalGames << ", äº‹ä»¶å¼ºåº¦ï¼š" << eventStrength << "å±æ€§/Pt"
            << "\033[0m" << endl;
         return ss.str();
     }
@@ -107,11 +107,11 @@ public:
         for (int i = 0; i < 5; ++i) {
             int value = fiveStatus[i];
             if (value > 1200)
-                value = 600 + value / 2;    // >1200Ê±¼õ°ë£¨È¥À¨ºÅ£©
+                value = 600 + value / 2;    // >1200æ—¶å‡åŠï¼ˆå»æ‹¬å·ï¼‰
             ss << AttrNames[i] << "=" << value << " ";
         }
         ss << "Pt=" << skillPt << " ";
-        ss << "×Ü·Ö " << fiveStatusScore << "+" << skillScore() << "=" << finalScore;
+        ss << "æ€»åˆ† " << fiveStatusScore << "+" << skillScore() << "=" << finalScore;
         return ss.str();
     }
 

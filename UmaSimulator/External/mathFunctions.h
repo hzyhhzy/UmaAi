@@ -1,5 +1,5 @@
 #pragma once
 #include <cmath>
 
-//正态分布函数的累积分布函数的反函数
+//姝ｆ�佸垎甯冨嚱鏁扮殑绱Н鍒嗗竷鍑芥暟鐨勫弽鍑芥暟
 double normalCDFInverse(double p);

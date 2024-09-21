@@ -20,7 +20,7 @@ using json = nlohmann::json;
 
 wchar_t buf[10240];
 
-#define COMPARE(key) if ( a.key != b.key ) { cout << (#key) << ": ÊÖ¶¯ = " << a.key << ", µ¼³öÖµ = " << b.key << endl; ret = false; }
+#define COMPARE(key) if ( a.key != b.key ) { cout << (#key) << ": æ‰‹åŠ¨ = " << a.key << ", å¯¼å‡ºå€¼ = " << b.key << endl; ret = false; }
 
 template <typename T>
 bool compare_array(const T* a, const T* b, size_t len, const string& key)
@@ -48,20 +48,20 @@ bool compare_array(const T* a, const T* b, size_t len, const string& key)
 bool compare_card_value(const SupportCard& a, const SupportCard& b)
 {
 	bool ret = true;
-	//	CardValue level[5];	// ¸÷¸öÍ»ÆÆµÈ¼¶µÄÊı¾İ
-	COMPARE(youQingBasic);//ÓÑÇé¼Ó³É
-	COMPARE(ganJingBasic);//¸É¾¢¼Ó³É
-	COMPARE(xunLianBasic);//ÑµÁ·¼Ó³É
+	//	CardValue level[5];	// å„ä¸ªçªç ´ç­‰çº§çš„æ•°æ®
+	COMPARE(youQingBasic);//å‹æƒ…åŠ æˆ
+	COMPARE(ganJingBasic);//å¹²åŠ²åŠ æˆ
+	COMPARE(xunLianBasic);//è®­ç»ƒåŠ æˆ
 	compare_array(a.bonusBasic, b.bonusBasic, 6, "bonusBasic");
-	COMPARE(wizVitalBonusBasic);//ÖÇÁ¦²ÊÈ¦ÌåÁ¦»Ø¸´Á¿
+	COMPARE(wizVitalBonusBasic);//æ™ºåŠ›å½©åœˆä½“åŠ›å›å¤é‡
 	compare_array(a.initialBonus, b.initialBonus, 6, "initialBonus");
-	COMPARE(initialJiBan);//³õÊ¼î¿°í
-	COMPARE(saiHou);//Èüºó
-  COMPARE(hintLevel);//ºìµãµÈ¼¶
-	COMPARE(hintProbIncrease);//Æô·¢·¢ÉúÂÊÌáÉı
-	COMPARE(deYiLv);//µÃÒâÂÊ
-	COMPARE(failRateDrop); //Ê§°ÜÂÊ½µµÍ
-	COMPARE(vitalCostDrop); //ÌåÁ¦Ïû·ÑÏÂ½µ
+	COMPARE(initialJiBan);//åˆå§‹ç¾ç»Š
+	COMPARE(saiHou);//èµ›å
+  COMPARE(hintLevel);//çº¢ç‚¹ç­‰çº§
+	COMPARE(hintProbIncrease);//å¯å‘å‘ç”Ÿç‡æå‡
+	COMPARE(deYiLv);//å¾—æ„ç‡
+	COMPARE(failRateDrop); //å¤±è´¥ç‡é™ä½
+	COMPARE(vitalCostDrop); //ä½“åŠ›æ¶ˆè´¹ä¸‹é™
 	return ret;
 }
 
@@ -78,7 +78,7 @@ bool compare_card(const SupportCard& a, const SupportCard& b)
 		}
 	}
 //	if (!ret)
-//		cout << "(²Î¿¼¹ÌÓĞ): " << b.uniqueText << endl;
+//		cout << "(å‚è€ƒå›ºæœ‰): " << b.uniqueText << endl;
 	//SkillList cardSkill;
 	return ret;
 }
@@ -87,10 +87,10 @@ void test_compare_cards()
 {
 	for (auto c : GameDatabase::AllCards)
 	{
-		cout << "- ¼ì²é " << c.second.cardName << endl;
+		cout << "- æ£€æŸ¥ " << c.second.cardName << endl;
 		if (!GameDatabase::DBCards.count(c.first))
 		{
-			cout << "ÎŞ´Ë¿¨Æ¬ID£º" << c.first << endl;
+			cout << "æ— æ­¤å¡ç‰‡IDï¼š" << c.first << endl;
 		}
 		auto dbCard = GameDatabase::DBCards[c.first];
 		compare_card(c.second, dbCard);
@@ -99,19 +99,19 @@ void test_compare_cards()
 
 void main_test_json()
 {
-  // ¼ì²é¹¤×÷Ä¿Â¼
+  // æ£€æŸ¥å·¥ä½œç›®å½•
   GetModuleFileNameW(0, buf, 10240);
   filesystem::path exeDir = filesystem::path(buf).parent_path();
   filesystem::current_path(exeDir);
-  std::cout << "µ±Ç°¹¤×÷Ä¿Â¼£º" << filesystem::current_path() << endl;
-  cout << "µ±Ç°³ÌĞòÄ¿Â¼£º" << exeDir << endl;
+  std::cout << "å½“å‰å·¥ä½œç›®å½•ï¼š" << filesystem::current_path() << endl;
+  cout << "å½“å‰ç¨‹åºç›®å½•ï¼š" << exeDir << endl;
 
   GameDatabase::loadUmas("db/uma");
   GameDatabase::loadCards("db/card");
   GameDatabase::loadDBCards("db/cardDB.json");
   GameConfig::load("aiConfig.json");
-  cout << "ÔØÈëÍê³É" << endl;
+  cout << "è½½å…¥å®Œæˆ" << endl;
 
-  // todo: ¼ÓÈë¶ÔÂíÄïÊı¾İµÄ¼ì²é
+  // todo: åŠ å…¥å¯¹é©¬å¨˜æ•°æ®çš„æ£€æŸ¥
   test_compare_cards();
 }

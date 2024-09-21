@@ -26,7 +26,7 @@ Model::Model(std::string path, int batchsize)
   model = torch::jit::load(path);
   
   if (LIBTORCH_USE_GPU) {
-    // ½«Ä£ĞÍÒÆ¶¯µ½GPU
+    // å°†æ¨¡å‹ç§»åŠ¨åˆ°GPU
     model.to(torch::kCUDA);
   }
   else
@@ -41,17 +41,17 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
   if (LIBTORCH_USE_GPU) {
     input = input.to(at::kCUDA);
   }
-  // ÔËĞĞÄ£ĞÍ
+  // è¿è¡Œæ¨¡å‹
   at::Tensor output = model.forward({ input }).toTensor().to(at::kCPU);
 
-  // ×ª»»Êä³öÎª¸¡µãÊıÊı×é
+  // è½¬æ¢è¾“å‡ºä¸ºæµ®ç‚¹æ•°æ•°ç»„
   float* output_data = output.data_ptr<float>();
   memcpy(outputBuf, output_data, gameNum * NNOUTPUT_CHANNELS_V1 * sizeof(float));
 }
 
 void Model::printBackendInfo()
 {
-    cout << "AI°æ±¾£ºÉñ¾­ÍøÂç£¬ºó¶Ë£ºLibtorch " << (LIBTORCH_USE_GPU ? "GPU°æ" : "CPU°æ") << endl;
+    cout << "AIç‰ˆæœ¬ï¼šç¥ç»ç½‘ç»œï¼Œåç«¯ï¼šLibtorch " << (LIBTORCH_USE_GPU ? "GPUç‰ˆ" : "CPUç‰ˆ") << endl;
 }
 
 #endif

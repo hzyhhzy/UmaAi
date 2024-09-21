@@ -26,17 +26,17 @@ void main_modelBenchmark() {
 
 #if USE_BACKEND == BACKEND_LIBTORCH
   std::string modelpath = "../training/example/model_traced.pt";
-  // ¼ÓÔØÄ£ĞÍ
+  // åŠ è½½æ¨¡å‹
   torch::jit::script::Module model;
   try {
     model = torch::jit::load(modelpath);
   }
   catch (const c10::Error& e) {
-    std::cerr << "Ä£ĞÍ¼ÓÔØÊ§°Ü¡£" << e.what() << std::endl;
+    std::cerr << "æ¨¡å‹åŠ è½½å¤±è´¥ã€‚" << e.what() << std::endl;
     return;
   }
   if (LIBTORCH_USE_GPU) {
-    // ½«Ä£ĞÍÒÆ¶¯µ½GPU
+    // å°†æ¨¡å‹ç§»åŠ¨åˆ°GPU
     model.to(torch::kCUDA);
   }
   else
@@ -59,10 +59,10 @@ void main_modelBenchmark() {
           input = input.to(at::kCUDA);
         }
 
-        // ÔËĞĞÄ£ĞÍ
+        // è¿è¡Œæ¨¡å‹
         at::Tensor output = model.forward({ input }).toTensor().to(at::kCPU);
 
-        // ×ª»»Êä³öÎª¸¡µãÊıÊı×é
+        // è½¬æ¢è¾“å‡ºä¸ºæµ®ç‚¹æ•°æ•°ç»„
         float* output_data = output.data_ptr<float>();
 
       }
@@ -72,17 +72,17 @@ void main_modelBenchmark() {
   for (int i = 0; i < threadNum; i++)
     threads.emplace_back(modelthread, batchNumEveryThread);
 
-  // µÈ´ıËùÓĞÏß³ÌÍê³É
+  // ç­‰å¾…æ‰€æœ‰çº¿ç¨‹å®Œæˆ
   for (auto& th : threads) {
     th.join();
   }
 
   auto stop = std::chrono::high_resolution_clock::now();
 
-  // ¼ÆËã³ÖĞøÊ±¼ä
+  // è®¡ç®—æŒç»­æ—¶é—´
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
   double duration_s = 0.000001 * duration.count();
-  // Êä³ö³ÖĞøÊ±¼ä
+  // è¾“å‡ºæŒç»­æ—¶é—´
   std::cout << "Time: " << duration_s << " s, speed=" << N / duration_s << std::endl;
 #endif
 
@@ -96,7 +96,7 @@ void main_modelBenchmark() {
   std::cout << "Benchmark:" << std::endl;
   auto start = std::chrono::high_resolution_clock::now();
 
-  Evaluator evaBuf(&model, batchSize);//Ö»ÓÃÓÚÌá¹©Ò»Ğ©»º´æÇø
+  Evaluator evaBuf(&model, batchSize);//åªç”¨äºæä¾›ä¸€äº›ç¼“å­˜åŒº
 
   for (int b = 0; b < batchNumEveryThread; b++)
   {
@@ -106,13 +106,13 @@ void main_modelBenchmark() {
 
   auto stop = std::chrono::high_resolution_clock::now();
 
-  // ¼ÆËã³ÖĞøÊ±¼ä
+  // è®¡ç®—æŒç»­æ—¶é—´
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
   double duration_s = 0.000001 * duration.count();
-  // Êä³ö³ÖĞøÊ±¼ä
+  // è¾“å‡ºæŒç»­æ—¶é—´
   std::cout << "Time: " << duration_s << " s, speed=" << N / duration_s << std::endl;
 #endif
-  cout << "°´ÈÎÒâ¼ü¼ÌĞø" << endl;
+  cout << "æŒ‰ä»»æ„é”®ç»§ç»­" << endl;
   cin.get();
   return;
 }

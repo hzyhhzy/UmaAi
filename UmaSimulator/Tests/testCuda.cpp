@@ -22,7 +22,7 @@
 using namespace std;
 
 #if USE_BACKEND == BACKEND_CUDA
-// Ö÷»ú¶Ë´òÓ¡º¯Êı
+// ä¸»æœºç«¯æ‰“å°å‡½æ•°
 void printMatrix(const float* matrix, int m, int n) {
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
@@ -38,25 +38,25 @@ void main_testCuda()
   const string modelpath = "./db/model.txt";
   Model model(modelpath, bs);
 
-  // ×¼±¸ÊäÈëÊı¾İ
+  // å‡†å¤‡è¾“å…¥æ•°æ®
   std::string filename = "./db/example_data.npz";
   cnpy::npz_t my_npz = cnpy::npz_load(filename);
   cnpy::NpyArray arr = my_npz["x"];
 
-  // ½«Êı¾İ×ª»»ÎªÊÊµ±µÄ¸ñÊ½²¢ÌáÈ¡Ç°NÁĞ
+  // å°†æ•°æ®è½¬æ¢ä¸ºé€‚å½“çš„æ ¼å¼å¹¶æå–å‰Nåˆ—
   float* loaded_data = arr.data<float>();
   std::vector<float> data,output;
   output.resize(1000000);
   int num_rows = arr.shape[0];
   int num_cols = arr.shape[1];
 
-  for (size_t i = 0; i < bs; ++i) { // Ö»È¡Ç°2ĞĞ
+  for (size_t i = 0; i < bs; ++i) { // åªå–å‰2è¡Œ
     for (size_t j = 0; j < num_cols; ++j) {
       data.push_back(loaded_data[i * num_cols + j]);
     }
   }
 
-  Evaluator evaBuf(&model, bs);//Ö»ÓÃÓÚÌá¹©Ò»Ğ©»º´æÇø
+  Evaluator evaBuf(&model, bs);//åªç”¨äºæä¾›ä¸€äº›ç¼“å­˜åŒº
   model.evaluate(&evaBuf, data.data(), output.data(), bs);
   for (int t = 0; t < 32; t++)
   {

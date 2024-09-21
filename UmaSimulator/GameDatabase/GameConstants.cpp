@@ -1,41 +1,41 @@
 #include "GameConstants.h"
 #include "UmaData.h"
 
-//³£Êı»òÕß±È½Ï¶ÌµÄÁĞ±í·ÅÔÚ×îÇ°Ãæ
+//å¸¸æ•°æˆ–è€…æ¯”è¾ƒçŸ­çš„åˆ—è¡¨æ”¾åœ¨æœ€å‰é¢
 const double GameConstants::ScorePtRateDefault = 2.0;
-const double GameConstants::HintLevelPtRateDefault = 6.5;//ÒÔÇ°Ä¬ÈÏ5£¬ÖÖ²Ë±­µÄhint¾­³£Ï¡È±£¬¾Íµ÷´óÒ»µã
+const double GameConstants::HintLevelPtRateDefault = 6.5;//ä»¥å‰é»˜è®¤5ï¼Œç§èœæ¯çš„hintç»å¸¸ç¨€ç¼ºï¼Œå°±è°ƒå¤§ä¸€ç‚¹
 //const double GameConstants::ScorePtRateQieZhe = 2.2;
-const int GameConstants::BasicFiveStatusLimit[5] = { 2300,1000,2200,2200,1500 }; //ÓÎÏ·ÀïÔ­À´ÊÇ1750 1000 1700 1700 1350£¬Ä£ÄâÆ÷ÖĞ1200ÒÔÉÏ·­±¶
+const int GameConstants::BasicFiveStatusLimit[5] = { 2300,1000,2200,2200,1500 }; //æ¸¸æˆé‡ŒåŸæ¥æ˜¯1750 1000 1700 1700 1350ï¼Œæ¨¡æ‹Ÿå™¨ä¸­1200ä»¥ä¸Šç¿»å€
 
-//const int GameConstants::NormalRaceFiveStatusBonus = 3;//³£¹æ±ÈÈüÊôĞÔ¼Ó³É=3
-//const int GameConstants::NormalRacePtBonus = 45;//³£¹æ±ÈÈüpt¼Ó³É,G1=45
+//const int GameConstants::NormalRaceFiveStatusBonus = 3;//å¸¸è§„æ¯”èµ›å±æ€§åŠ æˆ=3
+//const int GameConstants::NormalRacePtBonus = 45;//å¸¸è§„æ¯”èµ›ptåŠ æˆ,G1=45
 const double GameConstants::EventProb = 0.35;
 const int GameConstants::EventStrengthDefault = 20;
 
 const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.1;
 const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.2;
 
-const double GameConstants::FriendVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//ÓÑÈËSSR¿¨µÄ»Ø¸´Á¿±¶Êı£¨ÂúÆÆ1.8£©
-const double GameConstants::FriendVitalBonusR[5] = { 1.2,1.23,1.26,1.3,1.3 };//ÓÑÈËR¿¨µÄ»Ø¸´Á¿±¶Êı
-const double GameConstants::FriendStatusBonusSSR[5] = { 1.2,1.21,1.23,1.25,1.25 };//ÓÑÈËSSR¿¨µÄÊÂ¼şĞ§¹û±¶Êı£¨ÂúÆÆ1.25£©
-const double GameConstants::FriendStatusBonusR[5] = { 1.1,1.11,1.13,1.15,1.15 };//ÓÑÈËR¿¨µÄÊÂ¼şĞ§¹û±¶Êı
+const double GameConstants::FriendVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//å‹äººSSRå¡çš„å›å¤é‡å€æ•°ï¼ˆæ»¡ç ´1.8ï¼‰
+const double GameConstants::FriendVitalBonusR[5] = { 1.2,1.23,1.26,1.3,1.3 };//å‹äººRå¡çš„å›å¤é‡å€æ•°
+const double GameConstants::FriendStatusBonusSSR[5] = { 1.2,1.21,1.23,1.25,1.25 };//å‹äººSSRå¡çš„äº‹ä»¶æ•ˆæœå€æ•°ï¼ˆæ»¡ç ´1.25ï¼‰
+const double GameConstants::FriendStatusBonusR[5] = { 1.1,1.11,1.13,1.15,1.15 };//å‹äººRå¡çš„äº‹ä»¶æ•ˆæœå€æ•°
 
 const std::vector<int> GameConstants::Cook_LinkCharas = { 9002,1001,1028,1030,1051,1104 };
 
-const int GameConstants::Cook_DishPtTrainingBonus[8] = { 0,10,16,21,25,28,30,30 };//ÁÏÀíptÑµÁ·¼Ó³É
-const int GameConstants::Cook_DishPtSkillPtBonus[8] = { 0,15,24,33,42,51,60,60 };//ÁÏÀípt¼¼ÄÜµã¼Ó³É
-const int GameConstants::Cook_DishPtDeyilvBonus[8] = { 0,5,8,11,14,17,20,20 };//ÁÏÀíptµÃÒâÂÊ¼Ó³É
-const int GameConstants::Cook_DishPtBigSuccessRate[8] = { 0,15,18,20,22,24,25,100 };//ÁÏÀí´ó³É¹¦¸ÅÂÊ
+const int GameConstants::Cook_DishPtTrainingBonus[8] = { 0,10,16,21,25,28,30,30 };//æ–™ç†ptè®­ç»ƒåŠ æˆ
+const int GameConstants::Cook_DishPtSkillPtBonus[8] = { 0,15,24,33,42,51,60,60 };//æ–™ç†ptæŠ€èƒ½ç‚¹åŠ æˆ
+const int GameConstants::Cook_DishPtDeyilvBonus[8] = { 0,5,8,11,14,17,20,20 };//æ–™ç†ptå¾—æ„ç‡åŠ æˆ
+const int GameConstants::Cook_DishPtBigSuccessRate[8] = { 0,15,18,20,22,24,25,100 };//æ–™ç†å¤§æˆåŠŸæ¦‚ç‡
 
-const double GameConstants::Cook_RestGreenRate = 0.2;//ĞİÏ¢ÂÌÉ«¸ÅÂÊ
-const double GameConstants::Cook_RaceGreenRate = 0.4;//±ÈÈüÂÌÉ«¸ÅÂÊ
+const double GameConstants::Cook_RestGreenRate = 0.2;//ä¼‘æ¯ç»¿è‰²æ¦‚ç‡
+const double GameConstants::Cook_RaceGreenRate = 0.4;//æ¯”èµ›ç»¿è‰²æ¦‚ç‡
 
-const int GameConstants::Cook_DishLevel[14] = { 0,1,1,2,2,2,2,2,3,3,3,3,3,4 };//1¼¶£ºµÚÒ»ÄêµÄÁ½¸ö£¬2¼¶£ºµÚ¶şÄêµÄ5¸ö£¬3¼¶£ºµÚÈıÄêµÄ5¸ö£¬4¼¶£ºµÚËÄÄêµÄG1Plate
-const int GameConstants::Cook_DishMainTraining[14] = { -1,-1,-1,0,1,2,3,4,0,1,2,3,4,-1 };//ÁÏÀíµÄÖ÷ÑµÁ·£¬1¼¶ºÍ4¼¶Ã»ÓĞ
-const int GameConstants::Cook_DishGainPt[14] = { 0,250,250,500,500,500,500,500,800,800,800,800,800,1500 };//ÁÏÀíµÄÁÏÀípt
+const int GameConstants::Cook_DishLevel[14] = { 0,1,1,2,2,2,2,2,3,3,3,3,3,4 };//1çº§ï¼šç¬¬ä¸€å¹´çš„ä¸¤ä¸ªï¼Œ2çº§ï¼šç¬¬äºŒå¹´çš„5ä¸ªï¼Œ3çº§ï¼šç¬¬ä¸‰å¹´çš„5ä¸ªï¼Œ4çº§ï¼šç¬¬å››å¹´çš„G1Plate
+const int GameConstants::Cook_DishMainTraining[14] = { -1,-1,-1,0,1,2,3,4,0,1,2,3,4,-1 };//æ–™ç†çš„ä¸»è®­ç»ƒï¼Œ1çº§å’Œ4çº§æ²¡æœ‰
+const int GameConstants::Cook_DishGainPt[14] = { 0,250,250,500,500,500,500,500,800,800,800,800,800,1500 };//æ–™ç†çš„æ–™ç†pt
 
 const std::string GameConstants::Cook_MaterialNames[5] = {
-  "ÂÜ²·","´óËâ","ÍÁ¶¹","À±½·","²İİ®"
+  "èåœ","å¤§è’œ","åœŸè±†","è¾£æ¤’","è‰è“"
 };
 
 const int GameConstants::Cook_DishCost[14][5]=
@@ -54,7 +54,7 @@ const int GameConstants::Cook_DishCost[14][5]=
   {40,0,40,250,0},
   {80,0,0,0,250},
   {80,80,80,80,80},
-};//ÁÏÀíÔ­ÁÏÏûºÄ
+};//æ–™ç†åŸæ–™æ¶ˆè€—
 const bool GameConstants::Cook_DishTrainingBonusEffective[14][5]=
 {
   {0,0,0,0,0},
@@ -71,8 +71,8 @@ const bool GameConstants::Cook_DishTrainingBonusEffective[14][5]=
   {0,0,0,1,0},
   {0,0,0,0,1},
   {1,1,1,1,1},
-};//ÁÏÀí¶ÔÄÄĞ©ÑµÁ·ÓĞ¼Ó³É
-const int GameConstants::Cook_FarmLvCost[5] = { 0,100,180,220,250 };//Å©ÌïÉı¼¶ÏûºÄ
+};//æ–™ç†å¯¹å“ªäº›è®­ç»ƒæœ‰åŠ æˆ
+const int GameConstants::Cook_FarmLvCost[5] = { 0,100,180,220,250 };//å†œç”°å‡çº§æ¶ˆè€—
 const int GameConstants::Cook_HarvestBasic[6] = { 0,20,20,30,40,40 };
 const int GameConstants::Cook_HarvestExtra[6] = { 0,20,30,30,40,40 };
 const int GameConstants::Cook_MaterialLimit[6] = { 0,200,400,600,800,999 };
@@ -129,7 +129,7 @@ bool GameConstants::isLinkChara(int id)
 
 const int GameConstants::TrainingBasicValue[5][5][7] =
 {
-  //ËÙ
+  //é€Ÿ
   {
     { 11, 0, 2, 0, 0, 5, -19},
     { 12, 0, 2, 0, 0, 5, -20},
@@ -137,7 +137,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
     { 14, 0, 3, 0, 0, 5, -23},
     { 15, 0, 4, 0, 0, 5, -25},
   },
-  //ÄÍ
+  //è€
   {
     { 0, 8, 0, 5, 0, 5, -20},
     { 0, 9, 0, 5, 0, 5, -21},
@@ -145,7 +145,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
     { 0, 11, 0, 7, 0, 5, -24},
     { 0, 12, 0, 8, 0, 5, -26},
   },
-  //Á¦
+  //åŠ›
   {
     { 0, 4, 9, 0, 0, 5, -20},
     { 0, 4, 10, 0, 0, 5, -21},
@@ -153,7 +153,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
     { 0, 5, 12, 0, 0, 5, -24},
     { 0, 6, 13, 0, 0, 5, -26},
   },
-  //¸ù
+  //æ ¹
   {
     { 2, 0, 2, 10, 0, 5, -20},
     { 2, 0, 2, 11, 0, 5, -21},
@@ -161,7 +161,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
     { 3, 0, 3, 13, 0, 5, -24},
     { 3, 0, 3, 14, 0, 5, -26},
   },
-  //ÖÇ
+  //æ™º
   {
     { 2, 0, 0, 0, 8, 5, 5},
     { 2, 0, 0, 0, 9, 5, 5},

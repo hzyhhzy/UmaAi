@@ -46,7 +46,7 @@ void websocket::on_disconnect(wsclient* c, websocketpp::connection_hdl hdl) {
 	m_status = "Lost";
 	auto con = c->get_con_from_hdl(hdl);
 	std::cout 
-		<< "ÓëURAµÄwebsocketÁ¬½ÓÒÑ¶Ï¿ª£º"
+		<< "ä¸ŽURAçš„websocketè¿žæŽ¥å·²æ–­å¼€ï¼š"
 		<< con->get_ec().message()
 		<< std::endl;
 	connect();
@@ -100,10 +100,10 @@ void websocket::send(std::wstring message) {
 	}
 }
 void websocket::init_ura() {
-	// ¶©ÔÄAIÐèÒªµÄÐÅÏ¢£¬È¡Ïû¶©ÔÄÊÇ°ÑCommandType¸Ä³É3
+	// è®¢é˜…AIéœ€è¦çš„ä¿¡æ¯ï¼Œå–æ¶ˆè®¢é˜…æ˜¯æŠŠCommandTypeæ”¹æˆ3
 	send(L"{\"CommandType\":2,\"Command\":\"SubscribeAiInfo\",\"Parameters\":[]}");
-	// ÔÚURAÉÏ´òÓ¡ÐÅÏ¢
-	send(L"{\"CommandType\":1,\"Command\":\"PrintText\",\"Parameters\":[\"[green]UmaAiÒÑ½¨Á¢Á¬½Ó[/]\"]}");
+	// åœ¨URAä¸Šæ‰“å°ä¿¡æ¯
+	send(L"{\"CommandType\":1,\"Command\":\"PrintText\",\"Parameters\":[\"[green]UmaAiå·²å»ºç«‹è¿žæŽ¥[/]\"]}");
 }
 std::string websocket::get_status() const {
 	return m_status;

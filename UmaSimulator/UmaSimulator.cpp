@@ -10,6 +10,12 @@
 
 int main()
 {
+	system("chcp 65001");
+	LANGID lang = GetSystemDefaultLangID();
+	std::cout << "Lang ID: " << lang << std::endl;
+	// 可以增加作者信息
+	SetWindowTextW(GetConsoleWindow(), TEXT("UmaAI 田园杯 | 蒙特卡洛 | UTF8-测试版-0.2.5 | Build 240830"));
+	
 	SearchResult::initNormDistributionCdfTable();
 	//main_testOnnx();
 	//return 0;

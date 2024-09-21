@@ -74,13 +74,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;$(PublicIncludeDirectories)</PublicIncludeDirectories>
-    <ExternalIncludePath>D:\boost_1_83_0;G:\libtorch\include;G:\libtorch\include\torch\csrc\api\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;G:\boost-1.86.0;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <ExternalIncludePath>G:\boost-1.86.0;D:\boost_1_83_0;G:\libtorch\include;G:\libtorch\include\torch\csrc\api\include;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>D:\boost_1_83_0\stage\lib;G:\libtorch\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;$(PublicIncludeDirectories)</PublicIncludeDirectories>
-    <ExternalIncludePath>C:\Users\zhenz\Downloads\boost_1_84_0\boost_1_84_0;G:\libtorch\include;G:\libtorch\include\torch\csrc\api\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <PublicIncludeDirectories>G:\src\UmaSimulator\UmaSimulator;G:\boost-1.86.0;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <ExternalIncludePath>G:\boost-1.86.0;C:\Users\zhenz\Downloads\boost_1_84_0\boost_1_84_0;G:\libtorch\include;G:\libtorch\include\torch\csrc\api\include;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>C:\Users\zhenz\Downloads\boost_1_84_0\boost_1_84_0\stage\lib;G:\libtorch\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -120,7 +120,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zc:__cplusplus /utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)External;C:\local\boost_1_83_0;C:\local\libtorch_debug\include;C:\local\libtorch_debug\include\torch\csrc\api\include;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -142,7 +142,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zc:__cplusplus /utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)External;C:\local\boost_1_83_0;C:\local\libtorch\include;C:\local\libtorch\include\torch\csrc\api\include;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -189,7 +189,10 @@
     <ClCompile Include="Selfplay\RandomCardsetHelper.cpp" />
     <ClCompile Include="Selfplay\SelfplayParam.cpp" />
     <ClCompile Include="Selfplay\SelfplayThread.cpp" />
-    <ClCompile Include="SupportCard\CardEffect.cpp" />
+    <ClCompile Include="SupportCard\CardEffect.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
     <ClCompile Include="SupportCard\SupportCard.cpp" />
     <ClCompile Include="Tests\test1.cpp" />
     <ClCompile Include="Tests\test2.cpp" />

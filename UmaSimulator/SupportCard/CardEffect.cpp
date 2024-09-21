@@ -21,34 +21,34 @@ CardTrainingEffect::CardTrainingEffect(const SupportCard* sc)
     */
 }
 
-// ¹ÌÓĞ´ÊÌõµÄÍ¨ÓÃ¼ÆËã·½·¨
-// key ¶ÔÓ¦ enum class UniqueEffectType
+// å›ºæœ‰è¯æ¡çš„é€šç”¨è®¡ç®—æ–¹æ³•
+// key å¯¹åº” enum class UniqueEffectType
 CardTrainingEffect& CardTrainingEffect::apply(int key, int value)
 {
     switch (key)
     {
-        case 1:  // ÓÑÇé-³ËËã
+        case 1:  // å‹æƒ…-ä¹˜ç®—
             youQing = (100 + youQing) * (100 + value) / 100 - 100;
             break;
-        case 2:    // ¸É¾¢-¼ÓËã
+        case 2:    // å¹²åŠ²-åŠ ç®—
             ganJing += value; break;
-        case 8:    // ÑµÁ·-¼ÓËã
+        case 8:    // è®­ç»ƒ-åŠ ç®—
             xunLian += value; break;
-        case 19:  // µÃÒâÂÊ-²»´¦Àí
+        case 19:  // å¾—æ„ç‡-ä¸å¤„ç†
     //       deYiLv = (100 + deYiLv) * (100 + value) / 100 - 100;
              break;
-        case 15:    // Èüºó-²»´¦Àí
+        case 15:    // èµ›å-ä¸å¤„ç†
     //       saiHou += value;
              break;
-        case 27: // Ê§°ÜÂÊ-¼õ³Ë
+        case 27: // å¤±è´¥ç‡-å‡ä¹˜
             failRateDrop = 100 - (100 - failRateDrop) * (100 - value) / 100;
             break;
-        case 28: // ÌåÁ¦-¼õ³Ë
+        case 28: // ä½“åŠ›-å‡ä¹˜
             vitalCostDrop = 100 - (100 - vitalCostDrop) * (100 - value) / 100;
             break;
-        case 31:    // ÖÇÁ¦»ØÌåUP-¼ÓËã£¨Éµ²»À­¼¸£©
+        case 31:    // æ™ºåŠ›å›ä½“UP-åŠ ç®—ï¼ˆå‚»ä¸æ‹‰å‡ ï¼‰
             vitalBonus += value; break;
-        case 3:    // ¸±ÊôĞÔ
+        case 3:    // å‰¯å±æ€§
             bonus[0] += value; break;
         case 4:
             bonus[1] += value; break;
@@ -61,7 +61,7 @@ CardTrainingEffect& CardTrainingEffect::apply(int key, int value)
         case 30:
             bonus[5] += value; break;
         /*
-        case 9: // ³õÊ¼ÊôĞÔ
+        case 9: // åˆå§‹å±æ€§
             initialBonus[0] += value; break;
         case 10:
             initialBonus[1] += value; break;
@@ -71,19 +71,19 @@ CardTrainingEffect& CardTrainingEffect::apply(int key, int value)
             initialBonus[3] += value; break;
         case 13:
             initialBonus[4] += value; break;
-        case 14:  // ³õÊ¼î¿°í
+        case 14:  // åˆå§‹ç¾ç»Š
             initialJiBan += value; break;
         */
-        case 17:    // HintµÈ¼¶
-        case 18:    // HintÂÊ£º²»´¦Àí
+        case 17:    // Hintç­‰çº§
+        case 18:    // Hintç‡ï¼šä¸å¤„ç†
             break;
-        // ÉñÓ¥ÌØÅĞ
-        case 41:  // ËÙÉñÓ¥
+        // ç¥é¹°ç‰¹åˆ¤
+        case 41:  // é€Ÿç¥é¹°
             for (int i = 0; i < 5; ++i)
                 bonus[i] += 1;
             break;
         default:
-            cout << "Î´Öª´ÊÌõ: " << key << " = " << value << endl;
+            cout << "æœªçŸ¥è¯æ¡: " << key << " = " << value << endl;
             break;
     }
     return *this;
@@ -93,16 +93,16 @@ const string CardTrainingEffect::explain() {
     stringstream ss;
     ss << std::setprecision(4);
     if (youQing > 0)
-        ss << "[²ÊÈ¦]ÓÑÇé=" << youQing << ' ';
+        ss << "[å½©åœˆ]å‹æƒ…=" << youQing << ' ';
     if (ganJing > 0)
-        ss << "¸É¾¢=" << ganJing << ' ';
+        ss << "å¹²åŠ²=" << ganJing << ' ';
     if (xunLian > 0)
-        ss << "ÑµÁ·=" << xunLian << ' ';
+        ss << "è®­ç»ƒ=" << xunLian << ' ';
     if (failRateDrop > 0)
-        ss << "Ê§°ÜÂÊ-" << failRateDrop << ' ';
+        ss << "å¤±è´¥ç‡-" << failRateDrop << ' ';
     if (vitalCostDrop > 0)
-        ss << "ÌåÁ¦ÏûºÄ-" << vitalCostDrop << ' ';
-    ss << "¸±ÊôĞÔ=( ";
+        ss << "ä½“åŠ›æ¶ˆè€—-" << vitalCostDrop << ' ';
+    ss << "å‰¯å±æ€§=( ";
     for (int i = 0; i < 6; ++i)
         ss << bonus[i] << ' ';
     ss << ")";

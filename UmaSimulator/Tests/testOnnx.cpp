@@ -22,7 +22,7 @@
 #include <onnxruntime_cxx_api.h>
 using namespace std;
 
-// Ö÷»ú¶Ë´òÓ¡º¯Êı
+// ä¸»æœºç«¯æ‰“å°å‡½æ•°
 void printMatrix(const float* matrix, int m, int n) {
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
@@ -38,18 +38,18 @@ void main_testOnnx()
   Ort::Session session{env, L"./db/model.onnx", Ort::SessionOptions{nullptr} };
   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
 
-  // ×¼±¸ÊäÈëÊı¾İ
+  // å‡†å¤‡è¾“å…¥æ•°æ®
   std::string filename = "./db/example_data.npz";
   cnpy::npz_t my_npz = cnpy::npz_load(filename);
   cnpy::NpyArray arr = my_npz["x"];
 
-  // ½«Êı¾İ×ª»»ÎªÊÊµ±µÄ¸ñÊ½²¢ÌáÈ¡Ç°NÁĞ
+  // å°†æ•°æ®è½¬æ¢ä¸ºé€‚å½“çš„æ ¼å¼å¹¶æå–å‰Nåˆ—
   float* loaded_data = arr.data<float>();
   std::vector<float> data;
   int num_rows = arr.shape[0];
   int num_cols = arr.shape[1];
 
-  for (size_t i = 0; i < 8; ++i) { // Ö»È¡Ç°NĞĞ
+  for (size_t i = 0; i < 8; ++i) { // åªå–å‰Nè¡Œ
     for (size_t j = 0; j < num_cols; ++j) {
       data.push_back(loaded_data[i * num_cols + j]);
     }

@@ -26,10 +26,10 @@ std::size_t findMaxIndex(const T(&arr)[N]) {
 
 void print_luck0(int luck)
 {
-	int u = 0;//ĞÂ°æÆ½¾ùÔËÆø´óÔ¼500£¬µ«ÎªÁËÕÕ¹ËÖÖÂí±È½ÏÒ»°ãºÍ¿¨Ã»ÂúÆÆµÄÈË£¨ÕâÁ½ÖÖÇé¿öai´ò·Ö»áÆ«¸ß£©£¬¾ÍÉè³É0ÁË
+	int u = 0;//æ–°ç‰ˆå¹³å‡è¿æ°”å¤§çº¦500ï¼Œä½†ä¸ºäº†ç…§é¡¾ç§é©¬æ¯”è¾ƒä¸€èˆ¬å’Œå¡æ²¡æ»¡ç ´çš„äººï¼ˆè¿™ä¸¤ç§æƒ…å†µaiæ‰“åˆ†ä¼šåé«˜ï¼‰ï¼Œå°±è®¾æˆ0äº†
 	int sigma = 1500;
 	string color = "";
-	if (luck > 20000) u = 32000;//ºÃµãµÄ¿¨Æ½¾ùÖµÔ¼Îªue6
+	if (luck > 20000) u = 32000;//å¥½ç‚¹çš„å¡å¹³å‡å€¼çº¦ä¸ºue6
 
 	if (!GameConfig::noColor)
 	{
@@ -47,39 +47,39 @@ void print_luck0(int luck)
 
 void main_testDemoGame()
 {
-	//const double radicalFactor = 5;//¼¤½ø¶È
-	//const int threadNum = 16; //Ïß³ÌÊı
-	 // const int searchN = 12288; //Ã¿¸öÑ¡ÏîµÄÃÉÌØ¿¨ÂåÄ£ÄâµÄ¾ÖÊı
+	//const double radicalFactor = 5;//æ¿€è¿›åº¦
+	//const int threadNum = 16; //çº¿ç¨‹æ•°
+	 // const int searchN = 12288; //æ¯ä¸ªé€‰é¡¹çš„è’™ç‰¹å¡æ´›æ¨¡æ‹Ÿçš„å±€æ•°
 
-	//¼¤½ø¶ÈÎªk£¬Ä£Äân¾ÖÊ±£¬±ê×¼²îÔ¼Îªsqrt(1+k^2/(2k+1))*1200/(sqrt(n))
-	//±ê×¼²î´óÓÚ30Ê±»áÑÏÖØÓ°ÏìÅĞ¶Ï×¼È·¶È
+	//æ¿€è¿›åº¦ä¸ºkï¼Œæ¨¡æ‹Ÿnå±€æ—¶ï¼Œæ ‡å‡†å·®çº¦ä¸ºsqrt(1+k^2/(2k+1))*1200/(sqrt(n))
+	//æ ‡å‡†å·®å¤§äº30æ—¶ä¼šä¸¥é‡å½±å“åˆ¤æ–­å‡†ç¡®åº¦
 
 
 	random_device rd;
 	auto rand = mt19937_64(rd());
 
 	int lastTurn = -1;
-	int scoreFirstTurn = 0;   // µÚÒ»»ØºÏ·ÖÊı
-	int scoreLastTurn = 0;   // ÉÏÒ»»ØºÏ·ÖÊı
+	int scoreFirstTurn = 0;   // ç¬¬ä¸€å›åˆåˆ†æ•°
+	int scoreLastTurn = 0;   // ä¸Šä¸€å›åˆåˆ†æ•°
 
-	// ¼ì²é¹¤×÷Ä¿Â¼
+	// æ£€æŸ¥å·¥ä½œç›®å½•
 	wchar_t buf[10240];
 	GetModuleFileNameW(0, buf, 10240);
 	filesystem::path exeDir = filesystem::path(buf).parent_path();
 	filesystem::current_path(exeDir);
-	//std::cout << "µ±Ç°¹¤×÷Ä¿Â¼£º" << filesystem::current_path() << endl;
-	cout << "µ±Ç°³ÌĞòÄ¿Â¼£º" << exeDir << endl;
+	//std::cout << "å½“å‰å·¥ä½œç›®å½•ï¼š" << filesystem::current_path() << endl;
+	cout << "å½“å‰ç¨‹åºç›®å½•ï¼š" << exeDir << endl;
 	GameConfig::load("./aiConfig.json");
 	GameDatabase::loadTranslation("./db/text_data.json");
 	GameDatabase::loadUmas("./db/umaDB.json");
-	//GameDatabase::loadCards("./db/card"); // ÔØÈë²¢ÓÅÏÈÊ¹ÓÃÊÖ¶¯Ö§Ô®¿¨Êı¾İ
-	GameDatabase::loadDBCards("./db/cardDB.json"); //cardDBÊı¾İÒÑ¾­ºÜÍêÉÆÁË
+	//GameDatabase::loadCards("./db/card"); // è½½å…¥å¹¶ä¼˜å…ˆä½¿ç”¨æ‰‹åŠ¨æ”¯æ´å¡æ•°æ®
+	GameDatabase::loadDBCards("./db/cardDB.json"); //cardDBæ•°æ®å·²ç»å¾ˆå®Œå–„äº†
 
 	string currentGameStagePath = string(getenv("LOCALAPPDATA")) + "/UmamusumeResponseAnalyzer/GameData/thisTurn.json";
 	//string currentGameStagePath = "./gameData/thisTurn.json";
 
 	const int threadNum = 8;
-	const double radicalFactor = 5;//¼¤½ø¶È
+	const double radicalFactor = 5;//æ¿€è¿›åº¦
 	const int searchN = 1024;
 	const int searchDepth = 1;
 
@@ -107,14 +107,14 @@ void main_testDemoGame()
 	while (true)
 	{
 
-		int umaId = 106501;//Ì«ÑôÉñ£¬15ËÙ15Á¦¼Ó³É
+		int umaId = 106501;//å¤ªé˜³ç¥ï¼Œ15é€Ÿ15åŠ›åŠ æˆ
 		int umaStars = 5;
-		//int cards[6] = { 301604,301344,301614,300194,300114,301074 };//ÓÑÈË£¬¸ß·å£¬ÉñÓ¥£¬ÎÚÀ­À­£¬·çÉñ£¬Ë¾»ú
-		int cards[6] = { 301604,301724,301614,301304,300114,300374 };//ÓÑÈË£¬ÖÇÂóÀ¥£¬ËÙÉñÓ¥£¬¸ù¿­Ë¹£¬¸ù·çÉñ£¬¸ù»ÊµÛ
+		//int cards[6] = { 301604,301344,301614,300194,300114,301074 };//å‹äººï¼Œé«˜å³°ï¼Œç¥é¹°ï¼Œä¹Œæ‹‰æ‹‰ï¼Œé£ç¥ï¼Œå¸æœº
+		int cards[6] = { 301604,301724,301614,301304,300114,300374 };//å‹äººï¼Œæ™ºéº¦æ˜†ï¼Œé€Ÿç¥é¹°ï¼Œæ ¹å‡¯æ–¯ï¼Œæ ¹é£ç¥ï¼Œæ ¹çš‡å¸
 
 		int zhongmaBlue[5] = { 18,0,0,0,0 };
 		int zhongmaBonus[6] = { 10,10,30,0,10,70 };
-		bool allowedDebuffs[9] = { false, false, false, false, false, false, true, false, false };//µÚ¶şÄê¿ÉÒÔ²»ÏûµÚ¼¸¸ödebuff¡£µÚÎå¸öÊÇÖÇÁ¦£¬µÚÆß¸öÊÇÇ¿ĞÄÔà
+		bool allowedDebuffs[9] = { false, false, false, false, false, false, true, false, false };//ç¬¬äºŒå¹´å¯ä»¥ä¸æ¶ˆç¬¬å‡ ä¸ªdebuffã€‚ç¬¬äº”ä¸ªæ˜¯æ™ºåŠ›ï¼Œç¬¬ä¸ƒä¸ªæ˜¯å¼ºå¿ƒè„
 		Game game;
 
 		game.newGame(rand, false, umaId, umaStars, cards, zhongmaBlue, zhongmaBonus);
@@ -135,7 +135,7 @@ void main_testDemoGame()
 				continue;
 			}
 			*/
-			if (game.turn == 0)//µÚÒ»»ØºÏ£¬»òÕßÖØÆôaiµÄµÚÒ»»ØºÏ
+			if (game.turn == 0)//ç¬¬ä¸€å›åˆï¼Œæˆ–è€…é‡å¯aiçš„ç¬¬ä¸€å›åˆ
 			{
 				scoreFirstTurn = 0;
 				scoreLastTurn = 0;
@@ -158,7 +158,7 @@ void main_testDemoGame()
 
 			auto printValue = [](int which, double p, double ref)
 				{
-					string prefix[] = { "ËÙ:", "ÄÍ:", "Á¦:", "¸ù:", "ÖÇ:", "| SS: ", "| ĞİÏ¢: ", "ÓÑÈË: ", "ÆÕÍ¨Íâ³ö: ", "±ÈÈü: " };
+					string prefix[] = { "é€Ÿ:", "è€:", "åŠ›:", "æ ¹:", "æ™º:", "| SS: ", "| ä¼‘æ¯: ", "å‹äºº: ", "æ™®é€šå¤–å‡º: ", "æ¯”èµ›: " };
 					if (p < -50000)
 					{
 						cout << prefix[which] << "--- ";
@@ -199,7 +199,7 @@ void main_testDemoGame()
 						maxMean = v.scoreMean;
 				}
 
-			//ĞİÏ¢ºÍÍâ³öÀïÃæ·Ö×î¸ßµÄÄÇ¸ö¡£Õâ¸öÊı×Ö×÷ÎªÏÔÊ¾²Î¿¼
+			//ä¼‘æ¯å’Œå¤–å‡ºé‡Œé¢åˆ†æœ€é«˜çš„é‚£ä¸ªã€‚è¿™ä¸ªæ•°å­—ä½œä¸ºæ˜¾ç¤ºå‚è€ƒ
 			double restValue = search.allChoicesValue[0][6].value;
 			if (search.allChoicesValue[0][7].value > restValue)
 				restValue = search.allChoicesValue[0][7].value;
@@ -211,16 +211,16 @@ void main_testDemoGame()
 			strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
 			if (game.turn == 0 || scoreFirstTurn == 0)
 			{
-				cout << "ÆÀ·ÖÔ¤²â: Æ½¾ù\033[1;32m" << int(maxMean) << "\033[0m" << "£¬ÀÖ¹Û\033[1;36m+" << int(maxValue - maxMean) << "\033[0m" << endl;
+				cout << "è¯„åˆ†é¢„æµ‹: å¹³å‡\033[1;32m" << int(maxMean) << "\033[0m" << "ï¼Œä¹è§‚\033[1;36m+" << int(maxValue - maxMean) << "\033[0m" << endl;
 				scoreFirstTurn = maxMean;
 			}
 			else
 			{
-				cout << "ÔËÆø | ±¾¾Ö£º";
+				cout << "è¿æ°” | æœ¬å±€ï¼š";
 				print_luck0(maxMean - scoreFirstTurn);
-				cout << " | ±¾»ØºÏ£º" << maxMean - scoreLastTurn
-					<< " | ÆÀ·ÖÔ¤²â: \033[1;32m" << maxMean << "\033[0m"
-					<< "£¨ÀÖ¹Û\033[1;36m+" << int(maxValue - maxMean) << "\033[0m£©" << endl;
+				cout << " | æœ¬å›åˆï¼š" << maxMean - scoreLastTurn
+					<< " | è¯„åˆ†é¢„æµ‹: \033[1;32m" << maxMean << "\033[0m"
+					<< "ï¼ˆä¹è§‚\033[1;36m+" << int(maxValue - maxMean) << "\033[0mï¼‰" << endl;
 
 			}
 			cout.flush();
@@ -230,18 +230,18 @@ void main_testDemoGame()
 			for (int i = 0; i < Search::buyBuffChoiceNum(game.turn); i++)
 			{
 				if (Search::buyBuffChoiceNum(game.turn) > 1 && i == 0)
-					cout << "²»Âò:              ";
+					cout << "ä¸ä¹°:              ";
 				if (i == 1)
-					cout << "Âò+50%:            ";
+					cout << "ä¹°+50%:            ";
 				if (i == 2 && game.turn < 50)
-					cout << "Âòpt+10:           ";
+					cout << "ä¹°pt+10:           ";
 				if (i == 2 && game.turn >= 50)
-					cout << "ÂòÌåÁ¦-20%:        ";
+					cout << "ä¹°ä½“åŠ›-20%:        ";
 				if (i == 3 && game.turn < 50)
-					cout << "Âò+50%Óëpt+10:     ";
+					cout << "ä¹°+50%ä¸pt+10:     ";
 				if (i == 3 && game.turn >= 50)
-					cout << "Âò+50%ÓëÌåÁ¦-20%:  ";
-				//cout << "ÑµÁ·: ";
+					cout << "ä¹°+50%ä¸ä½“åŠ›-20%:  ";
+				//cout << "è®­ç»ƒ: ";
 				for (int j = 0; j < 10; j++)
 				{
 					double value = search.allChoicesValue[i][j].value;

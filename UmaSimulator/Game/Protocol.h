@@ -30,8 +30,8 @@ class VenusDataSet
         vector<int> spiritBonus;
 
     public:
-        // Ê¹ÓÃ¸ÃºêÊ±£¬JsonÖĞ²»´æÔÚµÄKey¿ÉÒÔÓÃÄ¬ÈÏÖµÌæ»»£¬µ«Key=NullÊ±»á±¬Òì³£¡£
-        // Òò´ËÉú³ÉJSONÊ±Ó¦±ÜÃâ²úÉúNullÖµ£¬¶øÊÇÖ±½ÓÊ¡ÂÔ¸Ã¼ü
+        // ä½¿ç”¨è¯¥å®æ—¶ï¼ŒJsonä¸­ä¸å­˜åœ¨çš„Keyå¯ä»¥ç”¨é»˜è®¤å€¼æ›¿æ¢ï¼Œä½†Key=Nullæ—¶ä¼šçˆ†å¼‚å¸¸ã€‚
+        // å› æ­¤ç”ŸæˆJSONæ—¶åº”é¿å…äº§ç”ŸNullå€¼ï¼Œè€Œæ˜¯ç›´æ¥çœç•¥è¯¥é”®
         NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(VenusDataSet, venusLevelYellow, venusLevelRed, venusLevelBlue,
             venusSpiritsBottom, venusSpiritsUpper, venusAvailableWisdom, venusIsWisdomActive,
             venusCardFirstClick, venusCardUnlockOutgoing, venusCardIsQingRe,
@@ -93,7 +93,7 @@ class URAResponse
 {
     public:
         int umaId;
-        int16_t turn;   // ´Ó0¿ªÊ¼£¬µ½77½áÊø
+        int16_t turn;   // ä»0å¼€å§‹ï¼Œåˆ°77ç»“æŸ
         int16_t vital;
         int16_t maxVital;
         bool isQieZhe;

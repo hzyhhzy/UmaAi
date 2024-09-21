@@ -37,7 +37,7 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 }
 void Model::printBackendInfo()
 {
-    cout << "AI°æ±¾£ºÉñ¾­ÍøÂç£¬ºó¶Ë£ºOnnx-DirectML " << endl;
+    cout << "AIç‰ˆæœ¬ï¼šç¥žç»ç½‘ç»œï¼ŒåŽç«¯ï¼šOnnx-DirectML " << endl;
 }
 
 #endif

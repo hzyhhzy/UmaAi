@@ -83,7 +83,7 @@ void ModelCudaBuf::init(const ModelWeight& weight, int batchSize)
 {
   CUBLAS_ERR("CudaHandles", cublasCreate(&cublas));
 
-  //∏¥÷∆»®÷ÿµΩGPU
+  //Â§çÂà∂ÊùÉÈáçÂà∞GPU
   mallocAndCopyToDevice("inputheadGlobal1", weight.inputheadGlobal1, inputheadGlobal1);
   mallocAndCopyToDevice("inputheadGlobal2", weight.inputheadGlobal2, inputheadGlobal2);
   mallocAndCopyToDevice("inputheadCard", weight.inputheadCard, inputheadCard);
@@ -138,7 +138,7 @@ void ModelCudaBuf::init(const ModelWeight& weight, int batchSize)
   mallocOnDevice("outputhead_b_copied", batchSize * NNOUTPUT_CHANNELS_V1, outputhead_b_copied);
   for (int i = 0; i < batchSize; i++)
   {
-    CUDA_ERR("", cudaMemcpy(outputhead_b_copied + i * NNOUTPUT_CHANNELS_V1, outputhead_b, sizeof(float) * NNOUTPUT_CHANNELS_V1, cudaMemcpyDeviceToDevice));//batchsize*NNInputCæÿ’Û
+    CUDA_ERR("", cudaMemcpy(outputhead_b_copied + i * NNOUTPUT_CHANNELS_V1, outputhead_b, sizeof(float) * NNOUTPUT_CHANNELS_V1, cudaMemcpyDeviceToDevice));//batchsize*NNInputCÁü©Èòµ
   }
 
 }
@@ -239,7 +239,7 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
 #ifdef COMPRESS_NNINPUT
 
-  //—πÀınninput“‘Ω⁄ °pcie¥¯øÌ
+  //ÂéãÁº©nninput‰ª•ËäÇÁúÅpcieÂ∏¶ÂÆΩ
   vector<uint16_t>& onesIdx = eva->inputBufOnesIdx;
   vector<uint16_t>& floatIdx = eva->inputBufFloatIdx;
   vector<float>& floatValue = eva->inputBufFloatValue;
@@ -264,7 +264,7 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
         countFloat++;
       }
     }
-    //assert(false && "NNINPUT_MAX_FLOATªπ–Ë“™≤‚ ‘");
+    //assert(false && "NNINPUT_MAX_FLOATËøòÈúÄË¶ÅÊµãËØï");
     if (countOne > 185 || countFloat > 185)
       cout << "Warning: countOne=" << countOne << " countFloat=" << countFloat << endl;
     assert(countOne <= NNINPUT_MAX_ONES);
@@ -273,14 +273,14 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
 
   std::lock_guard<std::mutex> lock(mtx);
-  //ƒ⁄¥Ê÷– «batchsize*NNInputCæÿ’Û£¨––”≈œ»
+  //ÂÜÖÂ≠ò‰∏≠ÊòØbatchsize*NNInputCÁü©ÈòµÔºåË°å‰ºòÂÖà
   CUDA_ERR("", cudaMemcpy(cb.inputOnesIdx, onesIdx.data(), sizeof(uint16_t) * onesIdx.size(), cudaMemcpyHostToDevice));
   CUDA_ERR("", cudaMemcpy(cb.inputFloatIdx, floatIdx.data(), sizeof(uint16_t) * floatIdx.size(), cudaMemcpyHostToDevice));
   CUDA_ERR("", cudaMemcpy(cb.inputFloatValue, floatValue.data(), sizeof(float) * floatValue.size(), cudaMemcpyHostToDevice));
 
   CUDA_ERR("", decompressNNInput(cb.inputOnesIdx, cb.inputFloatIdx, cb.inputFloatValue, cb.input, batchSize, NNINPUT_CHANNELS_V1));
   //vector<float> f(batchSize * NNINPUT_CHANNELS_V1);
-  //CUDA_ERR("", cudaMemcpy(f.data(), cb.input, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1, cudaMemcpyDeviceToHost)); //batchsize*NNInputCæÿ’Û
+  //CUDA_ERR("", cudaMemcpy(f.data(), cb.input, sizeof(float) * batchSize * NNINPUT_CHANNELS_V1, cudaMemcpyDeviceToHost)); //batchsize*NNInputCÁü©Èòµ
   //for (int i = 0; i < batchSize * NNINPUT_CHANNELS_V1; i++)if (f[i] != inputBuf[i])cout << f[i] - inputBuf[i] << endl;
 #else
   std::lock_guard<std::mutex> lock(mtx);
@@ -332,7 +332,7 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
   CUDA_ERR("", reluInPlace(cb.encoderInput, ModelWeight::encoderCh * NN_TF_NUM * batchSize));
 
-  //Ω”œ¬¿¥ «encoder≤ø∑÷
+  //Êé•‰∏ãÊù•ÊòØencoderÈÉ®ÂàÜ
   for (int layer = 0; layer < ModelWeight::encoderLayer; layer++)
   {
     CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N,
@@ -347,7 +347,7 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
       cb.encoderInput, ModelWeight::encoderCh, &zero,
       cb.encoderV, ModelWeight::encoderCh));
 
-    //Q*xº∆À„attention£¨÷ªƒ‹√ø∏ˆæÿ’Û∑÷ø™À„
+    //Q*xËÆ°ÁÆóattentionÔºåÂè™ËÉΩÊØè‰∏™Áü©ÈòµÂàÜÂºÄÁÆó
     CUBLAS_ERR("", cublasSgemmStridedBatched(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N,
       NN_TF_NUM, NN_TF_NUM, ModelWeight::encoderCh, &one,
       cb.encoderQ, ModelWeight::encoderCh, NN_TF_NUM* ModelWeight::encoderCh,
@@ -358,7 +358,7 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
     CUDA_ERR("", reluInPlace(cb.encoderAtt, NN_TF_NUM * NN_TF_NUM* batchSize));
 
-    //attention*v£¨÷ªƒ‹√ø∏ˆæÿ’Û∑÷ø™À„
+    //attention*vÔºåÂè™ËÉΩÊØè‰∏™Áü©ÈòµÂàÜÂºÄÁÆó
     CUBLAS_ERR("", cublasSgemmStridedBatched(cb.cublas, CUBLAS_OP_N, CUBLAS_OP_N,
       ModelWeight::encoderCh, NN_TF_NUM, NN_TF_NUM, &one,
       cb.encoderV, ModelWeight::encoderCh, NN_TF_NUM* ModelWeight::encoderCh,
@@ -371,7 +371,7 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
     CUDA_ERR("", broadcastDim1Add(cb.encoderOutput, cb.encoderGf, batchSize, NN_TF_NUM, ModelWeight::encoderCh));
     CUDA_ERR("", reluInPlace(cb.encoderOutput, batchSize * NN_TF_NUM * ModelWeight::encoderCh));
-    CUDA_ERR("", addInPlace(cb.encoderInput, cb.encoderOutput, batchSize * NN_TF_NUM * ModelWeight::encoderCh));//ResNetΩ·ππ£¨∑≈ªÿinput
+    CUDA_ERR("", addInPlace(cb.encoderInput, cb.encoderOutput, batchSize * NN_TF_NUM * ModelWeight::encoderCh));//ResNetÁªìÊûÑÔºåÊîæÂõûinput
   }
 
   //h=h.mean(dim=1)
@@ -394,19 +394,19 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
     CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, ModelWeight::mlpCh, batchSize, ModelWeight::mlpCh, &one, cb.mlp_lin[layer][1], ModelWeight::mlpCh, cb.mlpMid, ModelWeight::mlpCh, &zero, cb.mlpMid2, ModelWeight::mlpCh));
     CUDA_ERR("", reluInPlace(cb.mlpMid2, batchSize * ModelWeight::mlpCh));
 
-    CUDA_ERR("", addInPlace(cb.mlpInput, cb.mlpMid2, batchSize * ModelWeight::mlpCh));//ResNetΩ·ππ£¨∑≈ªÿinput
+    CUDA_ERR("", addInPlace(cb.mlpInput, cb.mlpMid2, batchSize * ModelWeight::mlpCh));//ResNetÁªìÊûÑÔºåÊîæÂõûinput
   }
 
 
   CUBLAS_ERR("", cublasSgemm(cb.cublas, CUBLAS_OP_T, CUBLAS_OP_N, NNOUTPUT_CHANNELS_V1, batchSize, ModelWeight::mlpCh, &one, cb.outputhead_w, ModelWeight::mlpCh, cb.mlpInput, ModelWeight::mlpCh, &zero, cb.output, NNOUTPUT_CHANNELS_V1));
-  CUDA_ERR("", addInPlace(cb.output, cb.outputhead_b_copied, batchSize * NNOUTPUT_CHANNELS_V1));//ResNetΩ·ππ£¨∑≈ªÿinput
+  CUDA_ERR("", addInPlace(cb.output, cb.outputhead_b_copied, batchSize * NNOUTPUT_CHANNELS_V1));//ResNetÁªìÊûÑÔºåÊîæÂõûinput
 
   
-  CUDA_ERR("", cudaMemcpy(outputBuf, cb.output, sizeof(float) * batchSize * NNOUTPUT_CHANNELS_V1, cudaMemcpyDeviceToHost)); //batchsize*NNInputCæÿ’Û
+  CUDA_ERR("", cudaMemcpy(outputBuf, cb.output, sizeof(float) * batchSize * NNOUTPUT_CHANNELS_V1, cudaMemcpyDeviceToHost)); //batchsize*NNInputCÁü©Èòµ
 
   /*
   
-  CUDA_ERR("", cudaMemcpy(f.data(), cb.encoderInput, sizeof(float) * batchSize * ModelWeight::encoderCh * NN_TF_NUM, cudaMemcpyDeviceToHost)); //batchsize*NNInputCæÿ’Û
+  CUDA_ERR("", cudaMemcpy(f.data(), cb.encoderInput, sizeof(float) * batchSize * ModelWeight::encoderCh * NN_TF_NUM, cudaMemcpyDeviceToHost)); //batchsize*NNInputCÁü©Èòµ
 
   for (int i = 0; i < batchSize; i++)
   {
@@ -421,6 +421,6 @@ void Model::evaluate(Evaluator* eva, float* inputBuf, float* outputBuf, int game
 
 void Model::printBackendInfo()
 {
-  cout << "AI∞Ê±æ£∫…Òæ≠Õ¯¬Á£¨∫Û∂À£∫CUDA" << endl;
+  cout << "AIÁâàÊú¨ÔºöÁ•ûÁªèÁΩëÁªúÔºåÂêéÁ´ØÔºöCUDA" << endl;
 }
 #endif

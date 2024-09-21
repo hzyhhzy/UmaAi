@@ -5,66 +5,66 @@
 #include "../config.h"
 
 const int TOTAL_TURN = 78;
-const int MAX_INFO_PERSON_NUM = 6;//ÓĞµ¥¶ÀĞÅÏ¢µÄÈËÍ·¸öÊı£¨´Ë¾ç±¾Ö»ÓĞÖ§Ô®¿¨£©
+const int MAX_INFO_PERSON_NUM = 6;//æœ‰å•ç‹¬ä¿¡æ¯çš„äººå¤´ä¸ªæ•°ï¼ˆæ­¤å‰§æœ¬åªæœ‰æ”¯æ´å¡ï¼‰
 
 class GameConstants
 {
 public:
-  static const int TrainingBasicValue[5][5][7]; //TrainingBasicValue[ÑÕÉ«][µÚ¼¸ÖÖÑµÁ·][LV¼¸][ËÙÄÍÁ¦¸ùÖÇptÌåÁ¦]
-  static const int FailRateBasic[5][5];//[µÚ¼¸ÖÖÑµÁ·][LV¼¸]£¬Ê§°ÜÂÊ= 0.025*(x0-x)^2 + 1.25*(x0-x)
-  static const int BasicFiveStatusLimit[5];//³õÊ¼ÉÏÏŞ£¬1200ÒÔÉÏ·­±¶
+  static const int TrainingBasicValue[5][5][7]; //TrainingBasicValue[é¢œè‰²][ç¬¬å‡ ç§è®­ç»ƒ][LVå‡ ][é€Ÿè€åŠ›æ ¹æ™ºptä½“åŠ›]
+  static const int FailRateBasic[5][5];//[ç¬¬å‡ ç§è®­ç»ƒ][LVå‡ ]ï¼Œå¤±è´¥ç‡= 0.025*(x0-x)^2 + 1.25*(x0-x)
+  static const int BasicFiveStatusLimit[5];//åˆå§‹ä¸Šé™ï¼Œ1200ä»¥ä¸Šç¿»å€
 
-  //¸÷ÖÖÓÎÏ·²ÎÊı
-  //static const int NormalRaceFiveStatusBonus;//³£¹æ±ÈÈüÊôĞÔ¼Ó³É=3£¬ÌØÊâÂíÄïÌØÊâ´¦Àí£¨µÒ¶ÅË¹µÈ£©
-  //static const int NormalRacePtBonus;//³£¹æ±ÈÈüpt¼Ó³É
-  static const double EventProb;//Ã¿»ØºÏÓĞEventProb¸ÅÂÊËæ»úÒ»¸öÊôĞÔÒÔ¼°pt +EventStrengthDefault£¬Ä£ÄâÖ§Ô®¿¨ÊÂ¼ş
+  //å„ç§æ¸¸æˆå‚æ•°
+  //static const int NormalRaceFiveStatusBonus;//å¸¸è§„æ¯”èµ›å±æ€§åŠ æˆ=3ï¼Œç‰¹æ®Šé©¬å¨˜ç‰¹æ®Šå¤„ç†ï¼ˆç‹„æœæ–¯ç­‰ï¼‰
+  //static const int NormalRacePtBonus;//å¸¸è§„æ¯”èµ›ptåŠ æˆ
+  static const double EventProb;//æ¯å›åˆæœ‰EventProbæ¦‚ç‡éšæœºä¸€ä¸ªå±æ€§ä»¥åŠpt +EventStrengthDefaultï¼Œæ¨¡æ‹Ÿæ”¯æ´å¡äº‹ä»¶
   static const int EventStrengthDefault;
 
-  //¾ç±¾¿¨Ïà¹Ø
-  static const int FriendCardIdSSR = 30207;//SSRÇï´¨
-  static const int FriendCardIdR = 10109;//RÇï´¨
-  static const double FriendUnlockOutgoingProbEveryTurnLowFriendship;//Ã¿»ØºÏ½âËøÍâ³öµÄ¸ÅÂÊ£¬î¿°íĞ¡ÓÚ60
-  static const double FriendUnlockOutgoingProbEveryTurnHighFriendship;//Ã¿»ØºÏ½âËøÍâ³öµÄ¸ÅÂÊ£¬î¿°í´óÓÚµÈÓÚ60
-  //static const double FriendEventProb;//ÓÑÈËÊÂ¼ş¸ÅÂÊ//³£Êı0.4Ğ´ËÀÔÚ¶ÔÓ¦º¯ÊıÀïÁË
-  static const double FriendVitalBonusSSR[5];//ÓÑÈËSSR¿¨µÄ»Ø¸´Á¿±¶Êı£¨ÂúÆÆ1.6£©
-  static const double FriendVitalBonusR[5];//ÓÑÈËR¿¨µÄ»Ø¸´Á¿±¶Êı
-  static const double FriendStatusBonusSSR[5];//ÓÑÈËSSR¿¨µÄÊÂ¼şĞ§¹û±¶Êı£¨ÂúÆÆ1.25£©
-  static const double FriendStatusBonusR[5];//ÓÑÈËR¿¨µÄÊÂ¼şĞ§¹û±¶Êı
+  //å‰§æœ¬å¡ç›¸å…³
+  static const int FriendCardIdSSR = 30207;//SSRç§‹å·
+  static const int FriendCardIdR = 10109;//Rç§‹å·
+  static const double FriendUnlockOutgoingProbEveryTurnLowFriendship;//æ¯å›åˆè§£é”å¤–å‡ºçš„æ¦‚ç‡ï¼Œç¾ç»Šå°äº60
+  static const double FriendUnlockOutgoingProbEveryTurnHighFriendship;//æ¯å›åˆè§£é”å¤–å‡ºçš„æ¦‚ç‡ï¼Œç¾ç»Šå¤§äºç­‰äº60
+  //static const double FriendEventProb;//å‹äººäº‹ä»¶æ¦‚ç‡//å¸¸æ•°0.4å†™æ­»åœ¨å¯¹åº”å‡½æ•°é‡Œäº†
+  static const double FriendVitalBonusSSR[5];//å‹äººSSRå¡çš„å›å¤é‡å€æ•°ï¼ˆæ»¡ç ´1.6ï¼‰
+  static const double FriendVitalBonusR[5];//å‹äººRå¡çš„å›å¤é‡å€æ•°
+  static const double FriendStatusBonusSSR[5];//å‹äººSSRå¡çš„äº‹ä»¶æ•ˆæœå€æ•°ï¼ˆæ»¡ç ´1.25ï¼‰
+  static const double FriendStatusBonusR[5];//å‹äººRå¡çš„äº‹ä»¶æ•ˆæœå€æ•°
   
 
-  //¾ç±¾Ïà¹Ø
-  static const std::string Cook_MaterialNames[5];//ÁÏÀíÔ­ÁÏÃû³Æ
+  //å‰§æœ¬ç›¸å…³
+  static const std::string Cook_MaterialNames[5];//æ–™ç†åŸæ–™åç§°
 
-  static const std::vector<int> Cook_LinkCharas;// Link½ÇÉ«
-  //static const int Cook_DishPtBounds[7];//ÁÏÀíptµÄ·Öµµ
-  static int Cook_DishPtLevel(int dishPt);//ÁÏÀíptµÄ·Öµµ
-  static const int Cook_DishPtTrainingBonus[8];//ÁÏÀíptÑµÁ·¼Ó³É
-  static const int Cook_DishPtSkillPtBonus[8];//ÁÏÀípt¼¼ÄÜµã¼Ó³É
-  static const int Cook_DishPtDeyilvBonus[8];//ÁÏÀíptµÃÒâÂÊ¼Ó³É
-  static const int Cook_DishPtBigSuccessRate[8];//ÁÏÀí´ó³É¹¦¸ÅÂÊ
-  //´ó³É¹¦Ê±£¬ÏÈ°´»ù´¡¸ÅÂÊµÄ±ÈÀıÑ¡³öÒ»¸öbuff£¨ºöÂÔÎŞĞ§buff£©£¬ÔÙ¶ÔÃ¿¸öbuff°´×·¼Ó¸ÅÂÊ¾ö¶¨ÊÇ·ñ×·¼Ó
-  static const int Cook_DishPtBigSuccessBuffProb[5][6];//ÁÏÀí´ó³É¹¦µÄbuff»ù´¡¸ÅÂÊ£¬[ÁÏÀíµÈ¼¶][buffÀàĞÍ]£¬ÆäÖĞbuffÀàĞÍÒÀ´Î1ÌåÁ¦£¬2ĞÄÇé£¬3î¿°í£¬4·ÖÉí£¬5ÌåÁ¦ÉÏÏŞ
-  static const int Cook_DishPtBigSuccessBuffExtraProb[5][6];//ÁÏÀí´ó³É¹¦µÄbuff×·¼Ó¸ÅÂÊ£¬[ÁÏÀíµÈ¼¶][buffÀàĞÍ]£¬ÆäÖĞbuffÀàĞÍÒÀ´Î1ÌåÁ¦£¬2ĞÄÇé£¬3î¿°í£¬4·ÖÉí£¬5ÌåÁ¦ÉÏÏŞ
+  static const std::vector<int> Cook_LinkCharas;// Linkè§’è‰²
+  //static const int Cook_DishPtBounds[7];//æ–™ç†ptçš„åˆ†æ¡£
+  static int Cook_DishPtLevel(int dishPt);//æ–™ç†ptçš„åˆ†æ¡£
+  static const int Cook_DishPtTrainingBonus[8];//æ–™ç†ptè®­ç»ƒåŠ æˆ
+  static const int Cook_DishPtSkillPtBonus[8];//æ–™ç†ptæŠ€èƒ½ç‚¹åŠ æˆ
+  static const int Cook_DishPtDeyilvBonus[8];//æ–™ç†ptå¾—æ„ç‡åŠ æˆ
+  static const int Cook_DishPtBigSuccessRate[8];//æ–™ç†å¤§æˆåŠŸæ¦‚ç‡
+  //å¤§æˆåŠŸæ—¶ï¼Œå…ˆæŒ‰åŸºç¡€æ¦‚ç‡çš„æ¯”ä¾‹é€‰å‡ºä¸€ä¸ªbuffï¼ˆå¿½ç•¥æ— æ•ˆbuffï¼‰ï¼Œå†å¯¹æ¯ä¸ªbuffæŒ‰è¿½åŠ æ¦‚ç‡å†³å®šæ˜¯å¦è¿½åŠ 
+  static const int Cook_DishPtBigSuccessBuffProb[5][6];//æ–™ç†å¤§æˆåŠŸçš„buffåŸºç¡€æ¦‚ç‡ï¼Œ[æ–™ç†ç­‰çº§][buffç±»å‹]ï¼Œå…¶ä¸­buffç±»å‹ä¾æ¬¡1ä½“åŠ›ï¼Œ2å¿ƒæƒ…ï¼Œ3ç¾ç»Šï¼Œ4åˆ†èº«ï¼Œ5ä½“åŠ›ä¸Šé™
+  static const int Cook_DishPtBigSuccessBuffExtraProb[5][6];//æ–™ç†å¤§æˆåŠŸçš„buffè¿½åŠ æ¦‚ç‡ï¼Œ[æ–™ç†ç­‰çº§][buffç±»å‹]ï¼Œå…¶ä¸­buffç±»å‹ä¾æ¬¡1ä½“åŠ›ï¼Œ2å¿ƒæƒ…ï¼Œ3ç¾ç»Šï¼Œ4åˆ†èº«ï¼Œ5ä½“åŠ›ä¸Šé™
 
-  static const double Cook_RestGreenRate;//ĞİÏ¢ÂÌÉ«¸ÅÂÊ
-  static const double Cook_RaceGreenRate;//±ÈÈüÂÌÉ«¸ÅÂÊ
+  static const double Cook_RestGreenRate;//ä¼‘æ¯ç»¿è‰²æ¦‚ç‡
+  static const double Cook_RaceGreenRate;//æ¯”èµ›ç»¿è‰²æ¦‚ç‡
 
-  static const int Cook_DishLevel[14];//1¼¶£ºµÚÒ»ÄêµÄÁ½¸ö£¬2¼¶£ºµÚ¶şÄêµÄ5¸ö£¬3¼¶£ºµÚÈıÄêµÄ5¸ö£¬4¼¶£ºµÚËÄÄêµÄG1Plate
-  static const int Cook_DishMainTraining[14];//ÁÏÀíµÄÖ÷ÑµÁ·£¬1¼¶ºÍ4¼¶Ã»ÓĞ
-  static const int Cook_DishGainPt[14];//ÁÏÀí»ñµÃµÄÁÏÀípt
-  static const int Cook_DishCost[14][5];//ÁÏÀíÔ­ÁÏÏûºÄ
-  static const bool Cook_DishTrainingBonusEffective[14][5];//ÁÏÀí¶ÔÄÄĞ©ÑµÁ·ÓĞ¼Ó³É
-  static const int Cook_FarmLvCost[5];//Å©ÌïÉı¼¶ÏûºÄ
-  static const int Cook_HarvestBasic[6];//Å©ÌïµÈ¼¶ÊÕ»ñ»ù´¡Öµ
-  static const int Cook_HarvestExtra[6];//Å©ÌïµÈ¼¶ÊÕ»ñ×·¼ÓÖµ
-  static const int Cook_MaterialLimit[6];//²ÄÁÏÉÏÏŞ
+  static const int Cook_DishLevel[14];//1çº§ï¼šç¬¬ä¸€å¹´çš„ä¸¤ä¸ªï¼Œ2çº§ï¼šç¬¬äºŒå¹´çš„5ä¸ªï¼Œ3çº§ï¼šç¬¬ä¸‰å¹´çš„5ä¸ªï¼Œ4çº§ï¼šç¬¬å››å¹´çš„G1Plate
+  static const int Cook_DishMainTraining[14];//æ–™ç†çš„ä¸»è®­ç»ƒï¼Œ1çº§å’Œ4çº§æ²¡æœ‰
+  static const int Cook_DishGainPt[14];//æ–™ç†è·å¾—çš„æ–™ç†pt
+  static const int Cook_DishCost[14][5];//æ–™ç†åŸæ–™æ¶ˆè€—
+  static const bool Cook_DishTrainingBonusEffective[14][5];//æ–™ç†å¯¹å“ªäº›è®­ç»ƒæœ‰åŠ æˆ
+  static const int Cook_FarmLvCost[5];//å†œç”°å‡çº§æ¶ˆè€—
+  static const int Cook_HarvestBasic[6];//å†œç”°ç­‰çº§æ”¶è·åŸºç¡€å€¼
+  static const int Cook_HarvestExtra[6];//å†œç”°ç­‰çº§æ”¶è·è¿½åŠ å€¼
+  static const int Cook_MaterialLimit[6];//ææ–™ä¸Šé™
 
 
-  //ÆÀ·Ö
-  static const int FiveStatusFinalScore[1200+800*2+1];//²»Í¬ÊôĞÔ¶ÔÓ¦µÄÆÀ·Ö
-  static const double ScorePtRateDefault;//ÎªÁË·½±ã£¬Ö±½ÓÊÓÎªÃ¿1pt¶ÔÓ¦¶àÉÙ·Ö¡£
-  static const double HintLevelPtRateDefault;//ÎªÁË·½±ã£¬Ö±½ÓÊÓÎªÃ¿Ò»¼¶hint¶àÉÙpt¡£
-  //static const double ScorePtRateQieZhe;//ÎªÁË·½±ã£¬Ö±½ÓÊÓÎªÃ¿1pt¶ÔÓ¦¶àÉÙ·Ö¡£ÇĞÕß
+  //è¯„åˆ†
+  static const int FiveStatusFinalScore[1200+800*2+1];//ä¸åŒå±æ€§å¯¹åº”çš„è¯„åˆ†
+  static const double ScorePtRateDefault;//ä¸ºäº†æ–¹ä¾¿ï¼Œç›´æ¥è§†ä¸ºæ¯1ptå¯¹åº”å¤šå°‘åˆ†ã€‚
+  static const double HintLevelPtRateDefault;//ä¸ºäº†æ–¹ä¾¿ï¼Œç›´æ¥è§†ä¸ºæ¯ä¸€çº§hintå¤šå°‘ptã€‚
+  //static const double ScorePtRateQieZhe;//ä¸ºäº†æ–¹ä¾¿ï¼Œç›´æ¥è§†ä¸ºæ¯1ptå¯¹åº”å¤šå°‘åˆ†ã€‚åˆ‡è€…
 
   static bool isLinkChara(int id);
 
