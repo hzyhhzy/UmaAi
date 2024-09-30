@@ -1869,6 +1869,45 @@
     ],
     "star": 5
   },
+  "102403": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      15,
+      0,
+      0,
+      7
+    ],
+    "fiveStatusInitial": [
+      88,
+      138,
+      84,
+      124,
+      116
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 36,
+        "count": 1
+      }
+    ],
+    "gameId": 102403,
+    "name": "[ろっきん☆MewMeow]マヤノトップガン",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      43,
+      47,
+      53,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "102501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -3183,6 +3222,42 @@
     "freeRaces": [],
     "gameId": 104201,
     "name": "[Rocket☆Star]采珠",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      20,
+      22,
+      30,
+      32,
+      40,
+      45,
+      53,
+      58,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "104202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      13,
+      0,
+      7
+    ],
+    "fiveStatusInitial": [
+      106,
+      97,
+      119,
+      116,
+      112
+    ],
+    "freeRaces": [],
+    "gameId": 104202,
+    "name": "[Be♪Witched]シーキングザパール",
     "preferRaces": [],
     "preferReds": [],
     "races": [
