@@ -1,4 +1,4 @@
-//²âÊÔÑµÁ·ÊôĞÔÖµËã·¨
+//æµ‹è¯•è®­ç»ƒå±æ€§å€¼ç®—æ³•
 #include <iostream>
 #include <random>
 #include <sstream>
@@ -11,7 +11,7 @@ using namespace std;
 void main_test3()
 {
   /*
-  //³¬¼òµ¥µÄÂß¼­
+  //è¶…ç®€å•çš„é€»è¾‘
 
   random_device rd;
   auto rand = mt19937_64(rd());
@@ -31,22 +31,22 @@ void main_test3()
     game.newGame(rand, false, umaId, cards, zhongmaBlue, zhongmaBonus);
     for (int turn = 0; turn < TOTAL_TURN; turn++)
     {
-      assert(turn == game.turn && "»ØºÏÊı²»ÕıÈ·");
+      assert(turn == game.turn && "å›åˆæ•°ä¸æ­£ç¡®");
       game.randomDistributeCards(rand);
       //game.print();
-      if (game.isRacing)//±ÈÈü»ØºÏ
+      if (game.isRacing)//æ¯”èµ›å›åˆ
       {
         bool useVenus = game.venusAvailableWisdom == 1;
         bool suc = game.applyTraining(rand, -1, useVenus, -1, -1);
         assert(suc);
       }
-      else//³£¹æÑµÁ·»ØºÏ
+      else//å¸¸è§„è®­ç»ƒå›åˆ
       {
         bool useVenus = game.venusAvailableWisdom != 0;
         int chosenSpiritColor = 0;
         int chosenTrain = -1;
         int chosenOutgoing = -1;
-        if (game.vital < 50 && game.venusAvailableWisdom != 1)//ÓĞÅ®ÉñÍâ³ö¾ÍÍâ³ö£¬Ã»ÓĞ¾ÍĞİÏ¢
+        if (game.vital < 50 && game.venusAvailableWisdom != 1)//æœ‰å¥³ç¥å¤–å‡ºå°±å¤–å‡ºï¼Œæ²¡æœ‰å°±ä¼‘æ¯
         {
           if (game.venusCardUnlockOutgoing && !game.venusCardOutgoingUsed[4] && !game.isXiaHeSu())
           {
@@ -79,7 +79,7 @@ void main_test3()
 
             double expectSpiritNum = int(game.spiritDistribution[item] / 32) + 1;
             double value = 0;
-            assert(game.cardId[0] == SHENTUAN_ID && "ÉñÍÅ¿¨²»ÔÚµÚÒ»¸öÎ»ÖÃ");
+            assert(game.cardId[0] == SHENTUAN_ID && "ç¥å›¢å¡ä¸åœ¨ç¬¬ä¸€ä¸ªä½ç½®");
             for (int head = 0; head < 6; head++)
             {
               if (!game.cardDistribution[item][head])
@@ -148,7 +148,7 @@ void main_test3()
       }
       game.checkEventAfterTrain(rand);
     }
-    //cout << termcolor::red << "Óı³É½áÊø£¡" << termcolor::reset << endl;
+    //cout << termcolor::red << "è‚²æˆç»“æŸï¼" << termcolor::reset << endl;
     int score = game.finalScore();
     n += 1;
     totalScore += score;
@@ -157,6 +157,6 @@ void main_test3()
     //game.print();
     //game.printFinalStats();
   }
-  cout << n << "¾Ö£¬Æ½¾ù·Ö" << totalScore / n << "£¬±ê×¼²î" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "£¬×î¸ß·Ö" << bestScore << endl;
+  cout << n << "å±€ï¼Œå¹³å‡åˆ†" << totalScore / n << "ï¼Œæ ‡å‡†å·®" << sqrt(totalScoreSqr / n - totalScore * totalScore / n / n) << "ï¼Œæœ€é«˜åˆ†" << bestScore << endl;
   */
 }

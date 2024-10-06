@@ -1,9 +1,9 @@
 #pragma once
 #include "../config.h"
-void main_test1();//×¥ÇòÓÎÏ·
-void main_test2();//²âÊÔ¿¨×éÇ¿¶È£¨Æ½¾ùÑµÁ·Öµ£©
-void main_test3();//²âÊÔÑµÁ·ÊôĞÔÖµËã·¨
-void main_test4();//²âÊÔ²»Í¬ÈËÍ·ÊıµÄ¸ÅÂÊ
+void main_test1();//æŠ“çƒæ¸¸æˆ
+void main_test2();//æµ‹è¯•å¡ç»„å¼ºåº¦ï¼ˆå¹³å‡è®­ç»ƒå€¼ï¼‰
+void main_test3();//æµ‹è¯•è®­ç»ƒå±æ€§å€¼ç®—æ³•
+void main_test4();//æµ‹è¯•ä¸åŒäººå¤´æ•°çš„æ¦‚ç‡
 void main_test_json();
 void main_testLibtorch();
 void main_testDemoGame();

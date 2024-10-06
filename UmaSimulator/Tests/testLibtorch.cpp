@@ -10,17 +10,17 @@
 const bool useCuda = true;
 void main_testLibtorch() {
 
-  // ¼ÓÔØÄ£ĞÍ
+  // åŠ è½½æ¨¡å‹
   torch::jit::script::Module model;
   try {
     model = torch::jit::load("../training/example/model_traced.pt");
   }
   catch (const c10::Error& e) {
-    std::cerr << "Ä£ĞÍ¼ÓÔØÊ§°Ü¡£" << e.what() << std::endl;
+    std::cerr << "æ¨¡å‹åŠ è½½å¤±è´¥ã€‚" << e.what() << std::endl;
     return;
   }
   if (useCuda) {
-    // ½«Ä£ĞÍÒÆ¶¯µ½GPU
+    // å°†æ¨¡å‹ç§»åŠ¨åˆ°GPU
     model.to(torch::kCUDA);
   }
   else
@@ -28,18 +28,18 @@ void main_testLibtorch() {
     model.to(torch::kCPU);
   }
 
-  // ×¼±¸ÊäÈëÊı¾İ
+  // å‡†å¤‡è¾“å…¥æ•°æ®
   std::string filename = "../training/example/256.npz";
   cnpy::npz_t my_npz = cnpy::npz_load(filename);
   cnpy::NpyArray arr = my_npz["x"];
 
-  // ½«Êı¾İ×ª»»ÎªÊÊµ±µÄ¸ñÊ½²¢ÌáÈ¡Ç°NÁĞ
+  // å°†æ•°æ®è½¬æ¢ä¸ºé€‚å½“çš„æ ¼å¼å¹¶æå–å‰Nåˆ—
   float* loaded_data = arr.data<float>();
   std::vector<float> data;
   int num_rows = arr.shape[0];
   int num_cols = arr.shape[1];
 
-  for (size_t i = 0; i < 8; ++i) { // Ö»È¡Ç°NĞĞ
+  for (size_t i = 0; i < 8; ++i) { // åªå–å‰Nè¡Œ
     for (size_t j = 0; j < num_cols; ++j) {
       data.push_back(loaded_data[i * num_cols + j]);
     }
@@ -48,15 +48,15 @@ void main_testLibtorch() {
   if (useCuda) {
     input = input.to(at::kCUDA);
   }
-  // ÔËĞĞÄ£ĞÍ
+  // è¿è¡Œæ¨¡å‹
   std::vector<torch::jit::IValue> inputs;
   inputs.push_back(input);
   at::Tensor output = model.forward(inputs).toTensor().to(at::kCPU);
 
-  // ×ª»»Êä³öÎª¸¡µãÊıÊı×é
+  // è½¬æ¢è¾“å‡ºä¸ºæµ®ç‚¹æ•°æ•°ç»„
   float* output_data = output.data_ptr<float>();
 
-  // Êä³öÇ°¼¸¸ö½á¹ûÒÔ½øĞĞÑéÖ¤
+  // è¾“å‡ºå‰å‡ ä¸ªç»“æœä»¥è¿›è¡ŒéªŒè¯
   for (int i = 0; i < 8; ++i) {
     for (int j = 0; j < 5; ++j) {
       std::cout << output_data[i * 21 + j] << " ";
@@ -78,21 +78,21 @@ void main_testLibtorch() {
         input = input.to(at::kCUDA);
       }
 
-      // ÔËĞĞÄ£ĞÍ
+      // è¿è¡Œæ¨¡å‹
       std::vector<torch::jit::IValue> inputs;
       inputs.push_back(input);
       at::Tensor output = model.forward(inputs).toTensor().to(at::kCPU);
 
-      // ×ª»»Êä³öÎª¸¡µãÊıÊı×é
+      // è½¬æ¢è¾“å‡ºä¸ºæµ®ç‚¹æ•°æ•°ç»„
       float* output_data = output.data_ptr<float>();
 
     }
     auto stop = std::chrono::high_resolution_clock::now();
 
-    // ¼ÆËã³ÖĞøÊ±¼ä
+    // è®¡ç®—æŒç»­æ—¶é—´
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
     double duration_s = 0.000001 * duration.count();
-    // Êä³ö³ÖĞøÊ±¼ä
+    // è¾“å‡ºæŒç»­æ—¶é—´
     std::cout << "Time: " << duration_s << " s, batchsize=" << batchSize << " batchnum=" << epoches << " speed=" << batchSize * epoches / duration_s << std::endl;
   }
   return;

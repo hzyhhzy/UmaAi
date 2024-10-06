@@ -10,12 +10,12 @@
 struct GameConfig 
 {
   
-    static double radicalFactor; // ¼¤½ø¶È£¬Ìá¸ß»áµ¼ÖÂ¼ÆËã±äÂı
-    static int searchSingleMax;  // µÚÒ»Ñ¡Ïî´ïµ½¶àÉÙ´ÎËÑË÷¾ÍÍ£Ö¹ÃÉÌØ¿¨Âå
-    static int threadNum;   // Ïß³ÌÊı£¬¿É¸ù¾İ×ÔÉíCPUµ÷Õû£¬Éñ¾­ÍøÂç°æÖ±½ÓÉè³É4
+    static double radicalFactor; // æ¿€è¿›åº¦ï¼Œæé«˜ä¼šå¯¼è‡´è®¡ç®—å˜æ…¢
+    static int searchSingleMax;  // ç¬¬ä¸€é€‰é¡¹è¾¾åˆ°å¤šå°‘æ¬¡æœç´¢å°±åœæ­¢è’™ç‰¹å¡æ´›
+    static int threadNum;   // çº¿ç¨‹æ•°ï¼Œå¯æ ¹æ®è‡ªèº«CPUè°ƒæ•´ï¼Œç¥ç»ç½‘ç»œç‰ˆç›´æ¥è®¾æˆ4
 
-    static double scorePtRate;    // Ã¿ptµÄ·ÖÊı
-    static int scoringMode;    // ´ò·Ö·½Ê½
+    static double scorePtRate;    // æ¯ptçš„åˆ†æ•°
+    static int scoringMode;    // æ‰“åˆ†æ–¹å¼
 
     // "localfile": checking ./thisTurn.json
     // "urafile": communicating with URA using file
@@ -23,22 +23,22 @@ struct GameConfig
     static std::string communicationMode;    
 
 
-    //ÒÔÏÂ²»¾­³£ĞŞ¸Ä
+    //ä»¥ä¸‹ä¸ç»å¸¸ä¿®æ”¹
 
-    static int eventStrength;  // Ä£ÄâÆ÷ÀïÃ¿»ØºÏÓĞ40%¸ÅÂÊ¼ÓÕâÃ´¶àÊôĞÔ£¬Ä£ÄâÖ§Ô®¿¨ÊÂ¼ş¡£configÀïÃæ¼ÓÕâ¸ö²ÎÊıµÄÄ¿µÄÊÇÄ³ÖÖ³Ì¶ÈÉÏ´úÌæ¼¤½ø¶È£¬µ÷¸ßÁË»á¸üÇãÏòÓÚ¿ØÊôĞÔ
+    static int eventStrength;  // æ¨¡æ‹Ÿå™¨é‡Œæ¯å›åˆæœ‰40%æ¦‚ç‡åŠ è¿™ä¹ˆå¤šå±æ€§ï¼Œæ¨¡æ‹Ÿæ”¯æ´å¡äº‹ä»¶ã€‚configé‡Œé¢åŠ è¿™ä¸ªå‚æ•°çš„ç›®çš„æ˜¯æŸç§ç¨‹åº¦ä¸Šä»£æ›¿æ¿€è¿›åº¦ï¼Œè°ƒé«˜äº†ä¼šæ›´å€¾å‘äºæ§å±æ€§
 
-    static std::string modelPath;    // Éñ¾­ÍøÂçÎÄ¼şËùÔÚÄ¿Â¼
-    static int batchSize;   // ÏÔ¿¨°æµÄbatchSize£¬·ÇÉñ¾­ÍøÂç°æÉè¶àÉÙÇø±ğ²»´ó£¬Éñ¾­ÍøÂç°æÖ±½ÓÉè³É256
+    static std::string modelPath;    // ç¥ç»ç½‘ç»œæ–‡ä»¶æ‰€åœ¨ç›®å½•
+    static int batchSize;   // æ˜¾å¡ç‰ˆçš„batchSizeï¼Œéç¥ç»ç½‘ç»œç‰ˆè®¾å¤šå°‘åŒºåˆ«ä¸å¤§ï¼Œç¥ç»ç½‘ç»œç‰ˆç›´æ¥è®¾æˆ256
 
-    static int searchTotalMax; //ËùÓĞÑ¡Ïî×Ü¹²´ïµ½¶àÉÙ´ÎËÑË÷¾ÍÍ£Ö¹ÃÉÌØ¿¨Âå£¬0Îª²»ÏŞ
-    static int searchGroupSize; //ËÑË÷Ê±Ã¿´Î·ÖÅä¶àÉÙ¼ÆËãÁ¿¡£½¨Òé128£¬²»ÒªĞ¡ÓÚ16*Ïß³ÌÊı£¬Ì«Ğ¡»á´øÀ´ºÜ´ó¶îÍâ¿ªÏú£¨Ã¿searchGroupSize´ÎËÑË÷Òª¼ÆËãO(200000)´Î£©
-    static double searchCpuct; //cpuct²ÎÊı£¬Ô½Ğ¡ËÑË÷Ô½¼¯ÖĞ
-    static int maxDepth;  // ÃÉÌØ¿¨ÂåÉî¶È£¬Éñ¾­ÍøÂçÄ¬ÈÏÊÇ10£¬·ÇÉñ¾­ÍøÂçÊÇÖ±½ÓËÑµ½ÓÎÏ·½áÊø£¨TOTAL_TURN=67£©
+    static int searchTotalMax; //æ‰€æœ‰é€‰é¡¹æ€»å…±è¾¾åˆ°å¤šå°‘æ¬¡æœç´¢å°±åœæ­¢è’™ç‰¹å¡æ´›ï¼Œ0ä¸ºä¸é™
+    static int searchGroupSize; //æœç´¢æ—¶æ¯æ¬¡åˆ†é…å¤šå°‘è®¡ç®—é‡ã€‚å»ºè®®128ï¼Œä¸è¦å°äº16*çº¿ç¨‹æ•°ï¼Œå¤ªå°ä¼šå¸¦æ¥å¾ˆå¤§é¢å¤–å¼€é”€ï¼ˆæ¯searchGroupSizeæ¬¡æœç´¢è¦è®¡ç®—O(200000)æ¬¡ï¼‰
+    static double searchCpuct; //cpuctå‚æ•°ï¼Œè¶Šå°æœç´¢è¶Šé›†ä¸­
+    static int maxDepth;  // è’™ç‰¹å¡æ´›æ·±åº¦ï¼Œç¥ç»ç½‘ç»œé»˜è®¤æ˜¯10ï¼Œéç¥ç»ç½‘ç»œæ˜¯ç›´æ¥æœåˆ°æ¸¸æˆç»“æŸï¼ˆTOTAL_TURN=67ï¼‰
 
-    static std::string role;    // Ì¨´Ê·ç¸ñ
+    static std::string role;    // å°è¯é£æ ¼
 
-    static bool debugPrint; // ÏÔÊ¾µ÷ÊÔĞÅÏ¢£¬ÀıÈç½ø¶ÈÌõ'.'£¬Ä¬ÈÏÎªFalse
-    static bool noColor;    // ÎªTrueÊ±²»ÏÔÊ¾ÑÕÉ«
+    static bool debugPrint; // æ˜¾ç¤ºè°ƒè¯•ä¿¡æ¯ï¼Œä¾‹å¦‚è¿›åº¦æ¡'.'ï¼Œé»˜è®¤ä¸ºFalse
+    static bool noColor;    // ä¸ºTrueæ—¶ä¸æ˜¾ç¤ºé¢œè‰²
 
     static void load(const std::string &path);
 };

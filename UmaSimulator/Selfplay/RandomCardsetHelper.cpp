@@ -26,7 +26,7 @@ void GameGenerator::loadCardRankFile()
 std::vector<int> GameGenerator::getRandomCardset()
 {
   vector<int> cardset;
-  if (rand() % 16 != 0)//´øÓÑÈË
+  if (rand() % 16 != 0)//å¸¦å‹äºº
   {
     if (rand() % 2 != 0)
       cardset.push_back(301884);
@@ -45,7 +45,7 @@ std::vector<int> GameGenerator::getRandomCardset()
     cardTypeCount[rand() % 5] += 1;
   }
 
-  double cardRankFactor = rand() % 2 == 0 ? 2.0 : rand() % 2 ? 5.0 : 10.0;//Ò»°ëÊÇÒÔtop2µÄ¿¨ÎªÖ÷£¬ËÄ·ÖÖ®Ò»ÊÇtop5£¬ËÄ·ÖÖ®Ò»ÊÇtop10
+  double cardRankFactor = rand() % 2 == 0 ? 2.0 : rand() % 2 ? 5.0 : 10.0;//ä¸€åŠæ˜¯ä»¥top2çš„å¡ä¸ºä¸»ï¼Œå››åˆ†ä¹‹ä¸€æ˜¯top5ï¼Œå››åˆ†ä¹‹ä¸€æ˜¯top10
 
   std::uniform_real_distribution<double> uniDistr(0.0, 1.0);
   for (int ct = 0; ct < 5; ct++)
@@ -69,7 +69,7 @@ std::vector<int> GameGenerator::getRandomCardset()
   assert(cardset.size() == 6);
   for (int i = 0; i < 6; i++)
   {
-    if (rand() % 16 == 0)//·ÇÂúÆÆ¿¨
+    if (rand() % 16 == 0)//éæ»¡ç ´å¡
     {
       cardset[i] = (cardset[i] / 10) * 10 + rand() % 5;
     }
@@ -83,7 +83,7 @@ void GameGenerator::randomizeUmaCardParam(Game& game)
   std::normal_distribution<double> normDistr(0.0, 1.0);
   std::uniform_real_distribution<double> uniDistr(0.0, 1.0);
 
-  //Ëæ»úÂíÄïÊôĞÔ¼Ó³É£¬Ëæ»úlink
+  //éšæœºé©¬å¨˜å±æ€§åŠ æˆï¼Œéšæœºlink
   if (rand() % 4 == 0)
   {
     game.isLinkUma = rand() % 8 == 0;
@@ -96,7 +96,7 @@ void GameGenerator::randomizeUmaCardParam(Game& game)
     }
   }
 
-  //Ëæ»úÈü³Ì
+  //éšæœºèµ›ç¨‹
   if (rand() % 2 == 0)
   {
     for (int t = 12; t < 72; t++)
@@ -105,7 +105,7 @@ void GameGenerator::randomizeUmaCardParam(Game& game)
     }
   }
 
-  //Ëæ»ú¿¨×é²ÎÊı
+  //éšæœºå¡ç»„å‚æ•°
 
   for (int i = 0; i < 6; i++)
   {

@@ -3,30 +3,30 @@ const Action Action::Action_RedistributeCardsForTest = { 0, TRA_redistributeCard
 
 const std::string Action::trainingName[8] =
 {
-  "ËÙ",
-  "ÄÍ",
-  "Á¦",
-  "¸ù",
-  "ÖÇ",
-  "ĞİÏ¢",
-  "Íâ³ö",
-  "±ÈÈü"
+  "é€Ÿ",
+  "è€",
+  "åŠ›",
+  "æ ¹",
+  "æ™º",
+  "ä¼‘æ¯",
+  "å¤–å‡º",
+  "æ¯”èµ›"
 };
 const std::string Action::dishName[14] =
 {
-  "ÎŞ",
-  "ÈıÃ÷ÖÎ",
-  "¿§à¬",
-  "Ğ¡ËÙ",
-  "Ğ¡ÄÍ",
-  "Ğ¡Á¦",
-  "Ğ¡¸ù",
-  "Ğ¡ÖÇ",
-  "´óËÙ",
-  "´óÄÍ",
-  "´óÁ¦",
-  "´ó¸ù",
-  "´óÖÇ",
+  "æ— ",
+  "ä¸‰æ˜æ²»",
+  "å’–å–±",
+  "å°é€Ÿ",
+  "å°è€",
+  "å°åŠ›",
+  "å°æ ¹",
+  "å°æ™º",
+  "å¤§é€Ÿ",
+  "å¤§è€",
+  "å¤§åŠ›",
+  "å¤§æ ¹",
+  "å¤§æ™º",
   "G1Plate"
 };
 bool Action::isActionStandard() const
@@ -95,16 +95,16 @@ std::string Action::toString() const
   if (train >= 0 && train < 8)
   {
     if (dishType == DISH_none)
-      return "²»×ö²Ë+" + trainingName[train];
+      return "ä¸åšèœ+" + trainingName[train];
     else
       return dishName[dishType] + "+" + trainingName[train];
   }
   else if (train == TRA_none)
   {
     if (dishType != DISH_none)
-      return "ÏÈ×ö²Ë:" + dishName[dishType];
+      return "å…ˆåšèœ:" + dishName[dishType];
     else
-      return "Ê²Ã´¶¼²»×ö";
+      return "ä»€ä¹ˆéƒ½ä¸åš";
   }
   throw "Action::toString(): Unknown Action";
   return "";

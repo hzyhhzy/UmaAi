@@ -1869,6 +1869,45 @@
     ],
     "star": 5
   },
+  "102403": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      15,
+      0,
+      0,
+      7
+    ],
+    "fiveStatusInitial": [
+      88,
+      138,
+      84,
+      124,
+      116
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 36,
+        "count": 1
+      }
+    ],
+    "gameId": 102403,
+    "name": "[ろっきん☆MewMeow]マヤノトップガン",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      43,
+      47,
+      53,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "102501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -3200,6 +3239,42 @@
     ],
     "star": 5
   },
+  "104202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      13,
+      0,
+      7
+    ],
+    "fiveStatusInitial": [
+      106,
+      97,
+      119,
+      116,
+      112
+    ],
+    "freeRaces": [],
+    "gameId": 104202,
+    "name": "[Be♪Witched]シーキングザパール",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      20,
+      22,
+      30,
+      32,
+      40,
+      45,
+      53,
+      58,
+      65,
+      69
+    ],
+    "star": 5
+  },
   "104301": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -3554,7 +3629,7 @@
       }
     ],
     "gameId": 104702,
-    "name": "[Inlaid Stories]ゼンノロブロイ",
+    "name": "[Inlaid Stories]荒漠英雄",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6333,7 +6408,7 @@
       }
     ],
     "gameId": 110502,
-    "name": "[Like “ZEER”]ネオユニヴァース",
+    "name": "[Like “ZEER”]新宇宙",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6496,6 +6571,39 @@
     ],
     "star": 5
   },
+  "111001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      120,
+      108,
+      116,
+      96,
+      110
+    ],
+    "freeRaces": [],
+    "gameId": 111001,
+    "name": "[Future Weaver]西沙里奥",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      29,
+      30,
+      33,
+      43,
+      56,
+      68,
+      69
+    ],
+    "star": 5
+  },
   "111601": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6597,6 +6705,46 @@
       53,
       61,
       65
+    ],
+    "star": 5
+  },
+  "112101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      119,
+      93,
+      128,
+      103,
+      107
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 22,
+        "count": 1
+      }
+    ],
+    "gameId": 112101,
+    "name": "[Chevalier fidèle]デュランダル",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      32,
+      40,
+      41,
+      45,
+      53,
+      58,
+      65,
+      69
     ],
     "star": 5
   }

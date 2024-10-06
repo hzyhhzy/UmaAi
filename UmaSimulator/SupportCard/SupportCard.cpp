@@ -11,7 +11,8 @@ void SupportCard::write_to_json(json& j, const std::string cdname, const int id)
 	j["cardId"] = id / 10;
 	j["cardType"] = cardType;
 
-	j["cardName"] = string_To_UTF8(cdname);
+	//j["cardName"] = string_To_UTF8(cdname);
+	j["cardName"] = cdname;
 
 	j["cardValue"][1]["filled"] = false;
 	j["cardValue"][2]["filled"] = false;
@@ -38,7 +39,6 @@ void SupportCard::write_to_json(json& j, const std::string cdname, const int id)
 
 	//j["cardSkill"]["skillNum"] = 0;
 	//j["cardSkill"]["SkillList"] = NULL;
-
 }
 
 void SupportCard::load_from_json(json& j, int x) {
@@ -46,10 +46,11 @@ void SupportCard::load_from_json(json& j, int x) {
 	cardID = j.value("cardId", 0);
 	cardID = cardID * 10 + x;
 	cardType = j.value("cardType", -1);
-	cardName = UTF8_To_string(j.value<std::string>("cardName", ""));
-	//j.at("cardSkill").get_to(cardSkill);	// ²»ÔØÈë¼¼ÄÜ£¬ÒòÎª¸ñÊ½²»Í¬
+	//cardName = UTF8_To_string(j.value<std::string>("cardName", ""));
+	cardName = j.value<std::string>("cardName", "");
+	//j.at("cardSkill").get_to(cardSkill);	// ä¸è½½å…¥æŠ€èƒ½ï¼Œå› ä¸ºæ ¼å¼ä¸åŒ
 	charaId = j.value("charaId", -1);
-	// ÔØÈë¹ÌÓĞ¡£Ã»ÓĞ¸ÃkeyÊ±ÓÃÄ¬ÈÏÖµ
+	// è½½å…¥å›ºæœ‰ã€‚æ²¡æœ‰è¯¥keyæ—¶ç”¨é»˜è®¤å€¼
 	uniqueEffectType = j.value("uniqueEffectType", 0);
 	uniqueEffectParam = j.value("uniqueEffectParam", vector<int>());
 
@@ -72,12 +73,12 @@ void SupportCard::load_from_json(json& j, int x) {
 	}
 
 	if (charaId > 0) {
-		// Ö±½ÓÊ¹ÓÃcharaIDÅĞ¶ÏÊÇ·ñÎªÁ´½Ó¿¨
+		// ç›´æ¥ä½¿ç”¨charaIDåˆ¤æ–­æ˜¯å¦ä¸ºé“¾æ¥å¡
 		isLink = GameConstants::isLinkChara(charaId);
 	}
 	else 
 	{
-		assert(false && "ÀÏÊı¾İÌÔÌ­ÁË");
+		assert(false && "è€æ•°æ®æ·˜æ±°äº†");
 	}
 	return;
 }

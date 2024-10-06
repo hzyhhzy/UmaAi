@@ -11,10 +11,10 @@ enum TrainActionTypeEnum :int16_t
   TRA_guts,
   TRA_wiz,
   TRA_rest, 
-  TRA_outgoing, //°üÀ¨ºÏËŞµÄ¡°ĞİÏ¢&Íâ³ö¡±
+  TRA_outgoing, //åŒ…æ‹¬åˆå®¿çš„â€œä¼‘æ¯&å¤–å‡ºâ€
   TRA_race,
-  TRA_none = -1, //´ËAction²»ÑµÁ·£¬Ö»×ö²Ë
-  TRA_redistributeCardsForTest = -2 //Ê¹ÓÃÕâ¸ö±ê¼ÇÊ±£¬ËµÃ÷ÒªrandomDistributeCards£¬ÓÃÓÚ²âÊÔai·ÖÊı£¬ÔÚSearch::searchSingleActionThreadÖĞÊ¹ÓÃ
+  TRA_none = -1, //æ­¤Actionä¸è®­ç»ƒï¼Œåªåšèœ
+  TRA_redistributeCardsForTest = -2 //ä½¿ç”¨è¿™ä¸ªæ ‡è®°æ—¶ï¼Œè¯´æ˜è¦randomDistributeCardsï¼Œç”¨äºæµ‹è¯•aiåˆ†æ•°ï¼Œåœ¨Search::searchSingleActionThreadä¸­ä½¿ç”¨
 };
 enum DishTypeEnum :int16_t
 {
@@ -33,26 +33,28 @@ enum DishTypeEnum :int16_t
   DISH_wiz2,
   DISH_g1plate //5*80
 };
-//¿¼ÂÇµ½Õâ¸ö¾ç±¾×ö²ËÓĞËæ»úĞÔ£¬¿ÉÄÜ»áÓ°ÏìÏ£ÍûÑ¡µÄÑµÁ·
-//Ò»¸ö»ØºÏ¿ÉÒÔ²ğ³ÉÁ½²½£ºÏÈ×ö²Ë£¬ÔÙÑµÁ·£¬Ò²¿ÉÒÔ²»²ğ
-//ActionÀà±íÊ¾×ö²Ë£¬»òÕßÑµÁ·£¬»òÕß×ö²Ë+ÑµÁ·
-//¡°±ê×¼µÄAction¡±ÊÇ×ö²Ë»òÕßÑµÁ·£¬²»°üÀ¨ ×ö²Ë+ÑµÁ· ºÍ ²»×ö²ËÒ²²»ÑµÁ·
-//±ê×¼µÄActionÓĞ±àºÅ£¬8+13=21ÖÖ
-//ËÑË÷Ê±£¬Ã¿´ÎÖ»ËÑÒ»²ã¡°±ê×¼µÄAction¡±
-//ura±ÈÈüÊ±£¬Á½¸öºÏ·¨µÄactionÊÇ×ö²Ë+²»Ñ¡ÑµÁ·£¨×Ô¶¯±ÈÈü£©ºÍ²»×ö²Ë+Ñ¡Ôñ±ÈÈü
+//è€ƒè™‘åˆ°è¿™ä¸ªå‰§æœ¬åšèœæœ‰éšæœºæ€§ï¼Œå¯èƒ½ä¼šå½±å“å¸Œæœ›é€‰çš„è®­ç»ƒ
+//ä¸€ä¸ªå›åˆå¯ä»¥æ‹†æˆä¸¤æ­¥ï¼šå…ˆåšèœï¼Œå†è®­ç»ƒï¼Œä¹Ÿå¯ä»¥ä¸æ‹†
+//Actionç±»è¡¨ç¤ºåšèœï¼Œæˆ–è€…è®­ç»ƒï¼Œæˆ–è€…åšèœ+è®­ç»ƒ
+//â€œæ ‡å‡†çš„Actionâ€æ˜¯åšèœæˆ–è€…è®­ç»ƒï¼Œä¸åŒ…æ‹¬ åšèœ+è®­ç»ƒ å’Œ ä¸åšèœä¹Ÿä¸è®­ç»ƒ
+//æ ‡å‡†çš„Actionæœ‰ç¼–å·ï¼Œ8+13=21ç§
+//æœç´¢æ—¶ï¼Œæ¯æ¬¡åªæœä¸€å±‚â€œæ ‡å‡†çš„Actionâ€
+//uraæ¯”èµ›æ—¶ï¼Œä¸¤ä¸ªåˆæ³•çš„actionæ˜¯åšèœ+ä¸é€‰è®­ç»ƒï¼ˆè‡ªåŠ¨æ¯”èµ›ï¼‰å’Œä¸åšèœ+é€‰æ‹©æ¯”èµ›
 struct Action 
 {
   static const std::string trainingName[8];
   static const std::string dishName[14];
   static const Action Action_RedistributeCardsForTest;
-  static const int MAX_ACTION_TYPE = 21;//±ê×¼µÄActionÓĞ±àºÅ£¬8+13=21ÖÖ
-  static const int MAX_TWOSTAGE_ACTION_TYPE = 21 + 8 + 8;//¶ş½×¶ÎËÑË÷¿¼ÂÇµÄ×î¶àAction¸öÊı£¬Ö»ÓĞÁ½ÖÖ1¼¶²ËĞèÒª¿¼ÂÇ¶ş½×¶ÎËÑË÷£¬8+13+2*8=37ÖÖ
-
+  static const int MAX_ACTION_TYPE = 21;//æ ‡å‡†çš„Actionæœ‰ç¼–å·ï¼Œ8+13=21ç§
+  static const int MAX_TWOSTAGE_ACTION_TYPE = 21 + 8 + 8;//äºŒé˜¶æ®µæœç´¢è€ƒè™‘çš„æœ€å¤šActionä¸ªæ•°ï¼Œåªæœ‰ä¸¤ç§1çº§èœéœ€è¦è€ƒè™‘äºŒé˜¶æ®µæœç´¢ï¼Œ8+13+2*8=37ç§
   
-  int16_t dishType;//×ö²Ë£¬0Îª²»×ö²Ë
+  int16_t dishType;//åšèœï¼Œ0ä¸ºä¸åšèœ
 
-  int16_t train;//-1ÔİÊ±²»ÑµÁ·£¬01234ËÙÄÍÁ¦¸ùÖÇ£¬5Íâ³ö£¬6ĞİÏ¢£¬7±ÈÈü 
-  //×¢£ºÍâ³öÊÇÓÅÏÈÓÑÈËÍâ³ö£¬Ã»ÓĞÔÙÆÕÍ¨Íâ³ö£¬²»Ìá¹©Ñ¡Ïî
+  //-1æš‚æ—¶ä¸è®­ç»ƒï¼Œ01234é€Ÿè€åŠ›æ ¹æ™ºï¼Œ5å¤–å‡ºï¼Œ6ä¼‘æ¯ï¼Œ7æ¯”èµ›
+  // ç§ç”°æ¯ï¼š8-21 åƒèœ 100-104 å‡çº§ç”°
+  int16_t train;
+  
+  //æ³¨ï¼šå¤–å‡ºæ˜¯ä¼˜å…ˆå‹äººå¤–å‡ºï¼Œæ²¡æœ‰å†æ™®é€šå¤–å‡ºï¼Œä¸æä¾›é€‰é¡¹
   bool isActionStandard() const;
   int toInt() const;
   std::string toString() const;

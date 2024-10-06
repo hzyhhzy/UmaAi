@@ -5,7 +5,7 @@
 #include "../External/json.hpp"
 using json = nlohmann::json;
 
-// Ä£°åº¯Êı²»ÄÜ·ÅÔÚcppÀï£¬·ñÔò»áÕÒ²»µ½·ûºÅ
+// æ¨¡æ¿å‡½æ•°ä¸èƒ½æ”¾åœ¨cppé‡Œï¼Œå¦åˆ™ä¼šæ‰¾ä¸åˆ°ç¬¦å·
 template <typename T>
 json arrayToJson(T* arr, int len)
 {
@@ -29,7 +29,10 @@ int jsonToArray(const json& j, T* buf, int bufSize)
 	return count;
 }
 
-// ÒıÓÃwindows.hµÄº¯ÊıĞèÒª·ÅÔÚcppÀï£¬±ÜÃâÎÛÈ¾È«¾ÖÃüÃû¿Õ¼ä
+// å¼•ç”¨windows.hçš„å‡½æ•°éœ€è¦æ”¾åœ¨cppé‡Œï¼Œé¿å…æ±¡æŸ“å…¨å±€å‘½åç©ºé—´
 std::string string_To_UTF8(const std::string& str);
 std::string UTF8_To_string(const std::string& str);
+// è®¡ç®—UTF8å­—ç¬¦(Rune)æ•°
+int UTF8_rune_count(const std::string& utf8String);
+std::string UTF8_rune_cut(const std::string& utf8String, int n);
 #endif

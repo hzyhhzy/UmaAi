@@ -1,10 +1,11 @@
-﻿#include <iostream>
+#include <iostream>
 #include <cassert>
 #include <vector>
 #include <iomanip>  // for std::setw
 #include <algorithm>
 #include "../External/termcolor.hpp"
 #include "Game.h"
+#include "../External/utils.h"
 using std::cout;
 using std::string;
 using std::endl;
@@ -16,14 +17,13 @@ std::string Person::getPersonName() const
   string s =
     personType == PersonType_unknown ? "未加载" :
     personType == PersonType_scenarioCard ? "[友]理事长" :
-    personType == PersonType_card ? cardParam.cardName.substr(0, 8) :
+    personType == PersonType_card ? UTF8_rune_cut(cardParam.cardName, 5) :
     personType == PersonType_npc ? "NPC" :
     personType == PersonType_yayoi ? "理事长" :
     personType == PersonType_reporter ? "记者" :
     "未知";
   return s;
 }
-
 
 std::string Game::getPersonStrColored(int personId, int atTrain) const
 {
@@ -104,6 +104,8 @@ static void printTableRow(string strs[5])
   for (int i = 0; i < 5; i++)
   {
     string s = strs[i];
+    // 计算utf8字数与长度的差
+    int runeDiff = s.length() - UTF8_rune_count(s);
 
     //计算字符串中颜色代码的长度
     int colorCodeLen = 0;
@@ -122,7 +124,7 @@ static void printTableRow(string strs[5])
       }
     }
     s = "| " + s;
-    cout << std::setw(tableWidth + colorCodeLen) << s;
+    cout << std::setw(tableWidth + colorCodeLen + runeDiff/2) << s;
   }
   cout << "|" << endl << std::internal;
 }
@@ -222,8 +224,6 @@ void Game::print() const
   cout << endl;
   
   cout << "生效料理：" << termcolor::bright_green << Action::dishName[cook_dish] << termcolor::reset << endl;
-  
- 
 
   {
     string vitalColor;
@@ -248,8 +248,7 @@ void Game::print() const
         motivation == 4 ? "\033[33m好调\033[0m" :
         motivation == 5 ? "\033[32m绝好调\033[0m" : "未知") << endl;
     cout << endl;
-  }
-  
+  } 
 
   //string divLine = "|------------------------------------------------------------------------------------|\n";
 
@@ -367,7 +366,6 @@ void Game::print() const
     {
       int newVital = vital;
       newVital += trainVitalChange[i];
-
 
       //cout << " The vital dlt of training " << i << " is : " << trainVitalChange[i] << '\n';
 
