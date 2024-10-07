@@ -94,8 +94,9 @@ void main_ai()
 	GetModuleFileNameA(0, buf, 10240);
 	filesystem::path exeDir = filesystem::path(buf).parent_path();
 	filesystem::current_path(exeDir);
-	cout << "当前工作目录：" << filesystem::current_path() << endl;
-	cout << "当前程序目录：" << exeDir << endl;
+	// 有编码问题，暂时去掉
+	//cout << "当前工作目录：" << filesystem::current_path() << endl;
+	//cout << "当前程序目录：" << exeDir << endl;
 
 #if USE_BACKEND == BACKEND_NONE
 	GameConfig::load("./aiConfig_cpu.json");
