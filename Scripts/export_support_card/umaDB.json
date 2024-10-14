@@ -6732,7 +6732,7 @@
       }
     ],
     "gameId": 112101,
-    "name": "[Chevalier fidèle]デュランダル",
+    "name": "[Chevalier fidèle]多旺达",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6744,6 +6744,40 @@
       53,
       58,
       65,
+      69
+    ],
+    "star": 5
+  },
+  "112401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      99,
+      109,
+      106,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 112401,
+    "name": "[POPPING!]バブルガムフェロー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      45,
+      59,
+      67,
       69
     ],
     "star": 5
