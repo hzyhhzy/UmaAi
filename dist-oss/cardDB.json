@@ -75142,8 +75142,8 @@
   "30223": {
     "cardId": 30223,
     "charaId": 1012,
-    "cardName": "[根]ヒシアマゾン",
-    "fullName": "[牙を立て、リフレイン]ヒシアマゾン",
+    "cardName": "[根]菱亚马逊",
+    "fullName": "[露出獠牙，演奏副歌]菱亚马逊",
     "rarity": 3,
     "cardType": 3,
     "cardValue": [
@@ -75332,8 +75332,8 @@
   "30224": {
     "cardId": 30224,
     "charaId": 1016,
-    "cardName": "[速]ナリタブライアン",
-    "fullName": "[咆哮のアポヤンド]ナリタブライアン",
+    "cardName": "[速]成田白仁",
+    "fullName": "[咆哮的靠弦]成田白仁",
     "rarity": 3,
     "cardType": 0,
     "cardValue": [
@@ -75527,8 +75527,8 @@
   "30225": {
     "cardId": 30225,
     "charaId": 1056,
-    "cardName": "[根]マチカネフクキタル",
-    "fullName": "[メークパワートリオ]マチカネフクキタル",
+    "cardName": "[根]待兼福来",
+    "fullName": "[扮装强力三重奏]待兼福来",
     "rarity": 3,
     "cardType": 3,
     "cardValue": [
@@ -75706,6 +75706,401 @@
       8,
       10,
       0,
+      0
+    ]
+  },
+  "30226": {
+    "cardId": 30226,
+    "charaId": 1036,
+    "cardName": "[耐]エアシャカール",
+    "fullName": "[Cocoon]エアシャカール",
+    "rarity": 3,
+    "cardType": 1,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          30
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 25,
+        "ganJing": 20,
+        "xunLian": 10,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 0
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          33
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 27,
+        "ganJing": 23,
+        "xunLian": 11,
+        "initialJiBan": 26,
+        "saiHou": 6,
+        "hintProbIncrease": 33,
+        "deYiLv": 0
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          36
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 30,
+        "ganJing": 26,
+        "xunLian": 12,
+        "initialJiBan": 27,
+        "saiHou": 7,
+        "hintProbIncrease": 36,
+        "deYiLv": 0
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          40
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 32,
+        "ganJing": 30,
+        "xunLian": 13,
+        "initialJiBan": 28,
+        "saiHou": 8,
+        "hintProbIncrease": 40,
+        "deYiLv": 40
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          40
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 35,
+        "ganJing": 30,
+        "xunLian": 15,
+        "initialJiBan": 30,
+        "saiHou": 10,
+        "hintProbIncrease": 40,
+        "deYiLv": 80
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时持久力ボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      4,
+      2,
+      0,
+      0
+    ]
+  },
+  "30227": {
+    "cardId": 30227,
+    "charaId": 1009,
+    "cardName": "[智]ダイワスカーレット",
+    "fullName": "[緋色の君へ風が吹く]ダイワスカーレット",
+    "rarity": 3,
+    "cardType": 4,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 28,
+        "ganJing": 20,
+        "xunLian": 0,
+        "initialJiBan": 25,
+        "saiHou": 1,
+        "hintProbIncrease": 40,
+        "deYiLv": 50,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 31,
+        "ganJing": 20,
+        "xunLian": 0,
+        "initialJiBan": 26,
+        "saiHou": 2,
+        "hintProbIncrease": 45,
+        "deYiLv": 57,
+        "wizVitalBonus": 3
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "hintLevel": 4,
+        "youQing": 34,
+        "ganJing": 20,
+        "xunLian": 0,
+        "initialJiBan": 27,
+        "saiHou": 3,
+        "hintProbIncrease": 50,
+        "deYiLv": 65,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "hintLevel": 4,
+        "youQing": 37,
+        "ganJing": 20,
+        "xunLian": 5,
+        "initialJiBan": 28,
+        "saiHou": 5,
+        "hintProbIncrease": 55,
+        "deYiLv": 72,
+        "wizVitalBonus": 4
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          25
+        ],
+        "hintLevel": 5,
+        "youQing": 40,
+        "ganJing": 20,
+        "xunLian": 10,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 60,
+        "deYiLv": 80,
+        "wizVitalBonus": 5
+      }
+    ],
+    "uniqueEffectType": 16,
+    "uniqueEffectSummary": "根据速度技能个数，提高賢さボーナス效果(每个+1, 最大3个)",
+    "uniqueEffectParam": [
+      116,
+      1,
+      7,
+      1,
+      3,
       0
     ]
   }

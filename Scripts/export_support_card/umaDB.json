@@ -1791,6 +1791,40 @@
     ],
     "star": 5
   },
+  "102303": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      93,
+      128,
+      98,
+      114,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 102303,
+    "name": "[Engineered Victory]ビワハヤヒデ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "102401": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -1893,7 +1927,7 @@
       }
     ],
     "gameId": 102403,
-    "name": "[ろっきん☆MewMeow]マヤノトップガン",
+    "name": "[Rock in☆MewMeow]摩耶重炮",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -3257,7 +3291,7 @@
     ],
     "freeRaces": [],
     "gameId": 104202,
-    "name": "[Be♪Witched]シーキングザパール",
+    "name": "[Be♪Witched]采珠",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6766,7 +6800,7 @@
     ],
     "freeRaces": [],
     "gameId": 112401,
-    "name": "[POPPING!]バブルガムフェロー",
+    "name": "[POPPING!]吹波糖",
     "preferRaces": [],
     "preferReds": [],
     "races": [
