@@ -8,6 +8,7 @@ using namespace std;
 
 void SupportCard::write_to_json(json& j, const std::string cdname, const int id) const
 {
+	throw string("unchecked");
 	j["cardId"] = id / 10;
 	j["cardType"] = cardType;
 
@@ -69,6 +70,9 @@ void SupportCard::load_from_json(json& j, int x) {
 		j["cardValue"][x].at("bonus").get_to(bonusBasic);
 		j["cardValue"][x].at("initialBonus").get_to(initialBonus);
 		j["cardValue"][x].at("hintLevel").get_to(hintLevel);
+
+		eventRecoveryAmountUp = j["cardValue"][x].value<int>("eventRecoveryAmountUp", 0); //友人卡事件体力加成
+		eventEffectUp = j["cardValue"][x].value<int>("eventEffectUp", 0); //友人卡事件属性加成
 	}
 
 	if (charaId > 0) {
@@ -77,7 +81,7 @@ void SupportCard::load_from_json(json& j, int x) {
 	}
 	else 
 	{
-		assert(false && "老数据淘汰了");
+		throw "老数据淘汰了";
 	}
 	return;
 }

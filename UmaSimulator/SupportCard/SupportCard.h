@@ -42,6 +42,10 @@ struct SupportCard
 
 	bool isLink = false;//是否为link卡
 
+
+	int16_t eventRecoveryAmountUp = 0; //友人卡事件体力加成
+	int16_t eventEffectUp = 0; //友人卡事件属性加成
+
 	// 根据游戏状态计算支援卡的“固有”
     // 大部分固有都可以在默认参数下计算
 	CardTrainingEffect getCardEffect(const Game& game, bool isShining, int atTrain, int jiBan, int effectFactor, int trainingCardNum, int trainingShiningNum) const;
