@@ -34,20 +34,14 @@ void Person::setCard(int cardId)
     std::vector<int> probs = { 100,100,100,100,100,100 }; //基础概率，速耐力根智鸽
     distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 
-    if (realCardId == GameConstants::FriendCardIdR || realCardId == GameConstants::FriendCardIdSSR)//剧本友人卡
-    {
-      personType = PersonType_scenarioCard;
-    }
-    else
-    {
-      throw string("不支持带剧本卡以外的友人或团队卡");
-    }
+    personType = PersonType_friendCard;
+    
   }
   else if (cardType == 6)//团队卡
   {
     std::vector<int> probs = { 100,100,100,100,100,100 }; //基础概率，速耐力根智鸽
     distribution = std::discrete_distribution<>(probs.begin(), probs.end());
-    throw string("不支持带剧本卡以外的友人或团队卡");
+    throw string("不支持带凉花/理事长以外的友人或团队卡");
   }
   else if (cardType >= 0 && cardType <= 4)//速耐力根智卡
   {
@@ -58,15 +52,21 @@ void Person::setCard(int cardId)
   }
 
 }
-void Person::setExtraDeyilvBonus(int deyilvBonus)
+void Person::setExtraDeyilvBonus(int deyilvBonus, bool lianghuaEffect)
 {
+  std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
+  if (personType != PersonType_card)//友人卡，鸽率2倍
+    probs[5] = 100;
+  if (lianghuaEffect) //ssr凉花固有
+    probs[5] /= 2;
+
   if (personType == PersonType_card)
   {
-    int newDeyilv = int((100.0 + cardParam.deYiLv) * (1.00 + 0.01 * deyilvBonus) - 100); //我不知道这里应该加还是乘，但设成乘更能模拟胡局
-    std::vector<int> probs = { 100,100,100,100,100,50 }; //基础概率，速耐力根智鸽
+    int newDeyilv = cardParam.deYiLv + deyilvBonus; //我不知道这里应该加还是乘
+    
     probs[cardParam.cardType] += newDeyilv;
-    distribution = std::discrete_distribution<>(probs.begin(), probs.end());
   }
+  distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 }
 /*
 void Person::setNonCard(int pType)

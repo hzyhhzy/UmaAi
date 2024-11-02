@@ -8,14 +8,6 @@
 struct SearchParam;
 
 
-enum FarmUpgradeStrategyEnum :int16_t
-{
-  FUS_default,//默认（调试出来的最优）
-  FUS_noGarlicLv3,//不升级Lv3大蒜
-  FUS_garlicLv3,//升级Lv3大蒜
-  FUS_none,//不自动升级
-};
-
 enum scoringModeEnum :int16_t
 {
   SM_normal,//普通(凹分、评价点)模式
@@ -37,10 +29,17 @@ enum personIdEnum :int16_t
   PSID_npc = 8//NPC
 };
 
+enum friendTypeEnum :int16_t
+{
+  FriendType_none = 0, //无友人卡
+  FriendType_lianghua = 1, //凉花
+  FriendType_yayoi = 2, //理事长
+};
+
 enum gameStageEnum :int16_t
 {
-  GameStage_beforeTrain = 0,//训练（或比赛）前
-  GameStage_afterTrain = 1,//训练后，处理事件前
+  GameStage_beforeTrain = 1,//训练（或比赛）前
+  GameStage_beforeMechaUpgrade = 2,//升级机甲前
 };
 struct Game
 {
@@ -52,7 +51,6 @@ struct Game
   float ptScoreRate;//每pt多少分
   float hintPtRate;//每一级hint等价多少pt
   int16_t eventStrength;//每回合有（待测）概率加这么多属性，模拟支援卡事件
-  int16_t farmUpgradeStrategy;//升级农田的策略
   int16_t scoringMode;//评分方式
 
   //基本状态，不包括当前回合的训练信息
@@ -62,7 +60,7 @@ struct Game
   int16_t fiveStatusBonus[5];//马娘的五维属性的成长率
 
   int16_t turn;//回合数，从0开始，到77结束
-  int16_t gameStage;//游戏阶段，0是训练前，1是训练后
+  int16_t gameStage;//游戏阶段，1是训练回合，2是选升级，和Action的type对应
   int16_t vital;//体力，叫做“vital”是因为游戏里就这样叫的
   int16_t maxVital;//体力上限
   int16_t motivation;//干劲，从1到5分别是绝不调到绝好调
@@ -96,38 +94,33 @@ struct Game
   std::discrete_distribution<> distribution_noncard;//非卡理事长/记者的分布
   std::discrete_distribution<> distribution_npc;//npc的分布
 
-  //剧本相关--------------------------------------------------------------------------------------
-  
-  //状态相关
-  int16_t cook_material[5];//五种菜个数
-  int32_t cook_dish_pt;//料理pt
-  int32_t cook_dish_pt_turn_begin;//回合刚开始（吃菜之前）的料理pt：用来检查料理pt相关的升级
-  int16_t cook_farm_level[5];//五种农田的等级
-  int16_t cook_farm_pt;//农田升级pt
-  bool cook_dish_sure_success;//大成功确定
-  int16_t cook_dish;//当前生效的菜
-  int16_t cook_win_history[5];//五次试食会是否“大满足”，非大满足0，大满足1，超满足2
-
-  //最终收获值=f(cook_harvest_green_count)*(基本收获 + cook_harvest_history*追加收获 + cook_harvest_extra)
-  int16_t cook_harvest_history[4];//此4回合分别是哪4种菜，-1是还未选择
-  bool cook_harvest_green_history[4];//此4回合是不是绿菜
-  int16_t cook_harvest_extra[5];//每回合收获=追加收获+人头数。cook_harvest_extra是人头数累计菜量
-  
-
-
-  //菜量获取相关
-  int16_t cook_train_material_type[8];//训练外出比赛获得的菜的种类，编号参考TrainActionTypeEnum
-  bool cook_train_green[8];//训练外出比赛是否为绿圈
-  int16_t cook_main_race_material_type;//比赛回合的菜的种类
-
-  //单独处理剧本友人卡，因为接近必带。其他友人团队卡的以后再考虑
-  int16_t friend_type;//0没带友人卡，1 ssr卡，2 r卡
+  //友人卡。最多带一张
+  int16_t friend_type;//0没带友人卡，1凉花，2理事长
+  bool friend_isSSR;//友人卡是否为ssr
   int16_t friend_personId;//友人卡在persons里的编号
   int16_t friend_stage;//0是未点击，1是已点击但未解锁出行，2是已解锁出行
   int16_t friend_outgoingUsed;//友人的出行已经走了几段了   暂时不考虑其他友人团队卡的出行
   double friend_vitalBonus;//友人卡的回复量倍数
   double friend_statusBonus;//友人卡的事件效果倍数
 
+  int16_t currentDeyilvBonus;//当前得意率加成
+  bool currentLianghuaEffectEnable;//凉花固有是否启动
+
+
+
+  //剧本相关--------------------------------------------------------------------------------------
+  
+  //持久性的link效果（初始的已经在构造game类时考虑了）
+  bool mecha_linkeffect_moregear;//容易获得更多的机械齿轮
+  bool mecha_linkeffect_lvbonus;//研究Lv带来的训练效果提升量增加
+
+  int16_t mecha_rivalLv[5];//研究lv（rival_info）
+  int16_t mecha_overdrive_energy;//overdrive能量槽，0到6。ura期间无意义
+  bool mecha_overdrive_enabled;//是否已经开启overdrive
+  int16_t mecha_EN;//mecha升级点
+  int16_t mecha_upgrade[3][3];//mecha_upgrade[头胸脚][3]
+  bool mecha_hasGear[5];//每个训练有没有齿轮
+  int16_t mecha_win_history[5];//五次UGE是否成功，0是B，1是A，2是S
 
 
 
@@ -138,13 +131,6 @@ struct Game
   int16_t failRate[5];//训练失败率
   bool isTrainShining[5];//训练是否闪彩
 
-  int16_t cook_dishpt_success_rate;//大成功率
-  int16_t cook_dishpt_training_bonus;//料理pt训练加成
-  int16_t cook_dishpt_skillpt_bonus;//料理pt技能点加成
-  int16_t cook_dishpt_deyilv_bonus;//料理pt得意率加成
-  int16_t cook_train_material_num_extra[8];//训练外出比赛获得的菜的个数增加（cook_harvest_extra），训练=非link卡人头数+3*link卡数，外出比赛=0
-
-
   //训练数值计算的中间变量，存下来方便手写逻辑进行估计
   int16_t trainValueLower[5][6];//训练数值的下层，第一个数是第几个训练，第二个数依次是速耐力根智pt体力
   //double trainValueCardMultiplier[5];//支援卡乘区=(1+总训练加成)(1+干劲系数*(1+总干劲加成))(1+0.05*总卡数)(1+友情1)(1+友情2)...
@@ -152,6 +138,11 @@ struct Game
   //bool cardEffectCalculated;//支援卡效果是否已经计算过？吃无关菜不需要重新计算，分配卡组或者读json时需要置为false
   //CardTrainingEffect cardEffects[6];
 
+  int16_t mecha_rivalLvTotal;//研究lv总和
+  double mecha_upgradeTotal[3];//头胸脚分别的等级总和
+  int16_t mecha_lvGain[5][5];//研究Lv提升量mecha_lvGain[训练][第几项] 
+  double mecha_trainingStatusMultiplier[6];//五维属性和pt的倍率
+  
 
 
 
@@ -238,7 +229,7 @@ public:
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
   void addTrainingLevelCount(int trainIdx, int n);//为某个训练增加n次计数
   void checkDishPtUpgrade();//在回合后，检查料理pt是否跨段，如果跨段则更新得意率或提升训练等级
-  void updateDeyilv();//在dishPt升级后，更新得意率
+  void maybeUpdateDeyilv();//在dishPt升级后，更新得意率
 
   int getTrainingLevel(int trainIdx) const;//计算训练等级
   int calculateFailureRate(int trainType, double failRateMultiply) const;//计算训练失败率，failRateMultiply是训练失败率乘数=(1-支援卡1的失败率下降)*(1-支援卡2的失败率下降)*...
@@ -247,23 +238,7 @@ public:
   //bool trainShiningCount(int trainIdx) const;    // 指定训练彩圈数 //uaf不一定有用
   void calculateTrainingValueSingle(int tra);//计算每个训练加多少   //uaf剧本可能五个训练一起算比较方便
 
-  //做菜相关
-  int maxFarmPtUntilNow() const;//假如全程绿圈，获得的农田pt数减去已经升级的pt数
-  bool upgradeFarm(int item);//把第item个农田升1级，失败返回false
-  void addDishMaterial(int idx, int num);//增加菜材料，并处理溢出
-  bool isDishLegal(int dishId) const;//此料理是否允许
-  int getDishTrainingBonus(int trainIdx) const;//计算当前料理的训练加成
-  int getDishRaceBonus() const;//计算当前料理的比赛加成
-  void handleDishBigSuccess(int dishId, std::mt19937_64& rand);//处理料理大成功相关的事件
-  std::vector<int> dishBigSuccess_getBuffs(int dishId, std::mt19937_64& rand);//料理大成功-获取有哪些buff
-  void dishBigSuccess_hint(std::mt19937_64& rand);//料理大成功-技能hint
-  void dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand);//料理大成功的分身效果：往trainIdx随机分配一个支援卡
-  int turnIdxInHarvestLoop() const;//收获周期里的第几回合(turn%4)。夏合宿恒为0
-  void addFarm(int type, int extra, bool isGreen);//种田，extra是人头附加，isGreen是绿圈
-  std::vector<int> calculateHarvestNum(bool isAfterTrain) const;//收获五种菜的数量，以及农田pt数
-  void maybeHarvest();//每4回合收菜，合宿每回合收菜，不是收菜回合就直接return
-  void maybeCookingMeeting();//试食会
-
+  
 
 
   //友人卡相关事件

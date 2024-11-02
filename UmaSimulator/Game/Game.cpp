@@ -14,7 +14,6 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   ptScoreRate = GameConstants::ScorePtRateDefault;
   hintPtRate = GameConstants::HintLevelPtRateDefault;
   eventStrength = GameConstants::EventStrengthDefault;
-  farmUpgradeStrategy = FUS_default;
   scoringMode = SM_normal;
 
   umaId = newUmaId;
@@ -73,6 +72,9 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
   friendship_noncard_yayoi = 0;
   friendship_noncard_reporter = 0;
 
+  currentDeyilvBonus = 0;
+  currentLianghuaEffectEnable = false;
+
   for (int i = 0; i < MAX_INFO_PERSON_NUM; i++)
   {
     persons[i] = Person();
@@ -80,6 +82,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
   saihou = 0;
   friend_type = 0;
+  friend_isSSR = false;
   friend_personId = PSID_none;
   friend_stage = 0;
   friend_outgoingUsed = 0;
@@ -91,17 +94,35 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     persons[i].setCard(cardId);
     saihou += persons[i].cardParam.saiHou;
 
-    if (persons[i].personType == PersonType_scenarioCard)
+    if (persons[i].personType == PersonType_friendCard)
     {
       friend_personId = i;
-      bool isSSR = cardId > 300000;
-      if (isSSR)
-        friend_type = 1;
+      int friendCardId = cardId / 10;
+      if (friendCardId == GameConstants::FriendCardLianghuaSSRId)
+      {
+        friend_type = FriendType_lianghua;
+        friend_isSSR = true;
+      }
+      else if (friendCardId == GameConstants::FriendCardLianghuaRId)
+      {
+        friend_type = FriendType_lianghua;
+        friend_isSSR = false;
+      }
+      else if (friendCardId == GameConstants::FriendCardYayoiSSRId)
+      {
+        friend_type = FriendType_yayoi;
+        friend_isSSR = true;
+      }
+      else if (friendCardId == GameConstants::FriendCardYayoiRId)
+      {
+        friend_type = FriendType_yayoi;
+        friend_isSSR = false;
+      }
       else
-        friend_type = 2;
+        throw string("不支持带凉花/理事长以外的友人或团队卡");
       int friendLevel = cardId % 10;
       assert(friendLevel >= 0 && friendLevel <= 4);
-      if (friend_type ==1)
+      if (friend_type TODO)
       {
         friend_vitalBonus = GameConstants::FriendVitalBonusSSR[friendLevel];
         friend_statusBonus = GameConstants::FriendStatusBonusSSR[friendLevel];
@@ -128,39 +149,45 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     skillPt += persons[i].cardParam.initialBonus[5];
   }
 
-
-
-
+  mecha_linkeffect_moregear = false;
+  mecha_linkeffect_lvbonus = false;
   for (int i = 0; i < 5; i++)
+    mecha_rivalLv[i] = 0;//一个link是20，2个是40，所以最后没link再改成1
+  mecha_overdrive_energy = 0;
+  mecha_overdrive_enabled = false;
+  mecha_EN = 5;
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      mecha_upgrade[i][j] = 0;
+  for (int i = 0; i < 5; i++)
+    mecha_hasGear[i] = false;
+  for (int i = 0; i < 5; i++)
+    mecha_win_history[i] = 0;
+
+
+  //支援卡link
+  for (int i = 0; i < 7; i++)
   {
-    if (isLinkUma)
-      cook_material[i] = 75;
-    else
-      cook_material[i] = 50;
+    int chara = i < 6 ? persons[i].cardParam.charaId : umaId;
+    if (GameConstants::isLinkChara_initialEN(chara))
+      mecha_EN += 1;
+    if (GameConstants::isLinkChara_moreGear(chara))
+      mecha_linkeffect_moregear = true;
+    if (GameConstants::isLinkChara_initialOverdrive(chara))
+      mecha_overdrive_energy += 3;
+    if (GameConstants::isLinkChara_lvBonus(chara))
+      mecha_linkeffect_lvbonus = true;
+    if (GameConstants::isLinkChara_initialLv(chara))
+      for (int i = 0; i < 5; i++)
+        mecha_rivalLv[i] += 20;//一个link是20，2个是40
   }
-  cook_dish_pt = 0;
-  cook_dish_pt_turn_begin = 0;
-  for (int i = 0; i < 5; i++)
-    cook_farm_level[i] = 1;
-  cook_farm_pt = 0;
-  cook_dish_sure_success = false;
-  cook_dish = 0;
-  for (int i = 0; i < 5; i++)
-    cook_win_history[i] = 0;
 
-  for (int i = 0; i < 4; i++)
-  {
-    cook_harvest_history[i] = -1;
-    cook_harvest_green_history[i] = false;
-  }
+  if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
+  if (mecha_EN > 7)mecha_EN = 7;
   for (int i = 0; i < 5; i++)
-    cook_harvest_extra[i] = 0;
+    if (mecha_rivalLv[i] < 1)
+      mecha_rivalLv[i] = 1;
 
-  for (int i = 0; i < 8; i++)
-  {
-    cook_train_material_type[i] = -1;
-    cook_train_green[i] = false;
-  }
 
 
   randomDistributeCards(rand); //随机分配卡组，包括计算属性
@@ -169,16 +196,15 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
 
 void Game::randomDistributeCards(std::mt19937_64& rand)
 {
-  //比赛回合的人头分配，不需要置零，因为不输入神经网络
-  if (isRacing)
-  {
-    cook_main_race_material_type = rand() % 5;
-    return;//比赛不用分配卡组
-  }
-  
   for (int i = 0; i < 5; i++)
     for (int j = 0; j < 5; j++)
       personDistribution[i][j] = -1;
+
+  if (isRacing)
+  {
+    return;//比赛不用分配卡组
+  }
+  
 
   int headN[5] = { 0,0,0,0,0 };
   vector<int8_t> buckets[5];
@@ -188,12 +214,12 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   for (int i = 0; i < 6 + 2; i++)
   {
     int atTrain = 5;
-    if (friend_type != 0 && i == friend_personId)
+    if (friend_type == FriendType_yayoi && i == friend_personId)
     {
       //友人卡
       atTrain = persons[i].distribution(rand);
     }
-    else if (i == PSID_noncardYayoi && friend_type == 0)//非卡理事长
+    else if (i == PSID_noncardYayoi && friend_type != FriendType_yayoi)//非卡理事长
     {
       atTrain = distribution_noncard(rand);
     }
@@ -240,7 +266,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   }
 
   //npc
-  int npcCount = friend_type == 0 ? 6 : 7;//算上支援卡一共12个
+  int npcCount = 6;
   for (int i = 0; i < npcCount; i++)
   {
     int atTrain = distribution_npc(rand);
@@ -304,186 +330,81 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
       if (persons[pid].personType == PersonType_card)
       {
         double hintProb = 0.06 * (1 + 0.01 * persons[pid].cardParam.hintProbIncrease);
+        hintProb *= (1.0 + 0.15 * mecha_upgrade[0][1]);
         persons[pid].isHint = randBool(rand, hintProb);
         
       }
     }
   }
 
-  //休息外出比赛：随机菜种，随机绿圈
-  //休息&外出
-  int restMaterialType = rand() % 5;
-  bool restGreen = isXiahesu() ? true : randBool(rand, GameConstants::Cook_RestGreenRate);
-  cook_train_material_type[TRA_rest] = restMaterialType;
-  cook_train_material_type[TRA_outgoing] = restMaterialType;
-  cook_train_green[TRA_rest] = restGreen;
-  cook_train_green[TRA_outgoing] = restGreen;
-
-  //比赛
-  int raceMaterialType = rand() % 5;
-  bool raceGreen = randBool(rand, GameConstants::Cook_RaceGreenRate);
-  cook_train_material_type[TRA_race] = raceMaterialType;
-  cook_train_green[TRA_race] = raceGreen;
-
-  //训练的绿圈在calculateTrainingValue里计算
 
   calculateTrainingValue();
 }
 
-//总数=(1+料理pt加成+吃菜加成)*(1+料理pt技能点加成)
+//
 //上层=min(总数-下层, 100)
 void Game::calculateTrainingValue()
 {
-  //剧本训练加成
-  int cookDishLevel = GameConstants::Cook_DishPtLevel(cook_dish_pt);
-  cook_dishpt_success_rate = GameConstants::Cook_DishPtBigSuccessRate[cookDishLevel];
-  cook_dishpt_training_bonus = GameConstants::Cook_DishPtTrainingBonus[cookDishLevel];
-  cook_dishpt_skillpt_bonus = GameConstants::Cook_DishPtSkillPtBonus[cookDishLevel];
-  cook_dishpt_deyilv_bonus = GameConstants::Cook_DishPtDeyilvBonus[cookDishLevel];
+  //重新计算统计信息
+  mecha_rivalLvTotal = 0;
+  for (int i = 0; i < 5; i++)
+  {
+    mecha_rivalLvTotal += mecha_rivalLv[i];
+  }
+
+  for (int i = 0; i < 3; i++)
+  {
+    mecha_upgradeTotal[i] = 0;
+    for (int j = 0; j < 3; j++)
+      mecha_upgradeTotal[i] += mecha_upgrade[i][j];
+  }
+
+  //属性加成
+  for (int i = 0; i < 5; i++)
+  {
+    double m = 1.0;
+    //double rivalLvBonus = 0.06 + 0.0006 * mecha_rivalLv[i];
+    //if (mecha_linkeffect_lvbonus)rivalLvBonus * 1.5;
+    //m *= (1 + rivalLvBonus);
+
+    if (mecha_overdrive_enabled)
+    {
+      //m *= 1.25;
+      int upgradeGroup =
+        (i == 0 || i == 2) ? mecha_upgradeTotal[1] :
+        (i == 1 || i == 3) ? mecha_upgradeTotal[2] :
+        mecha_upgradeTotal[0];
+      if (upgradeGroup >= 9)
+      {
+        int count = mecha_rivalLvTotal / 200;
+        double bonus = 0.03 * count;
+        m *= (1 + bonus);
+      }
+      else if (upgradeGroup >= 6)
+      {
+        int count = mecha_rivalLvTotal / 300;
+        double bonus = 0.03 * count;
+        m *= (1 + bonus);
+      }
+    }
+
+    mecha_trainingStatusMultiplier[i] = m;
+  }
+
+  double ptb = 1.0;
+  ptb *= 1 + mecha_upgrade[2][2] * 0.12;
+  if (mecha_overdrive_enabled && mecha_upgradeTotal[2] >= 15)
+  {
+    int count = mecha_rivalLvTotal / 150;
+    double bonus = 0.03 * count;
+    ptb *= (1 + bonus);
+  }
+  mecha_trainingStatusMultiplier[5] = ptb;
   
-  for (int i = 0; i < 8; i++)
-    cook_train_material_num_extra[i] = 0;
+
 
   for (int i = 0; i < 5; i++)
     calculateTrainingValueSingle(i);
-}
-bool Game::isDishLegal(int dishId) const
-{
-  //同一回合不能重复制作料理
-  if (cook_dish != DISH_none)
-    return false;
-
-  int dishLevel = GameConstants::Cook_DishLevel[dishId];
-  //检查是否达到解锁时间
-  if (dishLevel == 0)
-    return false;
-  else if (dishLevel == 1)
-  {
-    //nothing
-  }
-  else if (dishLevel == 2)
-  { 
-    if (turn < 24)
-      return false;
-  }
-  else if (dishLevel == 3)
-  {
-    if (turn < 48)
-      return false;
-  }
-  else if (dishLevel == 4)
-  {
-    if (turn < 72)
-      return false;
-  }
-  else
-    throw "ERROR: Game::isDishLegal Unknown dish level";
-
-
-  //检查材料够不够
-  for (int i = 0; i < 5; i++)
-  {
-    int matCost = GameConstants::Cook_DishCost[dishId][i];
-    if (dishId == DISH_g1plate)//如果不是超满足，G1Plate要涨价
-    {
-      //默认超满足
-      if (cook_win_history[4] < 2)//大满足
-        matCost = 100;
-    }
-    if (cook_material[i] < matCost)
-      return false;
-  }
-  return true;
-}
-
-int Game::maxFarmPtUntilNow() const
-{
-  int totalCost = 0;
-  for (int i = 0; i < 5; i++)
-  {
-    for (int j = 1; j < cook_farm_level[i]; j++)
-    {
-      totalCost += GameConstants::Cook_FarmLvCost[j];
-    }
-  }
-
-  //计算假如全程绿圈，最多多少pt
-  int normalCycleNum = turn <= 39 ? turn / 4 :
-    turn <= 63 ? turn / 4 - 1 :
-    turn <= 72 ? turn / 4 - 2 :
-    72 / 4 - 2;
-  int smallCycleNum = turn <= 36 ? 0 :
-    turn <= 39 ? turn - 36 :
-    turn <= 60 ? 4 :
-    turn <= 63 ? 4 + turn - 60 :
-    turn <= 72 ? 8 :
-    8 + turn - 72;
-  int maxFarmPt = normalCycleNum * 160 + smallCycleNum * 75;
-  return maxFarmPt - totalCost;
-}
-
-std::vector<int> Game::calculateHarvestNum(bool isAfterTrain) const
-{
-  bool smallHarvest = isXiahesu() || turn >= 72;
-  int harvestTurnNum = smallHarvest ? 1 : 4;
-  if (!isAfterTrain)//只供训练前显示
-  {
-    harvestTurnNum = smallHarvest ? 0 : turn % 4;
-  }
-
-  vector<int> harvestBasic = { 0,0,0,0,0 };
-  int greenNum = 0;
-  for (int i = 0; i < 5; i++)
-  {
-    harvestBasic[i] = GameConstants::Cook_HarvestBasic[cook_farm_level[i]];
-    if (smallHarvest)
-      harvestBasic[i] = harvestBasic[i] / 2;
-    harvestBasic[i] += cook_harvest_extra[i];
-  }
-  for (int i = 0; i < harvestTurnNum; i++)
-  {
-    int matType = cook_harvest_history[i];
-    if (matType == -1)
-      throw "ERROR: Game::maybeHarvest cook_harvest_history[i] == -1";
-
-    harvestBasic[matType] += GameConstants::Cook_HarvestExtra[cook_farm_level[matType]];
-    if (cook_harvest_green_history[i])
-      greenNum += 1;
-  }
-
-  double multiplier = smallHarvest ? (greenNum == 0 ? 1.0000001 : 1.5000001) :
-    greenNum == 0 ? 1.0000001 :
-    greenNum == 1 ? 1.1000001 :
-    greenNum == 2 ? 1.2000001 :
-    greenNum == 3 ? 1.4000001 :
-    greenNum == 4 ? 1.6000001 :
-    1000;
-
-  int farmPt = smallHarvest ? int(multiplier * 50) : int(multiplier * 100);
-  for(int i=0;i<5;i++)
-    harvestBasic[i] = int(harvestBasic[i] * multiplier);
-  harvestBasic.push_back(farmPt);
-  return harvestBasic;
-}
-void Game::maybeHarvest()
-{
-  if (!(isXiahesu() || turn >= 72 || turn % 4 == 3))
-    return;//no harvest
-  printEvents("农田收获");
-  vector<int> harvest = calculateHarvestNum(true);
-
-  for (int i = 0; i < 5; i++)
-    addDishMaterial(i, harvest[i]);
-  cook_farm_pt += harvest[5];
-
-  //clear
-  for (int i = 0; i < 4; i++)
-  {
-    cook_harvest_history[i] = -1;
-    cook_harvest_green_history[i] = false;
-  }
-  for (int i = 0; i < 5; i++)
-    cook_harvest_extra[i] = 0;
 }
 
 void Game::addTrainingLevelCount(int trainIdx, int n)
@@ -491,193 +412,26 @@ void Game::addTrainingLevelCount(int trainIdx, int n)
   trainLevelCount[trainIdx] += n;
   if (trainLevelCount[trainIdx] > 16)trainLevelCount[trainIdx] = 16;
 }
-void Game::checkDishPtUpgrade()
+
+void Game::maybeUpdateDeyilv()
 {
-  int oldDishPt = cook_dish_pt_turn_begin;
-  if (GameConstants::Cook_DishPtLevel(oldDishPt) != GameConstants::Cook_DishPtLevel(cook_dish_pt))
+  int deyilvBonus = 15 * mecha_upgrade[0][0];
+  bool lianghuaEffectEnable =
+    friend_type == FriendType_lianghua &&
+    friend_isSSR &&
+    persons[friend_personId].friendship >= 60;
+  if (deyilvBonus != currentDeyilvBonus || lianghuaEffectEnable != currentLianghuaEffectEnable)
   {
-    printEvents("料理pt达到下一阶段");
-    //upgrade deyilv
-    updateDeyilv();
-  }
-  if ((oldDishPt < 2000 && cook_dish_pt >= 2000)
-   // || (oldDishPt < 5000 && cook_dish_pt >= 5000)
-    || (oldDishPt < 7000 && cook_dish_pt >= 7000)
-    || (oldDishPt < 12000 && cook_dish_pt >= 12000)
-    )
-  {
-    printEvents("食意开眼，全体训练等级+1");
-    for (int i = 0; i < 5; i++)
-      addTrainingLevelCount(i, 4);
-  }
-
-  cook_dish_pt_turn_begin = cook_dish_pt;
-}
-bool Game::makeDish(int16_t dishId, std::mt19937_64& rand)
-{
-  if (!isDishLegal(dishId))
-    return false;
-
-  //扣除材料
-  for (int i = 0; i < 5; i++)
-  {
-    int matCost = GameConstants::Cook_DishCost[dishId][i];
-    if (dishId == DISH_g1plate)//如果不是超满足，G1Plate要涨价
-    {
-      //默认超满足
-      if (cook_win_history[4] < 2)//大满足
-        matCost = 100;
-    }
-    cook_material[i] -= matCost;
-  }
-  cook_dish = dishId;
-
-  //升级农田
-  autoUpgradeFarm(false);
-
-  //检查是否大成功
-  bool isBigSuccess = cook_dish_sure_success ? true : randBool(rand, 0.01 * cook_dishpt_success_rate);
-  if (isBigSuccess)
-    handleDishBigSuccess(dishId, rand);
-
-  //计算料理pt
-  assert(cook_dish_pt == cook_dish_pt_turn_begin);
-  int pt = GameConstants::Cook_DishGainPt[dishId];
-  cook_dish_pt += pt;
-
-  cook_dish_sure_success = false;
-  //如果跨越1500倍数了，或者大于12000，下次必为大成功
-  if (cook_dish_pt >= 12000 || cook_dish_pt / 1500 != cook_dish_pt_turn_begin / 1500)
-    cook_dish_sure_success = true;
-
-  //料理的训练加成以外的效果：体力和羁绊
-  int dishLevel = GameConstants::Cook_DishLevel[dishId];
-  if (dishLevel == 1)
-  {
+    currentDeyilvBonus = deyilvBonus;
+    currentLianghuaEffectEnable = lianghuaEffectEnable;
     for (int i = 0; i < 6; i++)
-      addJiBan(i, 2, true);
+    {
+      persons[i].setExtraDeyilvBonus(deyilvBonus, lianghuaEffectEnable);
+    }
   }
-  else if (dishLevel == 2)
-  {
-    int mainTrain = GameConstants::Cook_DishMainTraining[dishId];
-    int farmLevel = cook_farm_level[mainTrain];
-    if (farmLevel >= 3)
-      addVital(5);
-  }
-  else if (dishLevel == 3)
-  {
-    int mainTrain = GameConstants::Cook_DishMainTraining[dishId];
-    int farmLevel = cook_farm_level[mainTrain];
-    if(mainTrain!=4)
-      addVital(10);
-    if (farmLevel >= 3)
-      addVital(5);
-  }
-  else if (dishLevel == 4)
-  {
-    addVital(25);
-  }
-  else
-    throw "ERROR: Game::makeDish Unknown dish level";
+}
 
-  calculateTrainingValue();
-  return true;
-}
-void Game::handleDishBigSuccess(int dishId, std::mt19937_64& rand)
-{
-  //hint
-  dishBigSuccess_hint(rand);
-
-  //buff
-  std::vector<int> buffs = dishBigSuccess_getBuffs(dishId, rand);
-  //如果有体力最大值，则先加体力最大值
-  for (int i = 0; i < buffs.size(); i++)
-  {
-    if (buffs[i] == 5)
-    {
-      addVitalMax(4);
-      break;
-    }
-  }
-  for (int i = 0; i < buffs.size(); i++)
-  {
-    if (buffs[i] == 1)
-    {
-      addVital(10);
-      printEvents("料理大成功：体力+10");
-    }
-    else if (buffs[i] == 2)
-    {
-      addMotivation(1);
-      printEvents("料理大成功：干劲+1");
-    }
-    else if (buffs[i] == 3)
-    {
-      for (int i = 0; i < 6; i++)
-        addJiBan(i, 3, true);
-      printEvents("料理大成功：全体羁绊+3");
-    }
-    else if (buffs[i] == 4)
-    {
-      int dishlevel = GameConstants::Cook_DishLevel[dishId];
-      if (dishlevel == 4)
-      {
-        //G1Plate菜，每个训练邀请2个人
-        for (int tr = 0; tr < 5; tr++)
-        {
-          dishBigSuccess_invitePeople(tr, rand);
-          dishBigSuccess_invitePeople(tr, rand);
-        }
-      }
-      else if (dishlevel == 3 || dishlevel == 2)
-      {
-        //其他菜，相应训练邀请1个人
-        int mainTrain = GameConstants::Cook_DishMainTraining[dishId];
-        dishBigSuccess_invitePeople(mainTrain, rand);
-      }
-      else
-        throw "ERROR: Game::handleDishBigSuccess buffs[i] == 4 but dishlevel != 2 or 3 or 4";
-      printEvents("料理大成功：摇人");
-    }
-    else if (buffs[i] == 5)
-    {
-      //已经处理过了
-      printEvents("料理大成功：体力上限+4");
-    }
-    else
-      throw "ERROR: Game::handleDishBigSuccess Unknown buff type";
-  }
-
-}
-void Game::updateDeyilv()
-{
-  int deyilvBonus = GameConstants::Cook_DishPtDeyilvBonus[GameConstants::Cook_DishPtLevel(cook_dish_pt)];
-  for (int i = 0; i < 6; i++)
-  {
-    if (persons[i].personType == PersonType_card)
-    {
-      persons[i].setExtraDeyilvBonus(deyilvBonus);
-    }
-  }
-}
-void Game::dishBigSuccess_hint(std::mt19937_64& rand)
-{
-  vector<int> availableHintLevels;
-  //随机选一张卡hint
-  for (int i = 0; i < 6; i++)
-  {
-    int hintLevel = persons[i].personType == PersonType_card ? persons[i].cardParam.hintLevel : 0;
-    if (persons[i].cardParam.isLink && hintLevel != 0 && hintLevel < 5)hintLevel += 1;
-    if (hintLevel > 0)
-      availableHintLevels.push_back(i);
-  }
-  int hintlevel = 1;
-  if (availableHintLevels.size() > 0)
-    hintlevel = availableHintLevels[rand() % availableHintLevels.size()];
-  printEvents("料理大成功：hint +" + to_string(hintlevel));
-  skillPt += int(hintlevel * hintPtRate);
-}
-void Game::dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand)
+void Game::tryInvitePeople(int trainIdx, std::mt19937_64& rand)
 {
   //先数一下已经有几个人
   int count = 0;
@@ -725,357 +479,6 @@ void Game::dishBigSuccess_invitePeople(int trainIdx, std::mt19937_64& rand)
   int pid = availablePeople[rand() % availablePeople.size()];
   personDistribution[trainIdx][count] = pid;
   //require recalculate later
-}
-void Game::autoUpgradeFarm(bool beforeXiahesu)
-{
-  if (farmUpgradeStrategy == FUS_none)
-    return;
-
-  if (isXiahesu())
-    return;
-
-  //第一年，只在确定训练后收菜前升级
-  if (turn < 24)
-  {
-    if (turn % 4 != 3) //下回合收菜才升级
-      return;
-    if (gameStage != GameStage_afterTrain)//确定训练后才升级
-      return;
-    if (cook_farm_pt < GameConstants::Cook_FarmLvCost[1])//升级pt不够
-      return;
-
-    int value[5] = { 5,1,4,2,3 };//优先级
-    //已经lv2的不升级
-    for (int i = 0; i < 5; i++)
-    {
-      if (cook_farm_level[i] == 2)
-        value[i] -= 99999;
-    }
-    //统计4回合内点击次数，点击一次value+10，快溢出则额外加
-    int clickNums[5] = { 0,0,0,0,0 };
-    for (int i = 0; i < 4; i++)
-    {
-      int type = cook_harvest_history[i];
-      if (type == -1)
-        throw "ERROR: Game::autoUpgradeFarm cook_harvest_history[i] == -1，第一年训练后收菜前才可自动升级农田";
-      clickNums[type] += 1;
-    }
-    for (int i = 0; i < 5; i++)
-    {
-      value[i] += clickNums[i] * 10;
-      int overflow = 30 + 25 * clickNums[i] + cook_material[i] - GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
-      if(overflow>0)
-        value[i] += overflow;
-    }
-  
-    if (farmUpgradeStrategy == FUS_default)
-    {
-      //第一年不升lv2大蒜，除非溢出太多
-      value[1] -= 40;
-    }
-    //选出最大的
-    int maxIdx = 0;
-    for (int i = 0; i < 5; i++)
-    {
-      if (value[i] > value[maxIdx])
-        maxIdx = i;
-    }
-    //value小于0不升级
-    if (value[maxIdx] >= 0)
-    {
-      bool suc = upgradeFarm(maxIdx);
-      assert(suc);
-      autoUpgradeFarm(beforeXiahesu);//有可能再升级一个
-    }
-  }
-  //第二年，吃菜前或者收菜前升级
-  else if (turn < 48)
-  {
-    if (gameStage == GameStage_beforeTrain)//吃菜前升级，可以贪LV3的5体力
-    {
-      if (GameConstants::Cook_DishLevel[cook_dish] != 2)
-        return;
-      if (cook_farm_pt < GameConstants::Cook_FarmLvCost[2])
-        return;//升级pt不够
-      if (maxVital - vital <= 0)
-        return;//体力满了
-      int mainTrain = GameConstants::Cook_DishMainTraining[cook_dish];
-      if (cook_farm_level[mainTrain] == 3)
-        return;//已经lv3了
-      //大蒜（编号1）不升级，草莓（编号4）在其他三个没升级之前不升级
-      if (mainTrain == 1
-        || (mainTrain == 4 && (cook_farm_level[0] != 3 || cook_farm_level[2] != 3 || cook_farm_level[3] != 3)))
-        return;
-      bool suc = upgradeFarm(mainTrain);
-      assert(suc);
-    }
-    else if (gameStage == GameStage_afterTrain)//收菜前升级
-    {
-      if (turn % 4 != 3) //下回合收菜才升级
-        return;
-      int value[5] = { 25,-59,24,23,2 };//优先级
-      //已经lv3的不升级，lv1的提升权重
-      for (int i = 0; i < 5; i++)
-      {
-        if (cook_farm_level[i] == 3)
-          value[i] -= 99999;
-        if (cook_farm_level[i] == 1)
-          value[i] += 60; //这个数恰好可以让蒜溢出时升级lv2，而不升级lv3
-      }
-      if(beforeXiahesu)
-      {
-        //nothing
-      }
-      else
-      {
-        //统计4回合内点击数，快溢出则额外加
-        int clickNums[5] = { 0,0,0,0,0 };
-        for (int i = 0; i < 4; i++)
-        {
-          int type = cook_harvest_history[i];
-          if (type == -1)
-            throw "ERROR: Game::autoUpgradeFarm cook_harvest_history[i] == -1，第二年训练后收菜前才可自动升级农田";
-          clickNums[type] += 1;
-        }
-        for (int i = 0; i < 5; i++)
-        {
-          int overflow = 55 + 45 * clickNums[i] + cook_material[i] - GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
-          if (overflow > 0)
-            value[i] += overflow;
-        }
-      }
-      //选出最大的
-      int maxIdx = 0;
-      for (int i = 0; i < 5; i++)
-      {
-        if (value[i] > value[maxIdx])
-          maxIdx = i;
-      }
-      //value小于0不升级
-      if (value[maxIdx] >= 0 && cook_farm_pt >= GameConstants::Cook_FarmLvCost[cook_farm_level[maxIdx]])
-      {
-        bool suc = upgradeFarm(maxIdx);
-        assert(suc);
-        autoUpgradeFarm(beforeXiahesu);//有可能再升级一个
-      }
-    }
-    else
-      assert(false);
-  }
-  //第三年，收菜前升级
-  else if (turn < 72)
-  {
-    if (gameStage == GameStage_beforeTrain)//吃菜前不升级
-      return;
-    if (turn % 4 != 3) //下回合收菜才升级
-      return;
-
-    //升级路线：32333 42443 43443 43453 53553
-    int value[5] = { 283,140,281,282,160 };//优先级
-    int priorLv5[5] = { 3,1,4,5,2 };//优先级
-    //根据lv调整权重
-    for (int i = 0; i < 5; i++)
-    {
-      if (cook_farm_level[i] == 1)
-        value[i] += 1000;
-      else if (cook_farm_level[i] == 2)
-        value[i] += 200;
-      else if (cook_farm_level[i] == 3)
-        value[i] += 100;
-      else if (cook_farm_level[i] == 4)
-        value[i] += 0;
-      else if (cook_farm_level[i] == 5)
-        value[i] -= 99999;
-    }
-
-    if (beforeXiahesu)
-    {
-      for (int i = 0; i < 5; i++)
-      {
-        if (cook_farm_level[i] <= 3)
-          value[i] += 0;
-        else
-          value[i] += 3 * priorLv5[i];
-      }
-    }
-    else
-    {
-      //统计4回合内点击数，快溢出则额外加
-      int clickNums[5] = { 0,0,0,0,0 };
-      for (int i = 0; i < 4; i++)
-      {
-        int type = cook_harvest_history[i];
-        if (type == -1)
-          throw "ERROR: Game::autoUpgradeFarm cook_harvest_history[i] == -1，第二年训练后收菜前才可自动升级农田";
-        clickNums[type] += 1;
-      }
-      for (int i = 0; i < 5; i++)
-      {
-        if (cook_farm_level[i] <= 3)
-          value[i] += clickNums[i] * 15;
-        else
-          value[i] += 3 * priorLv5[i];
-        int overflow = 55 + 45 * clickNums[i] + cook_material[i] - GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
-        if (overflow > 0)
-          value[i] += overflow;
-      }
-    }
-    //选出最大的
-    int maxIdx = 0;
-    for (int i = 0; i < 5; i++)
-    {
-      if (value[i] > value[maxIdx])
-        maxIdx = i;
-    }
-    //value小于0不升级
-    if (value[maxIdx] >= 0 && cook_farm_pt >= GameConstants::Cook_FarmLvCost[cook_farm_level[maxIdx]])
-    {
-      bool suc = upgradeFarm(maxIdx);
-      assert(suc);
-      autoUpgradeFarm(beforeXiahesu);//有可能再升级一个
-    }
-    
-
-  }
-  //ura期间，先升5
-  else 
-  {
-    if (gameStage == GameStage_beforeTrain)//吃菜前不升级
-      return;
-
-    int value[5] = { 1000 - cook_material[0], 1000 - cook_material[1], 1000 - cook_material[2], 1000 - cook_material[3], 1000 - cook_material[4], };//优先级
-    //根据lv调整权重
-    for (int i = 0; i < 5; i++)
-    {
-      if (cook_farm_level[i] == 1)
-        value[i] += 1000;
-      else if (cook_farm_level[i] == 2)
-        value[i] += 200;
-      else if (cook_farm_level[i] == 3)
-        value[i] += 0;
-      else if (cook_farm_level[i] == 4)
-        value[i] += 1000;
-      else if (cook_farm_level[i] == 5)
-        value[i] -= 99999;
-    }
-    //选出最大的
-    int maxIdx = 0;
-    for (int i = 0; i < 5; i++)
-    {
-      if (value[i] > value[maxIdx])
-        maxIdx = i;
-    }
-    //value小于0不升级
-    if (value[maxIdx] >= 0 && cook_farm_pt >= GameConstants::Cook_FarmLvCost[cook_farm_level[maxIdx]])
-    {
-      bool suc = upgradeFarm(maxIdx);
-      assert(suc);
-      autoUpgradeFarm(beforeXiahesu);//有可能再升级一个
-    }
-
-
-    }
-}
-void Game::addDishMaterial(int idx, int value)
-{
-  cook_material[idx] += value;
-  int limit = GameConstants::Cook_MaterialLimit[cook_farm_level[idx]];
-  if (cook_material[idx] > limit)
-    cook_material[idx] = limit;
-}
-std::vector<int> Game::dishBigSuccess_getBuffs(int dishId, std::mt19937_64& rand)
-{
-  //1体力，2心情，3羁绊，4分身，5体力上限
-  vector<int> buffs;
-
-  int dishLevel = GameConstants::Cook_DishLevel[dishId];
-
-  //写一个局部函数，判断这个buff是否允许
-  auto isBuffLegal = [&](int buffType)
-    {
-      if (buffType == 1)//体力
-        return true;
-      else if (buffType == 2)//心情
-        return true;
-      else if (buffType == 3)//羁绊，满羁绊不触发
-      {
-        for (int i = 0; i < 6; i++)
-          if (persons[i].friendship < 100)
-            return true;
-        return false;
-      }
-      else if (buffType == 4)//分身，已经满人的不触发
-      {
-        if (dishLevel == 4)
-          return true;
-        if (dishLevel == 1)
-          return false;
-        int mainTrain = GameConstants::Cook_DishMainTraining[dishId];
-        if (personDistribution[mainTrain][4] == PSID_none)
-        {
-          //检查其他训练是否有可以邀请的人
-          for (int tra = 0; tra < 5; tra++)
-          {
-            if (tra == mainTrain)continue;
-            for (int idx = 0; idx < 5; idx++)
-            {
-              int pid = personDistribution[tra][idx];
-              if (pid == -1)continue;
-              if (pid >= 0 && pid < 6)
-                return true;
-            }
-          }
-        }
-        return false;
-      }
-      else if (buffType == 5)//体力上限，满120不触发
-        return maxVital < 120;
-      
-      throw "ERROR: Game::dishBigSuccess_getBuffs Unknown buff type";
-    };
-
-  vector<int> availableBuffs;
-  vector<int> buffRelativeProbs;
-  for (int i = 1; i <= 5; i++)
-  {
-    int prob = GameConstants::Cook_DishPtBigSuccessBuffProb[dishLevel][i];
-    if (isBuffLegal(i) && prob > 0)
-    {
-      availableBuffs.push_back(i);
-      buffRelativeProbs.push_back(prob);
-    }
-  }
-  if (availableBuffs.size() == 0)
-    throw "ERROR: Game::dishBigSuccess_getBuffs availableBuffs.size() == 0";
-  //random pick one buff
-  std::discrete_distribution<> distribution(buffRelativeProbs.begin(), buffRelativeProbs.end());
-  buffs.push_back(availableBuffs[distribution(rand)]);
-
-  //追加buff
-  for (int i = 0; i < 5; i++)
-  {
-    int prob = GameConstants::Cook_DishPtBigSuccessBuffExtraProb[dishLevel][i];
-    if (prob == 0)continue;
-    if (!isBuffLegal(i))continue;
-    if (randBool(rand, prob * 0.01))
-    {
-      //检查是否已经有这个buff
-      bool hasBuff = false;
-      for (int j = 0; j < buffs.size(); j++)
-      {
-        if (buffs[j] == i)
-        {
-          hasBuff = true;
-          break;
-        }
-      }
-      if (!hasBuff)
-        buffs.push_back(i);
-    }
-  }
-  return buffs;
-
-
 }
 int Game::calculateRealStatusGain(int value, int gain) const//考虑1200以上为2的倍数的实际属性增加值
 {
@@ -1176,30 +579,9 @@ int Game::calculateFailureRate(int trainType, double failRateMultiply) const
 void Game::runRace(int basicFiveStatusBonus, int basicPtBonus)
 {
   double raceMultiply = 1 + 0.01 * saihou;
-  double dishMultiply = 1.0;
-  //dish race bonus
-  if (cook_dish != DISH_none)
-  {
-    double extraBonus = 0;
-    int dishLevel = GameConstants::Cook_DishLevel[cook_dish];
-    if (dishLevel == 3)
-    {
-      if (turn < 60)extraBonus = 25;
-      else extraBonus = 35;
-    }
-    else if (dishLevel == 4)
-    {
-      int lv5Count = 0;
-      for (int i = 0; i < 5; i++)
-        if (cook_farm_level[i] >= 5)
-          lv5Count++;
-      extraBonus = 80 + 5 * lv5Count;
-    }
-    dishMultiply = 1 + 0.01 * extraBonus;
-  }
 
-  int fiveStatusBonus = int(dishMultiply * int(raceMultiply * basicFiveStatusBonus));
-  int ptBonus = int(dishMultiply * int(raceMultiply * basicPtBonus));
+  int fiveStatusBonus = int(raceMultiply * basicFiveStatusBonus);
+  int ptBonus = int(raceMultiply * basicPtBonus);
   //cout << fiveStatusBonus << " " << ptBonus << endl;
   addAllStatus(fiveStatusBonus);
   skillPt += ptBonus;
@@ -1223,97 +605,119 @@ void Game::handleFriendOutgoing(std::mt19937_64& rand)
 {
   assert(friend_type!=0 && friend_stage >= FriendStage_afterUnlockOutgoing && friend_outgoingUsed < 5);
   int pid = friend_personId;
-  if (friend_outgoingUsed == 0)
+  if (friend_type == FriendType_yayoi)
   {
-    addVitalFriend(30);
-    addMotivation(1);
-    addStatusFriend(3, 20);
-    addJiBan(pid, 5, false);
-  }
-  else if (friend_outgoingUsed == 1)
-  {
-    addVitalFriend(30);
-    addMotivation(1);
-    addStatusFriend(0, 10);
-    addStatusFriend(3, 10);
-    isRefreshMind = true;
-    addJiBan(pid, 5, false);
-  }
-  else if (friend_outgoingUsed == 2)
-  {
-    int remainVital = maxVital - vital;
-    if (remainVital >= 20)//选上
-      addVitalFriend(43);
-    else//选下
-      addStatusFriend(3, 29);
-    addMotivation(1);
-    addJiBan(pid, 5, false);
-  }
-  else if (friend_outgoingUsed == 3)
-  {
-    addVitalFriend(30);
-    addMotivation(1);
-    addStatusFriend(3, 25);
-    addJiBan(pid, 5, false);
-  }
-  else if (friend_outgoingUsed == 4)
-  {
-    //有大成功和成功
-    if (rand() % 4 != 0)//粗略估计，75%大成功
+    if (friend_outgoingUsed == 0)
     {
       addVitalFriend(30);
-      addStatusFriend(3, 36);
-      skillPt += 72;//金技能等价
+      addMotivation(1);
+      addStatusFriend(3, 20);
+      addJiBan(pid, 5, false);
     }
-    else
+    else if (friend_outgoingUsed == 1)
     {
-      addVitalFriend(26);
-      addStatusFriend(3, 24);
-      skillPt += 40;//金技能等价
+      addVitalFriend(30);
+      addMotivation(1);
+      addStatusFriend(0, 10);
+      addStatusFriend(3, 10);
+      isRefreshMind = true;
+      addJiBan(pid, 5, false);
     }
-    addMotivation(1);
-    addJiBan(pid, 5, false);
-    isRefreshMind = true;
+    else if (friend_outgoingUsed == 2)
+    {
+      int remainVital = maxVital - vital;
+      if (remainVital >= 20)//选上
+        addVitalFriend(43);
+      else//选下
+        addStatusFriend(3, 29);
+      addMotivation(1);
+      addJiBan(pid, 5, false);
+    }
+    else if (friend_outgoingUsed == 3)
+    {
+      addVitalFriend(30);
+      addMotivation(1);
+      addStatusFriend(3, 25);
+      addJiBan(pid, 5, false);
+    }
+    else if (friend_outgoingUsed == 4)
+    {
+      //有大成功和成功
+      if (rand() % 4 != 0)//粗略估计，75%大成功
+      {
+        addVitalFriend(30);
+        addStatusFriend(3, 36);
+        skillPt += 72;//金技能等价
+      }
+      else
+      {
+        addVitalFriend(26);
+        addStatusFriend(3, 24);
+        skillPt += 40;//金技能等价
+      }
+      addMotivation(1);
+      addJiBan(pid, 5, false);
+      isRefreshMind = true;
+    }
+    else throw string("未知的出行");
   }
-  else assert(false && "未知的出行");
+  else if (friend_type == FriendType_lianghua)
+  {
+    todo;
+  }
+  else throw string("未知的出行");
 
-  //全体菜+40
-  for (int i = 0; i < 5; i++)
-    addDishMaterial(i, 40);
 
   friend_outgoingUsed += 1;
 }
 void Game::handleFriendUnlock(std::mt19937_64& rand)
 {
   assert(friend_stage == FriendStage_beforeUnlockOutgoing);
-  if (maxVital - vital >= 40)
-  {
-    addVitalFriend(25);
-    printEvents("友人外出解锁！选上");
+
+  if (friend_type == FriendType_yayoi)
+  { 
+    if (maxVital - vital >= 15)
+    {
+      addVitalFriend(25);
+      printEvents("友人外出解锁！选上");
+    }
+    else
+    {
+      addStatusFriend(0, 8);
+      addStatusFriend(3, 8);
+      skillPt += 10;//直线巧者+5
+      printEvents("友人外出解锁！选下");
+    }
+    addMotivation(1);
+    isRefreshMind = true;
+    addJiBan(friend_personId, 5, false);
   }
-  else
+  else if (friend_type == FriendType_lianghua)
   {
-    addStatusFriend(0, 8);
-    addStatusFriend(3, 8);
-    skillPt += 10;//直线巧者+5
-    printEvents("友人外出解锁！选下");
+    todo;
   }
-  addMotivation(1);
-  isRefreshMind = true;
-  addJiBan(friend_personId, 5, false);
+  else throw string("未知的友人解锁出行");
   friend_stage = FriendStage_afterUnlockOutgoing;
 }
 void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
 {
-  assert(friend_type!=0 && (friend_personId<6&& friend_personId>=0) && persons[friend_personId].personType==PersonType_scenarioCard);
+  assert(friend_type!=0 && (friend_personId<6&& friend_personId>=0) && persons[friend_personId].personType==PersonType_friendCard);
   if (friend_stage == FriendStage_notClicked)
   {
     printEvents("第一次点友人");
     friend_stage = FriendStage_beforeUnlockOutgoing;
-    
-    addStatusFriend(0, 14);
-    addJiBan(friend_personId, 10, false);
-    addMotivation(1);
+
+    if (friend_type == FriendType_yayoi)
+    {
+      addStatusFriend(0, 14);
+      addJiBan(friend_personId, 10, false);
+      addMotivation(1);
+    }
+    else if (friend_type == FriendType_lianghua)
+    {
+      todo;
+    }
+    else throw string("未知的第一次点友人");
   }
   else
   {
@@ -1326,41 +730,49 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
       addMotivation(1);//10%概率加心情
     }
 
-    if (turn < 24)
+    if (friend_type == FriendType_yayoi)
     {
-      //给羁绊最低的人加3羁绊
-      int minJiBan = 10000;
-      int minJiBanId = -1;
-      for (int i = 0; i < 6; i++)
+      if (turn < 24)
       {
-        if (persons[i].personType == PersonType_card)
+        //给羁绊最低的人加3羁绊
+        int minJiBan = 10000;
+        int minJiBanId = -1;
+        for (int i = 0; i < 6; i++)
         {
-          if (persons[i].friendship < minJiBan)
+          if (persons[i].personType == PersonType_card)
           {
-            minJiBan = persons[i].friendship;
-            minJiBanId = i;
+            if (persons[i].friendship < minJiBan)
+            {
+              minJiBan = persons[i].friendship;
+              minJiBanId = i;
+            }
           }
         }
-      }
-      if (minJiBanId != -1)
-      {
-        addJiBan(minJiBanId, 3, false);
-      }
-      addJiBan(friend_personId, 5, false);
-      printEvents("友人点击事件:" + persons[minJiBanId].getPersonName() + " 羁绊+3, 理事长羁绊+5");
+        if (minJiBanId != -1)
+        {
+          addJiBan(minJiBanId, 3, false);
+        }
+        addJiBan(friend_personId, 5, false);
+        printEvents("友人点击事件:" + persons[minJiBanId].getPersonName() + " 羁绊+3, 理事长羁绊+5");
 
      
+      }
+      else if (turn < 48)
+      {
+        addStatusFriend(0, 12);
+        addJiBan(friend_personId, 5, false);
+      }
+      else
+      {
+        addStatusFriend(3, 12);
+        addJiBan(friend_personId, 5, false);
+      }
     }
-    else if (turn < 48)
+    else if (friend_type == FriendType_lianghua)
     {
-      addStatusFriend(0, 12);
-      addJiBan(friend_personId, 5, false);
+      todo;
     }
-    else
-    {
-      addStatusFriend(3, 12);
-      addJiBan(friend_personId, 5, false);
-    }
+    else throw string("未知的友人点击事件");
   }
 
 }
@@ -1370,27 +782,42 @@ void Game::handleFriendFixedEvent()
   if (friend_stage < FriendStage_beforeUnlockOutgoing)return;//出行没解锁就没事件
   if (turn == 23)
   {
-    addMotivation(1);
-    addStatusFriend(0, 24);
-    addJiBan(friend_personId, 5, false);
-    skillPt += 40;//三级中盘巧者，而且有进化，因此这个hint是有效的
+    if (friend_type == FriendType_yayoi)
+    {
+      addMotivation(1);
+      addStatusFriend(0, 24);
+      addJiBan(friend_personId, 5, false);
+      skillPt += 40;//三级中盘巧者，而且有进化，因此这个hint是有效的
+    }
+    else if (friend_type == FriendType_lianghua)
+    {
+      todo;
+    }
+    else throw string("未知的友人固定事件");
   }
   else if (turn == 77)
   {
-    if (friend_outgoingUsed >= 5)//走完出行
+    if (friend_type == FriendType_yayoi)
     {
-      addStatusFriend(0, 20);
-      addStatusFriend(3, 20);
-      addStatusFriend(5, 56);
+      if (friend_outgoingUsed >= 5)//走完出行
+      {
+        addStatusFriend(0, 20);
+        addStatusFriend(3, 20);
+        addStatusFriend(5, 56);
+      }
+      else
+      {
+        //just guess, to be filled
+        addStatusFriend(0, 16);
+        addStatusFriend(3, 16);
+        addStatusFriend(5, 43);
+      }
     }
-    else
+    else if (friend_type == FriendType_lianghua)
     {
-      //just guess, to be filled
-      addStatusFriend(0, 16);
-      addStatusFriend(3, 16);
-      addStatusFriend(5, 43);
+      todo;
     }
-
+    else throw string("未知的友人固定事件");
   }
   else
   {
@@ -1976,7 +1403,7 @@ void Game::calculateTrainingValueSingle(int tra)
 
 void Game::addYayoiJiBan(int value)
 {
-  if (friend_type != 0)
+  if (friend_type == FriendType_yayoi)
     addJiBan(friend_personId, value, true);
   else
     addJiBan(PSID_noncardYayoi, value, true);
@@ -1984,53 +1411,10 @@ void Game::addYayoiJiBan(int value)
 
 int Game::getYayoiJiBan() const
 {
-  if (friend_type != 0)
+  if (friend_type == FriendType_yayoi)
     return persons[friend_personId].friendship;
   else
     return friendship_noncard_yayoi;
-}
-
-int Game::getDishTrainingBonus(int trainIdx) const
-{
-  if (cook_dish == DISH_none)return 0;
-  if (!GameConstants::Cook_DishTrainingBonusEffective[cook_dish][trainIdx])
-    return 0;
-  int dishLevel = GameConstants::Cook_DishLevel[cook_dish];
-  if (dishLevel == 1)
-    return 25;
-  else if (dishLevel == 2)
-  {
-    int b = 50;
-    int mainTrainingIdx = GameConstants::Cook_DishMainTraining[cook_dish];
-    if (cook_farm_level[mainTrainingIdx] >= 5)
-      b += 10;
-    if (turn >= 36)
-      b += 10;
-    return b;
-  }
-  else if (dishLevel == 3)
-  {
-    int b = 80;
-    int mainTrainingIdx = GameConstants::Cook_DishMainTraining[cook_dish];
-    if(cook_farm_level[mainTrainingIdx] >= 5)
-      b += 10;
-    if (turn >= 60)
-      b += 10;
-    if (mainTrainingIdx == 4)
-      b += 10;
-    return b;
-  }
-  else if (dishLevel == 4)
-  {
-    int lv5Count = 0;
-    for (int i = 0; i < 5; i++)
-      if (cook_farm_level[i] >= 5)
-        lv5Count++;
-    return 165 + 5 * lv5Count;
-  }
-  else
-    throw "ERROR: Game::getDishTrainingBonus Unknown dish level";
-  return 100000;
 }
 
 void Game::checkEventAfterTrain(std::mt19937_64& rand)

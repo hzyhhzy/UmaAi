@@ -15,7 +15,7 @@ std::string Person::getPersonName() const
 {
   string s =
     personType == PersonType_unknown ? "未加载" :
-    personType == PersonType_scenarioCard ? "[友]理事长" :
+    personType == PersonType_friendCard ? cardParam.cardName.substr(0, 8) :
     personType == PersonType_card ? cardParam.cardName.substr(0, 8) :
     personType == PersonType_npc ? "NPC" :
     personType == PersonType_yayoi ? "理事长" :
@@ -40,7 +40,7 @@ std::string Game::getPersonStrColored(int personId, int atTrain) const
       if (p.friendship < 100)
         s = s + ":" + to_string(p.friendship);
     }
-    if (p.personType == PersonType_scenarioCard)
+    if (p.personType == PersonType_friendCard)
       s = "\033[32m" + s + "\033[0m"; // 友人
     else if (p.personType == PersonType_card)
     {
