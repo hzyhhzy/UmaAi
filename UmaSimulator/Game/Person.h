@@ -9,7 +9,7 @@ class Game;
 enum PersonTypeEnum :int8_t
 {
   PersonType_unknown = 0,
-  PersonType_scenarioCard,
+  PersonType_friendCard,
   PersonType_card,
   PersonType_npc,
   PersonType_yayoi,
@@ -26,31 +26,31 @@ enum FriendStageEnum :int8_t
   FriendStage_refusedOutgoing
 };
 
-struct Person //ä»»ä½•ä¸€ä¸ªå¯èƒ½å‡ºç°åœ¨è®­ç»ƒé‡Œçš„äººå¤´
+struct Person //ÈÎºÎÒ»¸ö¿ÉÄÜ³öÏÖÔÚÑµÁ·ÀïµÄÈËÍ·
 {
-  //bool isCard;//æ˜¯å¦ä¸ºæ”¯æ´å¡ï¼Œå¦åˆ™ä¸ºç†äº‹é•¿è®°è€…æˆ–è€…ä¸å¸¦å¡çš„å‡‰èŠ±   ç”¨personTypeæ›¿ä»£äº†
-  SupportCard cardParam;//æ”¯æ´å¡å‚æ•°
-  int8_t personType;//0ä»£è¡¨æœªçŸ¥ï¼Œ1ä»£è¡¨å‰§æœ¬å‹äººæ”¯æ´å¡ï¼ˆRæˆ–SSRéƒ½è¡Œï¼‰ï¼Œ2ä»£è¡¨æ™®é€šæ”¯æ´å¡ //å…¶ä»–çš„ç§ç”°æ¯aiä¸æ”¾åœ¨personç±»é‡Œäº†ï¼ˆ3ä»£è¡¨npc(uafå‰§æœ¬æ²¡æœ‰)ï¼Œ4ç†äº‹é•¿ï¼Œ5è®°è€…ï¼Œ6ä¸å¸¦å¡çš„å‡‰èŠ±ï¼Œ7å…¶ä»–å‹äººå¡ï¼Œ8å…¶ä»–å›¢é˜Ÿå¡ã€‚ï¼‰
-  int16_t charaId;//äººå¤´å¯¹åº”çš„é©¬å¨˜idï¼Œæ‡’å¾—å†™å¯ä»¥ä¸€å¾‹0ï¼ˆåªç”¨äºè·å¾—åå­—ï¼‰
+  //bool isCard;//ÊÇ·ñÎªÖ§Ô®¿¨£¬·ñÔòÎªÀíÊÂ³¤¼ÇÕß»òÕß²»´ø¿¨µÄÁ¹»¨   ÓÃpersonTypeÌæ´úÁË
+  SupportCard cardParam;//Ö§Ô®¿¨²ÎÊı
+  int8_t personType;//0´ú±íÎ´Öª£¬1´ú±í¾ç±¾ÓÑÈËÖ§Ô®¿¨£¨R»òSSR¶¼ĞĞ£©£¬2´ú±íÆÕÍ¨Ö§Ô®¿¨ //ÆäËûµÄÖÖÌï±­ai²»·ÅÔÚpersonÀàÀïÁË£¨3´ú±ínpc(uaf¾ç±¾Ã»ÓĞ)£¬4ÀíÊÂ³¤£¬5¼ÇÕß£¬6²»´ø¿¨µÄÁ¹»¨£¬7ÆäËûÓÑÈË¿¨£¬8ÆäËûÍÅ¶Ó¿¨¡££©
+  int16_t charaId;//ÈËÍ·¶ÔÓ¦µÄÂíÄïid£¬ÀÁµÃĞ´¿ÉÒÔÒ»ÂÉ0£¨Ö»ÓÃÓÚ»ñµÃÃû×Ö£©
 
-  int8_t friendship;//ç¾ç»Š
-  //bool atTrain[5];//æ˜¯å¦åœ¨äº”ä¸ªè®­ç»ƒé‡Œã€‚å¯¹äºæ™®é€šçš„å¡åªæ˜¯one-hotæˆ–è€…å…¨ç©ºï¼Œå¯¹äºssrä½å²³å¯èƒ½æœ‰ä¸¤ä¸ªtrue
-  bool isHint;//æ˜¯å¦æœ‰hintã€‚å‹äººå¡æˆ–è€…npcæ’ä¸ºfalse
-  int8_t cardRecord;//è®°å½•ä¸€äº›å¯èƒ½éšç€æ—¶é—´è€Œæ”¹å˜çš„å‚æ•°ï¼Œä¾‹å¦‚æ ¹æ¶¡è½®çš„å›ºæœ‰
-  //int8_t friendOrGroupCardStage;//åªå¯¹å‹äººå¡å›¢é˜Ÿå¡æœ‰æ•ˆï¼Œ0æ˜¯æœªç‚¹å‡»ï¼Œ1æ˜¯å·²ç‚¹å‡»ä½†æœªè§£é”å‡ºè¡Œï¼Œ2æ˜¯å·²è§£é”å‡ºè¡Œä½†æ²¡æƒ…çƒ­ï¼Œ3æ˜¯æƒ…çƒ­çŠ¶æ€
-  //int8_t groupCardShiningContinuousTurns;//å›¢é˜Ÿå¡æƒ…çƒ­äº†å‡ ä¸ªå›åˆäº†ï¼ˆä¸‹å›åˆç»“æŸæƒ…çƒ­çš„æ¦‚ç‡ä¸æ­¤æœ‰å…³ï¼Œæ•°æ®å¯ä»¥åœ¨å¤§å¸ˆæ¯ç‰ˆaié‡Œæ‰¾åˆ°ï¼‰
+  int8_t friendship;//î¿°í
+  //bool atTrain[5];//ÊÇ·ñÔÚÎå¸öÑµÁ·Àï¡£¶ÔÓÚÆÕÍ¨µÄ¿¨Ö»ÊÇone-hot»òÕßÈ«¿Õ£¬¶ÔÓÚssr×ôÔÀ¿ÉÄÜÓĞÁ½¸ötrue
+  bool isHint;//ÊÇ·ñÓĞhint¡£ÓÑÈË¿¨»òÕßnpcºãÎªfalse
+  int8_t cardRecord;//¼ÇÂ¼Ò»Ğ©¿ÉÄÜËæ×ÅÊ±¼ä¶ø¸Ä±äµÄ²ÎÊı£¬ÀıÈç¸ùÎĞÂÖµÄ¹ÌÓĞ
+  //int8_t friendOrGroupCardStage;//Ö»¶ÔÓÑÈË¿¨ÍÅ¶Ó¿¨ÓĞĞ§£¬0ÊÇÎ´µã»÷£¬1ÊÇÒÑµã»÷µ«Î´½âËø³öĞĞ£¬2ÊÇÒÑ½âËø³öĞĞµ«Ã»ÇéÈÈ£¬3ÊÇÇéÈÈ×´Ì¬
+  //int8_t groupCardShiningContinuousTurns;//ÍÅ¶Ó¿¨ÇéÈÈÁË¼¸¸ö»ØºÏÁË£¨ÏÂ»ØºÏ½áÊøÇéÈÈµÄ¸ÅÂÊÓë´ËÓĞ¹Ø£¬Êı¾İ¿ÉÒÔÔÚ´óÊ¦±­°æaiÀïÕÒµ½£©
 
 
   
-  std::discrete_distribution<> distribution;//distribution(rand)å¯ä»¥æ ¹æ®å¾—æ„ç‡ç”Ÿæˆ0~5çš„æ•´æ•°ï¼Œä»£è¡¨è¿™å¼ å¡å‡ºç°åœ¨é€Ÿè€åŠ›æ ¹æ™ºé¸½ã€‚ssrä½å²³è°ƒç”¨ä¸¤æ¬¡
+  std::discrete_distribution<> distribution;//distribution(rand)¿ÉÒÔ¸ù¾İµÃÒâÂÊÉú³É0~5µÄÕûÊı£¬´ú±íÕâÕÅ¿¨³öÏÖÔÚËÙÄÍÁ¦¸ùÖÇ¸ë¡£ssr×ôÔÀµ÷ÓÃÁ½´Î
 
-  Person();//æœªåŠ è½½çš„äººå¤´
-  void setCard(int cardId);//æŠŠæ­¤äººå¤´è®¾ç½®ä¸ºæŸä¸ªæ”¯æ´å¡ï¼Œåªè€ƒè™‘åˆšå¼€å±€çš„çŠ¶æ€ï¼Œå¦‚æœæ˜¯æ¸¸æˆåŠé€”ï¼Œéœ€è¦æ‰‹åŠ¨ä¿®æ”¹ç¾ç»Šç­‰
-  void setExtraDeyilvBonus(int deyilvBonus);//é¢å¤–çš„å¾—æ„ç‡åŠ æˆ
-  //void setNonCard(int pType);//æŠŠæ­¤äººå¤´è®¾ç½®ä¸ºéæ”¯æ´å¡äººå¤´ï¼ˆç†äº‹é•¿è®°è€…ç­‰ï¼‰ï¼Œåªè€ƒè™‘åˆšå¼€å±€çš„çŠ¶æ€ï¼Œå¦‚æœæ˜¯æ¸¸æˆåŠé€”ï¼Œéœ€è¦æ‰‹åŠ¨ä¿®æ”¹ç¾ç»Šç­‰
+  Person();//Î´¼ÓÔØµÄÈËÍ·
+  void setCard(int cardId);//°Ñ´ËÈËÍ·ÉèÖÃÎªÄ³¸öÖ§Ô®¿¨£¬Ö»¿¼ÂÇ¸Õ¿ª¾ÖµÄ×´Ì¬£¬Èç¹ûÊÇÓÎÏ·°ëÍ¾£¬ĞèÒªÊÖ¶¯ĞŞ¸Äî¿°íµÈ
+  void setExtraDeyilvBonus(int deyilvBonus, bool lianghuaEffect);//¶îÍâµÄµÃÒâÂÊ¼Ó³É
+  //void setNonCard(int pType);//°Ñ´ËÈËÍ·ÉèÖÃÎª·ÇÖ§Ô®¿¨ÈËÍ·£¨ÀíÊÂ³¤¼ÇÕßµÈ£©£¬Ö»¿¼ÂÇ¸Õ¿ª¾ÖµÄ×´Ì¬£¬Èç¹ûÊÇÓÎÏ·°ëÍ¾£¬ĞèÒªÊÖ¶¯ĞŞ¸Äî¿°íµÈ
   
 
-  void getCardNNInputV1(float* buf, const Game& game, int index) const;//ç¥ç»ç½‘ç»œè¾“å…¥å‘é‡ï¼Œä¸åŒ…æ‹¬æ”¯æ´å¡å‚æ•°ï¼ŒGameç±»ä¼šæŠŠæ”¯æ´å¡å‚æ•°æ”¾åœ¨å¯¹åº”ä½ç½®
-  std::string getPersonName() const;//è·å¾—äººç‰©åç§°
-  //std::string getPersonStrColored(const Game& game, int personId, int atTrain) const;//äººç‰©åç§°ä¸ç¾ç»Šç­‰æ•´åˆæˆå¸¦é¢œè‰²çš„å­—ç¬¦ä¸²ï¼Œåœ¨å°é»‘æ¿è¡¨æ ¼ä¸­æ˜¾ç¤º
+  void getCardNNInputV1(float* buf, const Game& game, int index) const;//Éñ¾­ÍøÂçÊäÈëÏòÁ¿£¬²»°üÀ¨Ö§Ô®¿¨²ÎÊı£¬GameÀà»á°ÑÖ§Ô®¿¨²ÎÊı·ÅÔÚ¶ÔÓ¦Î»ÖÃ
+  std::string getPersonName() const;//»ñµÃÈËÎïÃû³Æ
+  //std::string getPersonStrColored(const Game& game, int personId, int atTrain) const;//ÈËÎïÃû³ÆÓëî¿°íµÈÕûºÏ³É´øÑÕÉ«µÄ×Ö·û´®£¬ÔÚĞ¡ºÚ°å±í¸ñÖĞÏÔÊ¾
 };

@@ -7,8 +7,8 @@
 #include "Game.h"
 using namespace std;
 using json = nlohmann::json;
-// æ˜¯å¦æŠŠä½ç ´å¡å½“åšæ»¡ç ´å¤„ç†ï¼ˆä¼šå¯¼è‡´ä¸€å®šçš„é¢„æµ‹åå·®ï¼‰
-// ä¸ºTrueæ—¶ä¼šæŠŠæ‰€æœ‰IDçš„æœ€é«˜ä½æ”¹ä¸ºæ»¡ç ´ï¼ˆé©¬å¨˜5xxxï¼Œå¡4xxxï¼‰
+// ÊÇ·ñ°ÑµÍÆÆ¿¨µ±×öÂúÆÆ´¦Àí£¨»áµ¼ÖÂÒ»¶¨µÄÔ¤²âÆ«²î£©
+// ÎªTrueÊ±»á°ÑËùÓĞIDµÄ×î¸ßÎ»¸ÄÎªÂúÆÆ£¨ÂíÄï5xxx£¬¿¨4xxx£©
 static bool maskUmaId = true;
 
 int mask_umaId(int umaId)
@@ -20,7 +20,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
 {
   if (jsonStr == "[test]" || jsonStr == "{\"Result\":1,\"Reason\":null}")
   {
-    std::cout << "å·²æˆåŠŸä¸URAå»ºç«‹è¿æ¥ï¼Œä½†æš‚æœªæ¥æ”¶åˆ°å›åˆä¿¡æ¯ï¼Œç­‰å¾…æ¸¸æˆå¼€å§‹" << std::endl;
+    std::cout << "ÒÑ³É¹¦ÓëURA½¨Á¢Á¬½Ó£¬µ«ÔİÎ´½ÓÊÕµ½»ØºÏĞÅÏ¢£¬µÈ´ıÓÎÏ·¿ªÊ¼" << std::endl;
     return false;
   }
   try
@@ -30,33 +30,37 @@ bool Game::loadGameFromJson(std::string jsonStr)
     int newcards[6];
     int newzmbluecount[5];
     for (int i = 0; i < 6; i++) {
-        newcards[i] = j["cardId"][i];
-        if(i<5){ newzmbluecount[i] = j["zhongMaBlueCount"][i]; }
-        
+      newcards[i] = j["cardId"][i];
+      if (i < 5) { newzmbluecount[i] = j["zhongMaBlueCount"][i]; }
+
     }
     //int zhongmaBlue[5] = { 18,0,0,0,0 };
     int zhongmaBonus[6] = { 10,10,30,0,10,70 };
-    newGame(rand,true,j["umaId"], j["umaStar"],newcards, newzmbluecount,zhongmaBonus);
-    
+    newGame(rand, true, j["umaId"], j["umaStar"], newcards, newzmbluecount, zhongmaBonus);
+
     ptScoreRate = j.contains("ptScoreRate") ? double(j["ptScoreRate"]) : GameConstants::ScorePtRateDefault;
-    
+
     turn = j["turn"];
-    gameStage = GameStage_beforeTrain;
+    gameStage = j["gameStage"];
+    if (gameStage == GameStage_beforeMechaUpgrade)
+      if (turn != 2 && turn != 24 && turn != 36 && turn != 48 && turn != 60 && turn != 72)
+        throw "Game::loadGameFromJson ÔÚµÚ" + to_string(turn) + "»ØºÏÉı¼¶»ú¼×";
+
     vital = j["vital"];
     maxVital = j["maxVital"];
     motivation = j["motivation"];
     for (int i = 0; i < 5; i++) {
-        fiveStatus[i] = j["fiveStatus"][i];
-        fiveStatusLimit[i] = j["fiveStatusLimit"][i];
+      fiveStatus[i] = j["fiveStatus"][i];
+      fiveStatusLimit[i] = j["fiveStatusLimit"][i];
     }
-    
+
     skillPt = j["skillPt"];
     skillScore = j["skillScore"];
     for (int i = 0; i < 5; i++) {
       trainLevelCount[i] = j["trainLevelCount"][i];
     }
 
-    failureRateBias= j["failureRateBias"];
+    failureRateBias = j["failureRateBias"];
     isQieZhe = j["isQieZhe"];
     isAiJiao = j["isAiJiao"];
     isPositiveThinking = j["isPositiveThinking"];
@@ -65,7 +69,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     isRacing = j["isRacing"];
     if (isRacing != isRacingTurn[turn])
     {
-      cout << "Warning:å®é™…èµ›ç¨‹å’Œé¢„æœŸèµ›ç¨‹ä¸ä¸€è‡´" << endl;
+      cout << "Warning:Êµ¼ÊÈü³ÌºÍÔ¤ÆÚÈü³Ì²»Ò»ÖÂ" << endl;
       isRacingTurn[turn] = isRacing;
     }
     for (int i = 0; i < 6; i++) {
@@ -97,105 +101,38 @@ bool Game::loadGameFromJson(std::string jsonStr)
         }
         else
         {
-          throw "Game::loadGameFromJsonè¯»å–åˆ°æœªçŸ¥çš„personId:" + to_string(pid);
+          throw "Game::loadGameFromJson¶ÁÈ¡µ½Î´ÖªµÄpersonId:" + to_string(pid);
         }
       }
     }
 
-    for (int i = 0; i < 5; i++) {
-      cook_material[i] = j["cook_material"][i];
-    }
-    cook_dish_pt = j["cook_dish_pt"];
-    cook_dish_pt_turn_begin = cook_dish_pt;
-    cook_dish = j["cook_dish"];
-    if (cook_dish != DISH_none)
-    {
-      int lastDishPtGain = GameConstants::Cook_DishGainPt[cook_dish];
-      cook_dish_pt_turn_begin -= lastDishPtGain;
-    }
-    for (int i = 0; i < 5; i++) {
-      cook_farm_level[i] = j["cook_farm_level"][i];
-    }
-
-    cook_farm_pt = j["cook_farm_pt"];
-    cook_dish_sure_success = j["cook_dish_sure_success"];
-    //æ³¨æ„cook_dish_sure_successæ˜¯ä¸‹ä¸€ä¸ªæ–™ç†æ˜¯å¦å¤§æˆåŠŸï¼Œè€Œä¸æ˜¯è¿™ä¸ªæ–™ç†æ˜¯å¦å¤§æˆåŠŸ
-    if (cook_dish != DISH_none)
-    {
-      cook_dish_sure_success = false;
-      //å¦‚æœè·¨è¶Š1500å€æ•°äº†ï¼Œæˆ–è€…å¤§äº12000ï¼Œä¸‹æ¬¡å¿…ä¸ºå¤§æˆåŠŸ
-      if (cook_dish_pt >= 12000 || cook_dish_pt / 1500 != cook_dish_pt_turn_begin / 1500)
-        cook_dish_sure_success = true;
-    }
-    for (int i = 0; i < 5; i++) {
-      cook_win_history[i] = j["cook_win_history"][i];
-    }
-    
-    for (int i = 0; i < 4; i++) {
-      cook_harvest_history[i] = j["cook_harvest_history"][i];
-      cook_harvest_green_history[i] = j["cook_harvest_green_history"][i];
-    }
-    //calculate cook_harvest_extra
-    if (isXiahesu() || turn >= 72)
-    {
-      for (int i = 0; i < 5; i++)
-        cook_harvest_extra[i] = 0;
-    }
-    else
-    {
-      int harvestTurnNum = turn % 4;
-      vector<int> harvestBasic = { 0,0,0,0,0 };
-      int greenNum = 0;
-      for (int i = 0; i < 5; i++)
-      {
-        harvestBasic[i] = GameConstants::Cook_HarvestBasic[cook_farm_level[i]];
-      }
-      for (int i = 0; i < harvestTurnNum; i++)
-      {
-        int matType = cook_harvest_history[i];
-        if (matType == -1)
-          throw "ERROR: Game::loadGameFromJson cook_harvest_history[i] == -1";
-
-        harvestBasic[matType] += GameConstants::Cook_HarvestExtra[cook_farm_level[matType]];
-        if (cook_harvest_green_history[i])
-          greenNum += 1;
-      }
-
-      double multiplier = 
-        greenNum == 0 ? 1.0000001 :
-        greenNum == 1 ? 1.1000001 :
-        greenNum == 2 ? 1.2000001 :
-        greenNum == 3 ? 1.4000001 :
-        greenNum == 4 ? 1.6000001 :
-        1000;
-
-      for (int i = 0; i < 5; i++)
-      {
-        int harvestNum = j["cook_harvest_num"][i];
-        int extra = int(ceil(harvestNum / multiplier - harvestBasic[i]));
-        cook_harvest_extra[i] = extra;
-      }
-    }
-
-    
-
-    for (int i = 0; i < 8; i++) {
-      cook_train_material_type[i] = j["cook_train_material_type"][i];
-      cook_train_green[i] = j["cook_train_green"][i];
-      if (cook_train_material_type[i] == -1)
-        cook_train_material_type[i] = i < 5 ? i : 0;//å‡¯æ–¯è¿æˆ˜ä¼‘æ¯ï¼Œä»¥åŠé”æ¯”èµ›å›åˆå¯èƒ½è¿”å›-1ï¼Œè¿™é‡Œè®¾æˆèåœï¼Œé¿å…é—ªé€€
-    }
-    
-    cook_main_race_material_type = j.contains("cook_main_race_material_type") ? int(j["cook_main_race_material_type"]) : -1;
-    if (isRacing && cook_main_race_material_type == -1)//å‡¯æ–¯ç‰¹æ®Šå›åˆ
-      cook_main_race_material_type = 0;
 
     if (friend_type != 0) {
       friend_outgoingUsed = j["friend_outgoingUsed"];
       friend_stage = j["friend_stage"];
     }
 
-    updateDeyilv();
+    for (int i = 0; i < 5; i++) {
+      mecha_rivalLv[i] = j["mecha_rivalLv"][i];
+    }
+    mecha_overdrive_energy = j["mecha_overdrive_energy"];
+    mecha_overdrive_enabled = j["mecha_overdrive_enabled"];
+    mecha_EN = j["mecha_EN"]; //°üÀ¨ÒÑ¾­»¨·ÑÁËµÄEN
+    for (int i = 0; i < 3; i++) {
+      for (int t = 0; t < 3; t++) {
+        mecha_upgrade[i][t] = j["mecha_upgrade"][i][t];
+      }
+    }
+    for (int i = 0; i < 5; i++) {
+      mecha_hasGear[i] = j["mecha_hasGear"][i];
+    }
+    for (int i = 0; i < 5; i++) {
+      mecha_win_history[i] = j["mecha_win_history"][i];
+    }
+
+
+
+    maybeUpdateDeyilv();
     calculateTrainingValue();
   //for (int k = 1; k < 5; k++) {
    //     cout << trainValue[1][k] << endl;
@@ -204,19 +141,19 @@ bool Game::loadGameFromJson(std::string jsonStr)
   }
   catch (string e)
   {
-    cout << "è¯»å–æ¸¸æˆä¿¡æ¯jsonå‡ºé”™ï¼š" << e << endl;
+    cout << "¶ÁÈ¡ÓÎÏ·ĞÅÏ¢json³ö´í£º" << e << endl;
     //cout << "-- json --" << endl << jsonStr << endl;
     return false;
   }
   catch (std::exception& e)
   {
-    cout << "è¯»å–æ¸¸æˆä¿¡æ¯jsonå‡ºé”™ï¼šæœªçŸ¥é”™è¯¯" << endl << e.what() << endl;
+    cout << "¶ÁÈ¡ÓÎÏ·ĞÅÏ¢json³ö´í£ºÎ´Öª´íÎó" << endl << e.what() << endl;
     //cout << "-- json --" << endl << jsonStr << endl;
     return false;
   }
   catch (...)
   {
-    cout << "è¯»å–æ¸¸æˆä¿¡æ¯jsonå‡ºé”™ï¼šæœªçŸ¥é”™è¯¯"  << endl;
+    cout << "¶ÁÈ¡ÓÎÏ·ĞÅÏ¢json³ö´í£ºÎ´Öª´íÎó"  << endl;
     return false;
   }
 

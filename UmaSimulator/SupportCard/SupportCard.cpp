@@ -48,9 +48,9 @@ void SupportCard::load_from_json(json& j, int x) {
 	cardType = j.value("cardType", -1);
 	//cardName = UTF8_To_string(j.value<std::string>("cardName", ""));
 	cardName = j.value<std::string>("cardName", "");
-	//j.at("cardSkill").get_to(cardSkill);	// 不载入技能，因为格式不同
+	//j.at("cardSkill").get_to(cardSkill);	// �����뼼�ܣ���Ϊ��ʽ��ͬ
 	charaId = j.value("charaId", -1);
-	// 载入固有。没有该key时用默认值
+	// ������С�û�и�keyʱ��Ĭ��ֵ
 	uniqueEffectType = j.value("uniqueEffectType", 0);
 	uniqueEffectParam = j.value("uniqueEffectParam", vector<int>());
 
@@ -70,10 +70,13 @@ void SupportCard::load_from_json(json& j, int x) {
 		j["cardValue"][x].at("bonus").get_to(bonusBasic);
 		j["cardValue"][x].at("initialBonus").get_to(initialBonus);
 		j["cardValue"][x].at("hintLevel").get_to(hintLevel);
+
+		eventRecoveryAmountUp = j["cardValue"][x].value<int>("eventRecoveryAmountUp", 0); //���˿��¼������ӳ�
+		eventEffectUp = j["cardValue"][x].value<int>("eventEffectUp", 0); //���˿��¼����Լӳ�
 	}
 
 	if (charaId > 0) {
-		// 直接使用charaID判断是否为链接卡
+		// ֱ��ʹ��charaID�ж��Ƿ�Ϊ���ӿ�
 		isLink = GameConstants::isLinkChara(charaId);
 	}
 	else 
