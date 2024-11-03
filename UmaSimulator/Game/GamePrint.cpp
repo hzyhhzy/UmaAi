@@ -188,6 +188,35 @@ void Game::print() const
     cout << "距离下次UGE还有 " << nextCompetition - turn << " 回合" << endl;
   }
 
+  //mecha lv
+  {
+    for (int i = 0; i < 3; i++)
+    {
+      cout << (i == 0 ? "头" : i == 1 ? "胸" : "脚");
+      cout << ": " << termcolor::bright_cyan << mecha_upgradeTotal[i] << termcolor::reset;
+      cout << " (" << mecha_upgrade[i][0] << "+" << mecha_upgrade[i][1] << "+" << mecha_upgrade[i][2] << ")   ";
+    }
+    cout << endl;
+  }
+
+
+  //总lv，齿轮槽
+  {
+    int totalLevel = 0;
+    for (int i = 0; i < 5; i++)
+    {
+      totalLevel += mecha_rivalLv[i];
+    }
+    int targetLevel=GameConstants::Mecha_TargetTotalLevel[GameConstants::Mecha_UGENumFinished(turn)];
+    cout << "总Lv: " << termcolor::bright_green << totalLevel << termcolor::reset << "/" << targetLevel << "(" << 100 * totalLevel / targetLevel << "%)";
+    cout << "     ";
+    cout << "齿轮槽: " << termcolor::bright_green << mecha_overdrive_energy / 3 << termcolor::reset << "(+" << mecha_overdrive_energy % 3 << ")";
+    if (mecha_overdrive_enabled)
+      cout << termcolor::bright_red << "  已开启超频训练" << termcolor::reset << endl;
+
+    cout << endl;
+  }
+
  
 
   {
@@ -212,7 +241,6 @@ void Game::print() const
         motivation == 3 ? "\033[31m普通\033[0m" :
         motivation == 4 ? "\033[33m好调\033[0m" :
         motivation == 5 ? "\033[32m绝好调\033[0m" : "未知") << endl;
-    cout << endl;
   }
   
 
@@ -228,10 +256,10 @@ void Game::print() const
   {
     if (isTrainShining[i])
       divLine += "\033[32m" + divLineOne + "\033[0m";
-    else if (!mecha_hasGear[i])
-      divLine += "\033[35m" + divLineOne + "\033[0m";
+    else if (mecha_hasGear[i])
+      divLine += "\033[34m" + divLineOne + "\033[0m";
     else
-      divLine += divLineOne;
+      divLine += "\033[2m" + divLineOne + "\033[0m";
     divLineWhite += divLineOne;
 
     if (i != 4)
@@ -276,7 +304,10 @@ void Game::print() const
     string oneRow[5];//表格中一行要显示的内容
     for (int i = 0; i < 5; i++)
     {
-      oneRow[i] = to_string(mecha_rivalLv[i]) + "/" + to_string(mecha_rivalLvLimit);
+      int totalLvGain = 0;
+      for (int j = 0; j < 5; j++)
+        totalLvGain += mecha_lvGain[i][j];
+      oneRow[i] = to_string(mecha_rivalLv[i]) + "/" + to_string(mecha_rivalLvLimit) + " \033[32m+" + to_string(totalLvGain) + "\033[0m";
     }
     printTableRow(oneRow);
   }
@@ -293,10 +324,29 @@ void Game::print() const
     printTableRow(oneRow);
   }
 
-  if (isRacing)
+  //训练等级
+  {
+    string oneRow[5];//表格中一行要显示的内容
+    for (int i = 0; i < 5; i++)
+    {
+      oneRow[i] = "等级：" + to_string(getTrainingLevel(i) + 1);
+      if (getTrainingLevel(i) < 4)
+        oneRow[i] = oneRow[i] + "(+" + to_string(trainLevelCount[i] % 4) + ")";
+
+    }
+    printTableRow(oneRow);
+  }
+
+  if (isRacing || gameStage != GameStage_beforeTrain)
   {
     cout << divLineWhite;
-    cout << termcolor::red << "比赛回合" << termcolor::reset << endl;
+    if (gameStage == GameStage_beforeMechaUpgrade)
+      cout << termcolor::red << "升级机甲回合" << termcolor::reset << endl; 
+    else if (isRacing)
+      cout << termcolor::red << "比赛回合" << termcolor::reset << endl;
+    else
+      throw "未知的非训练回合";
+    cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
     return;//比赛回合就不显示训练了
   }
 
@@ -324,18 +374,6 @@ void Game::print() const
       else
         vitalStr = "\033[31m" + vitalStr + "\033[0m";
       oneRow[i] = "体力：" + vitalStr + "/" + to_string(maxVital);
-    }
-    printTableRow(oneRow);
-  }
-  //训练等级
-  {
-    string oneRow[5];//表格中一行要显示的内容
-    for (int i = 0; i < 5; i++)
-    {
-      oneRow[i] = "等级：" + to_string(getTrainingLevel(i) + 1);
-      if (getTrainingLevel(i) < 4)
-        oneRow[i] = oneRow[i] + "(+" + to_string(trainLevelCount[i] % 4) + ")";
-        
     }
     printTableRow(oneRow);
   }
@@ -403,7 +441,7 @@ void Game::print() const
       printTableRow(oneRow);
     }
   }
-  cout << divLineWhite;
+  cout << divLine;
 
   //此训练加的五等级
   {
@@ -428,7 +466,7 @@ void Game::print() const
       printTableRow(oneRow);
     }
   }
-  cout << divLineWhite;
+  cout << divLine;
   //休息外出比赛的菜种
   {
     string oneRow[5];//表格中一行要显示的内容
@@ -442,8 +480,7 @@ void Game::print() const
         s = "外出";
       else if (t == 7)
         s = "比赛";
-      Action action;
-      action.train = t;
+      Action action(t);
       if(!isLegal(action))
         s = "\033[31m" + s + ":__\033[0m";
       
@@ -452,7 +489,7 @@ void Game::print() const
     printTableRow(oneRow);
   }
 
-  cout << divLineWhite;
+  cout << divLine;
 
   cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
 

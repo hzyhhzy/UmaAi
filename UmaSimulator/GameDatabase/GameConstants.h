@@ -36,6 +36,20 @@ public:
   static const double Mecha_GearProb;// 无彩圈训练有齿轮的概率
   static const double Mecha_GearProbLinkBonus;// “容易获得更多的机械齿轮”是增加多大概率
 
+  static const int Mecha_TargetTotalLevel[6];
+
+  static int Mecha_UGENumFinished(int turn);
+
+  static bool isLinkChara(int id);
+  static bool isLinkChara_initialEN(int id);
+  static bool isLinkChara_moreGear(int id);
+  static bool isLinkChara_initialOverdrive(int id);
+  static bool isLinkChara_lvBonus(int id);
+  static bool isLinkChara_initialLv(int id);
+
+
+
+
   //lv提升公式。以下内容参考：
   //https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
   //https://github.com/mee1080/umasim/blob/main/data/mecha_memo.md
@@ -49,11 +63,5 @@ public:
   static const double HintLevelPtRateDefault;//为了方便，直接视为每一级hint多少pt。
   //static const double ScorePtRateQieZhe;//为了方便，直接视为每1pt对应多少分。切者
 
-  static bool isLinkChara(int id);
-  static bool isLinkChara_initialEN(int id);
-  static bool isLinkChara_moreGear(int id);
-  static bool isLinkChara_initialOverdrive(int id);
-  static bool isLinkChara_lvBonus(int id);
-  static bool isLinkChara_initialLv(int id);
 
 };

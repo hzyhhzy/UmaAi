@@ -1427,7 +1427,7 @@ void Game::calculateTrainingValueSingle(int tra)
       turn < 60 ? 20 :
       turn < 72 ? 25 :
       30;
-    scenarioTrainMultiplier *= (1 + 0.01 * gearBonus); //偶尔有一两点误差，但我怎么改都有误差
+    scenarioTrainMultiplier *= (1 + 0.01 * gearBonus);
   }
 
   //胸的3号升级，友情加成

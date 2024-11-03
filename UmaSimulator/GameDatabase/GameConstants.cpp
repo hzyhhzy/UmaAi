@@ -24,6 +24,22 @@ const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.
 //const double GameConstants::FriendStatusBonusR[5] = { 1.1,1.11,1.13,1.15,1.15 };//友人R卡的事件效果倍数
 
 const std::vector<int> GameConstants::Mecha_LinkCharas = { 1023,1050,1036,1083,1084 };
+int GameConstants::Mecha_UGENumFinished(int turn)
+{
+  if (turn < 24)
+    return 0;
+  else if (turn < 36)
+    return 1;
+  else if (turn < 48)
+    return 2;
+  else if (turn < 60)
+    return 3;
+  else if (turn < 72)
+    return 4;
+  else return 5;
+}
+const int GameConstants::Mecha_TargetTotalLevel[6] = { 600,1000,1400,1900,2400,2400 };
+
 bool GameConstants::isLinkChara(int id)
 {
   if (id > 100000)id /= 100;
@@ -86,7 +102,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
   {
     { 0, 10, 0, 4, 0, 5, -20},
     { 0, 11, 0, 4, 0, 5, -21},
-    { 0, 12, 0, 4, 0, 5, -22},
+    { 0, 12, 0, 5, 0, 5, -22},
     { 0, 13, 0, 5, 0, 5, -24},
     { 0, 14, 0, 6, 0, 5, -26},
   },
@@ -94,7 +110,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
   {
     { 0, 4, 10, 0, 0, 5, -20},
     { 0, 4, 11, 0, 0, 5, -21},
-    { 0, 4, 12, 0, 0, 5, -22},
+    { 0, 5, 12, 0, 0, 5, -22},
     { 0, 5, 13, 0, 0, 5, -24},
     { 0, 6, 14, 0, 0, 5, -26},
   },
@@ -168,7 +184,7 @@ const int GameConstants::Mecha_LvGainSubTrainIdx[5][3] =
 {
   {0,2,1},
   {1,4,3},
-  {2,1,3},
+  {2,1,4},
   {3,0,2},
   {4,3,0},
 };

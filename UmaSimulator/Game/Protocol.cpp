@@ -43,8 +43,11 @@ bool Game::loadGameFromJson(std::string jsonStr)
     turn = j["turn"];
     gameStage = j["gameStage"];
     if (gameStage == GameStage_beforeMechaUpgrade)
-      if (turn != 2 && turn != 24 && turn != 36 && turn != 48 && turn != 60 && turn != 72)
+    {
+      if (turn == 2)turn -= 1; //把升级机甲回合视为上一个回合结尾
+      if (turn != 1 && turn != 23 && turn != 35 && turn != 47 && turn != 59 && turn != 71)
         throw "Game::loadGameFromJson 在第" + to_string(turn) + "回合升级机甲";
+    }
 
     vital = j["vital"];
     maxVital = j["maxVital"];
