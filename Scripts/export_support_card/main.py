@@ -9,7 +9,7 @@ import jsons, codecs
 ShortType = ['', '速', '耐', '力', '根', '智', '友', '团']
 DirectKeys = ['deYiLv', 'failRateDrop', 'ganJing', 'hintProbIncrease',
               'saiHou', 'vitalCostDrop', 'wizVitalBonus', 'xunLian',
-              'youQing', 'initialJiBan']
+              'youQing', 'initialJiBan', 'eventRecoveryAmountUp', 'eventEffectUp']
 
 # 特判直接合并面板（得意率）的卡
 # 智太阳神，活动力乌拉拉，东商
