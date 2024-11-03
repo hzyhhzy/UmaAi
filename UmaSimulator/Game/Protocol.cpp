@@ -145,6 +145,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     //cout << "-- json --" << endl << jsonStr << endl;
     return false;
   }
+  /*
   catch (std::exception& e)
   {
     cout << "读取游戏信息json出错：未知错误" << endl << e.what() << endl;
@@ -156,6 +157,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     cout << "读取游戏信息json出错：未知错误"  << endl;
     return false;
   }
+  */
 
   return true;
 }

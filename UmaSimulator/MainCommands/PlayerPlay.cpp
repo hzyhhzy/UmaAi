@@ -212,7 +212,7 @@ void main_playerPlay()
           endl;
       }
 
-      todo;
+      throw "todo";
       //œ‘ æ ÷–¥¬ﬂº≠
       Action handWrittenAction = Evaluator::handWrittenStrategy(game);
       cout << " ÷–¥¬ﬂº≠£∫" << termcolor::green << handWrittenAction.toString() << termcolor::reset << endl;
@@ -220,9 +220,9 @@ void main_playerPlay()
 
       cin >> s;
 
-      if (isTrain)
+      //if (isTrain)
+      throw "todo";
       {
-        action.dishType = 0;
         if (game.isRacing && s == "0")
           action.train = TRA_race;
         else if (s == "1")

@@ -239,7 +239,10 @@ public:
   void calculateTrainingValueSingle(int tra);//计算每个训练加多少 
 
   bool tryInvitePeople(std::mt19937_64& rand);//拉一个人，但有概率失败，需要循环调用
-  
+  void mecha_addRivalLv(int idx, int value);//增加研究lv，并处理溢出
+  void mecha_distributeEN(int head3, int chest3, int foot3);//给定头胸脚的3级个数，分配到三个小项
+  void mecha_maybeRunUGE();//UGE比赛
+  bool mecha_activate_overdrive();//开启overdrive
 
 
   //友人卡相关事件

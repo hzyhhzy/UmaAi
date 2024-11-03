@@ -120,7 +120,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
 //Reference:
 //https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
 //https://github.com/mee1080/umasim/blob/main/data/mecha_memo.md
-static const int Mecha_LvGainBasic[2][3][3][6] = {
+const int GameConstants::Mecha_LvGainBasic[2][3][3][6] = {
   // 通常
   {
     // 通常

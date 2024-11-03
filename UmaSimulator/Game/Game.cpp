@@ -467,7 +467,29 @@ bool Game::tryInvitePeople(std::mt19937_64& rand)
     return false;
 
   personDistribution[inviteTrain][space] = invitePerson;
+  return true;
   //require recalculate later
+}
+void Game::mecha_addRivalLv(int idx, int value)
+{
+  assert(idx >= 0 && idx < 5);
+  int t = mecha_rivalLv[idx] + value;
+
+  if (t > mecha_rivalLvLimit)
+    t = mecha_rivalLvLimit;
+}
+void Game::mecha_distributeEN(int head3, int chest3, int foot3)
+{
+  throw "todo";
+}
+void Game::mecha_maybeRunUGE()
+{
+  throw "todo";
+}
+bool Game::mecha_activate_overdrive()
+{
+  throw "todo";
+  return false;
 }
 int Game::calculateRealStatusGain(int value, int gain) const//考虑1200以上为2的倍数的实际属性增加值
 {
@@ -650,7 +672,7 @@ void Game::handleFriendOutgoing(std::mt19937_64& rand)
   }
   else if (friend_type == FriendType_lianghua)
   {
-    todo;
+    throw "todo";
   }
   else throw string("未知的出行");
 
@@ -681,7 +703,7 @@ void Game::handleFriendUnlock(std::mt19937_64& rand)
   }
   else if (friend_type == FriendType_lianghua)
   {
-    todo;
+    throw "todo";
   }
   else throw string("未知的友人解锁出行");
   friend_stage = FriendStage_afterUnlockOutgoing;
@@ -702,7 +724,7 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
     }
     else if (friend_type == FriendType_lianghua)
     {
-      todo;
+      throw "todo";
     }
     else throw string("未知的第一次点友人");
   }
@@ -757,7 +779,7 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
     }
     else if (friend_type == FriendType_lianghua)
     {
-      todo;
+      throw "todo";
     }
     else throw string("未知的友人点击事件");
   }
@@ -778,7 +800,7 @@ void Game::handleFriendFixedEvent()
     }
     else if (friend_type == FriendType_lianghua)
     {
-      todo;
+      throw "todo";
     }
     else throw string("未知的友人固定事件");
   }
@@ -802,7 +824,7 @@ void Game::handleFriendFixedEvent()
     }
     else if (friend_type == FriendType_lianghua)
     {
-      todo;
+      throw "todo";
     }
     else throw string("未知的友人固定事件");
   }
@@ -813,29 +835,21 @@ void Game::handleFriendFixedEvent()
 }
 bool Game::applyTraining(std::mt19937_64& rand, int train)
 {
-  assert(gameStage == GameStage_beforeTrain);
-  int matType = -1;//此回合的菜的种类
-  int matExtra = 0;//此回合的菜的额外加成（训练人头数）
-  bool isGreen = false;//此回合的菜是否绿圈
   if (isRacing)
   {
-    //比赛收益在checkEventAfterTrain()里处理，此处只处理菜
-    assert(train == TRA_none || train == TRA_race);
-    matType = cook_main_race_material_type;
-    matExtra = 0;
-    isGreen = true;
-    
+    //固定比赛的收益在checkEventAfterTrain()里处理
+    assert(train == TRA_race);
 
-    //assert(false && "所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
-    //return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
+    mecha_overdrive_energy += 1;
+    if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
+    for (int i = 0; i < 5; i++)
+    {
+      mecha_addRivalLv(i, 7);
+    }
+
   }
   else
   {
-    matType = cook_train_material_type[train];
-    matExtra = cook_train_material_num_extra[train];
-    isGreen = cook_train_green[train];//如果训练失败，后续将其设为false
-
-
     if (train == TRA_rest)//休息
     {
       if (isXiahesu())//合宿只能外出
@@ -852,6 +866,8 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
         else
           addVital(30);
       }
+      mecha_overdrive_energy += 1;
+      if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
     }
     else if (train == TRA_race)//比赛
     {
@@ -867,6 +883,13 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
       addVital(-15);
       if (rand() % 10 == 0)
         addMotivation(1);
+
+      mecha_overdrive_energy += 1;
+      if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
+      for (int i = 0; i < 5; i++)
+      {
+        mecha_addRivalLv(i, 7);
+      }
     }
     else if (train == TRA_outgoing)//外出
     {
@@ -882,7 +905,6 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
       {
         //友人出行
         handleFriendOutgoing(rand);
-        isGreen = true;
       }
       else //普通出行
       {
@@ -895,12 +917,13 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
           addVital(10);
         }
       }
+      mecha_overdrive_energy += 1;
+      if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
     }
     else if (train <= 4 && train >= 0)//常规训练
     {
       if (rand() % 100 < failRate[train])//训练失败
       {
-        isGreen = false;
         if (failRate[train] >= 20 && (rand() % 100 < failRate[train]))//训练大失败，概率是瞎猜的
         {
           printEvents("训练大失败！");
@@ -935,7 +958,8 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
         addVital(trainVitalChange[train]);
 
         int friendshipExtra = 0;//如果带了SSR友人卡，+1。如果友人卡在这个训练，再+2。爱娇不在这里处理
-        if (friend_type == 1)
+        bool isSSRYayoi = friend_type == PersonType_yayoi && friend_isSSR;
+        if (isSSRYayoi)
           friendshipExtra += 1;
 
         vector<int> hintCards;//有哪几个卡出红感叹号了
@@ -945,7 +969,7 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
         {
           int p = personDistribution[train][i];
           if (p == PSID_none)break;//没人
-          if (friend_type == 1 && p == friend_personId)
+          if (isSSRYayoi && p == friend_personId)
           {
             friendshipExtra += 2;
             break;
@@ -958,7 +982,7 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
 
           if (p == friend_personId && friend_type != 0)//友人卡
           {
-            assert(persons[p].personType == PersonType_scenarioCard);
+            assert(persons[p].personType == PersonType_friendCard);
             addJiBan(p, 4 + friendshipExtra, false);
             clickFriend = true;
           }
@@ -995,41 +1019,50 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
 
         if (hintCards.size() > 0)
         {
-          int hintCard = hintCards[rand() % hintCards.size()];//随机一张卡出hint
-
-          addJiBan(hintCard, 5, false);
-          int hintLevel = persons[hintCard].cardParam.hintLevel;
-          if (hintLevel > 0)
+          if (!(mecha_overdrive_enabled && mecha_upgradeTotal[0] >= 15))//随机一张卡出hint
           {
-            skillPt += int(hintLevel * hintPtRate);
+            int hintCard = hintCards[rand() % hintCards.size()];
+            hintCards.clear();
+            hintCards.push_back(hintCard);
           }
-          else //根乌拉拉这种，只给属性
+
+          for (int p = 0; p < hintCards.size(); p++)
           {
-            if (train == 0)
+            int hintCard = hintCards[p];
+            addJiBan(hintCard, 5, false);
+            int hintLevel = persons[hintCard].cardParam.hintLevel;
+            if (hintLevel > 0)
             {
-              addStatus(0, 6);
-              addStatus(2, 2);
+              skillPt += int(hintLevel * hintPtRate);
             }
-            else if (train == 1)
+            else //根乌拉拉这种，只给属性
             {
-              addStatus(1, 6);
-              addStatus(3, 2);
-            }
-            else if (train == 2)
-            {
-              addStatus(2, 6);
-              addStatus(1, 2);
-            }
-            else if (train == 3)
-            {
-              addStatus(3, 6);
-              addStatus(0, 1);
-              addStatus(2, 1);
-            }
-            else if (train == 4)
-            {
-              addStatus(4, 6);
-              skillPt += 5;
+              if (train == 0)
+              {
+                addStatus(0, 6);
+                addStatus(2, 2);
+              }
+              else if (train == 1)
+              {
+                addStatus(1, 6);
+                addStatus(3, 2);
+              }
+              else if (train == 2)
+              {
+                addStatus(2, 6);
+                addStatus(1, 2);
+              }
+              else if (train == 3)
+              {
+                addStatus(3, 6);
+                addStatus(0, 1);
+                addStatus(2, 1);
+              }
+              else if (train == 4)
+              {
+                addStatus(4, 6);
+                skillPt += 5;
+              }
             }
           }
         }
@@ -1041,6 +1074,16 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
         //训练等级提升
         addTrainingLevelCount(train, 1);
 
+        if (mecha_hasGear[train])
+        {
+          mecha_overdrive_energy += 1;
+          if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+          mecha_addRivalLv(i, mecha_lvGain[train][i]);
+        }
       }
 
     }
@@ -1051,11 +1094,6 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
     }
   }
 
-
-  //种菜
-  addFarm(matType, matExtra, isGreen);
-  gameStage = GameStage_afterTrain;
-  autoUpgradeFarm(false);
   return true;
 }
 
@@ -1539,7 +1577,6 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   }
   else if (turn == 35)
   {
-    autoUpgradeFarm(true);//合宿前升级农田
     printEvents("第二年合宿开始");
   }
   else if (turn == 47)//第二年年底
@@ -1619,7 +1656,6 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   }
   else if (turn == 59)
   {
-    autoUpgradeFarm(true);//合宿前升级农田
     printEvents("第三年合宿开始");
   }
   else if (turn == 70)
@@ -1653,9 +1689,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
 
     for (int c = 0; c < 5; c++)
     {
-      if (c < 4 &&  cook_win_history[c] != 1)
-        allWin = false;
-      if (c == 4 && cook_win_history[c] != 2)
+      if (mecha_win_history[c] != 2)
         allWin = false;
     }
     if (allWin)
@@ -1690,7 +1724,7 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   if (friend_type != 0)
   {
     Person& p = persons[friend_personId];
-    assert(p.personType == PersonType_scenarioCard);
+    assert(p.personType == PersonType_friendCard);
     if (friend_stage==FriendStage_beforeUnlockOutgoing)
     {
       double unlockOutgoingProb = p.friendship >= 60 ?
@@ -1777,33 +1811,38 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
 void Game::applyAction(std::mt19937_64& rand, Action action)
 {
   if (isEnd()) return;
-  //assert(turn < TOTAL_TURN && "Game::applyTrainingAndNextTurn游戏已结束");
-  //assert(!(isRacing && !isUraRace) && "非ura的比赛回合都在checkEventAfterTrain里跳过了");
-  if (action.dishType != DISH_none)//dish only, not next turn
+  if (action.type == GameStage_beforeMechaUpgrade)
   {
-    bool suc = makeDish(action.dishType, rand);
-    assert(suc && "Game::applyAction选择了不合法的菜品");
+    throw "todo";
   }
-  if (action.train != TRA_none || isRacing)
+  else
   {
-    bool suc = applyTraining(rand, action.train);
-    assert(suc && "Game::applyAction选择了不合法的训练");
-    
-    checkEventAfterTrain(rand);
-    if (isEnd()) return;
+    if (action.overdrive)//dish only, not next turn
+    {
+      bool suc = mecha_activate_overdrive();
+      assert(suc && "Game::applyAction 无法开启overdrive");
+    }
+    if (action.train != TRA_none)
+    {
+      bool suc = applyTraining(rand, action.train);
+      assert(suc && "Game::applyAction选择了不合法的训练");
 
-    randomDistributeCards(rand);
+      checkEventAfterTrain(rand);
+      if (isEnd()) return;
+
+      randomDistributeCards(rand);
 
 
-    //非ura的比赛回合也可能吃菜，用来刷pt，所以不跳过
-    
-    //if (isRacing && !isUraRace)//非ura的比赛回合，直接跳到下一个回合
-    //{
-    //  Action emptyAction;
-    //  emptyAction.train = TRA_none;
-    //  emptyAction.dishType = DISH_none;
-    //  applyAction(rand, emptyAction);
-    //}
+      //非ura的比赛回合也可能吃菜，用来刷pt，所以不跳过
+
+      //if (isRacing && !isUraRace)//非ura的比赛回合，直接跳到下一个回合
+      //{
+      //  Action emptyAction;
+      //  emptyAction.train = TRA_none;
+      //  emptyAction.dishType = DISH_none;
+      //  applyAction(rand, emptyAction);
+      //}
+    }
   }
 }
 
