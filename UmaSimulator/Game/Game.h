@@ -111,7 +111,7 @@ struct Game
   //剧本相关--------------------------------------------------------------------------------------
   
   //持久性的link效果（初始的已经在构造game类时考虑了）
-  bool mecha_linkeffect_moregear;//容易获得更多的机械齿轮
+  int mecha_linkeffect_gearProbBonus;//容易获得更多的机械齿轮
   bool mecha_linkeffect_lvbonus;//研究Lv带来的训练效果提升量增加
 
   int16_t mecha_rivalLv[5];//研究lv（rival_info）
@@ -142,6 +142,7 @@ struct Game
   double mecha_upgradeTotal[3];//头胸脚分别的等级总和
   int16_t mecha_lvGain[5][5];//研究Lv提升量mecha_lvGain[训练][第几项] 
   double mecha_trainingStatusMultiplier[6];//五维属性和pt的倍率
+  double mecha_lvGainMultiplier[5];//研究Lv提升量倍率
   
 
 
@@ -181,10 +182,8 @@ public:
 
   //原则上这几个private就行，如果private在某些地方非常不方便那就改成public
 
-  void autoUpgradeFarm(bool beforeXiahesu);//农田升级策略用手写逻辑处理，就不额外计算了，beforeXiahesu是夏合宿前那个回合收菜后进行升级
   void randomDistributeCards(std::mt19937_64& rand);//随机分配人头
   void calculateTrainingValue();//计算所有训练分别加多少，并计算失败率、训练等级提升等
-  bool makeDish(int16_t dishId, std::mt19937_64& rand);//做菜，并处理相关收益，计算相关数值
   bool applyTraining(std::mt19937_64& rand, int train);//处理 训练/出行/比赛 本身，包括友人点击事件，不包括做菜，不包括固定事件和剧本事件。如果不合法，则返回false，且保证不做任何修改
   void checkEventAfterTrain(std::mt19937_64& rand);//检查固定事件和随机事件，并进入下一个回合
 
@@ -228,16 +227,17 @@ public:
   void addVitalFriend(int value);//友人卡事件，增加体力，考虑回复量加成
   void runRace(int basicFiveStatusBonus, int basicPtBonus);//把比赛奖励加到属性和pt上，输入是不计赛后加成的基础值
   void addTrainingLevelCount(int trainIdx, int n);//为某个训练增加n次计数
-  void checkDishPtUpgrade();//在回合后，检查料理pt是否跨段，如果跨段则更新得意率或提升训练等级
-  void maybeUpdateDeyilv();//在dishPt升级后，更新得意率
+  void maybeUpdateDeyilv();//检查是否需要更新得意率
 
   int getTrainingLevel(int trainIdx) const;//计算训练等级
   int calculateFailureRate(int trainType, double failRateMultiply) const;//计算训练失败率，failRateMultiply是训练失败率乘数=(1-支援卡1的失败率下降)*(1-支援卡2的失败率下降)*...
 
   bool isCardShining(int personIdx, int trainIdx) const;    // 判断指定卡是否闪彩。普通卡看羁绊与所在训练，团队卡看friendOrGroupCardStage
   //bool trainShiningCount(int trainIdx) const;    // 指定训练彩圈数 //uaf不一定有用
-  void calculateTrainingValueSingle(int tra);//计算每个训练加多少   //uaf剧本可能五个训练一起算比较方便
+  void calculateLvGainSingle(int tra, int headNum, bool isShining);//计算每个训练加多少研究等级
+  void calculateTrainingValueSingle(int tra);//计算每个训练加多少 
 
+  bool tryInvitePeople(std::mt19937_64& rand);//拉一个人，但有概率失败，需要循环调用
   
 
 

@@ -122,16 +122,9 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
         throw string("不支持带凉花/理事长以外的友人或团队卡");
       int friendLevel = cardId % 10;
       assert(friendLevel >= 0 && friendLevel <= 4);
-      if (friend_type TODO)
-      {
-        friend_vitalBonus = GameConstants::FriendVitalBonusSSR[friendLevel];
-        friend_statusBonus = GameConstants::FriendStatusBonusSSR[friendLevel];
-      }
-      else
-      {
-        friend_vitalBonus = GameConstants::FriendVitalBonusR[friendLevel];
-        friend_statusBonus = GameConstants::FriendStatusBonusR[friendLevel];
-      }
+      friend_vitalBonus = 1.0 + 0.01 * persons[i].cardParam.eventRecoveryAmountUp;
+      friend_statusBonus = 1.0 + 0.01 * persons[i].cardParam.eventEffectUp;
+      
       friend_vitalBonus += 1e-10;
       friend_statusBonus += 1e-10;//加个小量，避免因为舍入误差而算错
     }
@@ -149,7 +142,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     skillPt += persons[i].cardParam.initialBonus[5];
   }
 
-  mecha_linkeffect_moregear = false;
+  mecha_linkeffect_gearProbBonus = 0;
   mecha_linkeffect_lvbonus = false;
   for (int i = 0; i < 5; i++)
     mecha_rivalLv[i] = 0;//一个link是20，2个是40，所以最后没link再改成1
@@ -172,7 +165,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     if (GameConstants::isLinkChara_initialEN(chara))
       mecha_EN += 1;
     if (GameConstants::isLinkChara_moreGear(chara))
-      mecha_linkeffect_moregear = true;
+      mecha_linkeffect_gearProbBonus += 1;
     if (GameConstants::isLinkChara_initialOverdrive(chara))
       mecha_overdrive_energy += 3;
     if (GameConstants::isLinkChara_lvBonus(chara))
@@ -316,27 +309,23 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   }
 
   //是否有hint
-  for (int i = 0; i < 6; i++)
-    persons[i].isHint = false;
-
-  for (int t = 0; t < 5; t++)
+  for (int pid = 0; pid < 6; pid++)
   {
-    for (int h = 0; h < 5; h++)
+    if (persons[pid].personType == PersonType_card)
     {
-      int pid = personDistribution[t][h];
-      if (pid < 0)break;
-      if (pid >= 6)continue;
-
-      if (persons[pid].personType == PersonType_card)
-      {
-        double hintProb = 0.06 * (1 + 0.01 * persons[pid].cardParam.hintProbIncrease);
-        hintProb *= (1.0 + 0.15 * mecha_upgrade[0][1]);
-        persons[pid].isHint = randBool(rand, hintProb);
+      double hintProb = 0.06 * (1 + 0.01 * persons[pid].cardParam.hintProbIncrease);
+      hintProb *= (1.0 + 0.15 * mecha_upgrade[0][1]);
+      persons[pid].isHint = randBool(rand, hintProb);
         
-      }
     }
   }
 
+  //随机决定是否有齿轮。如果有彩圈，则在calculateTrainingValue()里会变成true，这里不用考虑
+  double gearProb = GameConstants::Mecha_GearProb + GameConstants::Mecha_GearProbLinkBonus * mecha_linkeffect_gearProbBonus;
+  for (int i = 0; i < 5; i++)
+  {
+    mecha_hasGear[i] = randBool(rand, gearProb);
+  }
 
   calculateTrainingValue();
 }
@@ -400,8 +389,34 @@ void Game::calculateTrainingValue()
     ptb *= (1 + bonus);
   }
   mecha_trainingStatusMultiplier[5] = ptb;
-  
 
+  for (int i = 0; i < 5; i++)
+  {
+    int upgradeLv =
+      i == 0 ? mecha_upgrade[2][0] :
+      i == 1 ? mecha_upgrade[1][0] :
+      i == 2 ? mecha_upgrade[2][1] :
+      i == 3 ? mecha_upgrade[1][1] :
+      mecha_upgrade[0][0];
+    double lvGainBonus =
+      upgradeLv == 5 ? 40 :
+      upgradeLv == 4 ? 33 :
+      upgradeLv == 3 ? 26 :
+      upgradeLv == 2 ? 18 :
+      upgradeLv == 1 ? 10 :
+      0;
+    if (mecha_overdrive_enabled)
+    {
+      if (mecha_upgradeTotal[0] >= 12)
+        lvGainBonus += 25;
+      else if (mecha_upgradeTotal[0] >= 9)
+        lvGainBonus += 20;
+      else if (mecha_upgradeTotal[0] >= 6)
+        lvGainBonus += 15;
+    }
+
+    mecha_lvGainMultiplier[i] = 1.0 + 0.01 * lvGainBonus;
+  }
 
   for (int i = 0; i < 5; i++)
     calculateTrainingValueSingle(i);
@@ -431,53 +446,25 @@ void Game::maybeUpdateDeyilv()
   }
 }
 
-void Game::tryInvitePeople(int trainIdx, std::mt19937_64& rand)
+bool Game::tryInvitePeople(std::mt19937_64& rand) 
 {
-  //先数一下已经有几个人
-  int count = 0;
-  bool cannotInvite[6] = { true, true, true, true, true, true };//不在任何一个训练，或者已经在当前训练
-  for (int tra = 0; tra < 5; tra++)
-  {
-    if (tra == trainIdx)continue;
-    for (int idx = 0; idx < 5; idx++)
-    {
-      int pid = personDistribution[tra][idx];
-      if (pid == -1)continue;
-      if (pid >= 0 && pid < 6)
-      {
-        cannotInvite[pid] = false;
-      }
-    }
-  }
-  for (int i = 0; i < 5; i++)
-  {
-    int pid = personDistribution[trainIdx][i];
-    if (pid == PSID_none)
-      break;
-    count++;
+  int invitePerson = rand() % 6;
+  int inviteTrain = rand() % 5;
 
-    if (pid >= 0 && pid < 6)
-    {
-      cannotInvite[pid] = true;
-    }
-  }
-  if (count >= 5)return;//已经满了
-
-
-  //从不在personDistribution[trainIdx]里的人里选一个，放到里面
-  vector<int> availablePeople;
-  for (int i = 0; i < 6; i++)
+  int space = -1;
+  for (int idx = 0; idx < 5; idx++)
   {
-    if (!cannotInvite[i])
-      availablePeople.push_back(i);
+    int pid = personDistribution[inviteTrain][idx];
+    if (pid == -1 && space == -1)
+      space = idx;
+    if (pid == invitePerson)
+      return false;
   }
-  if (availablePeople.size() == 0)
-  {
-    return;//可能其他训练都是当前训练的复制人头，因此没有可邀请的人
-    //throw "ERROR: Game::dishBigSuccess_invitePeople availablePeople.size() == 0 && turn < 72";
-  }
-  int pid = availablePeople[rand() % availablePeople.size()];
-  personDistribution[trainIdx][count] = pid;
+
+  if (space == -1)
+    return false;
+
+  personDistribution[inviteTrain][space] = invitePerson;
   //require recalculate later
 }
 int Game::calculateRealStatusGain(int value, int gain) const//考虑1200以上为2的倍数的实际属性增加值
@@ -536,7 +523,7 @@ void Game::addMotivation(int value)
 }
 void Game::addJiBan(int idx, int value, bool ignoreAijiao)
 {
-  if(idx==PSID_noncardYayoi)
+  if(idx == PSID_noncardYayoi)
     friendship_noncard_yayoi += value;
   else if (idx == PSID_noncardReporter)
     friendship_noncard_reporter += value;
@@ -556,8 +543,6 @@ void Game::addAllStatus(int value)
 }
 int Game::calculateFailureRate(int trainType, double failRateMultiply) const
 {
-  //粗略拟合的训练失败率，二次函数 A*(x0-x)^2+B*(x0-x)
-  //误差应该在2%以内
   static const double A = 0.025;
   static const double B = 1.25;
   double x0 = 0.1 * GameConstants::FailRateBasic[trainType][getTrainingLevel(trainType)];
@@ -1240,30 +1225,26 @@ int Game::getTrainingLevel(int item) const
   return trainLevelCount[item] / 4;
 }
 
-int Game::turnIdxInHarvestLoop() const
+void Game::calculateLvGainSingle(int tra, int headNum, bool isShining)
 {
-  if (isXiahesu() || turn >= 72)return 0;
-  else return turn % 4;
+  bool xhs = isXiahesu();
+  int group = !mecha_hasGear[tra] ? 0 : !isShining ? 1 : 2;
+  for (int i = 0; i < 5; i++)
+    mecha_lvGain[tra][i] = 0;
+  for (int sub = 0; sub < 3; sub++)
+  {
+    int type = GameConstants::Mecha_LvGainSubTrainIdx[tra][sub];
+    int basic = GameConstants::Mecha_LvGainBasic[xhs][group][sub][headNum];
+    double multiplier = mecha_lvGainMultiplier[type];
+    int gain = int(ceil(multiplier * basic));
+    mecha_lvGain[tra][type] = gain;
+  }
 }
-bool Game::upgradeFarm(int item)
-{
-  if (isXiahesu())return false;
-  int lv = cook_farm_level[item];
-  if (lv >= 5)
-    return false;
-  else if (lv >= 3 && turn < 48)
-    return false;
-  else if (lv >= 2 && turn < 24)
-    return false;
 
-  if (cook_farm_pt < GameConstants::Cook_FarmLvCost[lv])
-    return false;
-  cook_farm_pt -= GameConstants::Cook_FarmLvCost[lv];
-  cook_farm_level[item] += 1;
-  printEvents(GameConstants::Cook_MaterialNames[item] + "升至" + to_string(cook_farm_level[item]) + "级");
-}
+//Reference：https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
 void Game::calculateTrainingValueSingle(int tra)
 {
+  //先算下层------------------------------------------------------------------
   int headNum = 0;//几张卡或者npc，理事长记者不算
   int shiningNum = 0;//几张闪彩
   int linkNum = 0;//几张link
@@ -1307,13 +1288,6 @@ void Game::calculateTrainingValueSingle(int tra)
   }
   isTrainShining[tra] = shiningNum;
 
-
-  //菜量获取值
-  cook_train_material_type[tra] = tra;
-  cook_train_green[tra] = shiningNum > 0;
-  cook_train_material_num_extra[tra] = headNum + 2 * linkNum;
-
-
   //基础值
   for (int i = 0; i < 6; i++)
     basicValue[i] = GameConstants::TrainingBasicValue[tra][tlevel][i];
@@ -1348,7 +1322,8 @@ void Game::calculateTrainingValueSingle(int tra)
   }
 
   //体力，失败率
-
+  if (mecha_overdrive_enabled && mecha_upgradeTotal[0] >= 15)
+    vitalCostMultiplier *= 0.5;
   int vitalChangeInt = vitalCostBasic > 0 ? -int(vitalCostBasic * vitalCostMultiplier) : -vitalCostBasic;
   if (vitalChangeInt > maxVital - vital)vitalChangeInt = maxVital - vital;
   if (vitalChangeInt < -vital)vitalChangeInt = -vital;
@@ -1369,12 +1344,54 @@ void Game::calculateTrainingValueSingle(int tra)
     trainValueLower[tra][i] = bvl * cardMultiplier * umaBonus;
   }
 
-  //剧本训练加成
-  double scenarioTrainMultiplier = 1 + 0.01 * cook_dishpt_training_bonus;
-  //料理训练加成
-  if (cook_dish != DISH_none)
-    scenarioTrainMultiplier += 0.01 * getDishTrainingBonus(tra);
-  double skillPtMultiplier = scenarioTrainMultiplier * (1 + 0.01 * cook_dishpt_skillpt_bonus);
+
+  //有彩圈的必有齿轮-----------------------------------------------------
+  if (shiningNum > 0)
+    mecha_hasGear[tra] = true;
+
+  //算上层-----------------------------------------------------
+
+  double scenarioTrainMultiplier = 1.0;//剧本总训练加成
+
+  //研究等级加成
+  double lvBonus = 6 + 0.06 * mecha_rivalLv[tra];
+  if (mecha_linkeffect_lvbonus)lvBonus *= 1.5;
+  scenarioTrainMultiplier *= (1 + 0.01 * lvBonus);
+
+  //有齿轮的训练有加成
+  if (mecha_hasGear[tra])
+  {
+    double gearBonus =
+      turn < 24 ? 0.05 :
+      turn < 36 ? 0.10 :
+      turn < 48 ? 0.15 :
+      turn < 60 ? 0.20 :
+      turn < 72 ? 0.25 :
+      0.30;
+    scenarioTrainMultiplier *= (1 + 0.01 * gearBonus);
+  }
+
+  //胸的3号升级，友情加成
+  if(shiningNum > 0) 
+  {
+    double friendshipBonus = 2 * mecha_upgrade[1][2];
+    scenarioTrainMultiplier *= (1 + 0.01 * friendshipBonus);
+  }
+
+  //overdrive
+  if (mecha_overdrive_enabled)
+  {
+    //基础25%
+    scenarioTrainMultiplier *= 1.25;
+
+    //胸3级和12级
+    double headBonus = 
+      mecha_upgradeTotal[1] >= 12 ? 3 : 
+      mecha_upgradeTotal[1] >= 3 ? 1 : 
+      0;
+
+    scenarioTrainMultiplier *= (1 + 0.01 * headNum * headBonus); 
+  }
 
 
 
@@ -1385,8 +1402,7 @@ void Game::calculateTrainingValueSingle(int tra)
     int lower = trainValueLower[tra][i];
     if (lower > 100) lower = 100;
     trainValueLower[tra][i] = lower;
-    double multiplier = i < 5 ? scenarioTrainMultiplier : skillPtMultiplier;
-    int total = int(lower * multiplier);
+    int total = int(lower * scenarioTrainMultiplier * mecha_trainingStatusMultiplier[i]);
     int upper = total - lower;
     if (upper > 100)upper = 100;
     if (i < 5)
@@ -1398,7 +1414,7 @@ void Game::calculateTrainingValueSingle(int tra)
     trainValue[tra][i] = total;
   }
 
-
+  calculateLvGainSingle(tra, headNum, shiningNum > 0);
 }
 
 void Game::addYayoiJiBan(int value)
@@ -1419,11 +1435,10 @@ int Game::getYayoiJiBan() const
 
 void Game::checkEventAfterTrain(std::mt19937_64& rand)
 {
-  assert(gameStage == GameStage_afterTrain);
+  mecha_overdrive_enabled = false;
   checkFixedEvents(rand);
   checkRandomEvents(rand);
 
-  cook_dish = DISH_none;
 
   //回合数+1
   turn++;
@@ -1436,91 +1451,10 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
   }
 
 }
-void Game::maybeCookingMeeting()
-{
-  if (turn == 23)
-  {
-    if (cook_dish_pt >= 1000)
-    {
-      cook_win_history[0] = 1;
-      addAllStatus(5);
-      skillPt += 40;
-    }
-    else
-    {
-      addAllStatus(3);
-      skillPt += 30;
-    }
-  }
-  else if (turn == 35)
-  {
-    if (cook_dish_pt >= 2000)
-    {
-      cook_win_history[1] = 1;
-      addAllStatus(10);
-      skillPt += 50;
-    }
-    else
-    {
-      addAllStatus(5);
-      skillPt += 40;
-    }
-  }
-  else if (turn == 47)
-  {
-    if (cook_dish_pt >= 5000)
-    {
-      cook_win_history[2] = 1;
-      addAllStatus(15);
-      skillPt += 60;
-    }
-    else
-    {
-      addAllStatus(10);
-      skillPt += 50;
-    }
-  }
-  else if (turn == 59)
-  {
-    if (cook_dish_pt >= 7000)
-    {
-      cook_win_history[3] = 1;
-      addAllStatus(20);
-      skillPt += 70;
-    }
-    else
-    {
-      addAllStatus(15);
-      skillPt += 60;
-    }
-  }
-  else if (turn == 71)
-  {
-    if (cook_dish_pt >= 12000)
-    {
-      cook_win_history[4] = 2;
-      addAllStatus(25);
-      skillPt += 70;
-    }
-    else if(cook_dish_pt >= 10000)
-    {
-      cook_win_history[4] = 1;
-      addAllStatus(20); //dont know, but not important
-      skillPt += 60;
-    }
-    else
-    {
-      addAllStatus(20);
-      skillPt += 60;
-    }
-  }
-}
 void Game::checkFixedEvents(std::mt19937_64& rand)
 {
   //处理各种固定事件
-  checkDishPtUpgrade();
-  maybeHarvest(); 
-  maybeCookingMeeting();
+
   if (isRefreshMind)
   {
     addVital(5);
@@ -1820,15 +1754,6 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
     addMotivation(-1);
     printEvents("模拟随机事件：\033[0m\033[33m心情-1\033[0m\033[32m");
   }
-
-}
-void Game::addFarm(int type, int extra, bool isGreen)
-{
-  int harvestLoopIdx = turnIdxInHarvestLoop();
-  cook_harvest_history[harvestLoopIdx] = type;
-  cook_harvest_extra[type] += extra;
-  if (isGreen)
-    cook_harvest_green_history[harvestLoopIdx] = true;
 
 }
 void Game::applyAction(std::mt19937_64& rand, Action action)

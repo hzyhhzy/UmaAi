@@ -12,6 +12,9 @@ const int GameConstants::BasicFiveStatusLimit[5] = { 2300,2200,1800,1400,1400 };
 const double GameConstants::EventProb = 0.35;
 const int GameConstants::EventStrengthDefault = 20;
 
+const double GameConstants::Mecha_GearProb = 0.5;// 无彩圈训练有齿轮的概率
+const double GameConstants::Mecha_GearProbLinkBonus = 0.05;// “容易获得更多的机械齿轮”是增加多大概率
+
 const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.1;
 const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.2;
 
@@ -67,8 +70,8 @@ const int GameConstants::FailRateBasic[5][5] =
   {320,321,322,323,324}
 };
 
-
-
+//Reference:
+//https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
 const int GameConstants::TrainingBasicValue[5][5][7] =
 {
   //速
@@ -81,27 +84,27 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
   },
   //耐
   {
-    { 0, 8, 0, 5, 0, 5, -20},
-    { 0, 9, 0, 5, 0, 5, -21},
-    { 0, 10, 0, 6, 0, 5, -22},
-    { 0, 11, 0, 7, 0, 5, -24},
-    { 0, 12, 0, 8, 0, 5, -26},
+    { 0, 10, 0, 4, 0, 5, -20},
+    { 0, 11, 0, 4, 0, 5, -21},
+    { 0, 12, 0, 4, 0, 5, -22},
+    { 0, 13, 0, 5, 0, 5, -24},
+    { 0, 14, 0, 6, 0, 5, -26},
   },
   //力
   {
-    { 0, 4, 9, 0, 0, 5, -20},
-    { 0, 4, 10, 0, 0, 5, -21},
-    { 0, 4, 11, 0, 0, 5, -22},
-    { 0, 5, 12, 0, 0, 5, -24},
-    { 0, 6, 13, 0, 0, 5, -26},
+    { 0, 4, 10, 0, 0, 5, -20},
+    { 0, 4, 11, 0, 0, 5, -21},
+    { 0, 4, 12, 0, 0, 5, -22},
+    { 0, 5, 13, 0, 0, 5, -24},
+    { 0, 6, 14, 0, 0, 5, -26},
   },
   //根
   {
-    { 2, 0, 2, 10, 0, 5, -20},
-    { 2, 0, 2, 11, 0, 5, -21},
-    { 2, 0, 2, 12, 0, 5, -22},
-    { 3, 0, 3, 13, 0, 5, -24},
-    { 3, 0, 3, 14, 0, 5, -26},
+    { 2, 0, 2, 9, 0, 5, -20},
+    { 2, 0, 2, 10, 0, 5, -21},
+    { 2, 0, 2, 11, 0, 5, -22},
+    { 3, 0, 2, 12, 0, 5, -24},
+    { 4, 0, 3, 13, 0, 5, -26},
   },
   //智
   {
@@ -112,6 +115,62 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
     { 4, 0, 0, 0, 12, 5, 5},
   },
   
+};
+
+//Reference:
+//https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
+//https://github.com/mee1080/umasim/blob/main/data/mecha_memo.md
+static const int Mecha_LvGainBasic[2][3][3][6] = {
+  // 通常
+  {
+    // 通常
+    {
+        {7, 11, 14, 18, 21, 25},
+        {2, 3, 4, 5, 6, 7},
+        {1, 1, 2, 2, 3, 3},
+    },
+    // 齿轮
+    {
+        {9, 13, 17, 21, 26, 30},
+        {2, 4, 5, 6, 7, 8},
+        {1, 1, 2, 3, 3, 4},
+    },
+    // 友情
+    {
+        {0, 17, 21, 25, 29, 33},
+        {0, 4, 6, 7, 8, 10},
+        {0, 2, 2, 3, 4, 4},
+    },
+  },
+  // 合宿
+  {
+    // 通常
+    {
+        {14, 18, 21, 25, 28, 32},
+        {4, 5, 6, 7, 8, 9},
+        {2, 2, 3, 3, 4, 4},
+    },
+    // 齿轮
+    {
+        {17, 21, 26, 30, 34, 38},
+        {5, 6, 7, 8, 10, 11},
+        {2, 3, 3, 4, 4, 5},
+    },
+    // 友情
+    {
+        {0, 25, 29, 33, 38, 42},
+        {0, 7, 8, 10, 10, 12},
+        {0, 3, 4, 4, 5, 5},
+    },
+  }
+};
+const int GameConstants::Mecha_LvGainSubTrainIdx[5][3] =
+{
+  {0,2,1},
+  {1,4,3},
+  {2,1,3},
+  {3,0,2},
+  {4,3,0},
 };
 
 const int GameConstants::FiveStatusFinalScore[2801] = {

@@ -10,6 +10,7 @@ const int MAX_INFO_PERSON_NUM = 6;//有单独信息的人头个数（此剧本只有支援卡）
 class GameConstants
 {
 public:
+  //Reference：https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
   static const int TrainingBasicValue[5][5][7]; //TrainingBasicValue[颜色][第几种训练][LV几][速耐力根智pt体力]
   static const int FailRateBasic[5][5];//[第几种训练][LV几]，失败率= 0.025*(x0-x)^2 + 1.25*(x0-x)
   static const int BasicFiveStatusLimit[5];//初始上限，1200以上翻倍
@@ -32,6 +33,14 @@ public:
 
   //剧本相关
   static const std::vector<int> Mecha_LinkCharas;// Link角色
+  static const double Mecha_GearProb;// 无彩圈训练有齿轮的概率
+  static const double Mecha_GearProbLinkBonus;// “容易获得更多的机械齿轮”是增加多大概率
+
+  //lv提升公式。以下内容参考：
+  //https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
+  //https://github.com/mee1080/umasim/blob/main/data/mecha_memo.md
+  static const int Mecha_LvGainBasic[2][3][3][6]; //[是否合宿][无齿轮、齿轮、友情][主、副1、副2][人数]
+  static const int Mecha_LvGainSubTrainIdx[5][3]; //Lv提升的副属性是什么 
 
 
   //评分
