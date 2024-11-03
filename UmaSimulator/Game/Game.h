@@ -139,6 +139,7 @@ struct Game
   //CardTrainingEffect cardEffects[6];
 
   int16_t mecha_rivalLvTotal;//研究lv总和
+  int16_t mecha_rivalLvLimit;//研究lv上限
   double mecha_upgradeTotal[3];//头胸脚分别的等级总和
   int16_t mecha_lvGain[5][5];//研究Lv提升量mecha_lvGain[训练][第几项] 
   double mecha_trainingStatusMultiplier[6];//五维属性和pt的倍率

@@ -1,6 +1,5 @@
 #include "Action.h"
 
-const Action Action::Action_RedistributeCardsForTest = { -1,false, -1 ,0,0 };
 
 const std::string Action::trainingName[8] =
 {

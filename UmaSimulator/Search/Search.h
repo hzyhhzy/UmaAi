@@ -43,8 +43,7 @@ public:
   static const int searchStageNum = 3;
   static const double searchFactorStage[searchStageNum];
   static const double searchThreholdStdevStage[searchStageNum];
-  static Action intToTwoStageAction(int i);//Action::intToAction只处理单阶段Action（要么吃菜，要么训练），这个函数处理双阶段（同时吃菜和训练）
-
+  
 
 
   Game rootGame;//当前或刚搜索完的是哪个局面
@@ -105,6 +104,5 @@ private:
     std::mt19937_64& rand,
     Action action
   );
-  void integrateTwoStageResults();//整合二阶段搜索结果，保存到一阶段Action的位置
 
 };

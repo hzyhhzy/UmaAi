@@ -17,14 +17,6 @@ const double bigFailValue = -500;
 const double outgoingBonusIfNotFullMotivation = 150;//掉心情时提高外出分数
 const double raceBonus = 150;//比赛收益，不考虑体力
 
-//const double materialValue[5] = { 0.5,0.2,0.5,0.5,0.3 };//每个料理原料的估值
-//const double materialValueScale = 1.0;//料理原料的估值乘以这个系数，方便一起改
-const double greenBonusBasicYear1 = 100;//绿色料理的加成，羁绊没满时降低系数，第一年
-const double greenBonusBasicYear2 = 100;//绿色料理的加成，第二年
-const double greenBonusBasicYear3 = 100;//绿色料理的加成，第三年
-
-const double cookingThreholdFactorLv2 = 0.5;//越大第二三年吃菜越激进（2级菜）
-const double cookingThreholdFactorLv3 = 1.0;//越大第三年吃菜越激进（3级菜）
 
 
 //const double xiangtanExhaustLossMax = 800;//相谈耗尽且没达标的估值扣分
@@ -137,8 +129,9 @@ static double materialEvaluation(int turn, int count) //评估吃菜的开销，决定第二
 
 Action Evaluator::handWrittenStrategy(const Game& game)
 {
+  throw "todo";
+  /*
   Action bestAction;
-  bestAction.dishType = DISH_none;
   bestAction.train = TRA_none;
 
   if (game.isEnd())return bestAction;
@@ -491,5 +484,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
   }
   return bestAction;
+  */
 }
 

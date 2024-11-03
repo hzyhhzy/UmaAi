@@ -92,11 +92,11 @@ ModelOutputValueV1 Evaluator::extractValueFromNNOutputBuf(float* buf)
 
 Action Evaluator::extractActionFromNNOutputBuf(float* buf, const Game& game)
 {
-  Action bestAction = { 0, -1 };
+  Action bestAction = Action();
   float bestValue = -1e8;
   for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
   {
-    Action action = Action::intToAction(actionInt);
+    Action action = Action(actionInt);
     if (!game.isLegal(action))continue;
     if (buf[actionInt] > bestValue)
     {

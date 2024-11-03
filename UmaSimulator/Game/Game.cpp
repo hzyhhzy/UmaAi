@@ -341,6 +341,8 @@ void Game::calculateTrainingValue()
     mecha_rivalLvTotal += mecha_rivalLv[i];
   }
 
+  mecha_rivalLvLimit = turn < 24 ? 200 : turn < 36 ? 300 : turn < 48 ? 400 : turn < 60 ? 500 : turn < 72 ? 600 : 700;
+
   for (int i = 0; i < 3; i++)
   {
     mecha_upgradeTotal[i] = 0;
@@ -1063,57 +1065,73 @@ bool Game::isLegal(Action action) const
   if (!action.isActionStandard())
     return false;
 
-  //是否吃得起菜
-  if (action.dishType != DISH_none)
-    if (!isDishLegal(action.dishType))
-      return false;
+  //stage是否匹配
+  if (action.type != gameStage)
+    return false;
 
-  if (isRacing)
+  if (action.type == GameStage_beforeTrain)
   {
-    //if (isUraRace)
-    //{
-      if (action.train == TRA_none || action.train == TRA_race)//none是吃菜然后比赛，race是直接比赛
+    if (isRacing)
+    {
+      if (action.train == TRA_race)
         return true;
       else
         return false;
-    //}
-    //else
-    //{
-      //assert(false && "所有ura以外的剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
-      //return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
-    //}
-  }
-
-  if (action.train == TRA_rest)
-  {
-    if (isXiahesu())
-    {
-      return false;//将夏合宿的“外出&休息”称为外出
     }
-    return true;
-  }
-  else if (action.train == TRA_outgoing)
-  {
-    return true;
-  }
-  else if (action.train == TRA_race)
-  {
-    return isRaceAvailable();
-  }
-  else if (action.train >= 0 && action.train <= 4)
-  {
-    return true;
-  }
-  else if (action.dishType != DISH_none)
-  {
-    return isDishLegal(action.dishType);
-  }
-  else
-  {
-    assert(false && "未知的训练项目");
+
+    //是否能开齿轮
+    if (action.overdrive)
+    {
+      if (mecha_overdrive_energy < 3)
+        return false;
+      if (mecha_overdrive_enabled)
+        return false;
+      if (mecha_upgradeTotal[1] >= 15)//摇人，应该先开overdrive再选训练，分两步
+        return action.train == -1;
+      else
+        return action.train >= 0 && action.train <= 4;
+    }
+
+    if (action.train == TRA_rest)
+    {
+      if (isXiahesu())
+      {
+        return false;//将夏合宿的“外出&休息”称为外出
+      }
+      return true;
+    }
+    else if (action.train == TRA_outgoing)
+    {
+      return true;
+    }
+    else if (action.train == TRA_race)
+    {
+      return isRaceAvailable();
+    }
+    else if (action.train >= 0 && action.train <= 4)
+    {
+      return true;
+    }
+    else
+    {
+      assert(false && "未知的训练项目");
+      return false;
+    }
     return false;
   }
-  return false;
+  else if (action.type == GameStage_beforeMechaUpgrade)
+  {
+    int total3 = mecha_EN / 3;
+    int mechaHeadLimit = turn >= 36 ? 5 : 3;//第二次UGE解锁头3号升级
+    int mechaChestLimit = turn >= 60 ? 5 : 3;//第四次UGE解锁胸3号升级
+    int mechaFootLimit = turn >= 60 ? 5 : 3;//第四次UGE解锁腿3号升级
+    int mechaFoot = total3 - action.mechaHead - action.mechaChest;
+    if (action.mechaHead < 0 || action.mechaHead > mechaHeadLimit)return false;
+    if (action.mechaChest < 0 || action.mechaChest > mechaChestLimit)return false;
+    if (mechaFoot < 0 || mechaFoot > mechaFootLimit)return false;
+    return true;
+  }
+  else throw "unknown action.type";
 }
 
 
@@ -1286,7 +1304,7 @@ void Game::calculateTrainingValueSingle(int tra)
       linkNum += 1;
     }
   }
-  isTrainShining[tra] = shiningNum;
+  isTrainShining[tra] = shiningNum > 0;
 
   //基础值
   for (int i = 0; i < 6; i++)
@@ -1635,7 +1653,7 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
 
     for (int c = 0; c < 5; c++)
     {
-      if (c < 4 && cook_win_history[c] != 1)
+      if (c < 4 &&  cook_win_history[c] != 1)
         allWin = false;
       if (c == 4 && cook_win_history[c] != 2)
         allWin = false;

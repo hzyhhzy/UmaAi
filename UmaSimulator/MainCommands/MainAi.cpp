@@ -329,7 +329,7 @@ void main_ai()
 			ModelOutputValueV1 trainAvgScore = { -1,-1,-1 };
 			double trainLuckRate = -1;
 
-			if (game.cook_dish == DISH_none)
+			if (game.gameStage == GameStage_beforeTrain)
 			{
 				trainAvgScore = search2.evaluateNewGame(game, rand);
 
@@ -375,20 +375,20 @@ void main_ai()
 					maxMean = v.scoreMean;
 			}
 
-			Action restAction;
-			restAction.dishType = DISH_none;
-			restAction.train = TRA_rest;
-			Action outgoingAction;
-			outgoingAction.dishType = DISH_none;
-			outgoingAction.train = TRA_outgoing;
-			//休息和外出里面分最高的那个。这个数字作为显示参考
-			double restValue = search.allActionResults[restAction.toInt()].lastCalculate.value;
-			double outgoingValue = search.allActionResults[outgoingAction.toInt()].lastCalculate.value;
-			if (outgoingValue > restValue)
-				restValue = outgoingValue;
+			double restValue = 0;
+			if (game.gameStage == GameStage_beforeTrain)
+			{
+				Action restAction = Action(TRA_rest);
+				Action outgoingAction = Action(TRA_outgoing);
+				//休息和外出里面分最高的那个。这个数字作为显示参考
+				double restValue = search.allActionResults[restAction.toInt()].lastCalculate.value;
+				double outgoingValue = search.allActionResults[outgoingAction.toInt()].lastCalculate.value;
+				if (outgoingValue > restValue)
+					restValue = outgoingValue;
+			}
 
 
-			wstring strToSendURA = L"UMAAI_COOK";
+			wstring strToSendURA = L"UMAAI_MECHA";
 			strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
 			if (game.turn == 0 || scoreFirstTurn == 0)
 			{

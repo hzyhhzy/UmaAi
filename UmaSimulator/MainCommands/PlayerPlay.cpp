@@ -185,10 +185,7 @@ void main_playerPlay()
      // auto tdata = search.exportTrainingSample();
 
       Action action;
-      action.dishType = DISH_none;
-      action.train = -1;
-      string dishKeys[14] = { "0","a1","a2","b1","b2","b3","b4","b5","c1","c2","c3","c4","c5","d" };//13种菜对应的键盘输入
-
+      
       string s;
       if (game.isRacing)
       {
@@ -215,25 +212,7 @@ void main_playerPlay()
           endl;
       }
 
-      //显示可以吃的菜
-      if (game.cook_dish == DISH_none)
-      {
-        if (game.isRacing)
-          cout << termcolor::green << "吃菜并比赛：" << termcolor::reset;
-        else
-          cout << termcolor::green << "吃菜：" << termcolor::reset;
-        int legalDishNum = 0;
-        for (int i = 1; i < 14; i++)
-        {
-          if (!game.isDishLegal(i))
-            continue;
-          legalDishNum += 1;
-          cout << termcolor::cyan << dishKeys[i] << termcolor::reset << ":" << Action::dishName[i] << " ";
-        }
-        if (legalDishNum == 0)
-          cout << termcolor::red << "没有可以吃的菜" << termcolor::reset;
-        cout << endl;
-      }
+      todo;
       //显示手写逻辑
       Action handWrittenAction = Evaluator::handWrittenStrategy(game);
       cout << "手写逻辑：" << termcolor::green << handWrittenAction.toString() << termcolor::reset << endl;
@@ -241,18 +220,7 @@ void main_playerPlay()
 
       cin >> s;
 
-      //s是不是吃菜
-      bool isDish = false;
-      for (int i = 1; i < 14; i++)
-      {
-        if (s == dishKeys[i])
-        {
-          action.dishType = i;
-          action.train = TRA_none;
-          isDish = true;
-        }
-      }
-      if (!isDish)
+      if (isTrain)
       {
         action.dishType = 0;
         if (game.isRacing && s == "0")
