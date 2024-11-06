@@ -305,6 +305,23 @@ void main_ai()
 
 			//game.applyAction(rand, Action(DISH_none, TRA_guts));
 			game.print();
+
+			//debug:check every legal move
+			for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
+			{
+				Action ac = Action(i);
+				if (game.isLegal(ac))
+				{
+					cout << ac.toString() << " ";
+					Game g = game;
+					g.applyAction(rand, ac);
+					g.randomDistributeCards(rand);
+				}
+			}
+
+
+
+
 			//game2.print();
 			//game = game2;
 

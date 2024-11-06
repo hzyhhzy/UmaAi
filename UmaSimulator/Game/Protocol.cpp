@@ -129,8 +129,12 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 5; i++) {
       mecha_hasGear[i] = j["mecha_hasGear"][i];
     }
+    mecha_anyLose = false;
+    int UGEcount = turn / 12 - 1;
     for (int i = 0; i < 5; i++) {
       mecha_win_history[i] = j["mecha_win_history"][i];
+      if (i < UGEcount && mecha_win_history[i] != 2)
+        mecha_anyLose = true;
     }
 
 
