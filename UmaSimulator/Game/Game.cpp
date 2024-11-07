@@ -515,6 +515,11 @@ void Game::mecha_distributeEN(int head3, int chest3, int foot3, int otherENType)
     int chestEn = 3 * chest3;
     if (chestEn < 0 || chestEn > 15 || (chestEn > 10 && turn < 59))
       throw "distributeEN illegal input";
+    if (turn >= 59)
+    {
+      mecha_upgrade[1][2] = min(5, chestEn);
+      chestEn -= mecha_upgrade[1][2];
+    }
     while (chestEn > 0)
     {
       int item = turn >= 59 ? rand() % 3 : rand() % 2;
@@ -528,6 +533,11 @@ void Game::mecha_distributeEN(int head3, int chest3, int foot3, int otherENType)
     int footEn = 3 * foot3;
     if (footEn < 0 || footEn > 15 || (footEn > 10 && turn < 59))
       throw "distributeEN illegal input";
+    if (turn >= 59)
+    {
+      mecha_upgrade[2][2] = min(5, footEn);
+      footEn -= mecha_upgrade[2][2];
+    }
     while (footEn > 0)
     {
       int item = turn >= 59 ? rand() % 3 : rand() % 2;

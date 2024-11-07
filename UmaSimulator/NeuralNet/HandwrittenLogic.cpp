@@ -6,8 +6,8 @@
 
 const double statusWeights[5] = { 6,6,6,6,6 };
 const double jibanValue = 3;
-const double vitalFactorStart = 6;
-const double vitalFactorEnd = 10;
+const double vitalFactorStart = 3.5;
+const double vitalFactorEnd = 7;
 const double vitalScaleTraining = 1;
 
 const double reserveStatusFactor = 40;//¿ØÊôĞÔÊ±¸øÃ¿»ØºÏÔ¤Áô¶àÉÙ£¬´Ó0Öğ½¥Ôö¼Óµ½Õâ¸öÊı×Ö
@@ -15,7 +15,12 @@ const double reserveStatusFactor = 40;//¿ØÊôĞÔÊ±¸øÃ¿»ØºÏÔ¤Áô¶àÉÙ£¬´Ó0Öğ½¥Ôö¼Óµ½Õ
 const double smallFailValue = -150;
 const double bigFailValue = -500;
 const double outgoingBonusIfNotFullMotivation = 150;//µôĞÄÇéÊ±Ìá¸ßÍâ³ö·ÖÊı
-const double raceBonus = 150;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
+const double raceBonus = 100;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
+
+const double mechaLvBonusStart = 10;
+const double mechaLvBonusEnd = 5;
+const double mechaLvReserve = 40;
+const double overdriveActivateFactor = 1.5;
 
 
 
@@ -29,6 +34,34 @@ inline double statusSoftFunction(double x, double reserve, double reserveInvX2)/
   return x + 0.5 * reserve;
 }
 
+static double mechaLvEvaluation(const Game& g, int train) //mechaLvÌáÉıÁ¿£¬¿¿½üÉÏÏŞÊ±Ë¥¼õ
+{
+  if (train == -1 || train == TRA_outgoing || train == TRA_rest)return 0;
+
+  int turnsBeforeUGE =
+    g.turn <= 11 ? 12 :
+    g.turn <= 23 ? 23 - g.turn :
+    g.turn <= 35 ? 35 - g.turn :
+    g.turn <= 47 ? 47 - g.turn :
+    g.turn <= 59 ? 59 - g.turn :
+    g.turn <= 71 ? 71 - g.turn :
+    0;
+  double reserve = 1 + mechaLvReserve / 12.0 * turnsBeforeUGE;
+  double reserveInvX2 = 1 / (2 * reserve);
+
+  double value = 0;
+  for (int item = 0; item < 5; item++)
+  {
+    int gain = train < 5 ? g.mecha_lvGain[train][item] : 7;
+    double remain = g.mecha_rivalLvLimit - g.mecha_rivalLv[item];
+    double s0 = statusSoftFunction(-remain, reserve, reserveInvX2);
+    double s1 = statusSoftFunction(gain - remain, reserve, reserveInvX2);
+    value += (s1 - s0);
+  }
+  return value;
+
+}
+
 static void statusGainEvaluation(const Game& g, double* result) { //resultÒÀ´ÎÊÇÎåÖÖÑµÁ·µÄ¹ÀÖµ
   int remainTurn = TOTAL_TURN - g.turn - 1;//Õâ´ÎÑµÁ·ºó»¹ÓĞ¼¸¸öÑµÁ·»ØºÏ
   //uraÆÚ¼äµÄÒ»¸ö»ØºÏÊÓÎªÁ½¸ö»ØºÏ£¬Òò´Ë²»ĞèÒª¶îÍâ´¦Àí
@@ -38,7 +71,7 @@ static void statusGainEvaluation(const Game& g, double* result) { //resultÒÀ´ÎÊÇ
   double reserve = reserveStatusFactor * remainTurn * (1 - double(remainTurn) / (TOTAL_TURN * 2));
   double reserveInvX2 = 1 / (2 * reserve);
 
-  double finalBonus0 = 60;
+  double finalBonus0 = 45;
   finalBonus0 += 30;//ura3ºÍ×îÖÕÊÂ¼ş
   if (remainTurn >= 1)finalBonus0 += 20;//ura2
   if (remainTurn >= 2)finalBonus0 += 20;//ura1
@@ -50,10 +83,15 @@ static void statusGainEvaluation(const Game& g, double* result) { //resultÒÀ´ÎÊÇ
     remain[i] = g.fiveStatusLimit[i] - g.fiveStatus[i] - finalBonus0;
   }
 
-  if (g.friend_type != 0)
+  if (g.friend_type == FriendType_lianghua)
   {
     remain[0] -= 25;
     remain[4] -= 25;
+  }
+  else if (g.friend_type == FriendType_yayoi)
+  {
+    remain[0] -= 25;
+    remain[3] -= 25;
   }
 
 
@@ -109,22 +147,6 @@ static double vitalEvaluation(int vital, int maxVital)
     return vitalEvaluation(maxVital, maxVital);
 }
 
-static double materialEvaluation(int turn, int count) //ÆÀ¹À³Ô²ËµÄ¿ªÏú£¬¾ö¶¨µÚ¶şÈıÄê³Ô²»³Ô²Ë
-{
-  double bias =
-    turn < 48 ? 100 :
-    turn < 60 ? 100 :
-    turn < 68 ? 60 :
-    10;
-
-  double scale =
-    turn < 48 ? 20 :
-    turn < 60 ? 30 :
-    turn < 68 ? 40 :
-    40;
-
-  return sqrt(count + bias) * scale;
-}
 
 static Action getMechaUpgradeAdvise(int turn, int en)
 {
@@ -184,9 +206,9 @@ static Action getMechaUpgradeAdvise(int turn, int en)
   }
   else if (turn == 47)
   {
-    if (en >= 24)//233
+    if (en >= 24)//530
     {
-      action.mechaHead = 2;
+      action.mechaHead = 5;
       action.mechaChest = 3;
     }
     else if (en >= 21)
@@ -314,6 +336,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   int maxVitalEquvalant = calculateMaxVitalEquvalant(game);
   double vitalEvalBeforeTrain = vitalEvaluation(std::min(maxVitalEquvalant, int(game.vital)), game.maxVital);
 
+  double mechaLvFactor = mechaLvBonusStart + (game.turn / double(TOTAL_TURN)) * (mechaLvBonusEnd - mechaLvBonusStart);
 
   //Íâ³ö/ĞİÏ¢
   {
@@ -353,6 +376,8 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     int vitalAfterRace = std::min(maxVitalEquvalant, -15 + game.vital);
     value += vitalFactor * (vitalEvaluation(vitalAfterRace, game.maxVital) - vitalEvalBeforeTrain);
 
+    double mechaLvValue = mechaLvEvaluation(game, TRA_race);
+    value += mechaLvValue;
 
     if (PrintHandwrittenLogicValueForDebug)
       std::cout << raceAction.toString() << " " << value << std::endl;
@@ -366,9 +391,9 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
   //ÑµÁ·
 
+  double statusGainE[5];
   //ÏÈÕÒµ½×îºÃµÄÑµÁ·£¬È»ºó¼ÆËãÒª²»Òª³Ô²Ë
   {
-    double statusGainE[5];
     statusGainEvaluation(game, statusGainE);
 
 
@@ -435,6 +460,9 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
       }
 
+      double mechaLvValue = mechaLvEvaluation(game, tra);
+      value += mechaLvValue;
+
 
       //ÀíÂÛÉÏ£¬¹ÀÖµĞèÒª³ËÉÏ²ËµÄÑµÁ·¼Ó³ÉÈ»ºó¼õÈ¥²ËµÄ¿ªÏú£¬µ«¹ıÓÚ¸´ÔÓ£¬ÀÁµÃ¿¼ÂÇÁË
       int vitalAfterTrain = std::min(maxVitalEquvalant, game.trainVitalChange[tra] + game.vital);
@@ -461,28 +489,49 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         value = 0.01 * failRate * failValueAvg + (1 - 0.01 * failRate) * value;
       }
 
-      Action action;
-      action.type = GameStage_beforeTrain;
-      if (overdriveAvailable)//¿ªÆôoverdrive
-      {
-        action.overdrive = true;
-        action.train = tra;
-        if (game.mecha_upgradeTotal[1] >= 15)
-          action.train = TRA_none;
-      }
-      else
-      {
-        action.overdrive = false;
-        action.train = tra;
-      }
+
 
       if (value > bestValue)
       {
         bestValue = value;
+
+
+        Action action;
+        action.type = GameStage_beforeTrain;
+        action.overdrive = false;
+        action.train = tra;
+
+        //ÊÇ·ñoverdrive
+        if (overdriveAvailable)
+        {
+          if (game.mecha_overdrive_energy >= 6 ||
+            (game.mecha_overdrive_energy >= 5 && game.turn < 71 && game.isRacingTurn[game.turn + 1]))
+            action.overdrive = true;
+          if(game.turn >= 69)
+            action.overdrive = true;
+          double overdriveBound =
+            game.turn <= 11 ? 0 :
+            game.turn <= 23 ? 50 :
+            game.turn <= 35 ? 300 :
+            game.turn <= 47 ? 350 :
+            game.turn <= 59 ? 400 :
+            game.turn <= 71 ? 400 :
+            0;
+          overdriveBound *= overdriveActivateFactor;
+          if (statusGainE[tra] >= overdriveBound)
+            action.overdrive = true;
+        }
+
+        if (action.overdrive)
+        {
+          if (game.mecha_upgradeTotal[1] >= 15)
+            action.train = TRA_none;
+        }
+
         bestAction = action;
       }
-      if (PrintHandwrittenLogicValueForDebug)
-        std::cout << action.toString() << " " << value << std::endl;
+      //if (PrintHandwrittenLogicValueForDebug)
+      //  std::cout << action.toString() << " " << value << std::endl;
     }
 
 
