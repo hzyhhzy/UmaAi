@@ -30,7 +30,9 @@ void Evaluator::evaluateSelf(int mode, const SearchParam& param)
     {
       for (int i = 0; i < maxBatchsize; i++)
       {
+        //gameInput[i].print();
         actionResults[i] = handWrittenStrategy(gameInput[i]);
+        //std::cout<<actionResults[i].toString()<<std::endl;
       }
     }
   }

@@ -4,10 +4,10 @@
 #include "../Search/Search.h"
 
 
-const double statusWeights[5] = { 5,5,7,6,6 };
-const double jibanValue = 3.5;
-const double vitalFactorStart = 2;
-const double vitalFactorEnd = 4;
+const double statusWeights[5] = { 6,6,6,6,6 };
+const double jibanValue = 3;
+const double vitalFactorStart = 6;
+const double vitalFactorEnd = 10;
 const double vitalScaleTraining = 1;
 
 const double reserveStatusFactor = 40;//控属性时给每回合预留多少，从0逐渐增加到这个数字
@@ -126,95 +126,182 @@ static double materialEvaluation(int turn, int count) //评估吃菜的开销，决定第二
   return sqrt(count + bias) * scale;
 }
 
+static Action getMechaUpgradeAdvise(int turn, int en)
+{
+  Action action;
+  action.type = GameStage_beforeMechaUpgrade;
+  action.train = -1;
+  action.overdrive = false;
+  if (turn == 1)
+  {
+    if (en >= 6)//101
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 0;
+    }
+    else if (en >= 3)
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 0;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 23)
+  {
+    if (en >= 12)//022
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 2;
+    }
+    else if (en >= 9)
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 2;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 35)
+  {
+    if (en >= 18)//222
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 2;
+    }
+    else if (en >= 15)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 2;
+    }
+    else if (en >= 12)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 2;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 47)
+  {
+    if (en >= 24)//233
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 3;
+    }
+    else if (en >= 21)
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 2;
+    }
+    else if (en >= 18)
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 2;
+    }
+    else if (en >= 15)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 2;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 59)
+  {
+    if (en >= 30)//055
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 5;
+    }
+    else if (en >= 27)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 3;
+    }
+    else if (en >= 24)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 2;
+    }
+    else if (en >= 21)
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 2;
+    }
+    else if (en >= 18)
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 2;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 71)
+  {
+    if (en >= 36)//255
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 5;
+    }
+    else if (en >= 33)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 5;
+    }
+    else if (en >= 30)
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 5;
+    }
+    else if (en >= 27)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 3;
+    }
+    else if (en >= 24)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 2;
+    }
+    else if (en >= 21)
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 2;
+    }
+    else if (en >= 18)
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 2;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else
+    throw "this turn should not upgrade mecha";
+  return action;
+
+}
+
+
 
 Action Evaluator::handWrittenStrategy(const Game& game)
 {
-  throw "todo";
-  /*
   Action bestAction;
-  bestAction.train = TRA_none;
-
   if (game.isEnd())return bestAction;
+  if (game.gameStage == GameStage_beforeMechaUpgrade)
+    return getMechaUpgradeAdvise(game.turn, game.mecha_EN);
+
+  bestAction.type = GameStage_beforeTrain;
+
   //比赛
   if (game.isRacing)
   {
-    if (game.turn < 72)//常规比赛不吃菜
-    {
-      bestAction.train = TRA_race;
-      return bestAction;
-    }
-    if (game.turn == TOTAL_TURN - 1)//ura最后一回合，能吃什么就吃什么
-    {
-      //从后往前挨个试
-      for (int i = DISH_g1plate; i >= 1; i--)
-      {
-        bestAction.dishType = i;
-        if (game.isLegal(bestAction))return bestAction;
-      }
-      //什么都吃不了
-      bestAction.dishType = DISH_none;
-      bestAction.train = TRA_race;
-      return bestAction;
-    }
-
-
-    //ura1和ura2，算一下能不能吃g1plate
-    int g1plateCost = game.cook_win_history[4] == 2 ? 80 : 100;
-
-    bool haveG1Plate = true;
-    for (int matType = 0; matType < 5; matType++)
-    {
-      int matGain = 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]] / 2;
-      if (matType == game.cook_main_race_material_type)
-        matGain += 1.5001 * GameConstants::Cook_HarvestExtra[game.cook_farm_level[matType]];
-      int reserveMin = game.turn == 73 ?
-        2 * g1plateCost + 80 - 3 * 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]] / 2 :
-        2 * g1plateCost;//要保证后续的训练回合一直可以吃到g1plate
-      if (game.cook_material[matType] < g1plateCost || game.cook_material[matType] + matGain < reserveMin)
-      {
-        haveG1Plate = false;
-        break;
-      }
-    }
-    if (haveG1Plate)
-    {
-      bestAction.dishType = DISH_g1plate;
-      return bestAction;
-    }
-    else
-    {
-      //吃了下回合训练没法吃了
-      bestAction.train = TRA_race;
-      return bestAction;
-    }
+    bestAction.train = TRA_race;
+    return bestAction;
   }
-
-  //ura期间如果能吃G1Plate就直接吃，否则不吃
-  if (game.turn >= 72 && game.cook_dish==DISH_none)
-  {
-    if (game.isDishLegal(DISH_g1plate))
-    {
-      bestAction.dishType = DISH_g1plate;
-      return bestAction;
-    }
-    //否则是吃过了或者吃不了，寻找最优训练
-  }
-
-
-  //常规训练回合
   
-  //如果吃了2级3级菜，直接选择对应训练
-  if (game.cook_dish != DISH_none)
-  {
-    int dishLevel = GameConstants::Cook_DishLevel[game.cook_dish];
-    if (dishLevel == 2 || dishLevel == 3)
-    {
-      int tra = GameConstants::Cook_DishMainTraining[game.cook_dish];
-      bestAction.dishType = DISH_none;
-      bestAction.train = tra;
-      return bestAction;
-    }
-  }
+
 
 
 
@@ -227,14 +314,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   int maxVitalEquvalant = calculateMaxVitalEquvalant(game);
   double vitalEvalBeforeTrain = vitalEvaluation(std::min(maxVitalEquvalant, int(game.vital)), game.maxVital);
 
-  double greenBonus =
-    game.turn < 24 ? greenBonusBasicYear1 :
-    game.turn < 48 ? greenBonusBasicYear2 :
-    greenBonusBasicYear3;
-  //羁绊没满时降低绿色料理加成
-  for (int i = 0; i < 6; i++)
-    if (game.persons[i].friendship < 80)
-      greenBonus *= 0.85;
 
   //外出/休息
   {
@@ -244,7 +323,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       game.friend_outgoingUsed < 5 &&
       (!game.isXiahesu());
     Action action;
-    action.dishType = DISH_none;
+    action.type = GameStage_beforeTrain;
     action.train = TRA_rest;
     if (isFriendOutgoingAvailable || game.isXiahesu())action.train = TRA_outgoing;//有友人外出优先外出，否则休息
 
@@ -254,11 +333,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     int vitalAfterRest = std::min(maxVitalEquvalant, vitalGain + game.vital);
     double value = vitalFactor * (vitalEvaluation(vitalAfterRest, game.maxVital) - vitalEvalBeforeTrain);
     if (addMotivation)value += outgoingBonusIfNotFullMotivation;
-
-    bool isGreen = game.cook_train_green[action.train];
-    if (isFriendOutgoingAvailable && action.train == TRA_outgoing)
-      isGreen = true;
-    if (isGreen)value += greenBonus;
 
     if (PrintHandwrittenLogicValueForDebug)
       std::cout << action.toString() << " " << value << std::endl;
@@ -270,7 +344,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   }
   //比赛
   Action raceAction;
-  raceAction.dishType = DISH_none;
   raceAction.train = TRA_race;
   if(game.isLegal(raceAction))
   {
@@ -280,8 +353,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     int vitalAfterRace = std::min(maxVitalEquvalant, -15 + game.vital);
     value += vitalFactor * (vitalEvaluation(vitalAfterRace, game.maxVital) - vitalEvalBeforeTrain);
 
-    if (game.cook_train_green[TRA_race])
-      value += greenBonus;
 
     if (PrintHandwrittenLogicValueForDebug)
       std::cout << raceAction.toString() << " " << value << std::endl;
@@ -324,7 +395,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         if (pi < 0)break;//没人
         if (pi >= 6)continue;//不是卡
         const Person& p = game.persons[pi];
-        if (p.personType == PersonType_scenarioCard)//友人卡
+        if (p.personType == PersonType_friendCard)//友人卡
         {
           haveFriend = true;
           if (game.friend_stage == FriendStage_notClicked)
@@ -364,72 +435,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
       }
 
-      int bestDish = 0;
-      //考虑吃各种菜
-      //第一年：自己相应训练只有一种菜
-      //第二年：只考虑lv2菜
-      //第三年：lv2和lv3都考虑
-      //ura：大概率已经吃过g1plate了，这里不考虑吃菜
-      if (game.cook_dish == DISH_none)
-      {
-        if (game.turn < 24)//第一年
-        {
-          if (game.cook_dish_pt < 3000)//吃到2500pt
-          {
-            if (tra == 0)
-            {
-              if (game.isDishLegal(DISH_curry))
-                bestDish = DISH_curry;
-              else if (game.isDishLegal(DISH_sandwich))
-                bestDish = DISH_sandwich;
-            }
-            else if (tra == 1 || tra == 3)
-            {
-              if (game.isDishLegal(DISH_curry))
-                bestDish = DISH_curry;
-            }
-            else if (tra == 2 || tra == 4)
-            {
-              if (game.isDishLegal(DISH_sandwich))
-                bestDish = DISH_sandwich;
-            }
-          }
-        }
-        else if (game.turn < 72)//第二三年
-        {
-          int dish1 = DISH_speed1 + tra;
-          int dish2 = DISH_speed2 + tra;
-          assert(GameConstants::Cook_DishMainTraining[dish1] == tra);
-          assert(GameConstants::Cook_DishMainTraining[dish2] == tra);
-
-          if (game.isDishLegal(dish1))
-          {
-            int mat0 = game.cook_material[tra];
-            assert(mat0 >= 150);
-            double matEval0 = materialEvaluation(game.turn, mat0);
-            double matEval1 = materialEvaluation(game.turn, mat0 - 150);
-            double matEval2 = (game.turn >= 48 && mat0 >= 250) ? materialEvaluation(game.turn, mat0 - 250) : -99999;
-            double trValue = statusGainE[tra];
-
-            double gain1 = trValue * cookingThreholdFactorLv2 - matEval0 + matEval1;
-            double gain2 = trValue * cookingThreholdFactorLv3 - matEval0 + matEval2;
-            //std::cout << game.turn << " " << gain1 << std::endl;
-
-
-            if (gain1 > 0)
-            {
-              bestDish = dish1;
-            }
-
-            if (gain2 > 0 && gain2 > gain1)
-            {
-              bestDish = dish2;
-            }
-
-          }
-          
-        } 
-      }
 
       //理论上，估值需要乘上菜的训练加成然后减去菜的开销，但过于复杂，懒得考虑了
       int vitalAfterTrain = std::min(maxVitalEquvalant, game.trainVitalChange[tra] + game.vital);
@@ -438,15 +443,11 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       //到目前为止都是训练成功的value
       //计算吃菜之后的体力，重新计算失败率
       double failRate = game.failRate[tra];
-      if (bestDish != 0 && failRate > 0)
+      bool overdriveAvailable = !game.mecha_overdrive_enabled && game.mecha_overdrive_energy >= 3;
+      if (overdriveAvailable && game.mecha_upgradeTotal[2] >= 12 && failRate > 0)
       {
-        int dishLevel = GameConstants::Cook_DishLevel[bestDish];
-        int dishMainTraining = GameConstants::Cook_DishMainTraining[bestDish];
-        int vitalGainDish = dishLevel==1?0:
-          dishLevel == 2 ? (game.cook_farm_level[dishMainTraining] >= 3 ? 5 : 0):
-          dishLevel == 3 ? (game.cook_farm_level[dishMainTraining] >= 3 ? 20 : 15): //假设一半大成功加体力
-          25;
-        failRate -= 1.7 * vitalGainDish;//粗糙估计
+        int vitalGain = 15;
+        failRate -= 1.7 * vitalGain;//粗糙估计
         if (failRate < 0)failRate = 0;
       }
 
@@ -461,14 +462,17 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       }
 
       Action action;
-      if (bestDish != DISH_none)//先吃菜，下一次再训练
+      action.type = GameStage_beforeTrain;
+      if (overdriveAvailable)//开启overdrive
       {
-        action.dishType = bestDish;
-        action.train = TRA_none;
+        action.overdrive = true;
+        action.train = tra;
+        if (game.mecha_upgradeTotal[1] >= 15)
+          action.train = TRA_none;
       }
       else
       {
-        action.dishType = DISH_none;
+        action.overdrive = false;
         action.train = tra;
       }
 
@@ -484,6 +488,5 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
   }
   return bestAction;
-  */
 }
 

@@ -488,6 +488,7 @@ void Game::mecha_addRivalLv(int idx, int value)
 
   if (t > mecha_rivalLvLimit)
     t = mecha_rivalLvLimit;
+  mecha_rivalLv[idx] = t;
 }
 void Game::mecha_distributeEN(int head3, int chest3, int foot3, int otherENType)
 {
@@ -561,7 +562,7 @@ bool Game::mecha_maybeRunUGE()
   if (turn != 1 && turn != 23 && turn != 35 && turn != 47 && turn != 59 && turn != 71)
     return false;
   gameStage = GameStage_beforeMechaUpgrade;
-  if (turn != 1)return true;
+  if (turn == 1)return true;
 
   //check lv requirement
 
@@ -1867,12 +1868,12 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
     if (allWin)
     {
       skillPt += 40;//¾ç±¾½ð
-      addAllStatus(60);
-      skillPt += 150;
+      addAllStatus(45);
+      skillPt += 175;
     }
     else 
     {
-      addAllStatus(25);
+      addAllStatus(40);
       //there should be something, but not important
     }
 
