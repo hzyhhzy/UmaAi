@@ -173,13 +173,13 @@ static Action getMechaUpgradeAdvise(int turn, int en)
   {
     if (en >= 12)//022
     {
-      action.mechaHead = 0;
-      action.mechaChest = 2;
+      action.mechaHead = 2;
+      action.mechaChest = 0;
     }
     else if (en >= 9)
     {
-      action.mechaHead = 0;
-      action.mechaChest = 2;
+      action.mechaHead = 2;
+      action.mechaChest = 0;
     }
     else
       throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
@@ -188,17 +188,17 @@ static Action getMechaUpgradeAdvise(int turn, int en)
   {
     if (en >= 18)//222
     {
-      action.mechaHead = 2;
-      action.mechaChest = 2;
+      action.mechaHead = 5;
+      action.mechaChest = 1;
     }
     else if (en >= 15)
     {
-      action.mechaHead = 1;
+      action.mechaHead = 3;
       action.mechaChest = 2;
     }
     else if (en >= 12)
     {
-      action.mechaHead = 1;
+      action.mechaHead = 2;
       action.mechaChest = 2;
     }
     else
@@ -213,18 +213,18 @@ static Action getMechaUpgradeAdvise(int turn, int en)
     }
     else if (en >= 21)
     {
-      action.mechaHead = 2;
+      action.mechaHead = 5;
       action.mechaChest = 2;
     }
     else if (en >= 18)
     {
-      action.mechaHead = 2;
-      action.mechaChest = 2;
+      action.mechaHead = 5;
+      action.mechaChest = 5;
     }
     else if (en >= 15)
     {
-      action.mechaHead = 1;
-      action.mechaChest = 2;
+      action.mechaHead = 5;
+      action.mechaChest = 0;
     }
     else
       throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";

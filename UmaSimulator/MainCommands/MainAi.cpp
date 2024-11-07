@@ -286,7 +286,7 @@ void main_ai()
 		};
 
 		//search.runSearch(game, GameConfig::searchN, TOTAL_TURN, 0, rand);
-		if (game.turn < TOTAL_TURN )
+		if (game.turn < TOTAL_TURN)
 		{
 
 			//备份回合信息用于debug
@@ -303,21 +303,21 @@ void main_ai()
 				cout << "保存回合信息失败" << endl;
 			}
 
-			//game.applyAction(rand, Action(DISH_none, TRA_guts));
+			//game.applyAction(rand, Action(3));
 			game.print();
 
 			//debug:check every legal move
-			for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
-			{
-				Action ac = Action(i);
-				if (game.isLegal(ac))
-				{
-					cout << ac.toString() << " ";
-					Game g = game;
-					g.applyAction(rand, ac);
-					g.randomDistributeCards(rand);
-				}
-			}
+			//for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
+			//{
+			//	Action ac = Action(i);
+			//	if (game.isLegal(ac))
+			//	{
+			//		cout << ac.toString() << " ";
+			//		Game g = game;
+			//		g.applyAction(rand, ac);
+			//		g.randomDistributeCards(rand);
+			//	}
+			//}
 
 
 
@@ -326,7 +326,7 @@ void main_ai()
 			//game = game2;
 
 
-			/*
+			
 			evaSingle.gameInput[0] = game;
 			evaSingle.evaluateSelf(1, searchParam);
 			Action hl = evaSingle.actionResults[0];
@@ -395,7 +395,7 @@ void main_ai()
 				Action restAction = Action(TRA_rest);
 				Action outgoingAction = Action(TRA_outgoing);
 				//休息和外出里面分最高的那个。这个数字作为显示参考
-				double restValue = search.allActionResults[restAction.toInt()].lastCalculate.value;
+				restValue = search.allActionResults[restAction.toInt()].lastCalculate.value;
 				double outgoingValue = search.allActionResults[outgoingAction.toInt()].lastCalculate.value;
 				if (outgoingValue > restValue)
 					restValue = outgoingValue;
@@ -431,25 +431,64 @@ void main_ai()
 			cout.flush();
 			scoreLastTurn = maxMean;
 
-
-			string prefix[Action::MAX_ACTION_TYPE] = { "速:", "耐:", "力:", "根:", "智:", "| 休息: ", "外出: ", "比赛: " };
-
-			for (int tr = 0; tr < 8; tr++)
+			if (game.gameStage == GameStage_beforeTrain)
 			{
-				Action a;
-				a.train = tr;
-				double value = search.allActionResults[a.toInt()].lastCalculate.value;
-				strToSendURA += L" " + to_wstring(tr) + L" " + to_wstring(value - restValue) + L" " + to_wstring(maxValue - restValue);
-				cout << prefix[tr];
-				printValue(value - restValue, maxValue - restValue);
-				//cout << "(" << search.allActionResults[a.toInt()].num << ")";
-				//cout << "(±" << 2 * int(Search::expectedSearchStdev / sqrt(search.allActionResults[a.toInt()].num)) << ")";
-				if (tr == TRA_race && game.isLegal(a))
+				string prefix[8] = { "速:", "耐:", "力:", "根:", "智:", "| 休息: ", "外出: ", "比赛: " };
+
+				for (int tr = 0; tr < 8; tr++)
 				{
-					cout << "(比赛亏损:\033[1;36m" << maxValue - value << "\033[0m）";
+					Action a(tr);
+					double value = search.allActionResults[a.toInt()].lastCalculate.value;
+					strToSendURA += L" " + to_wstring(tr) + L" " + to_wstring(value - restValue) + L" " + to_wstring(maxValue - restValue);
+					cout << prefix[tr];
+					printValue(value - restValue, maxValue - restValue);
+					//cout << "(" << search.allActionResults[a.toInt()].num << ")";
+					//cout << "(±" << 2 * int(Search::expectedSearchStdev / sqrt(search.allActionResults[a.toInt()].num)) << ")";
+					if (tr == TRA_race && game.isLegal(a))
+					{
+						cout << "(比赛亏损:\033[1;36m" << maxValue - value << "\033[0m）";
+					}
+				}
+				cout << endl;
+				if (!game.mecha_overdrive_enabled && game.mecha_overdrive_energy >= 3)
+				{
+					Action a(0);
+					a.overdrive = true;
+					if (game.mecha_upgradeTotal[1] >= 15)
+					{
+						a.train = -1;
+						double value = search.allActionResults[a.toInt()].lastCalculate.value;
+						cout << "开启齿轮：";
+						printValue(value - restValue, maxValue - restValue);
+					}
+					else
+					{
+						cout << "开启齿轮：";
+						for (int tr = 0; tr < 5; tr++)
+						{
+							a.train = tr;
+							double value = search.allActionResults[a.toInt()].lastCalculate.value;
+							cout << prefix[tr];
+							printValue(value - restValue, maxValue - restValue);
+						}
+					}
+					cout << endl;
 				}
 			}
-			cout << endl;
+			else if (game.gameStage == GameStage_beforeMechaUpgrade)
+			{
+				cout << "\033[1;31mUmaAI只考虑头胸腿分别多少级，不考虑具体分到哪项，且非整3级的剩余EN也不考虑，请自己决定。\033[0m" << endl;
+				for (int u = 0; u < 36; u++)
+				{
+					Action a(u + 14);
+					if (!game.isLegal(a))continue;
+					cout << "头" + std::to_string(3 * a.mechaHead) + "级胸" + std::to_string(3 * a.mechaChest) + "级腿" + std::to_string(3 * (game.mecha_EN / 3 - a.mechaChest - a.mechaHead)) + "级: ";
+
+					double value = search.allActionResults[a.toInt()].lastCalculate.value;
+					printValue(value - restValue, maxValue - restValue);
+					cout << endl;
+				}
+			}
 
 			cout << endl;
 
@@ -460,7 +499,7 @@ void main_ai()
 				wstring s = L"{\"CommandType\":1,\"Command\":\"PrintUmaAiResult\",\"Parameters\":[\"" + strToSendURA + L"\"]}";
 				//ws.send(s);
 			}
-			*/
+			
 
 		}
 

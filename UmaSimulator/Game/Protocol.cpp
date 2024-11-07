@@ -62,6 +62,10 @@ bool Game::loadGameFromJson(std::string jsonStr)
     for (int i = 0; i < 5; i++) {
       trainLevelCount[i] = j["trainLevelCount"][i];
     }
+    if (gameStage==GameStage_beforeMechaUpgrade && (turn == 23 || turn == 47 || turn == 71))
+      for (int i = 0; i < 5; i++) {
+        addTrainingLevelCount(i, 4);
+      }
 
     failureRateBias = j["failureRateBias"];
     isQieZhe = j["isQieZhe"];
@@ -120,7 +124,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
     }
     mecha_overdrive_energy = j["mecha_overdrive_energy"];
     mecha_overdrive_enabled = j["mecha_overdrive_enabled"];
-    mecha_EN = j["mecha_EN"]; //包括已经花费了的EN
+    if (turn >= 2 || gameStage == GameStage_beforeMechaUpgrade)
+      mecha_EN = j["mecha_EN"]; //包括已经花费了的EN
     for (int i = 0; i < 3; i++) {
       for (int t = 0; t < 3; t++) {
         mecha_upgrade[i][t] = j["mecha_upgrade"][i][t];
@@ -131,6 +136,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     }
     mecha_anyLose = false;
     int UGEcount = turn / 12 - 1;
+    if (gameStage == GameStage_beforeMechaUpgrade)UGEcount += 1;
     for (int i = 0; i < 5; i++) {
       mecha_win_history[i] = j["mecha_win_history"][i];
       if (i < UGEcount && mecha_win_history[i] != 2)

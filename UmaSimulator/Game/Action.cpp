@@ -88,7 +88,7 @@ int Action::toInt() const
     return overdrive ? (train == -1 ? 5 + 8 : train + 8) : train;
   }
   //2 升级回合。只考虑整3级，action里只包括头和胸（脚=总-头-胸），选项个数为6*6=36
-  else if (type == 3)
+  else if (type == 2)
   {
     return 14 + 6 * mechaHead + mechaChest;
   }
@@ -108,7 +108,7 @@ std::string Action::toString() const
   //2 升级回合。只考虑整3级，action里只包括头和胸（脚=总-头-胸），选项个数为6*6=36
   else if (type == 2)
   {
-    return "头" + std::to_string(mechaHead) + "级胸" + std::to_string(mechaChest) + "级";
+    return "头" + std::to_string(3 * mechaHead) + "级胸" + std::to_string(3 * mechaChest) + "级";
   }
   else
     throw "Action::toString(): Unknown Action";
