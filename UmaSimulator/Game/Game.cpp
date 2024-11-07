@@ -491,6 +491,69 @@ void Game::mecha_addRivalLv(int idx, int value)
 }
 void Game::mecha_distributeEN(int head3, int chest3, int foot3, int otherENType)
 {
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      mecha_upgrade[i][j] = 0;
+
+  //暂时先随机分配
+  if (otherENType == 1)
+  {
+    int headEn = 3 * head3;
+    if (headEn < 0 || headEn>15 || (headEn > 10 && turn < 35))
+      throw "distributeEN illegal input";
+    while (headEn > 0)
+    {
+      int item = turn >= 35 ? rand() % 3 : rand() % 2;
+      if (mecha_upgrade[0][item] < 5)
+      {
+        mecha_upgrade[0][item] += 1;
+        headEn -= 1;
+      }
+    }
+
+    int chestEn = 3 * chest3;
+    if (chestEn < 0 || chestEn > 15 || (chestEn > 10 && turn < 59))
+      throw "distributeEN illegal input";
+    while (chestEn > 0)
+    {
+      int item = turn >= 59 ? rand() % 3 : rand() % 2;
+      if (mecha_upgrade[1][item] < 5)
+      {
+        mecha_upgrade[1][item] += 1;
+        chestEn -= 1;
+      }
+    }
+
+    int footEn = 3 * foot3;
+    if (footEn < 0 || footEn > 15 || (footEn > 10 && turn < 59))
+      throw "distributeEN illegal input";
+    while (footEn > 0)
+    {
+      int item = turn >= 59 ? rand() % 3 : rand() % 2;
+      if (mecha_upgrade[2][item] < 5)
+      {
+        mecha_upgrade[2][item] += 1;
+        footEn -= 1;
+      }
+    }
+
+    int otherEn = mecha_EN - 3 * (head3 + chest3 + foot3);
+    if (otherEn < 0 || otherEn >= 3)
+      throw "distributeEN illegal input";
+    while (otherEn > 0)
+    {
+      int type = rand() % 3;
+      int item = turn >= 35 ? rand() % 3 : rand() % 2;
+      if (mecha_upgrade[type][item] < 5)
+      {
+        mecha_upgrade[type][item] += 1;
+        otherEn -= 1;
+      }
+    }
+  }
+  else 
+    throw "todo";
+
   //throw "todo";
 }
 bool Game::mecha_maybeRunUGE()
@@ -1265,9 +1328,9 @@ bool Game::isLegal(Action action) const
   else if (action.type == GameStage_beforeMechaUpgrade)
   {
     int total3 = mecha_EN / 3;
-    int mechaHeadLimit = turn >= 36 ? 5 : 3;//第二次UGE解锁头3号升级
-    int mechaChestLimit = turn >= 60 ? 5 : 3;//第四次UGE解锁胸3号升级
-    int mechaFootLimit = turn >= 60 ? 5 : 3;//第四次UGE解锁腿3号升级
+    int mechaHeadLimit = turn >= 35 ? 5 : 3;//第二次UGE解锁头3号升级
+    int mechaChestLimit = turn >= 59 ? 5 : 3;//第四次UGE解锁胸3号升级
+    int mechaFootLimit = turn >= 59 ? 5 : 3;//第四次UGE解锁腿3号升级
     int mechaFoot = total3 - action.mechaHead - action.mechaChest;
     if (action.mechaHead < 0 || action.mechaHead > mechaHeadLimit)return false;
     if (action.mechaChest < 0 || action.mechaChest > mechaChestLimit)return false;
