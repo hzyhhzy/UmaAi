@@ -5,49 +5,40 @@
 #include "../config.h"
 
 const int TOTAL_TURN = 78;
-const int MAX_INFO_PERSON_NUM = 6;//ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¾ç±¾Ö»ï¿½ï¿½Ö§Ô®ï¿½ï¿½ï¿½ï¿½
+const int MAX_INFO_PERSON_NUM = 6;//ÓÐµ¥¶ÀÐÅÏ¢µÄÈËÍ·¸öÊý£¨´Ë¾ç±¾Ö»ÓÐÖ§Ô®¿¨£©
 
 class GameConstants
 {
 public:
-  //Referenceï¿½ï¿½https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
-  static const int TrainingBasicValue[5][5][7]; //TrainingBasicValue[ï¿½ï¿½É«][ï¿½Ú¼ï¿½ï¿½ï¿½Ñµï¿½ï¿½][LVï¿½ï¿½][ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ptï¿½ï¿½ï¿½ï¿½]
-  static const int FailRateBasic[5][5];//[ï¿½Ú¼ï¿½ï¿½ï¿½Ñµï¿½ï¿½][LVï¿½ï¿½]ï¿½ï¿½Ê§ï¿½ï¿½ï¿½ï¿½= 0.025*(x0-x)^2 + 1.25*(x0-x)
-  static const int BasicFiveStatusLimit[5];//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Þ£ï¿½1200ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½
+  //Reference£ºhttps://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
+  static const int TrainingBasicValue[5][5][7]; //TrainingBasicValue[ÑÕÉ«][µÚ¼¸ÖÖÑµÁ·][LV¼¸][ËÙÄÍÁ¦¸ùÖÇptÌåÁ¦]
+  static const int FailRateBasic[5][5];//[µÚ¼¸ÖÖÑµÁ·][LV¼¸]£¬Ê§°ÜÂÊ= 0.025*(x0-x)^2 + 1.25*(x0-x)
+  static const int BasicFiveStatusLimit[5];//³õÊ¼ÉÏÏÞ£¬1200ÒÔÉÏ·­±¶
 
-  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
-  //static const int NormalRaceFiveStatusBonus;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼Ó³ï¿½=3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â´¦ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½Ë¹ï¿½È£ï¿½
-  //static const int NormalRacePtBonus;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ptï¿½Ó³ï¿½
-  static const double EventProb;//Ã¿ï¿½Øºï¿½ï¿½ï¿½EventProbï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½pt +EventStrengthDefaultï¿½ï¿½Ä£ï¿½ï¿½Ö§Ô®ï¿½ï¿½ï¿½Â¼ï¿½
+  //¸÷ÖÖÓÎÏ·²ÎÊý
+  //static const int NormalRaceFiveStatusBonus;//³£¹æ±ÈÈüÊôÐÔ¼Ó³É=3£¬ÌØÊâÂíÄïÌØÊâ´¦Àí£¨µÒ¶ÅË¹µÈ£©
+  //static const int NormalRacePtBonus;//³£¹æ±ÈÈüpt¼Ó³É
+  static const double EventProb;//Ã¿»ØºÏÓÐEventProb¸ÅÂÊËæ»úÒ»¸öÊôÐÔÒÔ¼°pt +EventStrengthDefault£¬Ä£ÄâÖ§Ô®¿¨ÊÂ¼þ
   static const int EventStrengthDefault;
 
-  //ï¿½ç±¾ï¿½ï¿½ï¿½ï¿½ï¿½
-  static const int FriendCardYayoiSSRId = 30207;//SSRï¿½ï´¨
-  static const int FriendCardYayoiRId = 10109;//Rï¿½ï´¨
-  static const int FriendCardLianghuaSSRId = 30188;//SSRï¿½ï¿½ï¿½ï¿½
-  static const int FriendCardLianghuaRId = 10104;//Rï¿½ï¿½ï¿½ï¿½
-  static const double FriendUnlockOutgoingProbEveryTurnLowFriendship;//Ã¿ï¿½ØºÏ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½Ê£ï¿½î¿°ï¿½Ð¡ï¿½ï¿½60
-  static const double FriendUnlockOutgoingProbEveryTurnHighFriendship;//Ã¿ï¿½ØºÏ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½Ê£ï¿½î¿°ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½60
-  //static const double FriendEventProb;//ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½//ï¿½ï¿½ï¿½ï¿½0.4Ð´ï¿½ï¿½ï¿½Ú¶ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  //¾ç±¾¿¨Ïà¹Ø
+  static const int FriendCardYayoiSSRId = 30207;//SSRÇï´¨
+  static const int FriendCardYayoiRId = 10109;//RÇï´¨
+  static const int FriendCardLianghuaSSRId = 30188;//SSRÁ¹»¨
+  static const int FriendCardLianghuaRId = 10104;//RÁ¹»¨
+  static const double FriendUnlockOutgoingProbEveryTurnLowFriendship;//Ã¿»ØºÏ½âËøÍâ³öµÄ¸ÅÂÊ£¬î¿°íÐ¡ÓÚ60
+  static const double FriendUnlockOutgoingProbEveryTurnHighFriendship;//Ã¿»ØºÏ½âËøÍâ³öµÄ¸ÅÂÊ£¬î¿°í´óÓÚµÈÓÚ60
+  //static const double FriendEventProb;//ÓÑÈËÊÂ¼þ¸ÅÂÊ//³£Êý0.4Ð´ËÀÔÚ¶ÔÓ¦º¯ÊýÀïÁË
   
 
-  //ï¿½ç±¾ï¿½ï¿½ï¿½
-  static const std::vector<int> Mecha_LinkCharas;// Linkï¿½ï¿½É«
-  static const double Mecha_GearProb;// ï¿½Þ²ï¿½È¦Ñµï¿½ï¿½ï¿½Ð³ï¿½ï¿½ÖµÄ¸ï¿½ï¿½ï¿½
-  static const double Mecha_GearProbLinkBonus;// ï¿½ï¿½ï¿½ï¿½ï¿½×»ï¿½Ã¸ï¿½ï¿½ï¿½Ä»ï¿½Ðµï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¶ï¿½ï¿½ï¿½ï¿½ï¿½
+  //¾ç±¾Ïà¹Ø
+  static const std::vector<int> Mecha_LinkCharas;// Link½ÇÉ«
+  static const double Mecha_GearProb;// ÎÞ²ÊÈ¦ÑµÁ·ÓÐ³ÝÂÖµÄ¸ÅÂÊ
+  static const double Mecha_GearProbLinkBonus;// ¡°ÈÝÒ×»ñµÃ¸ü¶àµÄ»úÐµ³ÝÂÖ¡±ÊÇÔö¼Ó¶à´ó¸ÅÂÊ
 
-  //lvï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý²Î¿ï¿½ï¿½ï¿½
-  //https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
-  //https://github.com/mee1080/umasim/blob/main/data/mecha_memo.md
-  static const int Mecha_LvGainBasic[2][3][3][6]; //[ï¿½Ç·ï¿½ï¿½ï¿½ï¿½][ï¿½Þ³ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½][ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½2][ï¿½ï¿½ï¿½ï¿½]
-  static const int Mecha_LvGainSubTrainIdx[5][3]; //Lvï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê²Ã´ 
+  static const int Mecha_TargetTotalLevel[6];
 
-
-  //ï¿½ï¿½ï¿½ï¿½
-  static const int FiveStatusFinalScore[1200+800*2+1];//ï¿½ï¿½Í¬ï¿½ï¿½ï¿½Ô¶ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-  static const double ScorePtRateDefault;//Îªï¿½Ë·ï¿½ï¿½ã£¬Ö±ï¿½ï¿½ï¿½ï¿½ÎªÃ¿1ptï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Ù·Ö¡ï¿½
-  static const double HintLevelPtRateDefault;//Îªï¿½Ë·ï¿½ï¿½ã£¬Ö±ï¿½ï¿½ï¿½ï¿½ÎªÃ¿Ò»ï¿½ï¿½hintï¿½ï¿½ï¿½ï¿½ptï¿½ï¿½
-  //static const double ScorePtRateQieZhe;//Îªï¿½Ë·ï¿½ï¿½ã£¬Ö±ï¿½ï¿½ï¿½ï¿½ÎªÃ¿1ptï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Ù·Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½
+  static int Mecha_UGENumFinished(int turn);
 
   static bool isLinkChara(int id);
   static bool isLinkChara_initialEN(int id);
@@ -55,5 +46,22 @@ public:
   static bool isLinkChara_initialOverdrive(int id);
   static bool isLinkChara_lvBonus(int id);
   static bool isLinkChara_initialLv(int id);
+
+
+
+
+  //lvÌáÉý¹«Ê½¡£ÒÔÏÂÄÚÈÝ²Î¿¼£º
+  //https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
+  //https://github.com/mee1080/umasim/blob/main/data/mecha_memo.md
+  static const int Mecha_LvGainBasic[2][3][3][6]; //[ÊÇ·ñºÏËÞ][ÎÞ³ÝÂÖ¡¢³ÝÂÖ¡¢ÓÑÇé][Ö÷¡¢¸±1¡¢¸±2][ÈËÊý]
+  static const int Mecha_LvGainSubTrainIdx[5][3]; //LvÌáÉýµÄ¸±ÊôÐÔÊÇÊ²Ã´ 
+
+
+  //ÆÀ·Ö
+  static const int FiveStatusFinalScore[1200+800*2+1];//²»Í¬ÊôÐÔ¶ÔÓ¦µÄÆÀ·Ö
+  static const double ScorePtRateDefault;//ÎªÁË·½±ã£¬Ö±½ÓÊÓÎªÃ¿1pt¶ÔÓ¦¶àÉÙ·Ö¡£
+  static const double HintLevelPtRateDefault;//ÎªÁË·½±ã£¬Ö±½ÓÊÓÎªÃ¿Ò»¼¶hint¶àÉÙpt¡£
+  //static const double ScorePtRateQieZhe;//ÎªÁË·½±ã£¬Ö±½ÓÊÓÎªÃ¿1pt¶ÔÓ¦¶àÉÙ·Ö¡£ÇÐÕß
+
 
 };

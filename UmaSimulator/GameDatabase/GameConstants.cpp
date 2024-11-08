@@ -1,29 +1,45 @@
 #include "GameConstants.h"
 #include "UmaData.h"
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß±È½Ï¶Ìµï¿½ï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½
+//³£Êý»òÕß±È½Ï¶ÌµÄÁÐ±í·ÅÔÚ×îÇ°Ãæ
 const double GameConstants::ScorePtRateDefault = 2.0;
-const double GameConstants::HintLevelPtRateDefault = 6.5;//ï¿½ï¿½Ç°Ä¬ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç±¾ï¿½ï¿½hintï¿½ï¿½ï¿½ï¿½Ï¡È±ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+const double GameConstants::HintLevelPtRateDefault = 4;
 //const double GameConstants::ScorePtRateQieZhe = 2.2;
-const int GameConstants::BasicFiveStatusLimit[5] = { 2300,2200,1800,1400,1400 }; //Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1200ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½
+const int GameConstants::BasicFiveStatusLimit[5] = { 2300,2200,1800,1400,1400 }; //Ä£ÄâÆ÷ÖÐ1200ÒÔÉÏ·­±¶
 
-//const int GameConstants::NormalRaceFiveStatusBonus = 3;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼Ó³ï¿½=3
-//const int GameConstants::NormalRacePtBonus = 45;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ptï¿½Ó³ï¿½,G1=45
+//const int GameConstants::NormalRaceFiveStatusBonus = 3;//³£¹æ±ÈÈüÊôÐÔ¼Ó³É=3
+//const int GameConstants::NormalRacePtBonus = 45;//³£¹æ±ÈÈüpt¼Ó³É,G1=45
 const double GameConstants::EventProb = 0.35;
 const int GameConstants::EventStrengthDefault = 20;
 
-const double GameConstants::Mecha_GearProb = 0.5;// ï¿½Þ²ï¿½È¦Ñµï¿½ï¿½ï¿½Ð³ï¿½ï¿½ÖµÄ¸ï¿½ï¿½ï¿½
-const double GameConstants::Mecha_GearProbLinkBonus = 0.05;// ï¿½ï¿½ï¿½ï¿½ï¿½×»ï¿½Ã¸ï¿½ï¿½ï¿½Ä»ï¿½Ðµï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¶ï¿½ï¿½ï¿½ï¿½ï¿½
+const double GameConstants::Mecha_GearProb = 0.5;// ÎÞ²ÊÈ¦ÑµÁ·ÓÐ³ÝÂÖµÄ¸ÅÂÊ
+const double GameConstants::Mecha_GearProbLinkBonus = 0.05;// ¡°ÈÝÒ×»ñµÃ¸ü¶àµÄ»úÐµ³ÝÂÖ¡±ÊÇÔö¼Ó¶à´ó¸ÅÂÊ
 
 const double GameConstants::FriendUnlockOutgoingProbEveryTurnLowFriendship = 0.1;
 const double GameConstants::FriendUnlockOutgoingProbEveryTurnHighFriendship = 0.2;
 
-//const double GameConstants::FriendVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//ï¿½ï¿½ï¿½ï¿½SSRï¿½ï¿½ï¿½Ä»Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1.8ï¿½ï¿½
-//const double GameConstants::FriendVitalBonusR[5] = { 1.2,1.23,1.26,1.3,1.3 };//ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Ä»Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-//const double GameConstants::FriendStatusBonusSSR[5] = { 1.2,1.21,1.23,1.25,1.25 };//ï¿½ï¿½ï¿½ï¿½SSRï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1.25ï¿½ï¿½
-//const double GameConstants::FriendStatusBonusR[5] = { 1.1,1.11,1.13,1.15,1.15 };//ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//const double GameConstants::FriendVitalBonusSSR[5] = { 1.4,1.5,1.6,1.7,1.8 };//ÓÑÈËSSR¿¨µÄ»Ø¸´Á¿±¶Êý£¨ÂúÆÆ1.8£©
+//const double GameConstants::FriendVitalBonusR[5] = { 1.2,1.23,1.26,1.3,1.3 };//ÓÑÈËR¿¨µÄ»Ø¸´Á¿±¶Êý
+//const double GameConstants::FriendStatusBonusSSR[5] = { 1.2,1.21,1.23,1.25,1.25 };//ÓÑÈËSSR¿¨µÄÊÂ¼þÐ§¹û±¶Êý£¨ÂúÆÆ1.25£©
+//const double GameConstants::FriendStatusBonusR[5] = { 1.1,1.11,1.13,1.15,1.15 };//ÓÑÈËR¿¨µÄÊÂ¼þÐ§¹û±¶Êý
 
 const std::vector<int> GameConstants::Mecha_LinkCharas = { 1023,1050,1036,1083,1084 };
+int GameConstants::Mecha_UGENumFinished(int turn)
+{
+  if (turn < 24)
+    return 0;
+  else if (turn < 36)
+    return 1;
+  else if (turn < 48)
+    return 2;
+  else if (turn < 60)
+    return 3;
+  else if (turn < 72)
+    return 4;
+  else return 5;
+}
+const int GameConstants::Mecha_TargetTotalLevel[6] = { 600,1000,1400,1900,2400,2400 };
+
 bool GameConstants::isLinkChara(int id)
 {
   if (id > 100000)id /= 100;
@@ -74,7 +90,7 @@ const int GameConstants::FailRateBasic[5][5] =
 //https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
 const int GameConstants::TrainingBasicValue[5][5][7] =
 {
-  //ï¿½ï¿½
+  //ËÙ
   {
     { 11, 0, 2, 0, 0, 5, -19},
     { 12, 0, 2, 0, 0, 5, -20},
@@ -82,23 +98,23 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
     { 14, 0, 3, 0, 0, 5, -23},
     { 15, 0, 4, 0, 0, 5, -25},
   },
-  //ï¿½ï¿½
+  //ÄÍ
   {
     { 0, 10, 0, 4, 0, 5, -20},
     { 0, 11, 0, 4, 0, 5, -21},
-    { 0, 12, 0, 4, 0, 5, -22},
+    { 0, 12, 0, 5, 0, 5, -22},
     { 0, 13, 0, 5, 0, 5, -24},
     { 0, 14, 0, 6, 0, 5, -26},
   },
-  //ï¿½ï¿½
+  //Á¦
   {
     { 0, 4, 10, 0, 0, 5, -20},
     { 0, 4, 11, 0, 0, 5, -21},
-    { 0, 4, 12, 0, 0, 5, -22},
+    { 0, 5, 12, 0, 0, 5, -22},
     { 0, 5, 13, 0, 0, 5, -24},
     { 0, 6, 14, 0, 0, 5, -26},
   },
-  //ï¿½ï¿½
+  //¸ù
   {
     { 2, 0, 2, 9, 0, 5, -20},
     { 2, 0, 2, 10, 0, 5, -21},
@@ -106,7 +122,7 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
     { 3, 0, 2, 12, 0, 5, -24},
     { 4, 0, 3, 13, 0, 5, -26},
   },
-  //ï¿½ï¿½
+  //ÖÇ
   {
     { 2, 0, 0, 0, 8, 5, 5},
     { 2, 0, 0, 0, 9, 5, 5},
@@ -120,43 +136,43 @@ const int GameConstants::TrainingBasicValue[5][5][7] =
 //Reference:
 //https://github.com/mee1080/umasim/blob/main/core/src/commonMain/kotlin/io/github/mee1080/umasim/scenario/mecha/MechaStore.kt
 //https://github.com/mee1080/umasim/blob/main/data/mecha_memo.md
-static const int Mecha_LvGainBasic[2][3][3][6] = {
-  // Í¨ï¿½ï¿½
+const int GameConstants::Mecha_LvGainBasic[2][3][3][6] = {
+  // Í¨³£
   {
-    // Í¨ï¿½ï¿½
+    // Í¨³£
     {
         {7, 11, 14, 18, 21, 25},
         {2, 3, 4, 5, 6, 7},
         {1, 1, 2, 2, 3, 3},
     },
-    // ï¿½ï¿½ï¿½ï¿½
+    // ³ÝÂÖ
     {
         {9, 13, 17, 21, 26, 30},
         {2, 4, 5, 6, 7, 8},
         {1, 1, 2, 3, 3, 4},
     },
-    // ï¿½ï¿½ï¿½ï¿½
+    // ÓÑÇé
     {
         {0, 17, 21, 25, 29, 33},
         {0, 4, 6, 7, 8, 10},
         {0, 2, 2, 3, 4, 4},
     },
   },
-  // ï¿½ï¿½ï¿½ï¿½
+  // ºÏËÞ
   {
-    // Í¨ï¿½ï¿½
+    // Í¨³£
     {
         {14, 18, 21, 25, 28, 32},
         {4, 5, 6, 7, 8, 9},
         {2, 2, 3, 3, 4, 4},
     },
-    // ï¿½ï¿½ï¿½ï¿½
+    // ³ÝÂÖ
     {
         {17, 21, 26, 30, 34, 38},
         {5, 6, 7, 8, 10, 11},
         {2, 3, 3, 4, 4, 5},
     },
-    // ï¿½ï¿½ï¿½ï¿½
+    // ÓÑÇé
     {
         {0, 25, 29, 33, 38, 42},
         {0, 7, 8, 10, 10, 12},
@@ -168,7 +184,7 @@ const int GameConstants::Mecha_LvGainSubTrainIdx[5][3] =
 {
   {0,2,1},
   {1,4,3},
-  {2,1,3},
+  {2,1,4},
   {3,0,2},
   {4,3,0},
 };

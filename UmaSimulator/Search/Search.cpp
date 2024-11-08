@@ -14,7 +14,7 @@ using namespace std;
 const ModelOutputValueV1 ModelOutputValueV1::illegalValue = { 1e-5,0,1e-5 };
 
 const double Search::searchFactorStage[searchStageNum] = { 0.25,0.25,0.5 };
-const double Search::searchThreholdStdevStage[searchStageNum] = { 4,4,0 };//4ä¸ªæ ‡å‡†å·®ï¼Œæ¯”è¾ƒä¿å®ˆ
+const double Search::searchThreholdStdevStage[searchStageNum] = { 4,4,0 };//4¸ö±ê×¼²î£¬±È½Ï±£ÊØ
 
 double SearchResult::normDistributionCdfInv[NormDistributionSampling];
 
@@ -36,35 +36,13 @@ static void softmax(float* f, int n)
     f[i] *= totalInv;
 }
 
-//æ ¹æ®å›åˆæ•°è°ƒæ•´æ¿€è¿›åº¦
+//¸ù¾İ»ØºÏÊıµ÷Õû¼¤½ø¶È
 static double adjustRadicalFactor(double maxRf, int turn)
 {
-  //è®¡ç®—è¯¥å–çš„æ¿€è¿›åº¦
+  //¼ÆËã¸ÃÈ¡µÄ¼¤½ø¶È
   double remainTurns = TOTAL_TURN - turn;
   double factor = pow(remainTurns / TOTAL_TURN, 0.5);
   return factor * maxRf;
-}
-
-Action Search::intToTwoStageAction(int i)
-{
-  if (i < 21)
-    return Action::intToAction(i);
-  else if (i < 21 + 8)
-  {
-    Action a;
-    a.dishType = DISH_sandwich;
-    a.train = i - 21;
-    return a;
-  }
-  else if (i < 21 + 8 + 8)
-  {
-    Action a;
-    a.dishType = DISH_curry;
-    a.train = i - 21 - 8;
-    return a;
-  }
-  assert(false);
-  return Action();
 }
 
 Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame(threadNumInGame), batchSize(batchSize)
@@ -73,8 +51,8 @@ Search::Search(Model* model, int batchSize, int threadNumInGame):threadNumInGame
   for (int i = 0; i < threadNumInGame; i++)
     evaluators[i] = Evaluator(model, batchSize);
 
-  allActionResults.resize(Action::MAX_TWOSTAGE_ACTION_TYPE);
-  for (int i = 0; i < Action::MAX_TWOSTAGE_ACTION_TYPE; i++)
+  allActionResults.resize(Action::MAX_ACTION_TYPE);
+  for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
     allActionResults[i].clear();
 
   param.searchSingleMax = 0;
@@ -88,12 +66,12 @@ void Search::setParam(SearchParam param0)
 {
   param = param0;
 
-  //è®©searchGroupSizeæ˜¯æ•´batch
+  //ÈÃsearchGroupSizeÊÇÕûbatch
   param.searchGroupSize = calculateRealSearchN(param.searchGroupSize);
   param.searchSingleMax = calculateRealSearchN(param.searchSingleMax);
 
-  //è®©param.samplingNumæ˜¯æ•´batch
-  //int batchEveryThread = (param.samplingNum - 1) / (threadNumInGame * batchSize) + 1;//ç›¸å½“äºå‘ä¸Šå–æ•´
+  //ÈÃparam.samplingNumÊÇÕûbatch
+  //int batchEveryThread = (param.samplingNum - 1) / (threadNumInGame * batchSize) + 1;//Ïàµ±ÓÚÏòÉÏÈ¡Õû
   //if (batchEveryThread <= 0)batchEveryThread = 1;
   //int samplingNumEveryThread = batchSize * batchEveryThread;
   //param.samplingNum = threadNumInGame * samplingNumEveryThread;
@@ -111,54 +89,37 @@ Action Search::runSearch(const Game& game,
   rootGame.playerPrint = false;
   double radicalFactor = adjustRadicalFactor(param.maxRadicalFactor, rootGame.turn);
 
-  bool needTwoStageSearch =
-    twoStageSearchFirstYear &&
-    game.turn < 24 &&
-    !game.isRacing &&
-    game.cook_dish == DISH_none &&
-    (game.isDishLegal(DISH_curry) || game.isDishLegal(DISH_sandwich));
-
-  int maxActionType = needTwoStageSearch ? Action::MAX_TWOSTAGE_ACTION_TYPE : Action::MAX_ACTION_TYPE;
+  int maxActionType = Action::MAX_ACTION_TYPE;
 
   //bool shouldContinueSearch[Action::MAX_ACTION_TYPE];
   for (int actionInt = 0; actionInt < maxActionType; actionInt++)
   {
-    Action action = intToTwoStageAction(actionInt);
+    Action action = Action(actionInt);
 
     allActionResults[actionInt].clear();
-    bool islegal = false;
-    if (needTwoStageSearch)
-    {
-      //äºŒé˜¶æ®µæœç´¢ä¸å•ç‹¬åšèœ
-      if (action.train == TRA_none)islegal = false;
-      else if (action.dishType == DISH_none)islegal = rootGame.isLegal(action);
-      else
-        islegal = rootGame.isLegal(Action(action.dishType, TRA_none)) && rootGame.isLegal(Action(DISH_none, action.train));
-    }
-    else
-      islegal = rootGame.isLegal(action);
+    bool islegal = rootGame.isLegal(action);
 
     allActionResults[actionInt].isLegal = islegal;
     //shouldContinueSearch[actionInt] = allActionResults[actionInt].isLegal;
   }
 
-  assert(param.searchGroupSize == calculateRealSearchN(param.searchGroupSize));//setParamåº”è¯¥å¤„ç†è¿‡äº†
-  int totalSearchN = 0;//åˆ°ç›®å‰ä¸€å…±æœäº†å¤šå°‘
+  assert(param.searchGroupSize == calculateRealSearchN(param.searchGroupSize));//setParamÓ¦¸Ã´¦Àí¹ıÁË
+  int totalSearchN = 0;//µ½Ä¿Ç°Ò»¹²ËÑÁË¶àÉÙ
 
-  //æ¯ä¸ªactionå…ˆæœä¸€ç»„
+  //Ã¿¸öactionÏÈËÑÒ»×é
   for (int actionInt = 0; actionInt < maxActionType; actionInt++)
   {
     if (!allActionResults[actionInt].isLegal)continue;
-    Action action = intToTwoStageAction(actionInt);
+    Action action = Action(actionInt);
     //cout << action.dishType << action.train << endl;
     searchSingleAction(param.searchGroupSize, rand, allActionResults[actionInt], action);
     totalSearchN += param.searchGroupSize;
   }
 
-  //æ¯æ¬¡åˆ†é…searchGroupSizeçš„è®¡ç®—é‡åˆ°searchValueæœ€å¤§çš„é‚£ä¸ªactionï¼Œç›´åˆ°è¾¾åˆ°searchSingleMaxæˆ–searchTotalMaxç»ˆæ­¢æ¡ä»¶
+  //Ã¿´Î·ÖÅäsearchGroupSizeµÄ¼ÆËãÁ¿µ½searchValue×î´óµÄÄÇ¸öaction£¬Ö±µ½´ïµ½searchSingleMax»òsearchTotalMaxÖÕÖ¹Ìõ¼ş
   while (true)
   {
-    if (param.searchGroupSize >= param.searchSingleMax)//å‰é¢æœç´¢çš„ä¸€ä¸ªgroupå·²ç»è¾¾åˆ°é¢„å®šç›®æ ‡è®¡ç®—é‡ï¼Œæ— éœ€ç»§ç»­æœç´¢
+    if (param.searchGroupSize >= param.searchSingleMax)//Ç°ÃæËÑË÷µÄÒ»¸ögroupÒÑ¾­´ïµ½Ô¤¶¨Ä¿±ê¼ÆËãÁ¿£¬ÎŞĞè¼ÌĞøËÑË÷
       break;
 
     double bestSearchValue = -1e4;
@@ -171,8 +132,8 @@ Action Search::runSearch(const Game& game,
       double n = allActionResults[actionInt].num;
       assert(n > 0);
       double tn = double(totalSearchN);
-      double policy = 1.0;//å¯¹äºé©¬å¨˜ï¼Œå¸¸æ•°1å°±è¡Œï¼Œæ‡’å¾—åœ¨è¿™é‡Œè°ƒç”¨ç¥ç»ç½‘ç»œ
-      double searchValue = value + param.searchCpuct * policy * Search::expectedSearchStdev * sqrt(tn) / n;//æŠ„çš„æ£‹ç±»aiçš„å…¬å¼ï¼Œå¹³å‡åˆ†è¶Šé«˜æˆ–è®¡ç®—é‡è¶Šå°‘ï¼ŒsearchValueè¶Šé«˜
+      double policy = 1.0;//¶ÔÓÚÂíÄï£¬³£Êı1¾ÍĞĞ£¬ÀÁµÃÔÚÕâÀïµ÷ÓÃÉñ¾­ÍøÂç
+      double searchValue = value + param.searchCpuct * policy * Search::expectedSearchStdev * sqrt(tn) / n;//³­µÄÆåÀàaiµÄ¹«Ê½£¬Æ½¾ù·ÖÔ½¸ß»ò¼ÆËãÁ¿Ô½ÉÙ£¬searchValueÔ½¸ß
       if (searchValue > bestSearchValue)
       {
         bestSearchValue = searchValue;
@@ -182,7 +143,7 @@ Action Search::runSearch(const Game& game,
 
     assert(bestActionIntToSearch >= 0);
 
-    Action action = intToTwoStageAction(bestActionIntToSearch);
+    Action action = Action(bestActionIntToSearch);
     searchSingleAction(param.searchGroupSize, rand, allActionResults[bestActionIntToSearch], action);
     totalSearchN += param.searchGroupSize;
 
@@ -192,11 +153,8 @@ Action Search::runSearch(const Game& game,
       break;
   }
 
-  //æœç´¢å®Œæ¯•ï¼Œæ‰¾æœ€é«˜åˆ†çš„é€‰é¡¹
+  //ËÑË÷Íê±Ï£¬ÕÒ×î¸ß·ÖµÄÑ¡Ïî
 
-  //æŠŠäºŒé˜¶æ®µæœç´¢æ•´åˆåˆ°ç¬¬ä¸€ä¸ªé˜¶æ®µé‡Œ
-  if (needTwoStageSearch)
-    integrateTwoStageResults();
 
   double bestValue = -1e4;
   int bestActionInt = -1;
@@ -214,7 +172,7 @@ Action Search::runSearch(const Game& game,
 
   }
 
-  Action bestAction = Action::intToAction(bestActionInt);
+  Action bestAction = Action(bestActionInt);
   assert(rootGame.isLegal(bestAction));
   return bestAction;
 }
@@ -223,7 +181,7 @@ void Search::printSearchResult(bool showSearchNum)
 {
   for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
   {
-    Action action = Action::intToAction(actionInt);
+    Action action = Action(actionInt);
     SearchResult& res = allActionResults[actionInt];
     if (!res.isLegal)continue;
     ModelOutputValueV1 value = res.getWeightedMeanScore(param.maxRadicalFactor);
@@ -243,7 +201,7 @@ ModelOutputValueV1 Search::evaluateNewGame(const Game& game, std::mt19937_64& ra
   double radicalFactor = adjustRadicalFactor(param.maxRadicalFactor, game.turn);
   allActionResults[0].clear();
   allActionResults[0].isLegal = true;
-  searchSingleAction(param.searchSingleMax, rand, allActionResults[0], Action::Action_RedistributeCardsForTest);
+  searchSingleAction(param.searchSingleMax, rand, allActionResults[0], Action::RedistributeCardsForTest());
   return allActionResults[0].getWeightedMeanScore(adjustRadicalFactor(radicalFactor,game.turn));
 }
 
@@ -254,9 +212,8 @@ void Search::searchSingleAction(
   SearchResult& searchResult,
   Action action)
 {
-  //å…ˆæ£€æŸ¥actionæ˜¯å¦åˆæ³•
-  assert(action.train == TRA_redistributeCardsForTest || rootGame.isLegal(action)
-    || (rootGame.isLegal(Action(action.dishType, TRA_none)) && rootGame.isLegal(Action(DISH_none, action.train))));
+  //ÏÈ¼ì²éactionÊÇ·ñºÏ·¨
+  assert(action.type == -1 || rootGame.isLegal(action));
 
   int batchNumEachThread = calculateBatchNumEachThread(searchN);
   searchN = calculateRealSearchN(searchN);
@@ -323,33 +280,25 @@ void Search::searchSingleActionThread(
 {
   Evaluator& eva = evaluators[threadIdx];
   assert(eva.maxBatchsize == batchSize);
-  bool isTwoStageAction = (action.dishType != DISH_none && action.train != TRA_none);
-  bool isNewGame = action.train == TRA_redistributeCardsForTest;
+  bool isNewGame = action.type == -1;
 
   for (int batch = 0; batch < batchNum; batch++)
   {
     eva.gameInput.assign(batchSize, rootGame);
 
-    //å…ˆèµ°ç¬¬ä¸€æ­¥
+    //ÏÈ×ßµÚÒ»²½
     for (int i = 0; i < batchSize; i++)
     {
-      if (isNewGame)//é‡ç½®æ¸¸æˆ
+      if (isNewGame)//ÖØÖÃÓÎÏ·
         eva.gameInput[i].randomDistributeCards(rand);
-      else if(!isTwoStageAction)//å¸¸è§„
+      else//³£¹æ
         eva.gameInput[i].applyAction(rand, action);
-      else//äºŒé˜¶æ®µAction
-      {
-        Action action1 = { action.dishType,TRA_none };
-        Action action2 = { DISH_none,action.train };
-        eva.gameInput[i].applyAction(rand, action1);
-        eva.gameInput[i].applyAction(rand, action2);
-      }
     }
     int maxdepth = isNewGame ? param.maxDepth + 1 : param.maxDepth;
     for (int depth = 0; depth < param.maxDepth; depth++)
     {
-      eva.evaluateSelf(1, param);//è®¡ç®—policy
-      //bool distributeCards = (depth != maxDepth - 1);//æœ€åä¸€å±‚å°±ä¸åˆ†é…å¡ç»„äº†ï¼Œç›´æ¥è°ƒç”¨ç¥ç»ç½‘ç»œä¼°å€¼
+      eva.evaluateSelf(1, param);//¼ÆËãpolicy
+      //bool distributeCards = (depth != maxDepth - 1);//×îºóÒ»²ã¾Í²»·ÖÅä¿¨×éÁË£¬Ö±½Óµ÷ÓÃÉñ¾­ÍøÂç¹ÀÖµ
 
 
       bool allFinished = true;
@@ -362,7 +311,7 @@ void Search::searchSingleActionThread(
       }
       if (allFinished)break;
     }
-    eva.evaluateSelf(0, param);//è®¡ç®—value
+    eva.evaluateSelf(0, param);//¼ÆËãvalue
     for (int i = 0; i < batchSize; i++)
     {
       resultBuf[batch * batchSize + i] = eva.valueResults[i];
@@ -371,38 +320,10 @@ void Search::searchSingleActionThread(
   }
 }
 
-void Search::integrateTwoStageResults()
-{
-  for (int dish = 1; dish <= 2; dish++)
-  {
-    if (!rootGame.isDishLegal(dish))
-      continue;
-    double bestValue = -1e6;
-    int bestActionInt = -1;
-    for (int tra = 0; tra < 8; tra++)
-    {
-      int actionInt = 21 - 8 + dish * 8 + tra;
-      auto& res = allActionResults[actionInt];
-
-      if (res.isLegal)
-      {
-        double value = res.getWeightedMeanScore(res.lastRadicalFactor).value;
-        //cout << dish << tra << " " << value << endl;
-        if (value > bestValue)
-        {
-          bestValue = value;
-          bestActionInt = actionInt;
-        }
-      }
-    }
-    allActionResults[Action(dish, TRA_none).toInt()] = allActionResults[bestActionInt];
-  }
-}
-
 
 void SearchResult::initNormDistributionCdfTable()
 {
-  //æ­£æ€åˆ†å¸ƒç´¯ç§¯åˆ†å¸ƒå‡½æ•°çš„åå‡½æ•°åœ¨0~1ä¸Šå‡åŒ€å–ç‚¹
+  //ÕıÌ¬·Ö²¼ÀÛ»ı·Ö²¼º¯ÊıµÄ·´º¯ÊıÔÚ0~1ÉÏ¾ùÔÈÈ¡µã
   for (int i = 0; i < NormDistributionSampling; i++)
   {
     double x = (i + 0.5) / NormDistributionSampling;
@@ -442,23 +363,23 @@ ModelOutputValueV1 SearchResult::getWeightedMeanScore(double radicalFactor)
     lastCalculate = ModelOutputValueV1::illegalValue;
     return ModelOutputValueV1::illegalValue;
   }
-  double N = 0;//æ€»æ ·æœ¬é‡
-  double scoreTotal = 0;//scoreçš„å’Œ
-  double scoreSqrTotal = 0;//scoreçš„å¹³æ–¹å’Œ
-  //double winNum = 0;//score>=targetçš„æ¬¡æ•°æœŸæœ›
+  double N = 0;//×ÜÑù±¾Á¿
+  double scoreTotal = 0;//scoreµÄºÍ
+  double scoreSqrTotal = 0;//scoreµÄÆ½·½ºÍ
+  //double winNum = 0;//score>=targetµÄ´ÎÊıÆÚÍû
 
   double valueWeightTotal = 0;//sum(n^p*x[n]),x[n] from small to big
   double valueTotal = 0;//sum(n^p)
   double totalNinv = 1.0 / (num * NormDistributionSampling);
   for (int s = 0; s < MAX_SCORE; s++)
   {
-    double n = finalScoreDistribution[s]; //å½“å‰åˆ†æ•°çš„æ¬¡æ•°
-    double r = (N + 0.5 * n) * totalNinv; //å½“å‰åˆ†æ•°çš„æ’åæ¯”ä¾‹
+    double n = finalScoreDistribution[s]; //µ±Ç°·ÖÊıµÄ´ÎÊı
+    double r = (N + 0.5 * n) * totalNinv; //µ±Ç°·ÖÊıµÄÅÅÃû±ÈÀı
     N += n;
     scoreTotal += n * s;
     scoreSqrTotal += n * s * s;
 
-    //æŒ‰æ’ååŠ æƒå¹³å‡
+    //°´ÅÅÃû¼ÓÈ¨Æ½¾ù
     double w = pow(r, radicalFactor);
     valueWeightTotal += w * n;
     valueTotal += w * n * s;
@@ -476,7 +397,7 @@ ModelOutputValueV1 SearchResult::getWeightedMeanScore(double radicalFactor)
 
 int Search::calculateBatchNumEachThread(int searchN) const
 {
-  int batchEveryThread = (searchN - 1) / (threadNumInGame * batchSize) + 1;//ç›¸å½“äºå‘ä¸Šå–æ•´
+  int batchEveryThread = (searchN - 1) / (threadNumInGame * batchSize) + 1;//Ïàµ±ÓÚÏòÉÏÈ¡Õû
   if (batchEveryThread <= 0)batchEveryThread = 1;
   return batchEveryThread;
 }

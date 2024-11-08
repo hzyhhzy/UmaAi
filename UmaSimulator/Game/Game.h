@@ -138,7 +138,9 @@ struct Game
   //bool cardEffectCalculated;//支援卡效果是否已经计算过？吃无关菜不需要重新计算，分配卡组或者读json时需要置为false
   //CardTrainingEffect cardEffects[6];
 
+  bool mecha_anyLose;//有没有在某次UGE中获得S以下
   int16_t mecha_rivalLvTotal;//研究lv总和
+  int16_t mecha_rivalLvLimit;//研究lv上限
   double mecha_upgradeTotal[3];//头胸脚分别的等级总和
   int16_t mecha_lvGain[5][5];//研究Lv提升量mecha_lvGain[训练][第几项] 
   double mecha_trainingStatusMultiplier[6];//五维属性和pt的倍率
@@ -238,7 +240,11 @@ public:
   void calculateTrainingValueSingle(int tra);//计算每个训练加多少 
 
   bool tryInvitePeople(std::mt19937_64& rand);//拉一个人，但有概率失败，需要循环调用
-  
+  void mecha_addRivalLv(int idx, int value);//增加研究lv，并处理溢出
+  void mecha_distributeEN(int head3, int chest3, int foot3, int otherENType);//给定头胸脚的3级个数，分配到三个小项
+  bool mecha_maybeRunUGE();//UGE比赛
+  bool mecha_activate_overdrive(std::mt19937_64& rand);//开启overdrive
+  bool mecha_maybe_reverse_overdrive();//对于一个已经开启overdrive的局面，恢复到开启前的状态，人头和hint不需要恢复，只用于randomDistributeCards
 
 
   //友人卡相关事件

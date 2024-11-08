@@ -185,44 +185,38 @@ void Game::print() const
   {
     int nextCompetition = (turn / 12 + 1) * 12;
     if (turn < 24)nextCompetition = 24;
-    cout << "距离下次试食会还有 " << nextCompetition - turn << " 回合" << endl;
+    cout << "距离下次UGE还有 " << nextCompetition - turn << " 回合" << endl;
   }
 
-  cout << "农田pt：" << termcolor::green << cook_farm_pt << termcolor::reset << " (断绿亏损=" << maxFarmPtUntilNow() - cook_farm_pt << ")" << endl;
-  if (isXiahesu() || turn >= 72)
+  //mecha lv
   {
-    cout << termcolor::cyan << "夏合宿或Ura期间，每回合收获" << termcolor::reset << endl;
-  }
-  else
-  {
-    cout << "农田材料种类：";
-    int farmCount = turn % 4;
-    for (int i = 0; i < farmCount; i++)
+    for (int i = 0; i < 3; i++)
     {
-      bool isGreen = cook_harvest_green_history[i];
-      int materialType = cook_harvest_history[i];
-      if (isGreen)
-        cout << termcolor::green << GameConstants::Cook_MaterialNames[materialType] << termcolor::reset;
-      else
-        cout << termcolor::yellow << GameConstants::Cook_MaterialNames[materialType] << termcolor::reset;
-      cout << " ";
-    }
-    for (int i = 0; i < 4 - farmCount; i++)
-    {
-      cout << "__ ";
+      cout << (i == 0 ? "头" : i == 1 ? "胸" : "脚");
+      cout << ": " << termcolor::bright_cyan << mecha_upgradeTotal[i] << termcolor::reset;
+      cout << " (" << mecha_upgrade[i][0] << "+" << mecha_upgrade[i][1] << "+" << mecha_upgrade[i][2] << ")   ";
     }
     cout << endl;
   }
 
-  cout << "料理pt：" << termcolor::bright_yellow << cook_dish_pt << termcolor::reset;
-  if (cook_dish_sure_success)
-    cout << termcolor::bright_green << "   大成功确定" << termcolor::reset;
-  else
-    cout << "   大成功 " << cook_dish_pt % 1500 << "/1500";
-  cout << endl;
-  
-  cout << "生效料理：" << termcolor::bright_green << Action::dishName[cook_dish] << termcolor::reset << endl;
-  
+
+  //总lv，齿轮槽
+  {
+    int totalLevel = 0;
+    for (int i = 0; i < 5; i++)
+    {
+      totalLevel += mecha_rivalLv[i];
+    }
+    int targetLevel=GameConstants::Mecha_TargetTotalLevel[GameConstants::Mecha_UGENumFinished(turn)];
+    cout << "总Lv: " << termcolor::bright_green << totalLevel << termcolor::reset << "/" << targetLevel << "(" << 100 * totalLevel / targetLevel << "%)";
+    cout << "     ";
+    cout << "齿轮槽: " << termcolor::bright_green << mecha_overdrive_energy / 3 << termcolor::reset << "(+" << mecha_overdrive_energy % 3 << ")";
+    if (mecha_overdrive_enabled)
+      cout << termcolor::bright_red << "  已开启超频训练" << termcolor::reset << endl;
+
+    cout << endl;
+  }
+
  
 
   {
@@ -247,7 +241,6 @@ void Game::print() const
         motivation == 3 ? "\033[31m普通\033[0m" :
         motivation == 4 ? "\033[33m好调\033[0m" :
         motivation == 5 ? "\033[32m绝好调\033[0m" : "未知") << endl;
-    cout << endl;
   }
   
 
@@ -261,11 +254,12 @@ void Game::print() const
   string divLineWhite = "|";
   for (int i = 0; i < 5; i++)
   {
-    bool isGreen = cook_train_green[i];
-    if (isGreen)
+    if (isTrainShining[i])
       divLine += "\033[32m" + divLineOne + "\033[0m";
+    else if (mecha_hasGear[i])
+      divLine += "\033[34m" + divLineOne + "\033[0m";
     else
-      divLine += divLineOne;
+      divLine += "\033[2m" + divLineOne + "\033[0m";
     divLineWhite += divLineOne;
 
     if (i != 4)
@@ -305,41 +299,19 @@ void Game::print() const
     printTableRow(oneRow);
   }
   cout << divLine;
-  // 菜量
+  // 等级
   {
     string oneRow[5];//表格中一行要显示的内容
     for (int i = 0; i < 5; i++)
     {
-      oneRow[i] = GameConstants::Cook_MaterialNames[i] + ":";
-      oneRow[i] += to_string(cook_material[i]) + "/" + to_string(GameConstants::Cook_MaterialLimit[cook_farm_level[i]]);
+      int totalLvGain = 0;
+      for (int j = 0; j < 5; j++)
+        totalLvGain += mecha_lvGain[i][j];
+      oneRow[i] = to_string(mecha_rivalLv[i]) + "/" + to_string(mecha_rivalLvLimit) + " \033[32m+" + to_string(totalLvGain) + "\033[0m";
     }
     printTableRow(oneRow);
   }
-  {
-    string oneRow[5];//表格中一行要显示的内容
-    auto matGain = calculateHarvestNum(false);
-    for (int i = 0; i < 5; i++)
-    {
-      bool willOverflow = cook_material[i] + matGain[i] > GameConstants::Cook_MaterialLimit[cook_farm_level[i]];
-      if (willOverflow)
-      {
-        oneRow[i] = "\033[31m" + to_string(matGain[i]) + "\033[0m";
-      }
-      else
-        oneRow[i] = to_string(matGain[i]);
-      oneRow[i] = "+" + oneRow[i];
-    }
-    printTableRow(oneRow);
-  }
-  {
-    string oneRow[5];//表格中一行要显示的内容
-    for (int i = 0; i < 5; i++)
-    {
-      oneRow[i] = "LV " + to_string(cook_farm_level[i]);
-    }
-    printTableRow(oneRow);
-  }
-
+  
   cout << divLine;
 
   //属性值
@@ -352,11 +324,29 @@ void Game::print() const
     printTableRow(oneRow);
   }
 
-  if (isRacing)
+  //训练等级
+  {
+    string oneRow[5];//表格中一行要显示的内容
+    for (int i = 0; i < 5; i++)
+    {
+      oneRow[i] = "等级：" + to_string(getTrainingLevel(i) + 1);
+      if (getTrainingLevel(i) < 4)
+        oneRow[i] = oneRow[i] + "(+" + to_string(trainLevelCount[i] % 4) + ")";
+
+    }
+    printTableRow(oneRow);
+  }
+
+  if (isRacing || gameStage != GameStage_beforeTrain)
   {
     cout << divLineWhite;
-    cout << "比赛菜种：" << "\033[32m" << GameConstants::Cook_MaterialNames[cook_main_race_material_type] << "\033[0m" << endl;
-    cout << termcolor::red << "比赛回合" << termcolor::reset << endl;
+    if (gameStage == GameStage_beforeMechaUpgrade)
+      cout << termcolor::red << "升级机甲回合" << termcolor::reset << endl; 
+    else if (isRacing)
+      cout << termcolor::red << "比赛回合" << termcolor::reset << endl;
+    else
+      throw "未知的非训练回合";
+    cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
     return;//比赛回合就不显示训练了
   }
 
@@ -384,18 +374,6 @@ void Game::print() const
       else
         vitalStr = "\033[31m" + vitalStr + "\033[0m";
       oneRow[i] = "体力：" + vitalStr + "/" + to_string(maxVital);
-    }
-    printTableRow(oneRow);
-  }
-  //训练等级
-  {
-    string oneRow[5];//表格中一行要显示的内容
-    for (int i = 0; i < 5; i++)
-    {
-      oneRow[i] = "等级：" + to_string(getTrainingLevel(i) + 1);
-      if (getTrainingLevel(i) < 4)
-        oneRow[i] = oneRow[i] + "(+" + to_string(trainLevelCount[i] % 4) + ")";
-        
     }
     printTableRow(oneRow);
   }
@@ -463,8 +441,32 @@ void Game::print() const
       printTableRow(oneRow);
     }
   }
-  cout << divLineWhite;
+  cout << divLine;
 
+  //此训练加的五等级
+  {
+    for (int i = 0; i < 5; i++)
+    {
+      string oneRow[5];//表格中一行要显示的内容
+      string s;
+      if (i == 0)
+        s = "速";
+      else if (i == 1)
+        s = "耐";
+      else if (i == 2)
+        s = "力";
+      else if (i == 3)
+        s = "根";
+      else if (i == 4)
+        s = "智";
+      for (int item = 0; item < 5; item++)
+      {
+        oneRow[item] = s + "lv: " + to_string(mecha_lvGain[item][i]);
+      }
+      printTableRow(oneRow);
+    }
+  }
+  cout << divLine;
   //休息外出比赛的菜种
   {
     string oneRow[5];//表格中一行要显示的内容
@@ -478,27 +480,16 @@ void Game::print() const
         s = "外出";
       else if (t == 7)
         s = "比赛";
-      Action action;
-      action.dishType = DISH_none;
-      action.train = t;
+      Action action(t);
       if(!isLegal(action))
         s = "\033[31m" + s + ":__\033[0m";
-      else
-      {
-        int matType = cook_train_material_type[t];
-        s = s + ":";
-        bool isGreen = cook_train_green[t];
-        if (isGreen)
-          s = s + "\033[32m" + GameConstants::Cook_MaterialNames[matType] + "\033[0m";
-        else
-          s = s + "\033[33m" + GameConstants::Cook_MaterialNames[matType] + "\033[0m";
-      }
+      
       oneRow[t - 5] = s;
     }
     printTableRow(oneRow);
   }
 
-  cout << divLineWhite;
+  cout << divLine;
 
   cout << "\033[31m-------------------------------------------------------------------------------------------\033[0m" << endl;
 
