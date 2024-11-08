@@ -14,7 +14,7 @@ int main()
 	LANGID lang = GetSystemDefaultLangID();
 	std::cout << "Language ID: " << lang << std::endl;
 	// 可以增加作者信息
-	SetWindowTextW(GetConsoleWindow(), TEXT("UmaAI 田园杯 | 蒙特卡洛 | 0.2.5-utf8 | Build 241007"));
+	SetWindowTextW(GetConsoleWindow(), TEXT("UmaAI 机甲杯 | 蒙特卡洛 | 0.1.1-utf8 | Build 241108"));
 	
 	SearchResult::initNormDistributionCdfTable();
 	//main_testOnnx();

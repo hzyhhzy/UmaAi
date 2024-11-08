@@ -11,33 +11,33 @@ enum TrainActionTypeEnum :int16_t
   TRA_guts,
   TRA_wiz,
   TRA_rest, 
-  TRA_outgoing, //°üÀ¨ºÏËŞµÄ¡°ĞİÏ¢&Íâ³ö¡±
+  TRA_outgoing, //åŒ…æ‹¬åˆå®¿çš„â€œä¼‘æ¯&å¤–å‡ºâ€
   TRA_race,
-  TRA_none = -1, //´ËAction²»ÑµÁ·£¬Ö»×ö²Ë
-  //TRA_redistributeCardsForTest = -2 //Ê¹ÓÃÕâ¸ö±ê¼ÇÊ±£¬ËµÃ÷ÒªrandomDistributeCards£¬ÓÃÓÚ²âÊÔai·ÖÊı£¬ÔÚSearch::searchSingleActionThreadÖĞÊ¹ÓÃ
+  TRA_none = -1, //æ­¤Actionä¸è®­ç»ƒï¼Œåªåšèœ
+  //TRA_redistributeCardsForTest = -2 //ä½¿ç”¨è¿™ä¸ªæ ‡è®°æ—¶ï¼Œè¯´æ˜è¦randomDistributeCardsï¼Œç”¨äºæµ‹è¯•aiåˆ†æ•°ï¼Œåœ¨Search::searchSingleActionThreadä¸­ä½¿ç”¨
 };
 
 struct Action 
 {
   static const std::string trainingName[8];
   static Action RedistributeCardsForTest();
-  static const int MAX_ACTION_TYPE = 14 + 36;//±ê×¼µÄActionÓë±àºÅÒ»Ò»¶ÔÓ¦
+  static const int MAX_ACTION_TYPE = 14 + 36;//æ ‡å‡†çš„Actionä¸ç¼–å·ä¸€ä¸€å¯¹åº”
   
-  //Õâ¸ötypeºÍGame::stage¶ÔÓ¦
-  //0 Î´³õÊ¼»¯
-  //1 ÆÕÍ¨ÑµÁ·£¬Èç¹ûÓĞoverdriveÔò¿ÉÒÔ¾ö¶¨ÊÇ·ñ¿ª£¬Ò²¿ÉÒÔÏÈ¿ªoverdrive¶øÔİÊ±²»Ñ¡ÑµÁ·£¨½öÏŞµÚÈıÄêÏÂ°ëÄêµãÁË15¼¶ĞØ£¬ÔòĞèÒªÏÈ¾ö¶¨ÊÇ·ñ¿ªoverdrive¸ù¾İÒ¡ÈË½á¹û¶øÑ¡ÑµÁ·£©¡£Ñ¡Ïî¸öÊıÎª8+5+1
-  //2 Éı¼¶»ØºÏ¡£Ö»¿¼ÂÇÕû3¼¶£¬actionÀïÖ»°üÀ¨Í·ºÍĞØ£¨½Å=×Ü-Í·-ĞØ£©£¬Ñ¡Ïî¸öÊıÎª6*6=36
-  // ·ÇÕû3¼¶µÄ²¿·ÖÖ±½ÓÊÖĞ´Âß¼­
-  //-1 Ê¹ÓÃÕâ¸ö±ê¼ÇÊ±£¬ËµÃ÷ÒªrandomDistributeCards£¬ÓÃÓÚ²âÊÔai·ÖÊı£¬ÔÚSearch::searchSingleActionThreadÖĞÊ¹ÓÃ
+  //è¿™ä¸ªtypeå’ŒGame::stageå¯¹åº”
+  //0 æœªåˆå§‹åŒ–
+  //1 æ™®é€šè®­ç»ƒï¼Œå¦‚æœæœ‰overdriveåˆ™å¯ä»¥å†³å®šæ˜¯å¦å¼€ï¼Œä¹Ÿå¯ä»¥å…ˆå¼€overdriveè€Œæš‚æ—¶ä¸é€‰è®­ç»ƒï¼ˆä»…é™ç¬¬ä¸‰å¹´ä¸‹åŠå¹´ç‚¹äº†15çº§èƒ¸ï¼Œåˆ™éœ€è¦å…ˆå†³å®šæ˜¯å¦å¼€overdriveæ ¹æ®æ‘‡äººç»“æœè€Œé€‰è®­ç»ƒï¼‰ã€‚é€‰é¡¹ä¸ªæ•°ä¸º8+5+1
+  //2 å‡çº§å›åˆã€‚åªè€ƒè™‘æ•´3çº§ï¼Œactioné‡ŒåªåŒ…æ‹¬å¤´å’Œèƒ¸ï¼ˆè„š=æ€»-å¤´-èƒ¸ï¼‰ï¼Œé€‰é¡¹ä¸ªæ•°ä¸º6*6=36
+  // éæ•´3çº§çš„éƒ¨åˆ†ç›´æ¥æ‰‹å†™é€»è¾‘
+  //-1 ä½¿ç”¨è¿™ä¸ªæ ‡è®°æ—¶ï¼Œè¯´æ˜è¦randomDistributeCardsï¼Œç”¨äºæµ‹è¯•aiåˆ†æ•°ï¼Œåœ¨Search::searchSingleActionThreadä¸­ä½¿ç”¨
   int16_t type;
   
-  bool overdrive;//ÊÇ·ñ¿ªoverdrive£¨³İÂÖ£©ÑµÁ·¡£Èç¹ûÒÑ¾­¿ªÁË£¬Õâ¸öºãÎªfalse
+  bool overdrive;//æ˜¯å¦å¼€overdriveï¼ˆé½¿è½®ï¼‰è®­ç»ƒã€‚å¦‚æœå·²ç»å¼€äº†ï¼Œè¿™ä¸ªæ’ä¸ºfalse
   
-  int16_t train;//-1ÔİÊ±²»ÑµÁ·£¬01234ËÙÄÍÁ¦¸ùÖÇ£¬5Íâ³ö£¬6ĞİÏ¢£¬7±ÈÈü 
-  //×¢£ºÍâ³öÊÇÓÅÏÈÓÑÈËÍâ³ö£¬Ã»ÓĞÔÙÆÕÍ¨Íâ³ö£¬²»Ìá¹©Ñ¡Ïî
+  int16_t train;//-1æš‚æ—¶ä¸è®­ç»ƒï¼Œ01234é€Ÿè€åŠ›æ ¹æ™ºï¼Œ5å¤–å‡ºï¼Œ6ä¼‘æ¯ï¼Œ7æ¯”èµ› 
+  //æ³¨ï¼šå¤–å‡ºæ˜¯ä¼˜å…ˆå‹äººå¤–å‡ºï¼Œæ²¡æœ‰å†æ™®é€šå¤–å‡ºï¼Œä¸æä¾›é€‰é¡¹
 
-  int8_t mechaHead;//Í·²¿Éı¼¶
-  int8_t mechaChest;//ĞØ²¿Éı¼¶
+  int8_t mechaHead;//å¤´éƒ¨å‡çº§
+  int8_t mechaChest;//èƒ¸éƒ¨å‡çº§
   //inline int8_t mechaFoot(int8_t total) {
   //  return total - mechaHead - mechaChest;
   //}

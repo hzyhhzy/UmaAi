@@ -13,7 +13,7 @@ Person::Person()
   isHint = false;
   cardRecord = 0;
 
-  std::vector<int> probs = { 1,1,1,1,1,1 }; //ËÙÄÍÁ¦¸ùÖÇ¸ë
+  std::vector<int> probs = { 1,1,1,1,1,1 }; //é€Ÿè€åŠ›æ ¹æ™ºé¸½
   distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 }
 
@@ -27,26 +27,26 @@ void Person::setCard(int cardId)
   cardRecord = 0;
 
   int cardType = cardParam.cardType;
-  if (cardType == 5)//ÓÑÈË¿¨
+  if (cardType == 5)//å‹äººå¡
   {
     int realCardId = cardId / 10;
 
-    std::vector<int> probs = { 100,100,100,100,100,100 }; //»ù´¡¸ÅÂÊ£¬ËÙÄÍÁ¦¸ùÖÇ¸ë
+    std::vector<int> probs = { 100,100,100,100,100,100 }; //åŸºç¡€æ¦‚ç‡ï¼Œé€Ÿè€åŠ›æ ¹æ™ºé¸½
     distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 
     personType = PersonType_friendCard;
     
   }
-  else if (cardType == 6)//ÍÅ¶Ó¿¨
+  else if (cardType == 6)//å›¢é˜Ÿå¡
   {
-    std::vector<int> probs = { 100,100,100,100,100,100 }; //»ù´¡¸ÅÂÊ£¬ËÙÄÍÁ¦¸ùÖÇ¸ë
+    std::vector<int> probs = { 100,100,100,100,100,100 }; //åŸºç¡€æ¦‚ç‡ï¼Œé€Ÿè€åŠ›æ ¹æ™ºé¸½
     distribution = std::discrete_distribution<>(probs.begin(), probs.end());
-    throw string("²»Ö§³Ö´øÁ¹»¨/ÀíÊÂ³¤ÒÔÍâµÄÓÑÈË»òÍÅ¶Ó¿¨");
+    throw string("ä¸æ”¯æŒå¸¦å‡‰èŠ±/ç†äº‹é•¿ä»¥å¤–çš„å‹äººæˆ–å›¢é˜Ÿå¡");
   }
-  else if (cardType >= 0 && cardType <= 4)//ËÙÄÍÁ¦¸ùÖÇ¿¨
+  else if (cardType >= 0 && cardType <= 4)//é€Ÿè€åŠ›æ ¹æ™ºå¡
   {
     personType = 2;
-    std::vector<int> probs = { 100,100,100,100,100,50 }; //»ù´¡¸ÅÂÊ£¬ËÙÄÍÁ¦¸ùÖÇ¸ë
+    std::vector<int> probs = { 100,100,100,100,100,50 }; //åŸºç¡€æ¦‚ç‡ï¼Œé€Ÿè€åŠ›æ ¹æ™ºé¸½
     probs[cardType] += int(cardParam.deYiLv);
     distribution = std::discrete_distribution<>(probs.begin(), probs.end());
   }
@@ -54,15 +54,15 @@ void Person::setCard(int cardId)
 }
 void Person::setExtraDeyilvBonus(int deyilvBonus, bool lianghuaEffect)
 {
-  std::vector<int> probs = { 100,100,100,100,100,50 }; //»ù´¡¸ÅÂÊ£¬ËÙÄÍÁ¦¸ùÖÇ¸ë
-  if (personType != PersonType_card)//ÓÑÈË¿¨£¬¸ëÂÊ2±¶
+  std::vector<int> probs = { 100,100,100,100,100,50 }; //åŸºç¡€æ¦‚ç‡ï¼Œé€Ÿè€åŠ›æ ¹æ™ºé¸½
+  if (personType != PersonType_card)//å‹äººå¡ï¼Œé¸½ç‡2å€
     probs[5] = 100;
-  if (lianghuaEffect) //ssrÁ¹»¨¹ÌÓĞ
+  if (lianghuaEffect) //ssrå‡‰èŠ±å›ºæœ‰
     probs[5] /= 2;
 
   if (personType == PersonType_card)
   {
-    int newDeyilv = cardParam.deYiLv + deyilvBonus; //ÎÒ²»ÖªµÀÕâÀïÓ¦¸Ã¼Ó»¹ÊÇ³Ë
+    int newDeyilv = cardParam.deYiLv + deyilvBonus; //æˆ‘ä¸çŸ¥é“è¿™é‡Œåº”è¯¥åŠ è¿˜æ˜¯ä¹˜
     
     probs[cardParam.cardType] += newDeyilv;
   }
@@ -74,7 +74,7 @@ void Person::setNonCard(int pType)
   personType = pType;
   if (personType != PersonType_lishizhang && personType != PersonType_jizhe && personType != PersonType_lianghuaNonCard)
   {
-    assert(false && "setNonCardÖ»ÓÃÓÚ·ÇÖ§Ô®¿¨ÈËÍ·µÄ³õÊ¼»¯");
+    assert(false && "setNonCardåªç”¨äºéæ”¯æ´å¡äººå¤´çš„åˆå§‹åŒ–");
   }
 
   friendship = 0;
@@ -82,7 +82,7 @@ void Person::setNonCard(int pType)
   cardRecord = 0;
   friendOrGroupCardStage = 0;
   groupCardShiningContinuousTurns = 0;
-  std::vector<int> probs = { 100,100,100,100,100,200 }; //»ù´¡¸ÅÂÊ£¬ËÙÄÍÁ¦¸ùÖÇ¸ë
+  std::vector<int> probs = { 100,100,100,100,100,200 }; //åŸºç¡€æ¦‚ç‡ï¼Œé€Ÿè€åŠ›æ ¹æ™ºé¸½
   distribution = std::discrete_distribution<>(probs.begin(), probs.end());
 }
 */

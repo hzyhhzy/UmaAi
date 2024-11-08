@@ -7,38 +7,38 @@
 
 struct SearchResult
 {
-  static const int NormDistributionSampling = 128;//Í³¼Æ·ÖÊı·Ö²¼Ê±£¬Ã¿¸öÕıÌ¬·Ö²¼²ğ³É¶àÉÙ¸öÑù±¾
-  static double normDistributionCdfInv[NormDistributionSampling];//ÕıÌ¬·Ö²¼ÀÛ»ı·Ö²¼º¯ÊıµÄ·´º¯ÊıÔÚ0~1ÉÏ¾ùÔÈÈ¡µã
-  static void initNormDistributionCdfTable();//³õÊ¼»¯
+  static const int NormDistributionSampling = 128;//ç»Ÿè®¡åˆ†æ•°åˆ†å¸ƒæ—¶ï¼Œæ¯ä¸ªæ­£æ€åˆ†å¸ƒæ‹†æˆå¤šå°‘ä¸ªæ ·æœ¬
+  static double normDistributionCdfInv[NormDistributionSampling];//æ­£æ€åˆ†å¸ƒç´¯ç§¯åˆ†å¸ƒå‡½æ•°çš„åå‡½æ•°åœ¨0~1ä¸Šå‡åŒ€å–ç‚¹
+  static void initNormDistributionCdfTable();//åˆå§‹åŒ–
 
   //Action action;
   bool isLegal;
   int num;
-  int32_t finalScoreDistribution[MAX_SCORE];//Ä³¸öactionµÄ×îÖÕ·ÖÊı·Ö²¼Ô¤²â
+  int32_t finalScoreDistribution[MAX_SCORE];//æŸä¸ªactionçš„æœ€ç»ˆåˆ†æ•°åˆ†å¸ƒé¢„æµ‹
   void clear();
   void addResult(ModelOutputValueV1 v); //O(N*NormDistributionSampling)
   ModelOutputValueV1 getWeightedMeanScore(double radicalFactor);//slow, O(MAXSCORE), avoid frequently call
 
-  ModelOutputValueV1 lastCalculate;//ÉÏ´Îµ÷ÓÃgetWeightedMeanScoreµÄ¼ÆËã½á¹û
-  bool upToDate;//lastCalculateÊÇ·ñÒÑ¹ıÊ±
-  double lastRadicalFactor;//ÉÏ´Î¼ÆËãµÄradicalFactor
+  ModelOutputValueV1 lastCalculate;//ä¸Šæ¬¡è°ƒç”¨getWeightedMeanScoreçš„è®¡ç®—ç»“æœ
+  bool upToDate;//lastCalculateæ˜¯å¦å·²è¿‡æ—¶
+  double lastRadicalFactor;//ä¸Šæ¬¡è®¡ç®—çš„radicalFactor
 };
 
 
-//Ò»¾ÖÓÎÏ·ÊÇÒ»¸ösearch
+//ä¸€å±€æ¸¸æˆæ˜¯ä¸€ä¸ªsearch
 class Search
 {
 public:
-  // ÏÖÔÚÏ£Íû»ñµÃ×îÖÕ·ÖÊıµÄ·Ö²¼
-  // Ê¹ÓÃÉñ¾­ÍøÂç½øĞĞÃÉÌØ¿¨ÂåÊ±£¬Èç¹ûdepth<TOTAL_TURN£¬Ã»ÓĞËÑË÷µ½ÖÕ¾Ö¡£ÕâÊ±ÈÃÉñ¾­ÍøÂç·µ»ØÔ¤²âÆ½¾ùÖµmeanºÍ±ê×¼²îstdev
-  // ¶ÔÓÚÃÉÌØ¿¨ÂåµÄËùÓĞÑù±¾£¬°ÑÃ¿¸öÑù±¾ÊÓÎªÕıÌ¬·Ö²¼£¬²¢ÔÚÕıÌ¬·Ö²¼ÖĞÈ¡NormDistributionSampling¸öµã£¬¼ÓÔÚfinalScoreDistributionÉÏ
-  // Ö®ºó¶ÔfinalScoreDistribution½øĞĞ´¦Àí£¬¼ÆËãÕûÌåµÄModelOutputValueV1ÖĞµÄ¸÷Ïî²ÎÊı
+  // ç°åœ¨å¸Œæœ›è·å¾—æœ€ç»ˆåˆ†æ•°çš„åˆ†å¸ƒ
+  // ä½¿ç”¨ç¥ç»ç½‘ç»œè¿›è¡Œè’™ç‰¹å¡æ´›æ—¶ï¼Œå¦‚æœdepth<TOTAL_TURNï¼Œæ²¡æœ‰æœç´¢åˆ°ç»ˆå±€ã€‚è¿™æ—¶è®©ç¥ç»ç½‘ç»œè¿”å›é¢„æµ‹å¹³å‡å€¼meanå’Œæ ‡å‡†å·®stdev
+  // å¯¹äºè’™ç‰¹å¡æ´›çš„æ‰€æœ‰æ ·æœ¬ï¼ŒæŠŠæ¯ä¸ªæ ·æœ¬è§†ä¸ºæ­£æ€åˆ†å¸ƒï¼Œå¹¶åœ¨æ­£æ€åˆ†å¸ƒä¸­å–NormDistributionSamplingä¸ªç‚¹ï¼ŒåŠ åœ¨finalScoreDistributionä¸Š
+  // ä¹‹åå¯¹finalScoreDistributionè¿›è¡Œå¤„ç†ï¼Œè®¡ç®—æ•´ä½“çš„ModelOutputValueV1ä¸­çš„å„é¡¹å‚æ•°
   
   
-  //¶ÔÓÚÃ¿¸öactionÏÈËÑsearchFactorStage[0]±ÈÀıµÄ¼ÆËãÁ¿
-  //Èç¹ûÄ³¸öactionµÄ·ÖÊıÏà±È×î¸ß·ÖµÍÁËsearchThreholdStdevStage¸ö±ê×¼²î£¬ÔòÅÅ³ıµôÕâ¸öÑ¡Ïî
-  //Ã»±»ÅÅ³ıµÄaction½øĞĞµÚ¶şÂÖËÑË÷£¬¼ÆËãÁ¿ÊÇsearchFactorStage[1]
-  //stageÊı²»ÄÜÌ«¶à£¬ÒòÎªÃ¿´ÎÃ¿¸öaction¶¼Òª¼ÆËãgetWeightedMeanScore()
+  //å¯¹äºæ¯ä¸ªactionå…ˆæœsearchFactorStage[0]æ¯”ä¾‹çš„è®¡ç®—é‡
+  //å¦‚æœæŸä¸ªactionçš„åˆ†æ•°ç›¸æ¯”æœ€é«˜åˆ†ä½äº†searchThreholdStdevStageä¸ªæ ‡å‡†å·®ï¼Œåˆ™æ’é™¤æ‰è¿™ä¸ªé€‰é¡¹
+  //æ²¡è¢«æ’é™¤çš„actionè¿›è¡Œç¬¬äºŒè½®æœç´¢ï¼Œè®¡ç®—é‡æ˜¯searchFactorStage[1]
+  //stageæ•°ä¸èƒ½å¤ªå¤šï¼Œå› ä¸ºæ¯æ¬¡æ¯ä¸ªactionéƒ½è¦è®¡ç®—getWeightedMeanScore()
   static const int expectedSearchStdev = 2200;
   static const int searchStageNum = 3;
   static const double searchFactorStage[searchStageNum];
@@ -46,20 +46,20 @@ public:
   
 
 
-  Game rootGame;//µ±Ç°»ò¸ÕËÑË÷ÍêµÄÊÇÄÄ¸ö¾ÖÃæ
-  int threadNumInGame;//Ò»¸ösearchÀïÃæ¼¸¸öÏß³Ì
+  Game rootGame;//å½“å‰æˆ–åˆšæœç´¢å®Œçš„æ˜¯å“ªä¸ªå±€é¢
+  int threadNumInGame;//ä¸€ä¸ªsearché‡Œé¢å‡ ä¸ªçº¿ç¨‹
   int batchSize;
   SearchParam param;
   std::vector<Evaluator> evaluators;
 
-  std::vector<SearchResult> allActionResults;//ËùÓĞ¿ÉÄÜµÄÑ¡ÔñµÄ´ò·Ö
+  std::vector<SearchResult> allActionResults;//æ‰€æœ‰å¯èƒ½çš„é€‰æ‹©çš„æ‰“åˆ†
 
-  //¶ÔÓÚÃ¿¸ö¿ÉÄÜµÄÇé¿ö£¬Ã¿¸öÍùºóÄ£ÄâeachSamplingNum¾Ö£¬Ä£ÄâmaxDepth»ØºÏºó·µ»ØÉñ¾­ÍøÂçÊä³ö£¨Éñ¾­ÍøÂçÊä³öÊÇÆ½¾ù·Ö¡¢±ê×¼²î¡¢ÀÖ¹Û·Ö£©
-  //¹ØÓÚ¶àÏß³Ì£¬Ôİ¶¨µÄ·½°¸ÈçÏÂ£º
-  // 1.ModelÀàµÄÊäÈëÊÇÒÑ¾­ÕûÀíºÃµÄfloatÏòÁ¿*batchsize£¬Êä³öÒ²ÊÇÏòÁ¿*batchsize¡£ModelÀàÓĞËø£¬Í¬Ê±Ö»ÄÜ¼ÆËãÒ»¸ö
-  // 2.¶ÔÓÚevaluateSingleAction£¬°ÑeachSamplingNum¾ÖÓÎÏ·²ğ³ÉthreadNumInGame×é£¬Ã¿×éÒ»¸öÏß³Ì(Evaluator)¡£Ã¿¸öÏß³Ì·Ö³ÉeachSamplingNum/(threadNumInGame*batchsize)Ğ¡×é£¬Ã¿Ğ¡×ébatchsize¾ÖÓÎÏ·£¬ÒÀ´Î¼ÆËãÃ¿¸öĞ¡×éµÄ·ÖÊı£¬¶¼¼ÆËãÍê±ÏÖ®ºóÕûºÏÆğÀ´
-  // 3.Èç¹ûÒªÅÜºÜ¶à¾Ö£¨ÀıÈçÅÜÆ×£©£¬»áÍ¬Ê±ÅÜthreadGame¾Ö£¬×ÜÏß³ÌÊıÎªthreadGame*threadNumInGame¡£ÈôeachSamplingNum½ÏĞ¡batchsize½Ï´ó£¬¿ÉÒÔÈÃthreadNumInGame=1
-  // Ç¶Ì×½á¹¹£ºSearch(threadGame¸ö)->Evaluator(threadGame*threadNumInGame¸ö)->Model(1¸ö)
+  //å¯¹äºæ¯ä¸ªå¯èƒ½çš„æƒ…å†µï¼Œæ¯ä¸ªå¾€åæ¨¡æ‹ŸeachSamplingNumå±€ï¼Œæ¨¡æ‹ŸmaxDepthå›åˆåè¿”å›ç¥ç»ç½‘ç»œè¾“å‡ºï¼ˆç¥ç»ç½‘ç»œè¾“å‡ºæ˜¯å¹³å‡åˆ†ã€æ ‡å‡†å·®ã€ä¹è§‚åˆ†ï¼‰
+  //å…³äºå¤šçº¿ç¨‹ï¼Œæš‚å®šçš„æ–¹æ¡ˆå¦‚ä¸‹ï¼š
+  // 1.Modelç±»çš„è¾“å…¥æ˜¯å·²ç»æ•´ç†å¥½çš„floatå‘é‡*batchsizeï¼Œè¾“å‡ºä¹Ÿæ˜¯å‘é‡*batchsizeã€‚Modelç±»æœ‰é”ï¼ŒåŒæ—¶åªèƒ½è®¡ç®—ä¸€ä¸ª
+  // 2.å¯¹äºevaluateSingleActionï¼ŒæŠŠeachSamplingNumå±€æ¸¸æˆæ‹†æˆthreadNumInGameç»„ï¼Œæ¯ç»„ä¸€ä¸ªçº¿ç¨‹(Evaluator)ã€‚æ¯ä¸ªçº¿ç¨‹åˆ†æˆeachSamplingNum/(threadNumInGame*batchsize)å°ç»„ï¼Œæ¯å°ç»„batchsizeå±€æ¸¸æˆï¼Œä¾æ¬¡è®¡ç®—æ¯ä¸ªå°ç»„çš„åˆ†æ•°ï¼Œéƒ½è®¡ç®—å®Œæ¯•ä¹‹åæ•´åˆèµ·æ¥
+  // 3.å¦‚æœè¦è·‘å¾ˆå¤šå±€ï¼ˆä¾‹å¦‚è·‘è°±ï¼‰ï¼Œä¼šåŒæ—¶è·‘threadGameå±€ï¼Œæ€»çº¿ç¨‹æ•°ä¸ºthreadGame*threadNumInGameã€‚è‹¥eachSamplingNumè¾ƒå°batchsizeè¾ƒå¤§ï¼Œå¯ä»¥è®©threadNumInGame=1
+  // åµŒå¥—ç»“æ„ï¼šSearch(threadGameä¸ª)->Evaluator(threadGame*threadNumInGameä¸ª)->Model(1ä¸ª)
 
   Search(Model* model, int batchSize, int threadNumInGame);
   Search(Model* model, int batchSize, int threadNumInGame, SearchParam param0);
@@ -67,35 +67,35 @@ public:
   void setParam(SearchParam param0);
 
   Action runSearch(const Game& game,
-    std::mt19937_64& rand, bool twoStageSearchFirstYear = true);//¶ÔÓÚµ±Ç°¾ÖÃæ£¬¼ÆËãÃ¿¸öÑ¡ÏîµÄ·ÖÊı²¢·µ»Ø×îÓÅÑ¡Ïî, twoStageSearchFirstYearÊÇµÚÒ»ÄêËÑË÷³Ô²ËÖ®ºóÊÇ·ñÔÙËÑË÷ÑµÁ·
+    std::mt19937_64& rand, bool twoStageSearchFirstYear = true);//å¯¹äºå½“å‰å±€é¢ï¼Œè®¡ç®—æ¯ä¸ªé€‰é¡¹çš„åˆ†æ•°å¹¶è¿”å›æœ€ä¼˜é€‰é¡¹, twoStageSearchFirstYearæ˜¯ç¬¬ä¸€å¹´æœç´¢åƒèœä¹‹åæ˜¯å¦å†æœç´¢è®­ç»ƒ
 
-  void printSearchResult(bool showSearchNum);//´òÓ¡ËÑË÷½á¹û
+  void printSearchResult(bool showSearchNum);//æ‰“å°æœç´¢ç»“æœ
 
   ModelOutputValueV1 evaluateNewGame(const Game& game,
-    std::mt19937_64& rand);//Ö±½Ó´ÓµÚÒ»»ØºÏ¿ªÊ¼ÃÉÌØ¿¨Âå£¬ÓÃÓÚ²âÊÔ¿¨×éÇ¿¶È»òÕßaiÇ¿¶È
+    std::mt19937_64& rand);//ç›´æ¥ä»ç¬¬ä¸€å›åˆå¼€å§‹è’™ç‰¹å¡æ´›ï¼Œç”¨äºæµ‹è¯•å¡ç»„å¼ºåº¦æˆ–è€…aiå¼ºåº¦
 
-  //¶Ôµ¥¸öaction½øĞĞÃÉÌØ¿¨Âå£¬²¢½«½á¹û¼Óµ½allActionResultsÀï
+  //å¯¹å•ä¸ªactionè¿›è¡Œè’™ç‰¹å¡æ´›ï¼Œå¹¶å°†ç»“æœåŠ åˆ°allActionResultsé‡Œ
   void searchSingleAction(
     int searchN,
     std::mt19937_64& rand,
     SearchResult& searchResult,
     Action action);
 
-  //¸ù¾İËÑË÷½á¹ûÑ¡³ö×î¼ÑÑ¡Ôñ£¬policyÒ²×öÒ»¶¨µÄÈí»¯
-  //mode=0ÊÇ¸ù¾İÊ¤ÂÊ£¬=1ÊÇ¸ù¾İÆ½¾ù·Ö
+  //æ ¹æ®æœç´¢ç»“æœé€‰å‡ºæœ€ä½³é€‰æ‹©ï¼Œpolicyä¹Ÿåšä¸€å®šçš„è½¯åŒ–
+  //mode=0æ˜¯æ ¹æ®èƒœç‡ï¼Œ=1æ˜¯æ ¹æ®å¹³å‡åˆ†
   //ModelOutputPolicyV1 extractPolicyFromSearchResults(int mode, float delta = 0);
 
-  //µ¼³öÉÏ´ÎËÑË÷µÄÊı¾İ×÷ÎªÑµÁ·Ñù±¾
-  TrainingSample exportTrainingSample(double policyDelta = 100);//policyDeltaÊÇpolicyµÄÈí»¯ÏµÊı
+  //å¯¼å‡ºä¸Šæ¬¡æœç´¢çš„æ•°æ®ä½œä¸ºè®­ç»ƒæ ·æœ¬
+  TrainingSample exportTrainingSample(double policyDelta = 100);//policyDeltaæ˜¯policyçš„è½¯åŒ–ç³»æ•°
 
 
 private:
 
   std::vector<ModelOutputValueV1> NNresultBuf;
 
-  int calculateBatchNumEachThread(int searchN) const;//Ã¿¸öÏß³Ì¶àÉÙbatch
-  int calculateRealSearchN(int searchN) const;//¶ÔÏß³ÌÊı*batchsizeÈ¡ÕûºóµÄ¼ÆËãÁ¿
-  //¼ÆËãµ¥¸öactionµÄÊıÖµ£¬µ¥¸öÏß³Ì¡£°ÑÃ¿¾ÖµÄ½á¹û±£´æµ½resultBufÀï¡£ÏÈ²»ÍùallActionResultsÀï¼Ó
+  int calculateBatchNumEachThread(int searchN) const;//æ¯ä¸ªçº¿ç¨‹å¤šå°‘batch
+  int calculateRealSearchN(int searchN) const;//å¯¹çº¿ç¨‹æ•°*batchsizeå–æ•´åçš„è®¡ç®—é‡
+  //è®¡ç®—å•ä¸ªactionçš„æ•°å€¼ï¼Œå•ä¸ªçº¿ç¨‹ã€‚æŠŠæ¯å±€çš„ç»“æœä¿å­˜åˆ°resultBufé‡Œã€‚å…ˆä¸å¾€allActionResultsé‡ŒåŠ 
   void searchSingleActionThread(
     int threadIdx,
     ModelOutputValueV1* resultBuf, 

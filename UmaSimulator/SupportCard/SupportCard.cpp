@@ -8,11 +8,11 @@ using namespace std;
 
 void SupportCard::write_to_json(json& j, const std::string cdname, const int id) const
 {
+	throw string("unchecked");
 	j["cardId"] = id / 10;
 	j["cardType"] = cardType;
 
-	//j["cardName"] = string_To_UTF8(cdname);
-	j["cardName"] = cdname;
+	j["cardName"] = string_To_UTF8(cdname);
 
 	j["cardValue"][1]["filled"] = false;
 	j["cardValue"][2]["filled"] = false;
@@ -39,6 +39,7 @@ void SupportCard::write_to_json(json& j, const std::string cdname, const int id)
 
 	//j["cardSkill"]["skillNum"] = 0;
 	//j["cardSkill"]["SkillList"] = NULL;
+
 }
 
 void SupportCard::load_from_json(json& j, int x) {
@@ -48,9 +49,9 @@ void SupportCard::load_from_json(json& j, int x) {
 	cardType = j.value("cardType", -1);
 	//cardName = UTF8_To_string(j.value<std::string>("cardName", ""));
 	cardName = j.value<std::string>("cardName", "");
-	//j.at("cardSkill").get_to(cardSkill);	// �����뼼�ܣ���Ϊ��ʽ��ͬ
+	//j.at("cardSkill").get_to(cardSkill);	// 不载入技能，因为格式不同
 	charaId = j.value("charaId", -1);
-	// ������С�û�и�keyʱ��Ĭ��ֵ
+	// 载入固有。没有该key时用默认值
 	uniqueEffectType = j.value("uniqueEffectType", 0);
 	uniqueEffectParam = j.value("uniqueEffectParam", vector<int>());
 
@@ -71,17 +72,17 @@ void SupportCard::load_from_json(json& j, int x) {
 		j["cardValue"][x].at("initialBonus").get_to(initialBonus);
 		j["cardValue"][x].at("hintLevel").get_to(hintLevel);
 
-		eventRecoveryAmountUp = j["cardValue"][x].value<int>("eventRecoveryAmountUp", 0); //���˿��¼������ӳ�
-		eventEffectUp = j["cardValue"][x].value<int>("eventEffectUp", 0); //���˿��¼����Լӳ�
+		eventRecoveryAmountUp = j["cardValue"][x].value<int>("eventRecoveryAmountUp", 0); //友人卡事件体力加成
+		eventEffectUp = j["cardValue"][x].value<int>("eventEffectUp", 0); //友人卡事件属性加成
 	}
 
 	if (charaId > 0) {
-		// ֱ��ʹ��charaID�ж��Ƿ�Ϊ���ӿ�
+		// 直接使用charaID判断是否为链接卡
 		isLink = GameConstants::isLinkChara(charaId);
 	}
 	else 
 	{
-		assert(false && "老数据淘汰了");
+		throw "老数据淘汰了";
 	}
 	return;
 }

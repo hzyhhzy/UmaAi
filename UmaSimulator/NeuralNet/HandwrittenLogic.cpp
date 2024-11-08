@@ -10,12 +10,12 @@ const double vitalFactorStart = 3.5;
 const double vitalFactorEnd = 7;
 const double vitalScaleTraining = 1;
 
-const double reserveStatusFactor = 40;//¿ØÊôĞÔÊ±¸øÃ¿»ØºÏÔ¤Áô¶àÉÙ£¬´Ó0Öğ½¥Ôö¼Óµ½Õâ¸öÊı×Ö
+const double reserveStatusFactor = 40;//æ§å±æ€§æ—¶ç»™æ¯å›åˆé¢„ç•™å¤šå°‘ï¼Œä»0é€æ¸å¢åŠ åˆ°è¿™ä¸ªæ•°å­—
 
 const double smallFailValue = -150;
 const double bigFailValue = -500;
-const double outgoingBonusIfNotFullMotivation = 150;//µôĞÄÇéÊ±Ìá¸ßÍâ³ö·ÖÊı
-const double raceBonus = 100;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
+const double outgoingBonusIfNotFullMotivation = 150;//æ‰å¿ƒæƒ…æ—¶æé«˜å¤–å‡ºåˆ†æ•°
+const double raceBonus = 100;//æ¯”èµ›æ”¶ç›Šï¼Œä¸è€ƒè™‘ä½“åŠ›
 
 const double mechaLvBonusStart = 10;
 const double mechaLvBonusEnd = 5;
@@ -24,17 +24,17 @@ const double overdriveActivateFactor = 1.5;
 
 
 
-//const double xiangtanExhaustLossMax = 800;//ÏàÌ¸ºÄ¾¡ÇÒÃ»´ï±êµÄ¹ÀÖµ¿Û·Ö
+//const double xiangtanExhaustLossMax = 800;//ç›¸è°ˆè€—å°½ä¸”æ²¡è¾¾æ ‡çš„ä¼°å€¼æ‰£åˆ†
 
-//Ò»¸ö·Ö¶Îº¯Êı£¬ÓÃÀ´¿ØÊôĞÔ
-inline double statusSoftFunction(double x, double reserve, double reserveInvX2)//reserveÊÇ¿ØÊôĞÔ±£Áô¿Õ¼ä£¨½µµÍÈ¨ÖØ£©£¬reserveInvX2ÊÇ1/(2*reserve)
+//ä¸€ä¸ªåˆ†æ®µå‡½æ•°ï¼Œç”¨æ¥æ§å±æ€§
+inline double statusSoftFunction(double x, double reserve, double reserveInvX2)//reserveæ˜¯æ§å±æ€§ä¿ç•™ç©ºé—´ï¼ˆé™ä½æƒé‡ï¼‰ï¼ŒreserveInvX2æ˜¯1/(2*reserve)
 {
   if (x >= 0)return 0;
   if (x > -reserve)return -x * x * reserveInvX2;
   return x + 0.5 * reserve;
 }
 
-static double mechaLvEvaluation(const Game& g, int train) //mechaLvÌáÉıÁ¿£¬¿¿½üÉÏÏŞÊ±Ë¥¼õ
+static double mechaLvEvaluation(const Game& g, int train) //mechaLvæå‡é‡ï¼Œé è¿‘ä¸Šé™æ—¶è¡°å‡
 {
   if (train == -1 || train == TRA_outgoing || train == TRA_rest)return 0;
 
@@ -62,21 +62,21 @@ static double mechaLvEvaluation(const Game& g, int train) //mechaLvÌáÉıÁ¿£¬¿¿½üÉ
 
 }
 
-static void statusGainEvaluation(const Game& g, double* result) { //resultÒÀ´ÎÊÇÎåÖÖÑµÁ·µÄ¹ÀÖµ
-  int remainTurn = TOTAL_TURN - g.turn - 1;//Õâ´ÎÑµÁ·ºó»¹ÓĞ¼¸¸öÑµÁ·»ØºÏ
-  //uraÆÚ¼äµÄÒ»¸ö»ØºÏÊÓÎªÁ½¸ö»ØºÏ£¬Òò´Ë²»ĞèÒª¶îÍâ´¦Àí
-  //if (remainTurn == 2)remainTurn = 1;//uraµÚ¶ş»ØºÏ
-  //else if (remainTurn >= 4)remainTurn -= 2;//uraµÚÒ»»ØºÏ
+static void statusGainEvaluation(const Game& g, double* result) { //resultä¾æ¬¡æ˜¯äº”ç§è®­ç»ƒçš„ä¼°å€¼
+  int remainTurn = TOTAL_TURN - g.turn - 1;//è¿™æ¬¡è®­ç»ƒåè¿˜æœ‰å‡ ä¸ªè®­ç»ƒå›åˆ
+  //uraæœŸé—´çš„ä¸€ä¸ªå›åˆè§†ä¸ºä¸¤ä¸ªå›åˆï¼Œå› æ­¤ä¸éœ€è¦é¢å¤–å¤„ç†
+  //if (remainTurn == 2)remainTurn = 1;//uraç¬¬äºŒå›åˆ
+  //else if (remainTurn >= 4)remainTurn -= 2;//uraç¬¬ä¸€å›åˆ
 
   double reserve = reserveStatusFactor * remainTurn * (1 - double(remainTurn) / (TOTAL_TURN * 2));
   double reserveInvX2 = 1 / (2 * reserve);
 
   double finalBonus0 = 45;
-  finalBonus0 += 30;//ura3ºÍ×îÖÕÊÂ¼ş
+  finalBonus0 += 30;//ura3å’Œæœ€ç»ˆäº‹ä»¶
   if (remainTurn >= 1)finalBonus0 += 20;//ura2
   if (remainTurn >= 2)finalBonus0 += 20;//ura1
 
-  double remain[5]; //Ã¿ÖÖÊôĞÔ»¹ÓĞ¶àÉÙ¿Õ¼ä
+  double remain[5]; //æ¯ç§å±æ€§è¿˜æœ‰å¤šå°‘ç©ºé—´
 
   for (int i = 0; i < 5; i++)
   {
@@ -117,12 +117,12 @@ static double calculateMaxVitalEquvalant(const Game& g)
 {
   int t = g.turn;
   if (g.turn >= 76)
-    return 0;//×îºóÒ»»ØºÏ²»ĞèÒªÌåÁ¦
+    return 0;//æœ€åä¸€å›åˆä¸éœ€è¦ä½“åŠ›
   if (g.turn > 71)
-    return 10;//uraÆÚ¼ä¿ÉÒÔ³Ô²Ë
+    return 10;//uraæœŸé—´å¯ä»¥åƒèœ
   if (g.turn == 71)
-    return 30;//uraÇ°×îºóÒ»»ØºÏ£¬30ÌåÁ¦½ø¾ÍĞĞ
-  int nonRaceTurn = 0;//71»ØºÏÇ°£¬Ã¿¸öÑµÁ·»ØºÏ°´ÏûºÄ15ÌåÁ¦¼ÆËã
+    return 30;//uraå‰æœ€åä¸€å›åˆï¼Œ30ä½“åŠ›è¿›å°±è¡Œ
+  int nonRaceTurn = 0;//71å›åˆå‰ï¼Œæ¯ä¸ªè®­ç»ƒå›åˆæŒ‰æ¶ˆè€—15ä½“åŠ›è®¡ç®—
   for (int i = 71; i > g.turn; i--)
   {
     if (!g.isRacingTurn[i])nonRaceTurn++;
@@ -316,7 +316,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
   bestAction.type = GameStage_beforeTrain;
 
-  //±ÈÈü
+  //æ¯”èµ›
   if (game.isRacing)
   {
     bestAction.train = TRA_race;
@@ -338,7 +338,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
   double mechaLvFactor = mechaLvBonusStart + (game.turn / double(TOTAL_TURN)) * (mechaLvBonusEnd - mechaLvBonusStart);
 
-  //Íâ³ö/ĞİÏ¢
+  //å¤–å‡º/ä¼‘æ¯
   {
     bool isFriendOutgoingAvailable =
       game.friend_type != 0 &&
@@ -348,7 +348,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     Action action;
     action.type = GameStage_beforeTrain;
     action.train = TRA_rest;
-    if (isFriendOutgoingAvailable || game.isXiahesu())action.train = TRA_outgoing;//ÓĞÓÑÈËÍâ³öÓÅÏÈÍâ³ö£¬·ñÔòĞİÏ¢
+    if (isFriendOutgoingAvailable || game.isXiahesu())action.train = TRA_outgoing;//æœ‰å‹äººå¤–å‡ºä¼˜å…ˆå¤–å‡ºï¼Œå¦åˆ™ä¼‘æ¯
 
     int vitalGain = isFriendOutgoingAvailable ? 50 : game.isXiahesu() ? 40 : 50;
     bool addMotivation = game.motivation < 5 && action.train == TRA_outgoing;
@@ -365,7 +365,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       bestAction = action;
     }
   }
-  //±ÈÈü
+  //æ¯”èµ›
   Action raceAction;
   raceAction.train = TRA_race;
   if(game.isLegal(raceAction))
@@ -389,10 +389,10 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   }
 
 
-  //ÑµÁ·
+  //è®­ç»ƒ
 
   double statusGainE[5];
-  //ÏÈÕÒµ½×îºÃµÄÑµÁ·£¬È»ºó¼ÆËãÒª²»Òª³Ô²Ë
+  //å…ˆæ‰¾åˆ°æœ€å¥½çš„è®­ç»ƒï¼Œç„¶åè®¡ç®—è¦ä¸è¦åƒèœ
   {
     statusGainEvaluation(game, statusGainE);
 
@@ -402,13 +402,13 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       double value = statusGainE[tra];
 
 
-      //´¦ÀíhintºÍî¿°í
-      int cardHintNum = 0;//ËùÓĞhintËæ»úÈ¡Ò»¸ö£¬ËùÒÔ´ò·ÖµÄÊ±ºòÈ¡Æ½¾ù
+      //å¤„ç†hintå’Œç¾ç»Š
+      int cardHintNum = 0;//æ‰€æœ‰hintéšæœºå–ä¸€ä¸ªï¼Œæ‰€ä»¥æ‰“åˆ†çš„æ—¶å€™å–å¹³å‡
       for (int j = 0; j < 5; j++)
       {
         int p = game.personDistribution[tra][j];
-        if (p < 0)break;//Ã»ÈË
-        if (p >= 6)continue;//²»ÊÇ¿¨
+        if (p < 0)break;//æ²¡äºº
+        if (p >= 6)continue;//ä¸æ˜¯å¡
         if (game.persons[p].isHint)
           cardHintNum += 1;
       }
@@ -417,10 +417,10 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       for (int j = 0; j < 5; j++)
       {
         int pi = game.personDistribution[tra][j];
-        if (pi < 0)break;//Ã»ÈË
-        if (pi >= 6)continue;//²»ÊÇ¿¨
+        if (pi < 0)break;//æ²¡äºº
+        if (pi >= 6)continue;//ä¸æ˜¯å¡
         const Person& p = game.persons[pi];
-        if (p.personType == PersonType_friendCard)//ÓÑÈË¿¨
+        if (p.personType == PersonType_friendCard)//å‹äººå¡
         {
           haveFriend = true;
           if (game.friend_stage == FriendStage_notClicked)
@@ -464,18 +464,18 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       value += mechaLvValue;
 
 
-      //ÀíÂÛÉÏ£¬¹ÀÖµĞèÒª³ËÉÏ²ËµÄÑµÁ·¼Ó³ÉÈ»ºó¼õÈ¥²ËµÄ¿ªÏú£¬µ«¹ıÓÚ¸´ÔÓ£¬ÀÁµÃ¿¼ÂÇÁË
+      //ç†è®ºä¸Šï¼Œä¼°å€¼éœ€è¦ä¹˜ä¸Šèœçš„è®­ç»ƒåŠ æˆç„¶åå‡å»èœçš„å¼€é”€ï¼Œä½†è¿‡äºå¤æ‚ï¼Œæ‡’å¾—è€ƒè™‘äº†
       int vitalAfterTrain = std::min(maxVitalEquvalant, game.trainVitalChange[tra] + game.vital);
       value += vitalScaleTraining * vitalFactor * (vitalEvaluation(vitalAfterTrain, game.maxVital) - vitalEvalBeforeTrain);
 
-      //µ½Ä¿Ç°ÎªÖ¹¶¼ÊÇÑµÁ·³É¹¦µÄvalue
-      //¼ÆËã³Ô²ËÖ®ºóµÄÌåÁ¦£¬ÖØĞÂ¼ÆËãÊ§°ÜÂÊ
+      //åˆ°ç›®å‰ä¸ºæ­¢éƒ½æ˜¯è®­ç»ƒæˆåŠŸçš„value
+      //è®¡ç®—åƒèœä¹‹åçš„ä½“åŠ›ï¼Œé‡æ–°è®¡ç®—å¤±è´¥ç‡
       double failRate = game.failRate[tra];
       bool overdriveAvailable = !game.mecha_overdrive_enabled && game.mecha_overdrive_energy >= 3;
       if (overdriveAvailable && game.mecha_upgradeTotal[2] >= 12 && failRate > 0)
       {
         int vitalGain = 15;
-        failRate -= 1.7 * vitalGain;//´Ö²Ú¹À¼Æ
+        failRate -= 1.7 * vitalGain;//ç²—ç³™ä¼°è®¡
         if (failRate < 0)failRate = 0;
       }
 
@@ -501,7 +501,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         action.overdrive = false;
         action.train = tra;
 
-        //ÊÇ·ñoverdrive
+        //æ˜¯å¦overdrive
         if (overdriveAvailable)
         {
           if (game.mecha_overdrive_energy >= 6 ||

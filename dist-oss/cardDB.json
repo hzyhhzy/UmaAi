@@ -3526,6 +3526,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 20,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "failRateDrop": 15,
         "vitalCostDrop": 10
       },
@@ -3558,6 +3560,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 21,
+        "eventRecoveryAmountUp": 32,
+        "eventEffectUp": 21,
         "failRateDrop": 16,
         "vitalCostDrop": 11
       },
@@ -3590,6 +3594,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 22,
+        "eventRecoveryAmountUp": 35,
+        "eventEffectUp": 22,
         "failRateDrop": 17,
         "vitalCostDrop": 12
       },
@@ -3622,6 +3628,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 23,
+        "eventRecoveryAmountUp": 37,
+        "eventEffectUp": 23,
         "failRateDrop": 18,
         "vitalCostDrop": 13
       },
@@ -3654,6 +3662,8 @@
         "hintLevel": 0,
         "xunLian": 5,
         "initialJiBan": 25,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 25,
         "failRateDrop": 20,
         "vitalCostDrop": 15
       }
@@ -3696,6 +3706,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 20,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "failRateDrop": 15,
         "vitalCostDrop": 10
       },
@@ -3728,6 +3740,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 21,
+        "eventRecoveryAmountUp": 32,
+        "eventEffectUp": 21,
         "failRateDrop": 16,
         "vitalCostDrop": 11
       },
@@ -3760,6 +3774,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 22,
+        "eventRecoveryAmountUp": 35,
+        "eventEffectUp": 22,
         "failRateDrop": 17,
         "vitalCostDrop": 12
       },
@@ -3792,6 +3808,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 23,
+        "eventRecoveryAmountUp": 37,
+        "eventEffectUp": 23,
         "failRateDrop": 18,
         "vitalCostDrop": 13
       },
@@ -3824,6 +3842,8 @@
         "hintLevel": 0,
         "xunLian": 5,
         "initialJiBan": 25,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 25,
         "failRateDrop": 20,
         "vitalCostDrop": 15
       }
@@ -10397,6 +10417,8 @@
         "xunLian": 0,
         "initialJiBan": 20,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 20,
+        "eventEffectUp": 20,
         "failRateDrop": 10,
         "vitalCostDrop": 5
       },
@@ -10430,6 +10452,8 @@
         "xunLian": 0,
         "initialJiBan": 21,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 23,
+        "eventEffectUp": 21,
         "failRateDrop": 11,
         "vitalCostDrop": 6
       },
@@ -10463,6 +10487,8 @@
         "xunLian": 0,
         "initialJiBan": 22,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 26,
+        "eventEffectUp": 22,
         "failRateDrop": 13,
         "vitalCostDrop": 8
       },
@@ -10496,6 +10522,8 @@
         "xunLian": 0,
         "initialJiBan": 23,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 23,
         "failRateDrop": 15,
         "vitalCostDrop": 10
       },
@@ -10529,6 +10557,8 @@
         "xunLian": 5,
         "initialJiBan": 25,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 25,
         "failRateDrop": 15,
         "vitalCostDrop": 10
       }
@@ -12825,7 +12855,8 @@
         ],
         "hintLevel": 0,
         "ganJing": 25,
-        "initialJiBan": 15
+        "initialJiBan": 15,
+        "eventEffectUp": 5
       },
       {
         "filled": true,
@@ -12855,7 +12886,8 @@
         ],
         "hintLevel": 0,
         "ganJing": 27,
-        "initialJiBan": 16
+        "initialJiBan": 16,
+        "eventEffectUp": 10
       },
       {
         "filled": true,
@@ -12885,7 +12917,8 @@
         ],
         "hintLevel": 0,
         "ganJing": 30,
-        "initialJiBan": 18
+        "initialJiBan": 18,
+        "eventEffectUp": 15
       },
       {
         "filled": true,
@@ -12915,7 +12948,8 @@
         ],
         "hintLevel": 0,
         "ganJing": 32,
-        "initialJiBan": 20
+        "initialJiBan": 20,
+        "eventEffectUp": 20
       },
       {
         "filled": true,
@@ -12945,7 +12979,8 @@
         ],
         "hintLevel": 0,
         "ganJing": 35,
-        "initialJiBan": 20
+        "initialJiBan": 20,
+        "eventEffectUp": 25
       }
     ]
   },
@@ -14372,6 +14407,8 @@
         "xunLian": 0,
         "initialJiBan": 20,
         "saiHou": 1,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "failRateDrop": 15,
         "vitalCostDrop": 5
       },
@@ -14405,6 +14442,8 @@
         "xunLian": 0,
         "initialJiBan": 21,
         "saiHou": 2,
+        "eventRecoveryAmountUp": 32,
+        "eventEffectUp": 21,
         "failRateDrop": 16,
         "vitalCostDrop": 6
       },
@@ -14438,6 +14477,8 @@
         "xunLian": 0,
         "initialJiBan": 22,
         "saiHou": 3,
+        "eventRecoveryAmountUp": 35,
+        "eventEffectUp": 22,
         "failRateDrop": 17,
         "vitalCostDrop": 8
       },
@@ -14471,6 +14512,8 @@
         "xunLian": 0,
         "initialJiBan": 23,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 37,
+        "eventEffectUp": 23,
         "failRateDrop": 18,
         "vitalCostDrop": 10
       },
@@ -14504,6 +14547,8 @@
         "xunLian": 5,
         "initialJiBan": 25,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 25,
         "failRateDrop": 20,
         "vitalCostDrop": 10
       }
@@ -16296,6 +16341,8 @@
         "hintLevel": 0,
         "xunLian": 5,
         "initialJiBan": 20,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 5,
         "failRateDrop": 15,
         "vitalCostDrop": 5
       },
@@ -16328,6 +16375,8 @@
         "hintLevel": 0,
         "xunLian": 5,
         "initialJiBan": 21,
+        "eventRecoveryAmountUp": 32,
+        "eventEffectUp": 6,
         "failRateDrop": 16,
         "vitalCostDrop": 6
       },
@@ -16360,6 +16409,8 @@
         "hintLevel": 0,
         "xunLian": 5,
         "initialJiBan": 22,
+        "eventRecoveryAmountUp": 35,
+        "eventEffectUp": 8,
         "failRateDrop": 17,
         "vitalCostDrop": 8
       },
@@ -16392,6 +16443,8 @@
         "hintLevel": 0,
         "xunLian": 5,
         "initialJiBan": 23,
+        "eventRecoveryAmountUp": 37,
+        "eventEffectUp": 10,
         "failRateDrop": 18,
         "vitalCostDrop": 10
       },
@@ -16424,6 +16477,8 @@
         "hintLevel": 0,
         "xunLian": 5,
         "initialJiBan": 25,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 10,
         "failRateDrop": 20,
         "vitalCostDrop": 10
       }
@@ -18072,6 +18127,8 @@
         "ganJing": 25,
         "initialJiBan": 15,
         "saiHou": 0,
+        "eventRecoveryAmountUp": 20,
+        "eventEffectUp": 10,
         "failRateDrop": 15,
         "vitalCostDrop": 5
       },
@@ -18105,6 +18162,8 @@
         "ganJing": 27,
         "initialJiBan": 16,
         "saiHou": 0,
+        "eventRecoveryAmountUp": 23,
+        "eventEffectUp": 11,
         "failRateDrop": 16,
         "vitalCostDrop": 6
       },
@@ -18138,6 +18197,8 @@
         "ganJing": 30,
         "initialJiBan": 18,
         "saiHou": 0,
+        "eventRecoveryAmountUp": 26,
+        "eventEffectUp": 13,
         "failRateDrop": 17,
         "vitalCostDrop": 8
       },
@@ -18171,6 +18232,8 @@
         "ganJing": 32,
         "initialJiBan": 20,
         "saiHou": 0,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 15,
         "failRateDrop": 18,
         "vitalCostDrop": 10
       },
@@ -18204,6 +18267,8 @@
         "ganJing": 35,
         "initialJiBan": 20,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 15,
         "failRateDrop": 20,
         "vitalCostDrop": 10
       }
@@ -18973,6 +19038,8 @@
         "xunLian": 5,
         "initialJiBan": 15,
         "saiHou": 1,
+        "eventRecoveryAmountUp": 20,
+        "eventEffectUp": 10,
         "failRateDrop": 5,
         "vitalCostDrop": 5
       },
@@ -19007,6 +19074,8 @@
         "xunLian": 5,
         "initialJiBan": 16,
         "saiHou": 2,
+        "eventRecoveryAmountUp": 23,
+        "eventEffectUp": 11,
         "failRateDrop": 6,
         "vitalCostDrop": 6
       },
@@ -19041,6 +19110,8 @@
         "xunLian": 5,
         "initialJiBan": 18,
         "saiHou": 3,
+        "eventRecoveryAmountUp": 26,
+        "eventEffectUp": 13,
         "failRateDrop": 8,
         "vitalCostDrop": 8
       },
@@ -19075,6 +19146,8 @@
         "xunLian": 5,
         "initialJiBan": 20,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 15,
         "failRateDrop": 10,
         "vitalCostDrop": 10
       },
@@ -19109,6 +19182,8 @@
         "xunLian": 5,
         "initialJiBan": 20,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 15,
         "failRateDrop": 10,
         "vitalCostDrop": 10
       }
@@ -23891,6 +23966,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 20,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 25,
         "failRateDrop": 28.0,
         "vitalCostDrop": 19.25
       },
@@ -23923,6 +24000,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 21,
+        "eventRecoveryAmountUp": 42,
+        "eventEffectUp": 26,
         "failRateDrop": 28.900000000000006,
         "vitalCostDrop": 20.200000000000003
       },
@@ -23955,6 +24034,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 22,
+        "eventRecoveryAmountUp": 45,
+        "eventEffectUp": 27,
         "failRateDrop": 29.799999999999997,
         "vitalCostDrop": 21.150000000000006
       },
@@ -23987,6 +24068,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 23,
+        "eventRecoveryAmountUp": 47,
+        "eventEffectUp": 28,
         "failRateDrop": 30.700000000000003,
         "vitalCostDrop": 22.099999999999994
       },
@@ -24019,6 +24102,8 @@
         "hintLevel": 0,
         "xunLian": 5,
         "initialJiBan": 25,
+        "eventRecoveryAmountUp": 50,
+        "eventEffectUp": 30,
         "failRateDrop": 32.5,
         "vitalCostDrop": 24.0
       }
@@ -34729,6 +34814,193 @@
     "uniqueEffectType": 0,
     "uniqueEffectSummary": "スキルポイントボーナス(1),初期賢さアップ(20)"
   },
+  "20081": {
+    "cardId": 20081,
+    "charaId": 1082,
+    "cardName": "[力]ノースフライト",
+    "fullName": "[お任せ！オートクチュール]ノースフライト",
+    "rarity": 2,
+    "cardType": 2,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "hintLevel": 2,
+        "youQing": 20,
+        "ganJing": 30,
+        "xunLian": 10,
+        "initialJiBan": 25,
+        "saiHou": 0,
+        "hintProbIncrease": 20,
+        "deYiLv": 20
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "hintLevel": 2,
+        "youQing": 21,
+        "ganJing": 32,
+        "xunLian": 10,
+        "initialJiBan": 26,
+        "saiHou": 1,
+        "hintProbIncrease": 23,
+        "deYiLv": 25
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ],
+        "hintLevel": 2,
+        "youQing": 22,
+        "ganJing": 35,
+        "xunLian": 10,
+        "initialJiBan": 27,
+        "saiHou": 3,
+        "hintProbIncrease": 26,
+        "deYiLv": 30
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 23,
+        "ganJing": 37,
+        "xunLian": 10,
+        "initialJiBan": 28,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 35
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          0,
+          20,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 25,
+        "ganJing": 40,
+        "xunLian": 10,
+        "initialJiBan": 30,
+        "saiHou": 5,
+        "hintProbIncrease": 30,
+        "deYiLv": 35
+      }
+    ],
+    "uniqueEffectType": 0,
+    "uniqueEffectSummary": "xunLian(5),初期パワーアップ(20)"
+  },
   "30001": {
     "cardId": 30001,
     "charaId": 1001,
@@ -38386,6 +38658,8 @@
         "hintLevel": 0,
         "xunLian": 0,
         "initialJiBan": 25,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 25,
         "failRateDrop": 28.0,
         "vitalCostDrop": 19.25
       },
@@ -38418,6 +38692,8 @@
         "hintLevel": 0,
         "xunLian": 5,
         "initialJiBan": 26,
+        "eventRecoveryAmountUp": 45,
+        "eventEffectUp": 27,
         "failRateDrop": 29.799999999999997,
         "vitalCostDrop": 21.150000000000006
       },
@@ -38450,6 +38726,8 @@
         "hintLevel": 0,
         "xunLian": 10,
         "initialJiBan": 27,
+        "eventRecoveryAmountUp": 50,
+        "eventEffectUp": 30,
         "failRateDrop": 32.5,
         "vitalCostDrop": 24.0
       },
@@ -38482,6 +38760,8 @@
         "hintLevel": 0,
         "xunLian": 10,
         "initialJiBan": 28,
+        "eventRecoveryAmountUp": 55,
+        "eventEffectUp": 32,
         "failRateDrop": 34.3,
         "vitalCostDrop": 25.900000000000006
       },
@@ -38514,6 +38794,8 @@
         "hintLevel": 0,
         "xunLian": 10,
         "initialJiBan": 30,
+        "eventRecoveryAmountUp": 60,
+        "eventEffectUp": 35,
         "failRateDrop": 37.0,
         "vitalCostDrop": 28.75
       }
@@ -40950,6 +41232,8 @@
         "xunLian": 0,
         "initialJiBan": 25,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 20,
+        "eventEffectUp": 25,
         "failRateDrop": 23.5,
         "vitalCostDrop": 14.5
       },
@@ -40983,6 +41267,8 @@
         "xunLian": 5,
         "initialJiBan": 26,
         "saiHou": 6,
+        "eventRecoveryAmountUp": 23,
+        "eventEffectUp": 27,
         "failRateDrop": 24.400000000000006,
         "vitalCostDrop": 15.450000000000003
       },
@@ -41016,6 +41302,8 @@
         "xunLian": 10,
         "initialJiBan": 27,
         "saiHou": 7,
+        "eventRecoveryAmountUp": 26,
+        "eventEffectUp": 30,
         "failRateDrop": 26.200000000000003,
         "vitalCostDrop": 17.349999999999994
       },
@@ -41049,6 +41337,8 @@
         "xunLian": 10,
         "initialJiBan": 28,
         "saiHou": 8,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 32,
         "failRateDrop": 28.0,
         "vitalCostDrop": 19.25
       },
@@ -41082,6 +41372,8 @@
         "xunLian": 10,
         "initialJiBan": 30,
         "saiHou": 10,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 35,
         "failRateDrop": 28.0,
         "vitalCostDrop": 19.25
       }
@@ -43294,6 +43586,8 @@
         "xunLian": 0,
         "initialJiBan": 25,
         "saiHou": 1,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 25,
         "failRateDrop": 20,
         "vitalCostDrop": 5
       },
@@ -43327,6 +43621,8 @@
         "xunLian": 5,
         "initialJiBan": 26,
         "saiHou": 2,
+        "eventRecoveryAmountUp": 45,
+        "eventEffectUp": 27,
         "failRateDrop": 22,
         "vitalCostDrop": 6
       },
@@ -43360,6 +43656,8 @@
         "xunLian": 10,
         "initialJiBan": 27,
         "saiHou": 3,
+        "eventRecoveryAmountUp": 50,
+        "eventEffectUp": 30,
         "failRateDrop": 25,
         "vitalCostDrop": 8
       },
@@ -43393,6 +43691,8 @@
         "xunLian": 10,
         "initialJiBan": 28,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 55,
+        "eventEffectUp": 32,
         "failRateDrop": 27,
         "vitalCostDrop": 10
       },
@@ -43426,6 +43726,8 @@
         "xunLian": 10,
         "initialJiBan": 30,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 60,
+        "eventEffectUp": 35,
         "failRateDrop": 30,
         "vitalCostDrop": 10
       }
@@ -46026,6 +46328,8 @@
         "xunLian": 5,
         "initialJiBan": 25,
         "saiHou": 0,
+        "eventRecoveryAmountUp": 20,
+        "eventEffectUp": 15,
         "wizVitalBonus": 1
       },
       {
@@ -46059,6 +46363,8 @@
         "xunLian": 5,
         "initialJiBan": 27,
         "saiHou": 0,
+        "eventRecoveryAmountUp": 23,
+        "eventEffectUp": 16,
         "wizVitalBonus": 1
       },
       {
@@ -46092,6 +46398,8 @@
         "xunLian": 5,
         "initialJiBan": 30,
         "saiHou": 0,
+        "eventRecoveryAmountUp": 26,
+        "eventEffectUp": 18,
         "wizVitalBonus": 1
       },
       {
@@ -46125,6 +46433,8 @@
         "xunLian": 5,
         "initialJiBan": 32,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "wizVitalBonus": 2
       },
       {
@@ -46158,6 +46468,8 @@
         "xunLian": 5,
         "initialJiBan": 35,
         "saiHou": 10,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "wizVitalBonus": 2
       }
     ],
@@ -48392,7 +48704,9 @@
         ],
         "hintLevel": 0,
         "ganJing": 40,
-        "initialJiBan": 20
+        "initialJiBan": 20,
+        "eventRecoveryAmountUp": 0,
+        "eventEffectUp": 10
       },
       {
         "filled": true,
@@ -48422,7 +48736,9 @@
         ],
         "hintLevel": 0,
         "ganJing": 45,
-        "initialJiBan": 21
+        "initialJiBan": 21,
+        "eventRecoveryAmountUp": 0,
+        "eventEffectUp": 20
       },
       {
         "filled": true,
@@ -48452,7 +48768,9 @@
         ],
         "hintLevel": 0,
         "ganJing": 50,
-        "initialJiBan": 23
+        "initialJiBan": 23,
+        "eventRecoveryAmountUp": 0,
+        "eventEffectUp": 30
       },
       {
         "filled": true,
@@ -48482,7 +48800,9 @@
         ],
         "hintLevel": 0,
         "ganJing": 55,
-        "initialJiBan": 25
+        "initialJiBan": 25,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 40
       },
       {
         "filled": true,
@@ -48512,7 +48832,9 @@
         ],
         "hintLevel": 0,
         "ganJing": 60,
-        "initialJiBan": 25
+        "initialJiBan": 25,
+        "eventRecoveryAmountUp": 60,
+        "eventEffectUp": 50
       }
     ],
     "uniqueEffectType": 0,
@@ -48557,6 +48879,8 @@
         "ganJing": 15,
         "initialJiBan": 15,
         "saiHou": 1,
+        "eventRecoveryAmountUp": 20,
+        "eventEffectUp": 15,
         "wizVitalBonus": 1
       },
       {
@@ -48590,6 +48914,8 @@
         "ganJing": 16,
         "initialJiBan": 16,
         "saiHou": 2,
+        "eventRecoveryAmountUp": 23,
+        "eventEffectUp": 16,
         "wizVitalBonus": 1
       },
       {
@@ -48623,6 +48949,8 @@
         "ganJing": 17,
         "initialJiBan": 18,
         "saiHou": 3,
+        "eventRecoveryAmountUp": 26,
+        "eventEffectUp": 18,
         "wizVitalBonus": 1
       },
       {
@@ -48656,6 +48984,8 @@
         "ganJing": 18,
         "initialJiBan": 20,
         "saiHou": 4,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "wizVitalBonus": 1
       },
       {
@@ -48689,6 +49019,8 @@
         "ganJing": 20,
         "initialJiBan": 20,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "wizVitalBonus": 2
       }
     ],
@@ -58991,6 +59323,8 @@
         "youQing": 15,
         "xunLian": 0,
         "initialJiBan": 15,
+        "eventRecoveryAmountUp": 20,
+        "eventEffectUp": 15,
         "wizVitalBonus": 1
       },
       {
@@ -59023,6 +59357,8 @@
         "youQing": 16,
         "xunLian": 0,
         "initialJiBan": 16,
+        "eventRecoveryAmountUp": 23,
+        "eventEffectUp": 16,
         "wizVitalBonus": 1
       },
       {
@@ -59055,6 +59391,8 @@
         "youQing": 18,
         "xunLian": 0,
         "initialJiBan": 18,
+        "eventRecoveryAmountUp": 26,
+        "eventEffectUp": 18,
         "wizVitalBonus": 1
       },
       {
@@ -59087,6 +59425,8 @@
         "youQing": 20,
         "xunLian": 5,
         "initialJiBan": 20,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "wizVitalBonus": 2
       },
       {
@@ -59119,6 +59459,8 @@
         "youQing": 20,
         "xunLian": 10,
         "initialJiBan": 20,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "wizVitalBonus": 2
       }
     ],
@@ -63173,6 +63515,8 @@
         "ganJing": 20,
         "xunLian": 5,
         "initialJiBan": 25,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 15,
         "failRateDrop": 15,
         "vitalCostDrop": 15
       },
@@ -63206,6 +63550,8 @@
         "ganJing": 20,
         "xunLian": 5,
         "initialJiBan": 26,
+        "eventRecoveryAmountUp": 50,
+        "eventEffectUp": 16,
         "failRateDrop": 16,
         "vitalCostDrop": 17
       },
@@ -63239,6 +63585,8 @@
         "ganJing": 20,
         "xunLian": 5,
         "initialJiBan": 27,
+        "eventRecoveryAmountUp": 60,
+        "eventEffectUp": 18,
         "failRateDrop": 18,
         "vitalCostDrop": 20
       },
@@ -63272,6 +63620,8 @@
         "ganJing": 20,
         "xunLian": 5,
         "initialJiBan": 28,
+        "eventRecoveryAmountUp": 70,
+        "eventEffectUp": 20,
         "failRateDrop": 20,
         "vitalCostDrop": 22
       },
@@ -63305,6 +63655,8 @@
         "ganJing": 20,
         "xunLian": 5,
         "initialJiBan": 30,
+        "eventRecoveryAmountUp": 80,
+        "eventEffectUp": 20,
         "failRateDrop": 20,
         "vitalCostDrop": 25
       }
@@ -66970,6 +67322,8 @@
         "youQing": 15,
         "initialJiBan": 20,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 20,
+        "eventEffectUp": 15,
         "wizVitalBonus": 1
       },
       {
@@ -67002,6 +67356,8 @@
         "youQing": 16,
         "initialJiBan": 21,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 23,
+        "eventEffectUp": 16,
         "wizVitalBonus": 1
       },
       {
@@ -67034,6 +67390,8 @@
         "youQing": 18,
         "initialJiBan": 23,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 26,
+        "eventEffectUp": 18,
         "wizVitalBonus": 1
       },
       {
@@ -67066,6 +67424,8 @@
         "youQing": 20,
         "initialJiBan": 25,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "wizVitalBonus": 2
       },
       {
@@ -67098,6 +67458,8 @@
         "youQing": 20,
         "initialJiBan": 25,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 30,
+        "eventEffectUp": 20,
         "wizVitalBonus": 2
       }
     ],
@@ -68476,6 +68838,8 @@
         "xunLian": 0,
         "initialJiBan": 0,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 20,
         "failRateDrop": 20,
         "vitalCostDrop": 5
       },
@@ -68510,6 +68874,8 @@
         "xunLian": 0,
         "initialJiBan": 10,
         "saiHou": 6,
+        "eventRecoveryAmountUp": 45,
+        "eventEffectUp": 21,
         "failRateDrop": 22,
         "vitalCostDrop": 6
       },
@@ -68544,6 +68910,8 @@
         "xunLian": 0,
         "initialJiBan": 25,
         "saiHou": 7,
+        "eventRecoveryAmountUp": 50,
+        "eventEffectUp": 23,
         "failRateDrop": 25,
         "vitalCostDrop": 8
       },
@@ -68578,6 +68946,8 @@
         "xunLian": 5,
         "initialJiBan": 25,
         "saiHou": 8,
+        "eventRecoveryAmountUp": 55,
+        "eventEffectUp": 25,
         "failRateDrop": 27,
         "vitalCostDrop": 10
       },
@@ -68612,6 +68982,8 @@
         "xunLian": 10,
         "initialJiBan": 25,
         "saiHou": 10,
+        "eventRecoveryAmountUp": 60,
+        "eventEffectUp": 25,
         "failRateDrop": 30,
         "vitalCostDrop": 10
       }
@@ -72101,6 +72473,8 @@
         "xunLian": 0,
         "initialJiBan": 20,
         "saiHou": 1,
+        "eventRecoveryAmountUp": 40,
+        "eventEffectUp": 20,
         "failRateDrop": 15,
         "vitalCostDrop": 10
       },
@@ -72135,6 +72509,8 @@
         "xunLian": 0,
         "initialJiBan": 21,
         "saiHou": 2,
+        "eventRecoveryAmountUp": 50,
+        "eventEffectUp": 21,
         "failRateDrop": 16,
         "vitalCostDrop": 11
       },
@@ -72169,6 +72545,8 @@
         "xunLian": 0,
         "initialJiBan": 23,
         "saiHou": 3,
+        "eventRecoveryAmountUp": 60,
+        "eventEffectUp": 23,
         "failRateDrop": 18,
         "vitalCostDrop": 13
       },
@@ -72203,6 +72581,8 @@
         "xunLian": 5,
         "initialJiBan": 25,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 70,
+        "eventEffectUp": 25,
         "failRateDrop": 20,
         "vitalCostDrop": 15
       },
@@ -72237,6 +72617,8 @@
         "xunLian": 10,
         "initialJiBan": 25,
         "saiHou": 5,
+        "eventRecoveryAmountUp": 80,
+        "eventEffectUp": 25,
         "failRateDrop": 20,
         "vitalCostDrop": 15
       }
@@ -76101,6 +76483,196 @@
       7,
       1,
       3,
+      0
+    ]
+  },
+  "30228": {
+    "cardId": 30228,
+    "charaId": 1083,
+    "cardName": "[力]シンボリクリスエス",
+    "fullName": "[COOL⇔CRAZY/Buddy]シンボリクリスエス",
+    "rarity": 3,
+    "cardType": 2,
+    "cardValue": [
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialBonus": [
+          0,
+          25,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 25,
+        "xunLian": 0,
+        "initialJiBan": 25,
+        "saiHou": 5,
+        "hintProbIncrease": 40,
+        "deYiLv": 50
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          26,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 27,
+        "xunLian": 0,
+        "initialJiBan": 26,
+        "saiHou": 6,
+        "hintProbIncrease": 42,
+        "deYiLv": 57
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          27,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 30,
+        "xunLian": 0,
+        "initialJiBan": 27,
+        "saiHou": 7,
+        "hintProbIncrease": 45,
+        "deYiLv": 65
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          28,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          15
+        ],
+        "hintLevel": 3,
+        "youQing": 32,
+        "xunLian": 10,
+        "initialJiBan": 28,
+        "saiHou": 8,
+        "hintProbIncrease": 47,
+        "deYiLv": 72
+      },
+      {
+        "filled": true,
+        "bonus": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "initialBonus": [
+          0,
+          30,
+          0,
+          0,
+          0,
+          0
+        ],
+        "hintBonus": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          20
+        ],
+        "hintLevel": 4,
+        "youQing": 35,
+        "xunLian": 20,
+        "initialJiBan": 30,
+        "saiHou": 10,
+        "hintProbIncrease": 50,
+        "deYiLv": 80
+      }
+    ],
+    "uniqueEffectType": 1,
+    "uniqueEffectSummary": "羁绊>=80时パワーボーナス(2)",
+    "uniqueEffectParam": [
+      101,
+      80,
+      5,
+      2,
+      0,
       0
     ]
   }

@@ -3849,6 +3849,40 @@
     ],
     "star": 5
   },
+  "105003": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      118,
+      100,
+      101,
+      112,
+      119
+    ],
+    "freeRaces": [],
+    "gameId": 105003,
+    "name": "[迷光オーヴァライド]ナリタタイシン",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "105101": {
     "bonusData": [],
     "fiveStatusBonus": [

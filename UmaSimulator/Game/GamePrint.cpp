@@ -5,6 +5,8 @@
 #include <algorithm>
 #include "../External/termcolor.hpp"
 #include "Game.h"
+#include "../External/utils.h"
+
 using std::cout;
 using std::string;
 using std::endl;
@@ -15,8 +17,8 @@ std::string Person::getPersonName() const
 {
   string s =
     personType == PersonType_unknown ? "未加载" :
-    personType == PersonType_friendCard ? cardParam.cardName.substr(0, 8) :
-    personType == PersonType_card ? cardParam.cardName.substr(0, 8) :
+    personType == PersonType_friendCard ? UTF8_rune_cut(cardParam.cardName, 5) :
+    personType == PersonType_card ? UTF8_rune_cut(cardParam.cardName, 5) :
     personType == PersonType_npc ? "NPC" :
     personType == PersonType_yayoi ? "理事长" :
     personType == PersonType_reporter ? "记者" :
@@ -96,35 +98,36 @@ void Game::printEvents(string s) const
 #endif
 }
 
-
 const int tableWidth = 17;
 static void printTableRow(string strs[5])
 {
-  cout << std::left;
-  for (int i = 0; i < 5; i++)
-  {
-    string s = strs[i];
-
-    //计算字符串中颜色代码的长度
-    int colorCodeLen = 0;
-    bool inColorCode = false;
-    for (int j = 0; j < s.size(); j++)
+    cout << std::left;
+    for (int i = 0; i < 5; i++)
     {
-      char c = s[j];
-      if (c == '\033')
-        inColorCode = true;
+        string s = strs[i];
+        // 计算utf8字数与长度的差
+        int runeDiff = s.length() - UTF8_rune_count(s);
 
-      if (inColorCode)
-      {
-        colorCodeLen += 1;
-        if (c == 'm')
-          inColorCode = false;
-      }
+        //计算字符串中颜色代码的长度
+        int colorCodeLen = 0;
+        bool inColorCode = false;
+        for (int j = 0; j < s.size(); j++)
+        {
+            char c = s[j];
+            if (c == '\033')
+                inColorCode = true;
+
+            if (inColorCode)
+            {
+                colorCodeLen += 1;
+                if (c == 'm')
+                    inColorCode = false;
+            }
+        }
+        s = "| " + s;
+        cout << std::setw(tableWidth + colorCodeLen + runeDiff / 2) << s;
     }
-    s = "| " + s;
-    cout << std::setw(tableWidth + colorCodeLen) << s;
-  }
-  cout << "|" << endl << std::internal;
+    cout << "|" << endl << std::internal;
 }
 
 void Game::print() const
