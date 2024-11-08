@@ -3,7 +3,7 @@
 
 //常数或者比较短的列表放在最前面
 const double GameConstants::ScorePtRateDefault = 2.0;
-const double GameConstants::HintLevelPtRateDefault = 6.5;//以前默认5，近几个剧本的hint经常稀缺，就调大一点
+const double GameConstants::HintLevelPtRateDefault = 4;
 //const double GameConstants::ScorePtRateQieZhe = 2.2;
 const int GameConstants::BasicFiveStatusLimit[5] = { 2300,2200,1800,1400,1400 }; //模拟器中1200以上翻倍
 
