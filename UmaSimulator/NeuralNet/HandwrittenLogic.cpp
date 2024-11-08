@@ -4,64 +4,94 @@
 #include "../Search/Search.h"
 
 
-const double statusWeights[5] = { 5,5,7,6,6 };
-const double jibanValue = 3.5;
-const double vitalFactorStart = 2;
-const double vitalFactorEnd = 4;
+const double statusWeights[5] = { 6,6,6,6,6 };
+const double jibanValue = 3;
+const double vitalFactorStart = 3.5;
+const double vitalFactorEnd = 7;
 const double vitalScaleTraining = 1;
 
-const double reserveStatusFactor = 40;//æ§å±æ€§æ—¶ç»™æ¯å›åˆé¢„ç•™å¤šå°‘ï¼Œä»0é€æ¸å¢åŠ åˆ°è¿™ä¸ªæ•°å­—
+const double reserveStatusFactor = 40;//¿ØÊôĞÔÊ±¸øÃ¿»ØºÏÔ¤Áô¶àÉÙ£¬´Ó0Öğ½¥Ôö¼Óµ½Õâ¸öÊı×Ö
 
 const double smallFailValue = -150;
 const double bigFailValue = -500;
-const double outgoingBonusIfNotFullMotivation = 150;//æ‰å¿ƒæƒ…æ—¶æé«˜å¤–å‡ºåˆ†æ•°
-const double raceBonus = 150;//æ¯”èµ›æ”¶ç›Šï¼Œä¸è€ƒè™‘ä½“åŠ›
+const double outgoingBonusIfNotFullMotivation = 150;//µôĞÄÇéÊ±Ìá¸ßÍâ³ö·ÖÊı
+const double raceBonus = 100;//±ÈÈüÊÕÒæ£¬²»¿¼ÂÇÌåÁ¦
 
-//const double materialValue[5] = { 0.5,0.2,0.5,0.5,0.3 };//æ¯ä¸ªæ–™ç†åŸæ–™çš„ä¼°å€¼
-//const double materialValueScale = 1.0;//æ–™ç†åŸæ–™çš„ä¼°å€¼ä¹˜ä»¥è¿™ä¸ªç³»æ•°ï¼Œæ–¹ä¾¿ä¸€èµ·æ”¹
-const double greenBonusBasicYear1 = 100;//ç»¿è‰²æ–™ç†çš„åŠ æˆï¼Œç¾ç»Šæ²¡æ»¡æ—¶é™ä½ç³»æ•°ï¼Œç¬¬ä¸€å¹´
-const double greenBonusBasicYear2 = 100;//ç»¿è‰²æ–™ç†çš„åŠ æˆï¼Œç¬¬äºŒå¹´
-const double greenBonusBasicYear3 = 100;//ç»¿è‰²æ–™ç†çš„åŠ æˆï¼Œç¬¬ä¸‰å¹´
-
-const double cookingThreholdFactorLv2 = 0.5;//è¶Šå¤§ç¬¬äºŒä¸‰å¹´åƒèœè¶Šæ¿€è¿›ï¼ˆ2çº§èœï¼‰
-const double cookingThreholdFactorLv3 = 1.0;//è¶Šå¤§ç¬¬ä¸‰å¹´åƒèœè¶Šæ¿€è¿›ï¼ˆ3çº§èœï¼‰
+const double mechaLvBonusStart = 10;
+const double mechaLvBonusEnd = 5;
+const double mechaLvReserve = 40;
+const double overdriveActivateFactor = 1.5;
 
 
-//const double xiangtanExhaustLossMax = 800;//ç›¸è°ˆè€—å°½ä¸”æ²¡è¾¾æ ‡çš„ä¼°å€¼æ‰£åˆ†
 
-//ä¸€ä¸ªåˆ†æ®µå‡½æ•°ï¼Œç”¨æ¥æ§å±æ€§
-inline double statusSoftFunction(double x, double reserve, double reserveInvX2)//reserveæ˜¯æ§å±æ€§ä¿ç•™ç©ºé—´ï¼ˆé™ä½æƒé‡ï¼‰ï¼ŒreserveInvX2æ˜¯1/(2*reserve)
+//const double xiangtanExhaustLossMax = 800;//ÏàÌ¸ºÄ¾¡ÇÒÃ»´ï±êµÄ¹ÀÖµ¿Û·Ö
+
+//Ò»¸ö·Ö¶Îº¯Êı£¬ÓÃÀ´¿ØÊôĞÔ
+inline double statusSoftFunction(double x, double reserve, double reserveInvX2)//reserveÊÇ¿ØÊôĞÔ±£Áô¿Õ¼ä£¨½µµÍÈ¨ÖØ£©£¬reserveInvX2ÊÇ1/(2*reserve)
 {
   if (x >= 0)return 0;
   if (x > -reserve)return -x * x * reserveInvX2;
   return x + 0.5 * reserve;
 }
 
-static void statusGainEvaluation(const Game& g, double* result) { //resultä¾æ¬¡æ˜¯äº”ç§è®­ç»ƒçš„ä¼°å€¼
-  int remainTurn = TOTAL_TURN - g.turn - 1;//è¿™æ¬¡è®­ç»ƒåè¿˜æœ‰å‡ ä¸ªè®­ç»ƒå›åˆ
-  //uraæœŸé—´çš„ä¸€ä¸ªå›åˆè§†ä¸ºä¸¤ä¸ªå›åˆï¼Œå› æ­¤ä¸éœ€è¦é¢å¤–å¤„ç†
-  //if (remainTurn == 2)remainTurn = 1;//uraç¬¬äºŒå›åˆ
-  //else if (remainTurn >= 4)remainTurn -= 2;//uraç¬¬ä¸€å›åˆ
+static double mechaLvEvaluation(const Game& g, int train) //mechaLvÌáÉıÁ¿£¬¿¿½üÉÏÏŞÊ±Ë¥¼õ
+{
+  if (train == -1 || train == TRA_outgoing || train == TRA_rest)return 0;
+
+  int turnsBeforeUGE =
+    g.turn <= 11 ? 12 :
+    g.turn <= 23 ? 23 - g.turn :
+    g.turn <= 35 ? 35 - g.turn :
+    g.turn <= 47 ? 47 - g.turn :
+    g.turn <= 59 ? 59 - g.turn :
+    g.turn <= 71 ? 71 - g.turn :
+    0;
+  double reserve = 1 + mechaLvReserve / 12.0 * turnsBeforeUGE;
+  double reserveInvX2 = 1 / (2 * reserve);
+
+  double value = 0;
+  for (int item = 0; item < 5; item++)
+  {
+    int gain = train < 5 ? g.mecha_lvGain[train][item] : 7;
+    double remain = g.mecha_rivalLvLimit - g.mecha_rivalLv[item];
+    double s0 = statusSoftFunction(-remain, reserve, reserveInvX2);
+    double s1 = statusSoftFunction(gain - remain, reserve, reserveInvX2);
+    value += (s1 - s0);
+  }
+  return value;
+
+}
+
+static void statusGainEvaluation(const Game& g, double* result) { //resultÒÀ´ÎÊÇÎåÖÖÑµÁ·µÄ¹ÀÖµ
+  int remainTurn = TOTAL_TURN - g.turn - 1;//Õâ´ÎÑµÁ·ºó»¹ÓĞ¼¸¸öÑµÁ·»ØºÏ
+  //uraÆÚ¼äµÄÒ»¸ö»ØºÏÊÓÎªÁ½¸ö»ØºÏ£¬Òò´Ë²»ĞèÒª¶îÍâ´¦Àí
+  //if (remainTurn == 2)remainTurn = 1;//uraµÚ¶ş»ØºÏ
+  //else if (remainTurn >= 4)remainTurn -= 2;//uraµÚÒ»»ØºÏ
 
   double reserve = reserveStatusFactor * remainTurn * (1 - double(remainTurn) / (TOTAL_TURN * 2));
   double reserveInvX2 = 1 / (2 * reserve);
 
-  double finalBonus0 = 60;
-  finalBonus0 += 30;//ura3å’Œæœ€ç»ˆäº‹ä»¶
+  double finalBonus0 = 45;
+  finalBonus0 += 30;//ura3ºÍ×îÖÕÊÂ¼ş
   if (remainTurn >= 1)finalBonus0 += 20;//ura2
   if (remainTurn >= 2)finalBonus0 += 20;//ura1
 
-  double remain[5]; //æ¯ç§å±æ€§è¿˜æœ‰å¤šå°‘ç©ºé—´
+  double remain[5]; //Ã¿ÖÖÊôĞÔ»¹ÓĞ¶àÉÙ¿Õ¼ä
 
   for (int i = 0; i < 5; i++)
   {
     remain[i] = g.fiveStatusLimit[i] - g.fiveStatus[i] - finalBonus0;
   }
 
-  if (g.friend_type != 0)
+  if (g.friend_type == FriendType_lianghua)
   {
     remain[0] -= 25;
     remain[4] -= 25;
+  }
+  else if (g.friend_type == FriendType_yayoi)
+  {
+    remain[0] -= 25;
+    remain[3] -= 25;
   }
 
 
@@ -87,12 +117,12 @@ static double calculateMaxVitalEquvalant(const Game& g)
 {
   int t = g.turn;
   if (g.turn >= 76)
-    return 0;//æœ€åä¸€å›åˆä¸éœ€è¦ä½“åŠ›
+    return 0;//×îºóÒ»»ØºÏ²»ĞèÒªÌåÁ¦
   if (g.turn > 71)
-    return 10;//uraæœŸé—´å¯ä»¥åƒèœ
+    return 10;//uraÆÚ¼ä¿ÉÒÔ³Ô²Ë
   if (g.turn == 71)
-    return 30;//uraå‰æœ€åä¸€å›åˆï¼Œ30ä½“åŠ›è¿›å°±è¡Œ
-  int nonRaceTurn = 0;//71å›åˆå‰ï¼Œæ¯ä¸ªè®­ç»ƒå›åˆæŒ‰æ¶ˆè€—15ä½“åŠ›è®¡ç®—
+    return 30;//uraÇ°×îºóÒ»»ØºÏ£¬30ÌåÁ¦½ø¾ÍĞĞ
+  int nonRaceTurn = 0;//71»ØºÏÇ°£¬Ã¿¸öÑµÁ·»ØºÏ°´ÏûºÄ15ÌåÁ¦¼ÆËã
   for (int i = 71; i > g.turn; i--)
   {
     if (!g.isRacingTurn[i])nonRaceTurn++;
@@ -117,111 +147,183 @@ static double vitalEvaluation(int vital, int maxVital)
     return vitalEvaluation(maxVital, maxVital);
 }
 
-static double materialEvaluation(int turn, int count) //è¯„ä¼°åƒèœçš„å¼€é”€ï¼Œå†³å®šç¬¬äºŒä¸‰å¹´åƒä¸åƒèœ
+
+static Action getMechaUpgradeAdvise(int turn, int en)
 {
-  double bias =
-    turn < 48 ? 100 :
-    turn < 60 ? 100 :
-    turn < 68 ? 60 :
-    10;
+  Action action;
+  action.type = GameStage_beforeMechaUpgrade;
+  action.train = -1;
+  action.overdrive = false;
+  if (turn == 1)
+  {
+    if (en >= 6)//101
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 0;
+    }
+    else if (en >= 3)
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 0;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 23)
+  {
+    if (en >= 12)//022
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 0;
+    }
+    else if (en >= 9)
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 0;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 35)
+  {
+    if (en >= 18)//222
+    {
+      action.mechaHead = 5;
+      action.mechaChest = 1;
+    }
+    else if (en >= 15)
+    {
+      action.mechaHead = 3;
+      action.mechaChest = 2;
+    }
+    else if (en >= 12)
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 2;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 47)
+  {
+    if (en >= 24)//530
+    {
+      action.mechaHead = 5;
+      action.mechaChest = 3;
+    }
+    else if (en >= 21)
+    {
+      action.mechaHead = 5;
+      action.mechaChest = 2;
+    }
+    else if (en >= 18)
+    {
+      action.mechaHead = 5;
+      action.mechaChest = 5;
+    }
+    else if (en >= 15)
+    {
+      action.mechaHead = 5;
+      action.mechaChest = 0;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 59)
+  {
+    if (en >= 30)//055
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 5;
+    }
+    else if (en >= 27)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 3;
+    }
+    else if (en >= 24)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 2;
+    }
+    else if (en >= 21)
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 2;
+    }
+    else if (en >= 18)
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 2;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else if (turn == 71)
+  {
+    if (en >= 36)//255
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 5;
+    }
+    else if (en >= 33)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 5;
+    }
+    else if (en >= 30)
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 5;
+    }
+    else if (en >= 27)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 3;
+    }
+    else if (en >= 24)
+    {
+      action.mechaHead = 1;
+      action.mechaChest = 2;
+    }
+    else if (en >= 21)
+    {
+      action.mechaHead = 0;
+      action.mechaChest = 2;
+    }
+    else if (en >= 18)
+    {
+      action.mechaHead = 2;
+      action.mechaChest = 2;
+    }
+    else
+      throw "getMechaUpgradeAdvise : too few mechaEn when upgrade";
+  }
+  else
+    throw "this turn should not upgrade mecha";
+  return action;
 
-  double scale =
-    turn < 48 ? 20 :
-    turn < 60 ? 30 :
-    turn < 68 ? 40 :
-    40;
-
-  return sqrt(count + bias) * scale;
 }
+
 
 
 Action Evaluator::handWrittenStrategy(const Game& game)
 {
   Action bestAction;
-  bestAction.dishType = DISH_none;
-  bestAction.train = TRA_none;
-
   if (game.isEnd())return bestAction;
-  //æ¯”èµ›
+  if (game.gameStage == GameStage_beforeMechaUpgrade)
+    return getMechaUpgradeAdvise(game.turn, game.mecha_EN);
+
+  bestAction.type = GameStage_beforeTrain;
+
+  //±ÈÈü
   if (game.isRacing)
   {
-    if (game.turn < 72)//å¸¸è§„æ¯”èµ›ä¸åƒèœ
-    {
-      bestAction.train = TRA_race;
-      return bestAction;
-    }
-    if (game.turn == TOTAL_TURN - 1)//uraæœ€åä¸€å›åˆï¼Œèƒ½åƒä»€ä¹ˆå°±åƒä»€ä¹ˆ
-    {
-      //ä»åå¾€å‰æŒ¨ä¸ªè¯•
-      for (int i = DISH_g1plate; i >= 1; i--)
-      {
-        bestAction.dishType = i;
-        if (game.isLegal(bestAction))return bestAction;
-      }
-      //ä»€ä¹ˆéƒ½åƒä¸äº†
-      bestAction.dishType = DISH_none;
-      bestAction.train = TRA_race;
-      return bestAction;
-    }
-
-
-    //ura1å’Œura2ï¼Œç®—ä¸€ä¸‹èƒ½ä¸èƒ½åƒg1plate
-    int g1plateCost = game.cook_win_history[4] == 2 ? 80 : 100;
-
-    bool haveG1Plate = true;
-    for (int matType = 0; matType < 5; matType++)
-    {
-      int matGain = 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]] / 2;
-      if (matType == game.cook_main_race_material_type)
-        matGain += 1.5001 * GameConstants::Cook_HarvestExtra[game.cook_farm_level[matType]];
-      int reserveMin = game.turn == 73 ?
-        2 * g1plateCost + 80 - 3 * 1.5001 * GameConstants::Cook_HarvestBasic[game.cook_farm_level[matType]] / 2 :
-        2 * g1plateCost;//è¦ä¿è¯åç»­çš„è®­ç»ƒå›åˆä¸€ç›´å¯ä»¥åƒåˆ°g1plate
-      if (game.cook_material[matType] < g1plateCost || game.cook_material[matType] + matGain < reserveMin)
-      {
-        haveG1Plate = false;
-        break;
-      }
-    }
-    if (haveG1Plate)
-    {
-      bestAction.dishType = DISH_g1plate;
-      return bestAction;
-    }
-    else
-    {
-      //åƒäº†ä¸‹å›åˆè®­ç»ƒæ²¡æ³•åƒäº†
-      bestAction.train = TRA_race;
-      return bestAction;
-    }
+    bestAction.train = TRA_race;
+    return bestAction;
   }
-
-  //uraæœŸé—´å¦‚æœèƒ½åƒG1Plateå°±ç›´æ¥åƒï¼Œå¦åˆ™ä¸åƒ
-  if (game.turn >= 72 && game.cook_dish==DISH_none)
-  {
-    if (game.isDishLegal(DISH_g1plate))
-    {
-      bestAction.dishType = DISH_g1plate;
-      return bestAction;
-    }
-    //å¦åˆ™æ˜¯åƒè¿‡äº†æˆ–è€…åƒä¸äº†ï¼Œå¯»æ‰¾æœ€ä¼˜è®­ç»ƒ
-  }
-
-
-  //å¸¸è§„è®­ç»ƒå›åˆ
   
-  //å¦‚æœåƒäº†2çº§3çº§èœï¼Œç›´æ¥é€‰æ‹©å¯¹åº”è®­ç»ƒ
-  if (game.cook_dish != DISH_none)
-  {
-    int dishLevel = GameConstants::Cook_DishLevel[game.cook_dish];
-    if (dishLevel == 2 || dishLevel == 3)
-    {
-      int tra = GameConstants::Cook_DishMainTraining[game.cook_dish];
-      bestAction.dishType = DISH_none;
-      bestAction.train = tra;
-      return bestAction;
-    }
-  }
+
 
 
 
@@ -234,16 +336,9 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   int maxVitalEquvalant = calculateMaxVitalEquvalant(game);
   double vitalEvalBeforeTrain = vitalEvaluation(std::min(maxVitalEquvalant, int(game.vital)), game.maxVital);
 
-  double greenBonus =
-    game.turn < 24 ? greenBonusBasicYear1 :
-    game.turn < 48 ? greenBonusBasicYear2 :
-    greenBonusBasicYear3;
-  //ç¾ç»Šæ²¡æ»¡æ—¶é™ä½ç»¿è‰²æ–™ç†åŠ æˆ
-  for (int i = 0; i < 6; i++)
-    if (game.persons[i].friendship < 80)
-      greenBonus *= 0.85;
+  double mechaLvFactor = mechaLvBonusStart + (game.turn / double(TOTAL_TURN)) * (mechaLvBonusEnd - mechaLvBonusStart);
 
-  //å¤–å‡º/ä¼‘æ¯
+  //Íâ³ö/ĞİÏ¢
   {
     bool isFriendOutgoingAvailable =
       game.friend_type != 0 &&
@@ -251,9 +346,9 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       game.friend_outgoingUsed < 5 &&
       (!game.isXiahesu());
     Action action;
-    action.dishType = DISH_none;
+    action.type = GameStage_beforeTrain;
     action.train = TRA_rest;
-    if (isFriendOutgoingAvailable || game.isXiahesu())action.train = TRA_outgoing;//æœ‰å‹äººå¤–å‡ºä¼˜å…ˆå¤–å‡ºï¼Œå¦åˆ™ä¼‘æ¯
+    if (isFriendOutgoingAvailable || game.isXiahesu())action.train = TRA_outgoing;//ÓĞÓÑÈËÍâ³öÓÅÏÈÍâ³ö£¬·ñÔòĞİÏ¢
 
     int vitalGain = isFriendOutgoingAvailable ? 50 : game.isXiahesu() ? 40 : 50;
     bool addMotivation = game.motivation < 5 && action.train == TRA_outgoing;
@@ -261,11 +356,6 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     int vitalAfterRest = std::min(maxVitalEquvalant, vitalGain + game.vital);
     double value = vitalFactor * (vitalEvaluation(vitalAfterRest, game.maxVital) - vitalEvalBeforeTrain);
     if (addMotivation)value += outgoingBonusIfNotFullMotivation;
-
-    bool isGreen = game.cook_train_green[action.train];
-    if (isFriendOutgoingAvailable && action.train == TRA_outgoing)
-      isGreen = true;
-    if (isGreen)value += greenBonus;
 
     if (PrintHandwrittenLogicValueForDebug)
       std::cout << action.toString() << " " << value << std::endl;
@@ -275,9 +365,8 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       bestAction = action;
     }
   }
-  //æ¯”èµ›
+  //±ÈÈü
   Action raceAction;
-  raceAction.dishType = DISH_none;
   raceAction.train = TRA_race;
   if(game.isLegal(raceAction))
   {
@@ -287,8 +376,8 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     int vitalAfterRace = std::min(maxVitalEquvalant, -15 + game.vital);
     value += vitalFactor * (vitalEvaluation(vitalAfterRace, game.maxVital) - vitalEvalBeforeTrain);
 
-    if (game.cook_train_green[TRA_race])
-      value += greenBonus;
+    double mechaLvValue = mechaLvEvaluation(game, TRA_race);
+    value += mechaLvValue;
 
     if (PrintHandwrittenLogicValueForDebug)
       std::cout << raceAction.toString() << " " << value << std::endl;
@@ -300,11 +389,11 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   }
 
 
-  //è®­ç»ƒ
+  //ÑµÁ·
 
-  //å…ˆæ‰¾åˆ°æœ€å¥½çš„è®­ç»ƒï¼Œç„¶åè®¡ç®—è¦ä¸è¦åƒèœ
+  double statusGainE[5];
+  //ÏÈÕÒµ½×îºÃµÄÑµÁ·£¬È»ºó¼ÆËãÒª²»Òª³Ô²Ë
   {
-    double statusGainE[5];
     statusGainEvaluation(game, statusGainE);
 
 
@@ -313,13 +402,13 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       double value = statusGainE[tra];
 
 
-      //å¤„ç†hintå’Œç¾ç»Š
-      int cardHintNum = 0;//æ‰€æœ‰hintéšæœºå–ä¸€ä¸ªï¼Œæ‰€ä»¥æ‰“åˆ†çš„æ—¶å€™å–å¹³å‡
+      //´¦ÀíhintºÍî¿°í
+      int cardHintNum = 0;//ËùÓĞhintËæ»úÈ¡Ò»¸ö£¬ËùÒÔ´ò·ÖµÄÊ±ºòÈ¡Æ½¾ù
       for (int j = 0; j < 5; j++)
       {
         int p = game.personDistribution[tra][j];
-        if (p < 0)break;//æ²¡äºº
-        if (p >= 6)continue;//ä¸æ˜¯å¡
+        if (p < 0)break;//Ã»ÈË
+        if (p >= 6)continue;//²»ÊÇ¿¨
         if (game.persons[p].isHint)
           cardHintNum += 1;
       }
@@ -328,10 +417,10 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       for (int j = 0; j < 5; j++)
       {
         int pi = game.personDistribution[tra][j];
-        if (pi < 0)break;//æ²¡äºº
-        if (pi >= 6)continue;//ä¸æ˜¯å¡
+        if (pi < 0)break;//Ã»ÈË
+        if (pi >= 6)continue;//²»ÊÇ¿¨
         const Person& p = game.persons[pi];
-        if (p.personType == PersonType_scenarioCard)//å‹äººå¡
+        if (p.personType == PersonType_friendCard)//ÓÑÈË¿¨
         {
           haveFriend = true;
           if (game.friend_stage == FriendStage_notClicked)
@@ -371,89 +460,22 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
       }
 
-      int bestDish = 0;
-      //è€ƒè™‘åƒå„ç§èœ
-      //ç¬¬ä¸€å¹´ï¼šè‡ªå·±ç›¸åº”è®­ç»ƒåªæœ‰ä¸€ç§èœ
-      //ç¬¬äºŒå¹´ï¼šåªè€ƒè™‘lv2èœ
-      //ç¬¬ä¸‰å¹´ï¼šlv2å’Œlv3éƒ½è€ƒè™‘
-      //uraï¼šå¤§æ¦‚ç‡å·²ç»åƒè¿‡g1plateäº†ï¼Œè¿™é‡Œä¸è€ƒè™‘åƒèœ
-      if (game.cook_dish == DISH_none)
-      {
-        if (game.turn < 24)//ç¬¬ä¸€å¹´
-        {
-          if (game.cook_dish_pt < 3000)//åƒåˆ°2500pt
-          {
-            if (tra == 0)
-            {
-              if (game.isDishLegal(DISH_curry))
-                bestDish = DISH_curry;
-              else if (game.isDishLegal(DISH_sandwich))
-                bestDish = DISH_sandwich;
-            }
-            else if (tra == 1 || tra == 3)
-            {
-              if (game.isDishLegal(DISH_curry))
-                bestDish = DISH_curry;
-            }
-            else if (tra == 2 || tra == 4)
-            {
-              if (game.isDishLegal(DISH_sandwich))
-                bestDish = DISH_sandwich;
-            }
-          }
-        }
-        else if (game.turn < 72)//ç¬¬äºŒä¸‰å¹´
-        {
-          int dish1 = DISH_speed1 + tra;
-          int dish2 = DISH_speed2 + tra;
-          assert(GameConstants::Cook_DishMainTraining[dish1] == tra);
-          assert(GameConstants::Cook_DishMainTraining[dish2] == tra);
-
-          if (game.isDishLegal(dish1))
-          {
-            int mat0 = game.cook_material[tra];
-            assert(mat0 >= 150);
-            double matEval0 = materialEvaluation(game.turn, mat0);
-            double matEval1 = materialEvaluation(game.turn, mat0 - 150);
-            double matEval2 = (game.turn >= 48 && mat0 >= 250) ? materialEvaluation(game.turn, mat0 - 250) : -99999;
-            double trValue = statusGainE[tra];
-
-            double gain1 = trValue * cookingThreholdFactorLv2 - matEval0 + matEval1;
-            double gain2 = trValue * cookingThreholdFactorLv3 - matEval0 + matEval2;
-            //std::cout << game.turn << " " << gain1 << std::endl;
+      double mechaLvValue = mechaLvEvaluation(game, tra);
+      value += mechaLvValue;
 
 
-            if (gain1 > 0)
-            {
-              bestDish = dish1;
-            }
-
-            if (gain2 > 0 && gain2 > gain1)
-            {
-              bestDish = dish2;
-            }
-
-          }
-          
-        } 
-      }
-
-      //ç†è®ºä¸Šï¼Œä¼°å€¼éœ€è¦ä¹˜ä¸Šèœçš„è®­ç»ƒåŠ æˆç„¶åå‡å»èœçš„å¼€é”€ï¼Œä½†è¿‡äºå¤æ‚ï¼Œæ‡’å¾—è€ƒè™‘äº†
+      //ÀíÂÛÉÏ£¬¹ÀÖµĞèÒª³ËÉÏ²ËµÄÑµÁ·¼Ó³ÉÈ»ºó¼õÈ¥²ËµÄ¿ªÏú£¬µ«¹ıÓÚ¸´ÔÓ£¬ÀÁµÃ¿¼ÂÇÁË
       int vitalAfterTrain = std::min(maxVitalEquvalant, game.trainVitalChange[tra] + game.vital);
       value += vitalScaleTraining * vitalFactor * (vitalEvaluation(vitalAfterTrain, game.maxVital) - vitalEvalBeforeTrain);
 
-      //åˆ°ç›®å‰ä¸ºæ­¢éƒ½æ˜¯è®­ç»ƒæˆåŠŸçš„value
-      //è®¡ç®—åƒèœä¹‹åçš„ä½“åŠ›ï¼Œé‡æ–°è®¡ç®—å¤±è´¥ç‡
+      //µ½Ä¿Ç°ÎªÖ¹¶¼ÊÇÑµÁ·³É¹¦µÄvalue
+      //¼ÆËã³Ô²ËÖ®ºóµÄÌåÁ¦£¬ÖØĞÂ¼ÆËãÊ§°ÜÂÊ
       double failRate = game.failRate[tra];
-      if (bestDish != 0 && failRate > 0)
+      bool overdriveAvailable = !game.mecha_overdrive_enabled && game.mecha_overdrive_energy >= 3;
+      if (overdriveAvailable && game.mecha_upgradeTotal[2] >= 12 && failRate > 0)
       {
-        int dishLevel = GameConstants::Cook_DishLevel[bestDish];
-        int dishMainTraining = GameConstants::Cook_DishMainTraining[bestDish];
-        int vitalGainDish = dishLevel==1?0:
-          dishLevel == 2 ? (game.cook_farm_level[dishMainTraining] >= 3 ? 5 : 0):
-          dishLevel == 3 ? (game.cook_farm_level[dishMainTraining] >= 3 ? 20 : 15): //å‡è®¾ä¸€åŠå¤§æˆåŠŸåŠ ä½“åŠ›
-          25;
-        failRate -= 1.7 * vitalGainDish;//ç²—ç³™ä¼°è®¡
+        int vitalGain = 15;
+        failRate -= 1.7 * vitalGain;//´Ö²Ú¹À¼Æ
         if (failRate < 0)failRate = 0;
       }
 
@@ -467,25 +489,49 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         value = 0.01 * failRate * failValueAvg + (1 - 0.01 * failRate) * value;
       }
 
-      Action action;
-      if (bestDish != DISH_none)//å…ˆåƒèœï¼Œä¸‹ä¸€æ¬¡å†è®­ç»ƒ
-      {
-        action.dishType = bestDish;
-        action.train = TRA_none;
-      }
-      else
-      {
-        action.dishType = DISH_none;
-        action.train = tra;
-      }
+
 
       if (value > bestValue)
       {
         bestValue = value;
+
+
+        Action action;
+        action.type = GameStage_beforeTrain;
+        action.overdrive = false;
+        action.train = tra;
+
+        //ÊÇ·ñoverdrive
+        if (overdriveAvailable)
+        {
+          if (game.mecha_overdrive_energy >= 6 ||
+            (game.mecha_overdrive_energy >= 5 && game.turn < 71 && game.isRacingTurn[game.turn + 1]))
+            action.overdrive = true;
+          if(game.turn >= 69)
+            action.overdrive = true;
+          double overdriveBound =
+            game.turn <= 11 ? 0 :
+            game.turn <= 23 ? 50 :
+            game.turn <= 35 ? 300 :
+            game.turn <= 47 ? 350 :
+            game.turn <= 59 ? 400 :
+            game.turn <= 71 ? 400 :
+            0;
+          overdriveBound *= overdriveActivateFactor;
+          if (statusGainE[tra] >= overdriveBound)
+            action.overdrive = true;
+        }
+
+        if (action.overdrive)
+        {
+          if (game.mecha_upgradeTotal[1] >= 15)
+            action.train = TRA_none;
+        }
+
         bestAction = action;
       }
-      if (PrintHandwrittenLogicValueForDebug)
-        std::cout << action.toString() << " " << value << std::endl;
+      //if (PrintHandwrittenLogicValueForDebug)
+      //  std::cout << action.toString() << " " << value << std::endl;
     }
 
 
