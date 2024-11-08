@@ -181,6 +181,7 @@ void Game::newGame(mt19937_64& rand, bool enablePlayerPrint, int newUmaId, int u
     if (mecha_rivalLv[i] < 1)
       mecha_rivalLv[i] = 1;
 
+  mecha_anyLose = false;
 
 
   randomDistributeCards(rand); //随机分配卡组，包括计算属性
@@ -198,6 +199,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
     return;//比赛不用分配卡组
   }
   
+  bool overdrive_enabled = mecha_maybe_reverse_overdrive();
 
   int headN[5] = { 0,0,0,0,0 };
   vector<int8_t> buckets[5];
@@ -327,6 +329,15 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
     mecha_hasGear[i] = randBool(rand, gearProb);
   }
 
+  if (turn >= 72 && !mecha_anyLose)//ura期间每回合开启overdrive
+  {
+    mecha_overdrive_energy = 3;
+    bool suc = mecha_activate_overdrive(rand);
+    assert(suc);
+  }
+  else if (overdrive_enabled)
+    mecha_activate_overdrive(rand);
+
   calculateTrainingValue();
 }
 
@@ -340,6 +351,8 @@ void Game::calculateTrainingValue()
   {
     mecha_rivalLvTotal += mecha_rivalLv[i];
   }
+
+  mecha_rivalLvLimit = turn < 24 ? 200 : turn < 36 ? 300 : turn < 48 ? 400 : turn < 60 ? 500 : turn < 72 ? 600 : 700;
 
   for (int i = 0; i < 3; i++)
   {
@@ -360,18 +373,18 @@ void Game::calculateTrainingValue()
     {
       //m *= 1.25;
       int upgradeGroup =
-        (i == 0 || i == 2) ? mecha_upgradeTotal[1] :
-        (i == 1 || i == 3) ? mecha_upgradeTotal[2] :
+        (i == 0 || i == 2) ? mecha_upgradeTotal[2] :
+        (i == 1 || i == 3) ? mecha_upgradeTotal[1] :
         mecha_upgradeTotal[0];
       if (upgradeGroup >= 9)
       {
-        int count = mecha_rivalLvTotal / 200;
+        int count = 1 + (mecha_rivalLvTotal - 1) / 200;
         double bonus = 0.03 * count;
         m *= (1 + bonus);
       }
       else if (upgradeGroup >= 6)
       {
-        int count = mecha_rivalLvTotal / 300;
+        int count = 1 + (mecha_rivalLvTotal - 1) / 300;
         double bonus = 0.03 * count;
         m *= (1 + bonus);
       }
@@ -384,7 +397,7 @@ void Game::calculateTrainingValue()
   ptb *= 1 + mecha_upgrade[2][2] * 0.12;
   if (mecha_overdrive_enabled && mecha_upgradeTotal[2] >= 15)
   {
-    int count = mecha_rivalLvTotal / 150;
+    int count = 1 + (mecha_rivalLvTotal - 1) / 150;
     double bonus = 0.03 * count;
     ptb *= (1 + bonus);
   }
@@ -465,7 +478,192 @@ bool Game::tryInvitePeople(std::mt19937_64& rand)
     return false;
 
   personDistribution[inviteTrain][space] = invitePerson;
+  return true;
   //require recalculate later
+}
+void Game::mecha_addRivalLv(int idx, int value)
+{
+  assert(idx >= 0 && idx < 5);
+  int t = mecha_rivalLv[idx] + value;
+
+  if (t > mecha_rivalLvLimit)
+    t = mecha_rivalLvLimit;
+  mecha_rivalLv[idx] = t;
+}
+void Game::mecha_distributeEN(int head3, int chest3, int foot3, int otherENType)
+{
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      mecha_upgrade[i][j] = 0;
+
+  //暂时先随机分配
+  if (otherENType == 1)
+  {
+    int headEn = 3 * head3;
+    if (headEn < 0 || headEn>15 || (headEn > 10 && turn < 35))
+      throw "distributeEN illegal input";
+    while (headEn > 0)
+    {
+      int item = turn >= 35 ? rand() % 3 : rand() % 2;
+      if (mecha_upgrade[0][item] < 5)
+      {
+        mecha_upgrade[0][item] += 1;
+        headEn -= 1;
+      }
+    }
+
+    int chestEn = 3 * chest3;
+    if (chestEn < 0 || chestEn > 15 || (chestEn > 10 && turn < 59))
+      throw "distributeEN illegal input";
+    if (turn >= 59)
+    {
+      mecha_upgrade[1][2] = min(5, chestEn);
+      chestEn -= mecha_upgrade[1][2];
+    }
+    while (chestEn > 0)
+    {
+      int item = turn >= 59 ? rand() % 3 : rand() % 2;
+      if (mecha_upgrade[1][item] < 5)
+      {
+        mecha_upgrade[1][item] += 1;
+        chestEn -= 1;
+      }
+    }
+
+    int footEn = 3 * foot3;
+    if (footEn < 0 || footEn > 15 || (footEn > 10 && turn < 59))
+      throw "distributeEN illegal input";
+    if (turn >= 59)
+    {
+      mecha_upgrade[2][2] = min(5, footEn);
+      footEn -= mecha_upgrade[2][2];
+    }
+    while (footEn > 0)
+    {
+      int item = turn >= 59 ? rand() % 3 : rand() % 2;
+      if (mecha_upgrade[2][item] < 5)
+      {
+        mecha_upgrade[2][item] += 1;
+        footEn -= 1;
+      }
+    }
+
+    int otherEn = mecha_EN - 3 * (head3 + chest3 + foot3);
+    if (otherEn < 0 || otherEn >= 3)
+      throw "distributeEN illegal input";
+    while (otherEn > 0)
+    {
+      int type = rand() % 3;
+      int item = turn >= 35 ? rand() % 3 : rand() % 2;
+      if (mecha_upgrade[type][item] < 5)
+      {
+        mecha_upgrade[type][item] += 1;
+        otherEn -= 1;
+      }
+    }
+  }
+  else 
+    throw "todo";
+
+  //throw "todo";
+}
+bool Game::mecha_maybeRunUGE()
+{
+  if (turn != 1 && turn != 23 && turn != 35 && turn != 47 && turn != 59 && turn != 71)
+    return false;
+  gameStage = GameStage_beforeMechaUpgrade;
+  if (turn == 1)return true;
+
+  //check lv requirement
+
+  int UGEcount = turn / 12 - 1;//第几次，从0开始
+
+  {
+    int totalLv = 0;
+    for (int i = 0; i < 5; i++)
+      totalLv += mecha_rivalLv[i];
+    if (totalLv >= GameConstants::Mecha_TargetTotalLevel[UGEcount])//S
+    {
+      mecha_EN += 6;
+      addAllStatus(10 + 5 * UGEcount);
+      skillPt += 25 + 10 * UGEcount;
+      if (UGEcount == 0 || UGEcount == 2 || UGEcount == 4)
+        for (int i = 0; i < 5; i++)
+          addTrainingLevelCount(i, 4);
+      mecha_win_history[UGEcount] = 2;
+    }
+    else if(totalLv >= GameConstants::Mecha_TargetTotalLevel[UGEcount]*7/10)//A
+    {
+      mecha_EN += 5;
+      addAllStatus(10 + 5 * UGEcount);
+      skillPt += 25 + 10 * UGEcount;
+      if (UGEcount == 0 || UGEcount == 2 || UGEcount == 4)
+        for (int i = 0; i < 5; i++)
+          addTrainingLevelCount(i, 4);
+      mecha_win_history[UGEcount] = 1;
+      mecha_anyLose = true;
+    }
+    else //B
+    {
+      mecha_EN += 4;
+      addAllStatus(5 + 5 * UGEcount);
+      skillPt += 20 + 10 * UGEcount;
+      mecha_win_history[UGEcount] = 0;
+      mecha_anyLose = true;
+    }
+  }
+  return true;
+}
+bool Game::mecha_activate_overdrive(std::mt19937_64& rand)
+{
+  if (mecha_overdrive_enabled || mecha_overdrive_energy < 3)
+    return false;
+  mecha_overdrive_energy -= 3;
+  mecha_overdrive_enabled = true;
+  if (mecha_upgradeTotal[0] >= 3)
+  {
+    for (int i = 0; i < 5; i++)
+      mecha_hasGear[i] = true;
+  }
+  if (mecha_upgradeTotal[0] >= 15)
+  {
+    for (int i = 0; i < 6; i++)
+      if (persons[i].personType == PersonType_card)
+        persons[i].isHint = true;
+  }
+  if (mecha_upgradeTotal[1] >= 15)
+  {
+    int totalTry = 0;
+    int personToInvite = 2;
+    while (personToInvite > 0)
+    {
+      bool suc = tryInvitePeople(rand);
+      if (suc)personToInvite -= 1;
+      if (totalTry > 1000)
+        throw "Tried 1000 times but not successfully invite two person";
+    }
+  }
+  if (mecha_upgradeTotal[2] >= 12)
+  {
+    addVital(15);
+    addMotivation(1);
+  }
+
+  calculateTrainingValue();
+  return true;
+}
+bool Game::mecha_maybe_reverse_overdrive()
+{
+  if (!mecha_overdrive_enabled)
+    return false;
+  mecha_overdrive_energy += 3;
+  assert(mecha_overdrive_energy <= 6);
+  mecha_overdrive_enabled = false;
+  if (mecha_upgradeTotal[2] >= 12)
+  {
+    addVital(-15);
+  }
+  return true;
 }
 int Game::calculateRealStatusGain(int value, int gain) const//考虑1200以上为2的倍数的实际属性增加值
 {
@@ -648,7 +846,7 @@ void Game::handleFriendOutgoing(std::mt19937_64& rand)
   }
   else if (friend_type == FriendType_lianghua)
   {
-    todo;
+    throw "todo";
   }
   else throw string("未知的出行");
 
@@ -679,7 +877,7 @@ void Game::handleFriendUnlock(std::mt19937_64& rand)
   }
   else if (friend_type == FriendType_lianghua)
   {
-    todo;
+    throw "todo";
   }
   else throw string("未知的友人解锁出行");
   friend_stage = FriendStage_afterUnlockOutgoing;
@@ -700,7 +898,7 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
     }
     else if (friend_type == FriendType_lianghua)
     {
-      todo;
+      throw "todo";
     }
     else throw string("未知的第一次点友人");
   }
@@ -755,7 +953,7 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
     }
     else if (friend_type == FriendType_lianghua)
     {
-      todo;
+      throw "todo";
     }
     else throw string("未知的友人点击事件");
   }
@@ -776,7 +974,7 @@ void Game::handleFriendFixedEvent()
     }
     else if (friend_type == FriendType_lianghua)
     {
-      todo;
+      throw "todo";
     }
     else throw string("未知的友人固定事件");
   }
@@ -800,7 +998,7 @@ void Game::handleFriendFixedEvent()
     }
     else if (friend_type == FriendType_lianghua)
     {
-      todo;
+      throw "todo";
     }
     else throw string("未知的友人固定事件");
   }
@@ -811,29 +1009,24 @@ void Game::handleFriendFixedEvent()
 }
 bool Game::applyTraining(std::mt19937_64& rand, int train)
 {
-  assert(gameStage == GameStage_beforeTrain);
-  int matType = -1;//此回合的菜的种类
-  int matExtra = 0;//此回合的菜的额外加成（训练人头数）
-  bool isGreen = false;//此回合的菜是否绿圈
   if (isRacing)
   {
-    //比赛收益在checkEventAfterTrain()里处理，此处只处理菜
-    assert(train == TRA_none || train == TRA_race);
-    matType = cook_main_race_material_type;
-    matExtra = 0;
-    isGreen = true;
-    
+    //固定比赛的收益在checkEventAfterTrain()里处理
+    assert(train == TRA_race);
 
-    //assert(false && "所有剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
-    //return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
+    if (turn < 72)
+    {
+      mecha_overdrive_energy += 1;
+      if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
+      for (int i = 0; i < 5; i++)
+      {
+        mecha_addRivalLv(i, 7);
+      }
+    }
+
   }
   else
   {
-    matType = cook_train_material_type[train];
-    matExtra = cook_train_material_num_extra[train];
-    isGreen = cook_train_green[train];//如果训练失败，后续将其设为false
-
-
     if (train == TRA_rest)//休息
     {
       if (isXiahesu())//合宿只能外出
@@ -850,6 +1043,8 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
         else
           addVital(30);
       }
+      mecha_overdrive_energy += 1;
+      if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
     }
     else if (train == TRA_race)//比赛
     {
@@ -865,6 +1060,13 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
       addVital(-15);
       if (rand() % 10 == 0)
         addMotivation(1);
+
+      mecha_overdrive_energy += 1;
+      if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
+      for (int i = 0; i < 5; i++)
+      {
+        mecha_addRivalLv(i, 7);
+      }
     }
     else if (train == TRA_outgoing)//外出
     {
@@ -880,7 +1082,6 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
       {
         //友人出行
         handleFriendOutgoing(rand);
-        isGreen = true;
       }
       else //普通出行
       {
@@ -893,12 +1094,13 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
           addVital(10);
         }
       }
+      mecha_overdrive_energy += 1;
+      if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
     }
     else if (train <= 4 && train >= 0)//常规训练
     {
       if (rand() % 100 < failRate[train])//训练失败
       {
-        isGreen = false;
         if (failRate[train] >= 20 && (rand() % 100 < failRate[train]))//训练大失败，概率是瞎猜的
         {
           printEvents("训练大失败！");
@@ -933,7 +1135,10 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
         addVital(trainVitalChange[train]);
 
         int friendshipExtra = 0;//如果带了SSR友人卡，+1。如果友人卡在这个训练，再+2。爱娇不在这里处理
-        if (friend_type == 1)
+        if (mecha_overdrive_enabled && mecha_upgradeTotal[2] >= 3)//3级腿
+          friendshipExtra += 3;
+        bool isSSRYayoi = friend_type == PersonType_yayoi && friend_isSSR;
+        if (isSSRYayoi)
           friendshipExtra += 1;
 
         vector<int> hintCards;//有哪几个卡出红感叹号了
@@ -943,7 +1148,7 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
         {
           int p = personDistribution[train][i];
           if (p == PSID_none)break;//没人
-          if (friend_type == 1 && p == friend_personId)
+          if (isSSRYayoi && p == friend_personId)
           {
             friendshipExtra += 2;
             break;
@@ -956,7 +1161,7 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
 
           if (p == friend_personId && friend_type != 0)//友人卡
           {
-            assert(persons[p].personType == PersonType_scenarioCard);
+            assert(persons[p].personType == PersonType_friendCard);
             addJiBan(p, 4 + friendshipExtra, false);
             clickFriend = true;
           }
@@ -993,41 +1198,50 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
 
         if (hintCards.size() > 0)
         {
-          int hintCard = hintCards[rand() % hintCards.size()];//随机一张卡出hint
-
-          addJiBan(hintCard, 5, false);
-          int hintLevel = persons[hintCard].cardParam.hintLevel;
-          if (hintLevel > 0)
+          if (!(mecha_overdrive_enabled && mecha_upgradeTotal[0] >= 15))//随机一张卡出hint
           {
-            skillPt += int(hintLevel * hintPtRate);
+            int hintCard = hintCards[rand() % hintCards.size()];
+            hintCards.clear();
+            hintCards.push_back(hintCard);
           }
-          else //根乌拉拉这种，只给属性
+
+          for (int p = 0; p < hintCards.size(); p++)
           {
-            if (train == 0)
+            int hintCard = hintCards[p];
+            addJiBan(hintCard, 5, false);
+            int hintLevel = persons[hintCard].cardParam.hintLevel;
+            if (hintLevel > 0)
             {
-              addStatus(0, 6);
-              addStatus(2, 2);
+              skillPt += int(hintLevel * hintPtRate);
             }
-            else if (train == 1)
+            else //根乌拉拉这种，只给属性
             {
-              addStatus(1, 6);
-              addStatus(3, 2);
-            }
-            else if (train == 2)
-            {
-              addStatus(2, 6);
-              addStatus(1, 2);
-            }
-            else if (train == 3)
-            {
-              addStatus(3, 6);
-              addStatus(0, 1);
-              addStatus(2, 1);
-            }
-            else if (train == 4)
-            {
-              addStatus(4, 6);
-              skillPt += 5;
+              if (train == 0)
+              {
+                addStatus(0, 6);
+                addStatus(2, 2);
+              }
+              else if (train == 1)
+              {
+                addStatus(1, 6);
+                addStatus(3, 2);
+              }
+              else if (train == 2)
+              {
+                addStatus(2, 6);
+                addStatus(1, 2);
+              }
+              else if (train == 3)
+              {
+                addStatus(3, 6);
+                addStatus(0, 1);
+                addStatus(2, 1);
+              }
+              else if (train == 4)
+              {
+                addStatus(4, 6);
+                skillPt += 5;
+              }
             }
           }
         }
@@ -1039,6 +1253,16 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
         //训练等级提升
         addTrainingLevelCount(train, 1);
 
+        if (mecha_hasGear[train])
+        {
+          mecha_overdrive_energy += 1;
+          if (mecha_overdrive_energy > 6)mecha_overdrive_energy = 6;
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+          mecha_addRivalLv(i, mecha_lvGain[train][i]);
+        }
       }
 
     }
@@ -1049,11 +1273,6 @@ bool Game::applyTraining(std::mt19937_64& rand, int train)
     }
   }
 
-
-  //种菜
-  addFarm(matType, matExtra, isGreen);
-  gameStage = GameStage_afterTrain;
-  autoUpgradeFarm(false);
   return true;
 }
 
@@ -1063,57 +1282,73 @@ bool Game::isLegal(Action action) const
   if (!action.isActionStandard())
     return false;
 
-  //是否吃得起菜
-  if (action.dishType != DISH_none)
-    if (!isDishLegal(action.dishType))
-      return false;
+  //stage是否匹配
+  if (action.type != gameStage)
+    return false;
 
-  if (isRacing)
+  if (action.type == GameStage_beforeTrain)
   {
-    //if (isUraRace)
-    //{
-      if (action.train == TRA_none || action.train == TRA_race)//none是吃菜然后比赛，race是直接比赛
+    if (isRacing)
+    {
+      if (action.train == TRA_race)
         return true;
       else
         return false;
-    //}
-    //else
-    //{
-      //assert(false && "所有ura以外的剧本比赛都在checkEventAfterTrain()里处理，不能applyTraining");
-      //return false;//所有剧本比赛都在checkEventAfterTrain()里处理（相当于比赛回合直接跳过），不在这个函数
-    //}
-  }
-
-  if (action.train == TRA_rest)
-  {
-    if (isXiahesu())
-    {
-      return false;//将夏合宿的“外出&休息”称为外出
     }
-    return true;
-  }
-  else if (action.train == TRA_outgoing)
-  {
-    return true;
-  }
-  else if (action.train == TRA_race)
-  {
-    return isRaceAvailable();
-  }
-  else if (action.train >= 0 && action.train <= 4)
-  {
-    return true;
-  }
-  else if (action.dishType != DISH_none)
-  {
-    return isDishLegal(action.dishType);
-  }
-  else
-  {
-    assert(false && "未知的训练项目");
+
+    //是否能开齿轮
+    if (action.overdrive)
+    {
+      if (mecha_overdrive_energy < 3)
+        return false;
+      if (mecha_overdrive_enabled)
+        return false;
+      if (mecha_upgradeTotal[1] >= 15)//摇人，应该先开overdrive再选训练，分两步
+        return action.train == -1;
+      else
+        return action.train >= 0 && action.train <= 4;
+    }
+
+    if (action.train == TRA_rest)
+    {
+      if (isXiahesu())
+      {
+        return false;//将夏合宿的“外出&休息”称为外出
+      }
+      return true;
+    }
+    else if (action.train == TRA_outgoing)
+    {
+      return true;
+    }
+    else if (action.train == TRA_race)
+    {
+      return isRaceAvailable();
+    }
+    else if (action.train >= 0 && action.train <= 4)
+    {
+      return true;
+    }
+    else
+    {
+      assert(false && "未知的训练项目");
+      return false;
+    }
     return false;
   }
-  return false;
+  else if (action.type == GameStage_beforeMechaUpgrade)
+  {
+    int total3 = mecha_EN / 3;
+    int mechaHeadLimit = turn >= 35 ? 5 : 3;//第二次UGE解锁头3号升级
+    int mechaChestLimit = turn >= 59 ? 5 : 3;//第四次UGE解锁胸3号升级
+    int mechaFootLimit = turn >= 59 ? 5 : 3;//第四次UGE解锁腿3号升级
+    int mechaFoot = total3 - action.mechaHead - action.mechaChest;
+    if (action.mechaHead < 0 || action.mechaHead > mechaHeadLimit)return false;
+    if (action.mechaChest < 0 || action.mechaChest > mechaChestLimit)return false;
+    if (mechaFoot < 0 || mechaFoot > mechaFootLimit)return false;
+    return true;
+  }
+  else throw "unknown action.type";
 }
 
 
@@ -1236,7 +1471,9 @@ void Game::calculateLvGainSingle(int tra, int headNum, bool isShining)
     int type = GameConstants::Mecha_LvGainSubTrainIdx[tra][sub];
     int basic = GameConstants::Mecha_LvGainBasic[xhs][group][sub][headNum];
     double multiplier = mecha_lvGainMultiplier[type];
-    int gain = int(ceil(multiplier * basic));
+    int gain = int(multiplier * basic);
+    if (gain == basic && multiplier > 1)//至少+1
+      gain += 1;
     mecha_lvGain[tra][type] = gain;
   }
 }
@@ -1286,7 +1523,7 @@ void Game::calculateTrainingValueSingle(int tra)
       linkNum += 1;
     }
   }
-  isTrainShining[tra] = shiningNum;
+  isTrainShining[tra] = shiningNum > 0;
 
   //基础值
   for (int i = 0; i < 6; i++)
@@ -1354,7 +1591,7 @@ void Game::calculateTrainingValueSingle(int tra)
   double scenarioTrainMultiplier = 1.0;//剧本总训练加成
 
   //研究等级加成
-  double lvBonus = 6 + 0.06 * mecha_rivalLv[tra];
+  double lvBonus = mecha_rivalLv[tra] > 1 ? 6 + 0.06 * mecha_rivalLv[tra] : 0;
   if (mecha_linkeffect_lvbonus)lvBonus *= 1.5;
   scenarioTrainMultiplier *= (1 + 0.01 * lvBonus);
 
@@ -1362,13 +1599,14 @@ void Game::calculateTrainingValueSingle(int tra)
   if (mecha_hasGear[tra])
   {
     double gearBonus =
-      turn < 24 ? 0.05 :
-      turn < 36 ? 0.10 :
-      turn < 48 ? 0.15 :
-      turn < 60 ? 0.20 :
-      turn < 72 ? 0.25 :
-      0.30;
-    scenarioTrainMultiplier *= (1 + 0.01 * gearBonus);
+      turn < 12 ? 3 :
+      turn < 24 ? 6 :
+      turn < 36 ? 10 :
+      turn < 48 ? 16 :
+      turn < 60 ? 20 :
+      turn < 72 ? 25 :
+      30;
+    scenarioTrainMultiplier *= (1 + 0.01 * gearBonus); //偶尔有一两点误差，但我怎么改都有误差
   }
 
   //胸的3号升级，友情加成
@@ -1436,6 +1674,7 @@ int Game::getYayoiJiBan() const
 void Game::checkEventAfterTrain(std::mt19937_64& rand)
 {
   mecha_overdrive_enabled = false;
+  maybeUpdateDeyilv();
   checkFixedEvents(rand);
   checkRandomEvents(rand);
 
@@ -1453,7 +1692,7 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
 }
 void Game::checkFixedEvents(std::mt19937_64& rand)
 {
-  //处理各种固定事件
+
 
   if (isRefreshMind)
   {
@@ -1521,7 +1760,6 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   }
   else if (turn == 35)
   {
-    autoUpgradeFarm(true);//合宿前升级农田
     printEvents("第二年合宿开始");
   }
   else if (turn == 47)//第二年年底
@@ -1601,7 +1839,6 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
   }
   else if (turn == 59)
   {
-    autoUpgradeFarm(true);//合宿前升级农田
     printEvents("第三年合宿开始");
   }
   else if (turn == 70)
@@ -1635,20 +1872,18 @@ void Game::checkFixedEvents(std::mt19937_64& rand)
 
     for (int c = 0; c < 5; c++)
     {
-      if (c < 4 && cook_win_history[c] != 1)
-        allWin = false;
-      if (c == 4 && cook_win_history[c] != 2)
+      if (mecha_win_history[c] != 2)
         allWin = false;
     }
     if (allWin)
     {
       skillPt += 40;//剧本金
-      addAllStatus(60);
-      skillPt += 150;
+      addAllStatus(45);
+      skillPt += 175;
     }
     else 
     {
-      addAllStatus(25);
+      addAllStatus(40);
       //there should be something, but not important
     }
 
@@ -1672,7 +1907,7 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   if (friend_type != 0)
   {
     Person& p = persons[friend_personId];
-    assert(p.personType == PersonType_scenarioCard);
+    assert(p.personType == PersonType_friendCard);
     if (friend_stage==FriendStage_beforeUnlockOutgoing)
     {
       double unlockOutgoingProb = p.friendship >= 60 ?
@@ -1759,33 +1994,48 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
 void Game::applyAction(std::mt19937_64& rand, Action action)
 {
   if (isEnd()) return;
-  //assert(turn < TOTAL_TURN && "Game::applyTrainingAndNextTurn游戏已结束");
-  //assert(!(isRacing && !isUraRace) && "非ura的比赛回合都在checkEventAfterTrain里跳过了");
-  if (action.dishType != DISH_none)//dish only, not next turn
+  if (action.type == GameStage_beforeMechaUpgrade)
   {
-    bool suc = makeDish(action.dishType, rand);
-    assert(suc && "Game::applyAction选择了不合法的菜品");
-  }
-  if (action.train != TRA_none || isRacing)
-  {
-    bool suc = applyTraining(rand, action.train);
-    assert(suc && "Game::applyAction选择了不合法的训练");
-    
+    if (gameStage != GameStage_beforeMechaUpgrade)
+      throw "wrong game stage";
+    int mechaFoot = mecha_EN / 3 - action.mechaHead - action.mechaChest;
+    int type = 1;
+    mecha_distributeEN(
+      action.mechaHead,
+      action.mechaChest,
+      mechaFoot,
+      type
+    );
+
+    gameStage = GameStage_beforeTrain;
     checkEventAfterTrain(rand);
     if (isEnd()) return;
-
     randomDistributeCards(rand);
+  }
+  else
+  {
+    if (action.overdrive)
+    {
+      bool suc = mecha_activate_overdrive(rand);
+      assert(suc && "Game::applyAction 无法开启overdrive");
+    }
+    if (action.train != TRA_none)
+    {
+      bool suc = applyTraining(rand, action.train);
+      assert(suc && "Game::applyAction选择了不合法的训练");
+
+      bool runUGE = mecha_maybeRunUGE();
+
+      if (!runUGE)
+      {
+        checkEventAfterTrain(rand);
+        if (isEnd()) return;
+
+        randomDistributeCards(rand);
+      }
 
 
-    //非ura的比赛回合也可能吃菜，用来刷pt，所以不跳过
-    
-    //if (isRacing && !isUraRace)//非ura的比赛回合，直接跳到下一个回合
-    //{
-    //  Action emptyAction;
-    //  emptyAction.train = TRA_none;
-    //  emptyAction.dishType = DISH_none;
-    //  applyAction(rand, emptyAction);
-    //}
+    }
   }
 }
 
