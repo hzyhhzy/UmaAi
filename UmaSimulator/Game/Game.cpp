@@ -209,7 +209,7 @@ void Game::randomDistributeCards(std::mt19937_64& rand)
   for (int i = 0; i < 6 + 2; i++)
   {
     int atTrain = 5;
-    if (friend_type == FriendType_yayoi && i == friend_personId)
+    if (friend_type != FriendType_none && i == friend_personId)
     {
       //友人卡
       atTrain = persons[i].distribution(rand);
@@ -846,7 +846,54 @@ void Game::handleFriendOutgoing(std::mt19937_64& rand)
   }
   else if (friend_type == FriendType_lianghua)
   {
-    throw "todo";
+    int pid = friend_personId;
+    if (friend_outgoingUsed == 0)
+    {
+      addVitalFriend(35);
+      addMotivation(1);
+      addStatusFriend(0, 15);
+      addJiBan(pid, 5, false);
+    }
+    else if (friend_outgoingUsed == 1)
+    {
+      addVitalFriend(30);
+      addMotivation(1);
+      addStatusFriend(0, 10);
+      addStatusFriend(4, 10);
+      addJiBan(pid, 5, false);
+    }
+    else if (friend_outgoingUsed == 2)
+    {
+      addVitalFriend(50);
+      addMotivation(1);
+      addJiBan(pid, 5, false);
+    }
+    else if (friend_outgoingUsed == 3)
+    {
+      addVitalFriend(30);
+      addMotivation(1);
+      addStatusFriend(0, 25);
+      addJiBan(pid, 5, false);
+    }
+    else if (friend_outgoingUsed == 4)
+    {
+      //有大成功和成功
+      if (rand() % 4 != 0)//粗略估计，75%大成功
+      {
+        addVitalFriend(40);
+        addMotivation(1);
+        addStatusFriend(0, 30);
+        addJiBan(pid, 5, false);
+        skillPt += 72;//金技能等价
+      }
+      else
+      {
+        addVitalFriend(35);
+        addStatusFriend(0, 15);
+        addJiBan(pid, 5, false);
+        skillPt += 40;//金技能等价
+      }
+    }
   }
   else throw string("未知的出行");
 
@@ -877,7 +924,11 @@ void Game::handleFriendUnlock(std::mt19937_64& rand)
   }
   else if (friend_type == FriendType_lianghua)
   {
-    throw "todo";
+    maxVital += 4;
+    if (maxVital > 120)maxVital = 120;
+    addVitalFriend(20);
+    addMotivation(1);
+    addJiBan(friend_personId, 5, false);
   }
   else throw string("未知的友人解锁出行");
   friend_stage = FriendStage_afterUnlockOutgoing;
@@ -898,7 +949,10 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
     }
     else if (friend_type == FriendType_lianghua)
     {
-      throw "todo";
+      maxVital += 4;
+      if (maxVital > 120)maxVital = 120;
+      addJiBan(friend_personId, 10, false);
+      addMotivation(1);
     }
     else throw string("未知的第一次点友人");
   }
@@ -953,7 +1007,8 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
     }
     else if (friend_type == FriendType_lianghua)
     {
-      throw "todo";
+      addJiBan(friend_personId, 5, false);
+      addVitalFriend(7);
     }
     else throw string("未知的友人点击事件");
   }
@@ -970,11 +1025,17 @@ void Game::handleFriendFixedEvent()
       addMotivation(1);
       addStatusFriend(0, 24);
       addJiBan(friend_personId, 5, false);
-      skillPt += 40;//三级中盘巧者，而且有进化，因此这个hint是有效的
+      //skillPt += 40;//三级中盘巧者，而且有进化，因此这个hint是有效的
     }
     else if (friend_type == FriendType_lianghua)
     {
-      throw "todo";
+      maxVital += 4;
+      if (maxVital > 120)maxVital = 120;
+      //addVitalFriend(10);
+      addMotivation(1);
+      addStatusFriend(0, 10);
+      addJiBan(friend_personId, 5, false);
+      //skillPt += 40;//三级末脚，考虑到最后会给全身全灵，而且有进化，因此这个hint是有效的
     }
     else throw string("未知的友人固定事件");
   }
@@ -998,7 +1059,19 @@ void Game::handleFriendFixedEvent()
     }
     else if (friend_type == FriendType_lianghua)
     {
-      throw "todo";
+      if (friend_outgoingUsed >= 5)//走完出行
+      {
+        addStatusFriend(0, 30);
+        addStatusFriend(4, 30);
+        addStatusFriend(5, 45);
+      }
+      else
+      {
+        addStatusFriend(0, 25);
+        addStatusFriend(4, 25);
+        addStatusFriend(5, 35);
+      }
+
     }
     else throw string("未知的友人固定事件");
   }

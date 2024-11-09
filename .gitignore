@@ -368,3 +368,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+/enc_temp_folder/54f06331e1c285b1f37dc9e92439b2/Game.cpp

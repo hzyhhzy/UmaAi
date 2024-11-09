@@ -5,7 +5,7 @@
 
 
 const double statusWeights[5] = { 6,6,6,6,6 };
-const double jibanValue = 3;
+const double jibanValue = 12;
 const double vitalFactorStart = 3.5;
 const double vitalFactorEnd = 7;
 const double vitalScaleTraining = 1;
@@ -14,8 +14,8 @@ const double reserveStatusFactor = 40;//控属性时给每回合预留多少，�
 
 const double smallFailValue = -150;
 const double bigFailValue = -500;
-const double outgoingBonusIfNotFullMotivation = 150;//掉心情时提高外出分数
-const double raceBonus = 100;//比赛收益，不考虑体力
+const double outgoingBonusIfNotFullMotivation = 200;//掉心情时提高外出分数
+const double raceBonus = 150;//比赛收益，不考虑体力
 
 const double mechaLvBonusStart = 10;
 const double mechaLvBonusEnd = 5;
@@ -434,9 +434,9 @@ Action Evaluator::handWrittenStrategy(const Game& game)
           if (p.friendship < 80)
           {
             double jibanAdd = 7;
-            if (game.friend_type == 1)
+            if (game.friend_type == FriendType_yayoi)
               jibanAdd += 1;
-            if (haveFriend && game.friend_type == 1)
+            if (haveFriend && game.friend_type == FriendType_yayoi)
               jibanAdd += 2;
             if (game.isAiJiao)jibanAdd += 2;
             if (p.isHint)
