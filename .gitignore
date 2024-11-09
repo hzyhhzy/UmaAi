@@ -4,6 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 UmaSimulator/packets
+dist-oss/version.txt
 packets
 __pycache__
 master.mdb

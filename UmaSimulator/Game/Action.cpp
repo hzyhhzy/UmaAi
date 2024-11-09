@@ -3,14 +3,14 @@
 
 const std::string Action::trainingName[8] =
 {
-  "ËÙ",
-  "ÄÍ",
-  "Á¦",
-  "¸ù",
-  "ÖÇ",
-  "ÐÝÏ¢",
-  "Íâ³ö",
-  "±ÈÈü"
+  "é€Ÿ",
+  "è€",
+  "åŠ›",
+  "æ ¹",
+  "æ™º",
+  "ä¼‘æ¯",
+  "å¤–å‡º",
+  "æ¯”èµ›"
 };
 Action::Action()
 {
@@ -56,17 +56,17 @@ Action::Action(int id)
 }
 bool Action::isActionStandard() const
 {
-  //-1 Ê¹ÓÃÕâ¸ö±ê¼ÇÊ±£¬ËµÃ÷ÒªrandomDistributeCards£¬ÓÃÓÚ²âÊÔai·ÖÊý£¬ÔÚSearch::searchSingleActionThreadÖÐÊ¹ÓÃ
+  //-1 ä½¿ç”¨è¿™ä¸ªæ ‡è®°æ—¶ï¼Œè¯´æ˜Žè¦randomDistributeCardsï¼Œç”¨äºŽæµ‹è¯•aiåˆ†æ•°ï¼Œåœ¨Search::searchSingleActionThreadä¸­ä½¿ç”¨
   if (type == -1)
   {
     return false;
   }
-  //1 ÆÕÍ¨ÑµÁ·£¬Èç¹ûÓÐoverdriveÔò¿ÉÒÔ¾ö¶¨ÊÇ·ñ¿ª£¬Ò²¿ÉÒÔÏÈ¿ªoverdrive¶øÔÝÊ±²»Ñ¡ÑµÁ·£¨½öÏÞµÚÈýÄêÏÂ°ëÄêµãÁË15¼¶ÐØ£¬ÔòÐèÒªÏÈ¾ö¶¨ÊÇ·ñ¿ªoverdrive¸ù¾ÝÒ¡ÈË½á¹û¶øÑ¡ÑµÁ·£©¡£Ñ¡Ïî¸öÊýÎª8+5+1
+  //1 æ™®é€šè®­ç»ƒï¼Œå¦‚æžœæœ‰overdriveåˆ™å¯ä»¥å†³å®šæ˜¯å¦å¼€ï¼Œä¹Ÿå¯ä»¥å…ˆå¼€overdriveè€Œæš‚æ—¶ä¸é€‰è®­ç»ƒï¼ˆä»…é™ç¬¬ä¸‰å¹´ä¸‹åŠå¹´ç‚¹äº†15çº§èƒ¸ï¼Œåˆ™éœ€è¦å…ˆå†³å®šæ˜¯å¦å¼€overdriveæ ¹æ®æ‘‡äººç»“æžœè€Œé€‰è®­ç»ƒï¼‰ã€‚é€‰é¡¹ä¸ªæ•°ä¸º8+5+1
   else if (type == 1)
   {
     return mechaHead == 0 && mechaChest == 0 && (overdrive ? (train >= -1 && train < 5): (train >= 0 && train < 8));
   }
-  //2 Éý¼¶»ØºÏ¡£Ö»¿¼ÂÇÕû3¼¶£¬actionÀïÖ»°üÀ¨Í·ºÍÐØ£¨½Å=×Ü-Í·-ÐØ£©£¬Ñ¡Ïî¸öÊýÎª6*6=36
+  //2 å‡çº§å›žåˆã€‚åªè€ƒè™‘æ•´3çº§ï¼Œactioné‡ŒåªåŒ…æ‹¬å¤´å’Œèƒ¸ï¼ˆè„š=æ€»-å¤´-èƒ¸ï¼‰ï¼Œé€‰é¡¹ä¸ªæ•°ä¸º6*6=36
   else if (type == 2)
   {
     return !overdrive && train == -1 && mechaHead >= 0 && mechaHead <= 5 && mechaChest >= 0 && mechaChest <= 5;
@@ -82,12 +82,12 @@ int Action::toInt() const
     throw "Calling Action::toInt() for a non-standard action";
     return -1;
   }
-  //1 ÆÕÍ¨ÑµÁ·£¬Èç¹ûÓÐoverdriveÔò¿ÉÒÔ¾ö¶¨ÊÇ·ñ¿ª£¬Ò²¿ÉÒÔÏÈ¿ªoverdrive¶øÔÝÊ±²»Ñ¡ÑµÁ·£¨½öÏÞµÚÈýÄêÏÂ°ëÄêµãÁË15¼¶ÐØ£¬ÔòÐèÒªÏÈ¾ö¶¨ÊÇ·ñ¿ªoverdrive¸ù¾ÝÒ¡ÈË½á¹û¶øÑ¡ÑµÁ·£©¡£Ñ¡Ïî¸öÊýÎª8+5+1
+  //1 æ™®é€šè®­ç»ƒï¼Œå¦‚æžœæœ‰overdriveåˆ™å¯ä»¥å†³å®šæ˜¯å¦å¼€ï¼Œä¹Ÿå¯ä»¥å…ˆå¼€overdriveè€Œæš‚æ—¶ä¸é€‰è®­ç»ƒï¼ˆä»…é™ç¬¬ä¸‰å¹´ä¸‹åŠå¹´ç‚¹äº†15çº§èƒ¸ï¼Œåˆ™éœ€è¦å…ˆå†³å®šæ˜¯å¦å¼€overdriveæ ¹æ®æ‘‡äººç»“æžœè€Œé€‰è®­ç»ƒï¼‰ã€‚é€‰é¡¹ä¸ªæ•°ä¸º8+5+1
   if (type == 1)
   {
     return overdrive ? (train == -1 ? 5 + 8 : train + 8) : train;
   }
-  //2 Éý¼¶»ØºÏ¡£Ö»¿¼ÂÇÕû3¼¶£¬actionÀïÖ»°üÀ¨Í·ºÍÐØ£¨½Å=×Ü-Í·-ÐØ£©£¬Ñ¡Ïî¸öÊýÎª6*6=36
+  //2 å‡çº§å›žåˆã€‚åªè€ƒè™‘æ•´3çº§ï¼Œactioné‡ŒåªåŒ…æ‹¬å¤´å’Œèƒ¸ï¼ˆè„š=æ€»-å¤´-èƒ¸ï¼‰ï¼Œé€‰é¡¹ä¸ªæ•°ä¸º6*6=36
   else if (type == 2)
   {
     return 14 + 6 * mechaHead + mechaChest;
@@ -98,17 +98,17 @@ int Action::toInt() const
 
 std::string Action::toString() const
 {
-  //1 ÆÕÍ¨ÑµÁ·£¬Èç¹ûÓÐoverdriveÔò¿ÉÒÔ¾ö¶¨ÊÇ·ñ¿ª£¬Ò²¿ÉÒÔÏÈ¿ªoverdrive¶øÔÝÊ±²»Ñ¡ÑµÁ·£¨½öÏÞµÚÈýÄêÏÂ°ëÄêµãÁË15¼¶ÐØ£¬ÔòÐèÒªÏÈ¾ö¶¨ÊÇ·ñ¿ªoverdrive¸ù¾ÝÒ¡ÈË½á¹û¶øÑ¡ÑµÁ·£©¡£Ñ¡Ïî¸öÊýÎª8+5+1
+  //1 æ™®é€šè®­ç»ƒï¼Œå¦‚æžœæœ‰overdriveåˆ™å¯ä»¥å†³å®šæ˜¯å¦å¼€ï¼Œä¹Ÿå¯ä»¥å…ˆå¼€overdriveè€Œæš‚æ—¶ä¸é€‰è®­ç»ƒï¼ˆä»…é™ç¬¬ä¸‰å¹´ä¸‹åŠå¹´ç‚¹äº†15çº§èƒ¸ï¼Œåˆ™éœ€è¦å…ˆå†³å®šæ˜¯å¦å¼€overdriveæ ¹æ®æ‘‡äººç»“æžœè€Œé€‰è®­ç»ƒï¼‰ã€‚é€‰é¡¹ä¸ªæ•°ä¸º8+5+1
   if (type == 1)
   {
     if (overdrive && train == -1)
-      return "ÏÈ¿ª³ÝÂÖ";
-    return overdrive ? "³ÝÂÖ+" + trainingName[train] : trainingName[train];
+      return "å…ˆå¼€é½¿è½®";
+    return overdrive ? "é½¿è½®+" + trainingName[train] : trainingName[train];
   }
-  //2 Éý¼¶»ØºÏ¡£Ö»¿¼ÂÇÕû3¼¶£¬actionÀïÖ»°üÀ¨Í·ºÍÐØ£¨½Å=×Ü-Í·-ÐØ£©£¬Ñ¡Ïî¸öÊýÎª6*6=36
+  //2 å‡çº§å›žåˆã€‚åªè€ƒè™‘æ•´3çº§ï¼Œactioné‡ŒåªåŒ…æ‹¬å¤´å’Œèƒ¸ï¼ˆè„š=æ€»-å¤´-èƒ¸ï¼‰ï¼Œé€‰é¡¹ä¸ªæ•°ä¸º6*6=36
   else if (type == 2)
   {
-    return "Í·" + std::to_string(3 * mechaHead) + "¼¶ÐØ" + std::to_string(3 * mechaChest) + "¼¶";
+    return "å¤´" + std::to_string(3 * mechaHead) + "çº§èƒ¸" + std::to_string(3 * mechaChest) + "çº§";
   }
   else
     throw "Action::toString(): Unknown Action";

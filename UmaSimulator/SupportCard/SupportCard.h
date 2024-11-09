@@ -13,78 +13,77 @@ class CardTrainingEffect;
 
 struct SupportCard
 {
-	bool isDBCard = false;	// ÓÃÀ´±ê¼ÇÊÇÀÏ°æ±¾ÊÖĞ´µÄ»¹ÊÇĞÂ°æ±¾×Ô¶¯µÄ
-	int cardID = 0;//Ö§Ô®¿¨id
-	int charaId = 0;	// ½ÇÉ«ID
-	int cardType = 0;//Ö§Ô®¿¨ÀàĞÍ£¬0ËÙ1ÄÍ2Á¦3¸ù4ÖÇ5ÍÅ¶Ó6ÓÑÈË
-	std::string cardName; //¿¨Æ¬Ãû³Æ
-	//std::vector<int> cardSkill;	// ¼¼ÄÜÁĞ±í
+	bool isDBCard = false;	// ç”¨æ¥æ ‡è®°æ˜¯è€ç‰ˆæœ¬æ‰‹å†™çš„è¿˜æ˜¯æ–°ç‰ˆæœ¬è‡ªåŠ¨çš„
+	int cardID = 0;//æ”¯æ´å¡id
+	int charaId = 0;	// è§’è‰²ID
+	int cardType = 0;//æ”¯æ´å¡ç±»å‹ï¼Œ0é€Ÿ1è€2åŠ›3æ ¹4æ™º5å›¢é˜Ÿ6å‹äºº
+	std::string cardName; //å¡ç‰‡åç§°
+	//std::vector<int> cardSkill;	// æŠ€èƒ½åˆ—è¡¨
 
 	bool filled = false;
-	double youQingBasic = 0;//ÓÑÇé¼Ó³É
-	double ganJingBasic = 0;//¸É¾¢¼Ó³É
-	double xunLianBasic = 0;//ÑµÁ·¼Ó³É
-    double bonusBasic[6] = { 0 };//ËÙÄÍÁ¦¸ùÖÇptµÄ¼Ó³É
-	int wizVitalBonusBasic = 0;//ÖÇÁ¦²ÊÈ¦ÌåÁ¦»Ø¸´Á¿
-    int initialBonus[6] = { 0 };//³õÆÚËÙÄÍÁ¦¸ùÖÇptµÄÌáÉı
-	int initialJiBan = 0;//³õÊ¼î¿°í
-	double saiHou = 0;//Èüºó
-  //  int hintBonus[6] = { 0 };//ÎªÁË¼ò»¯£¬°ÑºìµãµÄ¼¼ÄÜµÈĞ§³É¶àÉÙÊôĞÔ¡£×ÛºÏ¿¼ÂÇ¼¼ÄÜÓĞĞ§ÂÊ£¨ÀıÈç¸ß·å90%ÓĞĞ§£¬³ıÁË¼¯ÖĞÁ¦£©£¬Æ½¾ùĞÔ¼Û±ÈÓëÕÛ¿Û£¬ÖÖÂíÖØ¸´¸ø¼¼ÄÜ£¨¼ÙÉè30%£©
-  int hintLevel = 0;//ºìµãµÈ¼¶£¬0´ú±íÃ»¼¼ÄÜ£¬1´ú±íÃ»¶îÍâÕÛ¿Û£¬n¼¶¶îÍâÕÛ¿ÛÊÇn+1
-	double hintProbIncrease = 0;//Æô·¢·¢ÉúÂÊÌáÉı
-	double deYiLv = 0;//µÃÒâÂÊ
-	double failRateDrop = 0; //Ê§°ÜÂÊ½µµÍ
-	double vitalCostDrop = 0; //ÌåÁ¦Ïû·ÑÏÂ½µ
-	// ·½±ãµ÷ÓÃ£¬¸ù¾İ¿¨Æ¬µÄµÈ¼¶ÔÚÓÎÏ·³õÊ¼½×¶Î¸³Öµ
+	double youQingBasic = 0;//å‹æƒ…åŠ æˆ
+	double ganJingBasic = 0;//å¹²åŠ²åŠ æˆ
+	double xunLianBasic = 0;//è®­ç»ƒåŠ æˆ
+    double bonusBasic[6] = { 0 };//é€Ÿè€åŠ›æ ¹æ™ºptçš„åŠ æˆ
+	int wizVitalBonusBasic = 0;//æ™ºåŠ›å½©åœˆä½“åŠ›å›å¤é‡
+    int initialBonus[6] = { 0 };//åˆæœŸé€Ÿè€åŠ›æ ¹æ™ºptçš„æå‡
+	int initialJiBan = 0;//åˆå§‹ç¾ç»Š
+	double saiHou = 0;//èµ›å
+  //  int hintBonus[6] = { 0 };//ä¸ºäº†ç®€åŒ–ï¼ŒæŠŠçº¢ç‚¹çš„æŠ€èƒ½ç­‰æ•ˆæˆå¤šå°‘å±æ€§ã€‚ç»¼åˆè€ƒè™‘æŠ€èƒ½æœ‰æ•ˆç‡ï¼ˆä¾‹å¦‚é«˜å³°90%æœ‰æ•ˆï¼Œé™¤äº†é›†ä¸­åŠ›ï¼‰ï¼Œå¹³å‡æ€§ä»·æ¯”ä¸æŠ˜æ‰£ï¼Œç§é©¬é‡å¤ç»™æŠ€èƒ½ï¼ˆå‡è®¾30%ï¼‰
+  int hintLevel = 0;//çº¢ç‚¹ç­‰çº§ï¼Œ0ä»£è¡¨æ²¡æŠ€èƒ½ï¼Œ1ä»£è¡¨æ²¡é¢å¤–æŠ˜æ‰£ï¼Œnçº§é¢å¤–æŠ˜æ‰£æ˜¯n+1
+	double hintProbIncrease = 0;//å¯å‘å‘ç”Ÿç‡æå‡
+	double deYiLv = 0;//å¾—æ„ç‡
+	double failRateDrop = 0; //å¤±è´¥ç‡é™ä½
+	double vitalCostDrop = 0; //ä½“åŠ›æ¶ˆè´¹ä¸‹é™
+	// æ–¹ä¾¿è°ƒç”¨ï¼Œæ ¹æ®å¡ç‰‡çš„ç­‰çº§åœ¨æ¸¸æˆåˆå§‹é˜¶æ®µèµ‹å€¼
 
-	int uniqueEffectType = 0; //Ö§Ô®¿¨¹ÌÓĞÀàĞÍ
-	std::vector<int> uniqueEffectParam; //Ö§Ô®¿¨¹ÌÓĞÌØÊâ²ÎÊı
+	int uniqueEffectType = 0; //æ”¯æ´å¡å›ºæœ‰ç±»å‹
+	std::vector<int> uniqueEffectParam; //æ”¯æ´å¡å›ºæœ‰ç‰¹æ®Šå‚æ•°
 
-	bool isLink = false;//ÊÇ·ñÎªlink¿¨
+	bool isLink = false;//æ˜¯å¦ä¸ºlinkå¡
 
+	int16_t eventRecoveryAmountUp = 0; //å‹äººå¡äº‹ä»¶ä½“åŠ›åŠ æˆ
+	int16_t eventEffectUp = 0; //å‹äººå¡äº‹ä»¶å±æ€§åŠ æˆ
 
-	int16_t eventRecoveryAmountUp = 0; //ÓÑÈË¿¨ÊÂ¼şÌåÁ¦¼Ó³É
-	int16_t eventEffectUp = 0; //ÓÑÈË¿¨ÊÂ¼şÊôĞÔ¼Ó³É
-
-	// ¸ù¾İÓÎÏ·×´Ì¬¼ÆËãÖ§Ô®¿¨µÄ¡°¹ÌÓĞ¡±
-    // ´ó²¿·Ö¹ÌÓĞ¶¼¿ÉÒÔÔÚÄ¬ÈÏ²ÎÊıÏÂ¼ÆËã
+	// æ ¹æ®æ¸¸æˆçŠ¶æ€è®¡ç®—æ”¯æ´å¡çš„â€œå›ºæœ‰â€
+    // å¤§éƒ¨åˆ†å›ºæœ‰éƒ½å¯ä»¥åœ¨é»˜è®¤å‚æ•°ä¸‹è®¡ç®—
 	CardTrainingEffect getCardEffect(const Game& game, bool isShining, int atTrain, int jiBan, int effectFactor, int trainingCardNum, int trainingShiningNum) const;
 
-	void getCardParamNNInputV1(float* buf, const Game& game) const;//Éñ¾­ÍøÂçÊäÈë£¬size=NNINPUT_CHANNELS_CARD_V1
+	void getCardParamNNInputV1(float* buf, const Game& game) const;//ç¥ç»ç½‘ç»œè¾“å…¥ï¼Œsize=NNINPUT_CHANNELS_CARD_V1
 
 	void write_to_json(json& j, const std::string cdname, const int id) const;
 	void load_from_json(json& j, int x);
 };
 
-//Ö§Ô®¿¨µÄÑµÁ·Ğ§¹û
-//ÏÈ°Ñ¿¨·ÖÅäµ½¶ÔÓ¦ÑµÁ·Àï£¬È»ºó²Å¼ÆËãCardTrainingEffect
-// ÒòÎªĞèÒª»¥ÏàÒıÓÃËùÒÔ¶¼·ÅÔÚÒ»¸öÍ·ÎÄ¼şÀï
+//æ”¯æ´å¡çš„è®­ç»ƒæ•ˆæœ
+//å…ˆæŠŠå¡åˆ†é…åˆ°å¯¹åº”è®­ç»ƒé‡Œï¼Œç„¶åæ‰è®¡ç®—CardTrainingEffect
+// å› ä¸ºéœ€è¦äº’ç›¸å¼•ç”¨æ‰€ä»¥éƒ½æ”¾åœ¨ä¸€ä¸ªå¤´æ–‡ä»¶é‡Œ
 class CardTrainingEffect
 {
 public:
-    bool isFixed = false; // ÎªTrueÊ±±íÊ¾²»ÔÙ¶Ô±¾¶ÔÏóµÄ¹ÌÓĞÊôĞÔ½øĞĞ¸üĞÂ
-    double youQing = 0;//ÓÑÇé¼Ó³É£¬Ã»ÉÁ²Ê¾ÍÊÇ0
-    double ganJing = 0;//¸É¾¢¼Ó³É
-    double xunLian = 0;//ÑµÁ·¼Ó³É
-    double bonus[6] = { 0 };//ËÙÄÍÁ¦¸ùÖÇptµÄ¼Ó³É
-    int vitalBonus = 0;//ÌåÁ¦»Ø¸´Á¿£¨Ö÷ÒªÊÇÖÇ²ÊÈ¦£©
-    double failRateDrop = 0; //Ê§°ÜÂÊ½µµÍ
-    double vitalCostDrop = 0; //ÌåÁ¦Ïû·ÑÏÂ½µ
+    bool isFixed = false; // ä¸ºTrueæ—¶è¡¨ç¤ºä¸å†å¯¹æœ¬å¯¹è±¡çš„å›ºæœ‰å±æ€§è¿›è¡Œæ›´æ–°
+    double youQing = 0;//å‹æƒ…åŠ æˆï¼Œæ²¡é—ªå½©å°±æ˜¯0
+    double ganJing = 0;//å¹²åŠ²åŠ æˆ
+    double xunLian = 0;//è®­ç»ƒåŠ æˆ
+    double bonus[6] = { 0 };//é€Ÿè€åŠ›æ ¹æ™ºptçš„åŠ æˆ
+    int vitalBonus = 0;//ä½“åŠ›å›å¤é‡ï¼ˆä¸»è¦æ˜¯æ™ºå½©åœˆï¼‰
+    double failRateDrop = 0; //å¤±è´¥ç‡é™ä½
+    double vitalCostDrop = 0; //ä½“åŠ›æ¶ˆè´¹ä¸‹é™
 	/*
-    int initialBonus[6] = { 0 };//³õÆÚËÙÄÍÁ¦¸ùÖÇptµÄÌáÉı
-    int initialJiBan = 0;//³õÊ¼î¿°í
-    double saiHou = 0;//Èüºó
-    //int hintBonus[6];//ÎªÁË¼ò»¯£¬°ÑºìµãµÄ¼¼ÄÜµÈĞ§³É¶àÉÙÊôĞÔ
-    //double hintProbIncrease;//Æô·¢·¢ÉúÂÊÌáÉı
-    double deYiLv = 0;//µÃÒâÂÊ
+    int initialBonus[6] = { 0 };//åˆæœŸé€Ÿè€åŠ›æ ¹æ™ºptçš„æå‡
+    int initialJiBan = 0;//åˆå§‹ç¾ç»Š
+    double saiHou = 0;//èµ›å
+    //int hintBonus[6];//ä¸ºäº†ç®€åŒ–ï¼ŒæŠŠçº¢ç‚¹çš„æŠ€èƒ½ç­‰æ•ˆæˆå¤šå°‘å±æ€§
+    //double hintProbIncrease;//å¯å‘å‘ç”Ÿç‡æå‡
+    double deYiLv = 0;//å¾—æ„ç‡
 	*/
 
 public:
     CardTrainingEffect() {}
     CardTrainingEffect(const SupportCard* sc);
 
-    // ¹ÌÓĞ´ÊÌõÍ¨ÓÃ´¦Àíº¯Êı
-    // key ¶ÔÓ¦ enum class UniqueEffectType
+    // å›ºæœ‰è¯æ¡é€šç”¨å¤„ç†å‡½æ•°
+    // key å¯¹åº” enum class UniqueEffectType
     CardTrainingEffect& apply(int key, int value);
 
     const std::string explain();

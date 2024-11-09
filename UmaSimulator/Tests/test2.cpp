@@ -1,4 +1,4 @@
-//²âÊÔÑµÁ·ÊôĞÔÖµËã·¨
+//æµ‹è¯•è®­ç»ƒå±æ€§å€¼ç®—æ³•
 #include <iostream>
 #include <random>
 #include "../Game/Game.h"
@@ -51,7 +51,7 @@ void main_test2()
     cout <<GameDatabase::AllCards[gen].cardName<<": "<< total / N << endl;
   }
 
-  game.cardId[4] = 4;//¸ÄÎÚÀ­À­µÄÓÑÇé¼Ó³É
+  game.cardId[4] = 4;//æ”¹ä¹Œæ‹‰æ‹‰çš„å‹æƒ…åŠ æˆ
   for (int yq = 0; yq <= 100; yq+=10)
   {
     GameDatabase::AllCards[30019].youQingBasic = yq;
@@ -73,7 +73,7 @@ void main_test2()
       }
       total += bestv;
     }
-    cout << "ÓÑÇé="<<yq << ": " << total / N << endl;
+    cout << "å‹æƒ…="<<yq << ": " << total / N << endl;
   }
   GameDatabase::AllCards[30019].youQingBasic = 32;
 
@@ -98,7 +98,7 @@ void main_test2()
       }
       total += bestv;
     }
-    cout << "µÃÒâÂÊ=" << d << ": " << total / N << endl;
+    cout << "å¾—æ„ç‡=" << d << ": " << total / N << endl;
   }
 
   GameDatabase::AllCards[30134].deYiLv = 50;
@@ -124,7 +124,7 @@ void main_test2()
       }
       total += bestv;
     }
-    cout << "¸ß·åµÃÒâÂÊ=" << d << ": " << total / N << endl;
+    cout << "é«˜å³°å¾—æ„ç‡=" << d << ": " << total / N << endl;
   }
 
   GameDatabase::AllCards[30134].deYiLv = 50;
@@ -150,7 +150,7 @@ void main_test2()
       }
       total += bestv;
     }
-    cout << "ÑµÁ·¼Ó³É=" << d << ": " << total / N << endl;
+    cout << "è®­ç»ƒåŠ æˆ=" << d << ": " << total / N << endl;
   }
   */
 }

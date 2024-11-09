@@ -97,7 +97,7 @@ void SelfplayThread::writeDataToFile()
     outputPath = outputPath + "/";
   outputPath = outputPath + generateHexFileName(rand) + ".npz";
 
-  cnpy::npz_save(outputPath, "x", nnInputBuf.data(), { uint64_t(param.sampleNumEachFile), NNINPUT_CHANNELS_V1 }, "w"); // "w" ��ʾдģʽ
-  cnpy::npz_save(outputPath, "label", nnOutputBuf.data(), { uint64_t(param.sampleNumEachFile), NNOUTPUT_CHANNELS_V1 }, "a"); // "a" ��ʾ׷��ģʽ
+  cnpy::npz_save(outputPath, "x", nnInputBuf.data(), { uint64_t(param.sampleNumEachFile), NNINPUT_CHANNELS_V1 }, "w"); // "w" 表示写模式
+  cnpy::npz_save(outputPath, "label", nnOutputBuf.data(), { uint64_t(param.sampleNumEachFile), NNOUTPUT_CHANNELS_V1 }, "a"); // "a" 表示追加模式
 
 }

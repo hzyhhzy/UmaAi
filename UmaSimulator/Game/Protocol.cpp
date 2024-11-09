@@ -7,8 +7,8 @@
 #include "Game.h"
 using namespace std;
 using json = nlohmann::json;
-// ÊÇ·ñ°ÑµÍÆÆ¿¨µ±×öÂúÆÆ´¦Àí£¨»áµ¼ÖÂÒ»¶¨µÄÔ¤²âÆ«²î£©
-// ÎªTrueÊ±»á°ÑËùÓĞIDµÄ×î¸ßÎ»¸ÄÎªÂúÆÆ£¨ÂíÄï5xxx£¬¿¨4xxx£©
+// æ˜¯å¦æŠŠä½ç ´å¡å½“åšæ»¡ç ´å¤„ç†ï¼ˆä¼šå¯¼è‡´ä¸€å®šçš„é¢„æµ‹åå·®ï¼‰
+// ä¸ºTrueæ—¶ä¼šæŠŠæ‰€æœ‰IDçš„æœ€é«˜ä½æ”¹ä¸ºæ»¡ç ´ï¼ˆé©¬å¨˜5xxxï¼Œå¡4xxxï¼‰
 static bool maskUmaId = true;
 
 int mask_umaId(int umaId)
@@ -20,7 +20,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
 {
   if (jsonStr == "[test]" || jsonStr == "{\"Result\":1,\"Reason\":null}")
   {
-    std::cout << "ÒÑ³É¹¦ÓëURA½¨Á¢Á¬½Ó£¬µ«ÔİÎ´½ÓÊÕµ½»ØºÏĞÅÏ¢£¬µÈ´ıÓÎÏ·¿ªÊ¼" << std::endl;
+    std::cout << "å·²æˆåŠŸä¸URAå»ºç«‹è¿æ¥ï¼Œä½†æš‚æœªæ¥æ”¶åˆ°å›åˆä¿¡æ¯ï¼Œç­‰å¾…æ¸¸æˆå¼€å§‹" << std::endl;
     return false;
   }
   try
@@ -44,9 +44,9 @@ bool Game::loadGameFromJson(std::string jsonStr)
     gameStage = j["gameStage"];
     if (gameStage == GameStage_beforeMechaUpgrade)
     {
-      if (turn == 2)turn -= 1; //°ÑÉı¼¶»ú¼×»ØºÏÊÓÎªÉÏÒ»¸ö»ØºÏ½áÎ²
+      if (turn == 2)turn -= 1; //æŠŠå‡çº§æœºç”²å›åˆè§†ä¸ºä¸Šä¸€ä¸ªå›åˆç»“å°¾
       if (turn != 1 && turn != 23 && turn != 35 && turn != 47 && turn != 59 && turn != 71)
-        throw "Game::loadGameFromJson ÔÚµÚ" + to_string(turn) + "»ØºÏÉı¼¶»ú¼×";
+        throw "Game::loadGameFromJson åœ¨ç¬¬" + to_string(turn) + "å›åˆå‡çº§æœºç”²";
     }
 
     vital = j["vital"];
@@ -76,7 +76,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     isRacing = j["isRacing"];
     if (isRacing != isRacingTurn[turn])
     {
-      cout << "Warning:Êµ¼ÊÈü³ÌºÍÔ¤ÆÚÈü³Ì²»Ò»ÖÂ" << endl;
+      cout << "Warning:å®é™…èµ›ç¨‹å’Œé¢„æœŸèµ›ç¨‹ä¸ä¸€è‡´" << endl;
       isRacingTurn[turn] = isRacing;
     }
     for (int i = 0; i < 6; i++) {
@@ -108,7 +108,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
         }
         else
         {
-          throw "Game::loadGameFromJson¶ÁÈ¡µ½Î´ÖªµÄpersonId:" + to_string(pid);
+          throw "Game::loadGameFromJsonè¯»å–åˆ°æœªçŸ¥çš„personId:" + to_string(pid);
         }
       }
     }
@@ -125,7 +125,7 @@ bool Game::loadGameFromJson(std::string jsonStr)
     mecha_overdrive_energy = j["mecha_overdrive_energy"];
     mecha_overdrive_enabled = j["mecha_overdrive_enabled"];
     if (turn >= 2 || gameStage == GameStage_beforeMechaUpgrade)
-      mecha_EN = j["mecha_EN"]; //°üÀ¨ÒÑ¾­»¨·ÑÁËµÄEN
+      mecha_EN = j["mecha_EN"]; //åŒ…æ‹¬å·²ç»èŠ±è´¹äº†çš„EN
     for (int i = 0; i < 3; i++) {
       for (int t = 0; t < 3; t++) {
         mecha_upgrade[i][t] = j["mecha_upgrade"][i][t];
@@ -154,20 +154,20 @@ bool Game::loadGameFromJson(std::string jsonStr)
   }
   catch (string e)
   {
-    cout << "¶ÁÈ¡ÓÎÏ·ĞÅÏ¢json³ö´í£º" << e << endl;
+    cout << "è¯»å–æ¸¸æˆä¿¡æ¯jsonå‡ºé”™ï¼š" << e << endl;
     //cout << "-- json --" << endl << jsonStr << endl;
     return false;
   }
   /*
   catch (std::exception& e)
   {
-    cout << "¶ÁÈ¡ÓÎÏ·ĞÅÏ¢json³ö´í£ºÎ´Öª´íÎó" << endl << e.what() << endl;
+    cout << "è¯»å–æ¸¸æˆä¿¡æ¯jsonå‡ºé”™ï¼šæœªçŸ¥é”™è¯¯" << endl << e.what() << endl;
     //cout << "-- json --" << endl << jsonStr << endl;
     return false;
   }
   catch (...)
   {
-    cout << "¶ÁÈ¡ÓÎÏ·ĞÅÏ¢json³ö´í£ºÎ´Öª´íÎó"  << endl;
+    cout << "è¯»å–æ¸¸æˆä¿¡æ¯jsonå‡ºé”™ï¼šæœªçŸ¥é”™è¯¯"  << endl;
     return false;
   }
   */

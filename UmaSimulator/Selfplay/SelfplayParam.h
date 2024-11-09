@@ -25,23 +25,23 @@ struct SelfplayParam
   int searchN = 1024;
   int searchGroupSize = 1024;
   double searchCpuct = 1.0; 
-  double policyDelta = 100.0;//·ÖÊýÃ¿½µµÍ¶àÉÙ£¬policy±ä³É1/e±¶
+  double policyDelta = 100.0;//åˆ†æ•°æ¯é™ä½Žå¤šå°‘ï¼Œpolicyå˜æˆ1/eå€
 
   //radicalFactor=radicalFactor_scale * (1/pow(rand(),radicalFactor_pow) - 1)
   double radicalFactor_scale = 2.0;
   double radicalFactor_pow = 1.0;
   double radicalFactor_max = 50;
 
-  //maxDepth_fullProbµÄÑù±¾ËÑË÷µ½Õâ¾Ö½áÊø£¬ÆäËûµÄlog(maxDepth)~ÕýÌ¬·Ö²¼(logmean,logstdev)
+  //maxDepth_fullProbçš„æ ·æœ¬æœç´¢åˆ°è¿™å±€ç»“æŸï¼Œå…¶ä»–çš„log(maxDepth)~æ­£æ€åˆ†å¸ƒ(logmean,logstdev)
   double maxDepth_logmean = 2.3;
   double maxDepth_logstdev = 0.7;
   int maxDepth_min = 5;
   double maxDepth_fullProb = 1.0;
 
-  //Åä¿¨µÄËæ»ú·½Ê½
-  //0 ¹Ì¶¨¿¨×é¹Ì¶¨Âí¹Ì¶¨ÖÖÂí
-  //1 Ëæ»úÂí£¬¹Ì¶¨´øssrÓÑÈË£¬Ëæ»úÖÖÂí£¬Ëæ»úÑ¡¿¨¡¢Ô½Ç¿µÄ¿¨¸ÅÂÊÔ½´ó£¬
-  //2 ÔÚ1µÄ»ù´¡ÉÏ£¬Ëæ»úÂí¼Ó³É£¬¿¨µÄ²ÎÊýÒ²ÈÅ¶¯£¬Ëæ»ú´øÓÑÈË
+  //é…å¡çš„éšæœºæ–¹å¼
+  //0 å›ºå®šå¡ç»„å›ºå®šé©¬å›ºå®šç§é©¬
+  //1 éšæœºé©¬ï¼Œå›ºå®šå¸¦ssrå‹äººï¼Œéšæœºç§é©¬ï¼Œéšæœºé€‰å¡ã€è¶Šå¼ºçš„å¡æ¦‚çŽ‡è¶Šå¤§ï¼Œ
+  //2 åœ¨1çš„åŸºç¡€ä¸Šï¼Œéšæœºé©¬åŠ æˆï¼Œå¡çš„å‚æ•°ä¹Ÿæ‰°åŠ¨ï¼Œéšæœºå¸¦å‹äºº
   int cardRandType = 2;
   
 };

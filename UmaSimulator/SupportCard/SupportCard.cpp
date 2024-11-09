@@ -47,10 +47,11 @@ void SupportCard::load_from_json(json& j, int x) {
 	cardID = j.value("cardId", 0);
 	cardID = cardID * 10 + x;
 	cardType = j.value("cardType", -1);
-	cardName = UTF8_To_string(j.value<std::string>("cardName", ""));
-	//j.at("cardSkill").get_to(cardSkill);	// ²»ÔØÈë¼¼ÄÜ£¬ÒòÎª¸ñÊ½²»Í¬
+	//cardName = UTF8_To_string(j.value<std::string>("cardName", ""));
+	cardName = j.value<std::string>("cardName", "");
+	//j.at("cardSkill").get_to(cardSkill);	// ä¸è½½å…¥æŠ€èƒ½ï¼Œå› ä¸ºæ ¼å¼ä¸åŒ
 	charaId = j.value("charaId", -1);
-	// ÔØÈë¹ÌÓĞ¡£Ã»ÓĞ¸ÃkeyÊ±ÓÃÄ¬ÈÏÖµ
+	// è½½å…¥å›ºæœ‰ã€‚æ²¡æœ‰è¯¥keyæ—¶ç”¨é»˜è®¤å€¼
 	uniqueEffectType = j.value("uniqueEffectType", 0);
 	uniqueEffectParam = j.value("uniqueEffectParam", vector<int>());
 
@@ -71,17 +72,17 @@ void SupportCard::load_from_json(json& j, int x) {
 		j["cardValue"][x].at("initialBonus").get_to(initialBonus);
 		j["cardValue"][x].at("hintLevel").get_to(hintLevel);
 
-		eventRecoveryAmountUp = j["cardValue"][x].value<int>("eventRecoveryAmountUp", 0); //ÓÑÈË¿¨ÊÂ¼şÌåÁ¦¼Ó³É
-		eventEffectUp = j["cardValue"][x].value<int>("eventEffectUp", 0); //ÓÑÈË¿¨ÊÂ¼şÊôĞÔ¼Ó³É
+		eventRecoveryAmountUp = j["cardValue"][x].value<int>("eventRecoveryAmountUp", 0); //å‹äººå¡äº‹ä»¶ä½“åŠ›åŠ æˆ
+		eventEffectUp = j["cardValue"][x].value<int>("eventEffectUp", 0); //å‹äººå¡äº‹ä»¶å±æ€§åŠ æˆ
 	}
 
 	if (charaId > 0) {
-		// Ö±½ÓÊ¹ÓÃcharaIDÅĞ¶ÏÊÇ·ñÎªÁ´½Ó¿¨
+		// ç›´æ¥ä½¿ç”¨charaIDåˆ¤æ–­æ˜¯å¦ä¸ºé“¾æ¥å¡
 		isLink = GameConstants::isLinkChara(charaId);
 	}
 	else 
 	{
-		throw "ÀÏÊı¾İÌÔÌ­ÁË";
+		throw "è€æ•°æ®æ·˜æ±°äº†";
 	}
 	return;
 }

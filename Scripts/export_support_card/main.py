@@ -9,7 +9,7 @@ import jsons, codecs
 ShortType = ['', '速', '耐', '力', '根', '智', '友', '团']
 DirectKeys = ['deYiLv', 'failRateDrop', 'ganJing', 'hintProbIncrease',
               'saiHou', 'vitalCostDrop', 'wizVitalBonus', 'xunLian',
-              'youQing', 'initialJiBan']
+              'youQing', 'initialJiBan', 'eventRecoveryAmountUp', 'eventEffectUp']
 
 # 特判直接合并面板（得意率）的卡
 # 智太阳神，活动力乌拉拉，东商
@@ -28,7 +28,8 @@ InitialKeys = {
     "初期持久力アップ": 1,
     "初期パワーアップ": 2,
     "初期根性アップ": 3,
-    "初期賢さアップ": 4
+    "初期賢さアップ": 4,
+    "初期PTアップ": 5
 }
 BonusKeys = {
     "速度ボーナス": 0,
@@ -113,6 +114,14 @@ SpecialRaces = {
     1109: {
         "races": [32],
         "note": "莱茵 - 设置为NHK"
+    },
+    1116: {
+        "races": [71],
+        "note": "贵妇人 - 增加有马纪念"
+    },
+    1121: {
+        "races": [41],
+        "note": "圣剑 - 参加短距锦标"
     }
 }
 
@@ -193,17 +202,6 @@ def prepareUniqueEffect(card, ueffect):
         else:
             print(f"新的羁绊型固有: {card['cardName']} - {jiBan}")
         useParam = True
-   # elif ueffect["type"] == 116:
-   #     typeMapping = {
-   #         30134: 16,
-   #         30142: 20,  # 合并
-   #         30154: 20,
-   #         30166: 19,
-   #         30170: 19,
-   #         30175: 22
-   #     }
-   #     utype = typeMapping[card["cardId"]]
-   #     useParam = True
     else:
         # 其他固有，只复制参数和映射ID
         if ueffect["type"] == 102:
@@ -215,7 +213,10 @@ def prepareUniqueEffect(card, ueffect):
             ueffect["uniqueParams"][2] = 8  # 调整参数顺序，方便AI处理
             useParam = True
         else:
-            utype = ueffect["type"] - 100    # 直接映射
+            if ueffect["type"] <= 120:
+                utype = ueffect["type"] - 100    # 直接映射
+            else:
+                utype = ueffect["type"] - 99     # 121 -> 22
             useParam = True        
 
     card["uniqueEffectType"] = utype
@@ -267,13 +268,15 @@ def parseSupportCard():
                 filled = True,
                 bonus = [0, 0, 0, 0, 0, 0],
                 initialBonus = [0, 0, 0, 0, 0, 0],
-                hintBonus = [0, 0, 0, 0, 0, 5] # 暂定
+                hintBonus = [0, 0, 0, 0, 0, 5], # deprecated
+                hintLevel = 0
             )
             for key, value in trans_card.effect_row_dict.items():
                 if key in DirectKeys:
                     d[key] = value[i]
                 elif key == "hintLvUp":
                     d["hintBonus"][5] += 5 * value[i]
+                    d["hintLevel"] = value[i] + 1
                 elif '初期' in key:
                     d['initialBonus'][InitialKeys[key]] = value[i]
                 elif 'ボーナス' in key:
@@ -286,6 +289,7 @@ def parseSupportCard():
             # 无技能的卡，把hint技能点换为属性
             for i in range(0, 5):
                 ucard["cardValue"][i]["hintBonus"] = HintValues[ucard["cardType"]]
+                ucard["cardValue"][i]["hintLevel"] = 0
             print(f"hintBonus = {HintValues[ucard['cardType']]}")
         result[int(trans_card.id)] = ucard
     return result
@@ -380,9 +384,9 @@ if __name__ == "__main__":
     cardDB = parseSupportCard()
     umaDB = parseUma()
 
-    with codecs.open('card/cardDB.json', 'w', encoding='utf-8') as f:
+    with codecs.open('cardDB.json', 'w', encoding='utf-8') as f:
         f.write(jsons.dumps(cardDB, strip_nulls=True, jdkwargs=dict(ensure_ascii=False, indent=2, skipkeys=True)))
         f.write("\n")
-    with codecs.open('card/umaDB.json', 'w', encoding='utf-8') as f:
+    with codecs.open('umaDB.json', 'w', encoding='utf-8') as f:
         f.write(jsons.dumps(umaDB, strip_nulls=True, jdkwargs=dict(ensure_ascii=False, indent=2, skipkeys=True)))
         f.write("\n")

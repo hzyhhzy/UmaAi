@@ -10,23 +10,23 @@
 
 void Evaluator::evaluateSelf(int mode, const SearchParam& param)
 {
-  if (model == NULL)//Ã»Éñ¾­ÍøÂç£¬ÊÖĞ´Âß¼­
+  if (model == NULL)//æ²¡ç¥ç»ç½‘ç»œï¼Œæ‰‹å†™é€»è¾‘
   {
-    if (mode == 0)//value£¬±ØĞëÖÕ¾Ö²Å¿É¼ÆËã
+    if (mode == 0)//valueï¼Œå¿…é¡»ç»ˆå±€æ‰å¯è®¡ç®—
     {
       for (int i = 0; i < maxBatchsize; i++)
       {
         const Game& game = gameInput[i];
-        assert(game.isEnd() && "ÎŞÉñ¾­ÍøÂçÊ±£¬Ö»ÓĞÓÎÏ·½áÊøºó²Å¿É¼ÆËãvalue");
+        assert(game.isEnd() && "æ— ç¥ç»ç½‘ç»œæ—¶ï¼Œåªæœ‰æ¸¸æˆç»“æŸåæ‰å¯è®¡ç®—value");
         int score = game.finalScore();
 
         auto& v = valueResults[i];
         v.scoreMean = score;
-        v.scoreStdev = 0; //µ¥¸öÒÑÖÕ¾ÖµÄÑù±¾£¬·½²î±ØÎª0
+        v.scoreStdev = 0; //å•ä¸ªå·²ç»ˆå±€çš„æ ·æœ¬ï¼Œæ–¹å·®å¿…ä¸º0
         v.value = score;
       }
     }
-    else if (mode == 1)//policy£¬ÊÖĞ´Âß¼­£¬×îÓÅµÄÑ¡ÔñÊÇ1£¬ÆäËûµÄÊÇ0
+    else if (mode == 1)//policyï¼Œæ‰‹å†™é€»è¾‘ï¼Œæœ€ä¼˜çš„é€‰æ‹©æ˜¯1ï¼Œå…¶ä»–çš„æ˜¯0
     {
       for (int i = 0; i < maxBatchsize; i++)
       {
@@ -56,7 +56,7 @@ void Evaluator::evaluateSelf(int mode, const SearchParam& param)
 
           auto& v = valueResults[i];
           v.scoreMean = score;
-          v.scoreStdev = 0; //µ¥¸öÒÑÖÕ¾ÖµÄÑù±¾£¬·½²î±ØÎª0
+          v.scoreStdev = 0; //å•ä¸ªå·²ç»ˆå±€çš„æ ·æœ¬ï¼Œæ–¹å·®å¿…ä¸º0
           v.value = score;
         }
         else
