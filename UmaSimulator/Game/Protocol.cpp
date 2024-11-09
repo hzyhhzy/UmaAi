@@ -124,6 +124,10 @@ bool Game::loadGameFromJson(std::string jsonStr)
     }
     mecha_overdrive_energy = j["mecha_overdrive_energy"];
     mecha_overdrive_enabled = j["mecha_overdrive_enabled"];
+    if (mecha_overdrive_enabled && mecha_overdrive_energy > 3)
+    {
+      mecha_overdrive_energy = 3; //可能是进ura前有剩余的overdrive
+    }
     if (turn >= 2 || gameStage == GameStage_beforeMechaUpgrade)
       mecha_EN = j["mecha_EN"]; //包括已经花费了的EN
     for (int i = 0; i < 3; i++) {
