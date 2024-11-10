@@ -219,7 +219,7 @@ static Action getMechaUpgradeAdvise(int turn, int en)
     else if (en >= 18)
     {
       action.mechaHead = 5;
-      action.mechaChest = 5;
+      action.mechaChest = 1;
     }
     else if (en >= 15)
     {
