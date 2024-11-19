@@ -34817,8 +34817,8 @@
   "20081": {
     "cardId": 20081,
     "charaId": 1082,
-    "cardName": "[力]ノースフライト",
-    "fullName": "[お任せ！オートクチュール]ノースフライト",
+    "cardName": "[力]北方飞翔",
+    "fullName": "[高定服装，就拜托你了！]北方飞翔",
     "rarity": 2,
     "cardType": 2,
     "cardValue": [
@@ -76094,8 +76094,8 @@
   "30226": {
     "cardId": 30226,
     "charaId": 1036,
-    "cardName": "[耐]エアシャカール",
-    "fullName": "[Cocoon]エアシャカール",
+    "cardName": "[耐]空中神宫",
+    "fullName": "[Cocoon]空中神宫",
     "rarity": 3,
     "cardType": 1,
     "cardValue": [
@@ -76289,8 +76289,8 @@
   "30227": {
     "cardId": 30227,
     "charaId": 1009,
-    "cardName": "[智]ダイワスカーレット",
-    "fullName": "[緋色の君へ風が吹く]ダイワスカーレット",
+    "cardName": "[智]大和赤骥",
+    "fullName": "[微风拂向绯红的你]大和赤骥",
     "rarity": 3,
     "cardType": 4,
     "cardValue": [
@@ -76489,8 +76489,8 @@
   "30228": {
     "cardId": 30228,
     "charaId": 1083,
-    "cardName": "[力]シンボリクリスエス",
-    "fullName": "[COOL⇔CRAZY/Buddy]シンボリクリスエス",
+    "cardName": "[力]吉兆",
+    "fullName": "[COOL⇔CRAZY/Buddy]吉兆",
     "rarity": 3,
     "cardType": 2,
     "cardValue": [

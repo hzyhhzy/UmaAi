@@ -1809,7 +1809,7 @@
     ],
     "freeRaces": [],
     "gameId": 102303,
-    "name": "[Engineered Victory]ビワハヤヒデ",
+    "name": "[Engineered Victory]琵琶晨光",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -3867,7 +3867,7 @@
     ],
     "freeRaces": [],
     "gameId": 105003,
-    "name": "[迷光オーヴァライド]ナリタタイシン",
+    "name": "[迷光超控]成田大进",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6669,6 +6669,44 @@
       56,
       68,
       69
+    ],
+    "star": 5
+  },
+  "111101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      112,
+      108,
+      109,
+      109,
+      112
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
+    "gameId": 111101,
+    "name": "[Inherited Hope]エアメサイア",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      44,
+      56,
+      68
     ],
     "star": 5
   },
