@@ -179,8 +179,8 @@ try {
 			while (!filesystem::exists(currentGameStagePath))
 			{
 				if (!isLinkError) {
-					std::cout << "\x1b[93m没有检测到回合数据: " << currentGameStagePath << "\x1b[0m" << endl;
-					std::cout << "\x1b[93m可能原因：（1）育成未开始，育成开始后会自动开始计算（2）小黑板没有发送数据，黑板设置应打开“生成AI数据文件”\x1b[0m" << endl;
+					std::cout << "\x1b[92m等待接收回合信息，请开始育成\x1b[0m" << endl;
+					//std::cout << "\x1b[93m如果育成已经开始，可能是小黑板没有发送数据，黑板设置应打开“生成AI数据文件”\x1b[0m" << endl;
 					isLinkError = true;
 				}
 			}
@@ -188,7 +188,7 @@ try {
 			if (!fs.good())
 			{
 				if (!isLinkError) {
-					std::cout << "读取回合数据文件错误" << endl;
+					std::cout << "读取回合数据错误" << endl;
 					isLinkError = true;
 				}
 				continue;
@@ -497,7 +497,7 @@ try {
 			system("pause");
 		}
 		catch (...) {
-			cout << "\x1b[91m发生未知错误 " << endl;
+			cout << "\x1b[91m发生未知错误，请重启AI" << endl;
 			cout << "\x1b[91m** 程序即将退出**\x1b[0m" << endl;
 			system("pause");
 		}
@@ -509,7 +509,7 @@ catch (exception& e) {
 	system("pause");
 }
 catch (...) {
-	cout << "\x1b[91mAI初始化时发生未知错误 " << endl;
+	cout << "\x1b[91mAI初始化时发生未知错误，请检查配置" << endl;
 	cout << "\x1b[91m** 程序即将退出**\x1b[0m" << endl;
 	system("pause");
 }

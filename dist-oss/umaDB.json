@@ -2584,6 +2584,39 @@
     ],
     "star": 5
   },
+  "103302": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      105,
+      123,
+      83,
+      115
+    ],
+    "freeRaces": [],
+    "gameId": 103302,
+    "name": "[Glacialis Vega]アドマイヤベガ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
   "103401": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -5597,6 +5630,47 @@
     ],
     "gameId": 107701,
     "name": "[The Proud Road]成田路",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      33,
+      43,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "107702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      117,
+      115,
+      107,
+      101,
+      110
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
+    "gameId": 107702,
+    "name": "[Celestial Road]ナリタトップロード",
     "preferRaces": [],
     "preferReds": [],
     "races": [
