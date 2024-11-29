@@ -100,17 +100,14 @@ void GameConfig::load(const string& path)
 		if (j.contains("noColor"))
 			GameConfig::noColor = j.at("noColor");
 
-
-
-
 		cout << "当前配置: " << j.dump(2) << endl;
 	}
 	catch (exception& e)
 	{
-		cout << "载入配置出错: " << e.what() << endl;
+		cout << "载入配置出错，请检查aiConfig.json: " << e.what() << endl;
 	}
 	catch (...)
 	{
-		cout << "载入配置时发生未知错误" << endl;
+		cout << "载入配置时发生未知错误，请检查aiConfig.json" << endl;
 	}
 }

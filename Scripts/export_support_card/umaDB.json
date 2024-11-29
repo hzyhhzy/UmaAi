@@ -1809,7 +1809,7 @@
     ],
     "freeRaces": [],
     "gameId": 102303,
-    "name": "[Engineered Victory]ビワハヤヒデ",
+    "name": "[Engineered Victory]琵琶晨光",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -2570,6 +2570,39 @@
     "freeRaces": [],
     "gameId": 103301,
     "name": "[星光夜想曲]爱慕织姬",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "103302": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      105,
+      123,
+      83,
+      115
+    ],
+    "freeRaces": [],
+    "gameId": 103302,
+    "name": "[Glacialis Vega]アドマイヤベガ",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -3867,7 +3900,7 @@
     ],
     "freeRaces": [],
     "gameId": 105003,
-    "name": "[迷光オーヴァライド]ナリタタイシン",
+    "name": "[迷光超控]成田大进",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -5613,6 +5646,47 @@
     ],
     "star": 5
   },
+  "107702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      117,
+      115,
+      107,
+      101,
+      110
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
+    "gameId": 107702,
+    "name": "[Celestial Road]ナリタトップロード",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      33,
+      43,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "107801": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6669,6 +6743,44 @@
       56,
       68,
       69
+    ],
+    "star": 5
+  },
+  "111101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      112,
+      108,
+      109,
+      109,
+      112
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
+    "gameId": 111101,
+    "name": "[Inherited Hope]エアメサイア",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      44,
+      56,
+      68
     ],
     "star": 5
   },
