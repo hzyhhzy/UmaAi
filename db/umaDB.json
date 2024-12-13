@@ -6820,6 +6820,46 @@
     ],
     "star": 5
   },
+  "111701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      104,
+      122,
+      114,
+      110,
+      100
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
+    "gameId": 111701,
+    "name": "[ドラマティック・チュチュ]ウインバリアシオン",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      31,
+      33,
+      43,
+      45,
+      53,
+      55,
+      59,
+      71
+    ],
+    "star": 5
+  },
   "111901": {
     "bonusData": [],
     "fiveStatusBonus": [
