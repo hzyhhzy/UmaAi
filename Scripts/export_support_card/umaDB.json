@@ -864,6 +864,39 @@
     ],
     "star": 5
   },
+  "101103": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      0,
+      20,
+      10
+    ],
+    "fiveStatusInitial": [
+      106,
+      114,
+      122,
+      103,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 101103,
+    "name": "[蒼炎の誉]グラスワンダー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      33,
+      45,
+      47,
+      59,
+      66,
+      71
+    ],
+    "star": 5
+  },
   "101201": {
     "bonusData": [],
     "fiveStatusBonus": [
