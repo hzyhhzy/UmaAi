@@ -4387,6 +4387,40 @@
     ],
     "star": 5
   },
+  "105702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      111,
+      113,
+      120,
+      98,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 105702,
+    "name": "[絢爛花道歌舞く君]ミスターシービー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      26,
+      30,
+      33,
+      43,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "105801": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6503,6 +6537,46 @@
     ],
     "gameId": 110401,
     "name": "[登龙之顶]葛城王牌",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      53,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "110402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      5,
+      0,
+      10,
+      15,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      108,
+      108,
+      112,
+      98
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
+    "gameId": 110402,
+    "name": "[雅号・墨龍]カツラギエース",
     "preferRaces": [],
     "preferReds": [],
     "races": [
