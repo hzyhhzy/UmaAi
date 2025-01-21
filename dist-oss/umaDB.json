@@ -338,6 +338,40 @@
     ],
     "star": 5
   },
+  "100403": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      88,
+      108,
+      122,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 100403,
+    "name": "[祝ひ寿ぐ神速天女]マルゼンスキー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      29,
+      30,
+      33,
+      47,
+      53,
+      58,
+      67
+    ],
+    "star": 5
+  },
   "100501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -5784,6 +5818,42 @@
       58,
       65,
       67
+    ],
+    "star": 5
+  },
+  "107901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      105,
+      108,
+      121,
+      101
+    ],
+    "freeRaces": [],
+    "gameId": 107901,
+    "name": "[衣錦還郷の瑞星]フリオーソ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      36,
+      44,
+      46,
+      47,
+      51,
+      53,
+      56,
+      59,
+      68
     ],
     "star": 5
   },
