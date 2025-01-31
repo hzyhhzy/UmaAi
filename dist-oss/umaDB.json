@@ -5821,6 +5821,39 @@
     ],
     "star": 5
   },
+  "107802": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      15,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      103,
+      105,
+      110,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 107802,
+    "name": "[Sugary Wind]ヤマニンゼファー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      41,
+      45,
+      58,
+      65,
+      67
+    ],
+    "star": 5
+  },
   "107901": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6173,6 +6206,39 @@
     "freeRaces": [],
     "gameId": 108701,
     "name": "[Flare]真弓快车",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      20,
+      22,
+      28,
+      30,
+      41,
+      53,
+      65
+    ],
+    "star": 5
+  },
+  "108702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      135,
+      72,
+      110,
+      124,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 108702,
+    "name": "[溶けない砂糖菓子]アストンマーチャン",
     "preferRaces": [],
     "preferReds": [],
     "races": [
