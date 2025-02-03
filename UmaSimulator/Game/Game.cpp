@@ -943,7 +943,7 @@ void Game::handleFriendClickEvent(std::mt19937_64& rand, int atTrain)
 
     if (friend_type == FriendType_yayoi)
     {
-      addStatusFriend(0, 14);
+      addStatusFriend(0, 8);
       addJiBan(friend_personId, 10, false);
       addMotivation(1);
     }
@@ -1023,7 +1023,7 @@ void Game::handleFriendFixedEvent()
     if (friend_type == FriendType_yayoi)
     {
       addMotivation(1);
-      addStatusFriend(0, 24);
+      addStatusFriend(0, 12);
       addJiBan(friend_personId, 5, false);
       //skillPt += 40;//三级中盘巧者，而且有进化，因此这个hint是有效的
     }

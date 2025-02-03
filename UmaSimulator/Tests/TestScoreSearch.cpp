@@ -31,9 +31,9 @@ namespace TestScoreSearch
   const int threadNum = 1;
   const int batchsize = 1;
   const int threadNumInner = 8;
-  const double radicalFactor = 3;//激进度
+  const double radicalFactor = 5;//激进度
   const int searchDepth = 2 * TOTAL_TURN;
-  const int searchN = 2048;
+  const int searchN = 4096;
   const bool recordGame = true;
   const bool debugPrint = false;
 
@@ -87,7 +87,7 @@ namespace TestScoreSearch
     {
       Game game;
       game.newGame(rand, false, test.umaId, test.umaStars, &test.cards[0], &test.zhongmaBlue[0], &test.zhongmaBonus[0]);
-
+      game.ptScoreRate = 0;
 
       while (!game.isEnd())
       {
