@@ -29,12 +29,18 @@ SelfplayThread::SelfplayThread(SelfplayParam param, Model* model) :param(param),
 void SelfplayThread::run()
 {
   int fileNum = 1 + ((param.maxSampleNum - 1) / param.threadNum);
+
+  printf("The fileNum is : %d\n", fileNum);
+
   for (int f = 0; f < fileNum; f++)
   {
     auto start = std::chrono::high_resolution_clock::now();
 
-    for (int g = 0; g < param.sampleNumEachFile; g++)
-      sampleData[g] = generateSingleSample();
+    for (int g = 0; g < param.sampleNumEachFile; g++) {
+        cout << "current id is : " << g << '\n';
+        sampleData[g] = generateSingleSample();
+    }
+        
     writeDataToFile();
 
     auto stop = std::chrono::high_resolution_clock::now();
@@ -52,7 +58,7 @@ TrainingSample SelfplayThread::generateSingleSample()
 
   SearchParam sp;
   if (randBool(rand, param.maxDepth_fullProb))
-    sp.maxDepth = TOTAL_TURN;
+    sp.maxDepth = TOTAL_TURN*2;
   else
   {
     sp.maxDepth = int(exp(param.maxDepth_logmean + normDistr(rand) * param.maxDepth_logstdev) + 0.5);
@@ -69,12 +75,23 @@ TrainingSample SelfplayThread::generateSingleSample()
   sp.searchGroupSize = param.searchGroupSize;
   sp.searchCpuct = param.searchCpuct;
 
+  cout << "maxDepth is : " << sp.maxDepth << '\n';
+
 
   Game game = gameGenerator.get();
+
+  cout << "The game turn is: " << game.turn << '\n';
+  
+  for (int i = 0; i < 5; ++i)
+      cout << game.fiveStatus[i] << " ";
+  cout << endl;
+
+  
+
   search.setParam(sp);
   search.runSearch(game, rand);
   TrainingSample res = search.exportTrainingSample(param.policyDelta);
-  //cout << res.valueTarget.scoreMean << endl;
+  //cout<<"The Mean score is: " << res.valueTarget.scoreMean << endl;
   return res;
 }
 

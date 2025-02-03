@@ -9,7 +9,7 @@ void GameGenerator::loadCardRankFile()
   for (int cardtype = 0; cardtype < 5; cardtype++)
   {
     assert(cardRank[cardtype].size() == 0);
-    string path = "./db/cardtest/testcard_" + to_string(cardtype) + ".txt";
+    string path = "./db/testcard_" + to_string(cardtype) + ".txt";
     ifstream fs(path);
     int N;
     fs >> N;
@@ -20,61 +20,68 @@ void GameGenerator::loadCardRankFile()
       fs >> cardid >> value >> score;
       cardRank[cardtype].push_back(cardid);
     }
+
+    cout << "card type " << cardtype << " loading finished.\n";
   }
 }
 
 std::vector<int> GameGenerator::getRandomCardset()
 {
-  vector<int> cardset;
-  if (rand() % 16 != 0)//带友人
-  {
-    if (rand() % 2 != 0)
-      cardset.push_back(301884);
-    else if (rand() % 8 != 0)
-      cardset.push_back(301880 + rand() % 5);
-    else if(rand() % 2 != 0)
-      cardset.push_back(101044);
-    else
-      cardset.push_back(101040 + rand() % 5);
-  }
-
-  int cardTypeCount[6] = { 0,0,0,0,0,0 };
-  
-  for (int i = 0; i < 6 - cardset.size(); i++)
-  {
-    cardTypeCount[rand() % 5] += 1;
-  }
-
-  double cardRankFactor = rand() % 2 == 0 ? 2.0 : rand() % 2 ? 5.0 : 10.0;//一半是以top2的卡为主，四分之一是top5，四分之一是top10
-
-  std::uniform_real_distribution<double> uniDistr(0.0, 1.0);
-  for (int ct = 0; ct < 5; ct++)
-  {
-    for (int i = 0; i < cardTypeCount[ct]; i++)
+    vector<int> cardset;
+    if (rand() % 16 != 0)//带友人
     {
-      int cardId = -1;
-      while (true)
-      {
-        int t = int(cardRankFactor * (1.0 / (uniDistr(rand) + 1e-8) - 1.0));// p(N) ~ 1/N^2
-        if (t >= cardRank[ct].size() || t < 0)
-          continue;
-
-        cardId = cardRank[ct][t] * 10 + 4;
-
-        break;
-      }
-      cardset.push_back(cardId);
+        if (rand() % 2 != 0)
+            cardset.push_back(302074);
+        else if (rand() % 8 != 0)
+            cardset.push_back(302070 + rand() % 5);
+        else if (rand() % 2 != 0)
+            cardset.push_back(101094);
+        else
+            cardset.push_back(101090 + rand() % 5);
     }
-  }
-  assert(cardset.size() == 6);
-  for (int i = 0; i < 6; i++)
-  {
-    if (rand() % 16 == 0)//非满破卡
+
+    int cardTypeCount[6] = { 0,0,0,0,0,0 };
+
+    for (int i = 0; i < 6 - cardset.size(); i++)
     {
-      cardset[i] = (cardset[i] / 10) * 10 + rand() % 5;
+        cardTypeCount[rand() % 5] += 1;
     }
-  }
-  return cardset;
+
+    double cardRankFactor = rand() % 2 == 0 ? 2.0 : rand() % 2 ? 5.0 : 10.0;//一半是以top2的卡为主，四分之一是top5，四分之一是top10
+
+    std::uniform_real_distribution<double> uniDistr(0.0, 1.0);
+    for (int ct = 0; ct < 5; ct++)
+    {
+        if (cardRank[ct].empty())
+        {
+            throw std::runtime_error("cardRank[" + std::to_string(ct) + "] is empty.");
+        }
+
+        for (int i = 0; i < cardTypeCount[ct]; i++)
+        {
+            int cardId = -1;
+            while (true)
+            {
+                int t = int(cardRankFactor * (1.0 / (uniDistr(rand) + 1e-8) - 1.0));// p(N) ~ 1/N^2
+                if (t >= cardRank[ct].size() || t < 0)
+                    continue;
+
+                cardId = cardRank[ct][t] * 10 + 4;
+
+                break;
+            }
+            cardset.push_back(cardId);
+        }
+    }
+    assert(cardset.size() == 6);
+    for (int i = 0; i < 6; i++)
+    {
+        if (rand() % 16 == 0)//非满破卡
+        {
+            cardset[i] = (cardset[i] / 10) * 10 + rand() % 5;
+        }
+    }
+    return cardset;
 }
 
 void GameGenerator::randomizeUmaCardParam(Game& game)

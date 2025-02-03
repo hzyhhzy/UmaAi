@@ -6,6 +6,7 @@
 #include <atomic>
 #include <future>
 #include <iostream>
+#include <queue>
 #include "Search.h"
 #include "../GameDatabase/GameConfig.h"
 #include "../External/mathFunctions.h"
@@ -328,40 +329,33 @@ void Search::searchSingleActionThread(
 
   for (int batch = 0; batch < batchNum; batch++)
   {
-    eva.gameInput.assign(batchSize, rootGame);
+      eva.gameInput.assign(batchSize, rootGame);
 
-    //先走第一步
-    for (int i = 0; i < batchSize; i++)
-    {
-      if (isNewGame)//重置游戏
-        eva.gameInput[i].randomDistributeCards(rand);
-      else if(!isTwoStageAction)//常规
-        eva.gameInput[i].applyAction(rand, action);
-      else//二阶段Action
-      {
-        Action action1 = { action.dishType,TRA_none };
-        Action action2 = { DISH_none,action.train };
-        eva.gameInput[i].applyAction(rand, action1);
-        eva.gameInput[i].applyAction(rand, action2);
-      }
-    }
-    int maxdepth = isNewGame ? param.maxDepth + 1 : param.maxDepth;
-    for (int depth = 0; depth < param.maxDepth; depth++)
-    {
-      eva.evaluateSelf(1, param);//计算policy
-      //bool distributeCards = (depth != maxDepth - 1);//最后一层就不分配卡组了，直接调用神经网络估值
-
-
-      bool allFinished = true;
+      //先走第一步
       for (int i = 0; i < batchSize; i++)
       {
-        if(!eva.gameInput[i].isEnd())
-          eva.gameInput[i].applyAction(rand, eva.actionResults[i]);
-        //Search::runOneTurnUsingPolicy(rand, gamesBuf[i], evaluators->policyResults[i], distributeCards);
-        if (!eva.gameInput[i].isEnd())allFinished = false;
+          if (isNewGame)//重置游戏
+              eva.gameInput[i].randomDistributeCards(rand);
+          else//常规
+              eva.gameInput[i].applyAction(rand, action);
       }
-      if (allFinished)break;
-    }
+      int maxdepth = isNewGame ? param.maxDepth + 1 : param.maxDepth;
+      for (int depth = 0; depth < param.maxDepth; depth++)
+      {
+          eva.evaluateSelf(1, param);//计算policy
+          //bool distributeCards = (depth != maxDepth - 1);//最后一层就不分配卡组了，直接调用神经网络估值
+
+
+          bool allFinished = true;
+          for (int i = 0; i < batchSize; i++)
+          {
+              if (!eva.gameInput[i].isEnd())
+                  eva.gameInput[i].applyAction(rand, eva.actionResults[i]);
+              //Search::runOneTurnUsingPolicy(rand, gamesBuf[i], evaluators->policyResults[i], distributeCards);
+              if (!eva.gameInput[i].isEnd())allFinished = false;
+          }
+          if (allFinished)break;
+      }
     eva.evaluateSelf(0, param);//计算value
     for (int i = 0; i < batchSize; i++)
     {

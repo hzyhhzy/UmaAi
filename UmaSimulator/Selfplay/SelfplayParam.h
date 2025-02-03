@@ -4,16 +4,16 @@
 #include "../config.h"
 struct SelfplayParam
 {
-  int threadNum = 16;
+  int threadNum = 16;  // Reduced from 16
   int threadNumInner = 1;
-  int maxSampleNum = 1000 * 1024 * 16;
+  int maxSampleNum = 1 * 16 * 10;  // Reduced from 1000 * 1024 * 16
 
 #if USE_BACKEND == BACKEND_LIBTORCH
   std::string modelPath = "./db/model_traced.pt";
   int batchsize = 1024;
 #elif USE_BACKEND == BACKEND_NONE
   std::string modelPath = "";
-  int batchsize = 1;
+  int batchsize = 16;
 #else
   std::string modelPath = "./db/model.txt";
   int batchsize = 1024;

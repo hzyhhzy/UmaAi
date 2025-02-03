@@ -327,8 +327,9 @@ void Person::getCardNNInputV1(float* buf, const Game& game, int index) const
 
 void Game::getNNInputV1(float* buf, const SearchParam& param) const
 {
-  throw "not implemented";
-  /*
+
+    return;
+ /*
   for (int i = 0; i < NNINPUT_CHANNELS_V1; i++)
     buf[i] = 0.0;
   int c = 0;
@@ -445,7 +446,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 
 
   //理事长和记者和无卡友人
-  //3*9=21 channels
+  //3*9=27 channels
   for (int p = 0; p < 3; p++)
   {
     if (p == 2 && lianghua_type != 0)
