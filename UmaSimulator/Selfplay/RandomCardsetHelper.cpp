@@ -29,13 +29,13 @@ std::vector<int> GameGenerator::getRandomCardset()
   if (rand() % 16 != 0)//´øÓÑÈË
   {
     if (rand() % 2 != 0)
-      cardset.push_back(301884);
+      cardset.push_back(302074);
     else if (rand() % 8 != 0)
-      cardset.push_back(301880 + rand() % 5);
+      cardset.push_back(302070 + rand() % 5);
     else if(rand() % 2 != 0)
-      cardset.push_back(101044);
+      cardset.push_back(101094);
     else
-      cardset.push_back(101040 + rand() % 5);
+      cardset.push_back(101090 + rand() % 5);
   }
 
   int cardTypeCount[6] = { 0,0,0,0,0,0 };

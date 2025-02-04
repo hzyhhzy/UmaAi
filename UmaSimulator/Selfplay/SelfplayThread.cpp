@@ -52,7 +52,7 @@ TrainingSample SelfplayThread::generateSingleSample()
 
   SearchParam sp;
   if (randBool(rand, param.maxDepth_fullProb))
-    sp.maxDepth = TOTAL_TURN;
+    sp.maxDepth = TOTAL_TURN*2;
   else
   {
     sp.maxDepth = int(exp(param.maxDepth_logmean + normDistr(rand) * param.maxDepth_logstdev) + 0.5);
@@ -71,6 +71,13 @@ TrainingSample SelfplayThread::generateSingleSample()
 
 
   Game game = gameGenerator.get();
+
+  // 数据内容
+  cout << "The game turn is: " << game.turn << '\n';
+  for (int i = 0; i < 5; ++i)
+      cout << game.fiveStatus[i] << " ";
+  cout << endl;
+
   search.setParam(sp);
   search.runSearch(game, rand);
   TrainingSample res = search.exportTrainingSample(param.policyDelta);
@@ -80,6 +87,8 @@ TrainingSample SelfplayThread::generateSingleSample()
 
 void SelfplayThread::writeDataToFile()
 {
+    return; //临时处理
+
   nnInputBuf.resize(NNINPUT_CHANNELS_V1 * param.sampleNumEachFile);
   nnOutputBuf.resize(NNOUTPUT_CHANNELS_V1 * param.sampleNumEachFile);
   assert(false);

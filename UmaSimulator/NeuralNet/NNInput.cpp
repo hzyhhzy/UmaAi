@@ -327,7 +327,7 @@ void Person::getCardNNInputV1(float* buf, const Game& game, int index) const
 
 void Game::getNNInputV1(float* buf, const SearchParam& param) const
 {
-  throw "not implemented";
+  //throw "not implemented";
   /*
   for (int i = 0; i < NNINPUT_CHANNELS_V1; i++)
     buf[i] = 0.0;
