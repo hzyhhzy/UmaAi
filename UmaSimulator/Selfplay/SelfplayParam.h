@@ -6,7 +6,7 @@ struct SelfplayParam
 {
   int threadNum = 16;
   int threadNumInner = 1;
-  int maxSampleNum = 1 * 16 * 1;
+  int maxSampleNum = 1 * 1 * 1;
 
 #if USE_BACKEND == BACKEND_LIBTORCH
   std::string modelPath = "./db/model_traced.pt";
@@ -20,7 +20,7 @@ struct SelfplayParam
 #endif
 
   std::string exportDataDir = "./selfplay/0/";
-  int sampleNumEachFile = 128;
+  int sampleNumEachFile = 16;
 
   int searchN = 1024;
   int searchGroupSize = 1024;

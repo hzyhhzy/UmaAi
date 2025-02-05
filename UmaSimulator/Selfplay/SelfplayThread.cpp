@@ -87,11 +87,10 @@ TrainingSample SelfplayThread::generateSingleSample()
 
 void SelfplayThread::writeDataToFile()
 {
-    return; //¡Ÿ ±¥¶¿Ì
 
   nnInputBuf.resize(NNINPUT_CHANNELS_V1 * param.sampleNumEachFile);
   nnOutputBuf.resize(NNOUTPUT_CHANNELS_V1 * param.sampleNumEachFile);
-  assert(false);
+  //assert(false);
   //static_assert(sizeof(ModelOutputPolicyV1) + sizeof(ModelOutputValueV1) == sizeof(float) * NNOUTPUT_CHANNELS_V1);
   
   for (int i = 0; i < param.sampleNumEachFile; i++)

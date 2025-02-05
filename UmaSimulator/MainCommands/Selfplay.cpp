@@ -37,15 +37,15 @@ void main_selfplay()
   for (int i = 0; i < param.threadNum; i++)
     spThreads.emplace_back(param, modelptr);
 
-  spThreads[0].run();
-  //for (auto& spt : spThreads) {
-  //  threads.emplace_back(&SelfplayThread::run, &spt);
-  //}
+  // spThreads[0].run();
+  for (auto& spt : spThreads) {
+   threads.emplace_back(&SelfplayThread::run, &spt);
+  }
 
   // 等待所有线程完成
-  //for (auto& th : threads) {
-  //  th.join();
-  //}
+  for (auto& th : threads) {
+   th.join();
+  }
 
   std::cout << "All threads finished." << std::endl;
 

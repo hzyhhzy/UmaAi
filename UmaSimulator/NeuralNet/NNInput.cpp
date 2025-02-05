@@ -543,7 +543,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 
   cout<<"Total channels:"<<buf_ptr<<endl;
 
-  return ;
+  // return ;
 
   assert(buf_ptr == NNINPUT_CHANNELS_GAMEGLOBAL_V1);
 
