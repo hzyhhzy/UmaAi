@@ -171,7 +171,6 @@ Game GameGenerator::randomOpening()
 Game GameGenerator::randomizeBeforeOutput(const Game& game0)
 {
   //assert("false" && "not implemented, TODO: GameGenerator::randomizeBeforeOutput");
-  return game0;
   
   Game game = game0;
   std::exponential_distribution<double> expDistr(1.0);
@@ -237,6 +236,12 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
       int newlevel = game.cook_farm_level[i] + dif;
       if (newlevel > 5)newlevel = 5;
       if (newlevel < 1)newlevel = 1;
+
+      if (newlevel > 3 && game.turn < 48)
+        newlevel=3;
+      if (newlevel > 2 && game.turn < 24)
+        newlevel=2;
+
       game.cook_farm_level[i] = newlevel;
     }
   }
