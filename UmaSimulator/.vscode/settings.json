@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "random": "cpp",
+        "*.ipp": "cpp"
+    }
+}

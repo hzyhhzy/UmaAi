@@ -1,0 +1,95 @@
+{
+    "umaId": 102403,
+    "umaStar": 4,
+    "islegal": true,
+    "turn": 43,
+    "vital": 79,
+    "maxVital": 100,
+    "motivation": 5,
+    "fiveStatus": [1206, 399, 562, 1014, 693],
+    "fiveStatusLimit": [2414, 1012, 2202, 2260, 1506],
+    "skillPt": 2113,
+    "skillScore": 0,
+    "trainLevelCount": [16, 9, 10, 16, 16],
+    "ptScoreRate": 2.0,
+    "failureRateBias": 0,
+    "isQieZhe": false,
+    "isAiJiao": false,
+    "isPositiveThinking": false,
+    "isRefreshMind": false,
+    "zhongMaBlueCount": [9, 3, 0, 6, 0],
+    "saihou": 0,
+    "isRacing": true,
+    "cardId": [301414, 302154, 301874, 302084, 302071, 302144],
+    "persons": [
+      {
+        "personType": 2,
+        "charaId": 0,
+        "friendship": 100,
+        "isHint": false,
+        "cardRecord": 0
+      },
+      {
+        "personType": 2,
+        "charaId": 0,
+        "friendship": 100,
+        "isHint": false,
+        "cardRecord": 0
+      },
+      {
+        "personType": 2,
+        "charaId": 0,
+        "friendship": 100,
+        "isHint": false,
+        "cardRecord": 0
+      },
+      {
+        "personType": 2,
+        "charaId": 0,
+        "friendship": 100,
+        "isHint": false,
+        "cardRecord": 0
+      },
+      {
+        "personType": 1,
+        "charaId": 0,
+        "friendship": 100,
+        "isHint": false,
+        "cardRecord": 0
+      },
+      {
+        "personType": 2,
+        "charaId": 0,
+        "friendship": 100,
+        "isHint": false,
+        "cardRecord": 0
+      }
+    ],
+    "personDistribution": [
+      [-1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1]
+    ],
+    "lockedTrainingId": -1,
+    "friendship_noncard_yayoi": 0,
+    "friendship_noncard_reporter": 50,
+    "cook_material": [118, 206, 133, 367, 139],
+    "cook_dish_pt": 8000,
+    "cook_dish": 0,
+    "cook_farm_level": [3, 2, 3, 3, 3],
+    "cook_farm_pt": 345,
+    "cook_dish_sure_success": false,
+    "cook_win_history": [1, 1, 0, 0, 0],
+    "cook_harvest_history": [1, 4, 3, -1],
+    "cook_harvest_green_history": [true, true, true, false],
+    "cook_harvest_num": [42, 70, 42, 93, 92],
+    "cook_train_material_type": [-1, -1, -1, -1, -1, -1, -1, 0],
+    "cook_train_green": [false, false, false, false, false, false, false, true],
+    "cook_main_race_material_type": 0,
+    "friend_type": 1,
+    "friend_personId": 4,
+    "friend_stage": 2,
+    "friend_outgoingUsed": 5
+  }

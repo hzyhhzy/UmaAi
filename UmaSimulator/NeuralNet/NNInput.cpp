@@ -324,136 +324,111 @@ void Person::getCardNNInputV1(float* buf, const Game& game, int index) const
 
 
 
+void NNInput_init(float * buf) { //初始化NNInput
+  for(int i=0;i<NNINPUT_CHANNELS_V1;++i)
+    buf[i] = 0.0;
+  return ;
+}
+
+void SetValue(float * buf, int &buf_ptr, int value) { //设置值
+  buf[buf_ptr] = 1.0 * value;
+  buf_ptr++;
+  return ;
+}
+
 
 void Game::getNNInputV1(float* buf, const SearchParam& param) const
 {
-  //throw "not implemented";
-  /*
-  for (int i = 0; i < NNINPUT_CHANNELS_V1; i++)
-    buf[i] = 0.0;
-  int c = 0;
+  int buf_ptr = 0; //指向NNInput buf的指针
+  NNInput_init(buf); //初始化NNInput
+  //设置搜索参数
+  buf[buf_ptr] = 1.0 * log(param.maxRadicalFactor + 1.0); //激进因子
+  buf_ptr += 6;
 
-  //search param
-  {
+  /*** 合法的action选项 ***/
+  for(int i=0;i<Action::MAX_ACTION_TYPE;++i)
+    SetValue(buf,buf_ptr,isLegal(Action::intToAction(i))?1.0:0.0);
 
-    buf[c] = 1.0 * log(param.maxRadicalFactor + 1.0);
-    c++;
+  /*** 参数相关设置 ***/
+  //ptScoreRate
+  SetValue(buf,buf_ptr,ptScoreRate-2); 
 
-    //其他的我觉得都没必要输入
-    
-    //buf[c] = 0.0 * log(param.maxDepth + 1.0);
-    //c++;
-    //buf[c] = 0.0 * (log(param.samplingNum + 1.0) - 7.0);
-    //c++;
-    
-    c += 5;//reserve
-
-  }
-
-
-;
-  //isLegal
-  for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
-  {
-    buf[c + i] = isLegal(Action::intToAction(i)) ? 1.0 : 0.0;
-  }
-  c += Action::MAX_ACTION_TYPE;
-
-  buf[c] = isLinkUma ? 1.0 : 0.0;
-  c++;
-
+  /*** 基本状态 ***/
+  // 是否为link马
+  SetValue(buf,buf_ptr,isLinkUma); 
+  // 是否为比赛回合
+  for(int i=0;i<TOTAL_TURN;++i) 
+    SetValue(buf,buf_ptr,isRacingTurn[i]?1.0:0.0);
+  // 五维属性的成长率
+  for(int i=0;i<5;++i) 
+    SetValue(buf,buf_ptr,fiveStatusBonus[i]);
   //第几回合
   assert(turn < TOTAL_TURN);
-  buf[c + turn] = 1.0;
-  c += TOTAL_TURN;
+  buf[buf_ptr + turn] = 1.0;
+  buf_ptr += TOTAL_TURN;
+  // 游戏阶段
+  SetValue(buf,buf_ptr,gameStage);
+  // 体力
+  SetValue(buf,buf_ptr,vital);
+  // 体力上限
+  SetValue(buf,buf_ptr,maxVital);
+  // 干劲
+  SetValue(buf,buf_ptr,motivation);
+  // 五维属性
+  for(int i=0;i<5;++i) 
+    SetValue(buf,buf_ptr,fiveStatus[i]);
+  // 五维属性上限
+  for(int i=0;i<5;++i) 
+    SetValue(buf,buf_ptr,fiveStatusLimit[i]);
+  // 技能分数
+  SetValue(buf,buf_ptr,getSkillScore());
+  // 训练等级计数
+  for(int i=0;i<5;++i) 
+    SetValue(buf,buf_ptr,trainLevelCount[i]);
+  // 当前训练等级
+  for(int i=0;i<5;++i) 
+    SetValue(buf,buf_ptr,getTrainingLevel(i));
 
-  //赛程
-  for (int i = 0; i < TOTAL_TURN; i++)
-    buf[c + i] = isRacingTurn[i] ? 1.0 : 0.0;
-  c += TOTAL_TURN;
+  /*** Buff状态设置 ***/
+  // 失败率改变量
+  SetValue(buf,buf_ptr,failureRateBias<0?1.0:0.0); //是否练习上手
+  SetValue(buf,buf_ptr,failureRateBias>0?1.0:0.0); //是否练习下手
+  // 是否切者
+  SetValue(buf,buf_ptr,isQieZhe?1.0:0.0);
+  // 是否爱娇
+  SetValue(buf,buf_ptr,isAiJiao?1.0:0.0);
+  // 是否积极思考
+  SetValue(buf,buf_ptr,isPositiveThinking?1.0:0.0);
+  // 是否放松心情
+  SetValue(buf,buf_ptr,isRefreshMind?1.0:0.0);
 
-  for (int i = 0; i < 5; i++)
+  /*** 种马状态设置 ***/
+  // 种马蓝色数量
+  for(int i=0;i<5;++i) 
+    SetValue(buf,buf_ptr,zhongMaBlueCount[i]*0.1);
+  // 种马额外属性加成
+  for(int i=0;i<5;++i) 
+    SetValue(buf,buf_ptr,zhongMaExtraBonus[i]*0.03);
+  // 种马额外pt加成
+  SetValue(buf,buf_ptr,zhongMaExtraBonus[5]*0.01);
+
+  /*** 比赛相关 ***/
+  // 赛后加成
+  SetValue(buf,buf_ptr,saihou*0.03);
+  // 是否在比赛
+  SetValue(buf,buf_ptr,isRacing?1.0:0.0);
+
+  /*** 人物分布 ***/
+  // 理事长和记者
+  // 2*9=18 channels
+  for (int p = 0; p < 2; p++)
   {
-    buf[c + i] = fiveStatusBonus[i] * 0.05;
-  }
-  c += 5;
-
-  buf[c] = (eventStrength - 20) * 0.2;
-  c++;
-
-
-  buf[c] = (vital - 50) * 0.02;
-  c++;
-  buf[c] = (maxVital - 100) * 0.1;
-  c++;
-
-  assert(motivation >= 1 && motivation <= 5);
-  buf[c + motivation - 1] = 1.0;
-  c += 5;
-
-  for (int i = 0; i < 5; i++)
-    buf[c + i] = fiveStatus[i] * 0.003;
-  c += 5;
-  for (int i = 0; i < 5; i++)
-    buf[c + i] = (fiveStatusLimit[i] - GameConstants::BasicFiveStatusLimit[i]) * 0.01;
-  c += 5;
-
-  buf[c] = getSkillScore() * 0.0002;
-  c++;
-
-  buf[c] = ptScoreRate - 2.0;
-  c++;
-
-  //练习上手
-  if (failureRateBias < 0)
-    buf[c] = failureRateBias * 0.5;
-  c++;
-
-  //练习下手
-  if (failureRateBias > 0)
-    buf[c] = failureRateBias * 0.5;
-  c++;
-
-  if (isAiJiao)
-    buf[c] = 1.0;
-  c++;
-
-  if (isPositiveThinking)
-    buf[c] = 1.0;
-  c++;
-
-
-  for (int i = 0; i < 5; i++)
-  {
-    buf[c + i] = zhongMaBlueCount[i] * 0.1;
-  }
-  c += 5;
-
-  for (int i = 0; i < 5; i++)
-  {
-    buf[c + i] = zhongMaExtraBonus[i] * 0.03;
-  }
-  c += 5;
-  buf[c] = zhongMaExtraBonus[5] * 0.01;
-  c++;
-
-
-  buf[c] = saihou * 0.03;
-  c++;
-
-  assert(!isRacing);
-
-
-  //理事长和记者和无卡友人
-  //3*9=21 channels
-  for (int p = 0; p < 3; p++)
-  {
-    if (p == 2 && lianghua_type != 0)
-      break;
-    buf[c + p * 7] = persons[p + 6].friendship * 0.01;
-    buf[c + p * 7 + 1] = persons[p + 6].friendship >= 40 ? 1.0 : 0.0;
-    buf[c + p * 7 + 2] = persons[p + 6].friendship >= 60 ? 1.0 : 0.0;
-    buf[c + p * 7 + 3] = persons[p + 6].friendship >= 80 ? 1.0 : 0.0;
+    if (p == 0 && friend_type != 0)
+      continue;
+    buf[buf_ptr + p * 9] = persons[p + 6].friendship * 0.01;
+    buf[buf_ptr + p * 9 + 1] = persons[p + 6].friendship >= 40 ? 1.0 : 0.0;
+    buf[buf_ptr + p * 9 + 2] = persons[p + 6].friendship >= 60 ? 1.0 : 0.0;
+    buf[buf_ptr + p * 9 + 3] = persons[p + 6].friendship >= 80 ? 1.0 : 0.0;
 
     //在哪个训练
     for (int tr = 0; tr < 5; tr++)
@@ -461,172 +436,116 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
       for (int i = 0; i < 5; i++)
       {
         if (personDistribution[tr][i] == p + 6)
-          buf[c + p * 7 + 4 + tr] = 1.0;
+          buf[buf_ptr + p * 9 + 4 + tr] = 1.0;
       }
     }
   }
-  c += 3 * 9;
+  buf_ptr += 2 * 9;
 
-
-  for (int i = 0; i < 5; i++)
-  {
-    buf[c + i * 3 + uaf_trainingColor[i]] = 1.0;
+  /*** 剧本相关 ***/
+  // 菜原料数量
+  for(int i=0;i<5;++i) 
+    SetValue(buf,buf_ptr,cook_material[i]*0.001); // 菜量范围在[0,999]
+  // 料理pt
+  SetValue(buf,buf_ptr,cook_dish_pt*0.0002); // 料理pt范围在[0,50000]
+  // 回合开始前的料理pt
+  SetValue(buf,buf_ptr,cook_dish_pt_turn_begin*0.0002); // 料理pt范围在[0,50000]
+  // 农田等级
+  for(int i=0;i<5;++i)
+    buf[buf_ptr+i*5+cook_farm_level[i]] = 1.0;
+  buf_ptr += 25;
+  // 农田升级pt
+  SetValue(buf,buf_ptr,cook_farm_pt*0.001); // 农田升级pt范围在[0,1000]
+  // 是否大成功
+  SetValue(buf,buf_ptr,cook_dish_sure_success?1.0:0.0);
+  // 当前菜
+  buf[buf_ptr+cook_dish] = 1.0;
+  buf_ptr += 14;
+  // 试食会历史
+  for(int i=0;i<5;++i){
+    buf[buf_ptr+cook_win_history[i]] = 1.0;
+    buf_ptr += 3;
   }
-  c += 3 * 5;
+  // 收获历史
+  for(int i=0;i<4;++i){
+    int vege_type = cook_harvest_history[i]==-1?5:cook_harvest_history[i];
+    buf[buf_ptr+cook_harvest_history[i]] = 1.0;
+    buf_ptr += 6; // 0~4表示对应的菜，5表示未选择
+  }
+  // 是否绿菜
+  for(int i=0;i<4;++i)
+    SetValue(buf,buf_ptr,cook_harvest_green_history[i]?1.0:0.0);
+  // 菜品的额外收获
+  for(int i=0;i<5;++i)
+    SetValue(buf,buf_ptr,cook_harvest_extra[i]*0.005); // 收获额外范围在[0,160]
+  // 各个Action获得菜的种类
+  for(int i=0;i<8;++i) {
+    buf[buf_ptr+cook_train_material_type[i]] = 1.0;
+    buf_ptr += 8;
+  }
+  // 是否绿菜
+  for(int i=0;i<8;++i)
+    SetValue(buf,buf_ptr,cook_train_green[i]?1.0:0.0);
+  // 比赛回合的菜种类
+  buf[buf_ptr+cook_main_race_material_type] = 1.0;
+  buf_ptr += 5;
+  
+  /*** 剧本友人卡 ***/
+  // 友人卡的状态
+  buf[buf_ptr+friend_type] = 1.0;
+  buf_ptr += 3;
+  // 存在友人卡时，友人卡的相关状态
+  if(friend_type != 0) {
+    // 友人卡的编号
+    buf[buf_ptr+friend_personId] = 1.0;
+    buf_ptr += 6;
+    // 友人卡的状态
+    buf[buf_ptr+friend_stage] = 1.0;
+    buf_ptr += 3;
+    // 友人卡出行的次数
+    buf[buf_ptr+friend_outgoingUsed] = 1.0;
+    buf_ptr += 6;
+    // 友人卡的体力恢复倍率
+    SetValue(buf,buf_ptr,friend_vitalBonus);
+    // 友人卡的事件效果倍率
+    SetValue(buf,buf_ptr,friend_statusBonus);
+  }
+  else{
+    buf_ptr += 17;
+  }
 
-  //训练等级
-  int targetLv = 10 * (turn / 12);
-  if (targetLv < 10)targetLv = 10;
-  if (targetLv > 50)targetLv = 0;//ura阶段
-  for (int color = 0; color < 3; color++)
-  {
-    for (int t = 0; t < 5; t++)
-    {
-      int lv = uaf_trainingLevel[color][t];
-      buf[c] = lv * 0.02;
-      c++;
-
-      int lv10 = lv / 10;
-      assert(lv10 >= 0 && lv10 <= 10);
-      if (lv10 > 5)lv10 = 5;
-      buf[c + lv10] = 1.0;
-      c += 6;
-
-      buf[c] = lv >= targetLv ? 1.0 : 0.0;
-      c++;
+  /*** 训练相关的信息 ***/
+  // 训练的数值和体力
+  for(int i=0;i<5;++i) {
+    for(int j=0;j<6;++j) {
+      SetValue(buf,buf_ptr,trainValue[i][j]*0.01);
     }
+    SetValue(buf,buf_ptr,trainVitalChange[i]*0.05);
   }
+  // 训练失败率
+  for(int i=0;i<5;++i)
+    SetValue(buf,buf_ptr,failRate[i]*0.01);
+  // 训练是否闪彩
+  for(int i=0;i<5;++i)
+    SetValue(buf,buf_ptr,isTrainShining[i]?1.0:0.0);
+  // 使用料理的大成功率
+  SetValue(buf,buf_ptr,cook_dishpt_success_rate*0.01);
+  // 料理pt训练加成
+  SetValue(buf,buf_ptr,cook_dishpt_training_bonus*0.01);
+  // 料理pt技能点加成
+  SetValue(buf,buf_ptr,cook_dishpt_skillpt_bonus*0.01);
+  // 料理pt得意率加成
+  SetValue(buf,buf_ptr,cook_dishpt_deyilv_bonus*0.05);
+  // 各个Action获得的额外菜个数
+  for(int i=0;i<8;++i)
+    SetValue(buf,buf_ptr, cook_train_material_num_extra[i]*0.02);
+  
 
+  cout<<"Total channels:"<<buf_ptr<<endl;
 
-  buf[c] = uaf_lastTurnNotTrain ? 1.0 : 0.0;
-  c++;
+  return ;
 
-  assert(uaf_xiangtanRemain >= 0 && uaf_xiangtanRemain <= 3);
-  buf[c + uaf_xiangtanRemain] = 1.0;
-  c += 4;
-
-  for (int i = 0; i < 3; i++)
-  {
-    int n = uaf_buffNum[i];
-    if (n > 5)n = 5;
-    assert(n >= 0);
-    buf[c + n] = 1.0;
-    c += 6;
-  }
-
-  if (lianghua_type != 0)
-  {
-    assert(lianghua_type <= 2);
-    buf[c + lianghua_type - 1] = 1.0;
-    c += 2;
-    int lianghua_stage = persons[lianghua_personId].friendOrGroupCardStage;
-    assert(lianghua_stage <= 2);
-    buf[c + lianghua_stage] = 1.0;
-    c += 3;
-    buf[c + lianghua_outgoingUsed] = 1.0;
-    c += 6;
-    buf[c] = 2.0 * (lianghua_vitalBonus - 1);
-    c++;
-    buf[c] = 4.0 * (lianghua_statusBonus - 1);
-    c++;
-    buf[c] = lianghua_guyouEffective ? 1.0 : 0.0;
-    c++;
-  }
-  else
-    c += 14;
-
-
-  for (int color = 0; color < 3; color++)
-  {
-    int lvt = uaf_trainLevelColorTotal[color];
-    int lv50 = lvt / 50;
-    int rem = 50 * (lv50 + 1) - lvt;
-    buf[c] = 0.004 * lvt;
-    c++;
-    buf[c] = 0.02 * rem;
-    c++;
-    assert(lv50 <= 10 && lv50 >= 0);
-    buf[c + lv50] = 1.0;
-    c += 11;
-  }
-
-  int uafTimes = uaf_competitionFinishedNum();
-  for (int color = 0; color < 3; color++)
-  {
-    int loseTimes = uafTimes * 5 - uaf_colorWinCount[color];
-    assert(loseTimes >= 0);
-    if (loseTimes > 6)loseTimes = 6;
-    buf[c + loseTimes] = 1.0;
-    c += 7;
-  }
-
-  buf[c] = uaf_trainingBonus * 0.02;
-  c++;
-
-
-
-
-  //训练数值
-  for (int i = 0; i < 5; i++)
-  {
-    for (int j = 0; j < 6; j++)
-    {
-      buf[c] = trainValue[i][j] * 0.02;
-      c++;
-    }
-    buf[c] = trainVitalChange[i] * 0.05;
-    c++;
-  }
-  for (int i = 0; i < 5; i++)
-  {
-    buf[c] = failRate[i] * 0.02;
-    c++;
-  }
-  for (int i = 0; i < 5; i++)
-  {
-    buf[c] = uaf_trainLevelGain[i] * 0.2;
-    c++;
-  }
-  for (int i = 0; i < 5; i++)
-  {
-    buf[c] = trainShiningNum[i] > 0 ? 1.0 : 0.0;
-    c++;
-  }
-
-
-  //检查是否有一次小于12win
-  bool haveBigLose = false;
-  for (int t = 0; t < uafTimes; t++)
-  {
-    int num = 0;
-    for (int color = 0; color < 3; color++)
-      for (int i = 0; i < 5; i++)
-        if (!uaf_winHistory[t][color][i])
-          num++;
-    if (num > 3)
-      haveBigLose = true;
-  }
-
-  if (uaf_haveLose)
-    buf[c] = 1.0;
-  c++;
-  if (haveBigLose)
-    buf[c] = 1.0;
-  c++;
-
-  for (int color = 0; color < 3; color++)
-    if (uaf_haveLoseColor[color])
-      buf[c + color] = 1.0;
-  c += 3;
-
-  for (int i = 0; i < 5; i++)
-  {
-    buf[c] = (trainValueCardMultiplier[i] - 1) * 1.0;
-    c++;
-  }
-
-  c += 10;//reserve
-  assert(c == NNINPUT_CHANNELS_GAMEGLOBAL_V1);
+  assert(buf_ptr == NNINPUT_CHANNELS_GAMEGLOBAL_V1);
 
   float* cardBuf = buf + NNINPUT_CHANNELS_GAMEGLOBAL_V1;
   //float* headBuf = buf + NNINPUT_CHANNELS_GAMEGLOBAL_V1 + 7 * NNINPUT_CHANNELS_CARD_V1;
@@ -635,5 +554,5 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   {
     persons[card].getCardNNInputV1(cardBuf + NNINPUT_CHANNELS_CARDPERSON_V1 * card, *this, card);
   }
-  */
+  
 }
