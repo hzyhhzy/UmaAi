@@ -172,7 +172,7 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
 {
   //assert("false" && "not implemented, TODO: GameGenerator::randomizeBeforeOutput");
   return game0;
-  /*
+  
   Game game = game0;
   std::exponential_distribution<double> expDistr(1.0);
   std::normal_distribution<double> normDistr(0.0, 1.0);
@@ -203,71 +203,66 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
     game.failureRateBias = 2;
 
 
-  //等级随机
+  // 菜量随机
   if (rand() % 2 == 0)
   {
-    double mean = expDistr(rand) * 3;
-
-    for (int color = 0; color < 3; color++)
+    double mean = expDistr(rand) * 30; //最终dif的范围扩大到+-90常见，+-270偶尔，比较合适
       for (int i = 0; i < 5; i++)
       {
         int dif = normDistr(rand) * mean + 0.5;
-        int newlevel = game.uaf_trainingLevel[color][i] + dif;
-        if (newlevel > 100)newlevel = 100;
-        if (newlevel < 1)newlevel = 1;
-        game.uaf_trainingLevel[color][i] = newlevel;
+        int newlevel = game.cook_material[i] + dif;
+        if (newlevel > 999)newlevel = 999;
+        if (newlevel < 0)newlevel = 0;
+        game.cook_material[i] = newlevel;
       }
-    game.uaf_checkNewBuffAfterLevelGain();
+  }
+  // 农田pt随机
+  if (rand() % 2 == 0)
+  {
+    double mean = expDistr(rand) * 30; //最终dif的范围扩大到+-90常见，+-270偶尔，比较合适
+    int dif = normDistr(rand) * mean + 0.5;
+    int newlevel = game.cook_farm_pt + dif;
+    if (newlevel > 999)newlevel = 999;
+    if (newlevel < 0)newlevel = 0;
+    game.cook_farm_pt = newlevel;
+  }
+
+  // 农田等级随机
+  if (rand() % 4 == 0)
+  {
+    double rand_number = rand() % 100;
+    for (int i = 0; i < 5; i++)
+    {
+      int dif = rand_number>67?1:rand_number>33?0:-1; // 1/3概率升级，1/3概率不变，1/3概率降级
+      int newlevel = game.cook_farm_level[i] + dif;
+      if (newlevel > 5)newlevel = 5;
+      if (newlevel < 1)newlevel = 1;
+      game.cook_farm_level[i] = newlevel;
+    }
+  }
+
+  // 绿圈记录随机
+  if (rand() % 4 == 0)
+  {
+    for (int i = 0; i < 4; i++)
+    {
+      if (rand() % 2 == 0)
+        game.cook_harvest_green_history[i] = rand() % 2?true:false;
+    }
   }
 
 
   //理事长记者的羁绊随机加
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 1; i++)
   {
-    if (game.lianghua_type != 0 && i == 2)continue;
+    if (game.friend_type != 0 && i == 0)continue;
     if (rand() % 8 == 0)
     {
-      game.addJiBan(6 + i, rand() % 8);
+      game.addJiBan(6 + i, rand() % 8,true);
     }
   }
-
-
-  if (rand() % 4 == 0)
-  {
-    game.uaf_lastTurnNotTrain = rand() % 4 == 0;
-  }
-
-  if (rand() % 4 == 0)
-  {
-    game.uaf_xiangtanRemain = rand() % 4;
-  }
-
-  for (int color = 0; color < 3; color++)
-  {
-    if (rand() % 32 == 0)
-    {
-      game.uaf_buffNum[color] = 1.0 * expDistr(rand);
-      if (game.uaf_buffNum[color] > 5)game.uaf_buffNum[color] = 5;
-    }
-  }
-
-  //随机输几场
-  if (rand() % 8 == 0)
-  {
-    double loseProb = expDistr(rand) * 0.02;
-    int cf = game.uaf_competitionFinishedNum();
-
-    for (int c = 0; c < cf; c++)
-      for (int color = 0; color < 3; color++)
-        for (int i = 0; i < 5; i++)
-          if(uniDistr(rand) < loseProb)
-            game.uaf_winHistory[c][color][i] = false;
-  }
-  //game.print();
-  game.calculateTrainingValue();
 
   return game;
-  */
 }
 
 void GameGenerator::newGameBatch()
@@ -289,7 +284,7 @@ void GameGenerator::newGameBatch()
   for (int depth = 0; depth < maxTurn*2; depth++)
   {
     evaluator.evaluateSelf(1, defaultSearchParam);//计算policy
-    assert("false" && "TODO:新剧本applyAction不一定是一个回合，要改生成策略");
+    // assert("false" && "TODO:新剧本applyAction不一定是一个回合，要改生成策略");
 
     for (int i = 0; i < param.batchsize; i++)
     {
@@ -332,6 +327,9 @@ Game GameGenerator::get()
     else
     {
       nextGamePointer += 1;
+
+      printf("make use of game %d\n", nextGamePointer - 1);
+
       return gameBuf[nextGamePointer - 1];
     }
   }

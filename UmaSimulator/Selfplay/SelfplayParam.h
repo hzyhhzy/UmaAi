@@ -4,7 +4,7 @@
 #include "../config.h"
 struct SelfplayParam
 {
-  int threadNum = 16;
+  int threadNum = 1;
   int threadNumInner = 1;
   int maxSampleNum = 1 * 1 * 1;
 
@@ -25,7 +25,7 @@ struct SelfplayParam
   int searchN = 1024;
   int searchGroupSize = 1024;
   double searchCpuct = 1.0; 
-  double policyDelta = 100.0;//����ÿ���Ͷ��٣�policy���1/e��
+  double policyDelta = 100.0;//����ÿ���Ͷ��٣�policy���?1/e��
 
   //radicalFactor=radicalFactor_scale * (1/pow(rand(),radicalFactor_pow) - 1)
   double radicalFactor_scale = 2.0;
@@ -38,8 +38,8 @@ struct SelfplayParam
   int maxDepth_min = 5;
   double maxDepth_fullProb = 1.0;
 
-  //�俨�������ʽ
-  //0 �̶�����̶����̶�����
+  //�俨��������?
+  //0 �̶�����̶����̶�����?
   //1 ��������̶���ssr���ˣ�������������ѡ����Խǿ�Ŀ�����Խ��
   //2 ��1�Ļ����ϣ�������ӳɣ����Ĳ���Ҳ�Ŷ������������
   int cardRandType = 2;
