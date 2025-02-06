@@ -79,7 +79,7 @@ void main_ai()
 	//激进度为k，模拟n局时，标准差约为sqrt(1+k^2/(2k+1))*1200/(sqrt(n))
 	//标准差大于30时会严重影响判断准确度
 
-
+try {
 	random_device rd;
 	auto rand = mt19937_64(rd());
 
@@ -120,8 +120,6 @@ void main_ai()
 	//	
 	//string currentGameStagePath = "./gameData/thisTurn.json";
 
-
-
 	Model* modelptr = NULL;
 	Model model(GameConfig::modelPath, GameConfig::batchSize);
 	Model* modelSingleptr = NULL;
@@ -152,6 +150,7 @@ void main_ai()
 
 	bool useWebsocket = GameConfig::communicationMode == "websocket";
 	bool isLinkError = false;
+
 	websocket ws(useWebsocket ? "http://127.0.0.1:4693" : "");
 	if (useWebsocket)
 	{
@@ -180,8 +179,8 @@ void main_ai()
 			while (!filesystem::exists(currentGameStagePath))
 			{
 				if (!isLinkError) {
-					std::cout << "\x1b[93m找不到" + currentGameStagePath + "，可能是育成未开始或小黑板未正常工作\x1b[0m" << endl;
-					std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
+					std::cout << "\x1b[92m等待接收回合信息，请开始育成\x1b[0m" << endl;
+					//std::cout << "\x1b[93m如果育成已经开始，可能是小黑板没有发送数据，黑板设置应打开“生成AI数据文件”\x1b[0m" << endl;
 					isLinkError = true;
 				}
 			}
@@ -189,8 +188,7 @@ void main_ai()
 			if (!fs.good())
 			{
 				if (!isLinkError) {
-					std::cout << "读取文件错误" << endl;
-					std::this_thread::sleep_for(std::chrono::milliseconds(3000));//延迟几秒，避免刷屏
+					std::cout << "读取回合数据错误" << endl;
 					isLinkError = true;
 				}
 				continue;
@@ -201,12 +199,6 @@ void main_ai()
 
 			jsonStr = tmp.str();
 			isLinkError = false;
-			//ifstream fs2(currentGameStagePath2);
-			//ostringstream tmp2;
-			//tmp2 << fs2.rdbuf();
-			//fs2.close();
-
-			//jsonStr2 = tmp2.str();
 		}
 
 		if (lastJsonStr == jsonStr)//没有更新
@@ -329,27 +321,6 @@ void main_ai()
 				//game.applyAction(rand, Action(3));
 				game.print();
 
-				//debug:check every legal move
-				//for (int i = 0; i < Action::MAX_ACTION_TYPE; i++)
-				//{
-				//	Action ac = Action(i);
-				//	if (game.isLegal(ac))
-				//	{
-				//		cout << ac.toString() << " ";
-				//		Game g = game;
-				//		g.applyAction(rand, ac);
-				//		g.randomDistributeCards(rand);
-				//	}
-				//}
-
-
-
-
-				//game2.print();
-				//game = game2;
-
-
-
 				evaSingle.gameInput[0] = game;
 				evaSingle.evaluateSelf(1, searchParam);
 				Action hl = evaSingle.actionResults[0];
@@ -423,8 +394,6 @@ void main_ai()
 					if (outgoingValue > restValue)
 						restValue = outgoingValue;
 				}
-
-
 				wstring strToSendURA = L"UMAAI_MECHA";
 				strToSendURA += L" " + to_wstring(game.turn) + L" " + to_wstring(maxMean) + L" " + to_wstring(scoreFirstTurn) + L" " + to_wstring(scoreLastTurn) + L" " + to_wstring(maxValue);
 				if (game.turn == 0 || scoreFirstTurn == 0)
@@ -514,22 +483,34 @@ void main_ai()
 				}
 
 				cout << endl;
-
-
 				//strToSendURA = L"0.1234567 5.4321";
 				if (useWebsocket)
 				{
 					wstring s = L"{\"CommandType\":1,\"Command\":\"PrintUmaAiResult\",\"Parameters\":[\"" + strToSendURA + L"\"]}";
 					//ws.send(s);
 				}
-
-
 			}
 		}
-		catch (...) {
+		catch (exception& e) {
+			cout << "\x1b[91m发生错误: " << endl << e.what() << endl;
 			cout << "\x1b[91m** 程序即将退出**\x1b[0m" << endl;
 			system("pause");
 		}
-
+		catch (...) {
+			cout << "\x1b[91m发生未知错误，请重启AI" << endl;
+			cout << "\x1b[91m** 程序即将退出**\x1b[0m" << endl;
+			system("pause");
+		}
 	}
+}
+catch (exception& e) {
+	cout << "\x1b[91mAI初始化时发生错误: " << endl << e.what() << endl;
+	cout << "\x1b[91m** 程序即将退出**\x1b[0m" << endl;
+	system("pause");
+}
+catch (...) {
+	cout << "\x1b[91mAI初始化时发生未知错误，请检查配置" << endl;
+	cout << "\x1b[91m** 程序即将退出**\x1b[0m" << endl;
+	system("pause");
+}
 }

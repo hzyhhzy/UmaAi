@@ -156,25 +156,27 @@ bool Game::loadGameFromJson(std::string jsonStr)
    // }
     
   }
+  /*
   catch (string e)
   {
     cout << "读取游戏信息json出错：" << e << endl;
     //cout << "-- json --" << endl << jsonStr << endl;
     return false;
   }
-  /*
+  */
+  
   catch (std::exception& e)
   {
-    cout << "读取游戏信息json出错：未知错误" << endl << e.what() << endl;
-    //cout << "-- json --" << endl << jsonStr << endl;
+    cout << "Json通信出错：" << endl << e.what() << endl;
+    cout << "-- json --" << endl << jsonStr << endl;
     return false;
   }
   catch (...)
   {
-    cout << "读取游戏信息json出错：未知错误"  << endl;
+    cout << "Json通信出错：未知错误"  << endl;
     return false;
   }
-  */
+  
 
   return true;
 }
