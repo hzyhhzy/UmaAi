@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "random": "cpp",
+        "*.ipp": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "vector": "cpp",
+        "thread": "cpp"
+    }
+}

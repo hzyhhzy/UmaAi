@@ -33,7 +33,7 @@ void SelfplayThread::run()
   {
     auto start = std::chrono::high_resolution_clock::now();
 
-    for (int g = 0; g < param.sampleNumEachFile; g++)
+    for (int g = 0; g < param.sampleNumEachFile; g++) 
       sampleData[g] = generateSingleSample();
     writeDataToFile();
 
@@ -52,7 +52,7 @@ TrainingSample SelfplayThread::generateSingleSample()
 
   SearchParam sp;
   if (randBool(rand, param.maxDepth_fullProb))
-    sp.maxDepth = TOTAL_TURN;
+    sp.maxDepth = TOTAL_TURN*2;
   else
   {
     sp.maxDepth = int(exp(param.maxDepth_logmean + normDistr(rand) * param.maxDepth_logstdev) + 0.5);
@@ -71,6 +71,13 @@ TrainingSample SelfplayThread::generateSingleSample()
 
 
   Game game = gameGenerator.get();
+
+  // Êý¾ÝÄÚÈÝ
+  cout << "The game turn is: " << game.turn << '\n';
+  for (int i = 0; i < 5; ++i)
+      cout << game.fiveStatus[i] << " ";
+  cout << endl;
+
   search.setParam(sp);
   search.runSearch(game, rand);
   TrainingSample res = search.exportTrainingSample(param.policyDelta);
@@ -80,9 +87,10 @@ TrainingSample SelfplayThread::generateSingleSample()
 
 void SelfplayThread::writeDataToFile()
 {
+
   nnInputBuf.resize(NNINPUT_CHANNELS_V1 * param.sampleNumEachFile);
   nnOutputBuf.resize(NNOUTPUT_CHANNELS_V1 * param.sampleNumEachFile);
-  assert(false);
+  //assert(false);
   //static_assert(sizeof(ModelOutputPolicyV1) + sizeof(ModelOutputValueV1) == sizeof(float) * NNOUTPUT_CHANNELS_V1);
   
   for (int i = 0; i < param.sampleNumEachFile; i++)

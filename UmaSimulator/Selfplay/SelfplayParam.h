@@ -4,16 +4,16 @@
 #include "../config.h"
 struct SelfplayParam
 {
-  int threadNum = 16;
-  int threadNumInner = 1;
-  int maxSampleNum = 1000 * 1024 * 16;
+  int threadNum = 4;
+  int threadNumInner = 4;
+  int maxSampleNum = 1 * 4 * 128;
 
 #if USE_BACKEND == BACKEND_LIBTORCH
   std::string modelPath = "./db/model_traced.pt";
   int batchsize = 1024;
 #elif USE_BACKEND == BACKEND_NONE
   std::string modelPath = "";
-  int batchsize = 1;
+  int batchsize = 16;
 #else
   std::string modelPath = "./db/model.txt";
   int batchsize = 1024;
@@ -25,23 +25,23 @@ struct SelfplayParam
   int searchN = 1024;
   int searchGroupSize = 1024;
   double searchCpuct = 1.0; 
-  double policyDelta = 100.0;//·ÖÊýÃ¿½µµÍ¶àÉÙ£¬policy±ä³É1/e±¶
+  double policyDelta = 100.0;//ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½Í¶ï¿½ï¿½Ù£ï¿½policyï¿½ï¿½ï¿?1/eï¿½ï¿½
 
   //radicalFactor=radicalFactor_scale * (1/pow(rand(),radicalFactor_pow) - 1)
   double radicalFactor_scale = 2.0;
   double radicalFactor_pow = 1.0;
   double radicalFactor_max = 50;
 
-  //maxDepth_fullProbµÄÑù±¾ËÑË÷µ½Õâ¾Ö½áÊø£¬ÆäËûµÄlog(maxDepth)~ÕýÌ¬·Ö²¼(logmean,logstdev)
+  //maxDepth_fullProbï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½log(maxDepth)~ï¿½ï¿½Ì¬ï¿½Ö²ï¿½(logmean,logstdev)
   double maxDepth_logmean = 2.3;
   double maxDepth_logstdev = 0.7;
   int maxDepth_min = 5;
   double maxDepth_fullProb = 1.0;
 
-  //Åä¿¨µÄËæ»ú·½Ê½
-  //0 ¹Ì¶¨¿¨×é¹Ì¶¨Âí¹Ì¶¨ÖÖÂí
-  //1 Ëæ»úÂí£¬¹Ì¶¨´øssrÓÑÈË£¬Ëæ»úÖÖÂí£¬Ëæ»úÑ¡¿¨¡¢Ô½Ç¿µÄ¿¨¸ÅÂÊÔ½´ó£¬
-  //2 ÔÚ1µÄ»ù´¡ÉÏ£¬Ëæ»úÂí¼Ó³É£¬¿¨µÄ²ÎÊýÒ²ÈÅ¶¯£¬Ëæ»ú´øÓÑÈË
+  //ï¿½ä¿¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê?
+  //0 ï¿½Ì¶ï¿½ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½ï¿½ï¿?
+  //1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½ssrï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½Ô½Ç¿ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ô½ï¿½ï¿½
+  //2 ï¿½ï¿½1ï¿½Ä»ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³É£ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½Ò²ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   int cardRandType = 2;
   
 };
