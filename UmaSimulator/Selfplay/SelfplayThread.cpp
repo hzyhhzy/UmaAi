@@ -33,7 +33,7 @@ void SelfplayThread::run()
   {
     auto start = std::chrono::high_resolution_clock::now();
 
-    for (int g = 0; g < param.sampleNumEachFile; g++) 
+    for (int g = 0; g < param.sampleNumEachFile; g++)
       sampleData[g] = generateSingleSample();
     writeDataToFile();
 

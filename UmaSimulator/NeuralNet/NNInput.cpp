@@ -316,6 +316,9 @@ void Person::getCardNNInputV1(float* buf, const Game& game, int index) const
         buf[7 + tr] = 1.0;
     }
   }
+
+  buf[7 + 5] = cardParam.isLink ? 1.0 : 0.0;
+
   cardParam.getCardParamNNInputV1(buf + NNINPUT_CHANNELS_PERSON_V1, game);
 }
 
@@ -419,28 +422,52 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   SetValue(buf,buf_ptr,isRacing?1.0:0.0);
 
   /*** 人物分布 ***/
-  // 理事长和记者
-  // 2*9=18 channels
-  for (int p = 0; p < 2; p++)
-  {
-    if (p == 0 && friend_type != 0)
-      continue;
-    buf[buf_ptr + p * 9] = persons[p + 6].friendship * 0.01;
-    buf[buf_ptr + p * 9 + 1] = persons[p + 6].friendship >= 40 ? 1.0 : 0.0;
-    buf[buf_ptr + p * 9 + 2] = persons[p + 6].friendship >= 60 ? 1.0 : 0.0;
-    buf[buf_ptr + p * 9 + 3] = persons[p + 6].friendship >= 80 ? 1.0 : 0.0;
-
-    //在哪个训练
-    for (int tr = 0; tr < 5; tr++)
-    {
-      for (int i = 0; i < 5; i++)
+  // 理事长羁绊和位置
+  if (friend_type == 0) {
+	  SetValue(buf, buf_ptr, friendship_noncard_yayoi * 0.01);
+	  SetValue(buf, buf_ptr, friendship_noncard_yayoi >= 40 ? 1.0 : 0.0);
+	  SetValue(buf, buf_ptr, friendship_noncard_yayoi >= 60 ? 1.0 : 0.0);
+	  SetValue(buf, buf_ptr, friendship_noncard_yayoi >= 80 ? 1.0 : 0.0);
+      for (int tr = 0; tr < 5; tr++)
       {
-        if (personDistribution[tr][i] == p + 6)
-          buf[buf_ptr + p * 9 + 4 + tr] = 1.0;
+          for (int i = 0; i < 5; i++)
+          {
+              if (personDistribution[tr][i] == 6)
+                  buf[buf_ptr + tr] = 1.0;
+          }
       }
+	  buf_ptr += 5;
+  }
+  else {
+      buf_ptr += 9;
+  }
+	  
+  // 记者羁绊和位置
+  SetValue(buf, buf_ptr, friendship_noncard_reporter * 0.01);
+  SetValue(buf, buf_ptr, friendship_noncard_reporter >= 40 ? 1.0 : 0.0);
+  SetValue(buf, buf_ptr, friendship_noncard_reporter >= 60 ? 1.0 : 0.0);
+  SetValue(buf, buf_ptr, friendship_noncard_reporter >= 80 ? 1.0 : 0.0);
+  for (int tr = 0; tr < 5; tr++)
+  {
+    for (int i = 0; i < 5; i++)
+    {
+      if (personDistribution[tr][i] == 7)
+        buf[buf_ptr + tr] = 1.0;
     }
   }
-  buf_ptr += 2 * 9;
+  buf_ptr += 5;
+  // 每个训练剩余的空位
+  for (int tr = 0; tr < 5; tr++)
+  {
+      int count = 0;
+	  for (int i = 0; i < 5; i++)
+	  {
+          if (personDistribution[tr][i] == 8)
+              count += 1;
+	  }
+      buf[buf_ptr + (5 - count)] = 1.0;
+      buf_ptr += 6;
+  }
 
   /*** 剧本相关 ***/
   // 菜原料数量
@@ -540,8 +567,6 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   for(int i=0;i<8;++i)
     SetValue(buf,buf_ptr, cook_train_material_num_extra[i]*0.02);
   
-
-  cout<<"Total channels:"<<buf_ptr<<endl;
 
   // return ;
 

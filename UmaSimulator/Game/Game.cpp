@@ -2043,13 +2043,17 @@ void Game::checkEventAfterTrain(std::mt19937_64& rand)
 
   //回合数+1
   turn++;
-  isRacing = isRacingTurn[turn];
-  gameStage = GameStage_beforeTrain;
+  
   if (turn >= TOTAL_TURN)
   {
     printEvents("育成结束!");
     printEvents("你的得分是：" + to_string(finalScore()));
   }
+  else {
+    isRacing = isRacingTurn[turn];
+    gameStage = GameStage_beforeTrain;
+  }
+  return;
 
 }
 void Game::maybeCookingMeeting()
