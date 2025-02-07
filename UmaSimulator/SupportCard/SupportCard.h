@@ -8,7 +8,7 @@
 #include <iostream>
 using json = nlohmann::json;
 
-class Game;
+struct Game;
 class CardTrainingEffect;
 
 struct SupportCard

@@ -3,7 +3,7 @@
 #include <random>
 #include <string>
 #include "../SupportCard/SupportCard.h"
-class Game;
+struct Game;
 
 
 enum PersonTypeEnum :int8_t
