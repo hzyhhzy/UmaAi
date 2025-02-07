@@ -37,15 +37,8 @@ Game GameGenerator::randomOpening()
     while (!GameDatabase::AllUmas.count(umaId))
       umaId = 100000 + (rand() % 200) * 100 + rand() % 2 + 1;
 
-    std::cout << "Generated umaId: " << umaId << std::endl;
-
     auto cards1 = getRandomCardset();
     for (int i = 0; i < 6; i++)cards[i] = cards1[i];
-
-    for (int i = 0; i < 6; i++) cards[i] = cards1[i];
-    std::cout << "Generated cards: ";
-    for (int i = 0; i < 6; i++) std::cout << cards[i] << " ";
-    std::cout << std::endl;
 
     //随机蓝因子和剧本因子
     {
@@ -237,9 +230,9 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
       if (newlevel > 5)newlevel = 5;
       if (newlevel < 1)newlevel = 1;
 
-      if (newlevel > 3 && game.turn < 48)
+      if (newlevel > 3 && game.turn <= 48)
         newlevel=3;
-      if (newlevel > 2 && game.turn < 24)
+      if (newlevel > 2 && game.turn <= 24)
         newlevel=2;
 
       game.cook_farm_level[i] = newlevel;
@@ -332,9 +325,6 @@ Game GameGenerator::get()
     else
     {
       nextGamePointer += 1;
-
-      printf("make use of game %d\n", nextGamePointer - 1);
-
       return gameBuf[nextGamePointer - 1];
     }
   }

@@ -58,8 +58,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     #data settings
-    parser.add_argument('--tdatadir', type=str, default='./train.npz', help='train dataset path: dir include dataset files or single dataset file')
-    parser.add_argument('--vdatadir', type=str, default='./val.npz', help='validation dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--tdatadir', type=str, default='../sp_gen0/selfplay/all.npz', help='train dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--vdatadir', type=str, default='../sp_gen0/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
     parser.add_argument('--maxvalsamp', type=int, default=1000000, help='validation sample num')
     parser.add_argument('--maxstep', type=int, default=5000000000, help='max step to train')
     parser.add_argument('--savestep', type=int, default=2000, help='step to save and validation')
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     parser.add_argument('--wdscale', type=float, default=1.0, help='weight decay')
     parser.add_argument('--rollbackthreshold', type=float, default=0.05, help='if loss increased this value, roll back 2*infostep steps')
     args = parser.parse_args()
-    
+    #print("用的旧版数据，别忘了改回来")
     if(args.gpu==-1):
         device=torch.device('cpu')
     else:
@@ -167,7 +167,7 @@ if __name__ == '__main__':
         lrhead = 5e-4
         wd = 1e-5
         wdhead = 1e-5
-        # lowl2param是一些密集型神经网络参数(mlp,cnn�?)，对lr和weightdecay更敏感，使用float32计算，几乎不需要weightdecay
+        # lowl2param是一些密集型神经网络参数(mlp,cnn等)，对lr和weightdecay更敏感，使用float32计算，几乎不需要weightdecay
         # otherparam需要高的weightdecay
         headparam = list(map(id, model.inputhead.parameters()))
         otherparam = list(filter(lambda p: id(p) not in headparam, model.parameters()))
@@ -226,7 +226,7 @@ if __name__ == '__main__':
         for _ , (x,label) in enumerate(tDataloader):
             if(x.shape[0]!=args.batchsize): #只要完整的batch
                 continue
-            if(random.random()>args.sampling): #随机舍去1-args.sampling的数�?
+            if(random.random()>args.sampling): #随机舍去1-args.sampling的数据
                 continue
             # data
             x = x.to(device)
