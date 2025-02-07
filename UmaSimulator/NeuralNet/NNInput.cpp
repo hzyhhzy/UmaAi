@@ -335,8 +335,8 @@ void NNInput_init(float * buf) { //初始化NNInput
   return ;
 }
 
-void SetValue(float * buf, int &buf_ptr, int value) { //设置值
-  buf[buf_ptr] = 1.0 * value;
+void SetValue(float * buf, int &buf_ptr, float value) { //设置值
+  buf[buf_ptr] = value;
   buf_ptr++;
   return ;
 }
@@ -356,17 +356,19 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 
   /*** 参数相关设置 ***/
   //ptScoreRate
-  SetValue(buf,buf_ptr,ptScoreRate-2); 
+  SetValue(buf, buf_ptr, ptScoreRate - 2.0);
+  SetValue(buf, buf_ptr, hintPtRate - 5.0);
+  SetValue(buf, buf_ptr, (eventStrength - 20) * 0.1);
 
   /*** 基本状态 ***/
   // 是否为link马
-  SetValue(buf,buf_ptr,isLinkUma); 
+  SetValue(buf,buf_ptr,isLinkUma ? 1.0 : 0.0);
   // 是否为比赛回合
-  for(int i=0;i<TOTAL_TURN;++i) 
-    SetValue(buf,buf_ptr,isRacingTurn[i]?1.0:0.0);
+  for (int i = 0; i < TOTAL_TURN; ++i)
+    SetValue(buf, buf_ptr, isRacingTurn[i] ? 1.0 : 0.0);
   // 五维属性的成长率
-  for(int i=0;i<5;++i) 
-    SetValue(buf,buf_ptr,fiveStatusBonus[i]);
+  for (int i = 0; i < 5; ++i)
+    SetValue(buf, buf_ptr, 0.1 * float(fiveStatusBonus[i]));
   //第几回合
   assert(turn < TOTAL_TURN);
   buf[buf_ptr + turn] = 1.0;
@@ -374,30 +376,35 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   // 游戏阶段
   SetValue(buf,buf_ptr,gameStage);
   // 体力
-  SetValue(buf,buf_ptr,vital);
+  SetValue(buf,buf_ptr,vital*0.02);
   // 体力上限
-  SetValue(buf,buf_ptr,maxVital);
+  SetValue(buf,buf_ptr,(maxVital-100.0)*0.10);
   // 干劲
-  SetValue(buf,buf_ptr,motivation);
+  buf[buf_ptr + motivation - 1] = 1.0;
+  buf_ptr += 5;
   // 五维属性
   for(int i=0;i<5;++i) 
-    SetValue(buf,buf_ptr,fiveStatus[i]);
+    SetValue(buf,buf_ptr,fiveStatus[i] * 0.002);
   // 五维属性上限
   for(int i=0;i<5;++i) 
-    SetValue(buf,buf_ptr,fiveStatusLimit[i]);
+    SetValue(buf,buf_ptr,(fiveStatusLimit[i] - GameConstants::BasicFiveStatusLimit[i])*0.01);
   // 技能分数
-  SetValue(buf,buf_ptr,getSkillScore());
+  SetValue(buf,buf_ptr,getSkillScore() * 0.001);
   // 训练等级计数
-  for(int i=0;i<5;++i) 
-    SetValue(buf,buf_ptr,trainLevelCount[i]);
+  for (int i = 0; i < 5; ++i)
+    SetValue(buf, buf_ptr, (trainLevelCount[i] % 4) * 0.25);
   // 当前训练等级
-  for(int i=0;i<5;++i) 
-    SetValue(buf,buf_ptr,getTrainingLevel(i));
+  for (int i = 0; i < 5; ++i)
+  {
+    buf[buf_ptr + (trainLevelCount[i] / 4)] = 1.0;
+    buf_ptr += 5;
+  }
 
   /*** Buff状态设置 ***/
   // 失败率改变量
-  SetValue(buf,buf_ptr,failureRateBias<0?1.0:0.0); //是否练习上手
-  SetValue(buf,buf_ptr,failureRateBias>0?1.0:0.0); //是否练习下手
+  SetValue(buf, buf_ptr, failureRateBias < 0 ? 1.0 * failureRateBias : 0.0); //是否练习上手
+  SetValue(buf, buf_ptr, failureRateBias > 0 ? 1.0 * failureRateBias : 0.0); //是否练习下手
+  
   // 是否切者
   SetValue(buf,buf_ptr,isQieZhe?1.0:0.0);
   // 是否爱娇
@@ -423,6 +430,10 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   // 是否在比赛
   SetValue(buf,buf_ptr,isRacing?1.0:0.0);
 
+
+  //buf[buf_ptr + friend_type] = 1.0;
+  //buf_ptr += 3;
+
   /*** 人物分布 ***/
   // 理事长羁绊和位置
   if (!isRacing && friend_type == 0) {
@@ -430,14 +441,14 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 	  SetValue(buf, buf_ptr, friendship_noncard_yayoi >= 40 ? 1.0 : 0.0);
 	  SetValue(buf, buf_ptr, friendship_noncard_yayoi >= 60 ? 1.0 : 0.0);
 	  SetValue(buf, buf_ptr, friendship_noncard_yayoi >= 80 ? 1.0 : 0.0);
-      for (int tr = 0; tr < 5; tr++)
-      {
-          for (int i = 0; i < 5; i++)
-          {
-              if (personDistribution[tr][i] == 6)
-                  buf[buf_ptr + tr] = 1.0;
-          }
-      }
+    for (int tr = 0; tr < 5; tr++)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (personDistribution[tr][i] == PSID_noncardYayoi)
+                buf[buf_ptr + tr] = 1.0;
+        }
+    }
 	  buf_ptr += 5;
   }
   else {
@@ -445,7 +456,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   }
 	  
   // 记者羁绊和位置
-  if (isRacing) {
+  if (!isRacing) {
       SetValue(buf, buf_ptr, friendship_noncard_reporter * 0.01);
       SetValue(buf, buf_ptr, friendship_noncard_reporter >= 40 ? 1.0 : 0.0);
       SetValue(buf, buf_ptr, friendship_noncard_reporter >= 60 ? 1.0 : 0.0);
@@ -454,7 +465,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
       {
           for (int i = 0; i < 5; i++)
           {
-              if (personDistribution[tr][i] == 7)
+              if (personDistribution[tr][i] == PSID_noncardReporter)
                   buf[buf_ptr + tr] = 1.0;
           }
       }
@@ -470,10 +481,10 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
           int count = 0;
           for (int i = 0; i < 5; i++)
           {
-              if (personDistribution[tr][i] == 8)
+              if (personDistribution[tr][i] == -1)
                   count += 1;
           }
-          buf[buf_ptr + (5 - count)] = 1.0;
+          buf[buf_ptr + count] = 1.0;
           buf_ptr += 6;
       }
   }
@@ -483,18 +494,47 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 
   /*** 剧本相关 ***/
   // 菜原料数量
-  for(int i=0;i<5;++i) 
-    SetValue(buf,buf_ptr,cook_material[i]*0.001); // 菜量范围在[0,999]
+  for (int i = 0; i < 5; ++i)
+  {
+    int d = cook_material[i];
+    SetValue(buf, buf_ptr, d * 0.01); // 菜量范围在[0,999]
+    SetValue(buf, buf_ptr, d >= 25 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 40 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 50 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 80 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 150 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 250 ? 1.0 : 0.0);
+  }
   // 料理pt
-  SetValue(buf,buf_ptr,cook_dish_pt*0.0002); // 料理pt范围在[0,50000]
+  // 训练等级之类的都是取决于吃菜前的pt，所以输入cook_dish_pt_turn_begin而不是cook_dish_pt
+  {
+    int d = cook_dish_pt_turn_begin > 12000 ? 12000 : cook_dish_pt;
+    SetValue(buf, buf_ptr, d * 0.0002); // 料理pt范围在[0,12000]
+    SetValue(buf, buf_ptr, d >= 2000 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 7000 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 12000 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 1500 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 2500 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 5000 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 10000 ? 1.0 : 0.0);
+    SetValue(buf, buf_ptr, d >= 12000 ? 1.0 : 0.001 * (d % 1500));
+  }
   // 回合开始前的料理pt
-  SetValue(buf,buf_ptr,cook_dish_pt_turn_begin*0.0002); // 料理pt范围在[0,50000]
+  //SetValue(buf,buf_ptr,*0.0002); // 料理pt范围在[0,50000]
   // 农田等级
   for(int i=0;i<5;++i)
     buf[buf_ptr+i*5+cook_farm_level[i]] = 1.0;
   buf_ptr += 25;
   // 农田升级pt
-  SetValue(buf,buf_ptr,cook_farm_pt*0.001); // 农田升级pt范围在[0,1000]
+  SetValue(buf, buf_ptr, cook_farm_pt * 0.002); // 农田升级pt范围在[0,1000]
+  SetValue(buf, buf_ptr, cook_farm_pt >= 100 ? 1.0 : 0.0);
+  SetValue(buf, buf_ptr, cook_farm_pt >= 180 ? 1.0 : 0.0);
+  SetValue(buf, buf_ptr, cook_farm_pt >= 220 ? 1.0 : 0.0);
+  SetValue(buf, buf_ptr, cook_farm_pt >= 250 ? 1.0 : 0.0);
+  SetValue(buf, buf_ptr, cook_farm_pt >= 360 ? 1.0 : 0.0);
+  SetValue(buf, buf_ptr, cook_farm_pt >= 440 ? 1.0 : 0.0);
+  SetValue(buf, buf_ptr, cook_farm_pt >= 540 ? 1.0 : 0.0);
+  SetValue(buf, buf_ptr, cook_farm_pt >= 660 ? 1.0 : 0.0);
   // 是否大成功
   SetValue(buf,buf_ptr,cook_dish_sure_success?1.0:0.0);
   // 当前菜
@@ -519,12 +559,15 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     SetValue(buf,buf_ptr,cook_harvest_extra[i]*0.005); // 收获额外范围在[0,160]
   // 各个Action获得菜的种类
   for(int i=0;i<8;++i) {
-    buf[buf_ptr+cook_train_material_type[i]] = 1.0;
-    buf_ptr += 8;
+    if (isLegal(Action(i)))
+    {
+      buf[buf_ptr + cook_train_material_type[i]] = 1.0;
+      buf_ptr += 5;
+      SetValue(buf, buf_ptr, cook_train_green[i] ? 1.0 : 0.0);
+    }
+    else
+      buf_ptr += 6;
   }
-  // 是否绿菜
-  for(int i=0;i<8;++i)
-    SetValue(buf,buf_ptr,cook_train_green[i]?1.0:0.0);
   // 比赛回合的菜种类
   if(isRacing)
     buf[buf_ptr+cook_main_race_material_type] = 1.0;
@@ -537,8 +580,8 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   // 存在友人卡时，友人卡的相关状态
   if(friend_type != 0) {
     // 友人卡的编号
-    buf[buf_ptr+friend_personId] = 1.0;
-    buf_ptr += 6;
+    //buf[buf_ptr+friend_personId] = 1.0;
+    //buf_ptr += 6;
     // 友人卡的状态
     buf[buf_ptr+friend_stage] = 1.0;
     buf_ptr += 3;
@@ -546,12 +589,12 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
     buf[buf_ptr+friend_outgoingUsed] = 1.0;
     buf_ptr += 6;
     // 友人卡的体力恢复倍率
-    SetValue(buf,buf_ptr,friend_vitalBonus);
+    SetValue(buf,buf_ptr,friend_vitalBonus - 1.0);
     // 友人卡的事件效果倍率
-    SetValue(buf,buf_ptr,friend_statusBonus);
+    SetValue(buf,buf_ptr,friend_statusBonus - 1.0);
   }
   else{
-    buf_ptr += 17;
+    buf_ptr += 11;
   }
 
   /*** 训练相关的信息 ***/
@@ -563,19 +606,18 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
           }
           SetValue(buf, buf_ptr, trainVitalChange[i] * 0.05);
       }
+
+      // 训练失败率
+      for (int i = 0; i < 5; ++i)
+        SetValue(buf, buf_ptr, failRate[i] * 0.01);
+
+      // 训练是否闪彩
+      for (int i = 0; i < 5; ++i)
+        SetValue(buf, buf_ptr, isTrainShining[i] ? 1.0 : 0.0);
   }
   else {
-	  buf_ptr += 35;
+	  buf_ptr += 45;
   }
-  // 训练失败率
-  if (!isRacing)
-      for(int i=0;i<5;++i)
-        SetValue(buf,buf_ptr,failRate[i]*0.01);
-  else
-	  buf_ptr += 5;
-  // 训练是否闪彩
-  for(int i=0;i<5;++i)
-    SetValue(buf,buf_ptr,isTrainShining[i]?1.0:0.0);
   // 使用料理的大成功率
   SetValue(buf,buf_ptr,cook_dishpt_success_rate*0.01);
   // 料理pt训练加成
@@ -585,12 +627,16 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   // 料理pt得意率加成
   SetValue(buf,buf_ptr,cook_dishpt_deyilv_bonus*0.05);
   // 各个Action获得的额外菜个数
-  for(int i=0;i<8;++i)
-    SetValue(buf,buf_ptr, cook_train_material_num_extra[i]*0.02);
-  
+  for (int i = 0; i < 8; ++i)
+  {
+    if (isLegal(Action(i)))
+      SetValue(buf, buf_ptr, cook_train_material_num_extra[i] * 0.02);
+    else
+      buf_ptr++;
+  }
 
   // return ;
-
+  //cout <<"NNINPUT_CHANNELS_GAMEGLOBAL_V1 should = "<< buf_ptr << endl;
   assert(buf_ptr == NNINPUT_CHANNELS_GAMEGLOBAL_V1);
 
   float* cardBuf = buf + NNINPUT_CHANNELS_GAMEGLOBAL_V1;

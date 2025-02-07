@@ -73,10 +73,10 @@ TrainingSample SelfplayThread::generateSingleSample()
   Game game = gameGenerator.get();
 
   // Êı¾İÄÚÈİ
-  cout << "The game turn is: " << game.turn << '\n';
-  for (int i = 0; i < 5; ++i)
-      cout << game.fiveStatus[i] << " ";
-  cout << endl;
+  //cout << "The game turn is: " << game.turn << '\n';
+  //for (int i = 0; i < 5; ++i)
+  //    cout << game.fiveStatus[i] << " ";
+  //cout << endl;
 
   search.setParam(sp);
   search.runSearch(game, rand);

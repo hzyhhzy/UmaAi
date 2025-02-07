@@ -129,6 +129,9 @@ Game GameGenerator::randomOpening()
   if (game.ptScoreRate > 3.0)game.ptScoreRate = 3.0;
   if (game.ptScoreRate < 1.5)game.ptScoreRate = 1.5;
 
+
+  game.hintPtRate += 1.0 * normDistr(rand);
+
   //if (rand() % 8 == 0)
   //  game.isQieZhe = true;
   if (rand() % 4 == 0) //Á·Ï°ÉÏÊÖ
