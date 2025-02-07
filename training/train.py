@@ -18,8 +18,21 @@ import copy
 backup_checkpoints=[50000*i for i in range(500)]
 
 
-if not os.path.exists("../saved_models"):
-    os.mkdir("../saved_models")
+def save_checkpoint(model, optimizer, path):
+    savedic={'totalstep': totalstep,
+            'state_dict': model.state_dict(),
+            'model_type': model.model_type,
+            'model_param':model.model_param}
+    if(optimizer is not None):
+        savedic['optimizer_state_dict']=optimizer.state_dict()
+
+    torch.save(
+        savedic,
+        path)
+    print('Model saved in {}\n'.format(path))
+
+if not os.path.exists("./saved_models"):
+    os.mkdir("./saved_models")
 
 def BCEfunction(x,y):
     return torch.nn.functional.softplus(x)-x*y + torch.log(y+1e-10)*y+torch.log(1-y+1e-10)*(1-y)
@@ -41,16 +54,16 @@ def calculateLoss(output,label):
     #print(torch.softmax(output_policy[:,:10],dim=1), label_policy[:,:10])
 
     huberloss=nn.HuberLoss(reduction='mean',delta=1.0)
-    vloss1 = 0.2*huberloss(output_value[:,0],(label_value[:,0]-38000)/300)
-    vloss2 = 0.4*huberloss(output_value[:,1],(label_value[:,1]-0)/150)
-    vloss3 = 0.2*huberloss(output_value[:,2],(label_value[:,2]-38000)/300)
+    vloss1 = 0.5*huberloss(output_value[:,0],(label_value[:,0]-Value_Mean)/Value_Scale)
+    vloss2 = 1.0*huberloss(output_value[:,1],(label_value[:,1]-0)/Valuevar_Scale)
+    vloss3 = 0.5*huberloss(output_value[:,2],(label_value[:,2]-Value_Mean)/Value_Scale)
     vloss=vloss1+vloss2+vloss3
 
     ploss1=cross_entropy_loss(output_policy,label_policy)
     ploss = ploss1
 
-    if(random.randint(0,1000)==0):
-        print(f"{vloss1.item():.4f} {vloss2.item():.4f} {vloss3.item():.4f} {ploss1.item():.4f} ")
+    #if(random.randint(0,1000)==0):
+    #    print(f"vloss items = {vloss1.item():.4f} {vloss2.item():.4f} {vloss3.item():.4f} {ploss1.item():.4f} ")
     return vloss,ploss
 
 
@@ -58,9 +71,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     #data settings
-    parser.add_argument('--tdatadir', type=str, default='../sp_gen0/selfplay/all.npz', help='train dataset path: dir include dataset files or single dataset file')
-    parser.add_argument('--vdatadir', type=str, default='../sp_gen0/selfplay/val.npz', help='validation dataset path: dir include dataset files or single dataset file')
-    parser.add_argument('--maxvalsamp', type=int, default=1000000, help='validation sample num')
+    parser.add_argument('--tdatadir', type=str, default='./tdata.npz', help='train dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--vdatadir', type=str, default='./vdata.npz', help='validation dataset path: dir include dataset files or single dataset file')
+    parser.add_argument('--maxvalsamp', type=int, default=32768, help='validation sample num')
     parser.add_argument('--maxstep', type=int, default=5000000000, help='max step to train')
     parser.add_argument('--savestep', type=int, default=2000, help='step to save and validation')
     parser.add_argument('--infostep', type=int, default=500, help='step to logger')
@@ -85,11 +98,14 @@ if __name__ == '__main__':
     #training parameters
     parser.add_argument('--gpu', type=int,
                         default=0, help='which gpu, -1 means cpu')
+    parser.add_argument('--datathread', type=int,
+                        default=1, help='how many threads for dataloader (windows has some bugs)')
     parser.add_argument('--batchsize', type=int,
-                        default=1024, help='batch size')
+                        default=2048, help='batch size')
     #parser.add_argument('--lr', type=float, default=2e-3, help='learning rate')
     parser.add_argument('--lrscale', type=float, default=1.0, help='learning rate scale')
     parser.add_argument('--wdscale', type=float, default=1.0, help='weight decay')
+    parser.add_argument('--gradclipscale', type=float, default=1.0, help='grad clip')
     parser.add_argument('--rollbackthreshold', type=float, default=0.05, help='if loss increased this value, roll back 2*infostep steps')
     args = parser.parse_args()
     #print("用的旧版数据，别忘了改回来")
@@ -129,7 +145,7 @@ if __name__ == '__main__':
                 vdata_files.extend(filenames)
     print("Finished counting data")
 
-    basepath = f'../saved_models/{args.savename}/'
+    basepath = f'./saved_models/{args.savename}/'
     if not os.path.exists(basepath):
         os.mkdir(basepath)
     backuppath=os.path.join(basepath,"backup")
@@ -144,6 +160,7 @@ if __name__ == '__main__':
     val_writer=SummaryWriter(os.path.join(tensorboardpath,"val"))
 
     print("Building model..............................................................................................")
+    optimizer_state_dict_initial=None
     modelpath=os.path.join(basepath,"model.pth")
     if os.path.exists(modelpath) and (not args.new) and (args.savename != 'null'):
         modeldata = torch.load(modelpath,map_location="cpu")
@@ -152,6 +169,9 @@ if __name__ == '__main__':
         model = ModelDic[model_type](*model_param).to(device)
 
         model.load_state_dict(modeldata['state_dict'])
+        if("optimizer_state_dict" in modeldata):
+            optimizer_state_dict_initial=modeldata["optimizer_state_dict"]
+            print("Loaded optimizer state dict")
         totalstep = modeldata['totalstep']
         print(f"Loaded model: type={model_type}, size={model_param}, totalstep={totalstep}")
     else:
@@ -163,43 +183,50 @@ if __name__ == '__main__':
     startstep=totalstep
     if model_type == 'res' or model_type == 'tl':
 
-        lr = 1.5e-3
-        lrhead = 5e-4
-        wd = 1e-5
-        wdhead = 1e-5
+        lr = 1e-3
+        lrhead = 1e-3
+        wd = 1e-3
+        wdhead = 1e-3
         # lowl2param是一些密集型神经网络参数(mlp,cnn等)，对lr和weightdecay更敏感，使用float32计算，几乎不需要weightdecay
         # otherparam需要高的weightdecay
         headparam = list(map(id, model.inputhead.parameters()))
         otherparam = list(filter(lambda p: id(p) not in headparam, model.parameters()))
         headparam = list(filter(lambda p: id(p) in headparam, model.parameters()))
-        optimizer = optim.Adam([{'params': otherparam},
+        optimizer = optim.AdamW([{'params': otherparam},
                                 {'params': headparam, 'lr': lrhead*args.lrscale, 'weight_decay': wdhead*args.wdscale}],
                                lr=lr*args.lrscale, weight_decay=wd*args.wdscale)
     elif model_type == 'tf' or model_type == 'tf2' or model_type == 'tfmlp':
 
-        lr = 5e-4
-        lrhead = 5e-4
-        lrtf = 5e-4
-        wd = 2e-5
-        wdhead = 2e-5
+        lr = 1e-3
+        lrhead = 1e-3
+        lrtf = 1e-3
+        wd = 1e-3
+        wdhead = 1e-3
         headparam = list(map(id, model.inputhead.parameters()))
         transformerparam=list(map(id, model.transformer_encoder.parameters()))
         otherparam = list(filter(lambda p: id(p) not in headparam and id(p) not in transformerparam, model.parameters()))
         headparam = list(filter(lambda p: id(p) in headparam, model.parameters()))
         transformerparam = list(filter(lambda p: id(p) in transformerparam, model.parameters()))
-        optimizer = optim.Adam([{'params': otherparam},
+        optimizer = optim.AdamW([{'params': otherparam},
                                 {'params': headparam, 'lr': lrhead*args.lrscale, 'weight_decay': wdhead*args.wdscale},
                                 {'params': transformerparam, 'lr': lrtf*args.lrscale, 'weight_decay': wd*args.wdscale}],
                                lr=lr*args.lrscale, weight_decay=wd*args.wdscale)
 
     elif model_type == 'em' or model_type == 'ems' or model_type == 'ems2' or model_type == 'ems3' or model_type == 'emsf' or model_type == 'emsm' or model_type == 'emsb':
-        lr = 7e-4
-        wd = 1e-5
-        optimizer = optim.Adam(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)
+        lr = 1e-3
+        wd = 1e-3
+        optimizer = optim.AdamW(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)
     else:
-        lr = 7e-4
-        wd = 1e-5
-        optimizer = optim.Adam(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)
+        lr = 1e-3
+        wd = 1e-3
+        optimizer = optim.AdamW(model.parameters(),lr=lr*args.lrscale,weight_decay=wd*args.wdscale)
+
+
+    if optimizer_state_dict_initial is not None:
+        # 复制优化器状态，但不复制学习率等参数
+        optimizer_state_dict_initial['param_groups']=optimizer.state_dict()['param_groups']
+        optimizer.load_state_dict(optimizer_state_dict_initial)
+
     model.train()
 
     #for rollbacking if loss explodes
@@ -211,7 +238,7 @@ if __name__ == '__main__':
     modelbackup2_loss=1e10
 
     time0=time.time()
-    loss_record_init=[0,0,0,1e-30,0,0]
+    loss_record_init=[0,0,0,1e-30,0,0,0,0]
     loss_record=loss_record_init.copy()
     print("Start Training..............................................................................................")
     while True:
@@ -221,7 +248,7 @@ if __name__ == '__main__':
             #print(f"Selected training file: {tdata_file}")
             tDataset = trainset(tdata_file)
             #print(f"{tDataset.__len__()} rows")
-            tDataloader = DataLoader(tDataset, shuffle=True, batch_size=args.batchsize)
+            tDataloader = DataLoader(tDataset, shuffle=True, batch_size=args.batchsize, pin_memory=True, num_workers=args.datathread)
 
         for _ , (x,label) in enumerate(tDataloader):
             if(x.shape[0]!=args.batchsize): #只要完整的batch
@@ -250,8 +277,8 @@ if __name__ == '__main__':
 
             loss = 0.0*vloss+1.0*ploss
             if(random.random()<=args.valuesampling):
-                loss=1.0*vloss+1.0*ploss
-            loss_record[0] += (vloss.detach().item() + ploss.detach().item())
+                loss=Vloss_Scale*vloss+1.0*ploss
+            loss_record[0] += loss.detach().item()
             loss_record[1] += vloss.detach().item()
             loss_record[2] += ploss.detach().item()
             loss_record[3] += 1
@@ -259,6 +286,15 @@ if __name__ == '__main__':
             loss_record[5] += p1_valueDif / args.batchsize
 
             loss.backward()
+            default_grad_clip=500
+            gradclipscale=args.gradclipscale if args.gradclipscale > 0 else 1e8
+            gnorm_cap=args.gradclipscale*default_grad_clip
+            gnorm_batch = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=gnorm_cap)
+            exgnorm_batch = max(0.0, gnorm_batch - gnorm_cap)
+            loss_record[6] += gnorm_batch
+            loss_record[7] += exgnorm_batch
+
+
             optimizer.step()
 
             # logs
@@ -272,14 +308,18 @@ if __name__ == '__main__':
                 ploss_train=loss_record[2]/loss_record[3]
                 p1acc_train=loss_record[4]/loss_record[3]
                 p1dif_train=loss_record[5]/loss_record[3]
-                print("name: {}, time: {:.2f} s, step: {}, totalloss: {:.4f}, vloss: {:.4f}, ploss: {:.4f}, p1acc: {:.2f}%, p1dif: {:.2f}"
-                      .format(args.savename,time_used,totalstep,totalloss_train,vloss_train,ploss_train,100*p1acc_train,p1dif_train))
+                gnorm_train=loss_record[6]/loss_record[3]
+                exgnorm_train=loss_record[7]/loss_record[3]
+                print("name: {}, time: {:.2f} s, step: {}, totalloss: {:.4f}, vloss: {:.4f}, ploss: {:.4f}, p1acc: {:.2f}%, p1dif: {:.2f}, gnorm: {:.2f}, exgnorm: {:.2f}"
+                      .format(args.savename,time_used,totalstep,totalloss_train,vloss_train,ploss_train,100*p1acc_train,p1dif_train,gnorm_train,exgnorm_train))
                 train_writer.add_scalar("steps_each_second",loss_record[3]/time_used,global_step=totalstep)
                 train_writer.add_scalar("totalloss",totalloss_train,global_step=totalstep)
                 train_writer.add_scalar("vloss",vloss_train,global_step=totalstep)
                 train_writer.add_scalar("ploss",ploss_train,global_step=totalstep)
                 train_writer.add_scalar("p1acc",p1acc_train,global_step=totalstep)
                 train_writer.add_scalar("p1dif",p1dif_train,global_step=totalstep)
+                train_writer.add_scalar("gnorm",gnorm_train,global_step=totalstep)
+                train_writer.add_scalar("exgnorm",exgnorm_train,global_step=totalstep)
 
                 loss_record = loss_record_init.copy()
 
@@ -304,22 +344,12 @@ if __name__ == '__main__':
             if((totalstep % args.savestep == 0) or (totalstep-startstep==args.maxstep) or (totalstep in backup_checkpoints)):
 
                 print(f"Finished training {totalstep} steps")
-                torch.save(
-                    {'totalstep': totalstep,
-                     'state_dict': model.state_dict(),
-                     'model_type': model.model_type,
-                     'model_param':model.model_param},
-                    modelpath)
+                save_checkpoint(model=model,optimizer=optimizer,path=modelpath)
                 print('Model saved in {}\n'.format(modelpath))
 
                 if(totalstep in backup_checkpoints):
                     modelpath_backup=os.path.join(backuppath,str(totalstep)+".pth")
-                    torch.save(
-                        {'totalstep': totalstep,
-                         'state_dict': model.state_dict(),
-                         'model_type': model.model_type,
-                         'model_param':model.model_param},
-                        modelpath_backup)
+                    save_checkpoint(model=model,optimizer=optimizer,path=modelpath_backup)
                     print('Model saved in {}\n'.format(modelpath_backup))
 
 
@@ -330,7 +360,7 @@ if __name__ == '__main__':
                     print(f"Selected validation file: {vdata_file}")
                     vDataset = trainset(vdata_file)
                     print(f"{vDataset.__len__()} rows")
-                    vDataloader = DataLoader(vDataset, shuffle=False, batch_size=args.batchsize)
+                    vDataloader = DataLoader(vDataset, shuffle=False, batch_size=args.batchsize, pin_memory=True, num_workers=args.datathread)
                     loss_record_val = loss_record_init.copy()
                     vsamp=0
                     model.eval()
@@ -357,9 +387,9 @@ if __name__ == '__main__':
                                 p1_predictedValues + 0.01)).sum().item()
                             p1_correct = (p1_predicted == p1_labels).sum().item()
 
-                            loss = 1.0*vloss+1.0*ploss
+                            loss = Vloss_Scale*vloss+1.0*ploss
 
-                            loss_record_val[0]+=(vloss.detach().item()+ploss.detach().item())
+                            loss_record_val[0]+=loss.detach().item()
                             loss_record_val[1]+=vloss.detach().item()
                             loss_record_val[2]+=ploss.detach().item()
                             loss_record_val[3]+=1
@@ -376,14 +406,23 @@ if __name__ == '__main__':
                     ploss_val = loss_record_val[2] / loss_record_val[3]
                     p1acc_val = loss_record_val[4] / loss_record_val[3]
                     p1dif_val = loss_record_val[5] / loss_record_val[3]
-                    print("Validation: name: {}, time: {:.2f} s, step: {}, totalloss: {:.4f}, vloss: {:.4f}, ploss: {:.4f}, p1acc: {:.2f}%, p1dif: {:.2f}"
-                          .format(args.savename, time_used, totalstep, totalloss_val, vloss_val, ploss_val, p1acc_val*100,p1dif_val))
+
+                    # 计算模型权重范数
+                    weight_norm = 0.0
+                    for param in model.parameters():
+                        if param.requires_grad:
+                            weight_norm += torch.norm(param).item()**2
+                    weight_norm = weight_norm**0.5
+
+                    print("Validation: name: {}, time: {:.2f} s, step: {}, totalloss: {:.4f}, vloss: {:.4f}, ploss: {:.4f}, p1acc: {:.2f}%, p1dif: {:.2f}, weight_norm: {:.2f}"
+                          .format(args.savename, time_used, totalstep, totalloss_val, vloss_val, ploss_val, p1acc_val*100,p1dif_val,weight_norm))
                     val_writer.add_scalar("steps_each_second", loss_record[3] / time_used, global_step=totalstep)
                     val_writer.add_scalar("totalloss", totalloss_val, global_step=totalstep)
                     val_writer.add_scalar("vloss", vloss_val, global_step=totalstep)
                     val_writer.add_scalar("ploss", ploss_val, global_step=totalstep)
                     val_writer.add_scalar("p1acc", p1acc_val, global_step=totalstep)
                     val_writer.add_scalar("p1dif",p1dif_val,global_step=totalstep)
+                    val_writer.add_scalar("weight_norm", weight_norm, global_step=totalstep)
 
                     model.train()
 

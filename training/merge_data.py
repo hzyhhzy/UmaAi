@@ -1,7 +1,8 @@
 import numpy as np
 import os
 
-dir='./val'
+#dir='./vdata'
+dir='./tdata'
 # Initialize lists to store data
 x_list = []
 label_list = []
@@ -19,4 +20,4 @@ label_combined = np.vstack(label_list)
 
 print(x_combined.shape[0], "rows")
 # Save the combined arrays to a npz file
-np.savez('./val.npz', x=x_combined, label=label_combined)
+np.savez_compressed('./tdata.npz', x=x_combined, label=label_combined)
