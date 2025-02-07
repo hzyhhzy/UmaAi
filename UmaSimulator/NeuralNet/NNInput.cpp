@@ -308,13 +308,15 @@ void Person::getCardNNInputV1(float* buf, const Game& game, int index) const
   //友人团队卡的状态在全局变量里输入
   
   //在哪个训练
-  for (int tr = 0; tr < 5; tr++)
-  {
-    for (int i = 0; i < 5; i++)
-    {
-      if (game.personDistribution[tr][i] == index)
-        buf[7 + tr] = 1.0;
-    }
+  if (!game.isRacing) {
+      for (int tr = 0; tr < 5; tr++)
+      {
+          for (int i = 0; i < 5; i++)
+          {
+              if (game.personDistribution[tr][i] == index)
+                  buf[7 + tr] = 1.0;
+          }
+      }
   }
 
   buf[7 + 5] = cardParam.isLink ? 1.0 : 0.0;
@@ -423,7 +425,7 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 
   /*** 人物分布 ***/
   // 理事长羁绊和位置
-  if (friend_type == 0) {
+  if (!isRacing && friend_type == 0) {
 	  SetValue(buf, buf_ptr, friendship_noncard_yayoi * 0.01);
 	  SetValue(buf, buf_ptr, friendship_noncard_yayoi >= 40 ? 1.0 : 0.0);
 	  SetValue(buf, buf_ptr, friendship_noncard_yayoi >= 60 ? 1.0 : 0.0);
@@ -443,31 +445,41 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   }
 	  
   // 记者羁绊和位置
-  SetValue(buf, buf_ptr, friendship_noncard_reporter * 0.01);
-  SetValue(buf, buf_ptr, friendship_noncard_reporter >= 40 ? 1.0 : 0.0);
-  SetValue(buf, buf_ptr, friendship_noncard_reporter >= 60 ? 1.0 : 0.0);
-  SetValue(buf, buf_ptr, friendship_noncard_reporter >= 80 ? 1.0 : 0.0);
-  for (int tr = 0; tr < 5; tr++)
-  {
-    for (int i = 0; i < 5; i++)
-    {
-      if (personDistribution[tr][i] == 7)
-        buf[buf_ptr + tr] = 1.0;
-    }
+  if (isRacing) {
+      SetValue(buf, buf_ptr, friendship_noncard_reporter * 0.01);
+      SetValue(buf, buf_ptr, friendship_noncard_reporter >= 40 ? 1.0 : 0.0);
+      SetValue(buf, buf_ptr, friendship_noncard_reporter >= 60 ? 1.0 : 0.0);
+      SetValue(buf, buf_ptr, friendship_noncard_reporter >= 80 ? 1.0 : 0.0);
+      for (int tr = 0; tr < 5; tr++)
+      {
+          for (int i = 0; i < 5; i++)
+          {
+              if (personDistribution[tr][i] == 7)
+                  buf[buf_ptr + tr] = 1.0;
+          }
+      }
+      buf_ptr += 5;
   }
-  buf_ptr += 5;
+  else 
+	  buf_ptr += 9;
+  
   // 每个训练剩余的空位
-  for (int tr = 0; tr < 5; tr++)
-  {
-      int count = 0;
-	  for (int i = 0; i < 5; i++)
-	  {
-          if (personDistribution[tr][i] == 8)
-              count += 1;
-	  }
-      buf[buf_ptr + (5 - count)] = 1.0;
-      buf_ptr += 6;
+  if (!isRacing) {
+      for (int tr = 0; tr < 5; tr++)
+      {
+          int count = 0;
+          for (int i = 0; i < 5; i++)
+          {
+              if (personDistribution[tr][i] == 8)
+                  count += 1;
+          }
+          buf[buf_ptr + (5 - count)] = 1.0;
+          buf_ptr += 6;
+      }
   }
+  else
+	  buf_ptr += 30;
+  
 
   /*** 剧本相关 ***/
   // 菜原料数量
@@ -514,7 +526,8 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
   for(int i=0;i<8;++i)
     SetValue(buf,buf_ptr,cook_train_green[i]?1.0:0.0);
   // 比赛回合的菜种类
-  buf[buf_ptr+cook_main_race_material_type] = 1.0;
+  if(isRacing)
+    buf[buf_ptr+cook_main_race_material_type] = 1.0;
   buf_ptr += 5;
   
   /*** 剧本友人卡 ***/
@@ -543,15 +556,23 @@ void Game::getNNInputV1(float* buf, const SearchParam& param) const
 
   /*** 训练相关的信息 ***/
   // 训练的数值和体力
-  for(int i=0;i<5;++i) {
-    for(int j=0;j<6;++j) {
-      SetValue(buf,buf_ptr,trainValue[i][j]*0.01);
-    }
-    SetValue(buf,buf_ptr,trainVitalChange[i]*0.05);
+  if (!isRacing) {
+      for (int i = 0; i < 5; ++i) {
+          for (int j = 0; j < 6; ++j) {
+              SetValue(buf, buf_ptr, trainValue[i][j] * 0.01);
+          }
+          SetValue(buf, buf_ptr, trainVitalChange[i] * 0.05);
+      }
+  }
+  else {
+	  buf_ptr += 35;
   }
   // 训练失败率
-  for(int i=0;i<5;++i)
-    SetValue(buf,buf_ptr,failRate[i]*0.01);
+  if (!isRacing)
+      for(int i=0;i<5;++i)
+        SetValue(buf,buf_ptr,failRate[i]*0.01);
+  else
+	  buf_ptr += 5;
   // 训练是否闪彩
   for(int i=0;i<5;++i)
     SetValue(buf,buf_ptr,isTrainShining[i]?1.0:0.0);
