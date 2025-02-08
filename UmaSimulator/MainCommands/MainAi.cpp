@@ -321,6 +321,7 @@ void main_ai()
 			else
 				cout << "´¿Éñ¾­ÍøÂç: " << hl.toString() << endl;
 
+			search.param.maxDepth = game.turn < 70 - GameConfig::maxDepth ? GameConfig::maxDepth : 2 * TOTAL_TURN;
 			Action bestAction = search.runSearch(game, rand);
 			cout << "ÃÉÌØ¿¨Âå: " << bestAction.toString() << endl;
 
