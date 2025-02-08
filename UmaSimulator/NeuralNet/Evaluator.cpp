@@ -84,9 +84,9 @@ void Evaluator::evaluateSelf(int mode, const SearchParam& param)
 ModelOutputValueV1 Evaluator::extractValueFromNNOutputBuf(float* buf)
 {
   ModelOutputValueV1 v;
-  v.scoreMean = 38000 + 300 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 0];
-  v.scoreStdev = 150 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 1]; 
-  v.value = 38000 + 300 * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 2];
+  v.scoreMean = NNOUTPUT_Value_Mean + NNOUTPUT_Value_Scale * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 0];
+  v.scoreStdev = NNOUTPUT_Valuevar_Scale * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 1];
+  v.value = NNOUTPUT_Value_Mean + NNOUTPUT_Value_Scale * buf[NNOUTPUT_CHANNELS_POLICY_V1 + 2];
   return v;
 }
 

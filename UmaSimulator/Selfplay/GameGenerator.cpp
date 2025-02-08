@@ -268,7 +268,7 @@ Game GameGenerator::randomizeBeforeOutput(const Game& game0)
 
 void GameGenerator::newGameBatch()
 {
-  const int maxTurn = TOTAL_TURN - 4;//4个固定比赛回合，因此最多训练TOTAL_TURN - 4次
+  const int maxTurn = TOTAL_TURN * 2;// max two actions per turn
   vector<int> turnsEveryGame(param.batchsize);
   evaluator.gameInput.resize(param.batchsize);
   for (int i = 0; i < param.batchsize; i++)
@@ -282,7 +282,7 @@ void GameGenerator::newGameBatch()
 
   //往后进行一些回合
   SearchParam defaultSearchParam(1024, 5.0);//这个参数随意取，只用于生成开局时输入神经网络
-  for (int depth = 0; depth < maxTurn*2; depth++)
+  for (int depth = 0; depth < maxTurn; depth++)
   {
     evaluator.evaluateSelf(1, defaultSearchParam);//计算policy
     // assert("false" && "TODO:新剧本applyAction不一定是一个回合，要改生成策略");
@@ -307,7 +307,7 @@ void GameGenerator::newGameBatch()
 bool GameGenerator::isVaildGame(const Game& game)
 {
   if (game.isEnd())return false;
-  if (game.isRacing)return false;
+  //if (game.isRacing)return false;  //maybe have dish during URA
   return true;
 }
 

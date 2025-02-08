@@ -12,6 +12,8 @@ const int NNINPUT_CHANNELS_PERSON_V1 = 13; //每个人头多少通道，不包括支援卡参数
 const int NNINPUT_CHANNELS_CARDPERSON_V1 = NNINPUT_CHANNELS_CARD_V1 + NNINPUT_CHANNELS_PERSON_V1; //每个支援卡人头多少通道，包括支援卡参数。 有npc的剧本不建议合并这两个
 const int NNINPUT_CHANNELS_V1 = NNINPUT_CHANNELS_GAMEGLOBAL_V1 + NNINPUT_CHANNELS_CARDPERSON_V1 * 6;//总通道数
 
+
+
 #if USE_BACKEND == BACKEND_CUDA
 //改以下数字，kernel.cu也要改
 const int NNINPUT_MAX_FLOAT = 192; //nninput里面最多有多少个非0非1的数
@@ -23,3 +25,8 @@ static_assert(NNINPUT_CHANNELS_V1 < 32767);//int16
 const int NNOUTPUT_CHANNELS_POLICY_V1 = 21;
 const int NNOUTPUT_CHANNELS_VALUE_V1 = 3;
 const int NNOUTPUT_CHANNELS_V1 = NNOUTPUT_CHANNELS_POLICY_V1 + NNOUTPUT_CHANNELS_VALUE_V1;
+
+//should be the same as config.py in training scripts
+const float NNOUTPUT_Value_Mean = 43000;
+const float NNOUTPUT_Value_Scale = 400;
+const float NNOUTPUT_Valuevar_Scale = 200;
