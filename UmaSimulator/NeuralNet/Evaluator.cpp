@@ -75,6 +75,9 @@ void Evaluator::evaluateSelf(int mode, const SearchParam& param)
         {
           actionResults[i] = extractActionFromNNOutputBuf(outputBuf.data() + NNOUTPUT_CHANNELS_V1 * i, game);
         }
+        //if (game.turn < 48)
+
+          //actionResults[i] = handWrittenStrategy(game);
       }
     }
     else assert(false);
@@ -94,16 +97,52 @@ Action Evaluator::extractActionFromNNOutputBuf(float* buf, const Game& game)
 {
   Action bestAction = { 0, -1 };
   float bestValue = -1e8;
+
+  //bool print = rand() % 32768 == 0 && rand() % 2 == 0 && game.turn<48 && game.turn>24;
+  const bool print = false;
+  if (print)
+  {
+    game.print();
+    float minValue = 1e9;
+    for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+    {
+      Action action = Action::intToAction(actionInt);
+      if (!game.isLegal(action))continue;
+      else
+      {
+        float v = buf[actionInt];
+        minValue = std::min(minValue, v);
+      }
+    }
+    for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
+    {
+      Action action = Action::intToAction(actionInt);
+      if (!game.isLegal(action))std::cout << "X ";
+      else
+      {
+        float v = buf[actionInt];
+        std::cout << int(10*( v - minValue)) << " ";
+      }
+      if (actionInt == 4)
+        std::cout << "   "  ;
+      if (actionInt == 7)
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+  }
   for (int actionInt = 0; actionInt < Action::MAX_ACTION_TYPE; actionInt++)
   {
     Action action = Action::intToAction(actionInt);
     if (!game.isLegal(action))continue;
-    if (buf[actionInt] > bestValue)
+    float v = buf[actionInt];
+    if (v > bestValue)
     {
       bestAction = action;
       bestValue = buf[actionInt];
     }
   }
+  if (print)
+    std::cout<< bestAction.toString() << std::endl;
   return bestAction;
 }
 
