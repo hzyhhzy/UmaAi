@@ -18,9 +18,9 @@ import copy
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--vdata', type=str, default='./example/example_data.npz', help='validation dataset file')
+    parser.add_argument('--vdata', type=str, default='./example_data.npz', help='validation dataset file')
 
-    parser.add_argument('--savename', type=str ,default='ems_1_128_1_256_256', help='model save pth')
+    parser.add_argument('--savename', type=str ,default='ems2_1_256_2_256_256_lr1', help='model save pth')
 
     #training parameters
     parser.add_argument('--gpu', type=int,
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         device = torch.device(f"cuda")
 
 
-    basepath = f'../saved_models/{args.savename}/'
+    basepath = f'./saved_models/{args.savename}/'
 
     print("Building model..............................................................................................")
     modelpath=os.path.join(basepath,"model.pth")
