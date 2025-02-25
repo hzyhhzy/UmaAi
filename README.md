@@ -1,3 +1,7 @@
+# 2025.2.4
+Group 2: 1021261217
+
+
 # 2024.6.26 New scenario started. UmaAi needs to be updated
 ### What is needed?
 #### 1.Analyzing scenario mechanics
