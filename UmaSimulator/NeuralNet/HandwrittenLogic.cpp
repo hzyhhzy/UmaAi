@@ -147,9 +147,9 @@ const double LgBuffValuesForRed[3 * 19] = { //不考虑颜色，不考虑羁绊�
   2,2,3,6, 7,6,4,8,4,5, 12,14,15,22,26,7,24,10,13
 };
 const double LgBuffValuesForBlue[3 * 19] = { //不考虑颜色
-  3,2,3,4, 7,9,4,11,13,7, 30,20,6,9,24,14,26,12,25,
-  3,2,3,4, 7,6,4,6,6,4, 10,17,20,17,12,16,26,10,21,
-  3,2,3,4, 7,6,4,6,4,5, 8,14,7,17,18,7,29,10,2
+  5,2,3,4, 10,9,4,11,13,7, 30,20,6,9,24,14,26,12,25,
+  5,2,3,4, 10,6,4,6,6,4, 10,17,20,17,12,16,26,10,21,
+  5,2,3,6, 10,6,4,6,4,5, 8,14,7,17,18,7,29,10,2
 };
 
 double getLgBuffColorWrongProb(int c0, int c1, int c2)
@@ -343,19 +343,39 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     }
     else if (game.decidingEvent == DecidingEvent_three)//优先补足8格
     {
-      if (game.lg_gauge[2] == 7)
-        return Action(ST_decideEvent, 2);
-      if (game.lg_gauge[1] == 7)
-        return Action(ST_decideEvent, 1);
-      if (game.lg_gauge[0] == 7)
+      if (game.lg_mainColor == L_blue || (game.lg_mainColor < 0 && game.gameSettings.color_priority == L_blue))
+      //if(false)
+      {
+        if (game.lg_gauge[0] == 7)
+          return Action(ST_decideEvent, 0);
+        if (game.lg_gauge[2] == 7)
+          return Action(ST_decideEvent, 2);
+        if (game.lg_gauge[1] == 7)
+          return Action(ST_decideEvent, 1);
+        if (game.lg_gauge[0] < 8)
+          return Action(ST_decideEvent, 0);
+        if (game.lg_gauge[2] < 8)
+          return Action(ST_decideEvent, 2);
+        if (game.lg_gauge[1] < 8)
+          return Action(ST_decideEvent, 1);
         return Action(ST_decideEvent, 0);
-      if (game.lg_gauge[2] < 8)
+      }
+      else
+      {
+        if (game.lg_gauge[2] == 7)
+          return Action(ST_decideEvent, 2);
+        if (game.lg_gauge[1] == 7)
+          return Action(ST_decideEvent, 1);
+        if (game.lg_gauge[0] == 7)
+          return Action(ST_decideEvent, 0);
+        if (game.lg_gauge[2] < 8)
+          return Action(ST_decideEvent, 2);
+        if (game.lg_gauge[1] < 8)
+          return Action(ST_decideEvent, 1);
+        if (game.lg_gauge[0] < 8)
+          return Action(ST_decideEvent, 0);
         return Action(ST_decideEvent, 2);
-      if (game.lg_gauge[1] < 8)
-        return Action(ST_decideEvent, 1);
-      if (game.lg_gauge[0] < 8)
-        return Action(ST_decideEvent, 0);
-      return Action(ST_decideEvent, 2);
+      }
     }
     else throw "handWrittenStrategy未知decidingEvent";
   }
