@@ -606,6 +606,9 @@ void Game::addMotivation(int value)
 {
   if (value < 0)
   {
+    if (lg_blue_active)//超绝好调免疫掉心情
+      return;
+
     if (isPositiveThinking)
       isPositiveThinking = false;
     else
@@ -617,6 +620,22 @@ void Game::addMotivation(int value)
   }
   else
   {
+    if (lg_mainColor == L_blue && value > 0)
+    {
+      if (lg_blue_active)
+      {
+        if (lg_blue_canExtendCount > 0)
+        {
+          lg_blue_canExtendCount -= 1;
+          lg_blue_remainCount += 1;
+        }
+      }
+      else
+      {
+        lg_blue_currentStepCount += 1;
+        if (lg_blue_currentStepCount >= 3)lg_blue_currentStepCount = 3;
+      }
+    }
     motivation += value;
     if (motivation > 5)
       motivation = 5;
@@ -2169,13 +2188,39 @@ void Game::setMainColorTurn36(std::mt19937_64& rand)
   }
   else if (lg_mainColor == L_blue)
   {
-    throw "todo";
+    lg_blue_active = true;
+    lg_blue_remainCount = 3;
+    lg_blue_canExtendCount = 2;
+    lg_blue_currentStepCount = 0;
   }
   else if (lg_mainColor == L_green)
   {
     throw "todo";
   }
 
+}
+
+void Game::updateLgBlueStatus()
+{
+  if (lg_mainColor != L_blue)return;
+  if (lg_blue_currentStepCount >= 3)
+  {
+    lg_blue_active = true;
+    lg_blue_remainCount = 3;
+    lg_blue_canExtendCount = 2;
+    lg_blue_currentStepCount = 0;
+  }
+  else if(lg_blue_active)
+  {
+    lg_blue_remainCount -= 1;
+    if (lg_blue_remainCount <= 0)
+    {
+      lg_blue_active = false;
+      lg_blue_remainCount = 0;
+      lg_blue_canExtendCount = 0;
+      lg_blue_currentStepCount = 0;
+    }
+  }
 }
 
 
@@ -2305,7 +2350,8 @@ void Game::checkEvent(std::mt19937_64& rand)
     printEvents("你的得分是：" + to_string(finalScore()));
   }
   else {
-    isRacing = isRacingTurn[turn];
+    isRacing = isRacingTurn[turn]; 
+    updateLgBlueStatus();
     calculateScenarioBonus();
   }
   return;

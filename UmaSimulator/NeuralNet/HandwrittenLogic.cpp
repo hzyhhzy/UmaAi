@@ -28,6 +28,8 @@ const double lg_red_fullGauge_factorMultiplierNPC = 1;
 const double lg_red_fullGauge_factorReserve = 0.3;
 
 
+//const double lg_blue_outingBonus = 300;
+
 //一个分段函数，用来控属性
 inline double statusSoftFunction(double x, double reserve, double reserveInvX2)//reserve是控属性保留空间（降低权重），reserveInvX2是1/(2*reserve)
 {
@@ -144,6 +146,11 @@ const double LgBuffValuesForRed[3 * 19] = { //不考虑颜色，不考虑羁绊�
   2,2,3,4, 7,6,4,8,6,4, 15,22,20,17,12,16,21,10,24,
   2,2,3,6, 7,6,4,8,4,5, 12,14,15,22,26,7,24,10,13
 };
+const double LgBuffValuesForBlue[3 * 19] = { //不考虑颜色
+  3,2,3,4, 7,9,4,11,13,7, 30,20,6,9,24,14,26,12,25,
+  3,2,3,4, 7,6,4,6,6,4, 10,17,20,17,12,16,26,10,21,
+  3,2,3,4, 7,6,4,6,4,5, 8,14,7,17,18,7,29,10,2
+};
 
 double getLgBuffColorWrongProb(int c0, int c1, int c2)
 {
@@ -248,16 +255,30 @@ double getLgBuffColorWrongProb(int c0, int c1, int c2)
 
 double getLgBuffEva(const Game& game, int idx)
 {
-  double v = LgBuffValuesForRed[idx];
-  //红登双羁绊
-  if (idx == 0 * 19 + 2 || idx == 1 * 19 + 2 || idx == 2 * 19 + 2 || idx == 2 * 19 + 10)
+  double v = 0;
+  bool preferRed = game.lg_mainColor == L_red ||
+    (game.lg_mainColor < 0 && (game.gameSettings.color_priority == L_red || game.gameSettings.color_priority < 0));
+  if (preferRed)
   {
-    int extraJiban = game.lg_bonus.jibanAdd1 + game.lg_bonus.jibanAdd2 + (game.isAiJiao ? 2 : 0);
-    if (extraJiban < 3)
+
+    v = LgBuffValuesForRed[idx];
+    //红登双羁绊
+    if (idx == 0 * 19 + 2 || idx == 1 * 19 + 2 || idx == 2 * 19 + 2 || idx == 2 * 19 + 10)
     {
-      v += 3.5;
+      int extraJiban = game.lg_bonus.jibanAdd1 + game.lg_bonus.jibanAdd2 + (game.isAiJiao ? 2 : 0);
+      if (extraJiban < 3)
+      {
+        v += 3.5;
+      }
     }
   }
+  else if (game.lg_mainColor == L_blue ||
+    (game.lg_mainColor < 0 && (game.gameSettings.color_priority == L_blue)))
+  {
+
+    v = LgBuffValuesForBlue[idx];
+  }
+
   //控色
   if (game.turn < 36 && game.gameSettings.color_priority >= 0)
   {

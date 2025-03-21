@@ -115,8 +115,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
     friend_qingreTurn = j["friend_qingreTurn"];
 
     lg_mainColor = j["lg_mainColor"];
-    if(lg_mainColor!=-1&&lg_mainColor!=L_red)
-      throw "当前版本暂不支持蓝登绿登，请等待新版本";
+    if(lg_mainColor!=-1 && lg_mainColor != L_red && lg_mainColor != L_blue)
+      throw "当前版本暂不支持绿登，请等待新版本";
     for (int i = 0; i < 3; i++) {
       lg_gauge[i] = j["lg_gauge"][i];
     }
