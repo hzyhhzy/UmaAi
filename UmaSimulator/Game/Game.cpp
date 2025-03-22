@@ -2898,6 +2898,7 @@ GameSettings::GameSettings()
   eventStrength = GameConstants::EventStrengthDefault;
   scoringMode = SM_normal;
   color_priority = L_red;
+  //color_priority = L_blue;
 }
 
 ScenarioBuffInfo::ScenarioBuffInfo()

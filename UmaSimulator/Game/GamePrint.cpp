@@ -404,9 +404,25 @@ void Game::print() const
         motivation == 2 ? "\033[31m不调\033[0m" :
         motivation == 3 ? "\033[31m普通\033[0m" :
         motivation == 4 ? "\033[33m好调\033[0m" :
-        motivation == 5 ? "\033[32m绝好调\033[0m" : "未知") << endl;
+        motivation == 5 ? (lg_blue_active?"\033[1;34m超绝好调\033[0m" :"\033[32m绝好调\033[0m" )
+        : "未知") << endl;
     cout << endl;
   }
+
+  if (lg_mainColor == L_blue)
+  {
+    if (lg_blue_active)
+    {
+      cout << "超绝好调剩余\033[32m" << lg_blue_remainCount << "\033[0m回合，可延长\033[32m" << lg_blue_canExtendCount << "\033[0m次";
+      cout << endl;
+    }
+    else
+    {
+      cout << "超绝好调充能\033[32m" << lg_blue_currentStepCount << "\033[0m/3";
+      cout << endl;
+    }
+  }
+
   for (int i = 0; i < 10; i++)
   {
     printStrFixedWidth(lg_buffs[i].getColoredState(), 80);
