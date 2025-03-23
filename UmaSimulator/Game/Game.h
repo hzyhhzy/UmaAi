@@ -403,7 +403,7 @@ public:
   void updateScenarioBuffCondition(int idx);//更新各种心得的触发条件
   void addLgGauge(int16_t color, int num);//给color加num格，去掉大于8溢出部分
   void setMainColorTurn36(std::mt19937_64& rand);//36回合时确定主色，color_priority不为空时强制指定这个颜色，但如果原颜色与指定颜色不同则扣3000分
-
+  void updateLgBlueStatus();//回合末更新蓝登状态
 
   //友人卡相关事件
   void handleFriendUnlock(std::mt19937_64& rand);//友人外出解锁
