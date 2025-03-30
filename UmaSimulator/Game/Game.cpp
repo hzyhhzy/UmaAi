@@ -1858,11 +1858,13 @@ void Game::addScenarioBuffBonus(int idx)
   }
   else if (id == 1 * 19 + 14)
   {
-    lg_buffs[idx].isActive = true;
-    lg_bonus.xunlian += 15;
-    if (lg_mainColor == L_green)
+    if (lg_buffs[idx].isActive)
     {
-      throw "绿色未实现";
+      lg_bonus.xunlian += 15;
+      if (lg_mainColor == L_green)
+      {
+        throw "绿色未实现";
+      }
     }
   }
   else if (id == 1 * 19 + 15)
