@@ -1127,7 +1127,7 @@ void Game::applyNormalTraining(std::mt19937_64& rand, int16_t train, bool succes
         addStatus(train, -5);//游戏里1200以上扣属性不折半，在此模拟器里对应1200以上翻倍
       addMotivation(-1);
     }
-    addLgGauge(lg_trainingColor[T_race], 1);
+    addLgGauge(lg_trainingColor[train], 1);
   }
   else
   {
@@ -2136,6 +2136,7 @@ void Game::updateScenarioBuffCondition(int idx)
 
 void Game::addLgGauge(int16_t color, int num)
 {
+  if (color < 0)throw "addLgGauge color<0";
   lg_gauge[color] += num;
   if (lg_gauge[color] > 8)lg_gauge[color] = 8;
 }
@@ -2898,6 +2899,7 @@ GameSettings::GameSettings()
   eventStrength = GameConstants::EventStrengthDefault;
   scoringMode = SM_normal;
   color_priority = L_red;
+  //color_priority = L_blue;
 }
 
 ScenarioBuffInfo::ScenarioBuffInfo()

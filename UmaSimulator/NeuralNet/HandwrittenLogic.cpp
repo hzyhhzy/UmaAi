@@ -27,6 +27,11 @@ const double lg_red_fullGauge_factorMultiplierCard = 0.7;
 const double lg_red_fullGauge_factorMultiplierNPC = 1;
 const double lg_red_fullGauge_factorReserve = 0.3;
 
+const double lg_blue_motivationBonus_notActive = 250;
+const double lg_blue_motivationBonus_extend = 230;
+const double lg_blue_motivationBonus_timescale = 0.8;
+const double lg_blue_vital_scale = 0.7;
+
 
 //const double lg_blue_outingBonus = 300;
 
@@ -38,8 +43,8 @@ inline double statusSoftFunction(double x, double reserve, double reserveInvX2)/
   return x + 0.5 * reserve;
 }
 
-static void statusGainEvaluation(const Game& g, double* result) { //result依次是五种训练的估值
-  int remainTurn = TOTAL_TURN - g.turn - 1;//这次训练后还有几个训练回合
+static void statusGainEvaluation(const Game& g, double* result,int remainTrainingTurns) { //result依次是五种训练的估值
+  int remainTurn = remainTrainingTurns;//这次训练后还有几个训练回合
   //ura期间的一个回合视为两个回合，因此不需要额外处理
   //if (remainTurn == 2)remainTurn = 1;//ura第二回合
   //else if (remainTurn >= 4)remainTurn -= 2;//ura第一回合
@@ -47,7 +52,7 @@ static void statusGainEvaluation(const Game& g, double* result) { //result依次
   double reserve = reserveStatusFactor * remainTurn * (1 - double(remainTurn) / (TOTAL_TURN * 2));
   double reserveInvX2 = 1 / (2 * reserve);
 
-  double finalBonus0 = 150;
+  double finalBonus0 = 170;
   //finalBonus0 += 30;//ura3和最终事件
   //if (remainTurn >= 1)finalBonus0 += 20;//ura2
   //if (remainTurn >= 2)finalBonus0 += 20;//ura1
@@ -101,29 +106,35 @@ static void statusGainEvaluation(const Game& g, double* result) { //result依次
             fullGaugeNPCs += 1;
         }
       }
+      double ef = 1 - lg_red_fullGauge_factorReserve;
+      if (remainTrainingTurns == 0)
+        ef *= 0;
       double w = lg_red_fullGauge_constant * pow(lg_red_fullGauge_factorMultiplierCard, fullGaugeCards) * pow(lg_red_fullGauge_factorMultiplierNPC, fullGaugeNPCs);
-      result[tra] *= w * (1 - lg_red_fullGauge_factorReserve) + lg_red_fullGauge_factorReserve;
+      result[tra] *= w * ef + (1 - ef);
     }
   }
 
 }
 
-
-
-
-static double calculateMaxVitalEquvalant(const Game& g)
+//还有几个训练回合（不含当前回合）
+static int countRemainTrainingTurns(const Game& g)
 {
-  int t = g.turn;
-  if (g.turn == 72)
-    return 0;//最后一回合
-  int nonRaceTurn = 0;//71回合前，每个训练回合按消耗15体力计算
-  for (int i = 72; i > g.turn; i--)
+  int nonRaceTurn = 0;
+  for (int i = TOTAL_TURN - 1; i > g.turn; i--)
   {
     if (!g.isRacingTurn[i])nonRaceTurn++;
-    if (nonRaceTurn >= 6)break;
   }
-  int maxVitalEq = 28 + 25 * nonRaceTurn;
-  if(maxVitalEq>g.maxVital)
+  return nonRaceTurn;
+
+}
+
+
+static double calculateMaxVitalEquvalant(const Game& g, int remainTrainingTurns)
+{
+  if (remainTrainingTurns <= 0)
+    return 0;//最后一回合
+  int maxVitalEq = 28 + 25 * remainTrainingTurns;
+  if (maxVitalEq > g.maxVital)
     maxVitalEq = g.maxVital;
   return maxVitalEq;
 
@@ -147,7 +158,7 @@ const double LgBuffValuesForRed[3 * 19] = { //不考虑颜色，不考虑羁绊�
   2,2,3,6, 7,6,4,8,4,5, 12,14,15,22,26,7,24,10,13
 };
 const double LgBuffValuesForBlue[3 * 19] = { //不考虑颜色
-  5,2,3,4, 10,9,4,11,13,7, 30,20,6,9,24,14,26,12,25,
+  5,2,3,4, 10,9,4,11,13,7, 28,24,6,9,24,14,26,12,25,
   5,2,3,4, 10,6,4,6,6,4, 10,17,20,17,12,16,26,10,21,
   5,2,3,6, 10,6,4,6,4,5, 8,14,7,17,18,7,29,10,2
 };
@@ -253,12 +264,22 @@ double getLgBuffColorWrongProb(int c0, int c1, int c2)
   return 9999;
 }
 
+int16_t getPreferColor(const Game& game)
+{
+  if (game.lg_mainColor == L_red ||
+    (game.lg_mainColor < 0 && (game.gameSettings.color_priority == L_red || game.gameSettings.color_priority < 0)))
+    return L_red;
+  else if (game.lg_mainColor == L_blue ||
+    (game.lg_mainColor < 0 && (game.gameSettings.color_priority == L_blue)))
+    return L_blue;
+  else return L_green;
+}
+
 double getLgBuffEva(const Game& game, int idx)
 {
   double v = 0;
-  bool preferRed = game.lg_mainColor == L_red ||
-    (game.lg_mainColor < 0 && (game.gameSettings.color_priority == L_red || game.gameSettings.color_priority < 0));
-  if (preferRed)
+  int16_t preferColor = getPreferColor(game);
+  if (preferColor==L_red)
   {
 
     v = LgBuffValuesForRed[idx];
@@ -272,8 +293,7 @@ double getLgBuffEva(const Game& game, int idx)
       }
     }
   }
-  else if (game.lg_mainColor == L_blue ||
-    (game.lg_mainColor < 0 && (game.gameSettings.color_priority == L_blue)))
+  else if (preferColor == L_blue)
   {
 
     v = LgBuffValuesForBlue[idx];
@@ -300,6 +320,182 @@ double getLgBuffEva(const Game& game, int idx)
   return v;
 }
 
+
+double getRestOutingEvaluation(const Game& game, Action& bestAction, double vitalFactor, int maxVitalEquvalant, double vitalEvalBeforeTrain, int remainTrainingTurns)
+{
+  if (game.lg_mainColor == L_blue)
+  {
+    double motivationValueEach = 0;
+    double motivationCount = 0;//最多可以有效提升心情多少次
+    if (game.lg_blue_active)
+    {
+      motivationValueEach = lg_blue_motivationBonus_extend;
+      motivationCount = game.lg_blue_canExtendCount;
+    }
+    else
+    {
+      motivationValueEach = lg_blue_motivationBonus_notActive;
+      motivationCount = 3 - game.lg_blue_currentStepCount;
+    }
+    double timeFactor = 1 + lg_blue_motivationBonus_timescale * (game.turn - 36) / 36.0;
+    motivationValueEach *= timeFactor;
+    if (remainTrainingTurns == 0)
+      motivationValueEach *= 0;
+    else if (remainTrainingTurns == 1)
+      motivationValueEach *= 0.5;
+
+    if (game.isXiahesu())
+    {
+      Action action(ST_train, T_outgoing);
+      int vitalGain = 40;
+      int vitalAfterRest = std::min(maxVitalEquvalant, vitalGain + game.vital);
+      double value = lg_blue_vital_scale * vitalFactor * (vitalEvaluation(vitalAfterRest, game.maxVital) - vitalEvalBeforeTrain);
+
+      double motivationToGet = 1;
+      if (game.lg_haveBuff[0 * 19 + 11])
+        motivationToGet += 1;
+      if (motivationToGet > motivationCount)
+        motivationToGet = motivationCount;
+
+      value += motivationValueEach * motivationToGet;
+      bestAction = action;
+      return value;
+    }
+    else
+    {
+      int vitalGain = 50;
+      int vitalAfterRest = std::min(maxVitalEquvalant, vitalGain + game.vital);
+      double vital50Value = lg_blue_vital_scale * vitalFactor * (vitalEvaluation(vitalAfterRest, game.maxVital) - vitalEvalBeforeTrain);
+      Action action(ST_train, T_rest);
+
+      
+      double motivationToGet = 0;
+      if (game.lg_haveBuff[0 * 19 + 11])
+        motivationToGet += 1;
+      if (motivationToGet > motivationCount)
+        motivationToGet = motivationCount;
+
+      double bestValue = vital50Value + motivationValueEach * motivationToGet;
+      bestAction = action;
+
+
+
+      action.idx = T_outgoing;
+
+      //比较出行与休息
+      bool isFriendOutgoingAvailable =
+        game.friend_type != 0 &&
+        game.friend_stage >= 2 &&
+        !game.friend_outgoingUsed[4] &&
+        (!game.isXiahesu());
+
+      double outingValue = 0.01;
+      motivationToGet = 1;
+      if (isFriendOutgoingAvailable)
+      {
+        outingValue += vital50Value;
+      }
+
+      if (game.lg_haveBuff[0 * 19 + 11])
+        motivationToGet += 1;
+      if (motivationToGet > motivationCount)
+        motivationToGet = motivationCount; 
+      outingValue += motivationValueEach * motivationToGet;
+
+      if (PrintHandwrittenLogicValueForDebug)
+        std::cout << action.toString() << " " << outingValue << std::endl;
+      if (outingValue > bestValue)
+      {
+        bestValue = outingValue;
+        bestAction = action;
+      }
+      return bestValue;
+    }
+
+
+
+  }
+  else
+  {
+    double motivationValue = 0;
+    if (game.motivation < 5)
+      motivationValue = outgoingBonusIfNotFullMotivationStart + (game.turn / double(TOTAL_TURN)) * (outgoingBonusIfNotFullMotivationEnd - outgoingBonusIfNotFullMotivationStart);
+
+    if (game.isXiahesu())
+    {
+      Action action(ST_train, T_outgoing);
+      int vitalGain = 40;
+      int vitalAfterRest = std::min(maxVitalEquvalant, vitalGain + game.vital);
+      double value = vitalFactor * (vitalEvaluation(vitalAfterRest, game.maxVital) - vitalEvalBeforeTrain);
+      value += motivationValue;
+      bestAction = action;
+      return value;
+    }
+    else
+    {
+      int vitalGain = 50;
+      int vitalAfterRest = std::min(maxVitalEquvalant, vitalGain + game.vital);
+      double value = vitalFactor * (vitalEvaluation(vitalAfterRest, game.maxVital) - vitalEvalBeforeTrain);
+      Action action(ST_train, T_rest);
+      if (PrintHandwrittenLogicValueForDebug)
+        std::cout << action.toString() << " " << value << std::endl;
+
+
+      if (game.lg_haveBuff[0 * 19 + 11])
+        value += motivationValue;
+
+      double bestValue = value;
+      bestAction = action;
+      
+
+
+      action.idx = T_outgoing;
+      double outingValue = motivationValue;
+
+
+      //比较出行与休息
+      bool isFriendOutgoingAvailable =
+        game.friend_type != 0 &&
+        game.friend_stage >= 2 &&
+        !game.friend_outgoingUsed[4] &&
+        (!game.isXiahesu());
+      if (isFriendOutgoingAvailable)
+      {
+        outingValue += value + 0.01;//体力
+
+        int outingUsed = game.friend_outgoingUsed[0] + game.friend_outgoingUsed[1] + game.friend_outgoingUsed[2] + game.friend_outgoingUsed[3] + game.friend_outgoingUsed[4];
+        int outingUsedExpected = game.turn / 12;
+        if (outingUsed > outingUsedExpected)
+          outingValue -= 200 * (outingUsed - outingUsedExpected);
+        int maxg = -1;
+        for (int i = 0; i < 3; i++)
+        {
+          if (game.lg_gauge[i] > maxg)
+            maxg = game.lg_gauge[i];
+          //if (game.lg_gauge[i] == 8)
+          //  outingValue -= 70;
+        }
+        int remainTurn = 6 - game.turn % 6;
+        if (game.turn > 24 && remainTurn <= 1 && maxg < 8)
+        {
+          outingValue += 350;
+        }
+
+
+      }
+
+      if (PrintHandwrittenLogicValueForDebug)
+        std::cout << action.toString() << " " << outingValue << std::endl;
+      if (outingValue > bestValue)
+      {
+        bestValue = outingValue;
+        bestAction = action;
+      }
+      return bestValue;
+    }
+  }
+}
+
 Action Evaluator::handWrittenStrategy(const Game& game)
 {
   auto allActions = game.getAllLegalActions();
@@ -312,6 +508,16 @@ Action Evaluator::handWrittenStrategy(const Game& game)
   {
     if (game.decidingEvent == DecidingEvent_outing)
     {
+      if (game.turn < 66 && (game.maxVital - game.vital <= 15))//可能是普通出行
+      {
+        if (game.turn % 6 == 5)//可能是交出行补格子
+        {
+
+        }
+        else
+          return Action(ST_decideEvent, 0);
+      }
+
       if (!game.friend_outgoingUsed[0])
         return Action(ST_decideEvent, 1);
       else if (!game.friend_outgoingUsed[1])
@@ -412,7 +618,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
       return bestAction;
     }
 
-
+    int remainTrainingTurns = countRemainTrainingTurns(game);
 
 
     double bestValue = -1e4;
@@ -420,90 +626,19 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
     double vitalFactor = vitalFactorStart + (game.turn / double(TOTAL_TURN)) * (vitalFactorEnd - vitalFactorStart);
 
-    int maxVitalEquvalant = calculateMaxVitalEquvalant(game);
+    int maxVitalEquvalant = calculateMaxVitalEquvalant(game, remainTrainingTurns);
     double vitalEvalBeforeTrain = vitalEvaluation(std::min(maxVitalEquvalant, int(game.vital)), game.maxVital);
 
 
     //外出/休息
+    Action restAction;
+    double restValue = getRestOutingEvaluation(game, restAction, vitalFactor, maxVitalEquvalant, vitalEvalBeforeTrain, remainTrainingTurns);
+    if (restValue > bestValue)
     {
-      if (game.isXiahesu())
-      {
-        Action action(ST_train, T_outgoing);
-        int vitalGain = 40;
-        int vitalAfterRest = std::min(maxVitalEquvalant, vitalGain + game.vital);
-        double value = vitalFactor * (vitalEvaluation(vitalAfterRest, game.maxVital) - vitalEvalBeforeTrain);
-        if (game.motivation < 5)value += outgoingBonusIfNotFullMotivationStart + (game.turn / double(TOTAL_TURN)) * (outgoingBonusIfNotFullMotivationEnd - outgoingBonusIfNotFullMotivationStart);
-
-
-        if (PrintHandwrittenLogicValueForDebug)
-          std::cout << action.toString() << " " << value << std::endl;
-        if (value > bestValue)
-        {
-          bestValue = value;
-          bestAction = action;
-        }
-      }
-      else
-      {
-        int vitalGain = 50;
-        int vitalAfterRest = std::min(maxVitalEquvalant, vitalGain + game.vital);
-        double value = vitalFactor * (vitalEvaluation(vitalAfterRest, game.maxVital) - vitalEvalBeforeTrain);
-        Action action(ST_train, T_rest);
-        if (PrintHandwrittenLogicValueForDebug)
-          std::cout << action.toString() << " " << value << std::endl;
-        if (value > bestValue)
-        {
-          bestValue = value;
-          bestAction = action;
-        }
-
-
-        action.idx = T_outgoing;
-        double outingValue = 0;
-        if(game.motivation < 5)
-          outingValue += outgoingBonusIfNotFullMotivationStart + (game.turn / double(TOTAL_TURN)) * (outgoingBonusIfNotFullMotivationEnd - outgoingBonusIfNotFullMotivationStart);
-
-
-        //比较出行与休息
-        bool isFriendOutgoingAvailable =
-          game.friend_type != 0 &&
-          game.friend_stage >= 2 &&
-          !game.friend_outgoingUsed[4] &&
-          (!game.isXiahesu());
-        if (isFriendOutgoingAvailable)
-        {
-          outingValue += value + 0.01;//体力
-
-          int outingUsed = game.friend_outgoingUsed[0] + game.friend_outgoingUsed[1] + game.friend_outgoingUsed[2] + game.friend_outgoingUsed[3] + game.friend_outgoingUsed[4]; 
-          int outingUsedExpected = game.turn / 12;
-          if (outingUsed > outingUsedExpected)
-            outingValue -= 200 * (outingUsed - outingUsedExpected);
-          int maxg = -1;
-          for (int i = 0; i < 3; i++)
-          {
-            if (game.lg_gauge[i] > maxg)
-              maxg = game.lg_gauge[i];
-            //if (game.lg_gauge[i] == 8)
-            //  outingValue -= 70;
-          }
-          int remainTurn = 6 - game.turn % 6;
-          if (game.turn > 24 && remainTurn <= 1 && maxg < 8)
-          {
-            outingValue += 350;
-          }
-
-
-        }
-
-        if (PrintHandwrittenLogicValueForDebug)
-          std::cout << action.toString() << " " << outingValue << std::endl;
-        if (outingValue > bestValue)
-        {
-          bestValue = outingValue;
-          bestAction = action;
-        }
-      }
+      bestValue = restValue;
+      bestAction = restAction;
     }
+
     //比赛
     if (game.isRaceAvailable())
     {
@@ -529,7 +664,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     //先找到最好的训练，然后计算要不要吃菜
     {
       double statusGainE[5];
-      statusGainEvaluation(game, statusGainE);
+      statusGainEvaluation(game, statusGainE, remainTrainingTurns);
 
 
       for (int tra = 0; tra < 5; tra++)
