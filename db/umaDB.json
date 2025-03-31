@@ -338,6 +338,40 @@
     ],
     "star": 5
   },
+  "100403": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      0,
+      15,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      88,
+      108,
+      122,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 100403,
+    "name": "[祝ひ寿ぐ神速天女]マルゼンスキー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      29,
+      30,
+      33,
+      47,
+      53,
+      58,
+      67
+    ],
+    "star": 5
+  },
   "100501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -850,6 +884,39 @@
     "freeRaces": [],
     "gameId": 101102,
     "name": "[圣翡翠・治愈师]草上飞",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      33,
+      45,
+      47,
+      59,
+      66,
+      71
+    ],
+    "star": 5
+  },
+  "101103": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      0,
+      20,
+      10
+    ],
+    "fiveStatusInitial": [
+      106,
+      114,
+      122,
+      103,
+      105
+    ],
+    "freeRaces": [],
+    "gameId": 101103,
+    "name": "[蒼炎の誉]グラスワンダー",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -1791,6 +1858,40 @@
     ],
     "star": 5
   },
+  "102303": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      93,
+      128,
+      98,
+      114,
+      117
+    ],
+    "freeRaces": [],
+    "gameId": 102303,
+    "name": "[Engineered Victory]琵琶晨光",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "102401": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -1855,6 +1956,45 @@
     ],
     "gameId": 102402,
     "name": "[日光・花束]摩耶重炮",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      43,
+      47,
+      53,
+      55,
+      59,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "102403": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      8,
+      15,
+      0,
+      0,
+      7
+    ],
+    "fiveStatusInitial": [
+      88,
+      138,
+      84,
+      124,
+      116
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 36,
+        "count": 1
+      }
+    ],
+    "gameId": 102403,
+    "name": "[Rock in☆MewMeow]摩耶重炮",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -2511,6 +2651,39 @@
     ],
     "star": 5
   },
+  "103302": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      105,
+      123,
+      83,
+      115
+    ],
+    "freeRaces": [],
+    "gameId": 103302,
+    "name": "[Glacialis Vega]アドマイヤベガ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
   "103401": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -2815,6 +2988,41 @@
     "freeRaces": [],
     "gameId": 103702,
     "name": "[COLLECT・巧克力职人]荣进闪耀",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      45,
+      47,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "103703": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      0,
+      10,
+      10
+    ],
+    "fiveStatusInitial": [
+      116,
+      101,
+      106,
+      107,
+      120
+    ],
+    "freeRaces": [],
+    "gameId": 103703,
+    "name": "[Reines Plätschern]荣进闪耀",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -3165,6 +3373,42 @@
     ],
     "star": 5
   },
+  "104202": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      13,
+      0,
+      7
+    ],
+    "fiveStatusInitial": [
+      106,
+      97,
+      119,
+      116,
+      112
+    ],
+    "freeRaces": [],
+    "gameId": 104202,
+    "name": "[Be♪Witched]采珠",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      20,
+      22,
+      30,
+      32,
+      40,
+      45,
+      53,
+      58,
+      65,
+      69
+    ],
+    "star": 5
+  },
   "104301": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -3495,6 +3739,47 @@
     ],
     "star": 5
   },
+  "104702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      114,
+      110,
+      112,
+      106,
+      108
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
+    "gameId": 104702,
+    "name": "[Inlaid Stories]荒漠英雄",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      31,
+      33,
+      43,
+      47,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "104801": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -3649,6 +3934,40 @@
     "freeRaces": [],
     "gameId": 105002,
     "name": "[Difference・Engineer]成田大进",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      30,
+      33,
+      43,
+      53,
+      55,
+      67,
+      71
+    ],
+    "star": 5
+  },
+  "105003": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      118,
+      100,
+      101,
+      112,
+      119
+    ],
+    "freeRaces": [],
+    "gameId": 105003,
+    "name": "[迷光超控]成田大进",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -4087,6 +4406,40 @@
     "freeRaces": [],
     "gameId": 105701,
     "name": "[Clear Bliss]千明代表",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      26,
+      30,
+      33,
+      43,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "105702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      111,
+      113,
+      120,
+      98,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 105702,
+    "name": "[絢爛花道歌舞く君]ミスターシービー",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -5238,6 +5591,44 @@
     ],
     "star": 5
   },
+  "107301": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      20,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      117,
+      115,
+      91,
+      126,
+      101
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 32,
+        "count": 1
+      }
+    ],
+    "gameId": 107301,
+    "name": "[志、高し、強し！]ツルマルツヨシ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      43,
+      55,
+      59,
+      66,
+      67,
+      71
+    ],
+    "star": 5
+  },
   "107401": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -5394,6 +5785,47 @@
     ],
     "star": 5
   },
+  "107702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      10,
+      20,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      117,
+      115,
+      107,
+      101,
+      110
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
+    "gameId": 107702,
+    "name": "[Celestial Road]ナリタトップロード",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      28,
+      30,
+      33,
+      43,
+      55,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "107801": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -5424,6 +5856,75 @@
       58,
       65,
       67
+    ],
+    "star": 5
+  },
+  "107802": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      15,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      103,
+      105,
+      110,
+      108
+    ],
+    "freeRaces": [],
+    "gameId": 107802,
+    "name": "[Sugary Wind]ヤマニンゼファー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      41,
+      45,
+      58,
+      65,
+      67
+    ],
+    "star": 5
+  },
+  "107901": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      115,
+      105,
+      108,
+      121,
+      101
+    ],
+    "freeRaces": [],
+    "gameId": 107901,
+    "name": "[衣錦還郷の瑞星]フリオーソ",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      23,
+      36,
+      44,
+      46,
+      47,
+      51,
+      53,
+      56,
+      59,
+      68
     ],
     "star": 5
   },
@@ -5622,6 +6123,42 @@
     ],
     "star": 5
   },
+  "108402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      120,
+      95,
+      126,
+      115,
+      94
+    ],
+    "freeRaces": [],
+    "gameId": 108402,
+    "name": "[With a Twist]タニノギムレット",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      32,
+      33,
+      41,
+      43,
+      58,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
   "108501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -5743,6 +6280,39 @@
     "freeRaces": [],
     "gameId": 108701,
     "name": "[Flare]真弓快车",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      20,
+      22,
+      28,
+      30,
+      41,
+      53,
+      65
+    ],
+    "star": 5
+  },
+  "108702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      135,
+      72,
+      110,
+      124,
+      109
+    ],
+    "freeRaces": [],
+    "gameId": 108702,
+    "name": "[溶けない砂糖菓子]アストンマーチャン",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -5951,6 +6521,45 @@
     ],
     "star": 5
   },
+  "109601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      114,
+      104,
+      115,
+      93,
+      124
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
+    "gameId": 109601,
+    "name": "[紅色塗早駆具足]ノーリーズン",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      47,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
   "109801": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6016,6 +6625,46 @@
     ],
     "gameId": 109901,
     "name": "[Star・Light・Ship]北港火山",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      38,
+      46,
+      50,
+      56,
+      59,
+      68,
+      70,
+      71
+    ],
+    "star": 5
+  },
+  "109902": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      15,
+      10,
+      0,
+      0,
+      5
+    ],
+    "fiveStatusInitial": [
+      111,
+      103,
+      105,
+      112,
+      119
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 30,
+        "count": 1
+      }
+    ],
+    "gameId": 109902,
+    "name": "[海边粉彩・地方偶像]北港火山",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6152,6 +6801,46 @@
     ],
     "star": 5
   },
+  "110402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      5,
+      0,
+      10,
+      15,
+      0
+    ],
+    "fiveStatusInitial": [
+      124,
+      108,
+      108,
+      112,
+      98
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
+    "gameId": 110402,
+    "name": "[雅号・墨龍]カツラギエース",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      53,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "110501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6177,6 +6866,47 @@
     ],
     "gameId": 110501,
     "name": "[Universe-Naut]新宇宙",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      35,
+      43,
+      45,
+      53,
+      55,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "110502": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      7,
+      10,
+      13
+    ],
+    "fiveStatusInitial": [
+      108,
+      102,
+      109,
+      104,
+      127
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 23,
+        "count": 1
+      }
+    ],
+    "gameId": 110502,
+    "name": "[Like “ZEER”]新宇宙",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6269,6 +6999,43 @@
     ],
     "star": 5
   },
+  "110702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      125,
+      120,
+      88,
+      116,
+      101
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
+    "gameId": 110702,
+    "name": "[Tap! Tap! Tap!]タップダンスシチー",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      46,
+      52,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
   "110801": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6339,6 +7106,193 @@
     ],
     "star": 5
   },
+  "111001": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      120,
+      108,
+      116,
+      96,
+      110
+    ],
+    "freeRaces": [],
+    "gameId": 111001,
+    "name": "[Future Weaver]西沙里奥",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      29,
+      30,
+      33,
+      43,
+      56,
+      68,
+      69
+    ],
+    "star": 5
+  },
+  "111101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      15,
+      0,
+      15
+    ],
+    "fiveStatusInitial": [
+      112,
+      108,
+      109,
+      109,
+      112
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
+    "gameId": 111101,
+    "name": "[Inherited Hope]エアメサイア",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      44,
+      56,
+      68
+    ],
+    "star": 5
+  },
+  "111501": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      123,
+      112,
+      122,
+      88,
+      105
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 27,
+        "count": 1
+      }
+    ],
+    "gameId": 111501,
+    "name": "[総攬]オルフェーヴル",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      47,
+      55,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "111601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      10,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      121,
+      102,
+      116,
+      112,
+      99
+    ],
+    "freeRaces": [],
+    "gameId": 111601,
+    "name": "[Regina dei fiori]贵妇人",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      33,
+      43,
+      45,
+      53,
+      59,
+      67,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "111701": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      104,
+      122,
+      114,
+      110,
+      100
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
+    "gameId": 111701,
+    "name": "[ドラマティック・チュチュ]ウインバリアシオン",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      31,
+      33,
+      43,
+      45,
+      53,
+      55,
+      59,
+      71
+    ],
+    "star": 5
+  },
   "111901": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6392,7 +7346,7 @@
     ],
     "freeRaces": [],
     "gameId": 112001,
-    "name": "[真実一路]カルストンライトオ",
+    "name": "[一心向前]金镇之光",
     "preferRaces": [],
     "preferReds": [],
     "races": [
@@ -6404,6 +7358,115 @@
       53,
       61,
       65
+    ],
+    "star": 5
+  },
+  "112101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      10,
+      0,
+      0
+    ],
+    "fiveStatusInitial": [
+      119,
+      93,
+      128,
+      103,
+      107
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 22,
+        "count": 1
+      }
+    ],
+    "gameId": 112101,
+    "name": "[Chevalier fidèle]多旺达",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      32,
+      40,
+      41,
+      45,
+      53,
+      58,
+      65,
+      69
+    ],
+    "star": 5
+  },
+  "112401": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      20,
+      0,
+      0,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      122,
+      99,
+      109,
+      106,
+      114
+    ],
+    "freeRaces": [],
+    "gameId": 112401,
+    "name": "[POPPING!]吹波糖",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      33,
+      43,
+      45,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
+  "113101": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      0,
+      10,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      116,
+      96,
+      124,
+      116,
+      98
+    ],
+    "freeRaces": [],
+    "gameId": 113101,
+    "name": "[すまいる・まい・うぇい！]グランアレグリア",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      22,
+      30,
+      32,
+      47,
+      53,
+      58,
+      65,
+      67,
+      69
     ],
     "star": 5
   }
