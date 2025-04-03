@@ -158,8 +158,11 @@ void Game::newGame(mt19937_64& rand, GameSettings settings, int newUmaId, int um
   lg_blue_remainCount = 0;
   lg_blue_currentStepCount = 0;
   lg_blue_canExtendCount = 0;
-  lg_green_todo = 0;
-
+  lg_green_active = false;
+  lg_green_continuationZoneCount = 0;
+  lg_green_currentStepCount = 0;
+  for (int i = 0; i < 5; i++)
+    lg_green_endRate[i] = 0;
   for (int i = 0; i < 16; i++)
     lg_red_friendsGauge[i] = 0;
   for (int i = 0; i < 16; i++)
@@ -175,6 +178,11 @@ void Game::newGame(mt19937_64& rand, GameSettings settings, int newUmaId, int um
 void Game::calculateScenarioBonus()
 {
   lg_bonus.clear();
+  if (lg_green_active)
+  {
+    lg_bonus.xunlian += 30;
+    lg_bonus.vitalReduce += 50;
+  }
   for (int i = 0; i < 10; i++)
     addScenarioBuffBonus(i);
 }
@@ -562,6 +570,7 @@ void Game::calculateTrainingValue()
 {
   for (int i = 0; i < 5; i++)
     calculateTrainingValueSingle(i);
+  calculateLgGreenEndRate();
 }
 void Game::addTrainingLevelCount(int trainIdx, int n)
 {
@@ -1090,6 +1099,7 @@ bool Game::applyTraining(std::mt19937_64& rand, int16_t train)
   }
 
   updateScenarioBuffAfterTrain(train, trainingSucceed);
+  updateLgGreenStatus(rand, train, trainingSucceed);
 
   if (stage == ST_pickBuff)
     maybeSkipPickBuffStage();//假如没有其他事件（团卡三选一，或外出），则检查是否该进入选buff环节，否则先处理事件再检查。
@@ -1861,9 +1871,9 @@ void Game::addScenarioBuffBonus(int idx)
     if (lg_buffs[idx].isActive)
     {
       lg_bonus.xunlian += 15;
-      if (lg_mainColor == L_green)
+      if (lg_mainColor == L_green && lg_green_active)
       {
-        throw "绿色未实现";
+        lg_bonus.xunlian += 15;
       }
     }
   }
@@ -2198,9 +2208,95 @@ void Game::setMainColorTurn36(std::mt19937_64& rand)
   }
   else if (lg_mainColor == L_green)
   {
-    throw "todo";
+    lg_green_active = true;
+    lg_green_currentStepCount = 0;
+    lg_green_continuationZoneCount = 1;
   }
 
+}
+
+void Game::updateLgGreenStatus(std::mt19937_64& rand, int trainIdx, bool trainSucceed)
+{
+  if (lg_mainColor != L_green)return;
+  if (lg_green_active)
+  {
+    if (lg_green_continuationZoneCount > 7)
+      throw "lg_green_continuationZoneCount > 7";
+    if (lg_green_continuationZoneCount == 7 || turn == 71)//挑战7回合，或游戏最后一回合，强制结束
+      endLgGreenChallenge(lg_green_continuationZoneCount, true);
+    else if (trainIdx == T_race)
+    {
+      lg_green_continuationZoneCount += 1;
+    }
+    else if (trainIdx == T_rest || trainIdx == T_outgoing)
+    {
+      endLgGreenChallenge(lg_green_continuationZoneCount, true);
+    }
+    else
+    {
+      if (trainIdx >= 5)
+        throw "trainIdx>=5";
+      if (!trainSucceed)
+        throw "!trainSucceed";
+      double endRate = lg_green_endRate[trainIdx];
+      if (endRate > 0 && (endRate >= 100 || randBool(rand, endRate * 0.01)))//挑战领域因为训练而结束
+      {
+        endLgGreenChallenge(lg_green_continuationZoneCount, false);
+      }
+      else
+      {
+        lg_green_continuationZoneCount += 1;
+      }
+    }
+  }
+  else
+  {
+    if (trainIdx < 5 && trainSucceed)
+      lg_green_currentStepCount += 1;
+    if (lg_green_currentStepCount >= 4)
+    {
+      lg_green_active = true;
+      lg_green_currentStepCount = 0;
+      lg_green_continuationZoneCount = 1;
+    }
+  }
+}
+
+void Game::endLgGreenChallenge(int turnCount, bool succeed)
+{
+  if (turnCount <= 4)
+  {
+    addAllStatus(5);
+  }
+  else if (turnCount == 5)
+  {
+    if (succeed)
+    {
+      addAllStatus(15);
+      skillPt += 30;
+    }
+    else
+      addAllStatus(5);
+  }
+  else if (turnCount == 6)
+  {
+    if (succeed)
+    {
+      addAllStatus(25);
+      skillPt += 40;
+    }
+    else
+      addAllStatus(5);
+  }
+  else if (turnCount == 7)
+  {
+    addAllStatus(35);
+    skillPt += 50;
+  }
+
+  lg_green_active = false;
+  lg_green_continuationZoneCount = 0;
+  lg_green_currentStepCount = 0;
 }
 
 void Game::updateLgBlueStatus()
@@ -2223,6 +2319,28 @@ void Game::updateLgBlueStatus()
       lg_blue_canExtendCount = 0;
       lg_blue_currentStepCount = 0;
     }
+  }
+}
+
+void Game::calculateLgGreenEndRate()
+{
+  if (!lg_green_active)
+  {
+    for (int i = 0; i < 5; i++)
+    {
+      lg_green_endRate[i] = 0;
+    }
+    return;
+  }
+  int endRateBias = lg_green_continuationZoneCount <= 4 ? 0 : 
+    lg_green_continuationZoneCount == 5 ? 30 : 
+    lg_green_continuationZoneCount == 6 ? 60 : 100;
+  for (int i = 0; i < 5; i++)
+  {
+    int endRate = endRateBias + failRate[i];
+    if (endRate > 100)endRate = 0;
+    lg_green_endRate[i] = endRate;
+    failRate[i] = 0;
   }
 }
 
@@ -2900,7 +3018,8 @@ GameSettings::GameSettings()
   hintProbTimeConstant= GameConstants::HintProbTimeConstantDefault;
   eventStrength = GameConstants::EventStrengthDefault;
   scoringMode = SM_normal;
-  color_priority = L_red;
+  //color_priority = L_red;
+  color_priority = L_green;
   //color_priority = L_blue;
 }
 

@@ -423,6 +423,20 @@ void Game::print() const
     }
   }
 
+  if (lg_mainColor == L_green)
+  {
+    if (lg_green_active)
+    {
+      cout << "挑战领域第\033[32m" << lg_green_continuationZoneCount << "\033[0m回合";
+      cout << endl;
+    }
+    else
+    {
+      cout << "挑战充能\033[32m" << lg_green_currentStepCount << "\033[0m/4";
+      cout << endl;
+    }
+  }
+
   for (int i = 0; i < 10; i++)
   {
     printStrFixedWidth(lg_buffs[i].getColoredState(), 80);
@@ -477,6 +491,8 @@ void Game::print() const
       int fRate = failRate[i];
       if (fRate > 0)
         s = s + "(\033[31m" + to_string(fRate) + "%\033[0m)";
+      else if(lg_green_active)
+        s = s + "(绿登\033[31m" + to_string(lg_green_endRate[i]) + "%\033[0m)";
       else
         s = s + "(0%)";
       oneRow[i] = s;

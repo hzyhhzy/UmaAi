@@ -246,7 +246,10 @@ struct Game
   int16_t lg_blue_currentStepCount;//满3格启动超绝好调
   int16_t lg_blue_canExtendCount;//还能延长几次
 
-  int16_t lg_green_todo;//绿登
+  bool lg_green_active;
+  int16_t lg_green_continuationZoneCount;
+  int16_t lg_green_currentStepCount;
+  int16_t lg_green_endRate[5];
 
   int16_t lg_red_friendsGauge[16];//红登的羁绊条，编号和personIdEnum对应
   int16_t lg_red_friendsLv[16];//红登的等级条，编号和personIdEnum对应
@@ -403,7 +406,10 @@ public:
   void updateScenarioBuffCondition(int idx);//更新各种心得的触发条件
   void addLgGauge(int16_t color, int num);//给color加num格，去掉大于8溢出部分
   void setMainColorTurn36(std::mt19937_64& rand);//36回合时确定主色，color_priority不为空时强制指定这个颜色，但如果原颜色与指定颜色不同则扣3000分
+  void updateLgGreenStatus(std::mt19937_64& rand, int trainIdx, bool trainSucceed);//训练结束后更新绿登状态
+  void endLgGreenChallenge(int turnCount, bool succeed);//处理挑战结束的收益，通过其他方式终止succeed是true，训练终止是false
   void updateLgBlueStatus();//回合末更新蓝登状态
+  void calculateLgGreenEndRate();
 
   //友人卡相关事件
   void handleFriendUnlock(std::mt19937_64& rand);//友人外出解锁

@@ -32,6 +32,9 @@ const double lg_blue_motivationBonus_extend = 230;
 const double lg_blue_motivationBonus_timescale = 0.8;
 const double lg_blue_vital_scale = 0.7;
 
+const double lg_green_endChallenge_scale = 400;//中断挑战领域扣分
+const double lg_green_endChallenge_factor_suc[8] = { 0, 1, 1, 1, 1, 0.5, -0.5, 0 };//中断挑战领域扣分
+const double lg_green_endChallenge_factor_fail[8] = { 0, 1, 1, 1, 1, 1, 1, 0 };//中断挑战领域扣分
 
 //const double lg_blue_outingBonus = 300;
 
@@ -161,6 +164,11 @@ const double LgBuffValuesForBlue[3 * 19] = { //不考虑颜色
   5,2,3,4, 10,9,4,11,13,7, 28,24,6,9,24,14,26,12,25,
   5,2,3,4, 10,6,4,6,6,4, 10,17,20,17,12,16,26,10,21,
   5,2,3,6, 10,6,4,6,4,5, 8,14,7,17,18,7,29,10,2
+};
+const double LgBuffValuesForGreen[3 * 19] = { //不考虑颜色
+  5,2,3,4, 9,6,4,8,9,7, 4,10,6,9,15,14,21,8,25,
+  5,2,3,4, 9,6,4,7,8,4, 6,22,23,17,24,13,21,10,24,
+  5,2,3,6, 9,6,4,7,4,5, 7,12,11,22,23,5,24,12,2
 };
 
 double getLgBuffColorWrongProb(int c0, int c1, int c2)
@@ -297,6 +305,11 @@ double getLgBuffEva(const Game& game, int idx)
   {
 
     v = LgBuffValuesForBlue[idx];
+  }
+  else if (preferColor == L_green)
+  {
+
+    v = LgBuffValuesForGreen[idx];
   }
 
   //控色
@@ -629,10 +642,13 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     int maxVitalEquvalant = calculateMaxVitalEquvalant(game, remainTrainingTurns);
     double vitalEvalBeforeTrain = vitalEvaluation(std::min(maxVitalEquvalant, int(game.vital)), game.maxVital);
 
+    double lgEndGreenBonusSuc = game.lg_green_active ? -lg_green_endChallenge_scale * lg_green_endChallenge_factor_suc[game.lg_green_continuationZoneCount] : 0;
+    double lgEndGreenBonusFail = game.lg_green_active ? -lg_green_endChallenge_scale * lg_green_endChallenge_factor_fail[game.lg_green_continuationZoneCount] : 0;
 
     //外出/休息
     Action restAction;
     double restValue = getRestOutingEvaluation(game, restAction, vitalFactor, maxVitalEquvalant, vitalEvalBeforeTrain, remainTrainingTurns);
+    if (game.lg_green_active)restValue += lgEndGreenBonusSuc;
     if (restValue > bestValue)
     {
       bestValue = restValue;
@@ -751,6 +767,9 @@ Action Evaluator::handWrittenStrategy(const Game& game)
 
           value = 0.01 * failRate * failValueAvg + (1 - 0.01 * failRate) * value;
         }
+
+        if (game.lg_green_active)value += lgEndGreenBonusFail * 0.01 * game.lg_green_endRate[tra];
+
 
         Action action(ST_train,tra);
 

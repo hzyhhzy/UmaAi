@@ -115,8 +115,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
     friend_qingreTurn = j["friend_qingreTurn"];
 
     lg_mainColor = j["lg_mainColor"];
-    if(lg_mainColor!=-1 && lg_mainColor != L_red && lg_mainColor != L_blue)
-      throw "当前版本暂不支持绿登，请等待新版本";
+    //if(lg_mainColor!=-1 && lg_mainColor != L_red && lg_mainColor != L_blue)
+    //  throw "当前版本暂不支持绿登，请等待新版本";
     for (int i = 0; i < 3; i++) {
       lg_gauge[i] = j["lg_gauge"][i];
     }
@@ -142,7 +142,9 @@ bool Game::loadGameFromJson(std::string jsonStr)
     lg_blue_remainCount = j["lg_blue_remainCount"];
     lg_blue_currentStepCount = j["lg_blue_currentStepCount"];
     lg_blue_canExtendCount = j["lg_blue_canExtendCount"];
-    lg_green_todo = j["lg_green_todo"];
+    lg_green_active = j["lg_green_active"];
+    lg_green_continuationZoneCount = j["lg_green_continuationZoneCount"];
+    lg_green_currentStepCount = j["lg_green_currentStepCount"];
 
     for (int i = 0; i < 16; i++) {
       lg_red_friendsGauge[i] = j["lg_red_friendsGauge"][i];
@@ -155,6 +157,12 @@ bool Game::loadGameFromJson(std::string jsonStr)
    //     cout << trainValue[1][k] << endl;
    // }
     
+  }
+  catch (const char* e)
+  {
+    cout << "\x1b[91m读取游戏信息json出错：" << e << "\x1b[0m" << endl;
+    //cout << "-- json --" << endl << jsonStr << endl;
+    return false;
   }
   catch (string e)
   {
