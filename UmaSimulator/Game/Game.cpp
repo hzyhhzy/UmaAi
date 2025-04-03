@@ -2714,7 +2714,7 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
     //前期事件属性/技能少，后期多
     double statusToGain = gameSettings.eventStrength * (0.5 + 1.0 * (turn * 1.0 / TOTAL_TURN));
     addStatus(rand() % 5, statusToGain);
-    skillPt += statusToGain;
+    skillPt += statusToGain * 0.5;
     printEvents("模拟支援卡随机事件：" + persons[card].cardParam.cardName + " 的羁绊+5，pt和随机属性+" + to_string(gameSettings.eventStrength));
 
     //支援卡一般是前几个事件加心情
@@ -2783,7 +2783,7 @@ void Game::checkRandomEvents(std::mt19937_64& rand)
   }
 
   //掉心情
-  if (turn >= 12 && randBool(rand, 0.05))
+  if (turn >= 12 && randBool(rand, 0.06))
   {
     addMotivation(-1);
     printEvents("模拟随机事件：\033[0m\033[33m心情-1\033[0m\033[32m");
@@ -3018,8 +3018,9 @@ GameSettings::GameSettings()
   hintProbTimeConstant= GameConstants::HintProbTimeConstantDefault;
   eventStrength = GameConstants::EventStrengthDefault;
   scoringMode = SM_normal;
+  color_priority = -1;
   //color_priority = L_red;
-  color_priority = L_green;
+  //color_priority = L_green;
   //color_priority = L_blue;
 }
 

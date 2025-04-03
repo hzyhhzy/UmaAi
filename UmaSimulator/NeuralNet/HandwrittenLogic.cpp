@@ -156,9 +156,9 @@ static double vitalEvaluation(int vital, int maxVital)
 }
 
 const double LgBuffValuesForRed[3 * 19] = { //不考虑颜色，不考虑羁绊，不考虑绿登蓝登限定加成
-  2,2,3,4, 7,6,4,7,8,7, 4,10,6,9,15,14,21,8,25,
-  2,2,3,4, 7,6,4,8,6,4, 15,22,20,17,12,16,21,10,24,
-  2,2,3,6, 7,6,4,8,4,5, 12,14,15,22,26,7,24,10,13
+  2,2,3,4, 5,6,4,8,9,7, 4,10,3,9,15,14,21,8,25,
+  2,2,3,4, 5,6,4,6,5,4, 15,22,20,17,12,16,21,10,24,
+  2,2,3,6, 5,6,4,8,4,3, 12,14,15,22,27,7,26,8,9
 };
 const double LgBuffValuesForBlue[3 * 19] = { //不考虑颜色
   5,2,3,4, 10,9,4,11,13,7, 28,24,6,9,24,14,26,12,25,
@@ -313,8 +313,10 @@ double getLgBuffEva(const Game& game, int idx)
   }
 
   //控色
-  if (game.turn < 36 && game.gameSettings.color_priority >= 0)
+  if (game.turn < 36)
   {
+    //如果没指定，则控红色，因为红色高两千
+    int preferColor = game.gameSettings.color_priority >= 0 ? game.gameSettings.color_priority : L_red;
     int counts[3] = { 0,0,0 };
     for (int i = 0; i < game.turn / 6; i++)
     {
@@ -325,9 +327,9 @@ double getLgBuffEva(const Game& game, int idx)
     int16_t newColor = idx / 19;
     counts[newColor] += 1;
 
-    int count0 = counts[game.gameSettings.color_priority];
-    int count1 = counts[(game.gameSettings.color_priority + 1) % 3];
-    int count2 = counts[(game.gameSettings.color_priority + 2) % 3];
+    int count0 = counts[preferColor];
+    int count1 = counts[(preferColor + 1) % 3];
+    int count2 = counts[(preferColor + 2) % 3];
     v -= lg_controlColorFactor * getLgBuffColorWrongProb(count0, count1, count2);
   }
   return v;
@@ -562,6 +564,7 @@ Action Evaluator::handWrittenStrategy(const Game& game)
     }
     else if (game.decidingEvent == DecidingEvent_three)//优先补足8格
     {
+      //蓝登就优先蓝色
       if (game.lg_mainColor == L_blue || (game.lg_mainColor < 0 && game.gameSettings.color_priority == L_blue))
       //if(false)
       {
@@ -579,7 +582,8 @@ Action Evaluator::handWrittenStrategy(const Game& game)
           return Action(ST_decideEvent, 1);
         return Action(ST_decideEvent, 0);
       }
-      else
+      //红登前36回合优先红色
+      else if (game.turn < 36 && (game.gameSettings.color_priority == L_red || game.gameSettings.color_priority == -1))
       {
         if (game.lg_gauge[2] == 7)
           return Action(ST_decideEvent, 2);
@@ -594,6 +598,22 @@ Action Evaluator::handWrittenStrategy(const Game& game)
         if (game.lg_gauge[0] < 8)
           return Action(ST_decideEvent, 0);
         return Action(ST_decideEvent, 2);
+      }
+      else //绿登或红登后期，优先绿色
+      {
+        if (game.lg_gauge[1] == 7)
+          return Action(ST_decideEvent, 1);
+        if (game.lg_gauge[2] == 7)
+          return Action(ST_decideEvent, 2);
+        if (game.lg_gauge[0] == 7)
+          return Action(ST_decideEvent, 0);
+        if (game.lg_gauge[1] < 8)
+          return Action(ST_decideEvent, 1);
+        if (game.lg_gauge[2] < 8)
+          return Action(ST_decideEvent, 2);
+        if (game.lg_gauge[0] < 8)
+          return Action(ST_decideEvent, 0);
+        return Action(ST_decideEvent, 1);
       }
     }
     else throw "handWrittenStrategy未知decidingEvent";
