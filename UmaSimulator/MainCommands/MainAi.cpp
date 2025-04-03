@@ -88,14 +88,6 @@ void main_ai()
 		ModelOutputValueV1 scoreLastTurn = ModelOutputValueV1();   // 上一回合分数
 		string lastJsonStr;//json str of the last time
 
-		// 检查工作目录
-		char buf[10240];
-		GetModuleFileNameA(0, buf, 10240);
-		filesystem::path exeDir = filesystem::path(buf).parent_path();
-		filesystem::current_path(exeDir);
-		std::cout << "当前工作目录：" << filesystem::current_path() << endl;
-		cout << "当前程序目录：" << exeDir << endl;
-
 #if USE_BACKEND == BACKEND_NONE
 		GameConfig::load("./aiConfig_cpu.json");
 #else

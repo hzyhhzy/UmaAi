@@ -6123,6 +6123,42 @@
     ],
     "star": 5
   },
+  "108402": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "fiveStatusInitial": [
+      120,
+      95,
+      126,
+      115,
+      94
+    ],
+    "freeRaces": [],
+    "gameId": 108402,
+    "name": "[With a Twist]タニノギムレット",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      24,
+      30,
+      32,
+      33,
+      41,
+      43,
+      58,
+      59,
+      67,
+      69
+    ],
+    "star": 5
+  },
   "108501": {
     "bonusData": [],
     "fiveStatusBonus": [
@@ -6482,6 +6518,45 @@
       55,
       69,
       71
+    ],
+    "star": 5
+  },
+  "109601": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      0,
+      20,
+      0,
+      0,
+      10
+    ],
+    "fiveStatusInitial": [
+      114,
+      104,
+      115,
+      93,
+      124
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 26,
+        "count": 1
+      }
+    ],
+    "gameId": 109601,
+    "name": "[紅色塗早駆具足]ノーリーズン",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      30,
+      33,
+      43,
+      47,
+      59,
+      67,
+      69
     ],
     "star": 5
   },
@@ -6912,6 +6987,43 @@
     ],
     "gameId": 110701,
     "name": "[GLITTER!]跳舞城",
+    "preferRaces": [],
+    "preferReds": [],
+    "races": [
+      11,
+      46,
+      52,
+      59,
+      69,
+      71
+    ],
+    "star": 5
+  },
+  "110702": {
+    "bonusData": [],
+    "fiveStatusBonus": [
+      10,
+      0,
+      0,
+      20,
+      0
+    ],
+    "fiveStatusInitial": [
+      125,
+      120,
+      88,
+      116,
+      101
+    ],
+    "freeRaces": [
+      {
+        "startTurn": 12,
+        "endTurn": 29,
+        "count": 1
+      }
+    ],
+    "gameId": 110702,
+    "name": "[Tap! Tap! Tap!]タップダンスシチー",
     "preferRaces": [],
     "preferReds": [],
     "races": [
