@@ -1240,7 +1240,9 @@ void Game::addHintWithoutJiban(std::mt19937_64& rand, int idx)
   int hintLevel = persons[idx].cardParam.hintLevel;
   int cardType = persons[idx].cardParam.cardType;
   assert(cardType < 5 && cardType >= 0);
-  double skillProb = 0.9 * (1 - exp(-exp(2 - hintSkillLvCount / gameSettings.hintProbTimeConstant)));//有多大概率是给技能而不是属性
+  //double skillProb = 0.9 * (1 - exp(-exp(2 - hintSkillLvCount / gameSettings.hintProbTimeConstant)));//有多大概率是给技能而不是属性
+  //cout << turn << " " << hintSkillLvCount << " " << skillProb << endl;
+  double skillProb = 0.8;
   if (hintLevel == 0)skillProb = 0;//根乌拉拉这种，只给属性
 
   if (randBool(rand, skillProb))
