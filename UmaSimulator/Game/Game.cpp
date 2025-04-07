@@ -3042,10 +3042,10 @@ GameSettings::GameSettings()
   hintProbTimeConstant= GameConstants::HintProbTimeConstantDefault;
   eventStrength = GameConstants::EventStrengthDefault;
   scoringMode = SM_normal;
-  //color_priority = -1;
+  color_priority = -1;
   //color_priority = L_red;
   //color_priority = L_green;
-  color_priority = L_blue;
+  //color_priority = L_blue;
 }
 
 ScenarioBuffInfo::ScenarioBuffInfo()
