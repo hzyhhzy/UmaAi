@@ -127,6 +127,8 @@ bool Game::loadGameFromJson(std::string jsonStr)
       lg_buffs[i].buffId = j["lg_buffs"][i]["buffId"];
       lg_buffs[i].coolTime = j["lg_buffs"][i]["coolTime"];
       lg_buffs[i].isActive = j["lg_buffs"][i]["isActive"];
+      if (lg_buffs[i].buffId >= 0)
+        lg_haveBuff[lg_buffs[i].buffId] = true;
     }
 
     lg_pickedBuffsNum = j["lg_pickedBuffsNum"];

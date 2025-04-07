@@ -2456,6 +2456,26 @@ void Game::chooseBuff(int16_t idx)
   stage = ST_event;
 }
 
+void Game::checkLgHaveBuff() const
+{
+  int buffCount = 0;
+  for (int i = 0; i < 10; i++)
+  {
+    int id = lg_buffs[i].buffId;
+    if (id < 0)break;
+    if (!lg_haveBuff[id])
+      throw "Game::checkLgHaveBuff() failed";
+    buffCount += 1;
+  }
+  for (int i = 0; i < 57; i++)
+  {
+    if (lg_haveBuff[i])
+      buffCount -= 1;
+  }
+  if (buffCount != 0)
+    throw "Game::checkLgHaveBuff() failed";
+}
+
 void Game::checkEvent(std::mt19937_64& rand)
 {
   assert(stage == ST_event);
@@ -2891,6 +2911,8 @@ std::vector<Action> Game::getAllLegalActions() const
 void Game::applyAction(std::mt19937_64& rand, Action action)
 {
   if (isEnd()) return;
+  if (rand() % 64 == 0)
+    checkLgHaveBuff();
   if (action.stage == ST_action_randomize)
   {
     undoRandomize();
@@ -3020,10 +3042,10 @@ GameSettings::GameSettings()
   hintProbTimeConstant= GameConstants::HintProbTimeConstantDefault;
   eventStrength = GameConstants::EventStrengthDefault;
   scoringMode = SM_normal;
-  color_priority = -1;
+  //color_priority = -1;
   //color_priority = L_red;
   //color_priority = L_green;
-  //color_priority = L_blue;
+  color_priority = L_blue;
 }
 
 ScenarioBuffInfo::ScenarioBuffInfo()

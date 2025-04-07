@@ -350,7 +350,8 @@ public:
   void randomPickBuff(std::mt19937_64& rand);//ST_pickBuff->ST_chooseBuff，从buff(心得)池里随机抽取buff
   int pickSingleBuff(std::mt19937_64& rand, int16_t color, int16_t star);//尝试随机抽取color颜色star星数的心得，如果全被抽完则返回-1
   void chooseBuff(int16_t idx); //ST_chooseBuff->ST_event，选择第几个buff
-  
+  void checkLgHaveBuff() const;//检查lg_haveBuff[57]和lg_buffs是否匹配，不匹配直接throw
+
   void checkEvent(std::mt19937_64& rand);//ST_chooseBuff->ST_distribute检查固定事件和随机事件，并进入下一个回合
   void checkFixedEvents(std::mt19937_64& rand);//每回合的固定事件，包括剧本事件和固定比赛和部分马娘事件等
   void checkRandomEvents(std::mt19937_64& rand);//模拟支援卡事件和随机马娘事件（随机加羁绊，体力，心情，掉心情等）
