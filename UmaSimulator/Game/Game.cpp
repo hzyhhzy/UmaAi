@@ -1768,7 +1768,7 @@ void Game::addScenarioBuffBonus(int idx)
   {
     lg_buffs[idx].isActive = motivation >= 5;
     if (lg_buffs[idx].isActive)
-      lg_bonus.alwaysHint;
+      lg_bonus.alwaysHint = true;
 
   }
   else if (id == 0 * 19 + 13)
@@ -1925,7 +1925,7 @@ void Game::addScenarioBuffBonus(int idx)
   else if (id == 2 * 19 + 9)
   {
     if (lg_buffs[idx].isActive)
-      lg_bonus.hintLv += 1;
+      lg_bonus.moreHint += 1;
   }
   else if (id == 2 * 19 + 10)
   {
