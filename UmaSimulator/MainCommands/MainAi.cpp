@@ -206,6 +206,7 @@ void main_ai()
 				game.gameSettings.eventStrength = GameConfig::eventStrength;
 				game.gameSettings.ptScoreRate = GameConfig::scorePtRate;
 				game.gameSettings.scoringMode = GameConfig::scoringMode;
+				game.gameSettings.color_priority = GameConfig::lgPreferColor;
 			
 				if (!suc)
 				{

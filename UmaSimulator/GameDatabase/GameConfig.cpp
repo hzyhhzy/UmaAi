@@ -8,6 +8,7 @@ double GameConfig::radicalFactor = 3;
 int GameConfig::scoringMode = SM_normal;
 double GameConfig::scorePtRate = GameConstants::ScorePtRateDefault;
 int GameConfig::eventStrength = GameConstants::EventStrengthDefault;
+int GameConfig::lgPreferColor = -1;
 
 #if USE_BACKEND != BACKEND_NONE      //神经网络版
 #if USE_BACKEND == BACKEND_LIBTORCH      //神经网络版
@@ -61,6 +62,8 @@ void GameConfig::load(const string& path)
 			GameConfig::radicalFactor = j.at("radicalFactor");
 		if (j.contains("eventStrength"))
 			GameConfig::eventStrength = j.at("eventStrength");
+		if (j.contains("lgPreferColor"))
+			GameConfig::lgPreferColor = j.at("lgPreferColor");
 		if (j.contains("scorePtRate"))
 			GameConfig::scorePtRate = j.at("scorePtRate");
 		if (j.contains("scoringMode"))

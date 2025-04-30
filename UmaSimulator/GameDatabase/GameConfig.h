@@ -26,6 +26,7 @@ struct GameConfig
     //以下不经常修改
 
     static int eventStrength;  // 模拟器里每回合有40%概率加这么多属性，模拟支援卡事件。config里面加这个参数的目的是某种程度上代替激进度，调高了会更倾向于控属性
+    static int lgPreferColor;  // 倾向于使用哪个颜色的老登，-1是不指定，0 1 2分别是蓝绿红
 
     static std::string modelPath;    // 神经网络文件所在目录
     static int batchSize;   // 显卡版的batchSize，非神经网络版设多少区别不大，神经网络版直接设成256

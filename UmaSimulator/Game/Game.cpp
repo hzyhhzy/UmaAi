@@ -385,7 +385,7 @@ void Game::randomDistributeHeads(std::mt19937_64& rand)
     if (lg_red_friendsGauge[p] == 20)continue;//已经分配
     auto& ps = persons[p];
     int cardType = ps.cardParam.cardType;
-    int deYiLv = ps.cardParam.deYiLv + lg_bonus.deyilv;
+    int deYiLv = (100 + ps.cardParam.deYiLv) * (100 + lg_bonus.deyilv) / 100 - 100;
     int absentRate = 50 - lg_bonus.disappearRateReduce;
     std::vector<int> probs = { 100,100,100,100,100,absentRate }; //速耐力根智鸽
     probs[cardType] += deYiLv;
