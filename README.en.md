@@ -14,6 +14,8 @@ The repository contains a training simulator, a hand-crafted policy, Monte Carlo
 
 > The UAF scenario is one of the more complete implementations in this repository. If you want to continue development, the `UAF` branch is the recommended reference.
 
+> The author lost interest in Umamusume in early 2026 and stopped playing, so this project is no longer maintained. Interested developers are welcome to continue development using the code in this repository and the explanations in these READMEs. With how capable AI-assisted programming has become, adapting UmaAI to a new scenario should not be especially difficult.
+
 ## Input and Output
 
 The state of an ongoing training run—including support-character placement across training facilities, the current turn, current stats, and scenario bonuses—must first be converted into a structured game state. This can be implemented through OCR, manual input, or certain “special methods.” Please research the specific approach yourself; this repository does not provide one.
